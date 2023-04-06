@@ -8,7 +8,7 @@
 ```python
 from vellumdev.client import VellumApi
 
-vellum = RavenApi(api_key="YOUR_API_KEY")
+vellum = VellumApi(api_key="YOUR_API_KEY")
 
 vellum.generate(
   deploymentName: '<DEPLOYMENT_NAME>',

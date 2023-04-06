@@ -1,12 +1,8 @@
 
-# {Company} Python Library
+# Vellum Python Library
 
-[![pypi](https://img.shields.io/pypi/v/{company}.svg)](https://pypi.python.org/pypi/{company})
+[![pypi](https://img.shields.io/pypi/v/vellum.svg)](https://pypi.python.org/pypi/vellum)
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-SDK%20generated%20by%20Fern-brightgreen)](https://github.com/fern-api/fern)
-
-## Documentation
-
-API documentation is available at <{docs_url}>.
 
 ## Usage
 

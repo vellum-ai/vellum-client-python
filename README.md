@@ -1,15 +1,19 @@
 
 # Vellum Python Library
 
-[![pypi](https://img.shields.io/pypi/v/vellum.svg)](https://pypi.python.org/pypi/vellum)
+[![pypi](https://img.shields.io/pypi/v/vellum.svg)](https://pypi.org/project/vellumdev/)
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-SDK%20generated%20by%20Fern-brightgreen)](https://github.com/fern-api/fern)
 
-## Usage
-
-Check out the [sample app](.sample-app/app.py) which consumes this SDK!
 
 ```python
-TODO
+from vellumdev.client import VellumApi
+
+vellum = RavenApi(api_key="YOUR_API_KEY")
+
+vellum.generate(
+  deploymentName: '<DEPLOYMENT_NAME>',
+  requests: [{ inputValues: { sample_key: 'sample_value' } }],
+)
 ```
 
 ## Beta status

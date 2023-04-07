@@ -6,7 +6,7 @@
 
 
 ```python
-from vellumdev.client import VellumApi
+from vellum.api.client import VellumApi
 
 vellum = VellumApi(api_key="YOUR_API_KEY")
 

@@ -9,8 +9,8 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class SearchWeightsRequest(pydantic.BaseModel):
-    semantic_similarity: float = pydantic.Field(description=("The relative weight to give to semantic similarity\n"))
-    keywords: float = pydantic.Field(description=("The relative weight to give to keyword matches\n"))
+    semantic_similarity: float
+    keywords: float
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

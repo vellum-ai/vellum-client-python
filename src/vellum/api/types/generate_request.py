@@ -6,19 +6,11 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .submit_completion_actual_request import SubmitCompletionActualRequest
 
 
-class SubmitCompletionActualsRequestRequest(pydantic.BaseModel):
-    deployment_id: typing.Optional[str] = pydantic.Field(
-        description=("The ID of the deployment. Must provide either this or deployment_name.\n")
-    )
-    deployment_name: typing.Optional[str] = pydantic.Field(
-        description=("The name of the deployment. Must provide either this or deployment_id.\n")
-    )
-    actuals: typing.List[SubmitCompletionActualRequest] = pydantic.Field(
-        description=("Feedback regarding the quality of previously generated completions\n")
-    )
+class GenerateRequest(pydantic.BaseModel):
+    input_values: typing.Dict[str, typing.Any]
+    external_ids: typing.Optional[typing.List[str]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

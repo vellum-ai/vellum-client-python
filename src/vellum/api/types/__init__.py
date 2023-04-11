@@ -4,62 +4,34 @@ from .document import Document
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .finish_reason_enum import FinishReasonEnum
 from .generate_options_request import GenerateOptionsRequest
-from .generate_request_body_request import GenerateRequestBodyRequest
-from .generate_request_request import GenerateRequestRequest
+from .generate_request import GenerateRequest
 from .generate_response import GenerateResponse
 from .generate_result import GenerateResult
 from .generate_result_data import GenerateResultData
 from .generate_result_error import GenerateResultError
 from .logprobs_enum import LogprobsEnum
-from .model_type_enum import ModelTypeEnum
-from .model_version_build_config import ModelVersionBuildConfig
-from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
-from .model_version_exec_config_read import ModelVersionExecConfigRead
-from .model_version_read import ModelVersionRead
-from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
-from .provider_enum import ProviderEnum
-from .search_request_body_request import SearchRequestBodyRequest
-from .search_request_options_request import SearchRequestOptionsRequest
+from .search_request_options import SearchRequestOptions
 from .search_response import SearchResponse
 from .search_result import SearchResult
-from .search_result_merging_request import SearchResultMergingRequest
 from .search_weights_request import SearchWeightsRequest
-from .submit_completion_actual_request import SubmitCompletionActualRequest
-from .submit_completion_actuals_request_request import SubmitCompletionActualsRequestRequest
-from .upload_document_request_body_request import UploadDocumentRequestBodyRequest
-from .upload_document_response import UploadDocumentResponse
 
 __all__ = [
     "Document",
     "EnrichedNormalizedCompletion",
     "FinishReasonEnum",
     "GenerateOptionsRequest",
-    "GenerateRequestBodyRequest",
-    "GenerateRequestRequest",
+    "GenerateRequest",
     "GenerateResponse",
     "GenerateResult",
     "GenerateResultData",
     "GenerateResultError",
     "LogprobsEnum",
-    "ModelTypeEnum",
-    "ModelVersionBuildConfig",
-    "ModelVersionExecConfigParameters",
-    "ModelVersionExecConfigRead",
-    "ModelVersionRead",
-    "ModelVersionSandboxSnapshot",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
-    "ProviderEnum",
-    "SearchRequestBodyRequest",
-    "SearchRequestOptionsRequest",
+    "SearchRequestOptions",
     "SearchResponse",
     "SearchResult",
-    "SearchResultMergingRequest",
     "SearchWeightsRequest",
-    "SubmitCompletionActualRequest",
-    "SubmitCompletionActualsRequestRequest",
-    "UploadDocumentRequestBodyRequest",
-    "UploadDocumentResponse",
 ]

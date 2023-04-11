@@ -5,15 +5,15 @@ import typing
 
 import pydantic
 
-from ..core.datetime_utils import serialize_datetime
-from .search_result_merging_request import SearchResultMergingRequest
-from .search_weights_request import SearchWeightsRequest
+from ....core.datetime_utils import serialize_datetime
 
 
-class SearchRequestOptionsRequest(pydantic.BaseModel):
-    limit: typing.Optional[int] = pydantic.Field(description=("The maximum number of results to return.\n"))
-    weights: typing.Optional[SearchWeightsRequest]
-    result_merging: typing.Optional[SearchResultMergingRequest]
+class SubmitCompletionActualRequest(pydantic.BaseModel):
+    id: typing.Optional[str]
+    external_id: typing.Optional[str]
+    text: typing.Optional[str]
+    quality: typing.Optional[float]
+    timestamp: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

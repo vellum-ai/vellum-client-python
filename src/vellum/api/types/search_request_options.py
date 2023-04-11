@@ -6,17 +6,12 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
+from .search_weights_request import SearchWeightsRequest
 
 
-class ModelVersionExecConfigRead(pydantic.BaseModel):
-    prompt_template: str = pydantic.Field(
-        description=("The template used to generate prompts for this model version.\n")
-    )
-    parameters: ModelVersionExecConfigParameters
-    input_variables: typing.List[str] = pydantic.Field(
-        description=("Names of the template variables specified in the prompt template.\n")
-    )
+class SearchRequestOptions(pydantic.BaseModel):
+    limit: typing.Optional[int]
+    weights: typing.Optional[SearchWeightsRequest]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -2,20 +2,15 @@
 
 import datetime as dt
 import typing
+import uuid
 
 import pydantic
 
-from ..core.datetime_utils import serialize_datetime
-from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
+from ....core.datetime_utils import serialize_datetime
 
 
-class ModelVersionBuildConfig(pydantic.BaseModel):
-    base_model: str = pydantic.Field(
-        description=(
-            "The name of the base model used to create this model version, as identified by the LLM provider.\n"
-        )
-    )
-    sandbox_snapshot: typing.Optional[ModelVersionSandboxSnapshot]
+class UploadDocumentResponse(pydantic.BaseModel):
+    document_id: uuid.UUID
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

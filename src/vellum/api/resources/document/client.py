@@ -7,6 +7,7 @@ from json.decoder import JSONDecodeError
 import httpx
 import pydantic
 
+from ...environment import VellumEnvironment
 from ...core.api_error import ApiError
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_headers import remove_none_from_headers
@@ -18,7 +19,7 @@ from .types.upload_document_response import UploadDocumentResponse
 
 
 class DocumentClient:
-    def __init__(self, *, environment: str, api_key: str):
+    def __init__(self, *, environment: VellumEnvironment, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -32,7 +33,7 @@ class DocumentClient:
     ) -> UploadDocumentResponse:
         _response = httpx.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment}/", "v1/upload-document"),
+            urllib.parse.urljoin(f"{self._environment.document}/", "v1/upload-document"),
             json=jsonable_encoder(
                 {
                     "add_to_index_names": add_to_index_names,
@@ -59,7 +60,7 @@ class DocumentClient:
 
 
 class AsyncDocumentClient:
-    def __init__(self, *, environment: str, api_key: str):
+    def __init__(self, *, environment: VellumEnvironment, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -74,7 +75,7 @@ class AsyncDocumentClient:
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
                 "POST",
-                urllib.parse.urljoin(f"{self._environment}/", "v1/upload-document"),
+                urllib.parse.urljoin(f"{self._environment.document}/", "v1/upload-document"),
                 json=jsonable_encoder(
                     {
                         "add_to_index_names": add_to_index_names,

@@ -6,7 +6,7 @@
 ## Installation
 
 ```sh
-pip install --upgrade stripe
+pip install --upgrade vellumdev
 ```
 
 ## Usage

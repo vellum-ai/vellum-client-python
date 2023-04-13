@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 
-class VellumApiEnvironment:
-    PRODUCTION: VellumApiEnvironment
+class VellumEnvironment:
+    PRODUCTION: VellumEnvironment
 
     def __init__(self, *, predict: str, document: str):
         self.predict = predict
         self.document = document
 
 
-VellumApiEnvironment.PRODUCTION = VellumApiEnvironment(
+VellumEnvironment.PRODUCTION = VellumEnvironment(
     predict="https://predict.vellum.ai", document="https://documents.vellum.ai"
 )

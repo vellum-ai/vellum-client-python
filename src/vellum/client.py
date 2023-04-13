@@ -12,7 +12,7 @@ from backports.cached_property import cached_property
 from .core.api_error import ApiError
 from .core.jsonable_encoder import jsonable_encoder
 from .core.remove_none_from_headers import remove_none_from_headers
-from .environment import VellumApiEnvironment
+from .environment import VellumEnvironment
 from .resources.commons.errors.bad_request_error import BadRequestError
 from .resources.commons.errors.internal_server_error import InternalServerError
 from .resources.commons.errors.not_found_error import NotFoundError
@@ -26,8 +26,8 @@ from .types.search_request_options import SearchRequestOptions
 from .types.search_response import SearchResponse
 
 
-class VellumApi:
-    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
+class Vellum:
+    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -103,8 +103,8 @@ class VellumApi:
         return DocumentClient(environment=self._environment, api_key=self.api_key)
 
 
-class AsyncVellumApi:
-    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
+class AsyncVellum:
+    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 

@@ -20,20 +20,6 @@ class GenerateResponse(pydantic.BaseModel):
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
         return super().dict(**kwargs_with_defaults)
 
-    @property
-    def texts(self) -> typing.List[str]:
-        return [
-            completion.text
-            for result in self.results
-            for completion in (result.data.completions if result.data else [])
-        ]
-
-    @property
-    def text(self) -> str:
-        if len(self.texts) != 1:
-            raise ValueError(f"Expected exactly one completion, but got {len(self.texts)}")
-        return self.texts[0]
-
     class Config:
         frozen = True
         json_encoders = {dt.datetime: serialize_datetime}

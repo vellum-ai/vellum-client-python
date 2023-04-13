@@ -10,7 +10,7 @@ import pydantic
 from ...core.api_error import ApiError
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_headers import remove_none_from_headers
-from ...environment import VellumApiEnvironment
+from ...environment import VellumEnvironment
 from ..commons.errors.bad_request_error import BadRequestError
 from ..commons.errors.internal_server_error import InternalServerError
 from ..commons.errors.not_found_error import NotFoundError
@@ -19,7 +19,7 @@ from .types.upload_document_response import UploadDocumentResponse
 
 
 class DocumentClient:
-    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
+    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -62,7 +62,7 @@ class DocumentClient:
 
 
 class AsyncDocumentClient:
-    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
+    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 

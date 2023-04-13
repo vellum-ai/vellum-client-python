@@ -13,10 +13,10 @@ pip install --upgrade vellumdev
 
 ```python
 import vellum
-from vellum.client import VellumApi
+from vellum.client import Vellum
 
 
-client = VellumApi(api_key="YOUR_API_KEY")
+client = Vellum(api_key="YOUR_API_KEY")
 
 result = client.generate(
     deployment_name="my-deployment",
@@ -33,9 +33,9 @@ print(result.text)
 Documents can be uploaded to Vellum via either the UI or this API. Once uploaded and indexed, Vellum's Search allows you to perform semantic searches against them.
 
 ```python
-from vellum.client import VellumApi
+from vellum.client import Vellum
 
-client = VellumApi(api_key="YOUR_API_KEY")
+client = Vellum(api_key="YOUR_API_KEY")
 
 with open("/path/to/your/file.txt", "rb") as file:
     result = client.document.upload(

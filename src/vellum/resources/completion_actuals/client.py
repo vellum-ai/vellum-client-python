@@ -11,6 +11,7 @@ import pydantic
 from ...core.api_error import ApiError
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_headers import remove_none_from_headers
+from ...environment import VellumApiEnvironment
 from ..commons.errors.bad_request_error import BadRequestError
 from ..commons.errors.internal_server_error import InternalServerError
 from ..commons.errors.not_found_error import NotFoundError
@@ -19,7 +20,7 @@ from .types.submit_completion_actual_request import SubmitCompletionActualReques
 
 
 class CompletionActualsClient:
-    def __init__(self, *, environment: str, api_key: str):
+    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -32,7 +33,7 @@ class CompletionActualsClient:
     ) -> None:
         _response = httpx.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment}/", "v1/submit-completion-actuals"),
+            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/submit-completion-actuals"),
             json=jsonable_encoder(
                 {"deployment_id": deployment_id, "deployment_name": deployment_name, "actuals": actuals}
             ),
@@ -54,7 +55,7 @@ class CompletionActualsClient:
 
 
 class AsyncCompletionActualsClient:
-    def __init__(self, *, environment: str, api_key: str):
+    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -68,7 +69,7 @@ class AsyncCompletionActualsClient:
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
                 "POST",
-                urllib.parse.urljoin(f"{self._environment}/", "v1/submit-completion-actuals"),
+                urllib.parse.urljoin(f"{self._environment.predict}/", "v1/submit-completion-actuals"),
                 json=jsonable_encoder(
                     {"deployment_id": deployment_id, "deployment_name": deployment_name, "actuals": actuals}
                 ),

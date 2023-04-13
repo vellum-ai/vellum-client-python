@@ -1,7 +1,7 @@
 
 [tool.poetry]
 name = "vellumdev"
-version = "0.0.1"
+version = "0.0.8"
 description = ""
 authors = []
 packages = [

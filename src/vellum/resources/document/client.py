@@ -10,6 +10,7 @@ import pydantic
 from ...core.api_error import ApiError
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_headers import remove_none_from_headers
+from ...environment import VellumApiEnvironment
 from ..commons.errors.bad_request_error import BadRequestError
 from ..commons.errors.internal_server_error import InternalServerError
 from ..commons.errors.not_found_error import NotFoundError
@@ -18,7 +19,7 @@ from .types.upload_document_response import UploadDocumentResponse
 
 
 class DocumentClient:
-    def __init__(self, *, environment: str, api_key: str):
+    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -28,12 +29,13 @@ class DocumentClient:
         add_to_index_names: typing.Optional[typing.List[str]] = None,
         external_id: typing.Optional[str] = None,
         label: str,
+        contents: typing.IO,
         keywords: typing.Optional[typing.List[str]] = None,
     ) -> UploadDocumentResponse:
         _response = httpx.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment}/", "v1/upload-document"),
-            json=jsonable_encoder(
+            urllib.parse.urljoin(f"{self._environment.document}/", "v1/upload-document"),
+            data=jsonable_encoder(
                 {
                     "add_to_index_names": add_to_index_names,
                     "external_id": external_id,
@@ -41,6 +43,7 @@ class DocumentClient:
                     "keywords": keywords,
                 }
             ),
+            files={"contents": contents},
             headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
         )
         if 200 <= _response.status_code < 300:
@@ -59,7 +62,7 @@ class DocumentClient:
 
 
 class AsyncDocumentClient:
-    def __init__(self, *, environment: str, api_key: str):
+    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -69,13 +72,14 @@ class AsyncDocumentClient:
         add_to_index_names: typing.Optional[typing.List[str]] = None,
         external_id: typing.Optional[str] = None,
         label: str,
+        contents: typing.IO,
         keywords: typing.Optional[typing.List[str]] = None,
     ) -> UploadDocumentResponse:
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
                 "POST",
-                urllib.parse.urljoin(f"{self._environment}/", "v1/upload-document"),
-                json=jsonable_encoder(
+                urllib.parse.urljoin(f"{self._environment.document}/", "v1/upload-document"),
+                data=jsonable_encoder(
                     {
                         "add_to_index_names": add_to_index_names,
                         "external_id": external_id,
@@ -83,6 +87,7 @@ class AsyncDocumentClient:
                         "keywords": keywords,
                     }
                 ),
+                files={"contents": contents},
                 headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
             )
         if 200 <= _response.status_code < 300:

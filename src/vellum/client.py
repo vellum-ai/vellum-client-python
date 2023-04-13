@@ -12,6 +12,7 @@ from backports.cached_property import cached_property
 from .core.api_error import ApiError
 from .core.jsonable_encoder import jsonable_encoder
 from .core.remove_none_from_headers import remove_none_from_headers
+from .environment import VellumApiEnvironment
 from .resources.commons.errors.bad_request_error import BadRequestError
 from .resources.commons.errors.internal_server_error import InternalServerError
 from .resources.commons.errors.not_found_error import NotFoundError
@@ -26,7 +27,7 @@ from .types.search_response import SearchResponse
 
 
 class VellumApi:
-    def __init__(self, *, environment: str, api_key: str):
+    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -40,7 +41,7 @@ class VellumApi:
     ) -> GenerateResponse:
         _response = httpx.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment}/", "v1/generate"),
+            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate"),
             json=jsonable_encoder(
                 {
                     "deployment_id": deployment_id,
@@ -75,7 +76,7 @@ class VellumApi:
     ) -> SearchResponse:
         _response = httpx.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment}/", "v1/search"),
+            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/search"),
             json=jsonable_encoder({"index_id": index_id, "index_name": index_name, "query": query, "options": options}),
             headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
         )
@@ -103,7 +104,7 @@ class VellumApi:
 
 
 class AsyncVellumApi:
-    def __init__(self, *, environment: str, api_key: str):
+    def __init__(self, *, environment: VellumApiEnvironment = VellumApiEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
 
@@ -118,7 +119,7 @@ class AsyncVellumApi:
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
                 "POST",
-                urllib.parse.urljoin(f"{self._environment}/", "v1/generate"),
+                urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate"),
                 json=jsonable_encoder(
                     {
                         "deployment_id": deployment_id,
@@ -154,7 +155,7 @@ class AsyncVellumApi:
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
                 "POST",
-                urllib.parse.urljoin(f"{self._environment}/", "v1/search"),
+                urllib.parse.urljoin(f"{self._environment.predict}/", "v1/search"),
                 json=jsonable_encoder(
                     {"index_id": index_id, "index_name": index_name, "query": query, "options": options}
                 ),

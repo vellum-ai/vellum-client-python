@@ -1,19 +1,58 @@
-
 # Vellum Python Library
 
-[![pypi](https://img.shields.io/pypi/v/vellum.svg)](https://pypi.org/project/vellumdev/)
+[![pypi](https://img.shields.io/pypi/v/vellumdev.svg)](https://pypi.python.org/pypi/vellumdev)
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-SDK%20generated%20by%20Fern-brightgreen)](https://github.com/fern-api/fern)
 
+## Installation
+
+```sh
+pip install --upgrade stripe
+```
+
+## Usage
 
 ```python
-from vellum.api.client import VellumApi
+import vellum
+from vellum.client import VellumApi
 
-vellum = VellumApi(api_key="YOUR_API_KEY")
 
-vellum.generate(
-  deploymentName: '<DEPLOYMENT_NAME>',
-  requests: [{ inputValues: { sample_key: 'sample_value' } }],
-)
+client = VellumApi(api_key="YOUR_API_KEY")
+
+result = client.generate(
+    deployment_name="my-deployment",
+    requests=[
+        vellum.GenerateRequest(
+            input_values={"question": "Can I get a refund?"})]
+    )
+
+print(result.text)
+```
+
+## Uploading documents
+
+Documents can be uploaded to Vellum via either the UI or this API. Once uploaded and indexed, Vellum's Search allows you to perform semantic searches against them.
+
+```python
+from vellum.client import VellumApi
+
+client = VellumApi(api_key="YOUR_API_KEY")
+
+with open("/path/to/your/file.txt", "rb") as file:
+    result = client.document.upload(
+        # File to upload
+        contents=file,
+        # Document label
+        label="Human-friendly label for your document",
+        # The names of indexes that you'd like this document to be added to.
+        add_to_index_names=["<your-index-name>"],
+        # Optionally include a unique ID from your system to this document later.
+        #   Useful if you want to perform updates later
+        external_id="<your-index-name>",
+        # Optionally include keywords to associate with the document that can be used in hybrid search
+        keywords=[],
+    )
+
+print(result)
 ```
 
 ## Beta status

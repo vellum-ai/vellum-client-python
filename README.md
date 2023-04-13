@@ -28,6 +28,25 @@ result = client.generate(
 print(result.text)
 ```
 
+## Async Client
+
+```python
+import vellum
+from vellum.client import AsyncVellum
+
+raven = AsyncVellum(api_key="YOUR_API_KEY")
+
+async def generate() -> str:
+  result = client.generate(
+    deployment_name="my-deployment",
+    requests=[
+        vellum.GenerateRequest(
+            input_values={"question": "Can I get a refund?"})]
+    )
+  
+  return result.text
+```
+
 ## Uploading documents
 
 Documents can be uploaded to Vellum via either the UI or this API. Once uploaded and indexed, Vellum's Search allows you to perform semantic searches against them.

@@ -9,7 +9,7 @@ from ....core.datetime_utils import serialize_datetime
 
 
 class ErrorResponse(pydantic.BaseModel):
-    detail: str = pydantic.Field(description=("Details about why the request failed.\n"))
+    detail: typing.Optional[str] = pydantic.Field(description=("Details about why the request failed.\n"))
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

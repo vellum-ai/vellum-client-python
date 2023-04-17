@@ -19,6 +19,7 @@ from .resources.commons.errors.not_found_error import NotFoundError
 from .resources.commons.types.error_response import ErrorResponse
 from .resources.completion_actuals.client import AsyncCompletionActualsClient, CompletionActualsClient
 from .resources.document.client import AsyncDocumentClient, DocumentClient
+from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
 from .types.generate_options_request import GenerateOptionsRequest
 from .types.generate_request import GenerateRequest
 from .types.generate_response import GenerateResponse
@@ -102,6 +103,10 @@ class Vellum:
     def document(self) -> DocumentClient:
         return DocumentClient(environment=self._environment, api_key=self.api_key)
 
+    @cached_property
+    def model_versions(self) -> ModelVersionsClient:
+        return ModelVersionsClient(environment=self._environment, api_key=self.api_key)
+
 
 class AsyncVellum:
     def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
@@ -182,3 +187,7 @@ class AsyncVellum:
     @cached_property
     def document(self) -> AsyncDocumentClient:
         return AsyncDocumentClient(environment=self._environment, api_key=self.api_key)
+
+    @cached_property
+    def model_versions(self) -> AsyncModelVersionsClient:
+        return AsyncModelVersionsClient(environment=self._environment, api_key=self.api_key)

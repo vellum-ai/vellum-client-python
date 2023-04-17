@@ -15,6 +15,7 @@ from ..commons.errors.bad_request_error import BadRequestError
 from ..commons.errors.internal_server_error import InternalServerError
 from ..commons.errors.not_found_error import NotFoundError
 from ..commons.types.error_response import ErrorResponse
+from .types.paginated_slim_document_list import PaginatedSlimDocumentList
 from .types.upload_document_response import UploadDocumentResponse
 
 
@@ -60,6 +61,28 @@ class DocumentClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def list(
+        self,
+        *,
+        document_index_id: typing.Optional[str] = None,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        ordering: typing.Optional[str] = None,
+    ) -> PaginatedSlimDocumentList:
+        _response = httpx.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
+            params={"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering},
+            headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
 
 class AsyncDocumentClient:
     def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
@@ -98,6 +121,29 @@ class AsyncDocumentClient:
             raise NotFoundError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
         if _response.status_code == 400:
             raise InternalServerError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def list(
+        self,
+        *,
+        document_index_id: typing.Optional[str] = None,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        ordering: typing.Optional[str] = None,
+    ) -> PaginatedSlimDocumentList:
+        async with httpx.AsyncClient() as _client:
+            _response = await _client.request(
+                "GET",
+                urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
+                params={"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering},
+                headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
+            )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

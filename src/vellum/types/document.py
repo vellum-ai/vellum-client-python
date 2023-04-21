@@ -2,7 +2,6 @@
 
 import datetime as dt
 import typing
-import uuid
 
 import pydantic
 
@@ -10,13 +9,11 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class Document(pydantic.BaseModel):
-    id: uuid.UUID
-    label: str = pydantic.Field(
-        description=("A human-readable label for the document. Defaults to the originally uploaded file's file name.\n")
-    )
+    id: str = pydantic.Field(description=("The ID of the document.\n"))
+    label: str = pydantic.Field(description=("The human-readable name for the document.\n"))
     external_id: typing.Optional[str] = pydantic.Field(
         description=(
-            "The unique id of this document as it exists in the user's system. If not provided, will be set to the document's id.\n"
+            "The unique ID of the document as represented in an external system and specified when it was originally uploaded.\n"
         )
     )
 

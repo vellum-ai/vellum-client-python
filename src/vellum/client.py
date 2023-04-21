@@ -2,7 +2,6 @@
 
 import typing
 import urllib.parse
-import uuid
 from json.decoder import JSONDecodeError
 
 import httpx
@@ -13,18 +12,14 @@ from .core.api_error import ApiError
 from .core.jsonable_encoder import jsonable_encoder
 from .core.remove_none_from_headers import remove_none_from_headers
 from .environment import VellumEnvironment
-from .resources.commons.errors.bad_request_error import BadRequestError
-from .resources.commons.errors.internal_server_error import InternalServerError
-from .resources.commons.errors.not_found_error import NotFoundError
-from .resources.commons.types.error_response import ErrorResponse
-from .resources.completion_actuals.client import AsyncCompletionActualsClient, CompletionActualsClient
-from .resources.document.client import AsyncDocumentClient, DocumentClient
+from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
 from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
 from .types.generate_options_request import GenerateOptionsRequest
-from .types.generate_request import GenerateRequest
+from .types.generate_request_request import GenerateRequestRequest
 from .types.generate_response import GenerateResponse
-from .types.search_request_options import SearchRequestOptions
+from .types.search_request_options_request import SearchRequestOptionsRequest
 from .types.search_response import SearchResponse
+from .types.submit_completion_actual_request import SubmitCompletionActualRequest
 
 
 class Vellum:
@@ -35,9 +30,9 @@ class Vellum:
     def generate(
         self,
         *,
-        deployment_id: typing.Optional[uuid.UUID] = None,
+        deployment_id: typing.Optional[str] = None,
         deployment_name: typing.Optional[str] = None,
-        requests: typing.List[GenerateRequest],
+        requests: typing.List[GenerateRequestRequest],
         options: typing.Optional[GenerateOptionsRequest] = None,
     ) -> GenerateResponse:
         _response = httpx.request(
@@ -51,16 +46,10 @@ class Vellum:
                     "options": options,
                 }
             ),
-            headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
+            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
-        if _response.status_code == 400:
-            raise NotFoundError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
-        if _response.status_code == 400:
-            raise InternalServerError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -70,25 +59,42 @@ class Vellum:
     def search(
         self,
         *,
-        index_id: typing.Optional[uuid.UUID] = None,
+        index_id: typing.Optional[str] = None,
         index_name: typing.Optional[str] = None,
         query: str,
-        options: SearchRequestOptions,
+        options: typing.Optional[SearchRequestOptionsRequest] = None,
     ) -> SearchResponse:
         _response = httpx.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.predict}/", "v1/search"),
             json=jsonable_encoder({"index_id": index_id, "index_name": index_name, "query": query, "options": options}),
-            headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
+            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(SearchResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
-        if _response.status_code == 400:
-            raise NotFoundError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
-        if _response.status_code == 400:
-            raise InternalServerError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def submit_completion_actuals(
+        self,
+        *,
+        deployment_id: typing.Optional[str] = None,
+        deployment_name: typing.Optional[str] = None,
+        actuals: typing.List[SubmitCompletionActualRequest],
+    ) -> None:
+        _response = httpx.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/submit-completion-actuals"),
+            json=jsonable_encoder(
+                {"deployment_id": deployment_id, "deployment_name": deployment_name, "actuals": actuals}
+            ),
+            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+        )
+        if 200 <= _response.status_code < 300:
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -96,12 +102,8 @@ class Vellum:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     @cached_property
-    def completion_actuals(self) -> CompletionActualsClient:
-        return CompletionActualsClient(environment=self._environment, api_key=self.api_key)
-
-    @cached_property
-    def document(self) -> DocumentClient:
-        return DocumentClient(environment=self._environment, api_key=self.api_key)
+    def documents(self) -> DocumentsClient:
+        return DocumentsClient(environment=self._environment, api_key=self.api_key)
 
     @cached_property
     def model_versions(self) -> ModelVersionsClient:
@@ -116,9 +118,9 @@ class AsyncVellum:
     async def generate(
         self,
         *,
-        deployment_id: typing.Optional[uuid.UUID] = None,
+        deployment_id: typing.Optional[str] = None,
         deployment_name: typing.Optional[str] = None,
-        requests: typing.List[GenerateRequest],
+        requests: typing.List[GenerateRequestRequest],
         options: typing.Optional[GenerateOptionsRequest] = None,
     ) -> GenerateResponse:
         async with httpx.AsyncClient() as _client:
@@ -133,16 +135,10 @@ class AsyncVellum:
                         "options": options,
                     }
                 ),
-                headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
+                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
-        if _response.status_code == 400:
-            raise NotFoundError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
-        if _response.status_code == 400:
-            raise InternalServerError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -152,10 +148,10 @@ class AsyncVellum:
     async def search(
         self,
         *,
-        index_id: typing.Optional[uuid.UUID] = None,
+        index_id: typing.Optional[str] = None,
         index_name: typing.Optional[str] = None,
         query: str,
-        options: SearchRequestOptions,
+        options: typing.Optional[SearchRequestOptionsRequest] = None,
     ) -> SearchResponse:
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
@@ -164,16 +160,34 @@ class AsyncVellum:
                 json=jsonable_encoder(
                     {"index_id": index_id, "index_name": index_name, "query": query, "options": options}
                 ),
-                headers=remove_none_from_headers({"X-API-KEY": self.api_key}),
+                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(SearchResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
-        if _response.status_code == 400:
-            raise NotFoundError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
-        if _response.status_code == 400:
-            raise InternalServerError(pydantic.parse_obj_as(ErrorResponse, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def submit_completion_actuals(
+        self,
+        *,
+        deployment_id: typing.Optional[str] = None,
+        deployment_name: typing.Optional[str] = None,
+        actuals: typing.List[SubmitCompletionActualRequest],
+    ) -> None:
+        async with httpx.AsyncClient() as _client:
+            _response = await _client.request(
+                "POST",
+                urllib.parse.urljoin(f"{self._environment.predict}/", "v1/submit-completion-actuals"),
+                json=jsonable_encoder(
+                    {"deployment_id": deployment_id, "deployment_name": deployment_name, "actuals": actuals}
+                ),
+                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            )
+        if 200 <= _response.status_code < 300:
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -181,12 +195,8 @@ class AsyncVellum:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     @cached_property
-    def completion_actuals(self) -> AsyncCompletionActualsClient:
-        return AsyncCompletionActualsClient(environment=self._environment, api_key=self.api_key)
-
-    @cached_property
-    def document(self) -> AsyncDocumentClient:
-        return AsyncDocumentClient(environment=self._environment, api_key=self.api_key)
+    def documents(self) -> AsyncDocumentsClient:
+        return AsyncDocumentsClient(environment=self._environment, api_key=self.api_key)
 
     @cached_property
     def model_versions(self) -> AsyncModelVersionsClient:

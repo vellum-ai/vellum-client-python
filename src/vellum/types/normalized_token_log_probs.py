@@ -10,8 +10,8 @@ from ..core.datetime_utils import serialize_datetime
 
 class NormalizedTokenLogProbs(pydantic.BaseModel):
     token: str
-    logprob: typing.Optional[float]
-    top_logprobs: typing.Optional[typing.Dict[str, float]]
+    logprob: float
+    top_logprobs: typing.Dict[str, float]
     text_offset: int
 
     def json(self, **kwargs: typing.Any) -> str:

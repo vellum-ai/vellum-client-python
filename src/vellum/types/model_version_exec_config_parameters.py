@@ -5,15 +5,18 @@ import typing
 
 import pydantic
 
-from ....core.datetime_utils import serialize_datetime
+from ..core.datetime_utils import serialize_datetime
 
 
-class SubmitCompletionActualRequest(pydantic.BaseModel):
-    id: typing.Optional[str]
-    external_id: typing.Optional[str]
-    text: typing.Optional[str]
-    quality: typing.Optional[float]
-    timestamp: typing.Optional[str]
+class ModelVersionExecConfigParameters(pydantic.BaseModel):
+    temperature: float
+    max_tokens: int
+    stop: typing.List[str]
+    top_p: float
+    top_k: typing.Optional[float]
+    frequency_penalty: float
+    presence_penalty: float
+    logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

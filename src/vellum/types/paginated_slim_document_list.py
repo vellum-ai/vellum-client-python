@@ -5,18 +5,15 @@ import typing
 
 import pydantic
 
-from ....core.datetime_utils import serialize_datetime
+from ..core.datetime_utils import serialize_datetime
+from .slim_document import SlimDocument
 
 
-class ModelVersionExecConfigParameters(pydantic.BaseModel):
-    temperature: float
-    max_tokens: int
-    stop: typing.Optional[typing.List[str]]
-    top_p: float
-    top_k: typing.Optional[float]
-    frequency_penalty: float
-    presence_penalty: float
-    logit_bias: typing.Optional[typing.Dict[str, float]]
+class PaginatedSlimDocumentList(pydantic.BaseModel):
+    count: typing.Optional[int]
+    next: typing.Optional[str]
+    previous: typing.Optional[str]
+    results: typing.Optional[typing.List[SlimDocument]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

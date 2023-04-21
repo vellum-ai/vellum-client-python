@@ -6,13 +6,10 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .search_result import SearchResult
 
 
-class SearchResponse(pydantic.BaseModel):
-    results: typing.List[SearchResult] = pydantic.Field(
-        description=("The results of the search. Each result represents a chunk that matches the search query.\n")
-    )
+class SearchResultMergingRequest(pydantic.BaseModel):
+    enabled: bool = pydantic.Field(description=("Whether to enable merging results\n"))
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

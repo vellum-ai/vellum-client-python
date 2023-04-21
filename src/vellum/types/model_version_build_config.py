@@ -5,19 +5,20 @@ import typing
 
 import pydantic
 
-from ....core.datetime_utils import serialize_datetime
-from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
+from ..core.datetime_utils import serialize_datetime
+from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
 
 
-class ModelVersionExecConfigRead(pydantic.BaseModel):
-    prompt_template: str = pydantic.Field(
-        description=("The template used to generate prompts for this model version.\n")
+class ModelVersionBuildConfig(pydantic.BaseModel):
+    base_model: str = pydantic.Field(
+        description=(
+            "The name of the base model used to create this model version, as identified by the LLM provider.\n"
+        )
     )
-    parameters: ModelVersionExecConfigParameters = pydantic.Field(
-        description=("The generation parameters that are passed to the LLM provider at runtime.\n")
-    )
-    input_variables: typing.List[str] = pydantic.Field(
-        description=("Names of the template variables specified in the prompt template.\n")
+    sandbox_snapshot: typing.Optional[ModelVersionSandboxSnapshot] = pydantic.Field(
+        description=(
+            "Information about the sandbox snapshot that was used to create this model version, if applicable.\n"
+        )
     )
 
     def json(self, **kwargs: typing.Any) -> str:

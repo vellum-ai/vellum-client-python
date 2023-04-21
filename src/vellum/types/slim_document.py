@@ -5,8 +5,8 @@ import typing
 
 import pydantic
 
-from ....core.datetime_utils import serialize_datetime
-from .document_to_document_index import DocumentToDocumentIndex
+from ..core.datetime_utils import serialize_datetime
+from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .processing_state_enum import ProcessingStateEnum
 from .status_enum import StatusEnum
 
@@ -29,7 +29,7 @@ class SlimDocument(pydantic.BaseModel):
             "A list of keywords associated with this document. Originally provided when uploading the document.\n"
         )
     )
-    document_to_document_indexes: typing.List[DocumentToDocumentIndex]
+    document_to_document_indexes: typing.List[DocumentDocumentToDocumentIndex]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

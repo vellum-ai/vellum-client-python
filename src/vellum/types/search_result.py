@@ -10,10 +10,12 @@ from .document import Document
 
 
 class SearchResult(pydantic.BaseModel):
-    document: Document
-    text: str
+    document: Document = pydantic.Field(
+        description=("The document that contains the chunk that matched the search query.\n")
+    )
+    text: str = pydantic.Field(description=("The text of the chunk that matched the search query.\n"))
     keywords: typing.List[str]
-    score: float
+    score: float = pydantic.Field(description=("A score representing how well the chunk matches the search query.\n"))
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

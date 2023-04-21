@@ -5,11 +5,18 @@ import typing
 
 import pydantic
 
-from ....core.datetime_utils import serialize_datetime
+from ..core.datetime_utils import serialize_datetime
 
 
-class ErrorResponse(pydantic.BaseModel):
-    detail: typing.Optional[str] = pydantic.Field(description=("Details about why the request failed.\n"))
+class GenerateRequestRequest(pydantic.BaseModel):
+    input_values: typing.Dict[str, typing.Any] = pydantic.Field(
+        description=("Key/value pairs for each template variable defined in the deployment's prompt.\n")
+    )
+    external_ids: typing.Optional[typing.List[str]] = pydantic.Field(
+        description=(
+            "Optionally include a unique identifier for each generation, as represented outside of Vellum. Note that this should generally be a list of length one.\n"
+        )
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

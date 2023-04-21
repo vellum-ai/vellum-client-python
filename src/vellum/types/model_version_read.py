@@ -5,7 +5,7 @@ import typing
 
 import pydantic
 
-from ....core.datetime_utils import serialize_datetime
+from ..core.datetime_utils import serialize_datetime
 from .model_type_enum import ModelTypeEnum
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_exec_config_read import ModelVersionExecConfigRead

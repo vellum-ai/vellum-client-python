@@ -5,12 +5,11 @@ import typing
 
 import pydantic
 
-from ....core.datetime_utils import serialize_datetime
+from ..core.datetime_utils import serialize_datetime
 
 
-class ModelVersionSandboxSnapshot(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the sandbox snapshot.\n"))
-    prompt_index: int = pydantic.Field(description=("The index of the prompt in the sandbox snapshot.\n"))
+class UploadDocumentErrorResponse(pydantic.BaseModel):
+    detail: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

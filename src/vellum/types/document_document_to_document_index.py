@@ -2,15 +2,21 @@
 
 import datetime as dt
 import typing
-import uuid
 
 import pydantic
 
-from ....core.datetime_utils import serialize_datetime
+from ..core.datetime_utils import serialize_datetime
+from .indexing_state_enum import IndexingStateEnum
 
 
-class UploadDocumentResponse(pydantic.BaseModel):
-    document_id: uuid.UUID
+class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
+    id: str = pydantic.Field(description=("Vellum-generated ID that uniquely identifies this link.\n"))
+    document_index_id: str = pydantic.Field(
+        description=("Vellum-generated ID that uniquely identifies the index this document is included in.\n")
+    )
+    indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(
+        description=("An enum value representing where this document is along its indexing lifecycle for this index.\n")
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

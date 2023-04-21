@@ -6,12 +6,11 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .search_result import SearchResult
 
 
-class SearchResponse(pydantic.BaseModel):
-    results: typing.List[SearchResult] = pydantic.Field(
-        description=("The results of the search. Each result represents a chunk that matches the search query.\n")
+class SearchFiltersRequest(pydantic.BaseModel):
+    external_ids: typing.Optional[typing.List[str]] = pydantic.Field(
+        description=("The document external IDs to filter by\n")
     )
 
     def json(self, **kwargs: typing.Any) -> str:

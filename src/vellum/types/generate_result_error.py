@@ -9,7 +9,7 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class GenerateResultError(pydantic.BaseModel):
-    message: str
+    message: str = pydantic.Field(description=("The error message returned by the LLM provider.\n"))
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -7,18 +7,20 @@ import pydantic
 
 from ..core.datetime_utils import serialize_datetime
 from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
+from .prompt_template_block_data import PromptTemplateBlockData
 
 
 class ModelVersionExecConfigRead(pydantic.BaseModel):
-    prompt_template: str = pydantic.Field(
-        description=("The template used to generate prompts for this model version.\n")
-    )
     parameters: ModelVersionExecConfigParameters = pydantic.Field(
         description=("The generation parameters that are passed to the LLM provider at runtime.\n")
     )
     input_variables: typing.List[str] = pydantic.Field(
         description=("Names of the template variables specified in the prompt template.\n")
     )
+    prompt_template: str = pydantic.Field(
+        description=("The template used to generate prompts for this model version.\n")
+    )
+    prompt_block_data: typing.Optional[PromptTemplateBlockData]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

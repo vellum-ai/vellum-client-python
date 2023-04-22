@@ -1,7 +1,7 @@
 
 [tool.poetry]
-name = "vellumdev"
-version = "0.0.20"
+name = "vellum-ai"
+version = "v0.0.1"
 description = ""
 authors = []
 packages = [
@@ -12,8 +12,8 @@ packages = [
 python = "^3.7"
 httpx = "0.23.3"
 types-backports = "0.1.3"
-pydantic = "^1.9.2"
 backports-cached_property = "1.0.2"
+pydantic = "^1.9.2"
 
 [tool.poetry.dev-dependencies]
 mypy = "0.971"

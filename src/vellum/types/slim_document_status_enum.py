@@ -6,9 +6,9 @@ import typing
 T_Result = typing.TypeVar("T_Result")
 
 
-class StatusEnum(str, enum.Enum):
+class SlimDocumentStatusEnum(str, enum.Enum):
     ACTIVE = "ACTIVE"
 
     def visit(self, active: typing.Callable[[], T_Result]) -> T_Result:
-        if self is StatusEnum.ACTIVE:
+        if self is SlimDocumentStatusEnum.ACTIVE:
             return active()

@@ -8,7 +8,7 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .processing_state_enum import ProcessingStateEnum
-from .status_enum import StatusEnum
+from .slim_document_status_enum import SlimDocumentStatusEnum
 
 
 class SlimDocument(pydantic.BaseModel):
@@ -23,7 +23,7 @@ class SlimDocument(pydantic.BaseModel):
     processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
         description=("The current processing state of the document\n")
     )
-    status: typing.Optional[StatusEnum] = pydantic.Field(description=("The document's current status.\n"))
+    status: typing.Optional[SlimDocumentStatusEnum] = pydantic.Field(description=("The document's current status.\n"))
     keywords: typing.Optional[typing.List[str]] = pydantic.Field(
         description=(
             "A list of keywords associated with this document. Originally provided when uploading the document.\n"

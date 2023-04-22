@@ -9,6 +9,7 @@ from ..core.datetime_utils import serialize_datetime
 from .model_type_enum import ModelTypeEnum
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_exec_config_read import ModelVersionExecConfigRead
+from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .provider_enum import ProviderEnum
 
 
@@ -27,6 +28,7 @@ class ModelVersionRead(pydantic.BaseModel):
     exec_config: ModelVersionExecConfigRead = pydantic.Field(
         description=("Configuration used to execute this model version.\n")
     )
+    status: typing.Optional[ModelVersionReadStatusEnum]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -8,7 +8,7 @@ from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .finish_reason_enum import FinishReasonEnum
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
-from .generate_request_request import GenerateRequestRequest
+from .generate_request import GenerateRequest
 from .generate_response import GenerateResponse
 from .generate_result import GenerateResult
 from .generate_result_data import GenerateResultData
@@ -53,7 +53,7 @@ __all__ = [
     "FinishReasonEnum",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
-    "GenerateRequestRequest",
+    "GenerateRequest",
     "GenerateResponse",
     "GenerateResult",
     "GenerateResultData",

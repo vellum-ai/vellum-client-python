@@ -15,7 +15,7 @@ from .environment import VellumEnvironment
 from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
 from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
 from .types.generate_options_request import GenerateOptionsRequest
-from .types.generate_request_request import GenerateRequestRequest
+from .types.generate_request import GenerateRequest
 from .types.generate_response import GenerateResponse
 from .types.search_request_options_request import SearchRequestOptionsRequest
 from .types.search_response import SearchResponse
@@ -32,7 +32,7 @@ class Vellum:
         *,
         deployment_id: typing.Optional[str] = None,
         deployment_name: typing.Optional[str] = None,
-        requests: typing.List[GenerateRequestRequest],
+        requests: typing.List[GenerateRequest],
         options: typing.Optional[GenerateOptionsRequest] = None,
     ) -> GenerateResponse:
         _response = httpx.request(
@@ -120,7 +120,7 @@ class AsyncVellum:
         *,
         deployment_id: typing.Optional[str] = None,
         deployment_name: typing.Optional[str] = None,
-        requests: typing.List[GenerateRequestRequest],
+        requests: typing.List[GenerateRequest],
         options: typing.Optional[GenerateOptionsRequest] = None,
     ) -> GenerateResponse:
         async with httpx.AsyncClient() as _client:

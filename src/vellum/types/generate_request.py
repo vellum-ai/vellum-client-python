@@ -8,7 +8,7 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 
 
-class GenerateRequestRequest(pydantic.BaseModel):
+class GenerateRequest(pydantic.BaseModel):
     input_values: typing.Dict[str, typing.Any] = pydantic.Field(
         description=("Key/value pairs for each template variable defined in the deployment's prompt.\n")
     )

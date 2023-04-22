@@ -57,7 +57,7 @@ from vellum.client import Vellum
 client = Vellum(api_key="YOUR_API_KEY")
 
 with open("/path/to/your/file.txt", "rb") as file:
-    result = client.document.upload(
+    result = client.documents.upload(
         # File to upload
         contents=file,
         # Document label

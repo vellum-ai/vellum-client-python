@@ -47,6 +47,7 @@ class Vellum:
                 }
             ),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            timeout=None,
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
@@ -136,6 +137,7 @@ class AsyncVellum:
                     }
                 ),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+                timeout=None,
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(GenerateResponse, _response.json())  # type: ignore

@@ -22,6 +22,7 @@ class ModelVersionsClient:
             "GET",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}"),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            timeout=None,
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ModelVersionRead, _response.json())  # type: ignore
@@ -43,6 +44,7 @@ class AsyncModelVersionsClient:
                 "GET",
                 urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}"),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+                timeout=None,
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ModelVersionRead, _response.json())  # type: ignore

@@ -33,6 +33,7 @@ class DocumentsClient:
             urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
             params={"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering},
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            timeout=None,
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
@@ -64,6 +65,7 @@ class DocumentsClient:
             ),
             files={"contents": contents},
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            timeout=None,
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
@@ -93,6 +95,7 @@ class AsyncDocumentsClient:
                 urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
                 params={"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering},
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+                timeout=None,
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
@@ -125,6 +128,7 @@ class AsyncDocumentsClient:
                 ),
                 files={"contents": contents},
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+                timeout=None,
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore

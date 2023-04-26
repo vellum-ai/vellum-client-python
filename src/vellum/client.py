@@ -70,6 +70,7 @@ class Vellum:
             urllib.parse.urljoin(f"{self._environment.predict}/", "v1/search"),
             json=jsonable_encoder({"index_id": index_id, "index_name": index_name, "query": query, "options": options}),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            timeout=None,
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(SearchResponse, _response.json())  # type: ignore
@@ -93,6 +94,7 @@ class Vellum:
                 {"deployment_id": deployment_id, "deployment_name": deployment_name, "actuals": actuals}
             ),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            timeout=None,
         )
         if 200 <= _response.status_code < 300:
             return
@@ -163,6 +165,7 @@ class AsyncVellum:
                     {"index_id": index_id, "index_name": index_name, "query": query, "options": options}
                 ),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+                timeout=None,
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(SearchResponse, _response.json())  # type: ignore
@@ -187,6 +190,7 @@ class AsyncVellum:
                     {"deployment_id": deployment_id, "deployment_name": deployment_name, "actuals": actuals}
                 ),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+                timeout=None,
             )
         if 200 <= _response.status_code < 300:
             return

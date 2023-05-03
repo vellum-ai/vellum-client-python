@@ -11,7 +11,7 @@ from ..core.datetime_utils import serialize_datetime
 class ModelVersionExecConfigParameters(pydantic.BaseModel):
     temperature: float
     max_tokens: int
-    stop: typing.List[str]
+    stop: typing.Optional[typing.List[str]]
     top_p: float
     top_k: typing.Optional[float]
     frequency_penalty: float

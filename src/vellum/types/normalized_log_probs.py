@@ -11,7 +11,7 @@ from .normalized_token_log_probs import NormalizedTokenLogProbs
 
 class NormalizedLogProbs(pydantic.BaseModel):
     tokens: typing.List[NormalizedTokenLogProbs]
-    likelihood: float
+    likelihood: typing.Optional[float]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

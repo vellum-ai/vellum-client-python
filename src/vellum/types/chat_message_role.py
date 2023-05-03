@@ -6,7 +6,7 @@ import typing
 T_Result = typing.TypeVar("T_Result")
 
 
-class ChatRoleEnum(str, enum.Enum):
+class ChatMessageRole(str, enum.Enum):
     SYSTEM = "SYSTEM"
     ASSISTANT = "ASSISTANT"
     USER = "USER"
@@ -17,9 +17,9 @@ class ChatRoleEnum(str, enum.Enum):
         assistant: typing.Callable[[], T_Result],
         user: typing.Callable[[], T_Result],
     ) -> T_Result:
-        if self is ChatRoleEnum.SYSTEM:
+        if self is ChatMessageRole.SYSTEM:
             return system()
-        if self is ChatRoleEnum.ASSISTANT:
+        if self is ChatMessageRole.ASSISTANT:
             return assistant()
-        if self is ChatRoleEnum.USER:
+        if self is ChatMessageRole.USER:
             return user()

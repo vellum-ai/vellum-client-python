@@ -6,13 +6,12 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .chat_message_role import ChatMessageRole
 
 
-class NormalizedTokenLogProbs(pydantic.BaseModel):
-    token: str
-    logprob: typing.Optional[float]
-    top_logprobs: typing.Optional[typing.Dict[str, typing.Optional[float]]]
-    text_offset: int
+class ChatMessageRequest(pydantic.BaseModel):
+    text: str
+    role: ChatMessageRole
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

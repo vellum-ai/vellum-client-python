@@ -6,11 +6,17 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .chat_message_request import ChatMessageRequest
 
 
 class GenerateRequest(pydantic.BaseModel):
     input_values: typing.Dict[str, typing.Any] = pydantic.Field(
         description=("Key/value pairs for each template variable defined in the deployment's prompt.\n")
+    )
+    chat_history: typing.Optional[typing.List[ChatMessageRequest]] = pydantic.Field(
+        description=(
+            "Optionally provide a list of chat messages that'll be used in place of the special {$chat_history} variable, if included in the prompt.\n"
+        )
     )
     external_ids: typing.Optional[typing.List[str]] = pydantic.Field(
         description=(

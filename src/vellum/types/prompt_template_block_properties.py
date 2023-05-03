@@ -6,11 +6,11 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .chat_role_enum import ChatRoleEnum
+from .chat_message_role import ChatMessageRole
 
 
 class PromptTemplateBlockProperties(pydantic.BaseModel):
-    chat_role: typing.Optional[ChatRoleEnum]
+    chat_role: typing.Optional[ChatMessageRole]
     text: typing.Optional[str]
     variable_name: typing.Optional[str]
     blocks: typing.Optional[typing.List[typing.Dict[str, typing.Any]]]

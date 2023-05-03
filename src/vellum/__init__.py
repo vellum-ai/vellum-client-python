@@ -4,7 +4,8 @@ from .environment import VellumEnvironment
 from .resources import documents, model_versions
 from .types import (
     BlockTypeEnum,
-    ChatRoleEnum,
+    ChatMessageRequest,
+    ChatMessageRole,
     Document,
     DocumentDocumentToDocumentIndex,
     EnrichedNormalizedCompletion,
@@ -50,7 +51,8 @@ from .types import (
 
 __all__ = [
     "BlockTypeEnum",
-    "ChatRoleEnum",
+    "ChatMessageRequest",
+    "ChatMessageRole",
     "Document",
     "DocumentDocumentToDocumentIndex",
     "EnrichedNormalizedCompletion",

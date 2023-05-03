@@ -46,11 +46,11 @@ class DocumentsClient:
     def upload(
         self,
         *,
-        add_to_index_names: typing.List[str],
-        external_id: str,
+        add_to_index_names: typing.Optional[typing.List[str]] = None,
+        external_id: typing.Optional[str] = None,
         label: str,
         contents: typing.IO,
-        keywords: typing.List[str],
+        keywords: typing.Optional[typing.List[str]] = None,
     ) -> UploadDocumentResponse:
         _response = httpx.request(
             "POST",
@@ -108,11 +108,11 @@ class AsyncDocumentsClient:
     async def upload(
         self,
         *,
-        add_to_index_names: typing.List[str],
-        external_id: str,
+        add_to_index_names: typing.Optional[typing.List[str]] = None,
+        external_id: typing.Optional[str] = None,
         label: str,
         contents: typing.IO,
-        keywords: typing.List[str],
+        keywords: typing.Optional[typing.List[str]] = None,
     ) -> UploadDocumentResponse:
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(

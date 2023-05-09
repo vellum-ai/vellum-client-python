@@ -17,10 +17,11 @@ class ModelVersionExecConfigRead(pydantic.BaseModel):
     input_variables: typing.List[str] = pydantic.Field(
         description=("Names of the template variables specified in the prompt template.\n")
     )
-    prompt_template: str = pydantic.Field(
+    prompt_template: typing.Optional[str] = pydantic.Field(
         description=("The template used to generate prompts for this model version.\n")
     )
     prompt_block_data: typing.Optional[PromptTemplateBlockData]
+    prompt_syntax_version: int
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

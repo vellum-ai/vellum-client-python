@@ -6,14 +6,15 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .block_type_enum import BlockTypeEnum
-from .prompt_template_block_properties import PromptTemplateBlockProperties
+from .sandbox_input import SandboxInput
+from .sandbox_metric_input_params import SandboxMetricInputParams
 
 
-class PromptTemplateBlock(pydantic.BaseModel):
-    id: str
-    block_type: BlockTypeEnum
-    properties: PromptTemplateBlockProperties
+class SandboxScenario(pydantic.BaseModel):
+    label: typing.Optional[str]
+    inputs: typing.List[SandboxInput] = pydantic.Field(description=("The inputs for the scenario\n"))
+    metric_input_params: typing.Optional[SandboxMetricInputParams]
+    id: str = pydantic.Field(description=("The id of the scenario\n"))
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

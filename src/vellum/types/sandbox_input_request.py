@@ -6,14 +6,15 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .block_type_enum import BlockTypeEnum
-from .prompt_template_block_properties import PromptTemplateBlockProperties
+from .chat_message_request import ChatMessageRequest
+from .type_enum import TypeEnum
 
 
-class PromptTemplateBlock(pydantic.BaseModel):
-    id: str
-    block_type: BlockTypeEnum
-    properties: PromptTemplateBlockProperties
+class SandboxInputRequest(pydantic.BaseModel):
+    key: str
+    type: typing.Optional[TypeEnum]
+    value: typing.Optional[str]
+    chat_history: typing.Optional[typing.List[ChatMessageRequest]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

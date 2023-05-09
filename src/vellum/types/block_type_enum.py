@@ -9,21 +9,17 @@ T_Result = typing.TypeVar("T_Result")
 class BlockTypeEnum(str, enum.Enum):
     CHAT_MESSAGE = "CHAT_MESSAGE"
     CHAT_HISTORY = "CHAT_HISTORY"
-    TEXT = "TEXT"
-    VARIABLE = "VARIABLE"
+    JINJA = "JINJA"
 
     def visit(
         self,
         chat_message: typing.Callable[[], T_Result],
         chat_history: typing.Callable[[], T_Result],
-        text: typing.Callable[[], T_Result],
-        variable: typing.Callable[[], T_Result],
+        jinja: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is BlockTypeEnum.CHAT_MESSAGE:
             return chat_message()
         if self is BlockTypeEnum.CHAT_HISTORY:
             return chat_history()
-        if self is BlockTypeEnum.TEXT:
-            return text()
-        if self is BlockTypeEnum.VARIABLE:
-            return variable()
+        if self is BlockTypeEnum.JINJA:
+            return jinja()

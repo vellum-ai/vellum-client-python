@@ -11,8 +11,7 @@ from .chat_message_role import ChatMessageRole
 
 class PromptTemplateBlockProperties(pydantic.BaseModel):
     chat_role: typing.Optional[ChatMessageRole]
-    text: typing.Optional[str]
-    variable_name: typing.Optional[str]
+    template: typing.Optional[str]
     blocks: typing.Optional[typing.List[typing.Dict[str, typing.Any]]]
 
     def json(self, **kwargs: typing.Any) -> str:

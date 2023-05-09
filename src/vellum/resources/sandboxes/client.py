@@ -27,14 +27,19 @@ class SandboxesClient:
         *,
         label: typing.Optional[str] = None,
         inputs: typing.List[SandboxInputRequest],
+        scenario_id: typing.Optional[str] = None,
         metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = None,
-        id: typing.Optional[str] = None,
     ) -> SandboxScenario:
         _response = httpx.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
             json=jsonable_encoder(
-                {"label": label, "inputs": inputs, "metric_input_params": metric_input_params, "id": id}
+                {
+                    "label": label,
+                    "inputs": inputs,
+                    "scenario_id": scenario_id,
+                    "metric_input_params": metric_input_params,
+                }
             ),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
             timeout=None,
@@ -59,15 +64,20 @@ class AsyncSandboxesClient:
         *,
         label: typing.Optional[str] = None,
         inputs: typing.List[SandboxInputRequest],
+        scenario_id: typing.Optional[str] = None,
         metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = None,
-        id: typing.Optional[str] = None,
     ) -> SandboxScenario:
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
                 "POST",
                 urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
                 json=jsonable_encoder(
-                    {"label": label, "inputs": inputs, "metric_input_params": metric_input_params, "id": id}
+                    {
+                        "label": label,
+                        "inputs": inputs,
+                        "scenario_id": scenario_id,
+                        "metric_input_params": metric_input_params,
+                    }
                 ),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
                 timeout=None,

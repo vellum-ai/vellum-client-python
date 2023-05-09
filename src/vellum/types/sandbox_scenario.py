@@ -13,8 +13,8 @@ from .sandbox_metric_input_params import SandboxMetricInputParams
 class SandboxScenario(pydantic.BaseModel):
     label: typing.Optional[str]
     inputs: typing.List[SandboxInput] = pydantic.Field(description=("The inputs for the scenario\n"))
-    metric_input_params: typing.Optional[SandboxMetricInputParams]
     id: str = pydantic.Field(description=("The id of the scenario\n"))
+    metric_input_params: SandboxMetricInputParams
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

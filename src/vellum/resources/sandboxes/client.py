@@ -15,6 +15,9 @@ from ...types.sandbox_input_request import SandboxInputRequest
 from ...types.sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from ...types.sandbox_scenario import SandboxScenario
 
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
+
 
 class SandboxesClient:
     def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
@@ -25,22 +28,22 @@ class SandboxesClient:
         self,
         id: str,
         *,
-        label: typing.Optional[str] = None,
+        label: typing.Optional[str] = OMIT,
         inputs: typing.List[SandboxInputRequest],
-        scenario_id: typing.Optional[str] = None,
-        metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = None,
+        scenario_id: typing.Optional[str] = OMIT,
+        metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = OMIT,
     ) -> SandboxScenario:
+        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if label is not OMIT:
+            _request["label"] = label
+        if scenario_id is not OMIT:
+            _request["scenario_id"] = scenario_id
+        if metric_input_params is not OMIT:
+            _request["metric_input_params"] = metric_input_params
         _response = httpx.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
-            json=jsonable_encoder(
-                {
-                    "label": label,
-                    "inputs": inputs,
-                    "scenario_id": scenario_id,
-                    "metric_input_params": metric_input_params,
-                }
-            ),
+            json=jsonable_encoder(_request),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
             timeout=None,
         )
@@ -62,23 +65,23 @@ class AsyncSandboxesClient:
         self,
         id: str,
         *,
-        label: typing.Optional[str] = None,
+        label: typing.Optional[str] = OMIT,
         inputs: typing.List[SandboxInputRequest],
-        scenario_id: typing.Optional[str] = None,
-        metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = None,
+        scenario_id: typing.Optional[str] = OMIT,
+        metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = OMIT,
     ) -> SandboxScenario:
+        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if label is not OMIT:
+            _request["label"] = label
+        if scenario_id is not OMIT:
+            _request["scenario_id"] = scenario_id
+        if metric_input_params is not OMIT:
+            _request["metric_input_params"] = metric_input_params
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
                 "POST",
                 urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
-                json=jsonable_encoder(
-                    {
-                        "label": label,
-                        "inputs": inputs,
-                        "scenario_id": scenario_id,
-                        "metric_input_params": metric_input_params,
-                    }
-                ),
+                json=jsonable_encoder(_request),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
                 timeout=None,
             )

@@ -7,6 +7,7 @@ import pydantic
 
 from ..core.datetime_utils import serialize_datetime
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
+from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 from .slim_document_status_enum import SlimDocumentStatusEnum
 
@@ -21,7 +22,14 @@ class SlimDocument(pydantic.BaseModel):
     )
     label: str = pydantic.Field(description=("Human-friendly name for this document.\n"))
     processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
-        description=("The current processing state of the document\n")
+        description=(
+            "An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.\n"
+        )
+    )
+    processing_failure_reason: typing.Optional[ProcessingFailureReasonEnum] = pydantic.Field(
+        description=(
+            "An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.\n"
+        )
     )
     status: typing.Optional[SlimDocumentStatusEnum] = pydantic.Field(description=("The document's current status.\n"))
     keywords: typing.Optional[typing.List[str]] = pydantic.Field(

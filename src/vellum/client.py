@@ -15,6 +15,7 @@ from .environment import VellumEnvironment
 from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
 from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
+from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
 from .types.generate_options_request import GenerateOptionsRequest
 from .types.generate_request import GenerateRequest
 from .types.generate_response import GenerateResponse
@@ -130,6 +131,10 @@ class Vellum:
     def sandboxes(self) -> SandboxesClient:
         return SandboxesClient(environment=self._environment, api_key=self.api_key)
 
+    @cached_property
+    def test_suites(self) -> TestSuitesClient:
+        return TestSuitesClient(environment=self._environment, api_key=self.api_key)
+
 
 class AsyncVellum:
     def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
@@ -237,3 +242,7 @@ class AsyncVellum:
     @cached_property
     def sandboxes(self) -> AsyncSandboxesClient:
         return AsyncSandboxesClient(environment=self._environment, api_key=self.api_key)
+
+    @cached_property
+    def test_suites(self) -> AsyncTestSuitesClient:
+        return AsyncTestSuitesClient(environment=self._environment, api_key=self.api_key)

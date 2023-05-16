@@ -6,11 +6,14 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .evaluation_params_request import EvaluationParamsRequest
 
 
-class SandboxMetricInputParamsRequest(pydantic.BaseModel):
-    params: typing.Optional[EvaluationParamsRequest]
+class EvaluationParams(pydantic.BaseModel):
+    target: typing.Optional[str] = pydantic.Field(
+        description=(
+            "The target value to compare the LLM output against. Typically what you expect or desire the LLM output to be.\n"
+        )
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

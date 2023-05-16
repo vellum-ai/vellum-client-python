@@ -6,10 +6,11 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .evaluation_params import EvaluationParams
 
 
 class SandboxMetricInputParams(pydantic.BaseModel):
-    params: typing.Optional[typing.Dict[str, typing.Any]]
+    params: typing.Optional[EvaluationParams]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

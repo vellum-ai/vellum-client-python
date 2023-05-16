@@ -6,15 +6,15 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .chat_message_request import ChatMessageRequest
+from .chat_message import ChatMessage
 from .type_enum import TypeEnum
 
 
-class SandboxInputRequest(pydantic.BaseModel):
+class ScenarioInput(pydantic.BaseModel):
     key: str
     type: typing.Optional[TypeEnum]
     value: typing.Optional[str]
-    chat_history: typing.Optional[typing.List[ChatMessageRequest]]
+    chat_history: typing.Optional[typing.List[ChatMessage]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -6,13 +6,13 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .sandbox_input import SandboxInput
 from .sandbox_metric_input_params import SandboxMetricInputParams
+from .scenario_input import ScenarioInput
 
 
 class SandboxScenario(pydantic.BaseModel):
     label: typing.Optional[str]
-    inputs: typing.List[SandboxInput] = pydantic.Field(description=("The inputs for the scenario\n"))
+    inputs: typing.List[ScenarioInput] = pydantic.Field(description=("The inputs for the scenario\n"))
     id: str = pydantic.Field(description=("The id of the scenario\n"))
     metric_input_params: SandboxMetricInputParams
 

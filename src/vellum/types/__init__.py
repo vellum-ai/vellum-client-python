@@ -7,6 +7,8 @@ from .chat_message_role import ChatMessageRole
 from .document import Document
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
+from .evaluation_params import EvaluationParams
+from .evaluation_params_request import EvaluationParamsRequest
 from .finish_reason_enum import FinishReasonEnum
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
@@ -27,16 +29,17 @@ from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
 from .paginated_slim_document_list import PaginatedSlimDocumentList
+from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 from .prompt_template_block import PromptTemplateBlock
 from .prompt_template_block_data import PromptTemplateBlockData
 from .prompt_template_block_properties import PromptTemplateBlockProperties
 from .provider_enum import ProviderEnum
-from .sandbox_input import SandboxInput
-from .sandbox_input_request import SandboxInputRequest
 from .sandbox_metric_input_params import SandboxMetricInputParams
 from .sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from .sandbox_scenario import SandboxScenario
+from .scenario_input import ScenarioInput
+from .scenario_input_request import ScenarioInputRequest
 from .search_error_response import SearchErrorResponse
 from .search_filters_request import SearchFiltersRequest
 from .search_request_options_request import SearchRequestOptionsRequest
@@ -48,6 +51,7 @@ from .slim_document import SlimDocument
 from .slim_document_status_enum import SlimDocumentStatusEnum
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
+from .test_suite_test_case import TestSuiteTestCase
 from .type_enum import TypeEnum
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
@@ -60,6 +64,8 @@ __all__ = [
     "Document",
     "DocumentDocumentToDocumentIndex",
     "EnrichedNormalizedCompletion",
+    "EvaluationParams",
+    "EvaluationParamsRequest",
     "FinishReasonEnum",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
@@ -80,16 +86,17 @@ __all__ = [
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
     "PaginatedSlimDocumentList",
+    "ProcessingFailureReasonEnum",
     "ProcessingStateEnum",
     "PromptTemplateBlock",
     "PromptTemplateBlockData",
     "PromptTemplateBlockProperties",
     "ProviderEnum",
-    "SandboxInput",
-    "SandboxInputRequest",
     "SandboxMetricInputParams",
     "SandboxMetricInputParamsRequest",
     "SandboxScenario",
+    "ScenarioInput",
+    "ScenarioInputRequest",
     "SearchErrorResponse",
     "SearchFiltersRequest",
     "SearchRequestOptionsRequest",
@@ -101,6 +108,7 @@ __all__ = [
     "SlimDocumentStatusEnum",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
+    "TestSuiteTestCase",
     "TypeEnum",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",

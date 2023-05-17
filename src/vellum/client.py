@@ -222,7 +222,7 @@ class AsyncVellum:
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
                 timeout=None) as _response: 
                 if 200 <= _response.status_code < 300:
-                    for text in _response.iter_text(): 
+                    async for text in _response.aiter_text(): 
                         yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(text))
                 else: 
                     try:

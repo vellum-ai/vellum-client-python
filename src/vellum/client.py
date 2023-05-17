@@ -2,6 +2,7 @@
 
 import typing
 import urllib.parse
+import json
 from json.decoder import JSONDecodeError
 
 import httpx
@@ -19,6 +20,7 @@ from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClien
 from .types.generate_options_request import GenerateOptionsRequest
 from .types.generate_request import GenerateRequest
 from .types.generate_response import GenerateResponse
+from .types.generate_stream_response import GenerateStreamResponse
 from .types.search_request_options_request import SearchRequestOptionsRequest
 from .types.search_response import SearchResponse
 from .types.submit_completion_actual_request import SubmitCompletionActualRequest
@@ -61,6 +63,34 @@ class Vellum:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
+    
+
+    def generate_stream(
+            self, 
+            *, 
+            deployment_id: typing.Optional[str] = OMIT,
+            deployment_name: typing.Optional[str] = OMIT,
+            requests: typing.List[GenerateRequest]) -> typing.Iterator[GenerateStreamResponse]: 
+        _request: typing.Dict[str, typing.Any] = {"requests": requests}
+        if deployment_id is not OMIT:
+            _request["deployment_id"] = deployment_id
+        if deployment_name is not OMIT:
+            _request["deployment_name"] = deployment_name
+        with httpx.stream(
+            "POST", 
+            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate-stream"),
+            json=jsonable_encoder(_request),
+            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            timeout=None) as _response: 
+            if 200 <= _response.status_code < 300:
+                for text in _response.iter_text(): 
+                    yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(text))
+            else: 
+                try:
+                    raise ApiError(status_code=_response.status_code, body=_response.json())
+                except JSONDecodeError:
+                    raise ApiError(status_code=_response.status_code, body=_response.text)
+
 
     def search(
         self,

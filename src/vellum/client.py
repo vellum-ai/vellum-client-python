@@ -202,6 +202,34 @@ class AsyncVellum:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    async def generate_stream(
+        self, 
+        *, 
+        deployment_id: typing.Optional[str] = OMIT,
+        deployment_name: typing.Optional[str] = OMIT,
+        requests: typing.List[GenerateRequest]
+    ) -> typing.AsyncIterator[GenerateStreamResponse]: 
+        _request: typing.Dict[str, typing.Any] = {"requests": requests}
+        if deployment_id is not OMIT:
+            _request["deployment_id"] = deployment_id
+        if deployment_name is not OMIT:
+            _request["deployment_name"] = deployment_name
+        async with httpx.AsyncClient() as _client:
+            async with _client.stream(
+                "POST", 
+                urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate-stream"),
+                json=jsonable_encoder(_request),
+                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+                timeout=None) as _response: 
+                if 200 <= _response.status_code < 300:
+                    for text in _response.iter_text(): 
+                        yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(text))
+                else: 
+                    try:
+                        raise ApiError(status_code=_response.status_code, body=_response.json())
+                    except JSONDecodeError:
+                        raise ApiError(status_code=_response.status_code, body=_response.text)
+
     async def search(
         self,
         *,

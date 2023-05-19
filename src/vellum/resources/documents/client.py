@@ -11,6 +11,9 @@ from ...core.api_error import ApiError
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_headers import remove_none_from_headers
 from ...environment import VellumEnvironment
+from ...errors.bad_request_error import BadRequestError
+from ...errors.internal_server_error import InternalServerError
+from ...errors.not_found_error import NotFoundError
 from ...types.paginated_slim_document_list import PaginatedSlimDocumentList
 from ...types.upload_document_response import UploadDocumentResponse
 
@@ -69,6 +72,12 @@ class DocumentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 500:
+            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -132,6 +141,12 @@ class AsyncDocumentsClient:
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 500:
+            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

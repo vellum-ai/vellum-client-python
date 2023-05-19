@@ -10,6 +10,7 @@ from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .evaluation_params import EvaluationParams
 from .evaluation_params_request import EvaluationParamsRequest
 from .finish_reason_enum import FinishReasonEnum
+from .generate_body_request import GenerateBodyRequest
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -17,6 +18,9 @@ from .generate_response import GenerateResponse
 from .generate_result import GenerateResult
 from .generate_result_data import GenerateResultData
 from .generate_result_error import GenerateResultError
+from .generate_stream_response import GenerateStreamResponse
+from .generate_stream_result import GenerateStreamResult
+from .generate_stream_result_data import GenerateStreamResultData
 from .indexing_state_enum import IndexingStateEnum
 from .logprobs_enum import LogprobsEnum
 from .model_type_enum import ModelTypeEnum
@@ -67,6 +71,7 @@ __all__ = [
     "EvaluationParams",
     "EvaluationParamsRequest",
     "FinishReasonEnum",
+    "GenerateBodyRequest",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
@@ -74,6 +79,9 @@ __all__ = [
     "GenerateResult",
     "GenerateResultData",
     "GenerateResultError",
+    "GenerateStreamResponse",
+    "GenerateStreamResult",
+    "GenerateStreamResultData",
     "IndexingStateEnum",
     "LogprobsEnum",
     "ModelTypeEnum",

@@ -19,7 +19,8 @@ from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
 from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
 from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
-from .types.generate_body_request import GenerateBodyRequest
+from .types.generate_options_request import GenerateOptionsRequest
+from .types.generate_request import GenerateRequest
 from .types.generate_response import GenerateResponse
 from .types.generate_stream_response import GenerateStreamResponse
 from .types.search_request_options_request import SearchRequestOptionsRequest
@@ -39,11 +40,25 @@ class Vellum:
         self.sandboxes = SandboxesClient(environment=self._environment, api_key=self.api_key)
         self.test_suites = TestSuitesClient(environment=self._environment, api_key=self.api_key)
 
-    def generate(self, *, request: GenerateBodyRequest) -> GenerateResponse:
+    def generate(
+        self,
+        *,
+        deployment_id: typing.Optional[str] = OMIT,
+        deployment_name: typing.Optional[str] = OMIT,
+        requests: typing.List[GenerateRequest],
+        options: typing.Optional[GenerateOptionsRequest] = OMIT,
+    ) -> GenerateResponse:
+        _request: typing.Dict[str, typing.Any] = {"requests": requests}
+        if deployment_id is not OMIT:
+            _request["deployment_id"] = deployment_id
+        if deployment_name is not OMIT:
+            _request["deployment_name"] = deployment_name
+        if options is not OMIT:
+            _request["options"] = options
         _response = httpx.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate"),
-            json=jsonable_encoder(request),
+            json=jsonable_encoder(_request),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
             timeout=None,
         )
@@ -61,16 +76,32 @@ class Vellum:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def generate_stream(self, *, request: GenerateBodyRequest) -> typing.Iterator[GenerateStreamResponse]:
+    def generate_stream(
+        self,
+        *,
+        deployment_id: typing.Optional[str] = OMIT,
+        deployment_name: typing.Optional[str] = OMIT,
+        requests: typing.List[GenerateRequest],
+        options: typing.Optional[GenerateOptionsRequest] = OMIT,
+    ) -> typing.Iterator[GenerateStreamResponse]:
+        _request: typing.Dict[str, typing.Any] = {"requests": requests}
+        if deployment_id is not OMIT:
+            _request["deployment_id"] = deployment_id
+        if deployment_name is not OMIT:
+            _request["deployment_name"] = deployment_name
+        if options is not OMIT:
+            _request["options"] = options
         with httpx.stream(
             "POST",
             urllib.parse.urljoin(f"{self._environment.default}/", "v1/generate-stream"),
-            json=jsonable_encoder(request),
+            json=jsonable_encoder(_request),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
             timeout=None,
         ) as _response:
             if 200 <= _response.status_code < 300:
                 for _text in _response.iter_text():
+                    if len(_text) == 0:
+                        continue
                     yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
                 return
             if _response.status_code == 400:
@@ -164,12 +195,26 @@ class AsyncVellum:
         self.sandboxes = AsyncSandboxesClient(environment=self._environment, api_key=self.api_key)
         self.test_suites = AsyncTestSuitesClient(environment=self._environment, api_key=self.api_key)
 
-    async def generate(self, *, request: GenerateBodyRequest) -> GenerateResponse:
+    async def generate(
+        self,
+        *,
+        deployment_id: typing.Optional[str] = OMIT,
+        deployment_name: typing.Optional[str] = OMIT,
+        requests: typing.List[GenerateRequest],
+        options: typing.Optional[GenerateOptionsRequest] = OMIT,
+    ) -> GenerateResponse:
+        _request: typing.Dict[str, typing.Any] = {"requests": requests}
+        if deployment_id is not OMIT:
+            _request["deployment_id"] = deployment_id
+        if deployment_name is not OMIT:
+            _request["deployment_name"] = deployment_name
+        if options is not OMIT:
+            _request["options"] = options
         async with httpx.AsyncClient() as _client:
             _response = await _client.request(
                 "POST",
                 urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate"),
-                json=jsonable_encoder(request),
+                json=jsonable_encoder(_request),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
                 timeout=None,
             )
@@ -187,17 +232,33 @@ class AsyncVellum:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def generate_stream(self, *, request: GenerateBodyRequest) -> typing.AsyncIterator[GenerateStreamResponse]:
+    async def generate_stream(
+        self,
+        *,
+        deployment_id: typing.Optional[str] = OMIT,
+        deployment_name: typing.Optional[str] = OMIT,
+        requests: typing.List[GenerateRequest],
+        options: typing.Optional[GenerateOptionsRequest] = OMIT,
+    ) -> typing.AsyncIterator[GenerateStreamResponse]:
+        _request: typing.Dict[str, typing.Any] = {"requests": requests}
+        if deployment_id is not OMIT:
+            _request["deployment_id"] = deployment_id
+        if deployment_name is not OMIT:
+            _request["deployment_name"] = deployment_name
+        if options is not OMIT:
+            _request["options"] = options
         async with httpx.AsyncClient() as _client:
             async with _client.stream(
                 "POST",
                 urllib.parse.urljoin(f"{self._environment.default}/", "v1/generate-stream"),
-                json=jsonable_encoder(request),
+                json=jsonable_encoder(_request),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
                 timeout=None,
             ) as _response:
                 if 200 <= _response.status_code < 300:
                     async for _text in _response.aiter_text():
+                        if len(_text) == 0:
+                            continue
                         yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
                     return
                 if _response.status_code == 400:

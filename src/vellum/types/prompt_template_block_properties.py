@@ -11,6 +11,7 @@ from .chat_message_role import ChatMessageRole
 
 class PromptTemplateBlockProperties(pydantic.BaseModel):
     chat_role: typing.Optional[ChatMessageRole]
+    chat_message_unterminated: typing.Optional[bool]
     template: typing.Optional[str]
     blocks: typing.Optional[typing.List[typing.Dict[str, typing.Any]]]
 

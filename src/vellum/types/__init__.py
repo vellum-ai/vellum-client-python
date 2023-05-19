@@ -10,7 +10,6 @@ from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .evaluation_params import EvaluationParams
 from .evaluation_params_request import EvaluationParamsRequest
 from .finish_reason_enum import FinishReasonEnum
-from .generate_body_request import GenerateBodyRequest
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -71,7 +70,6 @@ __all__ = [
     "EvaluationParams",
     "EvaluationParamsRequest",
     "FinishReasonEnum",
-    "GenerateBodyRequest",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",

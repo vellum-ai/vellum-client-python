@@ -2,15 +2,18 @@
 
 from .environment import VellumEnvironment
 from .errors import BadRequestError, InternalServerError, NotFoundError
-from .resources import documents, model_versions, sandboxes, test_suites
+from .resources import deployments, documents, model_versions, sandboxes, test_suites
 from .types import (
     BlockTypeEnum,
     ChatMessage,
     ChatMessageRequest,
     ChatMessageRole,
+    DeploymentRead,
+    DeploymentReadStatusEnum,
     Document,
     DocumentDocumentToDocumentIndex,
     EnrichedNormalizedCompletion,
+    EnvironmentEnum,
     EvaluationParams,
     EvaluationParamsRequest,
     FinishReasonEnum,
@@ -70,9 +73,12 @@ __all__ = [
     "ChatMessage",
     "ChatMessageRequest",
     "ChatMessageRole",
+    "DeploymentRead",
+    "DeploymentReadStatusEnum",
     "Document",
     "DocumentDocumentToDocumentIndex",
     "EnrichedNormalizedCompletion",
+    "EnvironmentEnum",
     "EvaluationParams",
     "EvaluationParamsRequest",
     "FinishReasonEnum",
@@ -127,6 +133,7 @@ __all__ = [
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
     "VellumEnvironment",
+    "deployments",
     "documents",
     "model_versions",
     "sandboxes",

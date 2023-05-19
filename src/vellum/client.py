@@ -15,6 +15,7 @@ from .environment import VellumEnvironment
 from .errors.bad_request_error import BadRequestError
 from .errors.internal_server_error import InternalServerError
 from .errors.not_found_error import NotFoundError
+from .resources.deployments.client import AsyncDeploymentsClient, DeploymentsClient
 from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
 from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
@@ -35,6 +36,7 @@ class Vellum:
     def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
+        self.deployments = DeploymentsClient(environment=self._environment, api_key=self.api_key)
         self.documents = DocumentsClient(environment=self._environment, api_key=self.api_key)
         self.model_versions = ModelVersionsClient(environment=self._environment, api_key=self.api_key)
         self.sandboxes = SandboxesClient(environment=self._environment, api_key=self.api_key)
@@ -190,6 +192,7 @@ class AsyncVellum:
     def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
         self._environment = environment
         self.api_key = api_key
+        self.deployments = AsyncDeploymentsClient(environment=self._environment, api_key=self.api_key)
         self.documents = AsyncDocumentsClient(environment=self._environment, api_key=self.api_key)
         self.model_versions = AsyncModelVersionsClient(environment=self._environment, api_key=self.api_key)
         self.sandboxes = AsyncSandboxesClient(environment=self._environment, api_key=self.api_key)

@@ -4,9 +4,12 @@ from .block_type_enum import BlockTypeEnum
 from .chat_message import ChatMessage
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
+from .deployment_read import DeploymentRead
+from .deployment_read_status_enum import DeploymentReadStatusEnum
 from .document import Document
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
+from .environment_enum import EnvironmentEnum
 from .evaluation_params import EvaluationParams
 from .evaluation_params_request import EvaluationParamsRequest
 from .finish_reason_enum import FinishReasonEnum
@@ -64,9 +67,12 @@ __all__ = [
     "ChatMessage",
     "ChatMessageRequest",
     "ChatMessageRole",
+    "DeploymentRead",
+    "DeploymentReadStatusEnum",
     "Document",
     "DocumentDocumentToDocumentIndex",
     "EnrichedNormalizedCompletion",
+    "EnvironmentEnum",
     "EvaluationParams",
     "EvaluationParamsRequest",
     "FinishReasonEnum",

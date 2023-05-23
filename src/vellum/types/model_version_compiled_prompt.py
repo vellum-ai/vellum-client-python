@@ -8,13 +8,13 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 
 
-class ModelVersionSandboxSnapshot(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the sandbox snapshot.\n"))
-    prompt_index: typing.Optional[int] = pydantic.Field(
-        description=("The index of the prompt in the sandbox snapshot.\n")
+class ModelVersionCompiledPrompt(pydantic.BaseModel):
+    text: str = pydantic.Field(
+        description=(
+            "The fully compiled prompt in normalized ChatML syntax after all variable substitutions and templating functions are applied.\n"
+        )
     )
-    prompt_id: typing.Optional[str] = pydantic.Field(description=("The id of the prompt in the sandbox snapshot.\n"))
-    sandbox_id: str
+    num_tokens: int = pydantic.Field(description=("The approximate number of tokens used by the compiled prompt.\n"))
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

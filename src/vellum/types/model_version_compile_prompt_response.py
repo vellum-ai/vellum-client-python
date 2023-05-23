@@ -6,15 +6,11 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .model_version_compiled_prompt import ModelVersionCompiledPrompt
 
 
-class ModelVersionSandboxSnapshot(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the sandbox snapshot.\n"))
-    prompt_index: typing.Optional[int] = pydantic.Field(
-        description=("The index of the prompt in the sandbox snapshot.\n")
-    )
-    prompt_id: typing.Optional[str] = pydantic.Field(description=("The id of the prompt in the sandbox snapshot.\n"))
-    sandbox_id: str
+class ModelVersionCompilePromptResponse(pydantic.BaseModel):
+    prompt: ModelVersionCompiledPrompt = pydantic.Field(description=("Information about the compiled prompt.\n"))
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

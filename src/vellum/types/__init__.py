@@ -27,6 +27,8 @@ from .indexing_state_enum import IndexingStateEnum
 from .logprobs_enum import LogprobsEnum
 from .model_type_enum import ModelTypeEnum
 from .model_version_build_config import ModelVersionBuildConfig
+from .model_version_compile_prompt_response import ModelVersionCompilePromptResponse
+from .model_version_compiled_prompt import ModelVersionCompiledPrompt
 from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
 from .model_version_exec_config_read import ModelVersionExecConfigRead
 from .model_version_read import ModelVersionRead
@@ -40,6 +42,7 @@ from .processing_state_enum import ProcessingStateEnum
 from .prompt_template_block import PromptTemplateBlock
 from .prompt_template_block_data import PromptTemplateBlockData
 from .prompt_template_block_properties import PromptTemplateBlockProperties
+from .prompt_template_input_variable import PromptTemplateInputVariable
 from .provider_enum import ProviderEnum
 from .sandbox_metric_input_params import SandboxMetricInputParams
 from .sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
@@ -90,6 +93,8 @@ __all__ = [
     "LogprobsEnum",
     "ModelTypeEnum",
     "ModelVersionBuildConfig",
+    "ModelVersionCompilePromptResponse",
+    "ModelVersionCompiledPrompt",
     "ModelVersionExecConfigParameters",
     "ModelVersionExecConfigRead",
     "ModelVersionRead",
@@ -103,6 +108,7 @@ __all__ = [
     "PromptTemplateBlock",
     "PromptTemplateBlockData",
     "PromptTemplateBlockProperties",
+    "PromptTemplateInputVariable",
     "ProviderEnum",
     "SandboxMetricInputParams",
     "SandboxMetricInputParamsRequest",

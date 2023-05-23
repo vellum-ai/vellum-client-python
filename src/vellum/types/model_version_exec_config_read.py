@@ -8,14 +8,15 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
 from .prompt_template_block_data import PromptTemplateBlockData
+from .prompt_template_input_variable import PromptTemplateInputVariable
 
 
 class ModelVersionExecConfigRead(pydantic.BaseModel):
     parameters: ModelVersionExecConfigParameters = pydantic.Field(
         description=("The generation parameters that are passed to the LLM provider at runtime.\n")
     )
-    input_variables: typing.List[str] = pydantic.Field(
-        description=("Names of the template variables specified in the prompt template.\n")
+    input_variables: typing.List[PromptTemplateInputVariable] = pydantic.Field(
+        description=("Names of the input variables specified in the prompt template.\n")
     )
     prompt_template: typing.Optional[str] = pydantic.Field(
         description=("The template used to generate prompts for this model version.\n")

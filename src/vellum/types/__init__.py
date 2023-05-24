@@ -41,9 +41,22 @@ from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 from .prompt_template_block import PromptTemplateBlock
 from .prompt_template_block_data import PromptTemplateBlockData
+from .prompt_template_block_data_request import PromptTemplateBlockDataRequest
 from .prompt_template_block_properties import PromptTemplateBlockProperties
+from .prompt_template_block_properties_request import PromptTemplateBlockPropertiesRequest
+from .prompt_template_block_request import PromptTemplateBlockRequest
 from .prompt_template_input_variable import PromptTemplateInputVariable
+from .prompt_template_input_variable_request import PromptTemplateInputVariableRequest
 from .provider_enum import ProviderEnum
+from .register_prompt_error_response import RegisterPromptErrorResponse
+from .register_prompt_model_parameters_request import RegisterPromptModelParametersRequest
+from .register_prompt_prompt import RegisterPromptPrompt
+from .register_prompt_prompt_info_request import RegisterPromptPromptInfoRequest
+from .register_prompt_response import RegisterPromptResponse
+from .registered_prompt_deployment import RegisteredPromptDeployment
+from .registered_prompt_model_version import RegisteredPromptModelVersion
+from .registered_prompt_sandbox import RegisteredPromptSandbox
+from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
 from .sandbox_metric_input_params import SandboxMetricInputParams
 from .sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from .sandbox_scenario import SandboxScenario
@@ -107,9 +120,22 @@ __all__ = [
     "ProcessingStateEnum",
     "PromptTemplateBlock",
     "PromptTemplateBlockData",
+    "PromptTemplateBlockDataRequest",
     "PromptTemplateBlockProperties",
+    "PromptTemplateBlockPropertiesRequest",
+    "PromptTemplateBlockRequest",
     "PromptTemplateInputVariable",
+    "PromptTemplateInputVariableRequest",
     "ProviderEnum",
+    "RegisterPromptErrorResponse",
+    "RegisterPromptModelParametersRequest",
+    "RegisterPromptPrompt",
+    "RegisterPromptPromptInfoRequest",
+    "RegisterPromptResponse",
+    "RegisteredPromptDeployment",
+    "RegisteredPromptModelVersion",
+    "RegisteredPromptSandbox",
+    "RegisteredPromptSandboxSnapshot",
     "SandboxMetricInputParams",
     "SandboxMetricInputParamsRequest",
     "SandboxScenario",

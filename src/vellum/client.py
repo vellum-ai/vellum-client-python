@@ -18,6 +18,7 @@ from .errors.not_found_error import NotFoundError
 from .resources.deployments.client import AsyncDeploymentsClient, DeploymentsClient
 from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
 from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
+from .resources.registered_prompts.client import AsyncRegisteredPromptsClient, RegisteredPromptsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
 from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
 from .types.generate_options_request import GenerateOptionsRequest
@@ -39,6 +40,7 @@ class Vellum:
         self.deployments = DeploymentsClient(environment=self._environment, api_key=self.api_key)
         self.documents = DocumentsClient(environment=self._environment, api_key=self.api_key)
         self.model_versions = ModelVersionsClient(environment=self._environment, api_key=self.api_key)
+        self.registered_prompts = RegisteredPromptsClient(environment=self._environment, api_key=self.api_key)
         self.sandboxes = SandboxesClient(environment=self._environment, api_key=self.api_key)
         self.test_suites = TestSuitesClient(environment=self._environment, api_key=self.api_key)
 
@@ -195,6 +197,7 @@ class AsyncVellum:
         self.deployments = AsyncDeploymentsClient(environment=self._environment, api_key=self.api_key)
         self.documents = AsyncDocumentsClient(environment=self._environment, api_key=self.api_key)
         self.model_versions = AsyncModelVersionsClient(environment=self._environment, api_key=self.api_key)
+        self.registered_prompts = AsyncRegisteredPromptsClient(environment=self._environment, api_key=self.api_key)
         self.sandboxes = AsyncSandboxesClient(environment=self._environment, api_key=self.api_key)
         self.test_suites = AsyncTestSuitesClient(environment=self._environment, api_key=self.api_key)
 

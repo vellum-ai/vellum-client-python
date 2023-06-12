@@ -2,7 +2,15 @@
 
 from .environment import VellumEnvironment
 from .errors import BadRequestError, ConflictError, InternalServerError, NotFoundError
-from .resources import deployments, documents, model_versions, registered_prompts, sandboxes, test_suites
+from .resources import (
+    deployments,
+    document_indexes,
+    documents,
+    model_versions,
+    registered_prompts,
+    sandboxes,
+    test_suites,
+)
 from .types import (
     BlockTypeEnum,
     ChatMessage,
@@ -12,6 +20,8 @@ from .types import (
     DeploymentReadStatusEnum,
     Document,
     DocumentDocumentToDocumentIndex,
+    DocumentIndexRead,
+    DocumentIndexStatus,
     EnrichedNormalizedCompletion,
     EnvironmentEnum,
     EvaluationParams,
@@ -94,6 +104,8 @@ __all__ = [
     "DeploymentReadStatusEnum",
     "Document",
     "DocumentDocumentToDocumentIndex",
+    "DocumentIndexRead",
+    "DocumentIndexStatus",
     "EnrichedNormalizedCompletion",
     "EnvironmentEnum",
     "EvaluationParams",
@@ -167,6 +179,7 @@ __all__ = [
     "UploadDocumentResponse",
     "VellumEnvironment",
     "deployments",
+    "document_indexes",
     "documents",
     "model_versions",
     "registered_prompts",

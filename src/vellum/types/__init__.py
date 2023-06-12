@@ -8,6 +8,8 @@ from .deployment_read import DeploymentRead
 from .deployment_read_status_enum import DeploymentReadStatusEnum
 from .document import Document
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
+from .document_index_read import DocumentIndexRead
+from .document_index_status import DocumentIndexStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .environment_enum import EnvironmentEnum
 from .evaluation_params import EvaluationParams
@@ -87,6 +89,8 @@ __all__ = [
     "DeploymentReadStatusEnum",
     "Document",
     "DocumentDocumentToDocumentIndex",
+    "DocumentIndexRead",
+    "DocumentIndexStatus",
     "EnrichedNormalizedCompletion",
     "EnvironmentEnum",
     "EvaluationParams",

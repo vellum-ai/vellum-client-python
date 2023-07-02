@@ -12,13 +12,21 @@ from .document_index_status import DocumentIndexStatus
 class DocumentIndexRead(pydantic.BaseModel):
     id: str
     created: str
-    label: str = pydantic.Field(description=("A human-readable label for the document index.\n"))
-    name: str = pydantic.Field(description=("A name that uniquely identifies this index within its workspace\n"))
+    label: str = pydantic.Field(
+        description=(
+            'A human-readable label for the document index <span style="white-space: nowrap">`<= 150 characters`</span> \n'
+        )
+    )
+    name: str = pydantic.Field(
+        description=(
+            'A name that uniquely identifies this index within its workspace <span style="white-space: nowrap">`<= 150 characters`</span> \n'
+        )
+    )
     status: typing.Optional[DocumentIndexStatus] = pydantic.Field(
         description=("The current status of the document index\n")
     )
     indexing_config: typing.Dict[str, typing.Any] = pydantic.Field(
-        description=("Configuration representing how documents should be indexed.\n")
+        description=("Configuration representing how documents should be indexed\n")
     )
 
     def json(self, **kwargs: typing.Any) -> str:

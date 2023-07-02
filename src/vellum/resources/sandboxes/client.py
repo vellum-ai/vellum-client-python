@@ -55,6 +55,21 @@ class SandboxesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def delete_sandbox_scenario(self, id: str, scenario_id: str) -> None:
+        _response = httpx.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"),
+            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
 
 class AsyncSandboxesClient:
     def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
@@ -87,6 +102,22 @@ class AsyncSandboxesClient:
             )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(SandboxScenario, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def delete_sandbox_scenario(self, id: str, scenario_id: str) -> None:
+        async with httpx.AsyncClient() as _client:
+            _response = await _client.request(
+                "DELETE",
+                urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"),
+                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+                timeout=None,
+            )
+        if 200 <= _response.status_code < 300:
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:

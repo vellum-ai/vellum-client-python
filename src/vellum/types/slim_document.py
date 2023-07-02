@@ -20,7 +20,11 @@ class SlimDocument(pydantic.BaseModel):
     last_uploaded_at: str = pydantic.Field(
         description=("A timestamp representing when this document was most recently uploaded.\n")
     )
-    label: str = pydantic.Field(description=("Human-friendly name for this document.\n"))
+    label: str = pydantic.Field(
+        description=(
+            'Human-friendly name for this document. <span style="white-space: nowrap">`<= 1000 characters`</span> \n'
+        )
+    )
     processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
         description=(
             "An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.\n"

@@ -11,7 +11,7 @@ from .prompt_template_block_properties_request import PromptTemplateBlockPropert
 
 
 class PromptTemplateBlockRequest(pydantic.BaseModel):
-    id: str
+    id: str = pydantic.Field(description=('<span style="white-space: nowrap">`non-empty`</span>\n'))
     block_type: BlockTypeEnum
     properties: PromptTemplateBlockPropertiesRequest
 

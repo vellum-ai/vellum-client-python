@@ -14,7 +14,7 @@ class ModelVersionSandboxSnapshot(pydantic.BaseModel):
         description=("The index of the prompt in the sandbox snapshot.\n")
     )
     prompt_id: typing.Optional[str] = pydantic.Field(description=("The id of the prompt in the sandbox snapshot.\n"))
-    sandbox_id: str
+    sandbox_id: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

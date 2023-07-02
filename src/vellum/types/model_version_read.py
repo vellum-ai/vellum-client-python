@@ -16,11 +16,17 @@ from .provider_enum import ProviderEnum
 class ModelVersionRead(pydantic.BaseModel):
     id: str = pydantic.Field(description=("Vellum-generated ID that uniquely identifies this model version.\n"))
     created: str = pydantic.Field(description=("Timestamp of when this model version was created.\n"))
-    label: str = pydantic.Field(description=("Human-friendly name for this model version.\n"))
+    label: str = pydantic.Field(
+        description=(
+            'Human-friendly name for this model version. <span style="white-space: nowrap">`<= 150 characters`</span> \n'
+        )
+    )
     model_type: ModelTypeEnum = pydantic.Field(description=("The type of task this model is used for.\n"))
     provider: ProviderEnum = pydantic.Field(description=("Which LLM provider this model version is associated with.\n"))
     external_id: str = pydantic.Field(
-        description=("The unique id of this model version as it exists in the above provider's system.\n")
+        description=(
+            'The unique id of this model version as it exists in the above provider\'s system. <span style="white-space: nowrap">`<= 250 characters`</span> \n'
+        )
     )
     build_config: ModelVersionBuildConfig = pydantic.Field(
         description=("Configuration used to build this model version.\n")

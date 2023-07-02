@@ -12,8 +12,8 @@ from .prompt_template_input_variable_request import PromptTemplateInputVariableR
 
 class RegisterPromptPromptInfoRequest(pydantic.BaseModel):
     prompt_syntax_version: typing.Optional[int]
-    prompt_block_data: typing.Optional[PromptTemplateBlockDataRequest]
-    input_variables: typing.Optional[typing.List[PromptTemplateInputVariableRequest]] = pydantic.Field(
+    prompt_block_data: PromptTemplateBlockDataRequest
+    input_variables: typing.List[PromptTemplateInputVariableRequest] = pydantic.Field(
         description=("Names of the input variables specified in the prompt template.\n")
     )
 

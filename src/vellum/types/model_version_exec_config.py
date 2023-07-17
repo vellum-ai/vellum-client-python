@@ -11,7 +11,7 @@ from .prompt_template_block_data import PromptTemplateBlockData
 from .prompt_template_input_variable import PromptTemplateInputVariable
 
 
-class ModelVersionExecConfigRead(pydantic.BaseModel):
+class ModelVersionExecConfig(pydantic.BaseModel):
     parameters: ModelVersionExecConfigParameters = pydantic.Field(
         description=("The generation parameters that are passed to the LLM provider at runtime.\n")
     )
@@ -22,7 +22,7 @@ class ModelVersionExecConfigRead(pydantic.BaseModel):
         description=("The template used to generate prompts for this model version.\n")
     )
     prompt_block_data: typing.Optional[PromptTemplateBlockData]
-    prompt_syntax_version: int
+    prompt_syntax_version: typing.Optional[int]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

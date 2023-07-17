@@ -11,7 +11,9 @@ from .logprobs_enum import LogprobsEnum
 
 class GenerateOptionsRequest(pydantic.BaseModel):
     logprobs: typing.Optional[LogprobsEnum] = pydantic.Field(
-        description=("Which logprobs to include, if any. Defaults to NONE.\n")
+        description=(
+            "Which logprobs to include, if any. Defaults to NONE.\n" "\n" "* `ALL` - ALL\n" "* `NONE` - NONE\n"
+        )
     )
 
     def json(self, **kwargs: typing.Any) -> str:

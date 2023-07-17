@@ -13,6 +13,7 @@ from ...core.remove_none_from_headers import remove_none_from_headers
 from ...environment import VellumEnvironment
 from ...types.document_index_read import DocumentIndexRead
 from ...types.document_index_status import DocumentIndexStatus
+from ...types.environment_enum import EnvironmentEnum
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -29,12 +30,15 @@ class DocumentIndexesClient:
         label: str,
         name: str,
         status: typing.Optional[DocumentIndexStatus] = OMIT,
+        environment: typing.Optional[EnvironmentEnum] = OMIT,
         indexing_config: typing.Dict[str, typing.Any],
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
     ) -> DocumentIndexRead:
         _request: typing.Dict[str, typing.Any] = {"label": label, "name": name, "indexing_config": indexing_config}
         if status is not OMIT:
             _request["status"] = status
+        if environment is not OMIT:
+            _request["environment"] = environment
         if copy_documents_from_index_id is not OMIT:
             _request["copy_documents_from_index_id"] = copy_documents_from_index_id
         _response = httpx.request(
@@ -64,12 +68,15 @@ class AsyncDocumentIndexesClient:
         label: str,
         name: str,
         status: typing.Optional[DocumentIndexStatus] = OMIT,
+        environment: typing.Optional[EnvironmentEnum] = OMIT,
         indexing_config: typing.Dict[str, typing.Any],
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
     ) -> DocumentIndexRead:
         _request: typing.Dict[str, typing.Any] = {"label": label, "name": name, "indexing_config": indexing_config}
         if status is not OMIT:
             _request["status"] = status
+        if environment is not OMIT:
+            _request["environment"] = environment
         if copy_documents_from_index_id is not OMIT:
             _request["copy_documents_from_index_id"] = copy_documents_from_index_id
         async with httpx.AsyncClient() as _client:

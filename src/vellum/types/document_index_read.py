@@ -7,6 +7,7 @@ import pydantic
 
 from ..core.datetime_utils import serialize_datetime
 from .document_index_status import DocumentIndexStatus
+from .environment_enum import EnvironmentEnum
 
 
 class DocumentIndexRead(pydantic.BaseModel):
@@ -23,7 +24,18 @@ class DocumentIndexRead(pydantic.BaseModel):
         )
     )
     status: typing.Optional[DocumentIndexStatus] = pydantic.Field(
-        description=("The current status of the document index\n")
+        description=(
+            "The current status of the document index\n" "\n" "* `ACTIVE` - Active\n" "* `ARCHIVED` - Archived\n"
+        )
+    )
+    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(
+        description=(
+            "The environment this document index is used in\n"
+            "\n"
+            "* `DEVELOPMENT` - Development\n"
+            "* `STAGING` - Staging\n"
+            "* `PRODUCTION` - Production\n"
+        )
     )
     indexing_config: typing.Dict[str, typing.Any] = pydantic.Field(
         description=("Configuration representing how documents should be indexed\n")

@@ -7,6 +7,14 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class IndexingStateEnum(str, enum.Enum):
+    """
+    * `AWAITING_PROCESSING` - Awaiting Processing
+    * `QUEUED` - Queued
+    * `INDEXING` - Indexing
+    * `INDEXED` - Indexed
+    * `FAILED` - Failed
+    """
+
     AWAITING_PROCESSING = "AWAITING_PROCESSING"
     QUEUED = "QUEUED"
     INDEXING = "INDEXING"

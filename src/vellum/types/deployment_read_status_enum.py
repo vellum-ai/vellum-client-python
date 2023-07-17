@@ -7,6 +7,12 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class DeploymentReadStatusEnum(str, enum.Enum):
+    """
+    * `ACTIVE` - Active
+    * `INACTIVE` - Inactive
+    * `ARCHIVED` - Archived
+    """
+
     ACTIVE = "ACTIVE"
     INACTIVE = "INACTIVE"
     ARCHIVED = "ARCHIVED"

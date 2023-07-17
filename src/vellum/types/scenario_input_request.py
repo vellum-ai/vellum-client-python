@@ -7,12 +7,12 @@ import pydantic
 
 from ..core.datetime_utils import serialize_datetime
 from .chat_message_request import ChatMessageRequest
-from .type_enum import TypeEnum
+from .scenario_input_type_enum import ScenarioInputTypeEnum
 
 
 class ScenarioInputRequest(pydantic.BaseModel):
     key: str = pydantic.Field(description=('<span style="white-space: nowrap">`non-empty`</span>\n'))
-    type: typing.Optional[TypeEnum]
+    type: typing.Optional[ScenarioInputTypeEnum]
     value: typing.Optional[str]
     chat_history: typing.Optional[typing.List[ChatMessageRequest]]
 

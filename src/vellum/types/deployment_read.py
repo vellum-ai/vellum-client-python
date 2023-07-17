@@ -25,12 +25,28 @@ class DeploymentRead(pydantic.BaseModel):
         )
     )
     status: typing.Optional[DeploymentReadStatusEnum] = pydantic.Field(
-        description=("The current status of the deployment\n")
+        description=(
+            "The current status of the deployment\n"
+            "\n"
+            "* `ACTIVE` - Active\n"
+            "* `INACTIVE` - Inactive\n"
+            "* `ARCHIVED` - Archived\n"
+        )
     )
     environment: typing.Optional[EnvironmentEnum] = pydantic.Field(
-        description=("The environment this deployment is used in\n")
+        description=(
+            "The environment this deployment is used in\n"
+            "\n"
+            "* `DEVELOPMENT` - Development\n"
+            "* `STAGING` - Staging\n"
+            "* `PRODUCTION` - Production\n"
+        )
     )
-    model_type: ModelTypeEnum = pydantic.Field(description=("The type of model this deployment serves\n"))
+    model_type: ModelTypeEnum = pydantic.Field(
+        description=(
+            "The type of model this deployment serves\n" "\n" "* `GENERATE` - Generate\n" "* `CLASSIFY` - Classify\n"
+        )
+    )
     active_model_version_ids: typing.List[str]
     last_deployed_on: str
 

@@ -7,10 +7,21 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class ProviderEnum(str, enum.Enum):
+    """
+    * `ANTHROPIC` - Anthropic
+    * `COHERE` - Cohere
+    * `GOOGLE` - Google
+    * `HOSTED` - Hosted
+    * `MOSAICML` - MosaicML
+    * `OPENAI` - OpenAI
+    * `PYQ` - Pyq
+    """
+
     ANTHROPIC = "ANTHROPIC"
     COHERE = "COHERE"
     GOOGLE = "GOOGLE"
     HOSTED = "HOSTED"
+    MOSAICML = "MOSAICML"
     OPENAI = "OPENAI"
     PYQ = "PYQ"
 
@@ -20,6 +31,7 @@ class ProviderEnum(str, enum.Enum):
         cohere: typing.Callable[[], T_Result],
         google: typing.Callable[[], T_Result],
         hosted: typing.Callable[[], T_Result],
+        mosaicml: typing.Callable[[], T_Result],
         openai: typing.Callable[[], T_Result],
         pyq: typing.Callable[[], T_Result],
     ) -> T_Result:
@@ -31,6 +43,8 @@ class ProviderEnum(str, enum.Enum):
             return google()
         if self is ProviderEnum.HOSTED:
             return hosted()
+        if self is ProviderEnum.MOSAICML:
+            return mosaicml()
         if self is ProviderEnum.OPENAI:
             return openai()
         if self is ProviderEnum.PYQ:

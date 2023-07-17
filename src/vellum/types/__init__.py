@@ -4,6 +4,7 @@ from .block_type_enum import BlockTypeEnum
 from .chat_message import ChatMessage
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
+from .content_type import ContentType
 from .deployment_read import DeploymentRead
 from .deployment_read_status_enum import DeploymentReadStatusEnum
 from .document import Document
@@ -31,8 +32,8 @@ from .model_type_enum import ModelTypeEnum
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_compile_prompt_response import ModelVersionCompilePromptResponse
 from .model_version_compiled_prompt import ModelVersionCompiledPrompt
+from .model_version_exec_config import ModelVersionExecConfig
 from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
-from .model_version_exec_config_read import ModelVersionExecConfigRead
 from .model_version_read import ModelVersionRead
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
@@ -64,6 +65,7 @@ from .sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from .sandbox_scenario import SandboxScenario
 from .scenario_input import ScenarioInput
 from .scenario_input_request import ScenarioInputRequest
+from .scenario_input_type_enum import ScenarioInputTypeEnum
 from .search_error_response import SearchErrorResponse
 from .search_filters_request import SearchFiltersRequest
 from .search_request_options_request import SearchRequestOptionsRequest
@@ -76,7 +78,6 @@ from .slim_document_status_enum import SlimDocumentStatusEnum
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
 from .test_suite_test_case import TestSuiteTestCase
-from .type_enum import TypeEnum
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
 
@@ -85,6 +86,7 @@ __all__ = [
     "ChatMessage",
     "ChatMessageRequest",
     "ChatMessageRole",
+    "ContentType",
     "DeploymentRead",
     "DeploymentReadStatusEnum",
     "Document",
@@ -112,8 +114,8 @@ __all__ = [
     "ModelVersionBuildConfig",
     "ModelVersionCompilePromptResponse",
     "ModelVersionCompiledPrompt",
+    "ModelVersionExecConfig",
     "ModelVersionExecConfigParameters",
-    "ModelVersionExecConfigRead",
     "ModelVersionRead",
     "ModelVersionReadStatusEnum",
     "ModelVersionSandboxSnapshot",
@@ -145,6 +147,7 @@ __all__ = [
     "SandboxScenario",
     "ScenarioInput",
     "ScenarioInputRequest",
+    "ScenarioInputTypeEnum",
     "SearchErrorResponse",
     "SearchFiltersRequest",
     "SearchRequestOptionsRequest",
@@ -157,7 +160,6 @@ __all__ = [
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
     "TestSuiteTestCase",
-    "TypeEnum",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
 ]

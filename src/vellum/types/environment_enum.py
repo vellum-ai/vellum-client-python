@@ -7,6 +7,12 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class EnvironmentEnum(str, enum.Enum):
+    """
+    * `DEVELOPMENT` - Development
+    * `STAGING` - Staging
+    * `PRODUCTION` - Production
+    """
+
     DEVELOPMENT = "DEVELOPMENT"
     STAGING = "STAGING"
     PRODUCTION = "PRODUCTION"

@@ -7,6 +7,11 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class ModelTypeEnum(str, enum.Enum):
+    """
+    * `GENERATE` - Generate
+    * `CLASSIFY` - Classify
+    """
+
     GENERATE = "GENERATE"
     CLASSIFY = "CLASSIFY"
 

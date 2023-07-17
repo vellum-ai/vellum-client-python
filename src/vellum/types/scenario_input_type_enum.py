@@ -6,12 +6,17 @@ import typing
 T_Result = typing.TypeVar("T_Result")
 
 
-class TypeEnum(str, enum.Enum):
+class ScenarioInputTypeEnum(str, enum.Enum):
+    """
+    * `TEXT` - Text
+    * `CHAT_HISTORY` - Chat History
+    """
+
     TEXT = "TEXT"
     CHAT_HISTORY = "CHAT_HISTORY"
 
     def visit(self, text: typing.Callable[[], T_Result], chat_history: typing.Callable[[], T_Result]) -> T_Result:
-        if self is TypeEnum.TEXT:
+        if self is ScenarioInputTypeEnum.TEXT:
             return text()
-        if self is TypeEnum.CHAT_HISTORY:
+        if self is ScenarioInputTypeEnum.CHAT_HISTORY:
             return chat_history()

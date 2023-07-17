@@ -8,7 +8,7 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 from .model_type_enum import ModelTypeEnum
 from .model_version_build_config import ModelVersionBuildConfig
-from .model_version_exec_config_read import ModelVersionExecConfigRead
+from .model_version_exec_config import ModelVersionExecConfig
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .provider_enum import ProviderEnum
 
@@ -21,8 +21,24 @@ class ModelVersionRead(pydantic.BaseModel):
             'Human-friendly name for this model version. <span style="white-space: nowrap">`<= 150 characters`</span> \n'
         )
     )
-    model_type: ModelTypeEnum = pydantic.Field(description=("The type of task this model is used for.\n"))
-    provider: ProviderEnum = pydantic.Field(description=("Which LLM provider this model version is associated with.\n"))
+    model_type: ModelTypeEnum = pydantic.Field(
+        description=(
+            "The type of task this model is used for.\n" "\n" "* `GENERATE` - Generate\n" "* `CLASSIFY` - Classify\n"
+        )
+    )
+    provider: ProviderEnum = pydantic.Field(
+        description=(
+            "Which LLM provider this model version is associated with.\n"
+            "\n"
+            "* `ANTHROPIC` - Anthropic\n"
+            "* `COHERE` - Cohere\n"
+            "* `GOOGLE` - Google\n"
+            "* `HOSTED` - Hosted\n"
+            "* `MOSAICML` - MosaicML\n"
+            "* `OPENAI` - OpenAI\n"
+            "* `PYQ` - Pyq\n"
+        )
+    )
     external_id: str = pydantic.Field(
         description=(
             'The unique id of this model version as it exists in the above provider\'s system. <span style="white-space: nowrap">`<= 250 characters`</span> \n'
@@ -31,7 +47,7 @@ class ModelVersionRead(pydantic.BaseModel):
     build_config: ModelVersionBuildConfig = pydantic.Field(
         description=("Configuration used to build this model version.\n")
     )
-    exec_config: ModelVersionExecConfigRead = pydantic.Field(
+    exec_config: ModelVersionExecConfig = pydantic.Field(
         description=("Configuration used to execute this model version.\n")
     )
     status: typing.Optional[ModelVersionReadStatusEnum]

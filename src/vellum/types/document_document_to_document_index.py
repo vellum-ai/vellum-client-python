@@ -15,7 +15,15 @@ class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
         description=("Vellum-generated ID that uniquely identifies the index this document is included in.\n")
     )
     indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(
-        description=("An enum value representing where this document is along its indexing lifecycle for this index.\n")
+        description=(
+            "An enum value representing where this document is along its indexing lifecycle for this index.\n"
+            "\n"
+            "* `AWAITING_PROCESSING` - Awaiting Processing\n"
+            "* `QUEUED` - Queued\n"
+            "* `INDEXING` - Indexing\n"
+            "* `INDEXED` - Indexed\n"
+            "* `FAILED` - Failed\n"
+        )
     )
 
     def json(self, **kwargs: typing.Any) -> str:

@@ -99,7 +99,7 @@ class Vellum:
             _request["options"] = options
         with httpx.stream(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", "v1/generate-stream"),
+            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate-stream"),
             json=jsonable_encoder(_request),
             headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
             timeout=None,
@@ -259,7 +259,7 @@ class AsyncVellum:
         async with httpx.AsyncClient() as _client:
             async with _client.stream(
                 "POST",
-                urllib.parse.urljoin(f"{self._environment.default}/", "v1/generate-stream"),
+                urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate-stream"),
                 json=jsonable_encoder(_request),
                 headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
                 timeout=None,

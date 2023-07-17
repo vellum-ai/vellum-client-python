@@ -7,6 +7,13 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class ModelVersionReadStatusEnum(str, enum.Enum):
+    """
+    * `CREATING` - Creating
+    * `READY` - Ready
+    * `CREATION_FAILED` - Creation Failed
+    * `DISABLED` - Disabled
+    """
+
     CREATING = "CREATING"
     READY = "READY"
     CREATION_FAILED = "CREATION_FAILED"

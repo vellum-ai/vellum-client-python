@@ -7,12 +7,12 @@ import pydantic
 
 from ..core.datetime_utils import serialize_datetime
 from .chat_message import ChatMessage
-from .type_enum import TypeEnum
+from .scenario_input_type_enum import ScenarioInputTypeEnum
 
 
 class ScenarioInput(pydantic.BaseModel):
     key: str
-    type: typing.Optional[TypeEnum]
+    type: typing.Optional[ScenarioInputTypeEnum]
     value: typing.Optional[str]
     chat_history: typing.Optional[typing.List[ChatMessage]]
 

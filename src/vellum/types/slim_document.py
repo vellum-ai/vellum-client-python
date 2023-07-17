@@ -28,14 +28,23 @@ class SlimDocument(pydantic.BaseModel):
     processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
         description=(
             "An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.\n"
+            "\n"
+            "* `QUEUED` - Queued\n"
+            "* `PROCESSING` - Processing\n"
+            "* `PROCESSED` - Processed\n"
+            "* `FAILED` - Failed\n"
         )
     )
     processing_failure_reason: typing.Optional[ProcessingFailureReasonEnum] = pydantic.Field(
         description=(
             "An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.\n"
+            "\n"
+            "* `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit\n"
         )
     )
-    status: typing.Optional[SlimDocumentStatusEnum] = pydantic.Field(description=("The document's current status.\n"))
+    status: typing.Optional[SlimDocumentStatusEnum] = pydantic.Field(
+        description=("The document's current status.\n" "\n" "* `ACTIVE` - Active\n")
+    )
     keywords: typing.Optional[typing.List[str]] = pydantic.Field(
         description=(
             "A list of keywords associated with this document. Originally provided when uploading the document.\n"

@@ -7,12 +7,12 @@ import typing
 import pydantic
 import typing_extensions
 
-from .constant_value_chat_history_variable import ConstantValueChatHistoryVariable
-from .constant_value_json_variable import ConstantValueJsonVariable
-from .constant_value_string_variable import ConstantValueStringVariable
+from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
+from .terminal_node_json_result import TerminalNodeJsonResult
+from .terminal_node_string_result import TerminalNodeStringResult
 
 
-class TerminalNodeResultOutput_String(ConstantValueStringVariable):
+class TerminalNodeResultOutput_String(TerminalNodeStringResult):
     type: typing_extensions.Literal["STRING"]
 
     class Config:
@@ -20,7 +20,7 @@ class TerminalNodeResultOutput_String(ConstantValueStringVariable):
         allow_population_by_field_name = True
 
 
-class TerminalNodeResultOutput_Json(ConstantValueJsonVariable):
+class TerminalNodeResultOutput_Json(TerminalNodeJsonResult):
     type: typing_extensions.Literal["JSON"]
 
     class Config:
@@ -28,7 +28,7 @@ class TerminalNodeResultOutput_Json(ConstantValueJsonVariable):
         allow_population_by_field_name = True
 
 
-class TerminalNodeResultOutput_ChatHistory(ConstantValueChatHistoryVariable):
+class TerminalNodeResultOutput_ChatHistory(TerminalNodeChatHistoryResult):
     type: typing_extensions.Literal["CHAT_HISTORY"]
 
     class Config:

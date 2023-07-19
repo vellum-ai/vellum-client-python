@@ -6,9 +6,6 @@ from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
-from .constant_value_chat_history_variable import ConstantValueChatHistoryVariable
-from .constant_value_json_variable import ConstantValueJsonVariable
-from .constant_value_string_variable import ConstantValueStringVariable
 from .content_type import ContentType
 from .deployment_node_result import DeploymentNodeResult
 from .deployment_node_result_data import DeploymentNodeResultData
@@ -90,6 +87,8 @@ from .slim_document import SlimDocument
 from .slim_document_status_enum import SlimDocumentStatusEnum
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
+from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
+from .terminal_node_json_result import TerminalNodeJsonResult
 from .terminal_node_result import TerminalNodeResult
 from .terminal_node_result_data import TerminalNodeResultData
 from .terminal_node_result_output import (
@@ -98,6 +97,7 @@ from .terminal_node_result_output import (
     TerminalNodeResultOutput_Json,
     TerminalNodeResultOutput_String,
 )
+from .terminal_node_string_result import TerminalNodeStringResult
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
@@ -134,9 +134,6 @@ __all__ = [
     "ChatMessageRole",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
-    "ConstantValueChatHistoryVariable",
-    "ConstantValueJsonVariable",
-    "ConstantValueStringVariable",
     "ContentType",
     "DeploymentNodeResult",
     "DeploymentNodeResultData",
@@ -218,12 +215,15 @@ __all__ = [
     "SlimDocumentStatusEnum",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
+    "TerminalNodeChatHistoryResult",
+    "TerminalNodeJsonResult",
     "TerminalNodeResult",
     "TerminalNodeResultData",
     "TerminalNodeResultOutput",
     "TerminalNodeResultOutput_ChatHistory",
     "TerminalNodeResultOutput_Json",
     "TerminalNodeResultOutput_String",
+    "TerminalNodeStringResult",
     "TestSuiteTestCase",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",

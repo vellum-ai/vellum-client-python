@@ -6,10 +6,12 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .chat_message import ChatMessage
 
 
-class ConstantValueStringVariable(pydantic.BaseModel):
-    value: typing.Optional[str]
+class TerminalNodeChatHistoryResult(pydantic.BaseModel):
+    name: str = pydantic.Field(description=("The unique name given to the terminal node that produced this output.\n"))
+    value: typing.List[ChatMessage]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

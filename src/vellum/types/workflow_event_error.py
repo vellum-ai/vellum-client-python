@@ -6,19 +6,12 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .workflow_event_error import WorkflowEventError
-from .workflow_node_result_data import WorkflowNodeResultData
-from .workflow_node_result_event_state import WorkflowNodeResultEventState
+from .workflow_execution_event_error_code import WorkflowExecutionEventErrorCode
 
 
-class WorkflowNodeResultEvent(pydantic.BaseModel):
-    id: str
-    node_id: str
-    node_result_id: str
-    state: WorkflowNodeResultEventState
-    ts: typing.Optional[str]
-    data: typing.Optional[WorkflowNodeResultData]
-    error: typing.Optional[WorkflowEventError]
+class WorkflowEventError(pydantic.BaseModel):
+    message: str
+    code: WorkflowExecutionEventErrorCode
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

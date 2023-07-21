@@ -101,6 +101,8 @@ from .terminal_node_string_result import TerminalNodeStringResult
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
+from .workflow_event_error import WorkflowEventError
+from .workflow_execution_event_error_code import WorkflowExecutionEventErrorCode
 from .workflow_execution_node_result_event import WorkflowExecutionNodeResultEvent
 from .workflow_execution_workflow_result_event import WorkflowExecutionWorkflowResultEvent
 from .workflow_node_result_data import (
@@ -113,7 +115,7 @@ from .workflow_node_result_data import (
     WorkflowNodeResultData_Terminal,
 )
 from .workflow_node_result_event import WorkflowNodeResultEvent
-from .workflow_node_result_event_state_enum import WorkflowNodeResultEventStateEnum
+from .workflow_node_result_event_state import WorkflowNodeResultEventState
 from .workflow_request_chat_history_input_request import WorkflowRequestChatHistoryInputRequest
 from .workflow_request_input_request import (
     WorkflowRequestInputRequest,
@@ -124,7 +126,15 @@ from .workflow_request_input_request import (
 from .workflow_request_json_input_request import WorkflowRequestJsonInputRequest
 from .workflow_request_string_input_request import WorkflowRequestStringInputRequest
 from .workflow_result_event import WorkflowResultEvent
-from .workflow_result_event_state_enum import WorkflowResultEventStateEnum
+from .workflow_result_event_output_data import (
+    WorkflowResultEventOutputData,
+    WorkflowResultEventOutputData_ChatHistory,
+    WorkflowResultEventOutputData_Json,
+    WorkflowResultEventOutputData_String,
+)
+from .workflow_result_event_output_data_chat_history import WorkflowResultEventOutputDataChatHistory
+from .workflow_result_event_output_data_json import WorkflowResultEventOutputDataJson
+from .workflow_result_event_output_data_string import WorkflowResultEventOutputDataString
 from .workflow_stream_event import WorkflowStreamEvent, WorkflowStreamEvent_Node, WorkflowStreamEvent_Workflow
 
 __all__ = [
@@ -227,6 +237,8 @@ __all__ = [
     "TestSuiteTestCase",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
+    "WorkflowEventError",
+    "WorkflowExecutionEventErrorCode",
     "WorkflowExecutionNodeResultEvent",
     "WorkflowExecutionWorkflowResultEvent",
     "WorkflowNodeResultData",
@@ -237,7 +249,7 @@ __all__ = [
     "WorkflowNodeResultData_Search",
     "WorkflowNodeResultData_Terminal",
     "WorkflowNodeResultEvent",
-    "WorkflowNodeResultEventStateEnum",
+    "WorkflowNodeResultEventState",
     "WorkflowRequestChatHistoryInputRequest",
     "WorkflowRequestInputRequest",
     "WorkflowRequestInputRequest_ChatHistory",
@@ -246,7 +258,13 @@ __all__ = [
     "WorkflowRequestJsonInputRequest",
     "WorkflowRequestStringInputRequest",
     "WorkflowResultEvent",
-    "WorkflowResultEventStateEnum",
+    "WorkflowResultEventOutputData",
+    "WorkflowResultEventOutputDataChatHistory",
+    "WorkflowResultEventOutputDataJson",
+    "WorkflowResultEventOutputDataString",
+    "WorkflowResultEventOutputData_ChatHistory",
+    "WorkflowResultEventOutputData_Json",
+    "WorkflowResultEventOutputData_String",
     "WorkflowStreamEvent",
     "WorkflowStreamEvent_Node",
     "WorkflowStreamEvent_Workflow",

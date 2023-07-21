@@ -13,6 +13,7 @@ class ProviderEnum(str, enum.Enum):
     * `GOOGLE` - Google
     * `HOSTED` - Hosted
     * `MOSAICML` - MosaicML
+    * `MYSTIC` - Mystic
     * `OPENAI` - OpenAI
     * `PYQ` - Pyq
     """
@@ -22,6 +23,7 @@ class ProviderEnum(str, enum.Enum):
     GOOGLE = "GOOGLE"
     HOSTED = "HOSTED"
     MOSAICML = "MOSAICML"
+    MYSTIC = "MYSTIC"
     OPENAI = "OPENAI"
     PYQ = "PYQ"
 
@@ -32,6 +34,7 @@ class ProviderEnum(str, enum.Enum):
         google: typing.Callable[[], T_Result],
         hosted: typing.Callable[[], T_Result],
         mosaicml: typing.Callable[[], T_Result],
+        mystic: typing.Callable[[], T_Result],
         openai: typing.Callable[[], T_Result],
         pyq: typing.Callable[[], T_Result],
     ) -> T_Result:
@@ -45,6 +48,8 @@ class ProviderEnum(str, enum.Enum):
             return hosted()
         if self is ProviderEnum.MOSAICML:
             return mosaicml()
+        if self is ProviderEnum.MYSTIC:
+            return mystic()
         if self is ProviderEnum.OPENAI:
             return openai()
         if self is ProviderEnum.PYQ:

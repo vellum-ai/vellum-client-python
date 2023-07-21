@@ -35,6 +35,7 @@ class ModelVersionRead(pydantic.BaseModel):
             "* `GOOGLE` - Google\n"
             "* `HOSTED` - Hosted\n"
             "* `MOSAICML` - MosaicML\n"
+            "* `MYSTIC` - Mystic\n"
             "* `OPENAI` - OpenAI\n"
             "* `PYQ` - Pyq\n"
         )

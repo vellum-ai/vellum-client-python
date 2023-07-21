@@ -6,7 +6,7 @@ import typing
 T_Result = typing.TypeVar("T_Result")
 
 
-class WorkflowNodeResultEventStateEnum(str, enum.Enum):
+class WorkflowNodeResultEventState(str, enum.Enum):
     """
     * `INITIATED` - INITIATED
     * `STREAMING` - STREAMING
@@ -26,11 +26,11 @@ class WorkflowNodeResultEventStateEnum(str, enum.Enum):
         fulfilled: typing.Callable[[], T_Result],
         rejected: typing.Callable[[], T_Result],
     ) -> T_Result:
-        if self is WorkflowNodeResultEventStateEnum.INITIATED:
+        if self is WorkflowNodeResultEventState.INITIATED:
             return initiated()
-        if self is WorkflowNodeResultEventStateEnum.STREAMING:
+        if self is WorkflowNodeResultEventState.STREAMING:
             return streaming()
-        if self is WorkflowNodeResultEventStateEnum.FULFILLED:
+        if self is WorkflowNodeResultEventState.FULFILLED:
             return fulfilled()
-        if self is WorkflowNodeResultEventStateEnum.REJECTED:
+        if self is WorkflowNodeResultEventState.REJECTED:
             return rejected()

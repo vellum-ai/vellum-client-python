@@ -10,9 +10,7 @@ from ..core.datetime_utils import serialize_datetime
 
 class WorkflowRequestJsonInputRequest(pydantic.BaseModel):
     name: str = pydantic.Field(
-        description=(
-            'The variable\'s name, as defined in the Workflow. <span style="white-space: nowrap">`non-empty`</span> \n'
-        )
+        description='The variable\'s name, as defined in the Workflow. <span style="white-space: nowrap">`non-empty`</span> '
     )
     value: typing.Dict[str, typing.Any]
 

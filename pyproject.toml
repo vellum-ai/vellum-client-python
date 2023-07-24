@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vellum-ai"
-version = "v0.0.21"
+version = "v0.0.22"
 description = ""
 readme = "README.md"
 authors = []
@@ -15,6 +15,7 @@ httpx = "0.23.3"
 
 [tool.poetry.dev-dependencies]
 mypy = "0.971"
+pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]

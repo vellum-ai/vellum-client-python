@@ -9,8 +9,8 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class RegisteredPromptModelVersion(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the generated model version.\n"))
-    label: str = pydantic.Field(description=("A human-friendly label for the generated model version.\n"))
+    id: str = pydantic.Field(description="The ID of the generated model version.")
+    label: str = pydantic.Field(description="A human-friendly label for the generated model version.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -14,6 +14,9 @@ class WorkflowResultEventOutputDataChatHistory(pydantic.BaseModel):
     name: str
     state: WorkflowNodeResultEventState
     node_id: str
+    delta: typing.Optional[str] = pydantic.Field(
+        description="The newly output string value. Only relevant for string outputs with a state of STREAMING."
+    )
     value: typing.Optional[typing.List[ChatMessage]]
 
     def json(self, **kwargs: typing.Any) -> str:

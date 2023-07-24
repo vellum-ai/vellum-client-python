@@ -4,27 +4,40 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-import httpx
 import pydantic
 
 from ...core.api_error import ApiError
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_headers import remove_none_from_headers
 from ...environment import VellumEnvironment
 from ...types.model_version_compile_prompt_response import ModelVersionCompilePromptResponse
 from ...types.model_version_read import ModelVersionRead
 
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
+
 
 class ModelVersionsClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     def retrieve(self, id: str) -> ModelVersionRead:
-        _response = httpx.request(
+        """
+
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Used to retrieve a model version given its ID.
+
+        Parameters:
+            - id: str. A UUID string identifying this model version.
+        """
+        _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}"),
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -38,11 +51,21 @@ class ModelVersionsClient:
     def model_version_compile_prompt(
         self, id: str, *, input_values: typing.Dict[str, typing.Any]
     ) -> ModelVersionCompilePromptResponse:
-        _response = httpx.request(
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Compiles the prompt backing the model version using the provided input values.
+
+        Parameters:
+            - id: str. A UUID string identifying this model version.
+
+            - input_values: typing.Dict[str, typing.Any]. Key/value pairs for each variable found within the model version's prompt template.
+        """
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}/compile-prompt"),
             json=jsonable_encoder({"input_values": input_values}),
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -55,18 +78,28 @@ class ModelVersionsClient:
 
 
 class AsyncModelVersionsClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     async def retrieve(self, id: str) -> ModelVersionRead:
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "GET",
-                urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}"),
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        """
+
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Used to retrieve a model version given its ID.
+
+        Parameters:
+            - id: str. A UUID string identifying this model version.
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ModelVersionRead, _response.json())  # type: ignore
         try:
@@ -78,14 +111,23 @@ class AsyncModelVersionsClient:
     async def model_version_compile_prompt(
         self, id: str, *, input_values: typing.Dict[str, typing.Any]
     ) -> ModelVersionCompilePromptResponse:
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "POST",
-                urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}/compile-prompt"),
-                json=jsonable_encoder({"input_values": input_values}),
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Compiles the prompt backing the model version using the provided input values.
+
+        Parameters:
+            - id: str. A UUID string identifying this model version.
+
+            - input_values: typing.Dict[str, typing.Any]. Key/value pairs for each variable found within the model version's prompt template.
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}/compile-prompt"),
+            json=jsonable_encoder({"input_values": input_values}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ModelVersionCompilePromptResponse, _response.json())  # type: ignore
         try:

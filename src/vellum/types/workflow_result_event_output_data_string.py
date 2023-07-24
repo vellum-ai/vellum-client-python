@@ -13,7 +13,12 @@ class WorkflowResultEventOutputDataString(pydantic.BaseModel):
     name: str
     state: WorkflowNodeResultEventState
     node_id: str
-    value: typing.Optional[str]
+    delta: typing.Optional[str] = pydantic.Field(
+        description="The newly output string value, meant to be concatenated with all previous. Will be non-null for events of state STREAMING."
+    )
+    value: typing.Optional[str] = pydantic.Field(
+        description="The entire string value. Will be non-null for events of state FULFILLED."
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

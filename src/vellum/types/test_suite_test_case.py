@@ -11,18 +11,14 @@ from .evaluation_params import EvaluationParams
 
 class TestSuiteTestCase(pydantic.BaseModel):
     test_case_id: typing.Optional[str] = pydantic.Field(
-        description=(
-            "The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended.\n"
-        )
+        description="The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended."
     )
-    label: typing.Optional[str] = pydantic.Field(description=("A human-friendly label for the test case.\n"))
+    label: typing.Optional[str] = pydantic.Field(description="A human-friendly label for the test case.")
     input_values: typing.Dict[str, typing.Any] = pydantic.Field(
-        description=("Key/value pairs for each input variable that the Test Suite expects.\n")
+        description="Key/value pairs for each input variable that the Test Suite expects."
     )
     evaluation_params: EvaluationParams = pydantic.Field(
-        description=(
-            "Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.\n"
-        )
+        description="Parameters to use when evaluating the test case, specific to the test suite's evaluation metric."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

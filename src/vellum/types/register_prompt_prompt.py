@@ -9,8 +9,8 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class RegisterPromptPrompt(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the generated prompt.\n"))
-    label: str = pydantic.Field(description=("A human-friendly label for the generated prompt.\n"))
+    id: str = pydantic.Field(description="The ID of the generated prompt.")
+    label: str = pydantic.Field(description="A human-friendly label for the generated prompt.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

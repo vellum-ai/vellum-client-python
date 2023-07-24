@@ -10,9 +10,7 @@ from ..core.datetime_utils import serialize_datetime
 
 class EvaluationParams(pydantic.BaseModel):
     target: typing.Optional[str] = pydantic.Field(
-        description=(
-            "The target value to compare the LLM output against. Typically what you expect or desire the LLM output to be.\n"
-        )
+        description="The target value to compare the LLM output against. Typically what you expect or desire the LLM output to be."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

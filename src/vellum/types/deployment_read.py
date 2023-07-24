@@ -15,14 +15,10 @@ class DeploymentRead(pydantic.BaseModel):
     id: str
     created: str
     label: str = pydantic.Field(
-        description=(
-            'A human-readable label for the deployment <span style="white-space: nowrap">`<= 150 characters`</span> \n'
-        )
+        description='A human-readable label for the deployment <span style="white-space: nowrap">`<= 150 characters`</span> '
     )
     name: str = pydantic.Field(
-        description=(
-            'A name that uniquely identifies this deployment within its workspace <span style="white-space: nowrap">`<= 150 characters`</span> \n'
-        )
+        description='A name that uniquely identifies this deployment within its workspace <span style="white-space: nowrap">`<= 150 characters`</span> '
     )
     status: typing.Optional[DeploymentReadStatusEnum] = pydantic.Field(
         description=(

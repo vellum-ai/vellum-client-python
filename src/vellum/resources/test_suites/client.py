@@ -4,12 +4,11 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-import httpx
 import pydantic
 
 from ...core.api_error import ApiError
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_headers import remove_none_from_headers
 from ...environment import VellumEnvironment
 from ...types.evaluation_params_request import EvaluationParamsRequest
 from ...types.test_suite_test_case import TestSuiteTestCase
@@ -19,9 +18,11 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class TestSuitesClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     def upsert_test_suite_test_case(
         self,
@@ -32,16 +33,38 @@ class TestSuitesClient:
         input_values: typing.Dict[str, typing.Any],
         evaluation_params: EvaluationParamsRequest,
     ) -> TestSuiteTestCase:
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Upserts a new test case for a test suite, keying off of the optionally provided test case id.
+
+        If an id is provided and has a match, the test case will be updated. If no id is provided or no match
+        is found, a new test case will be appended to the end.
+
+        Note that a full replacement of the test case is performed, so any fields not provided will be removed
+        or overwritten with default values.
+
+        Parameters:
+            - id: str. A UUID string identifying this test suite.
+
+            - test_case_id: typing.Optional[str]. The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended. <span style="white-space: nowrap">`non-empty`</span>
+
+            - label: typing.Optional[str]. A human-friendly label for the test case.
+
+            - input_values: typing.Dict[str, typing.Any]. Key/value pairs for each input variable that the Test Suite expects.
+
+            - evaluation_params: EvaluationParamsRequest. Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.
+        """
         _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_params": evaluation_params}
         if test_case_id is not OMIT:
             _request["test_case_id"] = test_case_id
         if label is not OMIT:
             _request["label"] = label
-        _response = httpx.request(
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases"),
             json=jsonable_encoder(_request),
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -53,10 +76,20 @@ class TestSuitesClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def delete_test_suite_test_case(self, id: str, test_case_id: str) -> None:
-        _response = httpx.request(
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Deletes an existing test case for a test suite, keying off of the test case id.
+
+        Parameters:
+            - id: str. A UUID string identifying this test suite.
+
+            - test_case_id: str. An id identifying the test case that you'd like to delete
+        """
+        _response = self._client_wrapper.httpx_client.request(
             "DELETE",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"),
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -69,9 +102,11 @@ class TestSuitesClient:
 
 
 class AsyncTestSuitesClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     async def upsert_test_suite_test_case(
         self,
@@ -82,19 +117,40 @@ class AsyncTestSuitesClient:
         input_values: typing.Dict[str, typing.Any],
         evaluation_params: EvaluationParamsRequest,
     ) -> TestSuiteTestCase:
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Upserts a new test case for a test suite, keying off of the optionally provided test case id.
+
+        If an id is provided and has a match, the test case will be updated. If no id is provided or no match
+        is found, a new test case will be appended to the end.
+
+        Note that a full replacement of the test case is performed, so any fields not provided will be removed
+        or overwritten with default values.
+
+        Parameters:
+            - id: str. A UUID string identifying this test suite.
+
+            - test_case_id: typing.Optional[str]. The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended. <span style="white-space: nowrap">`non-empty`</span>
+
+            - label: typing.Optional[str]. A human-friendly label for the test case.
+
+            - input_values: typing.Dict[str, typing.Any]. Key/value pairs for each input variable that the Test Suite expects.
+
+            - evaluation_params: EvaluationParamsRequest. Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.
+        """
         _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_params": evaluation_params}
         if test_case_id is not OMIT:
             _request["test_case_id"] = test_case_id
         if label is not OMIT:
             _request["label"] = label
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "POST",
-                urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases"),
-                json=jsonable_encoder(_request),
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
         try:
@@ -104,13 +160,22 @@ class AsyncTestSuitesClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     async def delete_test_suite_test_case(self, id: str, test_case_id: str) -> None:
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "DELETE",
-                urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"),
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Deletes an existing test case for a test suite, keying off of the test case id.
+
+        Parameters:
+            - id: str. A UUID string identifying this test suite.
+
+            - test_case_id: str. An id identifying the test case that you'd like to delete
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return
         try:

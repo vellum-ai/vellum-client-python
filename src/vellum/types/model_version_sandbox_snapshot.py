@@ -9,11 +9,9 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class ModelVersionSandboxSnapshot(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the sandbox snapshot.\n"))
-    prompt_index: typing.Optional[int] = pydantic.Field(
-        description=("The index of the prompt in the sandbox snapshot.\n")
-    )
-    prompt_id: typing.Optional[str] = pydantic.Field(description=("The id of the prompt in the sandbox snapshot.\n"))
+    id: str = pydantic.Field(description="The ID of the sandbox snapshot.")
+    prompt_index: typing.Optional[int] = pydantic.Field(description="The index of the prompt in the sandbox snapshot.")
+    prompt_id: typing.Optional[str] = pydantic.Field(description="The id of the prompt in the sandbox snapshot.")
     sandbox_id: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:

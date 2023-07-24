@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import pydantic
 import typing_extensions
 
 from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
@@ -36,7 +35,6 @@ class TerminalNodeResultOutput_ChatHistory(TerminalNodeChatHistoryResult):
         allow_population_by_field_name = True
 
 
-TerminalNodeResultOutput = typing_extensions.Annotated[
-    typing.Union[TerminalNodeResultOutput_String, TerminalNodeResultOutput_Json, TerminalNodeResultOutput_ChatHistory],
-    pydantic.Field(discriminator="type"),
+TerminalNodeResultOutput = typing.Union[
+    TerminalNodeResultOutput_String, TerminalNodeResultOutput_Json, TerminalNodeResultOutput_ChatHistory
 ]

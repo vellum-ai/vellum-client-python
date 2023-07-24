@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import pydantic
 import typing_extensions
 
 from .workflow_execution_node_result_event import WorkflowExecutionNodeResultEvent
@@ -27,6 +26,4 @@ class WorkflowStreamEvent_Node(WorkflowExecutionNodeResultEvent):
         allow_population_by_field_name = True
 
 
-WorkflowStreamEvent = typing_extensions.Annotated[
-    typing.Union[WorkflowStreamEvent_Workflow, WorkflowStreamEvent_Node], pydantic.Field(discriminator="type")
-]
+WorkflowStreamEvent = typing.Union[WorkflowStreamEvent_Workflow, WorkflowStreamEvent_Node]

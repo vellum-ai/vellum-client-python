@@ -11,7 +11,7 @@ from .scenario_input_type_enum import ScenarioInputTypeEnum
 
 
 class ScenarioInputRequest(pydantic.BaseModel):
-    key: str = pydantic.Field(description=('<span style="white-space: nowrap">`non-empty`</span>\n'))
+    key: str = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
     type: typing.Optional[ScenarioInputTypeEnum]
     value: typing.Optional[str]
     chat_history: typing.Optional[typing.List[ChatMessageRequest]]

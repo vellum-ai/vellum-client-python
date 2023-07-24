@@ -14,7 +14,7 @@ class RegisterPromptPromptInfoRequest(pydantic.BaseModel):
     prompt_syntax_version: typing.Optional[int]
     prompt_block_data: PromptTemplateBlockDataRequest
     input_variables: typing.List[PromptTemplateInputVariableRequest] = pydantic.Field(
-        description=("Names of the input variables specified in the prompt template.\n")
+        description="Names of the input variables specified in the prompt template."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import pydantic
 import typing_extensions
 
 from .workflow_result_event_output_data_chat_history import WorkflowResultEventOutputDataChatHistory
@@ -36,11 +35,6 @@ class WorkflowResultEventOutputData_ChatHistory(WorkflowResultEventOutputDataCha
         allow_population_by_field_name = True
 
 
-WorkflowResultEventOutputData = typing_extensions.Annotated[
-    typing.Union[
-        WorkflowResultEventOutputData_String,
-        WorkflowResultEventOutputData_Json,
-        WorkflowResultEventOutputData_ChatHistory,
-    ],
-    pydantic.Field(discriminator="type"),
+WorkflowResultEventOutputData = typing.Union[
+    WorkflowResultEventOutputData_String, WorkflowResultEventOutputData_Json, WorkflowResultEventOutputData_ChatHistory
 ]

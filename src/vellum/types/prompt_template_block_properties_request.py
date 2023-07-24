@@ -18,10 +18,10 @@ class PromptTemplateBlockPropertiesRequest(pydantic.BaseModel):
     template: typing.Optional[str]
     template_type: typing.Optional[ContentType]
     function_name: typing.Optional[str] = pydantic.Field(
-        description=('<span style="white-space: nowrap">`non-empty`</span>\n')
+        description='<span style="white-space: nowrap">`non-empty`</span>'
     )
     function_description: typing.Optional[str] = pydantic.Field(
-        description=('<span style="white-space: nowrap">`non-empty`</span>\n')
+        description='<span style="white-space: nowrap">`non-empty`</span>'
     )
     function_parameters: typing.Optional[typing.Dict[str, typing.Any]]
     blocks: typing.Optional[typing.List[PromptTemplateBlockRequest]]

@@ -9,8 +9,8 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class RegisteredPromptSandbox(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the generated sandbox.\n"))
-    label: str = pydantic.Field(description=("A human-friendly label for the generated sandbox.\n"))
+    id: str = pydantic.Field(description="The ID of the generated sandbox.")
+    label: str = pydantic.Field(description="A human-friendly label for the generated sandbox.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

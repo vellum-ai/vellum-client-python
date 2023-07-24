@@ -12,16 +12,14 @@ from .search_weights_request import SearchWeightsRequest
 
 
 class SearchRequestOptionsRequest(pydantic.BaseModel):
-    limit: typing.Optional[int] = pydantic.Field(description=("The maximum number of results to return.\n"))
+    limit: typing.Optional[int] = pydantic.Field(description="The maximum number of results to return.")
     weights: typing.Optional[SearchWeightsRequest] = pydantic.Field(
-        description=("The weights to use for the search. Must add up to 1.0.\n")
+        description="The weights to use for the search. Must add up to 1.0."
     )
     result_merging: typing.Optional[SearchResultMergingRequest] = pydantic.Field(
-        description=("The configuration for merging results.\n")
+        description="The configuration for merging results."
     )
-    filters: typing.Optional[SearchFiltersRequest] = pydantic.Field(
-        description=("The filters to apply to the search.\n")
-    )
+    filters: typing.Optional[SearchFiltersRequest] = pydantic.Field(description="The filters to apply to the search.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import pydantic
 import typing_extensions
 
 from .conditional_node_result import ConditionalNodeResult
@@ -63,14 +62,11 @@ class WorkflowNodeResultData_Terminal(TerminalNodeResult):
         allow_population_by_field_name = True
 
 
-WorkflowNodeResultData = typing_extensions.Annotated[
-    typing.Union[
-        WorkflowNodeResultData_Prompt,
-        WorkflowNodeResultData_Sandbox,
-        WorkflowNodeResultData_Deployment,
-        WorkflowNodeResultData_Search,
-        WorkflowNodeResultData_Conditional,
-        WorkflowNodeResultData_Terminal,
-    ],
-    pydantic.Field(discriminator="type"),
+WorkflowNodeResultData = typing.Union[
+    WorkflowNodeResultData_Prompt,
+    WorkflowNodeResultData_Sandbox,
+    WorkflowNodeResultData_Deployment,
+    WorkflowNodeResultData_Search,
+    WorkflowNodeResultData_Conditional,
+    WorkflowNodeResultData_Terminal,
 ]

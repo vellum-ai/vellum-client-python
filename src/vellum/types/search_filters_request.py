@@ -10,7 +10,7 @@ from ..core.datetime_utils import serialize_datetime
 
 class SearchFiltersRequest(pydantic.BaseModel):
     external_ids: typing.Optional[typing.List[str]] = pydantic.Field(
-        description=("The document external IDs to filter by\n")
+        description="The document external IDs to filter by"
     )
 
     def json(self, **kwargs: typing.Any) -> str:

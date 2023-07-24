@@ -10,11 +10,9 @@ from ..core.datetime_utils import serialize_datetime
 
 class ModelVersionCompiledPrompt(pydantic.BaseModel):
     text: str = pydantic.Field(
-        description=(
-            "The fully compiled prompt in normalized ChatML syntax after all variable substitutions and templating functions are applied.\n"
-        )
+        description="The fully compiled prompt in normalized ChatML syntax after all variable substitutions and templating functions are applied."
     )
-    num_tokens: int = pydantic.Field(description=("The approximate number of tokens used by the compiled prompt.\n"))
+    num_tokens: int = pydantic.Field(description="The approximate number of tokens used by the compiled prompt.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

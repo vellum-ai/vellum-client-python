@@ -3,25 +3,35 @@
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-import httpx
 import pydantic
 
 from ...core.api_error import ApiError
-from ...core.remove_none_from_headers import remove_none_from_headers
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...environment import VellumEnvironment
 from ...types.deployment_read import DeploymentRead
 
 
 class DeploymentsClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     def retrieve(self, id: str) -> DeploymentRead:
-        _response = httpx.request(
+        """
+
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Used to retrieve a deployment given its ID or name.
+
+        Parameters:
+            - id: str. Either the Deployment's ID or its unique name
+        """
+        _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/deployments/{id}"),
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -34,18 +44,28 @@ class DeploymentsClient:
 
 
 class AsyncDeploymentsClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     async def retrieve(self, id: str) -> DeploymentRead:
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "GET",
-                urllib.parse.urljoin(f"{self._environment.default}/", f"v1/deployments/{id}"),
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        """
+
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Used to retrieve a deployment given its ID or name.
+
+        Parameters:
+            - id: str. Either the Deployment's ID or its unique name
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/deployments/{id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DeploymentRead, _response.json())  # type: ignore
         try:

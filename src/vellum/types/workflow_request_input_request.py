@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import pydantic
 import typing_extensions
 
 from .workflow_request_chat_history_input_request import WorkflowRequestChatHistoryInputRequest
@@ -36,9 +35,6 @@ class WorkflowRequestInputRequest_ChatHistory(WorkflowRequestChatHistoryInputReq
         allow_population_by_field_name = True
 
 
-WorkflowRequestInputRequest = typing_extensions.Annotated[
-    typing.Union[
-        WorkflowRequestInputRequest_String, WorkflowRequestInputRequest_Json, WorkflowRequestInputRequest_ChatHistory
-    ],
-    pydantic.Field(discriminator="type"),
+WorkflowRequestInputRequest = typing.Union[
+    WorkflowRequestInputRequest_String, WorkflowRequestInputRequest_Json, WorkflowRequestInputRequest_ChatHistory
 ]

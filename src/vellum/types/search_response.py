@@ -11,7 +11,7 @@ from .search_result import SearchResult
 
 class SearchResponse(pydantic.BaseModel):
     results: typing.List[SearchResult] = pydantic.Field(
-        description=("The results of the search. Each result represents a chunk that matches the search query.\n")
+        description="The results of the search. Each result represents a chunk that matches the search query."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

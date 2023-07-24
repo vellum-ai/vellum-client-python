@@ -4,12 +4,11 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-import httpx
 import pydantic
 
 from ...core.api_error import ApiError
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_headers import remove_none_from_headers
 from ...environment import VellumEnvironment
 from ...errors.conflict_error import ConflictError
 from ...types.provider_enum import ProviderEnum
@@ -23,9 +22,11 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class RegisteredPromptsClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     def register_prompt(
         self,
@@ -38,6 +39,37 @@ class RegisteredPromptsClient:
         parameters: RegisterPromptModelParametersRequest,
         meta: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
     ) -> RegisterPromptResponse:
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Registers a prompt within Vellum and creates associated Vellum entities. Intended to be used by integration
+        partners, not directly by Vellum users.
+
+        Under the hood, this endpoint creates a new sandbox, a new model version, and a new deployment.
+
+        Parameters:
+            - label: str. A human-friendly label for corresponding entities created in Vellum. <span style="white-space: nowrap">`non-empty`</span>
+
+            - name: str. A uniquely-identifying name for corresponding entities created in Vellum. <span style="white-space: nowrap">`non-empty`</span>
+
+            - prompt: RegisterPromptPromptInfoRequest. Information about how to execute the prompt template.
+
+            - provider: ProviderEnum. The initial LLM provider to use for this prompt
+
+                                      * `ANTHROPIC` - Anthropic
+                                      * `COHERE` - Cohere
+                                      * `GOOGLE` - Google
+                                      * `HOSTED` - Hosted
+                                      * `MOSAICML` - MosaicML
+                                      * `MYSTIC` - Mystic
+                                      * `OPENAI` - OpenAI
+                                      * `PYQ` - Pyq
+            - model: str. The initial model to use for this prompt <span style="white-space: nowrap">`non-empty`</span>
+
+            - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
+
+            - meta: typing.Optional[typing.Dict[str, typing.Any]]. Optionally include additional metadata to store along with the prompt.
+        """
         _request: typing.Dict[str, typing.Any] = {
             "label": label,
             "name": name,
@@ -48,11 +80,11 @@ class RegisteredPromptsClient:
         }
         if meta is not OMIT:
             _request["meta"] = meta
-        _response = httpx.request(
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.default}/", "v1/registered-prompts/register"),
             json=jsonable_encoder(_request),
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -67,9 +99,11 @@ class RegisteredPromptsClient:
 
 
 class AsyncRegisteredPromptsClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     async def register_prompt(
         self,
@@ -82,6 +116,37 @@ class AsyncRegisteredPromptsClient:
         parameters: RegisterPromptModelParametersRequest,
         meta: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
     ) -> RegisterPromptResponse:
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Registers a prompt within Vellum and creates associated Vellum entities. Intended to be used by integration
+        partners, not directly by Vellum users.
+
+        Under the hood, this endpoint creates a new sandbox, a new model version, and a new deployment.
+
+        Parameters:
+            - label: str. A human-friendly label for corresponding entities created in Vellum. <span style="white-space: nowrap">`non-empty`</span>
+
+            - name: str. A uniquely-identifying name for corresponding entities created in Vellum. <span style="white-space: nowrap">`non-empty`</span>
+
+            - prompt: RegisterPromptPromptInfoRequest. Information about how to execute the prompt template.
+
+            - provider: ProviderEnum. The initial LLM provider to use for this prompt
+
+                                      * `ANTHROPIC` - Anthropic
+                                      * `COHERE` - Cohere
+                                      * `GOOGLE` - Google
+                                      * `HOSTED` - Hosted
+                                      * `MOSAICML` - MosaicML
+                                      * `MYSTIC` - Mystic
+                                      * `OPENAI` - OpenAI
+                                      * `PYQ` - Pyq
+            - model: str. The initial model to use for this prompt <span style="white-space: nowrap">`non-empty`</span>
+
+            - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
+
+            - meta: typing.Optional[typing.Dict[str, typing.Any]]. Optionally include additional metadata to store along with the prompt.
+        """
         _request: typing.Dict[str, typing.Any] = {
             "label": label,
             "name": name,
@@ -92,14 +157,13 @@ class AsyncRegisteredPromptsClient:
         }
         if meta is not OMIT:
             _request["meta"] = meta
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "POST",
-                urllib.parse.urljoin(f"{self._environment.default}/", "v1/registered-prompts/register"),
-                json=jsonable_encoder(_request),
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._environment.default}/", "v1/registered-prompts/register"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(RegisterPromptResponse, _response.json())  # type: ignore
         if _response.status_code == 409:

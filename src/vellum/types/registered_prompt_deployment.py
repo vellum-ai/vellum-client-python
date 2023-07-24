@@ -9,9 +9,9 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class RegisteredPromptDeployment(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the generated deployment.\n"))
-    name: str = pydantic.Field(description=("A uniquely-identifying name for generated deployment.\n"))
-    label: str = pydantic.Field(description=("A human-friendly label for the generated deployment.\n"))
+    id: str = pydantic.Field(description="The ID of the generated deployment.")
+    name: str = pydantic.Field(description="A uniquely-identifying name for generated deployment.")
+    label: str = pydantic.Field(description="A human-friendly label for the generated deployment.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

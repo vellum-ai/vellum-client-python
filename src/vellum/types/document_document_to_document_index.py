@@ -10,9 +10,9 @@ from .indexing_state_enum import IndexingStateEnum
 
 
 class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("Vellum-generated ID that uniquely identifies this link.\n"))
+    id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this link.")
     document_index_id: str = pydantic.Field(
-        description=("Vellum-generated ID that uniquely identifies the index this document is included in.\n")
+        description="Vellum-generated ID that uniquely identifies the index this document is included in."
     )
     indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(
         description=(

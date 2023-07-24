@@ -13,13 +13,13 @@ from .prompt_template_input_variable import PromptTemplateInputVariable
 
 class ModelVersionExecConfig(pydantic.BaseModel):
     parameters: ModelVersionExecConfigParameters = pydantic.Field(
-        description=("The generation parameters that are passed to the LLM provider at runtime.\n")
+        description="The generation parameters that are passed to the LLM provider at runtime."
     )
     input_variables: typing.List[PromptTemplateInputVariable] = pydantic.Field(
-        description=("Names of the input variables specified in the prompt template.\n")
+        description="Names of the input variables specified in the prompt template."
     )
     prompt_template: typing.Optional[str] = pydantic.Field(
-        description=("The template used to generate prompts for this model version.\n")
+        description="The template used to generate prompts for this model version."
     )
     prompt_block_data: typing.Optional[PromptTemplateBlockData]
     prompt_syntax_version: typing.Optional[int]

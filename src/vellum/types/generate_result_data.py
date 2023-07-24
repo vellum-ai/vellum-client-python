@@ -11,7 +11,7 @@ from .enriched_normalized_completion import EnrichedNormalizedCompletion
 
 class GenerateResultData(pydantic.BaseModel):
     completions: typing.List[EnrichedNormalizedCompletion] = pydantic.Field(
-        description=("The generated completions. This will generally be a list of length one.\n")
+        description="The generated completions. This will generally be a list of length one."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

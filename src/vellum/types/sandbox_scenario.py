@@ -12,8 +12,8 @@ from .scenario_input import ScenarioInput
 
 class SandboxScenario(pydantic.BaseModel):
     label: typing.Optional[str]
-    inputs: typing.List[ScenarioInput] = pydantic.Field(description=("The inputs for the scenario\n"))
-    id: str = pydantic.Field(description=("The id of the scenario\n"))
+    inputs: typing.List[ScenarioInput] = pydantic.Field(description="The inputs for the scenario")
+    id: str = pydantic.Field(description="The id of the scenario")
     metric_input_params: SandboxMetricInputParams
 
     def json(self, **kwargs: typing.Any) -> str:

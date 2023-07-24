@@ -11,14 +11,10 @@ from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
 
 class ModelVersionBuildConfig(pydantic.BaseModel):
     base_model: str = pydantic.Field(
-        description=(
-            "The name of the base model used to create this model version, as identified by the LLM provider.\n"
-        )
+        description="The name of the base model used to create this model version, as identified by the LLM provider."
     )
     sandbox_snapshot: typing.Optional[ModelVersionSandboxSnapshot] = pydantic.Field(
-        description=(
-            "Information about the sandbox snapshot that was used to create this model version, if applicable.\n"
-        )
+        description="Information about the sandbox snapshot that was used to create this model version, if applicable."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

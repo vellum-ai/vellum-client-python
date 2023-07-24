@@ -4,12 +4,12 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-import httpx
 import pydantic
 
 from ...core.api_error import ApiError
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_headers import remove_none_from_headers
+from ...core.remove_none_from_dict import remove_none_from_dict
 from ...environment import VellumEnvironment
 from ...errors.bad_request_error import BadRequestError
 from ...errors.internal_server_error import InternalServerError
@@ -17,11 +17,16 @@ from ...errors.not_found_error import NotFoundError
 from ...types.paginated_slim_document_list import PaginatedSlimDocumentList
 from ...types.upload_document_response import UploadDocumentResponse
 
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
+
 
 class DocumentsClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     def list(
         self,
@@ -31,11 +36,28 @@ class DocumentsClient:
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
     ) -> PaginatedSlimDocumentList:
-        _response = httpx.request(
+        """
+
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Used to list documents. Optionally filter on supported fields.
+
+        Parameters:
+            - document_index_id: typing.Optional[str]. Filter down to only those documents that are included in the specified index. You may provide either the Vellum-generated ID or the unique name of the index specified upon initial creation.
+
+            - limit: typing.Optional[int]. Number of results to return per page.
+
+            - offset: typing.Optional[int]. The initial index from which to return the results.
+
+            - ordering: typing.Optional[str]. Which field to use when ordering the results.
+        """
+        _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
-            params={"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering},
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            params=remove_none_from_dict(
+                {"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering}
+            ),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -55,7 +77,25 @@ class DocumentsClient:
         contents: typing.IO,
         keywords: typing.Optional[typing.List[str]] = None,
     ) -> UploadDocumentResponse:
-        _response = httpx.request(
+        """
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Upload a document to be indexed and used for search.
+
+        **Note:** Uses a base url of `https://documents.vellum.ai`.
+
+        Parameters:
+            - add_to_index_names: typing.Optional[typing.List[str]].
+
+            - external_id: typing.Optional[str].
+
+            - label: str.
+
+            - contents: typing.IO.
+
+            - keywords: typing.Optional[typing.List[str]].
+        """
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.documents}/", "v1/upload-document"),
             data=jsonable_encoder(
@@ -67,7 +107,7 @@ class DocumentsClient:
                 }
             ),
             files={"contents": contents},
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -86,9 +126,11 @@ class DocumentsClient:
 
 
 class AsyncDocumentsClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     async def list(
         self,
@@ -98,14 +140,30 @@ class AsyncDocumentsClient:
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
     ) -> PaginatedSlimDocumentList:
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "GET",
-                urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
-                params={"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering},
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        """
+
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Used to list documents. Optionally filter on supported fields.
+
+        Parameters:
+            - document_index_id: typing.Optional[str]. Filter down to only those documents that are included in the specified index. You may provide either the Vellum-generated ID or the unique name of the index specified upon initial creation.
+
+            - limit: typing.Optional[int]. Number of results to return per page.
+
+            - offset: typing.Optional[int]. The initial index from which to return the results.
+
+            - ordering: typing.Optional[str]. Which field to use when ordering the results.
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
+            params=remove_none_from_dict(
+                {"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering}
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
         try:
@@ -123,22 +181,39 @@ class AsyncDocumentsClient:
         contents: typing.IO,
         keywords: typing.Optional[typing.List[str]] = None,
     ) -> UploadDocumentResponse:
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "POST",
-                urllib.parse.urljoin(f"{self._environment.documents}/", "v1/upload-document"),
-                data=jsonable_encoder(
-                    {
-                        "add_to_index_names": add_to_index_names,
-                        "external_id": external_id,
-                        "label": label,
-                        "keywords": keywords,
-                    }
-                ),
-                files={"contents": contents},
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        """
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Upload a document to be indexed and used for search.
+
+        **Note:** Uses a base url of `https://documents.vellum.ai`.
+
+        Parameters:
+            - add_to_index_names: typing.Optional[typing.List[str]].
+
+            - external_id: typing.Optional[str].
+
+            - label: str.
+
+            - contents: typing.IO.
+
+            - keywords: typing.Optional[typing.List[str]].
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._environment.documents}/", "v1/upload-document"),
+            data=jsonable_encoder(
+                {
+                    "add_to_index_names": add_to_index_names,
+                    "external_id": external_id,
+                    "label": label,
+                    "keywords": keywords,
+                }
+            ),
+            files={"contents": contents},
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
         if _response.status_code == 400:

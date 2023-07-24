@@ -9,7 +9,7 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class RegisteredPromptSandboxSnapshot(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("The ID of the generated sandbox snapshot.\n"))
+    id: str = pydantic.Field(description="The ID of the generated sandbox snapshot.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

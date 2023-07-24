@@ -11,9 +11,7 @@ from .chat_message_request import ChatMessageRequest
 
 class WorkflowRequestChatHistoryInputRequest(pydantic.BaseModel):
     name: str = pydantic.Field(
-        description=(
-            'The variable\'s name, as defined in the Workflow. <span style="white-space: nowrap">`non-empty`</span> \n'
-        )
+        description='The variable\'s name, as defined in the Workflow. <span style="white-space: nowrap">`non-empty`</span> '
     )
     value: typing.List[ChatMessageRequest]
 

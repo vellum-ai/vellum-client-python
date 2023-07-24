@@ -13,17 +13,15 @@ from .slim_document_status_enum import SlimDocumentStatusEnum
 
 
 class SlimDocument(pydantic.BaseModel):
-    id: str = pydantic.Field(description=("Vellum-generated ID that uniquely identifies this document.\n"))
+    id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this document.")
     external_id: typing.Optional[str] = pydantic.Field(
-        description=("The external ID that was originally provided when uploading the document.\n")
+        description="The external ID that was originally provided when uploading the document."
     )
     last_uploaded_at: str = pydantic.Field(
-        description=("A timestamp representing when this document was most recently uploaded.\n")
+        description="A timestamp representing when this document was most recently uploaded."
     )
     label: str = pydantic.Field(
-        description=(
-            'Human-friendly name for this document. <span style="white-space: nowrap">`<= 1000 characters`</span> \n'
-        )
+        description='Human-friendly name for this document. <span style="white-space: nowrap">`<= 1000 characters`</span> '
     )
     processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
         description=(
@@ -46,9 +44,7 @@ class SlimDocument(pydantic.BaseModel):
         description=("The document's current status.\n" "\n" "* `ACTIVE` - Active\n")
     )
     keywords: typing.Optional[typing.List[str]] = pydantic.Field(
-        description=(
-            "A list of keywords associated with this document. Originally provided when uploading the document.\n"
-        )
+        description="A list of keywords associated with this document. Originally provided when uploading the document."
     )
     document_to_document_indexes: typing.List[DocumentDocumentToDocumentIndex]
 

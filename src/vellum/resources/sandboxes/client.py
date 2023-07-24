@@ -4,12 +4,11 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-import httpx
 import pydantic
 
 from ...core.api_error import ApiError
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_headers import remove_none_from_headers
 from ...environment import VellumEnvironment
 from ...types.sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from ...types.sandbox_scenario import SandboxScenario
@@ -20,9 +19,11 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class SandboxesClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     def upsert_sandbox_scenario(
         self,
@@ -33,6 +34,28 @@ class SandboxesClient:
         scenario_id: typing.Optional[str] = OMIT,
         metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = OMIT,
     ) -> SandboxScenario:
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
+
+        If an id is provided and has a match, the scenario will be updated. If no id is provided or no match
+        is found, a new scenario will be appended to the end.
+
+        Note that a full replacement of the scenario is performed, so any fields not provided will be removed
+        or overwritten with default values.
+
+        Parameters:
+            - id: str. A UUID string identifying this sandbox.
+
+            - label: typing.Optional[str].
+
+            - inputs: typing.List[ScenarioInputRequest]. The inputs for the scenario
+
+            - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended. <span style="white-space: nowrap">`non-empty`</span>
+
+            - metric_input_params: typing.Optional[SandboxMetricInputParamsRequest].
+        """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if label is not OMIT:
             _request["label"] = label
@@ -40,11 +63,11 @@ class SandboxesClient:
             _request["scenario_id"] = scenario_id
         if metric_input_params is not OMIT:
             _request["metric_input_params"] = metric_input_params
-        _response = httpx.request(
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
             json=jsonable_encoder(_request),
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -56,10 +79,20 @@ class SandboxesClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def delete_sandbox_scenario(self, id: str, scenario_id: str) -> None:
-        _response = httpx.request(
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
+
+        Parameters:
+            - id: str. A UUID string identifying this sandbox.
+
+            - scenario_id: str. An id identifying the scenario that you'd like to delete
+        """
+        _response = self._client_wrapper.httpx_client.request(
             "DELETE",
             urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"),
-            headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
+            headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
@@ -72,9 +105,11 @@ class SandboxesClient:
 
 
 class AsyncSandboxesClient:
-    def __init__(self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, api_key: str):
+    def __init__(
+        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
+    ):
         self._environment = environment
-        self.api_key = api_key
+        self._client_wrapper = client_wrapper
 
     async def upsert_sandbox_scenario(
         self,
@@ -85,6 +120,28 @@ class AsyncSandboxesClient:
         scenario_id: typing.Optional[str] = OMIT,
         metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = OMIT,
     ) -> SandboxScenario:
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
+
+        If an id is provided and has a match, the scenario will be updated. If no id is provided or no match
+        is found, a new scenario will be appended to the end.
+
+        Note that a full replacement of the scenario is performed, so any fields not provided will be removed
+        or overwritten with default values.
+
+        Parameters:
+            - id: str. A UUID string identifying this sandbox.
+
+            - label: typing.Optional[str].
+
+            - inputs: typing.List[ScenarioInputRequest]. The inputs for the scenario
+
+            - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended. <span style="white-space: nowrap">`non-empty`</span>
+
+            - metric_input_params: typing.Optional[SandboxMetricInputParamsRequest].
+        """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if label is not OMIT:
             _request["label"] = label
@@ -92,14 +149,13 @@ class AsyncSandboxesClient:
             _request["scenario_id"] = scenario_id
         if metric_input_params is not OMIT:
             _request["metric_input_params"] = metric_input_params
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "POST",
-                urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
-                json=jsonable_encoder(_request),
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(SandboxScenario, _response.json())  # type: ignore
         try:
@@ -109,13 +165,22 @@ class AsyncSandboxesClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     async def delete_sandbox_scenario(self, id: str, scenario_id: str) -> None:
-        async with httpx.AsyncClient() as _client:
-            _response = await _client.request(
-                "DELETE",
-                urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"),
-                headers=remove_none_from_headers({"X_API_KEY": self.api_key}),
-                timeout=None,
-            )
+        """
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
+
+        Parameters:
+            - id: str. A UUID string identifying this sandbox.
+
+            - scenario_id: str. An id identifying the scenario that you'd like to delete
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
         if 200 <= _response.status_code < 300:
             return
         try:

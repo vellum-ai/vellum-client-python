@@ -14,17 +14,15 @@ from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
 
 
 class RegisterPromptResponse(pydantic.BaseModel):
-    prompt: RegisterPromptPrompt = pydantic.Field(description=("Information about the generated prompt\n"))
+    prompt: RegisterPromptPrompt = pydantic.Field(description="Information about the generated prompt")
     sandbox_snapshot: RegisteredPromptSandboxSnapshot = pydantic.Field(
-        description=("Information about the generated sandbox snapshot\n")
+        description="Information about the generated sandbox snapshot"
     )
-    sandbox: RegisteredPromptSandbox = pydantic.Field(description=("Information about the generated sandbox\n"))
+    sandbox: RegisteredPromptSandbox = pydantic.Field(description="Information about the generated sandbox")
     model_version: RegisteredPromptModelVersion = pydantic.Field(
-        description=("Information about the generated model version\n")
+        description="Information about the generated model version"
     )
-    deployment: RegisteredPromptDeployment = pydantic.Field(
-        description=("Information about the generated deployment\n")
-    )
+    deployment: RegisteredPromptDeployment = pydantic.Field(description="Information about the generated deployment")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

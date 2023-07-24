@@ -14,14 +14,10 @@ class DocumentIndexRead(pydantic.BaseModel):
     id: str
     created: str
     label: str = pydantic.Field(
-        description=(
-            'A human-readable label for the document index <span style="white-space: nowrap">`<= 150 characters`</span> \n'
-        )
+        description='A human-readable label for the document index <span style="white-space: nowrap">`<= 150 characters`</span> '
     )
     name: str = pydantic.Field(
-        description=(
-            'A name that uniquely identifies this index within its workspace <span style="white-space: nowrap">`<= 150 characters`</span> \n'
-        )
+        description='A name that uniquely identifies this index within its workspace <span style="white-space: nowrap">`<= 150 characters`</span> '
     )
     status: typing.Optional[DocumentIndexStatus] = pydantic.Field(
         description=(
@@ -38,7 +34,7 @@ class DocumentIndexRead(pydantic.BaseModel):
         )
     )
     indexing_config: typing.Dict[str, typing.Any] = pydantic.Field(
-        description=("Configuration representing how documents should be indexed\n")
+        description="Configuration representing how documents should be indexed"
     )
 
     def json(self, **kwargs: typing.Any) -> str:

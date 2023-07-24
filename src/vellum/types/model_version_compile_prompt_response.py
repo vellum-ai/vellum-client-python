@@ -10,7 +10,7 @@ from .model_version_compiled_prompt import ModelVersionCompiledPrompt
 
 
 class ModelVersionCompilePromptResponse(pydantic.BaseModel):
-    prompt: ModelVersionCompiledPrompt = pydantic.Field(description=("Information about the compiled prompt.\n"))
+    prompt: ModelVersionCompiledPrompt = pydantic.Field(description="Information about the compiled prompt.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

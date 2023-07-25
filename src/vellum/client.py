@@ -103,6 +103,10 @@ class Vellum:
                         continue
                     yield pydantic.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
                 return
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
                 _response.read()
                 _response_json = _response.json()
@@ -390,6 +394,10 @@ class AsyncVellum:
                         continue
                     yield pydantic.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
                 return
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
                 await _response.aread()
                 _response_json = _response.json()

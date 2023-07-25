@@ -19,6 +19,7 @@ from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .environment_enum import EnvironmentEnum
 from .evaluation_params import EvaluationParams
 from .evaluation_params_request import EvaluationParamsRequest
+from .execute_workflow_stream_error_response import ExecuteWorkflowStreamErrorResponse
 from .finish_reason_enum import FinishReasonEnum
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
@@ -157,6 +158,7 @@ __all__ = [
     "EnvironmentEnum",
     "EvaluationParams",
     "EvaluationParamsRequest",
+    "ExecuteWorkflowStreamErrorResponse",
     "FinishReasonEnum",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",

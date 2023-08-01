@@ -20,6 +20,7 @@ class PromptTemplateBlockProperties(pydantic.BaseModel):
     function_name: typing.Optional[str]
     function_description: typing.Optional[str]
     function_parameters: typing.Optional[typing.Dict[str, typing.Any]]
+    function_forced: typing.Optional[bool]
     blocks: typing.Optional[typing.List[PromptTemplateBlock]]
 
     def json(self, **kwargs: typing.Any) -> str:

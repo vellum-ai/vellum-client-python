@@ -10,15 +10,22 @@ class WorkflowExecutionEventErrorCode(str, enum.Enum):
     """
     * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
     * `NODE_EXECUTION` - NODE_EXECUTION
+    * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
     """
 
     WORKFLOW_INITIALIZATION = "WORKFLOW_INITIALIZATION"
     NODE_EXECUTION = "NODE_EXECUTION"
+    NODE_EXECUTION_COUNT_LIMIT_REACHED = "NODE_EXECUTION_COUNT_LIMIT_REACHED"
 
     def visit(
-        self, workflow_initialization: typing.Callable[[], T_Result], node_execution: typing.Callable[[], T_Result]
+        self,
+        workflow_initialization: typing.Callable[[], T_Result],
+        node_execution: typing.Callable[[], T_Result],
+        node_execution_count_limit_reached: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is WorkflowExecutionEventErrorCode.WORKFLOW_INITIALIZATION:
             return workflow_initialization()
         if self is WorkflowExecutionEventErrorCode.NODE_EXECUTION:
             return node_execution()
+        if self is WorkflowExecutionEventErrorCode.NODE_EXECUTION_COUNT_LIMIT_REACHED:
+            return node_execution_count_limit_reached()

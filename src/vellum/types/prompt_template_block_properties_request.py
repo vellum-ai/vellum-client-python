@@ -24,6 +24,7 @@ class PromptTemplateBlockPropertiesRequest(pydantic.BaseModel):
         description='<span style="white-space: nowrap">`non-empty`</span>'
     )
     function_parameters: typing.Optional[typing.Dict[str, typing.Any]]
+    function_forced: typing.Optional[bool]
     blocks: typing.Optional[typing.List[PromptTemplateBlockRequest]]
 
     def json(self, **kwargs: typing.Any) -> str:

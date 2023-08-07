@@ -32,7 +32,12 @@ from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
 from .indexing_state_enum import IndexingStateEnum
+from .input_variable import InputVariable
+from .input_variable_type import InputVariableType
 from .logprobs_enum import LogprobsEnum
+from .metadata_filter_config_request import MetadataFilterConfigRequest
+from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
+from .metadata_filter_rule_request import MetadataFilterRuleRequest
 from .model_type_enum import ModelTypeEnum
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_compile_prompt_response import ModelVersionCompilePromptResponse
@@ -55,8 +60,6 @@ from .prompt_template_block_data_request import PromptTemplateBlockDataRequest
 from .prompt_template_block_properties import PromptTemplateBlockProperties
 from .prompt_template_block_properties_request import PromptTemplateBlockPropertiesRequest
 from .prompt_template_block_request import PromptTemplateBlockRequest
-from .prompt_template_input_variable import PromptTemplateInputVariable
-from .prompt_template_input_variable_request import PromptTemplateInputVariableRequest
 from .provider_enum import ProviderEnum
 from .register_prompt_error_response import RegisterPromptErrorResponse
 from .register_prompt_model_parameters_request import RegisterPromptModelParametersRequest
@@ -64,6 +67,7 @@ from .register_prompt_prompt import RegisterPromptPrompt
 from .register_prompt_prompt_info_request import RegisterPromptPromptInfoRequest
 from .register_prompt_response import RegisterPromptResponse
 from .registered_prompt_deployment import RegisteredPromptDeployment
+from .registered_prompt_input_variable_request import RegisteredPromptInputVariableRequest
 from .registered_prompt_model_version import RegisteredPromptModelVersion
 from .registered_prompt_sandbox import RegisteredPromptSandbox
 from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
@@ -84,6 +88,8 @@ from .search_response import SearchResponse
 from .search_result import SearchResult
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_weights_request import SearchWeightsRequest
+from .set_document_metadata_error_response import SetDocumentMetadataErrorResponse
+from .set_document_metadata_response import SetDocumentMetadataResponse
 from .slim_document import SlimDocument
 from .slim_document_status_enum import SlimDocumentStatusEnum
 from .submit_completion_actual_request import SubmitCompletionActualRequest
@@ -171,7 +177,12 @@ __all__ = [
     "GenerateStreamResult",
     "GenerateStreamResultData",
     "IndexingStateEnum",
+    "InputVariable",
+    "InputVariableType",
     "LogprobsEnum",
+    "MetadataFilterConfigRequest",
+    "MetadataFilterRuleCombinator",
+    "MetadataFilterRuleRequest",
     "ModelTypeEnum",
     "ModelVersionBuildConfig",
     "ModelVersionCompilePromptResponse",
@@ -194,8 +205,6 @@ __all__ = [
     "PromptTemplateBlockProperties",
     "PromptTemplateBlockPropertiesRequest",
     "PromptTemplateBlockRequest",
-    "PromptTemplateInputVariable",
-    "PromptTemplateInputVariableRequest",
     "ProviderEnum",
     "RegisterPromptErrorResponse",
     "RegisterPromptModelParametersRequest",
@@ -203,6 +212,7 @@ __all__ = [
     "RegisterPromptPromptInfoRequest",
     "RegisterPromptResponse",
     "RegisteredPromptDeployment",
+    "RegisteredPromptInputVariableRequest",
     "RegisteredPromptModelVersion",
     "RegisteredPromptSandbox",
     "RegisteredPromptSandboxSnapshot",
@@ -223,6 +233,8 @@ __all__ = [
     "SearchResult",
     "SearchResultMergingRequest",
     "SearchWeightsRequest",
+    "SetDocumentMetadataErrorResponse",
+    "SetDocumentMetadataResponse",
     "SlimDocument",
     "SlimDocumentStatusEnum",
     "SubmitCompletionActualRequest",

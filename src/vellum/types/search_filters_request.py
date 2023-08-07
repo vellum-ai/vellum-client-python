@@ -6,11 +6,15 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .metadata_filter_config_request import MetadataFilterConfigRequest
 
 
 class SearchFiltersRequest(pydantic.BaseModel):
     external_ids: typing.Optional[typing.List[str]] = pydantic.Field(
         description="The document external IDs to filter by"
+    )
+    metadata: typing.Optional[MetadataFilterConfigRequest] = pydantic.Field(
+        description="The metadata filters to apply to the search"
     )
 
     def json(self, **kwargs: typing.Any) -> str:

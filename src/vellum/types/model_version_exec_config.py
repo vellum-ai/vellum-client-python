@@ -6,17 +6,17 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .input_variable import InputVariable
 from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
 from .prompt_template_block_data import PromptTemplateBlockData
-from .prompt_template_input_variable import PromptTemplateInputVariable
 
 
 class ModelVersionExecConfig(pydantic.BaseModel):
     parameters: ModelVersionExecConfigParameters = pydantic.Field(
         description="The generation parameters that are passed to the LLM provider at runtime."
     )
-    input_variables: typing.List[PromptTemplateInputVariable] = pydantic.Field(
-        description="Names of the input variables specified in the prompt template."
+    input_variables: typing.List[InputVariable] = pydantic.Field(
+        description="Input variables specified in the prompt template."
     )
     prompt_template: typing.Optional[str] = pydantic.Field(
         description="The template used to generate prompts for this model version."

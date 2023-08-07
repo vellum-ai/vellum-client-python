@@ -8,8 +8,8 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 
 
-class PromptTemplateInputVariable(pydantic.BaseModel):
-    key: str = pydantic.Field(description="The name of the input variable.")
+class SetDocumentMetadataErrorResponse(pydantic.BaseModel):
+    detail: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -8,6 +8,7 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 from .deployment_read_status_enum import DeploymentReadStatusEnum
 from .environment_enum import EnvironmentEnum
+from .input_variable import InputVariable
 from .model_type_enum import ModelTypeEnum
 
 
@@ -45,6 +46,7 @@ class DeploymentRead(pydantic.BaseModel):
     )
     active_model_version_ids: typing.List[str]
     last_deployed_on: str
+    input_variables: typing.List[InputVariable]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

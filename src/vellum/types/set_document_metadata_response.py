@@ -6,16 +6,10 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .prompt_template_block_data_request import PromptTemplateBlockDataRequest
-from .registered_prompt_input_variable_request import RegisteredPromptInputVariableRequest
 
 
-class RegisterPromptPromptInfoRequest(pydantic.BaseModel):
-    prompt_syntax_version: typing.Optional[int]
-    prompt_block_data: PromptTemplateBlockDataRequest
-    input_variables: typing.List[RegisteredPromptInputVariableRequest] = pydantic.Field(
-        description="The input variables specified in the prompt template."
-    )
+class SetDocumentMetadataResponse(pydantic.BaseModel):
+    document_id: str = pydantic.Field(description="The ID of the newly created document.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -6,12 +6,13 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .input_variable_type import InputVariableType
 
 
-class PromptTemplateInputVariableRequest(pydantic.BaseModel):
-    key: str = pydantic.Field(
-        description='The name of the input variable. <span style="white-space: nowrap">`non-empty`</span> '
-    )
+class InputVariable(pydantic.BaseModel):
+    id: str
+    key: str
+    type: InputVariableType
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

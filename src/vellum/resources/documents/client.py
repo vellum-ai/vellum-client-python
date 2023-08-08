@@ -124,6 +124,7 @@ class DocumentsClient:
         label: str,
         contents: typing.IO,
         keywords: typing.Optional[typing.List[str]] = None,
+        metadata: typing.Optional[str] = None,
     ) -> UploadDocumentResponse:
         """
         <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
@@ -142,6 +143,8 @@ class DocumentsClient:
             - contents: typing.IO.
 
             - keywords: typing.Optional[typing.List[str]].
+
+            - metadata: typing.Optional[str].
         """
         _response = self._client_wrapper.httpx_client.request(
             "POST",
@@ -152,6 +155,7 @@ class DocumentsClient:
                     "external_id": external_id,
                     "label": label,
                     "keywords": keywords,
+                    "metadata": metadata,
                 }
             ),
             files={"contents": contents},
@@ -275,6 +279,7 @@ class AsyncDocumentsClient:
         label: str,
         contents: typing.IO,
         keywords: typing.Optional[typing.List[str]] = None,
+        metadata: typing.Optional[str] = None,
     ) -> UploadDocumentResponse:
         """
         <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
@@ -293,6 +298,8 @@ class AsyncDocumentsClient:
             - contents: typing.IO.
 
             - keywords: typing.Optional[typing.List[str]].
+
+            - metadata: typing.Optional[str].
         """
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
@@ -303,6 +310,7 @@ class AsyncDocumentsClient:
                     "external_id": external_id,
                     "label": label,
                     "keywords": keywords,
+                    "metadata": metadata,
                 }
             ),
             files={"contents": contents},

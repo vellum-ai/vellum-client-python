@@ -108,6 +108,7 @@ from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
 from .workflow_event_error import WorkflowEventError
 from .workflow_execution_event_error_code import WorkflowExecutionEventErrorCode
+from .workflow_execution_event_type import WorkflowExecutionEventType
 from .workflow_execution_node_result_event import WorkflowExecutionNodeResultEvent
 from .workflow_execution_workflow_result_event import WorkflowExecutionWorkflowResultEvent
 from .workflow_node_result_data import (
@@ -249,6 +250,7 @@ __all__ = [
     "UploadDocumentResponse",
     "WorkflowEventError",
     "WorkflowExecutionEventErrorCode",
+    "WorkflowExecutionEventType",
     "WorkflowExecutionNodeResultEvent",
     "WorkflowExecutionWorkflowResultEvent",
     "WorkflowNodeResultData",

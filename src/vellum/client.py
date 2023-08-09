@@ -31,6 +31,7 @@ from .types.generate_stream_response import GenerateStreamResponse
 from .types.search_request_options_request import SearchRequestOptionsRequest
 from .types.search_response import SearchResponse
 from .types.submit_completion_actual_request import SubmitCompletionActualRequest
+from .types.workflow_execution_event_type import WorkflowExecutionEventType
 from .types.workflow_request_input_request import WorkflowRequestInputRequest
 from .types.workflow_stream_event import WorkflowStreamEvent
 
@@ -64,6 +65,7 @@ class Vellum:
         release_tag: typing.Optional[str] = OMIT,
         inputs: typing.List[WorkflowRequestInputRequest],
         external_id: typing.Optional[str] = OMIT,
+        event_types: typing.Optional[typing.List[WorkflowExecutionEventType]] = OMIT,
     ) -> typing.Iterator[WorkflowStreamEvent]:
         """
         <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
@@ -80,6 +82,8 @@ class Vellum:
             - inputs: typing.List[WorkflowRequestInputRequest].
 
             - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes.
+
+            - event_types: typing.Optional[typing.List[WorkflowExecutionEventType]]. Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if workflow_deployment_id is not OMIT:
@@ -90,6 +94,8 @@ class Vellum:
             _request["release_tag"] = release_tag
         if external_id is not OMIT:
             _request["external_id"] = external_id
+        if event_types is not OMIT:
+            _request["event_types"] = event_types
         with self._client_wrapper.httpx_client.stream(
             "POST",
             urllib.parse.urljoin(f"{self._environment.predict}/", "v1/execute-workflow-stream"),
@@ -355,6 +361,7 @@ class AsyncVellum:
         release_tag: typing.Optional[str] = OMIT,
         inputs: typing.List[WorkflowRequestInputRequest],
         external_id: typing.Optional[str] = OMIT,
+        event_types: typing.Optional[typing.List[WorkflowExecutionEventType]] = OMIT,
     ) -> typing.AsyncIterator[WorkflowStreamEvent]:
         """
         <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
@@ -371,6 +378,8 @@ class AsyncVellum:
             - inputs: typing.List[WorkflowRequestInputRequest].
 
             - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes.
+
+            - event_types: typing.Optional[typing.List[WorkflowExecutionEventType]]. Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if workflow_deployment_id is not OMIT:
@@ -381,6 +390,8 @@ class AsyncVellum:
             _request["release_tag"] = release_tag
         if external_id is not OMIT:
             _request["external_id"] = external_id
+        if event_types is not OMIT:
+            _request["event_types"] = event_types
         async with self._client_wrapper.httpx_client.stream(
             "POST",
             urllib.parse.urljoin(f"{self._environment.predict}/", "v1/execute-workflow-stream"),

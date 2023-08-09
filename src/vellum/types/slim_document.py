@@ -38,6 +38,7 @@ class SlimDocument(pydantic.BaseModel):
             "An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.\n"
             "\n"
             "* `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit\n"
+            "* `INVALID_FILE` - Invalid File\n"
         )
     )
     status: typing.Optional[SlimDocumentStatusEnum] = pydantic.Field(

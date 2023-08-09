@@ -15,7 +15,6 @@ from ...errors.bad_request_error import BadRequestError
 from ...errors.internal_server_error import InternalServerError
 from ...errors.not_found_error import NotFoundError
 from ...types.paginated_slim_document_list import PaginatedSlimDocumentList
-from ...types.set_document_metadata_response import SetDocumentMetadataResponse
 from ...types.upload_document_response import UploadDocumentResponse
 
 # this is used as the default value for optional parameters
@@ -63,53 +62,6 @@ class DocumentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def set_document_metadata(
-        self,
-        *,
-        document_id: typing.Optional[str] = OMIT,
-        external_id: typing.Optional[str] = OMIT,
-        metadata: typing.Dict[str, typing.Any],
-    ) -> SetDocumentMetadataResponse:
-        """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
-        Set the metadata for a document to be used for search filtering.
-
-        **Note:** Uses a base url of `https://documents.vellum.ai`.
-
-        Parameters:
-            - document_id: typing.Optional[str]. The ID of the document to update. Must provide either this or `external_id`
-
-            - external_id: typing.Optional[str]. The external ID of the document to update. Must provide either this or `document_id`
-
-            - metadata: typing.Dict[str, typing.Any]. The metadata to set on the document. This will overwrite any existing metadata.
-        """
-        _request: typing.Dict[str, typing.Any] = {"metadata": metadata}
-        if document_id is not OMIT:
-            _request["document_id"] = document_id
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._environment.documents}/", "v1/set-document-metadata"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(SetDocumentMetadataResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -218,53 +170,6 @@ class AsyncDocumentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def set_document_metadata(
-        self,
-        *,
-        document_id: typing.Optional[str] = OMIT,
-        external_id: typing.Optional[str] = OMIT,
-        metadata: typing.Dict[str, typing.Any],
-    ) -> SetDocumentMetadataResponse:
-        """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
-        Set the metadata for a document to be used for search filtering.
-
-        **Note:** Uses a base url of `https://documents.vellum.ai`.
-
-        Parameters:
-            - document_id: typing.Optional[str]. The ID of the document to update. Must provide either this or `external_id`
-
-            - external_id: typing.Optional[str]. The external ID of the document to update. Must provide either this or `document_id`
-
-            - metadata: typing.Dict[str, typing.Any]. The metadata to set on the document. This will overwrite any existing metadata.
-        """
-        _request: typing.Dict[str, typing.Any] = {"metadata": metadata}
-        if document_id is not OMIT:
-            _request["document_id"] = document_id
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._environment.documents}/", "v1/set-document-metadata"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(SetDocumentMetadataResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

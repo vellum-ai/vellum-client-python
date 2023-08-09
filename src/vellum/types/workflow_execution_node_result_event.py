@@ -10,7 +10,8 @@ from .workflow_node_result_event import WorkflowNodeResultEvent
 
 
 class WorkflowExecutionNodeResultEvent(pydantic.BaseModel):
-    run_id: str
+    execution_id: str
+    run_id: typing.Optional[str]
     external_id: typing.Optional[str]
     data: WorkflowNodeResultEvent
 

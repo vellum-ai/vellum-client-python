@@ -88,8 +88,6 @@ from .search_response import SearchResponse
 from .search_result import SearchResult
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_weights_request import SearchWeightsRequest
-from .set_document_metadata_error_response import SetDocumentMetadataErrorResponse
-from .set_document_metadata_response import SetDocumentMetadataResponse
 from .slim_document import SlimDocument
 from .slim_document_status_enum import SlimDocumentStatusEnum
 from .submit_completion_actual_request import SubmitCompletionActualRequest
@@ -233,8 +231,6 @@ __all__ = [
     "SearchResult",
     "SearchResultMergingRequest",
     "SearchWeightsRequest",
-    "SetDocumentMetadataErrorResponse",
-    "SetDocumentMetadataResponse",
     "SlimDocument",
     "SlimDocumentStatusEnum",
     "SubmitCompletionActualRequest",

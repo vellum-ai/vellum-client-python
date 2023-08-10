@@ -14,6 +14,8 @@ from ...environment import VellumEnvironment
 from ...errors.bad_request_error import BadRequestError
 from ...errors.internal_server_error import InternalServerError
 from ...errors.not_found_error import NotFoundError
+from ...types.document_read import DocumentRead
+from ...types.document_status import DocumentStatus
 from ...types.paginated_slim_document_list import PaginatedSlimDocumentList
 from ...types.upload_document_response import UploadDocumentResponse
 
@@ -62,6 +64,52 @@ class DocumentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def partial_update(
+        self,
+        id: str,
+        *,
+        label: typing.Optional[str] = OMIT,
+        status: typing.Optional[DocumentStatus] = OMIT,
+        metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+    ) -> DocumentRead:
+        """
+
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
+
+        Parameters:
+            - id: str. A UUID string identifying this document.
+
+            - label: typing.Optional[str]. A human-readable label for the document. Defaults to the originally uploaded file's file name. <span style="white-space: nowrap">`non-empty`</span> <span style="white-space: nowrap">`<= 1000 characters`</span>
+
+            - status: typing.Optional[DocumentStatus]. The current status of the document
+
+                                                       * `ACTIVE` - Active
+            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. A JSON object containing any metadata associated with the document that you'd like to filter upon later.
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if label is not OMIT:
+            _request["label"] = label
+        if status is not OMIT:
+            _request["status"] = status
+        if metadata is not OMIT:
+            _request["metadata"] = metadata
+        _response = self._client_wrapper.httpx_client.request(
+            "PATCH",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/documents/{id}"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -170,6 +218,52 @@ class AsyncDocumentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def partial_update(
+        self,
+        id: str,
+        *,
+        label: typing.Optional[str] = OMIT,
+        status: typing.Optional[DocumentStatus] = OMIT,
+        metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+    ) -> DocumentRead:
+        """
+
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+
+        Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
+
+        Parameters:
+            - id: str. A UUID string identifying this document.
+
+            - label: typing.Optional[str]. A human-readable label for the document. Defaults to the originally uploaded file's file name. <span style="white-space: nowrap">`non-empty`</span> <span style="white-space: nowrap">`<= 1000 characters`</span>
+
+            - status: typing.Optional[DocumentStatus]. The current status of the document
+
+                                                       * `ACTIVE` - Active
+            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. A JSON object containing any metadata associated with the document that you'd like to filter upon later.
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if label is not OMIT:
+            _request["label"] = label
+        if status is not OMIT:
+            _request["status"] = status
+        if metadata is not OMIT:
+            _request["metadata"] = metadata
+        _response = await self._client_wrapper.httpx_client.request(
+            "PATCH",
+            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/documents/{id}"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

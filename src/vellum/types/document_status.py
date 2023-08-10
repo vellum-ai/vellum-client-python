@@ -2,4 +2,4 @@
 
 import typing_extensions
 
-SlimDocumentStatusEnum = typing_extensions.Literal["ACTIVE"]
+DocumentStatus = typing_extensions.Literal["ACTIVE"]

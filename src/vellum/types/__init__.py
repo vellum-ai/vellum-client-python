@@ -10,11 +10,13 @@ from .content_type import ContentType
 from .deployment_node_result import DeploymentNodeResult
 from .deployment_node_result_data import DeploymentNodeResultData
 from .deployment_read import DeploymentRead
-from .deployment_read_status_enum import DeploymentReadStatusEnum
+from .deployment_status import DeploymentStatus
 from .document import Document
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .document_index_read import DocumentIndexRead
 from .document_index_status import DocumentIndexStatus
+from .document_read import DocumentRead
+from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .environment_enum import EnvironmentEnum
 from .evaluation_params import EvaluationParams
@@ -89,7 +91,6 @@ from .search_result import SearchResult
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_weights_request import SearchWeightsRequest
 from .slim_document import SlimDocument
-from .slim_document_status_enum import SlimDocumentStatusEnum
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
 from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
@@ -154,11 +155,13 @@ __all__ = [
     "DeploymentNodeResult",
     "DeploymentNodeResultData",
     "DeploymentRead",
-    "DeploymentReadStatusEnum",
+    "DeploymentStatus",
     "Document",
     "DocumentDocumentToDocumentIndex",
     "DocumentIndexRead",
     "DocumentIndexStatus",
+    "DocumentRead",
+    "DocumentStatus",
     "EnrichedNormalizedCompletion",
     "EnvironmentEnum",
     "EvaluationParams",
@@ -233,7 +236,6 @@ __all__ = [
     "SearchResultMergingRequest",
     "SearchWeightsRequest",
     "SlimDocument",
-    "SlimDocumentStatusEnum",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
     "TerminalNodeChatHistoryResult",

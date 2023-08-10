@@ -6,7 +6,7 @@ import typing
 T_Result = typing.TypeVar("T_Result")
 
 
-class DeploymentReadStatusEnum(str, enum.Enum):
+class DeploymentStatus(str, enum.Enum):
     """
     * `ACTIVE` - Active
     * `INACTIVE` - Inactive
@@ -23,9 +23,9 @@ class DeploymentReadStatusEnum(str, enum.Enum):
         inactive: typing.Callable[[], T_Result],
         archived: typing.Callable[[], T_Result],
     ) -> T_Result:
-        if self is DeploymentReadStatusEnum.ACTIVE:
+        if self is DeploymentStatus.ACTIVE:
             return active()
-        if self is DeploymentReadStatusEnum.INACTIVE:
+        if self is DeploymentStatus.INACTIVE:
             return inactive()
-        if self is DeploymentReadStatusEnum.ARCHIVED:
+        if self is DeploymentStatus.ARCHIVED:
             return archived()

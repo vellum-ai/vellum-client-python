@@ -8,24 +8,21 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .document_status import DocumentStatus
-from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 
 
-class SlimDocument(pydantic.BaseModel):
-    id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this document.")
+class DocumentRead(pydantic.BaseModel):
+    id: str
     external_id: typing.Optional[str] = pydantic.Field(
-        description="The external ID that was originally provided when uploading the document."
+        description="The unique id of this document as it exists in the user's system."
     )
-    last_uploaded_at: str = pydantic.Field(
-        description="A timestamp representing when this document was most recently uploaded."
-    )
+    last_uploaded_at: str
     label: str = pydantic.Field(
-        description='Human-friendly name for this document. <span style="white-space: nowrap">`<= 1000 characters`</span> '
+        description='A human-readable label for the document. Defaults to the originally uploaded file\'s file name. <span style="white-space: nowrap">`<= 1000 characters`</span> '
     )
     processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
         description=(
-            "An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.\n"
+            "The current processing state of the document\n"
             "\n"
             "* `QUEUED` - Queued\n"
             "* `PROCESSING` - Processing\n"
@@ -33,21 +30,15 @@ class SlimDocument(pydantic.BaseModel):
             "* `FAILED` - Failed\n"
         )
     )
-    processing_failure_reason: typing.Optional[ProcessingFailureReasonEnum] = pydantic.Field(
-        description=(
-            "An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.\n"
-            "\n"
-            "* `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit\n"
-            "* `INVALID_FILE` - Invalid File\n"
-        )
-    )
     status: typing.Optional[DocumentStatus] = pydantic.Field(
-        description=("The document's current status.\n" "\n" "* `ACTIVE` - Active\n")
+        description=("The current status of the document\n" "\n" "* `ACTIVE` - Active\n")
     )
-    keywords: typing.Optional[typing.List[str]] = pydantic.Field(
-        description="A list of keywords associated with this document. Originally provided when uploading the document."
-    )
+    original_file_url: typing.Optional[str]
+    processed_file_url: typing.Optional[str]
     document_to_document_indexes: typing.List[DocumentDocumentToDocumentIndex]
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
+        description="A previously supplied JSON object containing metadata that can filtered on when searching."
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

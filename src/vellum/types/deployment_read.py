@@ -6,7 +6,7 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .deployment_read_status_enum import DeploymentReadStatusEnum
+from .deployment_status import DeploymentStatus
 from .environment_enum import EnvironmentEnum
 from .input_variable import InputVariable
 from .model_type_enum import ModelTypeEnum
@@ -21,7 +21,7 @@ class DeploymentRead(pydantic.BaseModel):
     name: str = pydantic.Field(
         description='A name that uniquely identifies this deployment within its workspace <span style="white-space: nowrap">`<= 150 characters`</span> '
     )
-    status: typing.Optional[DeploymentReadStatusEnum] = pydantic.Field(
+    status: typing.Optional[DeploymentStatus] = pydantic.Field(
         description=(
             "The current status of the deployment\n"
             "\n"

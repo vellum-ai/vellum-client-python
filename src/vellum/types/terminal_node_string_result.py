@@ -10,7 +10,7 @@ from ..core.datetime_utils import serialize_datetime
 
 class TerminalNodeStringResult(pydantic.BaseModel):
     name: str = pydantic.Field(description="The unique name given to the terminal node that produced this output.")
-    value: str
+    value: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

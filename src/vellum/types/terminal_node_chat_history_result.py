@@ -11,7 +11,7 @@ from .chat_message import ChatMessage
 
 class TerminalNodeChatHistoryResult(pydantic.BaseModel):
     name: str = pydantic.Field(description="The unique name given to the terminal node that produced this output.")
-    value: typing.List[ChatMessage]
+    value: typing.Optional[typing.List[ChatMessage]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

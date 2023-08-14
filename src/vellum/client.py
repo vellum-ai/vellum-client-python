@@ -109,12 +109,14 @@ class Vellum:
                         continue
                     yield pydantic.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
                 return
+            _response.read()
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 404:
                 raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
                 raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
-                _response.read()
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -218,6 +220,7 @@ class Vellum:
                         continue
                     yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
                 return
+            _response.read()
             if _response.status_code == 400:
                 raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 403:
@@ -227,7 +230,6 @@ class Vellum:
             if _response.status_code == 500:
                 raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
-                _response.read()
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -405,12 +407,14 @@ class AsyncVellum:
                         continue
                     yield pydantic.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
                 return
+            await _response.aread()
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 404:
                 raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
                 raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
-                await _response.aread()
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -514,6 +518,7 @@ class AsyncVellum:
                         continue
                     yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
                 return
+            await _response.aread()
             if _response.status_code == 400:
                 raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 403:
@@ -523,7 +528,6 @@ class AsyncVellum:
             if _response.status_code == 500:
                 raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
-                await _response.aread()
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)

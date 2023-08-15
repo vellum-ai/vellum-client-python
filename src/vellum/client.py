@@ -268,7 +268,7 @@ class Vellum:
             _request["options"] = options
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.documents}/", "v1/search"),
+            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/search"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -566,7 +566,7 @@ class AsyncVellum:
             _request["options"] = options
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.documents}/", "v1/search"),
+            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/search"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,

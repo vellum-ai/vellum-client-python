@@ -9,7 +9,6 @@ import pydantic
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...environment import VellumEnvironment
 from ...types.model_version_compile_prompt_response import ModelVersionCompilePromptResponse
 from ...types.model_version_read import ModelVersionRead
 
@@ -18,10 +17,7 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class ModelVersionsClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     def retrieve(self, id: str) -> ModelVersionRead:
@@ -36,7 +32,7 @@ class ModelVersionsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/model-versions/{id}"),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
@@ -63,7 +59,9 @@ class ModelVersionsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}/compile-prompt"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/model-versions/{id}/compile-prompt"
+            ),
             json=jsonable_encoder({"input_values": input_values}),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -78,10 +76,7 @@ class ModelVersionsClient:
 
 
 class AsyncModelVersionsClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     async def retrieve(self, id: str) -> ModelVersionRead:
@@ -96,7 +91,7 @@ class AsyncModelVersionsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/model-versions/{id}"),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
@@ -123,7 +118,9 @@ class AsyncModelVersionsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/model-versions/{id}/compile-prompt"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/model-versions/{id}/compile-prompt"
+            ),
             json=jsonable_encoder({"input_values": input_values}),
             headers=self._client_wrapper.get_headers(),
             timeout=None,

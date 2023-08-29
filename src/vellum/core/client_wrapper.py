@@ -4,28 +4,34 @@ import typing
 
 import httpx
 
+from ..environment import VellumEnvironment
+
 
 class BaseClientWrapper:
-    def __init__(self, *, api_key: str):
+    def __init__(self, *, api_key: str, environment: VellumEnvironment):
         self.api_key = api_key
+        self._environment = environment
 
     def get_headers(self) -> typing.Dict[str, str]:
         headers: typing.Dict[str, str] = {
             "X-Fern-Language": "Python",
             "X-Fern-SDK-Name": "vellum-ai",
-            "X-Fern-SDK-Version": "v0.0.34",
+            "X-Fern-SDK-Version": "v0.0.35",
         }
         headers["X_API_KEY"] = self.api_key
         return headers
 
+    def get_environment(self) -> VellumEnvironment:
+        return self._environment
+
 
 class SyncClientWrapper(BaseClientWrapper):
-    def __init__(self, *, api_key: str, httpx_client: httpx.Client):
-        super().__init__(api_key=api_key)
+    def __init__(self, *, api_key: str, environment: VellumEnvironment, httpx_client: httpx.Client):
+        super().__init__(api_key=api_key, environment=environment)
         self.httpx_client = httpx_client
 
 
 class AsyncClientWrapper(BaseClientWrapper):
-    def __init__(self, *, api_key: str, httpx_client: httpx.AsyncClient):
-        super().__init__(api_key=api_key)
+    def __init__(self, *, api_key: str, environment: VellumEnvironment, httpx_client: httpx.AsyncClient):
+        super().__init__(api_key=api_key, environment=environment)
         self.httpx_client = httpx_client

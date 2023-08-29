@@ -9,7 +9,6 @@ import pydantic
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...environment import VellumEnvironment
 from ...types.sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from ...types.sandbox_scenario import SandboxScenario
 from ...types.scenario_input_request import ScenarioInputRequest
@@ -19,10 +18,7 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class SandboxesClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     def upsert_sandbox_scenario(
@@ -65,7 +61,7 @@ class SandboxesClient:
             _request["metric_input_params"] = metric_input_params
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -91,7 +87,9 @@ class SandboxesClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"
+            ),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
@@ -105,10 +103,7 @@ class SandboxesClient:
 
 
 class AsyncSandboxesClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     async def upsert_sandbox_scenario(
@@ -151,7 +146,7 @@ class AsyncSandboxesClient:
             _request["metric_input_params"] = metric_input_params
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -177,7 +172,9 @@ class AsyncSandboxesClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"
+            ),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )

@@ -10,7 +10,6 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_dict import remove_none_from_dict
-from ...environment import VellumEnvironment
 from ...errors.bad_request_error import BadRequestError
 from ...errors.internal_server_error import InternalServerError
 from ...errors.not_found_error import NotFoundError
@@ -24,10 +23,7 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class DocumentsClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     def list(
@@ -55,7 +51,7 @@ class DocumentsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/documents"),
             params=remove_none_from_dict(
                 {"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering}
             ),
@@ -103,7 +99,7 @@ class DocumentsClient:
             _request["metadata"] = metadata
         _response = self._client_wrapper.httpx_client.request(
             "PATCH",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/documents/{id}"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -123,7 +119,7 @@ class DocumentsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/documents/{id}"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
@@ -167,7 +163,7 @@ class DocumentsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.documents}/", "v1/upload-document"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().documents}/", "v1/upload-document"),
             data=jsonable_encoder(
                 {
                     "add_to_index_names": add_to_index_names,
@@ -197,10 +193,7 @@ class DocumentsClient:
 
 
 class AsyncDocumentsClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     async def list(
@@ -228,7 +221,7 @@ class AsyncDocumentsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._environment.default}/", "v1/documents"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/documents"),
             params=remove_none_from_dict(
                 {"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering}
             ),
@@ -276,7 +269,7 @@ class AsyncDocumentsClient:
             _request["metadata"] = metadata
         _response = await self._client_wrapper.httpx_client.request(
             "PATCH",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/documents/{id}"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -296,7 +289,7 @@ class AsyncDocumentsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/documents/{id}"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
@@ -340,7 +333,7 @@ class AsyncDocumentsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.documents}/", "v1/upload-document"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().documents}/", "v1/upload-document"),
             data=jsonable_encoder(
                 {
                     "add_to_index_names": add_to_index_names,

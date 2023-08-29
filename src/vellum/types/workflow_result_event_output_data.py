@@ -16,6 +16,7 @@ class WorkflowResultEventOutputData_String(WorkflowResultEventOutputDataString):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -24,6 +25,7 @@ class WorkflowResultEventOutputData_Json(WorkflowResultEventOutputDataJson):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -32,6 +34,7 @@ class WorkflowResultEventOutputData_ChatHistory(WorkflowResultEventOutputDataCha
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 

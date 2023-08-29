@@ -9,7 +9,6 @@ import pydantic
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...environment import VellumEnvironment
 from ...types.document_index_read import DocumentIndexRead
 from ...types.document_index_status import DocumentIndexStatus
 from ...types.environment_enum import EnvironmentEnum
@@ -19,10 +18,7 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class DocumentIndexesClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     def create(
@@ -67,7 +63,7 @@ class DocumentIndexesClient:
             _request["copy_documents_from_index_id"] = copy_documents_from_index_id
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", "v1/document-indexes"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -82,10 +78,7 @@ class DocumentIndexesClient:
 
 
 class AsyncDocumentIndexesClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     async def create(
@@ -130,7 +123,7 @@ class AsyncDocumentIndexesClient:
             _request["copy_documents_from_index_id"] = copy_documents_from_index_id
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", "v1/document-indexes"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,

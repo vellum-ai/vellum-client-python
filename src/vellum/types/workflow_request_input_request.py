@@ -16,6 +16,7 @@ class WorkflowRequestInputRequest_String(WorkflowRequestStringInputRequest):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -24,6 +25,7 @@ class WorkflowRequestInputRequest_Json(WorkflowRequestJsonInputRequest):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -32,6 +34,7 @@ class WorkflowRequestInputRequest_ChatHistory(WorkflowRequestChatHistoryInputReq
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 

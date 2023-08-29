@@ -9,7 +9,6 @@ import pydantic
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...environment import VellumEnvironment
 from ...types.evaluation_params_request import EvaluationParamsRequest
 from ...types.test_suite_test_case import TestSuiteTestCase
 
@@ -18,10 +17,7 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class TestSuitesClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     def upsert_test_suite_test_case(
@@ -62,7 +58,9 @@ class TestSuitesClient:
             _request["label"] = label
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/test-suites/{id}/test-cases"
+            ),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -88,7 +86,9 @@ class TestSuitesClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"
+            ),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
@@ -102,10 +102,7 @@ class TestSuitesClient:
 
 
 class AsyncTestSuitesClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     async def upsert_test_suite_test_case(
@@ -146,7 +143,9 @@ class AsyncTestSuitesClient:
             _request["label"] = label
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/test-suites/{id}/test-cases"
+            ),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -172,7 +171,9 @@ class AsyncTestSuitesClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"
+            ),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )

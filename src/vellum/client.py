@@ -47,15 +47,16 @@ class Vellum:
         api_key: str,
         timeout: typing.Optional[float] = None,
     ):
-        self._environment = environment
-        self._client_wrapper = SyncClientWrapper(api_key=api_key, httpx_client=httpx.Client(timeout=timeout))
-        self.deployments = DeploymentsClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.document_indexes = DocumentIndexesClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.documents = DocumentsClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.model_versions = ModelVersionsClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.registered_prompts = RegisteredPromptsClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.sandboxes = SandboxesClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.test_suites = TestSuitesClient(environment=environment, client_wrapper=self._client_wrapper)
+        self._client_wrapper = SyncClientWrapper(
+            environment=environment, api_key=api_key, httpx_client=httpx.Client(timeout=timeout)
+        )
+        self.deployments = DeploymentsClient(client_wrapper=self._client_wrapper)
+        self.document_indexes = DocumentIndexesClient(client_wrapper=self._client_wrapper)
+        self.documents = DocumentsClient(client_wrapper=self._client_wrapper)
+        self.model_versions = ModelVersionsClient(client_wrapper=self._client_wrapper)
+        self.registered_prompts = RegisteredPromptsClient(client_wrapper=self._client_wrapper)
+        self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
+        self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
 
     def execute_workflow_stream(
         self,
@@ -98,7 +99,7 @@ class Vellum:
             _request["event_types"] = event_types
         with self._client_wrapper.httpx_client.stream(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/execute-workflow-stream"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow-stream"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -155,7 +156,7 @@ class Vellum:
             _request["options"] = options
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -209,7 +210,7 @@ class Vellum:
             _request["options"] = options
         with self._client_wrapper.httpx_client.stream(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate-stream"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate-stream"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -268,7 +269,7 @@ class Vellum:
             _request["options"] = options
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/search"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/search"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -315,7 +316,7 @@ class Vellum:
             _request["deployment_name"] = deployment_name
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/submit-completion-actuals"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/submit-completion-actuals"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -343,17 +344,16 @@ class AsyncVellum:
         api_key: str,
         timeout: typing.Optional[float] = None,
     ):
-        self._environment = environment
-        self._client_wrapper = AsyncClientWrapper(api_key=api_key, httpx_client=httpx.AsyncClient(timeout=timeout))
-        self.deployments = AsyncDeploymentsClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.document_indexes = AsyncDocumentIndexesClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.documents = AsyncDocumentsClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.model_versions = AsyncModelVersionsClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.registered_prompts = AsyncRegisteredPromptsClient(
-            environment=environment, client_wrapper=self._client_wrapper
+        self._client_wrapper = AsyncClientWrapper(
+            environment=environment, api_key=api_key, httpx_client=httpx.AsyncClient(timeout=timeout)
         )
-        self.sandboxes = AsyncSandboxesClient(environment=environment, client_wrapper=self._client_wrapper)
-        self.test_suites = AsyncTestSuitesClient(environment=environment, client_wrapper=self._client_wrapper)
+        self.deployments = AsyncDeploymentsClient(client_wrapper=self._client_wrapper)
+        self.document_indexes = AsyncDocumentIndexesClient(client_wrapper=self._client_wrapper)
+        self.documents = AsyncDocumentsClient(client_wrapper=self._client_wrapper)
+        self.model_versions = AsyncModelVersionsClient(client_wrapper=self._client_wrapper)
+        self.registered_prompts = AsyncRegisteredPromptsClient(client_wrapper=self._client_wrapper)
+        self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
+        self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
 
     async def execute_workflow_stream(
         self,
@@ -396,7 +396,7 @@ class AsyncVellum:
             _request["event_types"] = event_types
         async with self._client_wrapper.httpx_client.stream(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/execute-workflow-stream"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow-stream"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -453,7 +453,7 @@ class AsyncVellum:
             _request["options"] = options
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -507,7 +507,7 @@ class AsyncVellum:
             _request["options"] = options
         async with self._client_wrapper.httpx_client.stream(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/generate-stream"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate-stream"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -566,7 +566,7 @@ class AsyncVellum:
             _request["options"] = options
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/search"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/search"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -613,7 +613,7 @@ class AsyncVellum:
             _request["deployment_name"] = deployment_name
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.predict}/", "v1/submit-completion-actuals"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/submit-completion-actuals"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,

@@ -7,15 +7,11 @@ import pydantic
 
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...environment import VellumEnvironment
 from ...types.deployment_read import DeploymentRead
 
 
 class DeploymentsClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     def retrieve(self, id: str) -> DeploymentRead:
@@ -30,7 +26,7 @@ class DeploymentsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/deployments/{id}"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/deployments/{id}"),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
@@ -44,10 +40,7 @@ class DeploymentsClient:
 
 
 class AsyncDeploymentsClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     async def retrieve(self, id: str) -> DeploymentRead:
@@ -62,7 +55,7 @@ class AsyncDeploymentsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._environment.default}/", f"v1/deployments/{id}"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/deployments/{id}"),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )

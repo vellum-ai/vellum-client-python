@@ -9,7 +9,6 @@ import pydantic
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...environment import VellumEnvironment
 from ...errors.conflict_error import ConflictError
 from ...types.provider_enum import ProviderEnum
 from ...types.register_prompt_error_response import RegisterPromptErrorResponse
@@ -22,10 +21,7 @@ OMIT = typing.cast(typing.Any, ...)
 
 
 class RegisteredPromptsClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: SyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     def register_prompt(
@@ -82,7 +78,9 @@ class RegisteredPromptsClient:
             _request["meta"] = meta
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", "v1/registered-prompts/register"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", "v1/registered-prompts/register"
+            ),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -99,10 +97,7 @@ class RegisteredPromptsClient:
 
 
 class AsyncRegisteredPromptsClient:
-    def __init__(
-        self, *, environment: VellumEnvironment = VellumEnvironment.PRODUCTION, client_wrapper: AsyncClientWrapper
-    ):
-        self._environment = environment
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     async def register_prompt(
@@ -159,7 +154,9 @@ class AsyncRegisteredPromptsClient:
             _request["meta"] = meta
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._environment.default}/", "v1/registered-prompts/register"),
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", "v1/registered-prompts/register"
+            ),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,

@@ -19,6 +19,7 @@ class WorkflowNodeResultData_Prompt(PromptNodeResult):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -27,6 +28,7 @@ class WorkflowNodeResultData_Sandbox(SandboxNodeResult):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -35,6 +37,7 @@ class WorkflowNodeResultData_Deployment(DeploymentNodeResult):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -43,6 +46,7 @@ class WorkflowNodeResultData_Search(SearchNodeResult):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -51,6 +55,7 @@ class WorkflowNodeResultData_Conditional(ConditionalNodeResult):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 
@@ -59,6 +64,7 @@ class WorkflowNodeResultData_Terminal(TerminalNodeResult):
 
     class Config:
         frozen = True
+        smart_union = True
         allow_population_by_field_name = True
 
 

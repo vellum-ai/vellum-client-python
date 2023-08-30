@@ -10,6 +10,7 @@ from .chat_message import ChatMessage
 
 
 class TerminalNodeChatHistoryResult(pydantic.BaseModel):
+    id: typing.Optional[str]
     name: str = pydantic.Field(description="The unique name given to the terminal node that produced this output.")
     value: typing.Optional[typing.List[ChatMessage]]
 

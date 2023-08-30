@@ -8,10 +8,10 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 
 
-class DeploymentNodeResultData(pydantic.BaseModel):
-    output_id: str
-    text: typing.Optional[str]
-    delta: typing.Optional[str]
+class NodeInputCompiledStringValue(pydantic.BaseModel):
+    node_input_id: str
+    key: str
+    value: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

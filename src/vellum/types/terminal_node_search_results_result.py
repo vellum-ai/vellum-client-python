@@ -6,12 +6,13 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .search_result import SearchResult
 
 
-class SandboxNodeResultData(pydantic.BaseModel):
-    output_id: str
-    text: typing.Optional[str]
-    delta: typing.Optional[str]
+class TerminalNodeSearchResultsResult(pydantic.BaseModel):
+    id: typing.Optional[str]
+    name: str = pydantic.Field(description="The unique name given to the terminal node that produced this output.")
+    value: typing.Optional[typing.List[SearchResult]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

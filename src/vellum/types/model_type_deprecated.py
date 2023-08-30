@@ -6,7 +6,7 @@ import typing
 T_Result = typing.TypeVar("T_Result")
 
 
-class ModelTypeEnum(str, enum.Enum):
+class ModelTypeDeprecated(str, enum.Enum):
     """
     * `GENERATE` - Generate
     * `CLASSIFY` - Classify
@@ -16,7 +16,7 @@ class ModelTypeEnum(str, enum.Enum):
     CLASSIFY = "CLASSIFY"
 
     def visit(self, generate: typing.Callable[[], T_Result], classify: typing.Callable[[], T_Result]) -> T_Result:
-        if self is ModelTypeEnum.GENERATE:
+        if self is ModelTypeDeprecated.GENERATE:
             return generate()
-        if self is ModelTypeEnum.CLASSIFY:
+        if self is ModelTypeDeprecated.CLASSIFY:
             return classify()

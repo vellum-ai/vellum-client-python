@@ -11,17 +11,20 @@ class InputVariableType(str, enum.Enum):
     * `STRING` - STRING
     * `JSON` - JSON
     * `CHAT_HISTORY` - CHAT_HISTORY
+    * `SEARCH_RESULTS` - SEARCH_RESULTS
     """
 
     STRING = "STRING"
     JSON = "JSON"
     CHAT_HISTORY = "CHAT_HISTORY"
+    SEARCH_RESULTS = "SEARCH_RESULTS"
 
     def visit(
         self,
         string: typing.Callable[[], T_Result],
         json: typing.Callable[[], T_Result],
         chat_history: typing.Callable[[], T_Result],
+        search_results: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is InputVariableType.STRING:
             return string()
@@ -29,3 +32,5 @@ class InputVariableType(str, enum.Enum):
             return json()
         if self is InputVariableType.CHAT_HISTORY:
             return chat_history()
+        if self is InputVariableType.SEARCH_RESULTS:
+            return search_results()

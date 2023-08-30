@@ -7,17 +7,10 @@ import pydantic
 
 from ..core.datetime_utils import serialize_datetime
 from .chat_message import ChatMessage
-from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 
-class WorkflowResultEventOutputDataChatHistory(pydantic.BaseModel):
-    id: typing.Optional[str]
-    name: str
-    state: WorkflowNodeResultEventState
-    node_id: str
-    delta: typing.Optional[str] = pydantic.Field(
-        description="The newly output string value. Only relevant for string outputs with a state of STREAMING."
-    )
+class TemplatingNodeChatHistoryResult(pydantic.BaseModel):
+    id: str
     value: typing.Optional[typing.List[ChatMessage]]
 
     def json(self, **kwargs: typing.Any) -> str:

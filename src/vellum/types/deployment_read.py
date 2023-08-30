@@ -9,7 +9,7 @@ from ..core.datetime_utils import serialize_datetime
 from .deployment_status import DeploymentStatus
 from .environment_enum import EnvironmentEnum
 from .input_variable import InputVariable
-from .model_type_enum import ModelTypeEnum
+from .model_type_deprecated import ModelTypeDeprecated
 
 
 class DeploymentRead(pydantic.BaseModel):
@@ -39,11 +39,7 @@ class DeploymentRead(pydantic.BaseModel):
             "* `PRODUCTION` - Production\n"
         )
     )
-    model_type: ModelTypeEnum = pydantic.Field(
-        description=(
-            "The type of model this deployment serves\n" "\n" "* `GENERATE` - Generate\n" "* `CLASSIFY` - Classify\n"
-        )
-    )
+    model_type: ModelTypeDeprecated
     active_model_version_ids: typing.List[str]
     last_deployed_on: str
     input_variables: typing.List[InputVariable]

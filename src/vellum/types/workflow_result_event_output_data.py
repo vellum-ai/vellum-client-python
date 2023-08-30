@@ -8,6 +8,7 @@ import typing_extensions
 
 from .workflow_result_event_output_data_chat_history import WorkflowResultEventOutputDataChatHistory
 from .workflow_result_event_output_data_json import WorkflowResultEventOutputDataJson
+from .workflow_result_event_output_data_search_results import WorkflowResultEventOutputDataSearchResults
 from .workflow_result_event_output_data_string import WorkflowResultEventOutputDataString
 
 
@@ -38,6 +39,18 @@ class WorkflowResultEventOutputData_ChatHistory(WorkflowResultEventOutputDataCha
         allow_population_by_field_name = True
 
 
+class WorkflowResultEventOutputData_SearchResults(WorkflowResultEventOutputDataSearchResults):
+    type: typing_extensions.Literal["SEARCH_RESULTS"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 WorkflowResultEventOutputData = typing.Union[
-    WorkflowResultEventOutputData_String, WorkflowResultEventOutputData_Json, WorkflowResultEventOutputData_ChatHistory
+    WorkflowResultEventOutputData_String,
+    WorkflowResultEventOutputData_Json,
+    WorkflowResultEventOutputData_ChatHistory,
+    WorkflowResultEventOutputData_SearchResults,
 ]

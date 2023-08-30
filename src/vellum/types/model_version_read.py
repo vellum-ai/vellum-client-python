@@ -6,7 +6,7 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .model_type_enum import ModelTypeEnum
+from .model_type_deprecated import ModelTypeDeprecated
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_exec_config import ModelVersionExecConfig
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
@@ -19,11 +19,7 @@ class ModelVersionRead(pydantic.BaseModel):
     label: str = pydantic.Field(
         description='Human-friendly name for this model version. <span style="white-space: nowrap">`<= 150 characters`</span> '
     )
-    model_type: ModelTypeEnum = pydantic.Field(
-        description=(
-            "The type of task this model is used for.\n" "\n" "* `GENERATE` - Generate\n" "* `CLASSIFY` - Classify\n"
-        )
-    )
+    model_type: ModelTypeDeprecated
     provider: ProviderEnum = pydantic.Field(
         description=(
             "Which LLM provider this model version is associated with.\n"

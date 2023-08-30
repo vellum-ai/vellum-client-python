@@ -6,11 +6,13 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .deployment_node_result_data import DeploymentNodeResultData
+from .search_result import SearchResult
 
 
-class DeploymentNodeResult(pydantic.BaseModel):
-    data: DeploymentNodeResultData
+class NodeInputCompiledSearchResultsValue(pydantic.BaseModel):
+    node_input_id: str
+    key: str
+    value: typing.Optional[typing.List[SearchResult]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

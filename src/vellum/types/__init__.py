@@ -7,8 +7,6 @@ from .chat_message_role import ChatMessageRole
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .content_type import ContentType
-from .deployment_node_result import DeploymentNodeResult
-from .deployment_node_result_data import DeploymentNodeResultData
 from .deployment_read import DeploymentRead
 from .deployment_status import DeploymentStatus
 from .document import Document
@@ -40,7 +38,7 @@ from .logprobs_enum import LogprobsEnum
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
-from .model_type_enum import ModelTypeEnum
+from .model_type_deprecated import ModelTypeDeprecated
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_compile_prompt_response import ModelVersionCompilePromptResponse
 from .model_version_compiled_prompt import ModelVersionCompiledPrompt
@@ -49,6 +47,17 @@ from .model_version_exec_config_parameters import ModelVersionExecConfigParamete
 from .model_version_read import ModelVersionRead
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
+from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
+from .node_input_compiled_json_value import NodeInputCompiledJsonValue
+from .node_input_compiled_search_results_value import NodeInputCompiledSearchResultsValue
+from .node_input_compiled_string_value import NodeInputCompiledStringValue
+from .node_input_variable_compiled_value import (
+    NodeInputVariableCompiledValue,
+    NodeInputVariableCompiledValue_ChatHistory,
+    NodeInputVariableCompiledValue_Json,
+    NodeInputVariableCompiledValue_SearchResults,
+    NodeInputVariableCompiledValue_String,
+)
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
 from .paginated_slim_document_list import PaginatedSlimDocumentList
@@ -75,8 +84,6 @@ from .registered_prompt_sandbox import RegisteredPromptSandbox
 from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
 from .sandbox_metric_input_params import SandboxMetricInputParams
 from .sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
-from .sandbox_node_result import SandboxNodeResult
-from .sandbox_node_result_data import SandboxNodeResultData
 from .sandbox_scenario import SandboxScenario
 from .scenario_input import ScenarioInput
 from .scenario_input_request import ScenarioInputRequest
@@ -93,6 +100,19 @@ from .search_weights_request import SearchWeightsRequest
 from .slim_document import SlimDocument
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
+from .templating_node_chat_history_result import TemplatingNodeChatHistoryResult
+from .templating_node_json_result import TemplatingNodeJsonResult
+from .templating_node_result import TemplatingNodeResult
+from .templating_node_result_data import TemplatingNodeResultData
+from .templating_node_result_output import (
+    TemplatingNodeResultOutput,
+    TemplatingNodeResultOutput_ChatHistory,
+    TemplatingNodeResultOutput_Json,
+    TemplatingNodeResultOutput_SearchResults,
+    TemplatingNodeResultOutput_String,
+)
+from .templating_node_search_results_result import TemplatingNodeSearchResultsResult
+from .templating_node_string_result import TemplatingNodeStringResult
 from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
 from .terminal_node_json_result import TerminalNodeJsonResult
 from .terminal_node_result import TerminalNodeResult
@@ -101,8 +121,10 @@ from .terminal_node_result_output import (
     TerminalNodeResultOutput,
     TerminalNodeResultOutput_ChatHistory,
     TerminalNodeResultOutput_Json,
+    TerminalNodeResultOutput_SearchResults,
     TerminalNodeResultOutput_String,
 )
+from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
 from .terminal_node_string_result import TerminalNodeStringResult
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
@@ -115,10 +137,9 @@ from .workflow_execution_workflow_result_event import WorkflowExecutionWorkflowR
 from .workflow_node_result_data import (
     WorkflowNodeResultData,
     WorkflowNodeResultData_Conditional,
-    WorkflowNodeResultData_Deployment,
     WorkflowNodeResultData_Prompt,
-    WorkflowNodeResultData_Sandbox,
     WorkflowNodeResultData_Search,
+    WorkflowNodeResultData_Templating,
     WorkflowNodeResultData_Terminal,
 )
 from .workflow_node_result_event import WorkflowNodeResultEvent
@@ -137,10 +158,12 @@ from .workflow_result_event_output_data import (
     WorkflowResultEventOutputData,
     WorkflowResultEventOutputData_ChatHistory,
     WorkflowResultEventOutputData_Json,
+    WorkflowResultEventOutputData_SearchResults,
     WorkflowResultEventOutputData_String,
 )
 from .workflow_result_event_output_data_chat_history import WorkflowResultEventOutputDataChatHistory
 from .workflow_result_event_output_data_json import WorkflowResultEventOutputDataJson
+from .workflow_result_event_output_data_search_results import WorkflowResultEventOutputDataSearchResults
 from .workflow_result_event_output_data_string import WorkflowResultEventOutputDataString
 from .workflow_stream_event import WorkflowStreamEvent, WorkflowStreamEvent_Node, WorkflowStreamEvent_Workflow
 
@@ -152,8 +175,6 @@ __all__ = [
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
     "ContentType",
-    "DeploymentNodeResult",
-    "DeploymentNodeResultData",
     "DeploymentRead",
     "DeploymentStatus",
     "Document",
@@ -185,7 +206,7 @@ __all__ = [
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
-    "ModelTypeEnum",
+    "ModelTypeDeprecated",
     "ModelVersionBuildConfig",
     "ModelVersionCompilePromptResponse",
     "ModelVersionCompiledPrompt",
@@ -194,6 +215,15 @@ __all__ = [
     "ModelVersionRead",
     "ModelVersionReadStatusEnum",
     "ModelVersionSandboxSnapshot",
+    "NodeInputCompiledChatHistoryValue",
+    "NodeInputCompiledJsonValue",
+    "NodeInputCompiledSearchResultsValue",
+    "NodeInputCompiledStringValue",
+    "NodeInputVariableCompiledValue",
+    "NodeInputVariableCompiledValue_ChatHistory",
+    "NodeInputVariableCompiledValue_Json",
+    "NodeInputVariableCompiledValue_SearchResults",
+    "NodeInputVariableCompiledValue_String",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
     "PaginatedSlimDocumentList",
@@ -220,8 +250,6 @@ __all__ = [
     "RegisteredPromptSandboxSnapshot",
     "SandboxMetricInputParams",
     "SandboxMetricInputParamsRequest",
-    "SandboxNodeResult",
-    "SandboxNodeResultData",
     "SandboxScenario",
     "ScenarioInput",
     "ScenarioInputRequest",
@@ -238,6 +266,17 @@ __all__ = [
     "SlimDocument",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
+    "TemplatingNodeChatHistoryResult",
+    "TemplatingNodeJsonResult",
+    "TemplatingNodeResult",
+    "TemplatingNodeResultData",
+    "TemplatingNodeResultOutput",
+    "TemplatingNodeResultOutput_ChatHistory",
+    "TemplatingNodeResultOutput_Json",
+    "TemplatingNodeResultOutput_SearchResults",
+    "TemplatingNodeResultOutput_String",
+    "TemplatingNodeSearchResultsResult",
+    "TemplatingNodeStringResult",
     "TerminalNodeChatHistoryResult",
     "TerminalNodeJsonResult",
     "TerminalNodeResult",
@@ -245,7 +284,9 @@ __all__ = [
     "TerminalNodeResultOutput",
     "TerminalNodeResultOutput_ChatHistory",
     "TerminalNodeResultOutput_Json",
+    "TerminalNodeResultOutput_SearchResults",
     "TerminalNodeResultOutput_String",
+    "TerminalNodeSearchResultsResult",
     "TerminalNodeStringResult",
     "TestSuiteTestCase",
     "UploadDocumentErrorResponse",
@@ -257,10 +298,9 @@ __all__ = [
     "WorkflowExecutionWorkflowResultEvent",
     "WorkflowNodeResultData",
     "WorkflowNodeResultData_Conditional",
-    "WorkflowNodeResultData_Deployment",
     "WorkflowNodeResultData_Prompt",
-    "WorkflowNodeResultData_Sandbox",
     "WorkflowNodeResultData_Search",
+    "WorkflowNodeResultData_Templating",
     "WorkflowNodeResultData_Terminal",
     "WorkflowNodeResultEvent",
     "WorkflowNodeResultEventState",
@@ -275,9 +315,11 @@ __all__ = [
     "WorkflowResultEventOutputData",
     "WorkflowResultEventOutputDataChatHistory",
     "WorkflowResultEventOutputDataJson",
+    "WorkflowResultEventOutputDataSearchResults",
     "WorkflowResultEventOutputDataString",
     "WorkflowResultEventOutputData_ChatHistory",
     "WorkflowResultEventOutputData_Json",
+    "WorkflowResultEventOutputData_SearchResults",
     "WorkflowResultEventOutputData_String",
     "WorkflowStreamEvent",
     "WorkflowStreamEvent_Node",

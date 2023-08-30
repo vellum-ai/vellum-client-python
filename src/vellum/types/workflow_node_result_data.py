@@ -7,10 +7,9 @@ import typing
 import typing_extensions
 
 from .conditional_node_result import ConditionalNodeResult
-from .deployment_node_result import DeploymentNodeResult
 from .prompt_node_result import PromptNodeResult
-from .sandbox_node_result import SandboxNodeResult
 from .search_node_result import SearchNodeResult
+from .templating_node_result import TemplatingNodeResult
 from .terminal_node_result import TerminalNodeResult
 
 
@@ -23,26 +22,17 @@ class WorkflowNodeResultData_Prompt(PromptNodeResult):
         allow_population_by_field_name = True
 
 
-class WorkflowNodeResultData_Sandbox(SandboxNodeResult):
-    type: typing_extensions.Literal["SANDBOX"]
-
-    class Config:
-        frozen = True
-        smart_union = True
-        allow_population_by_field_name = True
-
-
-class WorkflowNodeResultData_Deployment(DeploymentNodeResult):
-    type: typing_extensions.Literal["DEPLOYMENT"]
-
-    class Config:
-        frozen = True
-        smart_union = True
-        allow_population_by_field_name = True
-
-
 class WorkflowNodeResultData_Search(SearchNodeResult):
     type: typing_extensions.Literal["SEARCH"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
+class WorkflowNodeResultData_Templating(TemplatingNodeResult):
+    type: typing_extensions.Literal["TEMPLATING"]
 
     class Config:
         frozen = True
@@ -70,9 +60,8 @@ class WorkflowNodeResultData_Terminal(TerminalNodeResult):
 
 WorkflowNodeResultData = typing.Union[
     WorkflowNodeResultData_Prompt,
-    WorkflowNodeResultData_Sandbox,
-    WorkflowNodeResultData_Deployment,
     WorkflowNodeResultData_Search,
+    WorkflowNodeResultData_Templating,
     WorkflowNodeResultData_Conditional,
     WorkflowNodeResultData_Terminal,
 ]

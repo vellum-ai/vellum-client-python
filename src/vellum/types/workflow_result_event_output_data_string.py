@@ -10,6 +10,7 @@ from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 
 class WorkflowResultEventOutputDataString(pydantic.BaseModel):
+    id: typing.Optional[str]
     name: str
     state: WorkflowNodeResultEventState
     node_id: str

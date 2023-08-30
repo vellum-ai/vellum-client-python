@@ -9,6 +9,7 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class TerminalNodeJsonResult(pydantic.BaseModel):
+    id: typing.Optional[str]
     name: str = pydantic.Field(description="The unique name given to the terminal node that produced this output.")
     value: typing.Optional[typing.Dict[str, typing.Any]]
 

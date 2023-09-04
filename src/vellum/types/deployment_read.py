@@ -8,8 +8,8 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 from .deployment_status import DeploymentStatus
 from .environment_enum import EnvironmentEnum
-from .input_variable import InputVariable
 from .model_type_deprecated import ModelTypeDeprecated
+from .vellum_variable import VellumVariable
 
 
 class DeploymentRead(pydantic.BaseModel):
@@ -42,7 +42,7 @@ class DeploymentRead(pydantic.BaseModel):
     model_type: ModelTypeDeprecated
     active_model_version_ids: typing.List[str]
     last_deployed_on: str
-    input_variables: typing.List[InputVariable]
+    input_variables: typing.List[VellumVariable]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -6,13 +6,13 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .input_variable_type import InputVariableType
+from .vellum_variable_type import VellumVariableType
 
 
 class RegisteredPromptInputVariableRequest(pydantic.BaseModel):
     key: str = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
     id: typing.Optional[str] = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
-    type: typing.Optional[InputVariableType]
+    type: typing.Optional[VellumVariableType]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

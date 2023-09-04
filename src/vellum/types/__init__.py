@@ -32,8 +32,6 @@ from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
 from .indexing_state_enum import IndexingStateEnum
-from .input_variable import InputVariable
-from .input_variable_type import InputVariableType
 from .logprobs_enum import LogprobsEnum
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
@@ -129,6 +127,8 @@ from .terminal_node_string_result import TerminalNodeStringResult
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
+from .vellum_variable import VellumVariable
+from .vellum_variable_type import VellumVariableType
 from .workflow_event_error import WorkflowEventError
 from .workflow_execution_event_error_code import WorkflowExecutionEventErrorCode
 from .workflow_execution_event_type import WorkflowExecutionEventType
@@ -200,8 +200,6 @@ __all__ = [
     "GenerateStreamResult",
     "GenerateStreamResultData",
     "IndexingStateEnum",
-    "InputVariable",
-    "InputVariableType",
     "LogprobsEnum",
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
@@ -291,6 +289,8 @@ __all__ = [
     "TestSuiteTestCase",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
+    "VellumVariable",
+    "VellumVariableType",
     "WorkflowEventError",
     "WorkflowExecutionEventErrorCode",
     "WorkflowExecutionEventType",

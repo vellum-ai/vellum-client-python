@@ -6,12 +6,12 @@ import typing
 T_Result = typing.TypeVar("T_Result")
 
 
-class InputVariableType(str, enum.Enum):
+class VellumVariableType(str, enum.Enum):
     """
-    * `STRING` - STRING
+    * `STRING` - String
     * `JSON` - JSON
-    * `CHAT_HISTORY` - CHAT_HISTORY
-    * `SEARCH_RESULTS` - SEARCH_RESULTS
+    * `CHAT_HISTORY` - Chat History
+    * `SEARCH_RESULTS` - Search Results
     """
 
     STRING = "STRING"
@@ -26,11 +26,11 @@ class InputVariableType(str, enum.Enum):
         chat_history: typing.Callable[[], T_Result],
         search_results: typing.Callable[[], T_Result],
     ) -> T_Result:
-        if self is InputVariableType.STRING:
+        if self is VellumVariableType.STRING:
             return string()
-        if self is InputVariableType.JSON:
+        if self is VellumVariableType.JSON:
             return json()
-        if self is InputVariableType.CHAT_HISTORY:
+        if self is VellumVariableType.CHAT_HISTORY:
             return chat_history()
-        if self is InputVariableType.SEARCH_RESULTS:
+        if self is VellumVariableType.SEARCH_RESULTS:
             return search_results()

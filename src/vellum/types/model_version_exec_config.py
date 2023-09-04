@@ -6,16 +6,16 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .input_variable import InputVariable
 from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
 from .prompt_template_block_data import PromptTemplateBlockData
+from .vellum_variable import VellumVariable
 
 
 class ModelVersionExecConfig(pydantic.BaseModel):
     parameters: ModelVersionExecConfigParameters = pydantic.Field(
         description="The generation parameters that are passed to the LLM provider at runtime."
     )
-    input_variables: typing.List[InputVariable] = pydantic.Field(
+    input_variables: typing.List[VellumVariable] = pydantic.Field(
         description="Input variables specified in the prompt template."
     )
     prompt_template: typing.Optional[str] = pydantic.Field(

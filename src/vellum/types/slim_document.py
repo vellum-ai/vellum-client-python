@@ -47,6 +47,9 @@ class SlimDocument(pydantic.BaseModel):
     keywords: typing.Optional[typing.List[str]] = pydantic.Field(
         description="A list of keywords associated with this document. Originally provided when uploading the document."
     )
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
+        description="A previously supplied JSON object containing metadata that can be filtered on when searching."
+    )
     document_to_document_indexes: typing.List[DocumentDocumentToDocumentIndex]
 
     def json(self, **kwargs: typing.Any) -> str:

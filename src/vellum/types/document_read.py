@@ -37,7 +37,7 @@ class DocumentRead(pydantic.BaseModel):
     processed_file_url: typing.Optional[str]
     document_to_document_indexes: typing.List[DocumentDocumentToDocumentIndex]
     metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
-        description="A previously supplied JSON object containing metadata that can filtered on when searching."
+        description="A previously supplied JSON object containing metadata that can be filtered on when searching."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

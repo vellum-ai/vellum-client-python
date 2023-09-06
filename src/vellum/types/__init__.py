@@ -9,7 +9,6 @@ from .conditional_node_result_data import ConditionalNodeResultData
 from .content_type import ContentType
 from .deployment_read import DeploymentRead
 from .deployment_status import DeploymentStatus
-from .document import Document
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .document_index_read import DocumentIndexRead
 from .document_index_status import DocumentIndexStatus
@@ -93,6 +92,7 @@ from .search_node_result_data import SearchNodeResultData
 from .search_request_options_request import SearchRequestOptionsRequest
 from .search_response import SearchResponse
 from .search_result import SearchResult
+from .search_result_document import SearchResultDocument
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_weights_request import SearchWeightsRequest
 from .slim_document import SlimDocument
@@ -177,7 +177,6 @@ __all__ = [
     "ContentType",
     "DeploymentRead",
     "DeploymentStatus",
-    "Document",
     "DocumentDocumentToDocumentIndex",
     "DocumentIndexRead",
     "DocumentIndexStatus",
@@ -259,6 +258,7 @@ __all__ = [
     "SearchRequestOptionsRequest",
     "SearchResponse",
     "SearchResult",
+    "SearchResultDocument",
     "SearchResultMergingRequest",
     "SearchWeightsRequest",
     "SlimDocument",

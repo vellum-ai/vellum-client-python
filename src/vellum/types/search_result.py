@@ -6,14 +6,14 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .document import Document
+from .search_result_document import SearchResultDocument
 
 
 class SearchResult(pydantic.BaseModel):
     text: str = pydantic.Field(description="The text of the chunk that matched the search query.")
     score: float = pydantic.Field(description="A score representing how well the chunk matches the search query.")
     keywords: typing.List[str]
-    document: Document = pydantic.Field(
+    document: SearchResultDocument = pydantic.Field(
         description="The document that contains the chunk that matched the search query."
     )
 

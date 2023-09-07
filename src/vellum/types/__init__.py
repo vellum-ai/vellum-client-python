@@ -98,6 +98,12 @@ from .search_weights_request import SearchWeightsRequest
 from .slim_document import SlimDocument
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
+from .submit_workflow_execution_actual_request import (
+    SubmitWorkflowExecutionActualRequest,
+    SubmitWorkflowExecutionActualRequest_ChatHistory,
+    SubmitWorkflowExecutionActualRequest_Json,
+    SubmitWorkflowExecutionActualRequest_String,
+)
 from .templating_node_chat_history_result import TemplatingNodeChatHistoryResult
 from .templating_node_json_result import TemplatingNodeJsonResult
 from .templating_node_result import TemplatingNodeResult
@@ -130,6 +136,9 @@ from .upload_document_response import UploadDocumentResponse
 from .vellum_variable import VellumVariable
 from .vellum_variable_type import VellumVariableType
 from .workflow_event_error import WorkflowEventError
+from .workflow_execution_actual_chat_history_request import WorkflowExecutionActualChatHistoryRequest
+from .workflow_execution_actual_json_request import WorkflowExecutionActualJsonRequest
+from .workflow_execution_actual_string_request import WorkflowExecutionActualStringRequest
 from .workflow_execution_event_error_code import WorkflowExecutionEventErrorCode
 from .workflow_execution_event_type import WorkflowExecutionEventType
 from .workflow_execution_node_result_event import WorkflowExecutionNodeResultEvent
@@ -264,6 +273,10 @@ __all__ = [
     "SlimDocument",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
+    "SubmitWorkflowExecutionActualRequest",
+    "SubmitWorkflowExecutionActualRequest_ChatHistory",
+    "SubmitWorkflowExecutionActualRequest_Json",
+    "SubmitWorkflowExecutionActualRequest_String",
     "TemplatingNodeChatHistoryResult",
     "TemplatingNodeJsonResult",
     "TemplatingNodeResult",
@@ -292,6 +305,9 @@ __all__ = [
     "VellumVariable",
     "VellumVariableType",
     "WorkflowEventError",
+    "WorkflowExecutionActualChatHistoryRequest",
+    "WorkflowExecutionActualJsonRequest",
+    "WorkflowExecutionActualStringRequest",
     "WorkflowExecutionEventErrorCode",
     "WorkflowExecutionEventType",
     "WorkflowExecutionNodeResultEvent",

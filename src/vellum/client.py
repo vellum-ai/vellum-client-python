@@ -31,6 +31,7 @@ from .types.generate_stream_response import GenerateStreamResponse
 from .types.search_request_options_request import SearchRequestOptionsRequest
 from .types.search_response import SearchResponse
 from .types.submit_completion_actual_request import SubmitCompletionActualRequest
+from .types.submit_workflow_execution_actual_request import SubmitWorkflowExecutionActualRequest
 from .types.workflow_execution_event_type import WorkflowExecutionEventType
 from .types.workflow_request_input_request import WorkflowRequestInputRequest
 from .types.workflow_stream_event import WorkflowStreamEvent
@@ -69,7 +70,7 @@ class Vellum:
         event_types: typing.Optional[typing.List[WorkflowExecutionEventType]] = OMIT,
     ) -> typing.Iterator[WorkflowStreamEvent]:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Stable</strong>
 
         Executes a deployed Workflow and streams back its results.
 
@@ -335,6 +336,49 @@ class Vellum:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def submit_workflow_execution_actuals(
+        self,
+        *,
+        actuals: typing.List[SubmitWorkflowExecutionActualRequest],
+        execution_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+    ) -> None:
+        """
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Used to submit feedback regarding the quality of previous workflow execution and its outputs.
+
+        **Note:** Uses a base url of `https://predict.vellum.ai`.
+
+        Parameters:
+            - actuals: typing.List[SubmitWorkflowExecutionActualRequest]. Feedback regarding the quality of an output on a previously executed workflow.
+
+            - execution_id: typing.Optional[str]. The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
+
+            - external_id: typing.Optional[str]. The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
+        """
+        _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
+        if execution_id is not OMIT:
+            _request["execution_id"] = execution_id
+        if external_id is not OMIT:
+            _request["external_id"] = external_id
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", "v1/submit-workflow-execution-actuals"
+            ),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
 
 class AsyncVellum:
     def __init__(
@@ -366,7 +410,7 @@ class AsyncVellum:
         event_types: typing.Optional[typing.List[WorkflowExecutionEventType]] = OMIT,
     ) -> typing.AsyncIterator[WorkflowStreamEvent]:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
+        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Stable</strong>
 
         Executes a deployed Workflow and streams back its results.
 
@@ -626,6 +670,49 @@ class AsyncVellum:
             raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
             raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def submit_workflow_execution_actuals(
+        self,
+        *,
+        actuals: typing.List[SubmitWorkflowExecutionActualRequest],
+        execution_id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+    ) -> None:
+        """
+        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+
+        Used to submit feedback regarding the quality of previous workflow execution and its outputs.
+
+        **Note:** Uses a base url of `https://predict.vellum.ai`.
+
+        Parameters:
+            - actuals: typing.List[SubmitWorkflowExecutionActualRequest]. Feedback regarding the quality of an output on a previously executed workflow.
+
+            - execution_id: typing.Optional[str]. The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
+
+            - external_id: typing.Optional[str]. The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
+        """
+        _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
+        if execution_id is not OMIT:
+            _request["execution_id"] = execution_id
+        if external_id is not OMIT:
+            _request["external_id"] = external_id
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", "v1/submit-workflow-execution-actuals"
+            ),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:

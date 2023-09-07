@@ -365,7 +365,7 @@ class Vellum:
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", "v1/submit-workflow-execution-actuals"
+                f"{self._client_wrapper.get_environment().predict}/", "v1/submit-workflow-execution-actuals"
             ),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
@@ -705,7 +705,7 @@ class AsyncVellum:
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", "v1/submit-workflow-execution-actuals"
+                f"{self._client_wrapper.get_environment().predict}/", "v1/submit-workflow-execution-actuals"
             ),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),

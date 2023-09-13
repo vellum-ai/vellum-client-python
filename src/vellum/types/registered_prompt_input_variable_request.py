@@ -10,8 +10,8 @@ from .vellum_variable_type import VellumVariableType
 
 
 class RegisteredPromptInputVariableRequest(pydantic.BaseModel):
-    key: str = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
-    id: typing.Optional[str] = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
+    key: str
+    id: typing.Optional[str]
     type: typing.Optional[VellumVariableType]
 
     def json(self, **kwargs: typing.Any) -> str:

@@ -15,10 +15,8 @@ from .provider_enum import ProviderEnum
 
 class ModelVersionRead(pydantic.BaseModel):
     id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this model version.")
-    created: str = pydantic.Field(description="Timestamp of when this model version was created.")
-    label: str = pydantic.Field(
-        description='Human-friendly name for this model version. <span style="white-space: nowrap">`<= 150 characters`</span> '
-    )
+    created: dt.datetime = pydantic.Field(description="Timestamp of when this model version was created.")
+    label: str = pydantic.Field(description="Human-friendly name for this model version.")
     model_type: ModelTypeDeprecated
     provider: ProviderEnum = pydantic.Field(
         description=(
@@ -35,7 +33,7 @@ class ModelVersionRead(pydantic.BaseModel):
         )
     )
     external_id: str = pydantic.Field(
-        description='The unique id of this model version as it exists in the above provider\'s system. <span style="white-space: nowrap">`<= 250 characters`</span> '
+        description="The unique id of this model version as it exists in the above provider's system."
     )
     build_config: ModelVersionBuildConfig = pydantic.Field(
         description="Configuration used to build this model version."

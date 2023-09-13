@@ -22,9 +22,6 @@ class ModelVersionsClient:
 
     def retrieve(self, id: str) -> ModelVersionRead:
         """
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Used to retrieve a model version given its ID.
 
         Parameters:
@@ -48,8 +45,6 @@ class ModelVersionsClient:
         self, id: str, *, input_values: typing.Dict[str, typing.Any]
     ) -> ModelVersionCompilePromptResponse:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Compiles the prompt backing the model version using the provided input values.
 
         Parameters:
@@ -81,9 +76,6 @@ class AsyncModelVersionsClient:
 
     async def retrieve(self, id: str) -> ModelVersionRead:
         """
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Used to retrieve a model version given its ID.
 
         Parameters:
@@ -107,8 +99,6 @@ class AsyncModelVersionsClient:
         self, id: str, *, input_values: typing.Dict[str, typing.Any]
     ) -> ModelVersionCompilePromptResponse:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Compiles the prompt backing the model version using the provided input values.
 
         Parameters:

@@ -6,6 +6,7 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .logical_operator import LogicalOperator
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
 
@@ -14,9 +15,9 @@ class MetadataFilterConfigRequest(pydantic.BaseModel):
     combinator: typing.Optional[MetadataFilterRuleCombinator]
     negated: typing.Optional[bool]
     rules: typing.Optional[typing.List[MetadataFilterRuleRequest]]
-    field: typing.Optional[str] = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
-    operator: typing.Optional[str] = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
-    value: typing.Optional[str] = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
+    field: typing.Optional[str]
+    operator: typing.Optional[LogicalOperator]
+    value: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

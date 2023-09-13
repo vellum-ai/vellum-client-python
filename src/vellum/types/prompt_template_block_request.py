@@ -12,7 +12,7 @@ from .block_type_enum import BlockTypeEnum
 
 
 class PromptTemplateBlockRequest(pydantic.BaseModel):
-    id: str = pydantic.Field(description='<span style="white-space: nowrap">`non-empty`</span>')
+    id: str
     block_type: BlockTypeEnum
     properties: PromptTemplateBlockPropertiesRequest
 

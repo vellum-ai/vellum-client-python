@@ -17,12 +17,8 @@ class PromptTemplateBlockPropertiesRequest(pydantic.BaseModel):
     chat_message_unterminated: typing.Optional[bool]
     template: typing.Optional[str]
     template_type: typing.Optional[ContentType]
-    function_name: typing.Optional[str] = pydantic.Field(
-        description='<span style="white-space: nowrap">`non-empty`</span>'
-    )
-    function_description: typing.Optional[str] = pydantic.Field(
-        description='<span style="white-space: nowrap">`non-empty`</span>'
-    )
+    function_name: typing.Optional[str]
+    function_description: typing.Optional[str]
     function_parameters: typing.Optional[typing.Dict[str, typing.Any]]
     function_forced: typing.Optional[bool]
     blocks: typing.Optional[typing.List[PromptTemplateBlockRequest]]

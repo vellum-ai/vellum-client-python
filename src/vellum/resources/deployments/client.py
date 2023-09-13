@@ -16,9 +16,6 @@ class DeploymentsClient:
 
     def retrieve(self, id: str) -> DeploymentRead:
         """
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Used to retrieve a deployment given its ID or name.
 
         Parameters:
@@ -45,9 +42,6 @@ class AsyncDeploymentsClient:
 
     async def retrieve(self, id: str) -> DeploymentRead:
         """
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Used to retrieve a deployment given its ID or name.
 
         Parameters:

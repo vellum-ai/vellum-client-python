@@ -31,6 +31,7 @@ from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
 from .indexing_state_enum import IndexingStateEnum
+from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
@@ -208,6 +209,7 @@ __all__ = [
     "GenerateStreamResult",
     "GenerateStreamResultData",
     "IndexingStateEnum",
+    "LogicalOperator",
     "LogprobsEnum",
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",

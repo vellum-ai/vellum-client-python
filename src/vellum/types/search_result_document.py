@@ -10,9 +10,7 @@ from ..core.datetime_utils import serialize_datetime
 
 class SearchResultDocument(pydantic.BaseModel):
     id: str = pydantic.Field(description="The ID of the document.")
-    label: str = pydantic.Field(
-        description='The human-readable name for the document. <span style="white-space: nowrap">`<= 1000 characters`</span> '
-    )
+    label: str = pydantic.Field(description="The human-readable name for the document.")
     external_id: typing.Optional[str] = pydantic.Field(
         description="The unique ID of the document as represented in an external system and specified when it was originally uploaded."
     )

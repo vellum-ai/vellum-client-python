@@ -31,8 +31,6 @@ class SandboxesClient:
         metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = OMIT,
     ) -> SandboxScenario:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
 
         If an id is provided and has a match, the scenario will be updated. If no id is provided or no match
@@ -48,7 +46,7 @@ class SandboxesClient:
 
             - inputs: typing.List[ScenarioInputRequest]. The inputs for the scenario
 
-            - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended. <span style="white-space: nowrap">`non-empty`</span>
+            - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 
             - metric_input_params: typing.Optional[SandboxMetricInputParamsRequest].
         """
@@ -76,8 +74,6 @@ class SandboxesClient:
 
     def delete_sandbox_scenario(self, id: str, scenario_id: str) -> None:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
 
         Parameters:
@@ -116,8 +112,6 @@ class AsyncSandboxesClient:
         metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = OMIT,
     ) -> SandboxScenario:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
 
         If an id is provided and has a match, the scenario will be updated. If no id is provided or no match
@@ -133,7 +127,7 @@ class AsyncSandboxesClient:
 
             - inputs: typing.List[ScenarioInputRequest]. The inputs for the scenario
 
-            - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended. <span style="white-space: nowrap">`non-empty`</span>
+            - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 
             - metric_input_params: typing.Optional[SandboxMetricInputParamsRequest].
         """
@@ -161,8 +155,6 @@ class AsyncSandboxesClient:
 
     async def delete_sandbox_scenario(self, id: str, scenario_id: str) -> None:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
 
         Parameters:

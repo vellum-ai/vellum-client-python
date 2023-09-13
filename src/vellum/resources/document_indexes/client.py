@@ -32,14 +32,12 @@ class DocumentIndexesClient:
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
     ) -> DocumentIndexRead:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Creates a new document index.
 
         Parameters:
-            - label: str. A human-readable label for the document index <span style="white-space: nowrap">`non-empty`</span> <span style="white-space: nowrap">`<= 150 characters`</span>
+            - label: str. A human-readable label for the document index
 
-            - name: str. A name that uniquely identifies this index within its workspace <span style="white-space: nowrap">`non-empty`</span> <span style="white-space: nowrap">`<= 150 characters`</span>
+            - name: str. A name that uniquely identifies this index within its workspace
 
             - status: typing.Optional[DocumentIndexStatus]. The current status of the document index
 
@@ -92,14 +90,12 @@ class AsyncDocumentIndexesClient:
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
     ) -> DocumentIndexRead:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Creates a new document index.
 
         Parameters:
-            - label: str. A human-readable label for the document index <span style="white-space: nowrap">`non-empty`</span> <span style="white-space: nowrap">`<= 150 characters`</span>
+            - label: str. A human-readable label for the document index
 
-            - name: str. A name that uniquely identifies this index within its workspace <span style="white-space: nowrap">`non-empty`</span> <span style="white-space: nowrap">`<= 150 characters`</span>
+            - name: str. A name that uniquely identifies this index within its workspace
 
             - status: typing.Optional[DocumentIndexStatus]. The current status of the document index
 

@@ -14,7 +14,7 @@ from .workflow_result_event_output_data import WorkflowResultEventOutputData
 class WorkflowResultEvent(pydantic.BaseModel):
     id: str
     state: WorkflowNodeResultEventState
-    ts: str
+    ts: dt.datetime
     output: typing.Optional[WorkflowResultEventOutputData]
     error: typing.Optional[WorkflowEventError]
 

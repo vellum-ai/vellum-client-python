@@ -30,8 +30,6 @@ class TestSuitesClient:
         evaluation_params: EvaluationParamsRequest,
     ) -> TestSuiteTestCase:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
 
         If an id is provided and has a match, the test case will be updated. If no id is provided or no match
@@ -43,7 +41,7 @@ class TestSuitesClient:
         Parameters:
             - id: str. A UUID string identifying this test suite.
 
-            - test_case_id: typing.Optional[str]. The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended. <span style="white-space: nowrap">`non-empty`</span>
+            - test_case_id: typing.Optional[str]. The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended.
 
             - label: typing.Optional[str]. A human-friendly label for the test case.
 
@@ -75,8 +73,6 @@ class TestSuitesClient:
 
     def delete_test_suite_test_case(self, id: str, test_case_id: str) -> None:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Deletes an existing test case for a test suite, keying off of the test case id.
 
         Parameters:
@@ -115,8 +111,6 @@ class AsyncTestSuitesClient:
         evaluation_params: EvaluationParamsRequest,
     ) -> TestSuiteTestCase:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
 
         If an id is provided and has a match, the test case will be updated. If no id is provided or no match
@@ -128,7 +122,7 @@ class AsyncTestSuitesClient:
         Parameters:
             - id: str. A UUID string identifying this test suite.
 
-            - test_case_id: typing.Optional[str]. The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended. <span style="white-space: nowrap">`non-empty`</span>
+            - test_case_id: typing.Optional[str]. The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended.
 
             - label: typing.Optional[str]. A human-friendly label for the test case.
 
@@ -160,8 +154,6 @@ class AsyncTestSuitesClient:
 
     async def delete_test_suite_test_case(self, id: str, test_case_id: str) -> None:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Deletes an existing test case for a test suite, keying off of the test case id.
 
         Parameters:

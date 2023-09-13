@@ -35,9 +35,6 @@ class DocumentsClient:
         ordering: typing.Optional[str] = None,
     ) -> PaginatedSlimDocumentList:
         """
-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Used to list documents. Optionally filter on supported fields.
 
         Parameters:
@@ -75,15 +72,12 @@ class DocumentsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
     ) -> DocumentRead:
         """
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
 
         Parameters:
             - id: str. A UUID string identifying this document.
 
-            - label: typing.Optional[str]. A human-readable label for the document. Defaults to the originally uploaded file's file name. <span style="white-space: nowrap">`non-empty`</span> <span style="white-space: nowrap">`<= 1000 characters`</span>
+            - label: typing.Optional[str]. A human-readable label for the document. Defaults to the originally uploaded file's file name.
 
             - status: typing.Optional[DocumentStatus]. The current status of the document
 
@@ -142,8 +136,6 @@ class DocumentsClient:
         metadata: typing.Optional[str] = None,
     ) -> UploadDocumentResponse:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Upload a document to be indexed and used for search.
 
         **Note:** Uses a base url of `https://documents.vellum.ai`.
@@ -205,9 +197,6 @@ class AsyncDocumentsClient:
         ordering: typing.Optional[str] = None,
     ) -> PaginatedSlimDocumentList:
         """
-
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Used to list documents. Optionally filter on supported fields.
 
         Parameters:
@@ -245,15 +234,12 @@ class AsyncDocumentsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
     ) -> DocumentRead:
         """
-
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
 
         Parameters:
             - id: str. A UUID string identifying this document.
 
-            - label: typing.Optional[str]. A human-readable label for the document. Defaults to the originally uploaded file's file name. <span style="white-space: nowrap">`non-empty`</span> <span style="white-space: nowrap">`<= 1000 characters`</span>
+            - label: typing.Optional[str]. A human-readable label for the document. Defaults to the originally uploaded file's file name.
 
             - status: typing.Optional[DocumentStatus]. The current status of the document
 
@@ -312,8 +298,6 @@ class AsyncDocumentsClient:
         metadata: typing.Optional[str] = None,
     ) -> UploadDocumentResponse:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Upload a document to be indexed and used for search.
 
         **Note:** Uses a base url of `https://documents.vellum.ai`.

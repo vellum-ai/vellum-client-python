@@ -12,13 +12,9 @@ from .environment_enum import EnvironmentEnum
 
 class DocumentIndexRead(pydantic.BaseModel):
     id: str
-    created: str
-    label: str = pydantic.Field(
-        description='A human-readable label for the document index <span style="white-space: nowrap">`<= 150 characters`</span> '
-    )
-    name: str = pydantic.Field(
-        description='A name that uniquely identifies this index within its workspace <span style="white-space: nowrap">`<= 150 characters`</span> '
-    )
+    created: dt.datetime
+    label: str = pydantic.Field(description="A human-readable label for the document index")
+    name: str = pydantic.Field(description="A name that uniquely identifies this index within its workspace")
     status: typing.Optional[DocumentIndexStatus] = pydantic.Field(
         description=(
             "The current status of the document index\n" "\n" "* `ACTIVE` - Active\n" "* `ARCHIVED` - Archived\n"

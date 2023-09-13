@@ -16,9 +16,9 @@ class DocumentRead(pydantic.BaseModel):
     external_id: typing.Optional[str] = pydantic.Field(
         description="The unique id of this document as it exists in the user's system."
     )
-    last_uploaded_at: str
+    last_uploaded_at: dt.datetime
     label: str = pydantic.Field(
-        description='A human-readable label for the document. Defaults to the originally uploaded file\'s file name. <span style="white-space: nowrap">`<= 1000 characters`</span> '
+        description="A human-readable label for the document. Defaults to the originally uploaded file's file name."
     )
     processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
         description=(

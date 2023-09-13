@@ -36,17 +36,15 @@ class RegisteredPromptsClient:
         meta: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
     ) -> RegisterPromptResponse:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Registers a prompt within Vellum and creates associated Vellum entities. Intended to be used by integration
         partners, not directly by Vellum users.
 
         Under the hood, this endpoint creates a new sandbox, a new model version, and a new deployment.
 
         Parameters:
-            - label: str. A human-friendly label for corresponding entities created in Vellum. <span style="white-space: nowrap">`non-empty`</span>
+            - label: str. A human-friendly label for corresponding entities created in Vellum.
 
-            - name: str. A uniquely-identifying name for corresponding entities created in Vellum. <span style="white-space: nowrap">`non-empty`</span>
+            - name: str. A uniquely-identifying name for corresponding entities created in Vellum.
 
             - prompt: RegisterPromptPromptInfoRequest. Information about how to execute the prompt template.
 
@@ -60,7 +58,7 @@ class RegisteredPromptsClient:
                                       * `MYSTIC` - Mystic
                                       * `OPENAI` - OpenAI
                                       * `PYQ` - Pyq
-            - model: str. The initial model to use for this prompt <span style="white-space: nowrap">`non-empty`</span>
+            - model: str. The initial model to use for this prompt
 
             - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
 
@@ -112,17 +110,15 @@ class AsyncRegisteredPromptsClient:
         meta: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
     ) -> RegisterPromptResponse:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Unstable</strong>
-
         Registers a prompt within Vellum and creates associated Vellum entities. Intended to be used by integration
         partners, not directly by Vellum users.
 
         Under the hood, this endpoint creates a new sandbox, a new model version, and a new deployment.
 
         Parameters:
-            - label: str. A human-friendly label for corresponding entities created in Vellum. <span style="white-space: nowrap">`non-empty`</span>
+            - label: str. A human-friendly label for corresponding entities created in Vellum.
 
-            - name: str. A uniquely-identifying name for corresponding entities created in Vellum. <span style="white-space: nowrap">`non-empty`</span>
+            - name: str. A uniquely-identifying name for corresponding entities created in Vellum.
 
             - prompt: RegisterPromptPromptInfoRequest. Information about how to execute the prompt template.
 
@@ -136,7 +132,7 @@ class AsyncRegisteredPromptsClient:
                                       * `MYSTIC` - Mystic
                                       * `OPENAI` - OpenAI
                                       * `PYQ` - Pyq
-            - model: str. The initial model to use for this prompt <span style="white-space: nowrap">`non-empty`</span>
+            - model: str. The initial model to use for this prompt
 
             - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
 

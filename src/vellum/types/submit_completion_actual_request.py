@@ -19,7 +19,7 @@ class SubmitCompletionActualRequest(pydantic.BaseModel):
     quality: typing.Optional[float] = pydantic.Field(
         description="A number between 0 and 1 representing the quality of the completion. 0 is the worst, 1 is the best."
     )
-    timestamp: typing.Optional[str] = pydantic.Field(
+    timestamp: typing.Optional[dt.datetime] = pydantic.Field(
         description="Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes."
     )
 

@@ -14,13 +14,9 @@ from .vellum_variable import VellumVariable
 
 class DeploymentRead(pydantic.BaseModel):
     id: str
-    created: str
-    label: str = pydantic.Field(
-        description='A human-readable label for the deployment <span style="white-space: nowrap">`<= 150 characters`</span> '
-    )
-    name: str = pydantic.Field(
-        description='A name that uniquely identifies this deployment within its workspace <span style="white-space: nowrap">`<= 150 characters`</span> '
-    )
+    created: dt.datetime
+    label: str = pydantic.Field(description="A human-readable label for the deployment")
+    name: str = pydantic.Field(description="A name that uniquely identifies this deployment within its workspace")
     status: typing.Optional[DeploymentStatus] = pydantic.Field(
         description=(
             "The current status of the deployment\n"
@@ -41,7 +37,7 @@ class DeploymentRead(pydantic.BaseModel):
     )
     model_type: ModelTypeDeprecated
     active_model_version_ids: typing.List[str]
-    last_deployed_on: str
+    last_deployed_on: dt.datetime
     input_variables: typing.List[VellumVariable]
 
     def json(self, **kwargs: typing.Any) -> str:

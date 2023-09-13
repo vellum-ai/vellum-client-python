@@ -70,8 +70,6 @@ class Vellum:
         event_types: typing.Optional[typing.List[WorkflowExecutionEventType]] = OMIT,
     ) -> typing.Iterator[WorkflowStreamEvent]:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Executes a deployed Workflow and streams back its results.
 
         Parameters:
@@ -133,8 +131,6 @@ class Vellum:
         options: typing.Optional[GenerateOptionsRequest] = OMIT,
     ) -> GenerateResponse:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Generate a completion using a previously defined deployment.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -187,8 +183,6 @@ class Vellum:
         options: typing.Optional[GenerateOptionsRequest] = OMIT,
     ) -> typing.Iterator[GenerateStreamResponse]:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Generate a stream of completions using a previously defined deployment.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -246,8 +240,6 @@ class Vellum:
         options: typing.Optional[SearchRequestOptionsRequest] = OMIT,
     ) -> SearchResponse:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Perform a search against a document index.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -257,7 +249,7 @@ class Vellum:
 
             - index_name: typing.Optional[str]. The name of the index to search against. Must provide either this or index_id.
 
-            - query: str. The query to search for. <span style="white-space: nowrap">`non-empty`</span>
+            - query: str. The query to search for.
 
             - options: typing.Optional[SearchRequestOptionsRequest]. Configuration options for the search.
         """
@@ -297,8 +289,6 @@ class Vellum:
         actuals: typing.List[SubmitCompletionActualRequest],
     ) -> None:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Used to submit feedback regarding the quality of previously generated completions.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -344,11 +334,9 @@ class Vellum:
         external_id: typing.Optional[str] = OMIT,
     ) -> None:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+            Used to submit feedback regarding the quality of previous workflow execution and its outputs.
 
-        Used to submit feedback regarding the quality of previous workflow execution and its outputs.
-
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+            **Note:** Uses a base url of `https://predict.vellum.ai`.
 
         Parameters:
             - actuals: typing.List[SubmitWorkflowExecutionActualRequest]. Feedback regarding the quality of an output on a previously executed workflow.
@@ -410,8 +398,6 @@ class AsyncVellum:
         event_types: typing.Optional[typing.List[WorkflowExecutionEventType]] = OMIT,
     ) -> typing.AsyncIterator[WorkflowStreamEvent]:
         """
-        <strong style="background-color:#ffc107; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Executes a deployed Workflow and streams back its results.
 
         Parameters:
@@ -473,8 +459,6 @@ class AsyncVellum:
         options: typing.Optional[GenerateOptionsRequest] = OMIT,
     ) -> GenerateResponse:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Generate a completion using a previously defined deployment.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -527,8 +511,6 @@ class AsyncVellum:
         options: typing.Optional[GenerateOptionsRequest] = OMIT,
     ) -> typing.AsyncIterator[GenerateStreamResponse]:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Generate a stream of completions using a previously defined deployment.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -586,8 +568,6 @@ class AsyncVellum:
         options: typing.Optional[SearchRequestOptionsRequest] = OMIT,
     ) -> SearchResponse:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Perform a search against a document index.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -597,7 +577,7 @@ class AsyncVellum:
 
             - index_name: typing.Optional[str]. The name of the index to search against. Must provide either this or index_id.
 
-            - query: str. The query to search for. <span style="white-space: nowrap">`non-empty`</span>
+            - query: str. The query to search for.
 
             - options: typing.Optional[SearchRequestOptionsRequest]. Configuration options for the search.
         """
@@ -637,8 +617,6 @@ class AsyncVellum:
         actuals: typing.List[SubmitCompletionActualRequest],
     ) -> None:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
-
         Used to submit feedback regarding the quality of previously generated completions.
 
         **Note:** Uses a base url of `https://predict.vellum.ai`.
@@ -684,11 +662,9 @@ class AsyncVellum:
         external_id: typing.Optional[str] = OMIT,
     ) -> None:
         """
-        <strong style="background-color:#4caf50; color:white; padding:4px; border-radius:4px">Stable</strong>
+            Used to submit feedback regarding the quality of previous workflow execution and its outputs.
 
-        Used to submit feedback regarding the quality of previous workflow execution and its outputs.
-
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+            **Note:** Uses a base url of `https://predict.vellum.ai`.
 
         Parameters:
             - actuals: typing.List[SubmitWorkflowExecutionActualRequest]. Feedback regarding the quality of an output on a previously executed workflow.

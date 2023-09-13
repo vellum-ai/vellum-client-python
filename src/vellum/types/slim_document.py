@@ -17,12 +17,10 @@ class SlimDocument(pydantic.BaseModel):
     external_id: typing.Optional[str] = pydantic.Field(
         description="The external ID that was originally provided when uploading the document."
     )
-    last_uploaded_at: str = pydantic.Field(
+    last_uploaded_at: dt.datetime = pydantic.Field(
         description="A timestamp representing when this document was most recently uploaded."
     )
-    label: str = pydantic.Field(
-        description='Human-friendly name for this document. <span style="white-space: nowrap">`<= 1000 characters`</span> '
-    )
+    label: str = pydantic.Field(description="Human-friendly name for this document.")
     processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
         description=(
             "An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.\n"

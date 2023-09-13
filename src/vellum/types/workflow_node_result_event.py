@@ -17,7 +17,7 @@ class WorkflowNodeResultEvent(pydantic.BaseModel):
     node_id: str
     node_result_id: str
     state: WorkflowNodeResultEventState
-    ts: typing.Optional[str]
+    ts: typing.Optional[dt.datetime]
     data: typing.Optional[WorkflowNodeResultData]
     error: typing.Optional[WorkflowEventError]
     input_values: typing.Optional[typing.List[NodeInputVariableCompiledValue]]

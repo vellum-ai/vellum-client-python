@@ -8,12 +8,22 @@ import typing_extensions
 
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
 from .node_input_compiled_json_value import NodeInputCompiledJsonValue
+from .node_input_compiled_number_value import NodeInputCompiledNumberValue
 from .node_input_compiled_search_results_value import NodeInputCompiledSearchResultsValue
 from .node_input_compiled_string_value import NodeInputCompiledStringValue
 
 
 class NodeInputVariableCompiledValue_String(NodeInputCompiledStringValue):
     type: typing_extensions.Literal["STRING"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
+class NodeInputVariableCompiledValue_Number(NodeInputCompiledNumberValue):
+    type: typing_extensions.Literal["NUMBER"]
 
     class Config:
         frozen = True
@@ -50,6 +60,7 @@ class NodeInputVariableCompiledValue_SearchResults(NodeInputCompiledSearchResult
 
 NodeInputVariableCompiledValue = typing.Union[
     NodeInputVariableCompiledValue_String,
+    NodeInputVariableCompiledValue_Number,
     NodeInputVariableCompiledValue_Json,
     NodeInputVariableCompiledValue_ChatHistory,
     NodeInputVariableCompiledValue_SearchResults,

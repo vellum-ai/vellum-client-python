@@ -8,11 +8,13 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 
 
-class SearchWeightsRequest(pydantic.BaseModel):
-    semantic_similarity: typing.Optional[float] = pydantic.Field(
-        description="The relative weight to give to semantic similarity"
-    )
-    keywords: typing.Optional[float] = pydantic.Field(description="The relative weight to give to keywords")
+class ApiNodeResultData(pydantic.BaseModel):
+    text_output_id: str
+    text: typing.Optional[str]
+    json_output_id: str
+    json_: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(alias="json")
+    status_code_output_id: str
+    status_code: int
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -25,4 +27,5 @@ class SearchWeightsRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        allow_population_by_field_name = True
         json_encoders = {dt.datetime: serialize_datetime}

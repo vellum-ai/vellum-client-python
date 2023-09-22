@@ -8,11 +8,10 @@ import pydantic
 from ..core.datetime_utils import serialize_datetime
 
 
-class SearchWeightsRequest(pydantic.BaseModel):
-    semantic_similarity: typing.Optional[float] = pydantic.Field(
-        description="The relative weight to give to semantic similarity"
-    )
-    keywords: typing.Optional[float] = pydantic.Field(description="The relative weight to give to keywords")
+class TerminalNodeNumberResult(pydantic.BaseModel):
+    id: typing.Optional[str]
+    name: str = pydantic.Field(description="The unique name given to the terminal node that produced this output.")
+    value: typing.Optional[int]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

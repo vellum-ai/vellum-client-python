@@ -6,13 +6,18 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
+from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 
-class SearchWeightsRequest(pydantic.BaseModel):
-    semantic_similarity: typing.Optional[float] = pydantic.Field(
-        description="The relative weight to give to semantic similarity"
+class WorkflowResultEventOutputDataNumber(pydantic.BaseModel):
+    id: typing.Optional[str]
+    name: str
+    state: WorkflowNodeResultEventState
+    node_id: str
+    delta: typing.Optional[str] = pydantic.Field(
+        description="The newly output string value. Only relevant for string outputs with a state of STREAMING."
     )
-    keywords: typing.Optional[float] = pydantic.Field(description="The relative weight to give to keywords")
+    value: typing.Optional[int]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

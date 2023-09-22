@@ -6,9 +6,9 @@ import typing
 import pydantic
 
 from ..core.datetime_utils import serialize_datetime
-from .content_type import ContentType
 from .finish_reason_enum import FinishReasonEnum
 from .normalized_log_probs import NormalizedLogProbs
+from .vellum_variable_type import VellumVariableType
 
 
 class EnrichedNormalizedCompletion(pydantic.BaseModel):
@@ -30,7 +30,7 @@ class EnrichedNormalizedCompletion(pydantic.BaseModel):
         description="The logprobs of the completion. Only present if specified in the original request options."
     )
     model_version_id: str = pydantic.Field(description="The ID of the model version used to generate this completion.")
-    type: typing.Optional[ContentType]
+    type: typing.Optional[VellumVariableType]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

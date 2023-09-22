@@ -9,14 +9,14 @@ import pydantic
 
 from ..core.datetime_utils import serialize_datetime
 from .chat_message_role import ChatMessageRole
-from .content_type import ContentType
+from .vellum_variable_type import VellumVariableType
 
 
 class PromptTemplateBlockProperties(pydantic.BaseModel):
     chat_role: typing.Optional[ChatMessageRole]
     chat_message_unterminated: typing.Optional[bool]
     template: typing.Optional[str]
-    template_type: typing.Optional[ContentType]
+    template_type: typing.Optional[VellumVariableType]
     function_name: typing.Optional[str]
     function_description: typing.Optional[str]
     function_parameters: typing.Optional[typing.Dict[str, typing.Any]]

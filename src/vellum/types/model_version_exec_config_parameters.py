@@ -9,8 +9,8 @@ from ..core.datetime_utils import serialize_datetime
 
 
 class ModelVersionExecConfigParameters(pydantic.BaseModel):
-    temperature: float
-    max_tokens: int
+    temperature: typing.Optional[float]
+    max_tokens: typing.Optional[int]
     top_p: float
     frequency_penalty: float
     presence_penalty: float

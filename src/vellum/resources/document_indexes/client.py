@@ -74,6 +74,27 @@ class DocumentIndexesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def retrieve(self, id: str) -> DocumentIndexRead:
+        """
+        Used to retrieve a Document Index given its ID or name.
+
+        Parameters:
+            - id: str. Either the Document Index's ID or its unique name
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
 
 class AsyncDocumentIndexesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -121,6 +142,27 @@ class AsyncDocumentIndexesClient:
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
             json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def retrieve(self, id: str) -> DocumentIndexRead:
+        """
+        Used to retrieve a Document Index given its ID or name.
+
+        Parameters:
+            - id: str. Either the Document Index's ID or its unique name
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )

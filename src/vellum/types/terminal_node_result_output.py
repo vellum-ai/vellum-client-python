@@ -8,12 +8,22 @@ import typing_extensions
 
 from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
 from .terminal_node_json_result import TerminalNodeJsonResult
+from .terminal_node_number_result import TerminalNodeNumberResult
 from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
 from .terminal_node_string_result import TerminalNodeStringResult
 
 
 class TerminalNodeResultOutput_String(TerminalNodeStringResult):
     type: typing_extensions.Literal["STRING"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
+class TerminalNodeResultOutput_Number(TerminalNodeNumberResult):
+    type: typing_extensions.Literal["NUMBER"]
 
     class Config:
         frozen = True
@@ -50,6 +60,7 @@ class TerminalNodeResultOutput_SearchResults(TerminalNodeSearchResultsResult):
 
 TerminalNodeResultOutput = typing.Union[
     TerminalNodeResultOutput_String,
+    TerminalNodeResultOutput_Number,
     TerminalNodeResultOutput_Json,
     TerminalNodeResultOutput_ChatHistory,
     TerminalNodeResultOutput_SearchResults,

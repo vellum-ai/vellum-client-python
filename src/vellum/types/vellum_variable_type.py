@@ -8,13 +8,15 @@ T_Result = typing.TypeVar("T_Result")
 
 class VellumVariableType(str, enum.Enum):
     """
-    * `STRING` - String
+    * `STRING` - STRING
+    * `NUMBER` - NUMBER
     * `JSON` - JSON
-    * `CHAT_HISTORY` - Chat History
-    * `SEARCH_RESULTS` - Search Results
+    * `CHAT_HISTORY` - CHAT_HISTORY
+    * `SEARCH_RESULTS` - SEARCH_RESULTS
     """
 
     STRING = "STRING"
+    NUMBER = "NUMBER"
     JSON = "JSON"
     CHAT_HISTORY = "CHAT_HISTORY"
     SEARCH_RESULTS = "SEARCH_RESULTS"
@@ -22,12 +24,15 @@ class VellumVariableType(str, enum.Enum):
     def visit(
         self,
         string: typing.Callable[[], T_Result],
+        number: typing.Callable[[], T_Result],
         json: typing.Callable[[], T_Result],
         chat_history: typing.Callable[[], T_Result],
         search_results: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is VellumVariableType.STRING:
             return string()
+        if self is VellumVariableType.NUMBER:
+            return number()
         if self is VellumVariableType.JSON:
             return json()
         if self is VellumVariableType.CHAT_HISTORY:

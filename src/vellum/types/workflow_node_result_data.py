@@ -6,6 +6,7 @@ import typing
 
 import typing_extensions
 
+from .api_node_result import ApiNodeResult
 from .conditional_node_result import ConditionalNodeResult
 from .prompt_node_result import PromptNodeResult
 from .search_node_result import SearchNodeResult
@@ -49,6 +50,15 @@ class WorkflowNodeResultData_Conditional(ConditionalNodeResult):
         allow_population_by_field_name = True
 
 
+class WorkflowNodeResultData_Api(ApiNodeResult):
+    type: typing_extensions.Literal["API"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 class WorkflowNodeResultData_Terminal(TerminalNodeResult):
     type: typing_extensions.Literal["TERMINAL"]
 
@@ -63,5 +73,6 @@ WorkflowNodeResultData = typing.Union[
     WorkflowNodeResultData_Search,
     WorkflowNodeResultData_Templating,
     WorkflowNodeResultData_Conditional,
+    WorkflowNodeResultData_Api,
     WorkflowNodeResultData_Terminal,
 ]

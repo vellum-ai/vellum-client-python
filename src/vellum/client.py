@@ -6,7 +6,6 @@ import urllib.parse
 from json.decoder import JSONDecodeError
 
 import httpx
-import pydantic
 
 from .core.api_error import ApiError
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
@@ -35,6 +34,11 @@ from .types.submit_workflow_execution_actual_request import SubmitWorkflowExecut
 from .types.workflow_execution_event_type import WorkflowExecutionEventType
 from .types.workflow_request_input_request import WorkflowRequestInputRequest
 from .types.workflow_stream_event import WorkflowStreamEvent
+
+try:
+    import pydantic.v1 as pydantic  # type: ignore
+except ImportError:
+    import pydantic  # type: ignore
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)

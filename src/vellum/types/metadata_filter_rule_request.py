@@ -5,11 +5,14 @@ from __future__ import annotations
 import datetime as dt
 import typing
 
-import pydantic
-
 from ..core.datetime_utils import serialize_datetime
 from .logical_operator import LogicalOperator
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
+
+try:
+    import pydantic.v1 as pydantic  # type: ignore
+except ImportError:
+    import pydantic  # type: ignore
 
 
 class MetadataFilterRuleRequest(pydantic.BaseModel):

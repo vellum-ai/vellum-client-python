@@ -3,14 +3,17 @@
 import datetime as dt
 import typing
 
-import pydantic
-
 from ..core.datetime_utils import serialize_datetime
 from .model_type_deprecated import ModelTypeDeprecated
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_exec_config import ModelVersionExecConfig
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .provider_enum import ProviderEnum
+
+try:
+    import pydantic.v1 as pydantic  # type: ignore
+except ImportError:
+    import pydantic  # type: ignore
 
 
 class ModelVersionRead(pydantic.BaseModel):

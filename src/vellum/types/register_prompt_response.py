@@ -3,14 +3,17 @@
 import datetime as dt
 import typing
 
-import pydantic
-
 from ..core.datetime_utils import serialize_datetime
 from .register_prompt_prompt import RegisterPromptPrompt
 from .registered_prompt_deployment import RegisteredPromptDeployment
 from .registered_prompt_model_version import RegisteredPromptModelVersion
 from .registered_prompt_sandbox import RegisteredPromptSandbox
 from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
+
+try:
+    import pydantic.v1 as pydantic  # type: ignore
+except ImportError:
+    import pydantic  # type: ignore
 
 
 class RegisterPromptResponse(pydantic.BaseModel):

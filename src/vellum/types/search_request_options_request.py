@@ -3,12 +3,15 @@
 import datetime as dt
 import typing
 
-import pydantic
-
 from ..core.datetime_utils import serialize_datetime
 from .search_filters_request import SearchFiltersRequest
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_weights_request import SearchWeightsRequest
+
+try:
+    import pydantic.v1 as pydantic  # type: ignore
+except ImportError:
+    import pydantic  # type: ignore
 
 
 class SearchRequestOptionsRequest(pydantic.BaseModel):

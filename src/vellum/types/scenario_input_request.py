@@ -3,11 +3,14 @@
 import datetime as dt
 import typing
 
-import pydantic
-
 from ..core.datetime_utils import serialize_datetime
 from .chat_message_request import ChatMessageRequest
 from .scenario_input_type_enum import ScenarioInputTypeEnum
+
+try:
+    import pydantic.v1 as pydantic  # type: ignore
+except ImportError:
+    import pydantic  # type: ignore
 
 
 class ScenarioInputRequest(pydantic.BaseModel):

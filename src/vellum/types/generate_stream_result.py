@@ -3,11 +3,14 @@
 import datetime as dt
 import typing
 
-import pydantic
-
 from ..core.datetime_utils import serialize_datetime
 from .generate_result_error import GenerateResultError
 from .generate_stream_result_data import GenerateStreamResultData
+
+try:
+    import pydantic.v1 as pydantic  # type: ignore
+except ImportError:
+    import pydantic  # type: ignore
 
 
 class GenerateStreamResult(pydantic.BaseModel):

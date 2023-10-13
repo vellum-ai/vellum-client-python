@@ -3,13 +3,16 @@
 import datetime as dt
 import typing
 
-import pydantic
-
 from ..core.datetime_utils import serialize_datetime
 from .node_input_variable_compiled_value import NodeInputVariableCompiledValue
 from .workflow_event_error import WorkflowEventError
 from .workflow_node_result_data import WorkflowNodeResultData
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
+
+try:
+    import pydantic.v1 as pydantic  # type: ignore
+except ImportError:
+    import pydantic  # type: ignore
 
 
 class WorkflowNodeResultEvent(pydantic.BaseModel):

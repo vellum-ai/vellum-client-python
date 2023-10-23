@@ -4,7 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .model_type_deprecated import ModelTypeDeprecated
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_exec_config import ModelVersionExecConfig
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
@@ -20,7 +19,6 @@ class ModelVersionRead(pydantic.BaseModel):
     id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this model version.")
     created: dt.datetime = pydantic.Field(description="Timestamp of when this model version was created.")
     label: str = pydantic.Field(description="Human-friendly name for this model version.")
-    model_type: ModelTypeDeprecated
     provider: ProviderEnum = pydantic.Field(
         description=(
             "Which LLM provider this model version is associated with.\n"
@@ -30,8 +28,9 @@ class ModelVersionRead(pydantic.BaseModel):
             "* `GOOGLE` - Google\n"
             "* `HOSTED` - Hosted\n"
             "* `MOSAICML` - MosaicML\n"
-            "* `MYSTIC` - Mystic\n"
             "* `OPENAI` - OpenAI\n"
+            "* `HUGGINGFACE` - HuggingFace\n"
+            "* `MYSTIC` - Mystic\n"
             "* `PYQ` - Pyq\n"
         )
     )

@@ -13,6 +13,7 @@ class VellumVariableType(str, enum.Enum):
     * `JSON` - JSON
     * `CHAT_HISTORY` - CHAT_HISTORY
     * `SEARCH_RESULTS` - SEARCH_RESULTS
+    * `ERROR` - ERROR
     """
 
     STRING = "STRING"
@@ -20,6 +21,7 @@ class VellumVariableType(str, enum.Enum):
     JSON = "JSON"
     CHAT_HISTORY = "CHAT_HISTORY"
     SEARCH_RESULTS = "SEARCH_RESULTS"
+    ERROR = "ERROR"
 
     def visit(
         self,
@@ -28,6 +30,7 @@ class VellumVariableType(str, enum.Enum):
         json: typing.Callable[[], T_Result],
         chat_history: typing.Callable[[], T_Result],
         search_results: typing.Callable[[], T_Result],
+        error: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is VellumVariableType.STRING:
             return string()
@@ -39,3 +42,5 @@ class VellumVariableType(str, enum.Enum):
             return chat_history()
         if self is VellumVariableType.SEARCH_RESULTS:
             return search_results()
+        if self is VellumVariableType.ERROR:
+            return error()

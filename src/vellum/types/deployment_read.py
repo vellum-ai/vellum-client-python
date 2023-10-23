@@ -6,7 +6,6 @@ import typing
 from ..core.datetime_utils import serialize_datetime
 from .deployment_status import DeploymentStatus
 from .environment_enum import EnvironmentEnum
-from .model_type_deprecated import ModelTypeDeprecated
 from .vellum_variable import VellumVariable
 
 try:
@@ -38,7 +37,6 @@ class DeploymentRead(pydantic.BaseModel):
             "* `PRODUCTION` - Production\n"
         )
     )
-    model_type: ModelTypeDeprecated
     active_model_version_ids: typing.List[str]
     last_deployed_on: dt.datetime
     input_variables: typing.List[VellumVariable]

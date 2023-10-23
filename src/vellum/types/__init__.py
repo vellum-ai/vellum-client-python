@@ -37,7 +37,6 @@ from .logprobs_enum import LogprobsEnum
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
-from .model_type_deprecated import ModelTypeDeprecated
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_compile_prompt_response import ModelVersionCompilePromptResponse
 from .model_version_compiled_prompt import ModelVersionCompiledPrompt
@@ -47,6 +46,7 @@ from .model_version_read import ModelVersionRead
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
+from .node_input_compiled_error_value import NodeInputCompiledErrorValue
 from .node_input_compiled_json_value import NodeInputCompiledJsonValue
 from .node_input_compiled_number_value import NodeInputCompiledNumberValue
 from .node_input_compiled_search_results_value import NodeInputCompiledSearchResultsValue
@@ -54,6 +54,7 @@ from .node_input_compiled_string_value import NodeInputCompiledStringValue
 from .node_input_variable_compiled_value import (
     NodeInputVariableCompiledValue,
     NodeInputVariableCompiledValue_ChatHistory,
+    NodeInputVariableCompiledValue_Error,
     NodeInputVariableCompiledValue_Json,
     NodeInputVariableCompiledValue_Number,
     NodeInputVariableCompiledValue_SearchResults,
@@ -109,6 +110,7 @@ from .submit_workflow_execution_actual_request import (
     SubmitWorkflowExecutionActualRequest_String,
 )
 from .templating_node_chat_history_result import TemplatingNodeChatHistoryResult
+from .templating_node_error_result import TemplatingNodeErrorResult
 from .templating_node_json_result import TemplatingNodeJsonResult
 from .templating_node_number_result import TemplatingNodeNumberResult
 from .templating_node_result import TemplatingNodeResult
@@ -116,6 +118,7 @@ from .templating_node_result_data import TemplatingNodeResultData
 from .templating_node_result_output import (
     TemplatingNodeResultOutput,
     TemplatingNodeResultOutput_ChatHistory,
+    TemplatingNodeResultOutput_Error,
     TemplatingNodeResultOutput_Json,
     TemplatingNodeResultOutput_Number,
     TemplatingNodeResultOutput_SearchResults,
@@ -124,6 +127,7 @@ from .templating_node_result_output import (
 from .templating_node_search_results_result import TemplatingNodeSearchResultsResult
 from .templating_node_string_result import TemplatingNodeStringResult
 from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
+from .terminal_node_error_result import TerminalNodeErrorResult
 from .terminal_node_json_result import TerminalNodeJsonResult
 from .terminal_node_number_result import TerminalNodeNumberResult
 from .terminal_node_result import TerminalNodeResult
@@ -131,6 +135,7 @@ from .terminal_node_result_data import TerminalNodeResultData
 from .terminal_node_result_output import (
     TerminalNodeResultOutput,
     TerminalNodeResultOutput_ChatHistory,
+    TerminalNodeResultOutput_Error,
     TerminalNodeResultOutput_Json,
     TerminalNodeResultOutput_Number,
     TerminalNodeResultOutput_SearchResults,
@@ -141,6 +146,8 @@ from .terminal_node_string_result import TerminalNodeStringResult
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
+from .vellum_error import VellumError
+from .vellum_error_code_enum import VellumErrorCodeEnum
 from .vellum_variable import VellumVariable
 from .vellum_variable_type import VellumVariableType
 from .workflow_event_error import WorkflowEventError
@@ -175,12 +182,14 @@ from .workflow_result_event import WorkflowResultEvent
 from .workflow_result_event_output_data import (
     WorkflowResultEventOutputData,
     WorkflowResultEventOutputData_ChatHistory,
+    WorkflowResultEventOutputData_Error,
     WorkflowResultEventOutputData_Json,
     WorkflowResultEventOutputData_Number,
     WorkflowResultEventOutputData_SearchResults,
     WorkflowResultEventOutputData_String,
 )
 from .workflow_result_event_output_data_chat_history import WorkflowResultEventOutputDataChatHistory
+from .workflow_result_event_output_data_error import WorkflowResultEventOutputDataError
 from .workflow_result_event_output_data_json import WorkflowResultEventOutputDataJson
 from .workflow_result_event_output_data_number import WorkflowResultEventOutputDataNumber
 from .workflow_result_event_output_data_search_results import WorkflowResultEventOutputDataSearchResults
@@ -225,7 +234,6 @@ __all__ = [
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
-    "ModelTypeDeprecated",
     "ModelVersionBuildConfig",
     "ModelVersionCompilePromptResponse",
     "ModelVersionCompiledPrompt",
@@ -235,12 +243,14 @@ __all__ = [
     "ModelVersionReadStatusEnum",
     "ModelVersionSandboxSnapshot",
     "NodeInputCompiledChatHistoryValue",
+    "NodeInputCompiledErrorValue",
     "NodeInputCompiledJsonValue",
     "NodeInputCompiledNumberValue",
     "NodeInputCompiledSearchResultsValue",
     "NodeInputCompiledStringValue",
     "NodeInputVariableCompiledValue",
     "NodeInputVariableCompiledValue_ChatHistory",
+    "NodeInputVariableCompiledValue_Error",
     "NodeInputVariableCompiledValue_Json",
     "NodeInputVariableCompiledValue_Number",
     "NodeInputVariableCompiledValue_SearchResults",
@@ -293,12 +303,14 @@ __all__ = [
     "SubmitWorkflowExecutionActualRequest_Json",
     "SubmitWorkflowExecutionActualRequest_String",
     "TemplatingNodeChatHistoryResult",
+    "TemplatingNodeErrorResult",
     "TemplatingNodeJsonResult",
     "TemplatingNodeNumberResult",
     "TemplatingNodeResult",
     "TemplatingNodeResultData",
     "TemplatingNodeResultOutput",
     "TemplatingNodeResultOutput_ChatHistory",
+    "TemplatingNodeResultOutput_Error",
     "TemplatingNodeResultOutput_Json",
     "TemplatingNodeResultOutput_Number",
     "TemplatingNodeResultOutput_SearchResults",
@@ -306,12 +318,14 @@ __all__ = [
     "TemplatingNodeSearchResultsResult",
     "TemplatingNodeStringResult",
     "TerminalNodeChatHistoryResult",
+    "TerminalNodeErrorResult",
     "TerminalNodeJsonResult",
     "TerminalNodeNumberResult",
     "TerminalNodeResult",
     "TerminalNodeResultData",
     "TerminalNodeResultOutput",
     "TerminalNodeResultOutput_ChatHistory",
+    "TerminalNodeResultOutput_Error",
     "TerminalNodeResultOutput_Json",
     "TerminalNodeResultOutput_Number",
     "TerminalNodeResultOutput_SearchResults",
@@ -321,6 +335,8 @@ __all__ = [
     "TestSuiteTestCase",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
+    "VellumError",
+    "VellumErrorCodeEnum",
     "VellumVariable",
     "VellumVariableType",
     "WorkflowEventError",
@@ -350,11 +366,13 @@ __all__ = [
     "WorkflowResultEvent",
     "WorkflowResultEventOutputData",
     "WorkflowResultEventOutputDataChatHistory",
+    "WorkflowResultEventOutputDataError",
     "WorkflowResultEventOutputDataJson",
     "WorkflowResultEventOutputDataNumber",
     "WorkflowResultEventOutputDataSearchResults",
     "WorkflowResultEventOutputDataString",
     "WorkflowResultEventOutputData_ChatHistory",
+    "WorkflowResultEventOutputData_Error",
     "WorkflowResultEventOutputData_Json",
     "WorkflowResultEventOutputData_Number",
     "WorkflowResultEventOutputData_SearchResults",

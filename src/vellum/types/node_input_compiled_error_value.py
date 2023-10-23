@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
+from .vellum_error import VellumError
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,14 +12,10 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class ModelVersionBuildConfig(pydantic.BaseModel):
-    base_model: str = pydantic.Field(
-        description="The name of the base model used to create this model version, as identified by the LLM provider."
-    )
-    sandbox_snapshot: typing.Optional[ModelVersionSandboxSnapshot] = pydantic.Field(
-        description="Information about the sandbox snapshot that was used to create this model version, if applicable."
-    )
-    prompt_version_id: typing.Optional[str]
+class NodeInputCompiledErrorValue(pydantic.BaseModel):
+    node_input_id: str
+    key: str
+    value: typing.Optional[VellumError]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

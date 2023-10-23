@@ -7,6 +7,7 @@ import typing
 import typing_extensions
 
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
+from .node_input_compiled_error_value import NodeInputCompiledErrorValue
 from .node_input_compiled_json_value import NodeInputCompiledJsonValue
 from .node_input_compiled_number_value import NodeInputCompiledNumberValue
 from .node_input_compiled_search_results_value import NodeInputCompiledSearchResultsValue
@@ -58,10 +59,20 @@ class NodeInputVariableCompiledValue_SearchResults(NodeInputCompiledSearchResult
         allow_population_by_field_name = True
 
 
+class NodeInputVariableCompiledValue_Error(NodeInputCompiledErrorValue):
+    type: typing_extensions.Literal["ERROR"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 NodeInputVariableCompiledValue = typing.Union[
     NodeInputVariableCompiledValue_String,
     NodeInputVariableCompiledValue_Number,
     NodeInputVariableCompiledValue_Json,
     NodeInputVariableCompiledValue_ChatHistory,
     NodeInputVariableCompiledValue_SearchResults,
+    NodeInputVariableCompiledValue_Error,
 ]

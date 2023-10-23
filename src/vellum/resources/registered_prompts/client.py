@@ -7,7 +7,9 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
+from ...errors.bad_request_error import BadRequestError
 from ...errors.conflict_error import ConflictError
+from ...errors.not_found_error import NotFoundError
 from ...types.provider_enum import ProviderEnum
 from ...types.register_prompt_error_response import RegisterPromptErrorResponse
 from ...types.register_prompt_model_parameters_request import RegisterPromptModelParametersRequest
@@ -58,8 +60,9 @@ class RegisteredPromptsClient:
                                       * `GOOGLE` - Google
                                       * `HOSTED` - Hosted
                                       * `MOSAICML` - MosaicML
-                                      * `MYSTIC` - Mystic
                                       * `OPENAI` - OpenAI
+                                      * `HUGGINGFACE` - HuggingFace
+                                      * `MYSTIC` - Mystic
                                       * `PYQ` - Pyq
             - model: str. The initial model to use for this prompt
 
@@ -88,6 +91,10 @@ class RegisteredPromptsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(RegisterPromptResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 409:
             raise ConflictError(pydantic.parse_obj_as(RegisterPromptErrorResponse, _response.json()))  # type: ignore
         try:
@@ -132,8 +139,9 @@ class AsyncRegisteredPromptsClient:
                                       * `GOOGLE` - Google
                                       * `HOSTED` - Hosted
                                       * `MOSAICML` - MosaicML
-                                      * `MYSTIC` - Mystic
                                       * `OPENAI` - OpenAI
+                                      * `HUGGINGFACE` - HuggingFace
+                                      * `MYSTIC` - Mystic
                                       * `PYQ` - Pyq
             - model: str. The initial model to use for this prompt
 
@@ -162,6 +170,10 @@ class AsyncRegisteredPromptsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(RegisterPromptResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 409:
             raise ConflictError(pydantic.parse_obj_as(RegisterPromptErrorResponse, _response.json()))  # type: ignore
         try:

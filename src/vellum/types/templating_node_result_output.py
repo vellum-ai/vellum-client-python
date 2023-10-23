@@ -7,6 +7,7 @@ import typing
 import typing_extensions
 
 from .templating_node_chat_history_result import TemplatingNodeChatHistoryResult
+from .templating_node_error_result import TemplatingNodeErrorResult
 from .templating_node_json_result import TemplatingNodeJsonResult
 from .templating_node_number_result import TemplatingNodeNumberResult
 from .templating_node_search_results_result import TemplatingNodeSearchResultsResult
@@ -58,10 +59,20 @@ class TemplatingNodeResultOutput_SearchResults(TemplatingNodeSearchResultsResult
         allow_population_by_field_name = True
 
 
+class TemplatingNodeResultOutput_Error(TemplatingNodeErrorResult):
+    type: typing_extensions.Literal["ERROR"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 TemplatingNodeResultOutput = typing.Union[
     TemplatingNodeResultOutput_String,
     TemplatingNodeResultOutput_Number,
     TemplatingNodeResultOutput_Json,
     TemplatingNodeResultOutput_ChatHistory,
     TemplatingNodeResultOutput_SearchResults,
+    TemplatingNodeResultOutput_Error,
 ]

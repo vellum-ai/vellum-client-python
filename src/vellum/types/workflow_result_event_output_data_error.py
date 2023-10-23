@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
+from .vellum_error import VellumError
+from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,14 +13,15 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class ModelVersionBuildConfig(pydantic.BaseModel):
-    base_model: str = pydantic.Field(
-        description="The name of the base model used to create this model version, as identified by the LLM provider."
+class WorkflowResultEventOutputDataError(pydantic.BaseModel):
+    id: typing.Optional[str]
+    name: str
+    state: WorkflowNodeResultEventState
+    node_id: str
+    delta: typing.Optional[str] = pydantic.Field(
+        description="The newly output string value. Only relevant for string outputs with a state of STREAMING."
     )
-    sandbox_snapshot: typing.Optional[ModelVersionSandboxSnapshot] = pydantic.Field(
-        description="Information about the sandbox snapshot that was used to create this model version, if applicable."
-    )
-    prompt_version_id: typing.Optional[str]
+    value: typing.Optional[VellumError]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -13,8 +13,9 @@ class ProviderEnum(str, enum.Enum):
     * `GOOGLE` - Google
     * `HOSTED` - Hosted
     * `MOSAICML` - MosaicML
-    * `MYSTIC` - Mystic
     * `OPENAI` - OpenAI
+    * `HUGGINGFACE` - HuggingFace
+    * `MYSTIC` - Mystic
     * `PYQ` - Pyq
     """
 
@@ -23,8 +24,9 @@ class ProviderEnum(str, enum.Enum):
     GOOGLE = "GOOGLE"
     HOSTED = "HOSTED"
     MOSAICML = "MOSAICML"
-    MYSTIC = "MYSTIC"
     OPENAI = "OPENAI"
+    HUGGINGFACE = "HUGGINGFACE"
+    MYSTIC = "MYSTIC"
     PYQ = "PYQ"
 
     def visit(
@@ -34,8 +36,9 @@ class ProviderEnum(str, enum.Enum):
         google: typing.Callable[[], T_Result],
         hosted: typing.Callable[[], T_Result],
         mosaicml: typing.Callable[[], T_Result],
-        mystic: typing.Callable[[], T_Result],
         openai: typing.Callable[[], T_Result],
+        huggingface: typing.Callable[[], T_Result],
+        mystic: typing.Callable[[], T_Result],
         pyq: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is ProviderEnum.ANTHROPIC:
@@ -48,9 +51,11 @@ class ProviderEnum(str, enum.Enum):
             return hosted()
         if self is ProviderEnum.MOSAICML:
             return mosaicml()
-        if self is ProviderEnum.MYSTIC:
-            return mystic()
         if self is ProviderEnum.OPENAI:
             return openai()
+        if self is ProviderEnum.HUGGINGFACE:
+            return huggingface()
+        if self is ProviderEnum.MYSTIC:
+            return mystic()
         if self is ProviderEnum.PYQ:
             return pyq()

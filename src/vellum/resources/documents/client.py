@@ -48,6 +48,11 @@ class DocumentsClient:
             - offset: typing.Optional[int]. The initial index from which to return the results.
 
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.list()
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
@@ -113,6 +118,11 @@ class DocumentsClient:
         """
         Parameters:
             - id: str. A UUID string identifying this document.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.destroy(id="id")
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
@@ -210,6 +220,11 @@ class AsyncDocumentsClient:
             - offset: typing.Optional[int]. The initial index from which to return the results.
 
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.list()
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
@@ -275,6 +290,11 @@ class AsyncDocumentsClient:
         """
         Parameters:
             - id: str. A UUID string identifying this document.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.destroy(id="id")
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",

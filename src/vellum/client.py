@@ -147,6 +147,12 @@ class Vellum:
             - requests: typing.List[GenerateRequest]. The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
 
             - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
+        ---
+        from vellum import GenerateOptionsRequest, GenerateRequest, LogprobsEnum
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.generate(requests=[GenerateRequest(input_values={})], options=GenerateOptionsRequest(logprobs=LogprobsEnum.ALL))
         """
         _request: typing.Dict[str, typing.Any] = {"requests": requests}
         if deployment_id is not OMIT:
@@ -303,6 +309,11 @@ class Vellum:
             - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
 
             - actuals: typing.List[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.submit_completion_actuals(actuals=[])
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
         if deployment_id is not OMIT:
@@ -348,6 +359,11 @@ class Vellum:
             - execution_id: typing.Optional[str]. The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
 
             - external_id: typing.Optional[str]. The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.submit_workflow_execution_actuals(actuals=[])
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
         if execution_id is not OMIT:
@@ -475,6 +491,14 @@ class AsyncVellum:
             - requests: typing.List[GenerateRequest]. The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
 
             - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
+        ---
+        from vellum import GenerateOptionsRequest, GenerateRequest, LogprobsEnum
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.generate(
+            requests=[GenerateRequest(input_values={})], options=GenerateOptionsRequest(logprobs=LogprobsEnum.ALL)
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"requests": requests}
         if deployment_id is not OMIT:
@@ -631,6 +655,11 @@ class AsyncVellum:
             - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
 
             - actuals: typing.List[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.submit_completion_actuals(actuals=[])
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
         if deployment_id is not OMIT:
@@ -676,6 +705,11 @@ class AsyncVellum:
             - execution_id: typing.Optional[str]. The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
 
             - external_id: typing.Optional[str]. The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.submit_workflow_execution_actuals(actuals=[])
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
         if execution_id is not OMIT:

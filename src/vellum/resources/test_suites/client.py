@@ -51,6 +51,12 @@ class TestSuitesClient:
             - input_values: typing.Dict[str, typing.Any]. Key/value pairs for each input variable that the Test Suite expects.
 
             - evaluation_params: EvaluationParamsRequest. Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.
+        ---
+        from vellum import EvaluationParamsRequest
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.upsert_test_suite_test_case(id="id", input_values={}, evaluation_params=EvaluationParamsRequest())
         """
         _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_params": evaluation_params}
         if test_case_id is not OMIT:
@@ -82,6 +88,11 @@ class TestSuitesClient:
             - id: str. A UUID string identifying this test suite.
 
             - test_case_id: str. An id identifying the test case that you'd like to delete
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.delete_test_suite_test_case(id="id", test_case_id="test-case-id")
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
@@ -132,6 +143,12 @@ class AsyncTestSuitesClient:
             - input_values: typing.Dict[str, typing.Any]. Key/value pairs for each input variable that the Test Suite expects.
 
             - evaluation_params: EvaluationParamsRequest. Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.
+        ---
+        from vellum import EvaluationParamsRequest
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.upsert_test_suite_test_case(id="id", input_values={}, evaluation_params=EvaluationParamsRequest())
         """
         _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_params": evaluation_params}
         if test_case_id is not OMIT:
@@ -163,6 +180,11 @@ class AsyncTestSuitesClient:
             - id: str. A UUID string identifying this test suite.
 
             - test_case_id: str. An id identifying the test case that you'd like to delete
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.delete_test_suite_test_case(id="id", test_case_id="test-case-id")
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",

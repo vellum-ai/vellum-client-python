@@ -83,6 +83,11 @@ class SandboxesClient:
             - id: str. A UUID string identifying this sandbox.
 
             - scenario_id: str. An id identifying the scenario that you'd like to delete
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.delete_sandbox_scenario(id="id", scenario_id="scenario-id")
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
@@ -164,6 +169,11 @@ class AsyncSandboxesClient:
             - id: str. A UUID string identifying this sandbox.
 
             - scenario_id: str. An id identifying the scenario that you'd like to delete
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.delete_sandbox_scenario(id="id", scenario_id="scenario-id")
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",

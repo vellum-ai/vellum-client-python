@@ -71,6 +71,30 @@ class DocumentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def destroy(self, id: str) -> None:
+        """
+        Parameters:
+            - id: str. A UUID string identifying this document.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(api_key="YOUR_API_KEY")
+        client.destroy(id="id")
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
     def partial_update(
         self,
         id: str,
@@ -108,30 +132,6 @@ class DocumentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def destroy(self, id: str) -> None:
-        """
-        Parameters:
-            - id: str. A UUID string identifying this document.
-        ---
-        from vellum.client import Vellum
-
-        client = Vellum(api_key="YOUR_API_KEY")
-        client.destroy(id="id")
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
-        )
-        if 200 <= _response.status_code < 300:
-            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -243,6 +243,30 @@ class AsyncDocumentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    async def destroy(self, id: str) -> None:
+        """
+        Parameters:
+            - id: str. A UUID string identifying this document.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(api_key="YOUR_API_KEY")
+        await client.destroy(id="id")
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
     async def partial_update(
         self,
         id: str,
@@ -280,30 +304,6 @@ class AsyncDocumentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def destroy(self, id: str) -> None:
-        """
-        Parameters:
-            - id: str. A UUID string identifying this document.
-        ---
-        from vellum.client import AsyncVellum
-
-        client = AsyncVellum(api_key="YOUR_API_KEY")
-        await client.destroy(id="id")
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
-        )
-        if 200 <= _response.status_code < 300:
-            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:

@@ -35,7 +35,7 @@ class RegisteredPromptsClient:
         label: str,
         name: str,
         prompt: RegisterPromptPromptInfoRequest,
-        provider: ProviderEnum,
+        provider: typing.Optional[ProviderEnum] = OMIT,
         model: str,
         parameters: RegisterPromptModelParametersRequest,
         meta: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
@@ -53,17 +53,20 @@ class RegisteredPromptsClient:
 
             - prompt: RegisterPromptPromptInfoRequest. Information about how to execute the prompt template.
 
-            - provider: ProviderEnum. The initial LLM provider to use for this prompt
+            - provider: typing.Optional[ProviderEnum]. The initial LLM provider to use for this prompt
 
-                                      * `ANTHROPIC` - Anthropic
-                                      * `COHERE` - Cohere
-                                      * `GOOGLE` - Google
-                                      * `HOSTED` - Hosted
-                                      * `MOSAICML` - MosaicML
-                                      * `OPENAI` - OpenAI
-                                      * `HUGGINGFACE` - HuggingFace
-                                      * `MYSTIC` - Mystic
-                                      * `PYQ` - Pyq
+                                                       * `ANTHROPIC` - Anthropic
+                                                       * `AWS_BEDROCK` - AWS Bedrock
+                                                       * `AZURE_OPENAI` - Azure OpenAI
+                                                       * `COHERE` - Cohere
+                                                       * `GOOGLE` - Google
+                                                       * `HOSTED` - Hosted
+                                                       * `MOSAICML` - MosaicML
+                                                       * `OPENAI` - OpenAI
+                                                       * `HUGGINGFACE` - HuggingFace
+                                                       * `MYSTIC` - Mystic
+                                                       * `PYQ` - Pyq
+                                                       * `REPLICATE` - Replicate
             - model: str. The initial model to use for this prompt
 
             - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
@@ -74,10 +77,11 @@ class RegisteredPromptsClient:
             "label": label,
             "name": name,
             "prompt": prompt,
-            "provider": provider,
             "model": model,
             "parameters": parameters,
         }
+        if provider is not OMIT:
+            _request["provider"] = provider
         if meta is not OMIT:
             _request["meta"] = meta
         _response = self._client_wrapper.httpx_client.request(
@@ -114,7 +118,7 @@ class AsyncRegisteredPromptsClient:
         label: str,
         name: str,
         prompt: RegisterPromptPromptInfoRequest,
-        provider: ProviderEnum,
+        provider: typing.Optional[ProviderEnum] = OMIT,
         model: str,
         parameters: RegisterPromptModelParametersRequest,
         meta: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
@@ -132,17 +136,20 @@ class AsyncRegisteredPromptsClient:
 
             - prompt: RegisterPromptPromptInfoRequest. Information about how to execute the prompt template.
 
-            - provider: ProviderEnum. The initial LLM provider to use for this prompt
+            - provider: typing.Optional[ProviderEnum]. The initial LLM provider to use for this prompt
 
-                                      * `ANTHROPIC` - Anthropic
-                                      * `COHERE` - Cohere
-                                      * `GOOGLE` - Google
-                                      * `HOSTED` - Hosted
-                                      * `MOSAICML` - MosaicML
-                                      * `OPENAI` - OpenAI
-                                      * `HUGGINGFACE` - HuggingFace
-                                      * `MYSTIC` - Mystic
-                                      * `PYQ` - Pyq
+                                                       * `ANTHROPIC` - Anthropic
+                                                       * `AWS_BEDROCK` - AWS Bedrock
+                                                       * `AZURE_OPENAI` - Azure OpenAI
+                                                       * `COHERE` - Cohere
+                                                       * `GOOGLE` - Google
+                                                       * `HOSTED` - Hosted
+                                                       * `MOSAICML` - MosaicML
+                                                       * `OPENAI` - OpenAI
+                                                       * `HUGGINGFACE` - HuggingFace
+                                                       * `MYSTIC` - Mystic
+                                                       * `PYQ` - Pyq
+                                                       * `REPLICATE` - Replicate
             - model: str. The initial model to use for this prompt
 
             - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
@@ -153,10 +160,11 @@ class AsyncRegisteredPromptsClient:
             "label": label,
             "name": name,
             "prompt": prompt,
-            "provider": provider,
             "model": model,
             "parameters": parameters,
         }
+        if provider is not OMIT:
+            _request["provider"] = provider
         if meta is not OMIT:
             _request["meta"] = meta
         _response = await self._client_wrapper.httpx_client.request(

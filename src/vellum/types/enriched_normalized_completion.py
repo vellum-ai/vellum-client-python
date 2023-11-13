@@ -33,8 +33,10 @@ class EnrichedNormalizedCompletion(pydantic.BaseModel):
         description="The logprobs of the completion. Only present if specified in the original request options."
     )
     model_version_id: str = pydantic.Field(description="The ID of the model version used to generate this completion.")
-    prompt_version_id: typing.Optional[str]
+    prompt_version_id: str
     type: typing.Optional[VellumVariableType]
+    deployment_release_tag: str
+    model_name: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

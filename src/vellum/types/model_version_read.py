@@ -24,6 +24,8 @@ class ModelVersionRead(pydantic.BaseModel):
             "Which LLM provider this model version is associated with.\n"
             "\n"
             "* `ANTHROPIC` - Anthropic\n"
+            "* `AWS_BEDROCK` - AWS Bedrock\n"
+            "* `AZURE_OPENAI` - Azure OpenAI\n"
             "* `COHERE` - Cohere\n"
             "* `GOOGLE` - Google\n"
             "* `HOSTED` - Hosted\n"
@@ -32,6 +34,7 @@ class ModelVersionRead(pydantic.BaseModel):
             "* `HUGGINGFACE` - HuggingFace\n"
             "* `MYSTIC` - Mystic\n"
             "* `PYQ` - Pyq\n"
+            "* `REPLICATE` - Replicate\n"
         )
     )
     external_id: str = pydantic.Field(

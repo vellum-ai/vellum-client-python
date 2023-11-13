@@ -9,6 +9,8 @@ T_Result = typing.TypeVar("T_Result")
 class ProviderEnum(str, enum.Enum):
     """
     * `ANTHROPIC` - Anthropic
+    * `AWS_BEDROCK` - AWS Bedrock
+    * `AZURE_OPENAI` - Azure OpenAI
     * `COHERE` - Cohere
     * `GOOGLE` - Google
     * `HOSTED` - Hosted
@@ -17,9 +19,12 @@ class ProviderEnum(str, enum.Enum):
     * `HUGGINGFACE` - HuggingFace
     * `MYSTIC` - Mystic
     * `PYQ` - Pyq
+    * `REPLICATE` - Replicate
     """
 
     ANTHROPIC = "ANTHROPIC"
+    AWS_BEDROCK = "AWS_BEDROCK"
+    AZURE_OPENAI = "AZURE_OPENAI"
     COHERE = "COHERE"
     GOOGLE = "GOOGLE"
     HOSTED = "HOSTED"
@@ -28,10 +33,13 @@ class ProviderEnum(str, enum.Enum):
     HUGGINGFACE = "HUGGINGFACE"
     MYSTIC = "MYSTIC"
     PYQ = "PYQ"
+    REPLICATE = "REPLICATE"
 
     def visit(
         self,
         anthropic: typing.Callable[[], T_Result],
+        aws_bedrock: typing.Callable[[], T_Result],
+        azure_openai: typing.Callable[[], T_Result],
         cohere: typing.Callable[[], T_Result],
         google: typing.Callable[[], T_Result],
         hosted: typing.Callable[[], T_Result],
@@ -40,9 +48,14 @@ class ProviderEnum(str, enum.Enum):
         huggingface: typing.Callable[[], T_Result],
         mystic: typing.Callable[[], T_Result],
         pyq: typing.Callable[[], T_Result],
+        replicate: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is ProviderEnum.ANTHROPIC:
             return anthropic()
+        if self is ProviderEnum.AWS_BEDROCK:
+            return aws_bedrock()
+        if self is ProviderEnum.AZURE_OPENAI:
+            return azure_openai()
         if self is ProviderEnum.COHERE:
             return cohere()
         if self is ProviderEnum.GOOGLE:
@@ -59,3 +72,5 @@ class ProviderEnum(str, enum.Enum):
             return mystic()
         if self is ProviderEnum.PYQ:
             return pyq()
+        if self is ProviderEnum.REPLICATE:
+            return replicate()

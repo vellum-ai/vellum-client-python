@@ -20,7 +20,7 @@ class WorkflowResultEventOutputDataNumber(pydantic.BaseModel):
     delta: typing.Optional[str] = pydantic.Field(
         description="The newly output string value. Only relevant for string outputs with a state of STREAMING."
     )
-    value: typing.Optional[int]
+    value: typing.Optional[float]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -14,7 +14,7 @@ except ImportError:
 class NodeInputCompiledNumberValue(pydantic.BaseModel):
     node_input_id: str
     key: str
-    value: typing.Optional[int]
+    value: typing.Optional[float]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

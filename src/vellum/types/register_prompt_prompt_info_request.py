@@ -14,7 +14,6 @@ except ImportError:
 
 
 class RegisterPromptPromptInfoRequest(pydantic.BaseModel):
-    prompt_syntax_version: typing.Optional[int]
     prompt_block_data: PromptTemplateBlockDataRequest
     input_variables: typing.List[RegisteredPromptInputVariableRequest] = pydantic.Field(
         description="The input variables specified in the prompt template."

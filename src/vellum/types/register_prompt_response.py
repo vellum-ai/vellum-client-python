@@ -25,6 +25,7 @@ class RegisterPromptResponse(pydantic.BaseModel):
     model_version: RegisteredPromptModelVersion = pydantic.Field(
         description="Information about the generated model version"
     )
+    prompt_version_id: str = pydantic.Field(description="The ID of the generated prompt version")
     deployment: RegisteredPromptDeployment = pydantic.Field(description="Information about the generated deployment")
 
     def json(self, **kwargs: typing.Any) -> str:

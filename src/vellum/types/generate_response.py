@@ -9,7 +9,7 @@ from .generate_result import GenerateResult
 try:
     import pydantic.v1 as pydantic  # type: ignore
 except ImportError:
-    import pydantic
+    import pydantic  # type: ignore
 
 
 class GenerateResponse(pydantic.BaseModel):

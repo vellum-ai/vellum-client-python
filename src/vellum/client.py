@@ -51,9 +51,12 @@ class Vellum:
         environment: VellumEnvironment = VellumEnvironment.PRODUCTION,
         api_key: str,
         timeout: typing.Optional[float] = None,
+        httpx_client: typing.Optional[httpx.Client] = None,
     ):
         self._client_wrapper = SyncClientWrapper(
-            environment=environment, api_key=api_key, httpx_client=httpx.Client(timeout=timeout)
+            environment=environment,
+            api_key=api_key,
+            httpx_client=httpx.Client(timeout=timeout) if httpx_client is None else httpx_client,
         )
         self.deployments = DeploymentsClient(client_wrapper=self._client_wrapper)
         self.document_indexes = DocumentIndexesClient(client_wrapper=self._client_wrapper)
@@ -151,8 +154,19 @@ class Vellum:
         from vellum import GenerateOptionsRequest, GenerateRequest, LogprobsEnum
         from vellum.client import Vellum
 
-        client = Vellum(api_key="YOUR_API_KEY")
-        client.generate(requests=[GenerateRequest(input_values={})], options=GenerateOptionsRequest(logprobs=LogprobsEnum.ALL))
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.generate(
+            requests=[
+                GenerateRequest(
+                    input_values={},
+                )
+            ],
+            options=GenerateOptionsRequest(
+                logprobs=LogprobsEnum.ALL,
+            ),
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"requests": requests}
         if deployment_id is not OMIT:
@@ -312,8 +326,12 @@ class Vellum:
         ---
         from vellum.client import Vellum
 
-        client = Vellum(api_key="YOUR_API_KEY")
-        client.submit_completion_actuals(actuals=[])
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.submit_completion_actuals(
+            actuals=[],
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
         if deployment_id is not OMIT:
@@ -362,8 +380,12 @@ class Vellum:
         ---
         from vellum.client import Vellum
 
-        client = Vellum(api_key="YOUR_API_KEY")
-        client.submit_workflow_execution_actuals(actuals=[])
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.submit_workflow_execution_actuals(
+            actuals=[],
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
         if execution_id is not OMIT:
@@ -395,9 +417,12 @@ class AsyncVellum:
         environment: VellumEnvironment = VellumEnvironment.PRODUCTION,
         api_key: str,
         timeout: typing.Optional[float] = None,
+        httpx_client: typing.Optional[httpx.AsyncClient] = None,
     ):
         self._client_wrapper = AsyncClientWrapper(
-            environment=environment, api_key=api_key, httpx_client=httpx.AsyncClient(timeout=timeout)
+            environment=environment,
+            api_key=api_key,
+            httpx_client=httpx.AsyncClient(timeout=timeout) if httpx_client is None else httpx_client,
         )
         self.deployments = AsyncDeploymentsClient(client_wrapper=self._client_wrapper)
         self.document_indexes = AsyncDocumentIndexesClient(client_wrapper=self._client_wrapper)
@@ -495,9 +520,18 @@ class AsyncVellum:
         from vellum import GenerateOptionsRequest, GenerateRequest, LogprobsEnum
         from vellum.client import AsyncVellum
 
-        client = AsyncVellum(api_key="YOUR_API_KEY")
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
         await client.generate(
-            requests=[GenerateRequest(input_values={})], options=GenerateOptionsRequest(logprobs=LogprobsEnum.ALL)
+            requests=[
+                GenerateRequest(
+                    input_values={},
+                )
+            ],
+            options=GenerateOptionsRequest(
+                logprobs=LogprobsEnum.ALL,
+            ),
         )
         """
         _request: typing.Dict[str, typing.Any] = {"requests": requests}
@@ -658,8 +692,12 @@ class AsyncVellum:
         ---
         from vellum.client import AsyncVellum
 
-        client = AsyncVellum(api_key="YOUR_API_KEY")
-        await client.submit_completion_actuals(actuals=[])
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.submit_completion_actuals(
+            actuals=[],
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
         if deployment_id is not OMIT:
@@ -708,8 +746,12 @@ class AsyncVellum:
         ---
         from vellum.client import AsyncVellum
 
-        client = AsyncVellum(api_key="YOUR_API_KEY")
-        await client.submit_workflow_execution_actuals(actuals=[])
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.submit_workflow_execution_actuals(
+            actuals=[],
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
         if execution_id is not OMIT:

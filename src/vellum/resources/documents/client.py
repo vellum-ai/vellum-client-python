@@ -51,8 +51,10 @@ class DocumentsClient:
         ---
         from vellum.client import Vellum
 
-        client = Vellum(api_key="YOUR_API_KEY")
-        client.list()
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.documents.list()
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
@@ -78,8 +80,12 @@ class DocumentsClient:
         ---
         from vellum.client import Vellum
 
-        client = Vellum(api_key="YOUR_API_KEY")
-        client.destroy(id="id")
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.documents.destroy(
+            id="id",
+        )
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
@@ -223,8 +229,10 @@ class AsyncDocumentsClient:
         ---
         from vellum.client import AsyncVellum
 
-        client = AsyncVellum(api_key="YOUR_API_KEY")
-        await client.list()
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.documents.list()
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
@@ -250,8 +258,12 @@ class AsyncDocumentsClient:
         ---
         from vellum.client import AsyncVellum
 
-        client = AsyncVellum(api_key="YOUR_API_KEY")
-        await client.destroy(id="id")
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.documents.destroy(
+            id="id",
+        )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",

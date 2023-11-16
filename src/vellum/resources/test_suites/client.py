@@ -7,7 +7,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...types.evaluation_params_request import EvaluationParamsRequest
+from ...types.test_case_variable_value_request import TestCaseVariableValueRequest
 from ...types.test_suite_test_case import TestSuiteTestCase
 
 try:
@@ -27,10 +27,10 @@ class TestSuitesClient:
         self,
         id: str,
         *,
-        test_case_id: typing.Optional[str] = OMIT,
+        test_suite_test_case_request_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
-        input_values: typing.Dict[str, typing.Any],
-        evaluation_params: EvaluationParamsRequest,
+        input_values: typing.List[TestCaseVariableValueRequest],
+        evaluation_values: typing.List[TestCaseVariableValueRequest],
     ) -> TestSuiteTestCase:
         """
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
@@ -44,15 +44,14 @@ class TestSuitesClient:
         Parameters:
             - id: str. A UUID string identifying this test suite.
 
-            - test_case_id: typing.Optional[str]. The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended.
+            - test_suite_test_case_request_id: typing.Optional[str].
 
-            - label: typing.Optional[str]. A human-friendly label for the test case.
+            - label: typing.Optional[str].
 
-            - input_values: typing.Dict[str, typing.Any]. Key/value pairs for each input variable that the Test Suite expects.
+            - input_values: typing.List[TestCaseVariableValueRequest].
 
-            - evaluation_params: EvaluationParamsRequest. Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.
+            - evaluation_values: typing.List[TestCaseVariableValueRequest].
         ---
-        from vellum import EvaluationParamsRequest
         from vellum.client import Vellum
 
         client = Vellum(
@@ -60,13 +59,13 @@ class TestSuitesClient:
         )
         client.test_suites.upsert_test_suite_test_case(
             id="id",
-            input_values={},
-            evaluation_params=EvaluationParamsRequest(),
+            input_values=[],
+            evaluation_values=[],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_params": evaluation_params}
-        if test_case_id is not OMIT:
-            _request["test_case_id"] = test_case_id
+        _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_values": evaluation_values}
+        if test_suite_test_case_request_id is not OMIT:
+            _request["id"] = test_suite_test_case_request_id
         if label is not OMIT:
             _request["label"] = label
         _response = self._client_wrapper.httpx_client.request(
@@ -130,10 +129,10 @@ class AsyncTestSuitesClient:
         self,
         id: str,
         *,
-        test_case_id: typing.Optional[str] = OMIT,
+        test_suite_test_case_request_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
-        input_values: typing.Dict[str, typing.Any],
-        evaluation_params: EvaluationParamsRequest,
+        input_values: typing.List[TestCaseVariableValueRequest],
+        evaluation_values: typing.List[TestCaseVariableValueRequest],
     ) -> TestSuiteTestCase:
         """
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
@@ -147,15 +146,14 @@ class AsyncTestSuitesClient:
         Parameters:
             - id: str. A UUID string identifying this test suite.
 
-            - test_case_id: typing.Optional[str]. The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended.
+            - test_suite_test_case_request_id: typing.Optional[str].
 
-            - label: typing.Optional[str]. A human-friendly label for the test case.
+            - label: typing.Optional[str].
 
-            - input_values: typing.Dict[str, typing.Any]. Key/value pairs for each input variable that the Test Suite expects.
+            - input_values: typing.List[TestCaseVariableValueRequest].
 
-            - evaluation_params: EvaluationParamsRequest. Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.
+            - evaluation_values: typing.List[TestCaseVariableValueRequest].
         ---
-        from vellum import EvaluationParamsRequest
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -163,13 +161,13 @@ class AsyncTestSuitesClient:
         )
         await client.test_suites.upsert_test_suite_test_case(
             id="id",
-            input_values={},
-            evaluation_params=EvaluationParamsRequest(),
+            input_values=[],
+            evaluation_values=[],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_params": evaluation_params}
-        if test_case_id is not OMIT:
-            _request["test_case_id"] = test_case_id
+        _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_values": evaluation_values}
+        if test_suite_test_case_request_id is not OMIT:
+            _request["id"] = test_suite_test_case_request_id
         if label is not OMIT:
             _request["label"] = label
         _response = await self._client_wrapper.httpx_client.request(

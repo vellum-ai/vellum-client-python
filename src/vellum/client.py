@@ -86,7 +86,7 @@ class Vellum:
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 
-            - inputs: typing.List[WorkflowRequestInputRequest].
+            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's deployment with their corresponding values.
 
             - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes.
 
@@ -452,7 +452,7 @@ class AsyncVellum:
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 
-            - inputs: typing.List[WorkflowRequestInputRequest].
+            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's deployment with their corresponding values.
 
             - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes.
 

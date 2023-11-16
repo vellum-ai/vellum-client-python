@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .search_result_document_request import SearchResultDocumentRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,15 +12,13 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class RegisterPromptModelParametersRequest(pydantic.BaseModel):
-    temperature: float
-    max_tokens: int
-    stop: typing.Optional[typing.List[str]]
-    top_p: float
-    top_k: typing.Optional[int]
-    frequency_penalty: float
-    presence_penalty: float
-    logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]]
+class SearchResultRequest(pydantic.BaseModel):
+    text: str = pydantic.Field(description="The text of the chunk that matched the search query.")
+    score: float = pydantic.Field(description="A score representing how well the chunk matches the search query.")
+    keywords: typing.List[str]
+    document: SearchResultDocumentRequest = pydantic.Field(
+        description="The document that contains the chunk that matched the search query."
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

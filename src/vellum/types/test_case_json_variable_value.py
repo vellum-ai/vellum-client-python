@@ -11,15 +11,9 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class RegisterPromptModelParametersRequest(pydantic.BaseModel):
-    temperature: float
-    max_tokens: int
-    stop: typing.Optional[typing.List[str]]
-    top_p: float
-    top_k: typing.Optional[int]
-    frequency_penalty: float
-    presence_penalty: float
-    logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]]
+class TestCaseJsonVariableValue(pydantic.BaseModel):
+    variable_id: str
+    value: typing.Optional[typing.Dict[str, typing.Any]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

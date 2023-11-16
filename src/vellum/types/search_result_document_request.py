@@ -11,15 +11,14 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class RegisterPromptModelParametersRequest(pydantic.BaseModel):
-    temperature: float
-    max_tokens: int
-    stop: typing.Optional[typing.List[str]]
-    top_p: float
-    top_k: typing.Optional[int]
-    frequency_penalty: float
-    presence_penalty: float
-    logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]]
+class SearchResultDocumentRequest(pydantic.BaseModel):
+    label: str = pydantic.Field(description="The human-readable name for the document.")
+    external_id: typing.Optional[str] = pydantic.Field(
+        description="The unique ID of the document as represented in an external system and specified when it was originally uploaded."
+    )
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
+        description="A previously supplied JSON object containing metadata that can be filtered on when searching."
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

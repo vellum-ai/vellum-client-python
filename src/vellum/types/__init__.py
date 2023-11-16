@@ -96,7 +96,9 @@ from .search_request_options_request import SearchRequestOptionsRequest
 from .search_response import SearchResponse
 from .search_result import SearchResult
 from .search_result_document import SearchResultDocument
+from .search_result_document_request import SearchResultDocumentRequest
 from .search_result_merging_request import SearchResultMergingRequest
+from .search_result_request import SearchResultRequest
 from .search_weights_request import SearchWeightsRequest
 from .slim_document import SlimDocument
 from .submit_completion_actual_request import SubmitCompletionActualRequest
@@ -141,11 +143,42 @@ from .terminal_node_result_output import (
 )
 from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
 from .terminal_node_string_result import TerminalNodeStringResult
+from .test_case_chat_history_variable_value import TestCaseChatHistoryVariableValue
+from .test_case_chat_history_variable_value_request import TestCaseChatHistoryVariableValueRequest
+from .test_case_error_variable_value import TestCaseErrorVariableValue
+from .test_case_error_variable_value_request import TestCaseErrorVariableValueRequest
+from .test_case_json_variable_value import TestCaseJsonVariableValue
+from .test_case_json_variable_value_request import TestCaseJsonVariableValueRequest
+from .test_case_number_variable_value import TestCaseNumberVariableValue
+from .test_case_number_variable_value_request import TestCaseNumberVariableValueRequest
+from .test_case_search_results_variable_value import TestCaseSearchResultsVariableValue
+from .test_case_search_results_variable_value_request import TestCaseSearchResultsVariableValueRequest
+from .test_case_string_variable_value import TestCaseStringVariableValue
+from .test_case_string_variable_value_request import TestCaseStringVariableValueRequest
+from .test_case_variable_value import (
+    TestCaseVariableValue,
+    TestCaseVariableValue_ChatHistory,
+    TestCaseVariableValue_Error,
+    TestCaseVariableValue_Json,
+    TestCaseVariableValue_Number,
+    TestCaseVariableValue_SearchResults,
+    TestCaseVariableValue_String,
+)
+from .test_case_variable_value_request import (
+    TestCaseVariableValueRequest,
+    TestCaseVariableValueRequest_ChatHistory,
+    TestCaseVariableValueRequest_Error,
+    TestCaseVariableValueRequest_Json,
+    TestCaseVariableValueRequest_Number,
+    TestCaseVariableValueRequest_SearchResults,
+    TestCaseVariableValueRequest_String,
+)
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
 from .vellum_error import VellumError
 from .vellum_error_code_enum import VellumErrorCodeEnum
+from .vellum_error_request import VellumErrorRequest
 from .vellum_variable import VellumVariable
 from .vellum_variable_type import VellumVariableType
 from .workflow_event_error import WorkflowEventError
@@ -289,7 +322,9 @@ __all__ = [
     "SearchResponse",
     "SearchResult",
     "SearchResultDocument",
+    "SearchResultDocumentRequest",
     "SearchResultMergingRequest",
+    "SearchResultRequest",
     "SearchWeightsRequest",
     "SlimDocument",
     "SubmitCompletionActualRequest",
@@ -328,11 +363,38 @@ __all__ = [
     "TerminalNodeResultOutput_String",
     "TerminalNodeSearchResultsResult",
     "TerminalNodeStringResult",
+    "TestCaseChatHistoryVariableValue",
+    "TestCaseChatHistoryVariableValueRequest",
+    "TestCaseErrorVariableValue",
+    "TestCaseErrorVariableValueRequest",
+    "TestCaseJsonVariableValue",
+    "TestCaseJsonVariableValueRequest",
+    "TestCaseNumberVariableValue",
+    "TestCaseNumberVariableValueRequest",
+    "TestCaseSearchResultsVariableValue",
+    "TestCaseSearchResultsVariableValueRequest",
+    "TestCaseStringVariableValue",
+    "TestCaseStringVariableValueRequest",
+    "TestCaseVariableValue",
+    "TestCaseVariableValueRequest",
+    "TestCaseVariableValueRequest_ChatHistory",
+    "TestCaseVariableValueRequest_Error",
+    "TestCaseVariableValueRequest_Json",
+    "TestCaseVariableValueRequest_Number",
+    "TestCaseVariableValueRequest_SearchResults",
+    "TestCaseVariableValueRequest_String",
+    "TestCaseVariableValue_ChatHistory",
+    "TestCaseVariableValue_Error",
+    "TestCaseVariableValue_Json",
+    "TestCaseVariableValue_Number",
+    "TestCaseVariableValue_SearchResults",
+    "TestCaseVariableValue_String",
     "TestSuiteTestCase",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
     "VellumError",
     "VellumErrorCodeEnum",
+    "VellumErrorRequest",
     "VellumVariable",
     "VellumVariableType",
     "WorkflowEventError",

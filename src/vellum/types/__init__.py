@@ -3,6 +3,7 @@
 from .api_node_result import ApiNodeResult
 from .api_node_result_data import ApiNodeResultData
 from .block_type_enum import BlockTypeEnum
+from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_message import ChatMessage
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
@@ -17,8 +18,16 @@ from .document_read import DocumentRead
 from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .environment_enum import EnvironmentEnum
+from .error_execute_prompt_response import ErrorExecutePromptResponse
 from .evaluation_params import EvaluationParams
 from .evaluation_params_request import EvaluationParamsRequest
+from .execute_prompt_api_error_response import ExecutePromptApiErrorResponse
+from .execute_prompt_response import (
+    ExecutePromptResponse,
+    ExecutePromptResponse_Error,
+    ExecutePromptResponse_Json,
+    ExecutePromptResponse_String,
+)
 from .execute_workflow_stream_error_response import ExecuteWorkflowStreamErrorResponse
 from .finish_reason_enum import FinishReasonEnum
 from .generate_error_response import GenerateErrorResponse
@@ -32,6 +41,8 @@ from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
 from .indexing_state_enum import IndexingStateEnum
+from .json_execute_prompt_response import JsonExecutePromptResponse
+from .json_input_request import JsonInputRequest
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
 from .metadata_filter_config_request import MetadataFilterConfigRequest
@@ -63,6 +74,12 @@ from .normalized_token_log_probs import NormalizedTokenLogProbs
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
+from .prompt_deployment_input_request import (
+    PromptDeploymentInputRequest,
+    PromptDeploymentInputRequest_ChatHistory,
+    PromptDeploymentInputRequest_Json,
+    PromptDeploymentInputRequest_String,
+)
 from .prompt_node_result import PromptNodeResult
 from .prompt_node_result_data import PromptNodeResultData
 from .prompt_template_block import PromptTemplateBlock
@@ -101,6 +118,8 @@ from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_request import SearchResultRequest
 from .search_weights_request import SearchWeightsRequest
 from .slim_document import SlimDocument
+from .string_execute_prompt_response import StringExecutePromptResponse
+from .string_input_request import StringInputRequest
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
 from .submit_workflow_execution_actual_request import (
@@ -231,6 +250,7 @@ __all__ = [
     "ApiNodeResult",
     "ApiNodeResultData",
     "BlockTypeEnum",
+    "ChatHistoryInputRequest",
     "ChatMessage",
     "ChatMessageRequest",
     "ChatMessageRole",
@@ -245,8 +265,14 @@ __all__ = [
     "DocumentStatus",
     "EnrichedNormalizedCompletion",
     "EnvironmentEnum",
+    "ErrorExecutePromptResponse",
     "EvaluationParams",
     "EvaluationParamsRequest",
+    "ExecutePromptApiErrorResponse",
+    "ExecutePromptResponse",
+    "ExecutePromptResponse_Error",
+    "ExecutePromptResponse_Json",
+    "ExecutePromptResponse_String",
     "ExecuteWorkflowStreamErrorResponse",
     "FinishReasonEnum",
     "GenerateErrorResponse",
@@ -260,6 +286,8 @@ __all__ = [
     "GenerateStreamResult",
     "GenerateStreamResultData",
     "IndexingStateEnum",
+    "JsonExecutePromptResponse",
+    "JsonInputRequest",
     "LogicalOperator",
     "LogprobsEnum",
     "MetadataFilterConfigRequest",
@@ -289,6 +317,10 @@ __all__ = [
     "PaginatedSlimDocumentList",
     "ProcessingFailureReasonEnum",
     "ProcessingStateEnum",
+    "PromptDeploymentInputRequest",
+    "PromptDeploymentInputRequest_ChatHistory",
+    "PromptDeploymentInputRequest_Json",
+    "PromptDeploymentInputRequest_String",
     "PromptNodeResult",
     "PromptNodeResultData",
     "PromptTemplateBlock",
@@ -327,6 +359,8 @@ __all__ = [
     "SearchResultRequest",
     "SearchWeightsRequest",
     "SlimDocument",
+    "StringExecutePromptResponse",
+    "StringInputRequest",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
     "SubmitWorkflowExecutionActualRequest",

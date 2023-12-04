@@ -12,8 +12,8 @@ except ImportError:
 
 
 class JsonExecutePromptResponse(pydantic.BaseModel):
-    value: typing.Dict[str, typing.Any]
     execution_id: str
+    value: typing.Dict[str, typing.Any]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -19,7 +19,7 @@ class ModelVersionsClient:
 
     def retrieve(self, id: str) -> ModelVersionRead:
         """
-        Used to retrieve a model version given its ID.
+        Deprecated. Use the `deployments/provider-payload` endpoint to fetch information that we send to Model providers.
 
         Parameters:
             - id: str. A UUID string identifying this model version.
@@ -45,7 +45,7 @@ class AsyncModelVersionsClient:
 
     async def retrieve(self, id: str) -> ModelVersionRead:
         """
-        Used to retrieve a model version given its ID.
+        Deprecated. Use the `deployments/provider-payload` endpoint to fetch information that we send to Model providers.
 
         Parameters:
             - id: str. A UUID string identifying this model version.

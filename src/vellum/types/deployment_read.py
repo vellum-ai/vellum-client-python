@@ -37,7 +37,9 @@ class DeploymentRead(pydantic.BaseModel):
             "* `PRODUCTION` - Production\n"
         )
     )
-    active_model_version_ids: typing.List[str]
+    active_model_version_ids: typing.List[str] = pydantic.Field(
+        description="Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead."
+    )
     last_deployed_on: dt.datetime
     input_variables: typing.List[VellumVariable]
 

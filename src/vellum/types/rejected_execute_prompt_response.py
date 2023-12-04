@@ -12,9 +12,10 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class ErrorExecutePromptResponse(pydantic.BaseModel):
-    execution_id: str
+class RejectedExecutePromptResponse(pydantic.BaseModel):
+    type: str
     value: VellumError
+    execution_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -22,12 +22,13 @@ from .resources.model_versions.client import AsyncModelVersionsClient, ModelVers
 from .resources.registered_prompts.client import AsyncRegisteredPromptsClient, RegisteredPromptsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
 from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
+from .types.execute_prompt_request import ExecutePromptRequest
 from .types.execute_prompt_response import ExecutePromptResponse
+from .types.execute_prompt_streaming_response import ExecutePromptStreamingResponse
 from .types.generate_options_request import GenerateOptionsRequest
 from .types.generate_request import GenerateRequest
 from .types.generate_response import GenerateResponse
 from .types.generate_stream_response import GenerateStreamResponse
-from .types.prompt_deployment_input_request import PromptDeploymentInputRequest
 from .types.search_request_options_request import SearchRequestOptionsRequest
 from .types.search_response import SearchResponse
 from .types.submit_completion_actual_request import SubmitCompletionActualRequest
@@ -67,47 +68,52 @@ class Vellum:
         self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
 
-    def execute_prompt(
-        self,
-        *,
-        inputs: typing.List[PromptDeploymentInputRequest],
-        prompt_deployment_id: typing.Optional[str] = OMIT,
-        prompt_deployment_name: typing.Optional[str] = OMIT,
-        release_tag: typing.Optional[str] = OMIT,
-        external_id: typing.Optional[str] = OMIT,
-    ) -> ExecutePromptResponse:
+    def execute_prompt(self, *, request: ExecutePromptRequest) -> ExecutePromptResponse:
         """
         Executes a deployed Prompt and returns the result.
 
         Parameters:
-            - inputs: typing.List[PromptDeploymentInputRequest].
-
-            - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
-
-            - prompt_deployment_name: typing.Optional[str]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
-
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
-
-            - external_id: typing.Optional[str].
+            - request: ExecutePromptRequest.
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if prompt_deployment_id is not OMIT:
-            _request["prompt_deployment_id"] = prompt_deployment_id
-        if prompt_deployment_name is not OMIT:
-            _request["prompt_deployment_name"] = prompt_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-prompt"),
-            json=jsonable_encoder(_request),
+            json=jsonable_encoder(request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 403:
+            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 500:
+            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def execute_prompt_stream(self, *, request: ExecutePromptRequest) -> ExecutePromptStreamingResponse:
+        """
+        Executes a deployed Prompt and streams back the results.
+
+        Parameters:
+            - request: ExecutePromptRequest.
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-prompt-stream"),
+            json=jsonable_encoder(request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExecutePromptStreamingResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
             raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 403:
@@ -488,47 +494,52 @@ class AsyncVellum:
         self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
 
-    async def execute_prompt(
-        self,
-        *,
-        inputs: typing.List[PromptDeploymentInputRequest],
-        prompt_deployment_id: typing.Optional[str] = OMIT,
-        prompt_deployment_name: typing.Optional[str] = OMIT,
-        release_tag: typing.Optional[str] = OMIT,
-        external_id: typing.Optional[str] = OMIT,
-    ) -> ExecutePromptResponse:
+    async def execute_prompt(self, *, request: ExecutePromptRequest) -> ExecutePromptResponse:
         """
         Executes a deployed Prompt and returns the result.
 
         Parameters:
-            - inputs: typing.List[PromptDeploymentInputRequest].
-
-            - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
-
-            - prompt_deployment_name: typing.Optional[str]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
-
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
-
-            - external_id: typing.Optional[str].
+            - request: ExecutePromptRequest.
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if prompt_deployment_id is not OMIT:
-            _request["prompt_deployment_id"] = prompt_deployment_id
-        if prompt_deployment_name is not OMIT:
-            _request["prompt_deployment_name"] = prompt_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-prompt"),
-            json=jsonable_encoder(_request),
+            json=jsonable_encoder(request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 403:
+            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 500:
+            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def execute_prompt_stream(self, *, request: ExecutePromptRequest) -> ExecutePromptStreamingResponse:
+        """
+        Executes a deployed Prompt and streams back the results.
+
+        Parameters:
+            - request: ExecutePromptRequest.
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-prompt-stream"),
+            json=jsonable_encoder(request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExecutePromptStreamingResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
             raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 403:

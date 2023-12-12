@@ -4,7 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .initiated_execute_prompt_response import InitiatedExecutePromptResponse
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,8 +11,9 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class InitiatedExecutePromptStreamingResponse(pydantic.BaseModel):
-    data: InitiatedExecutePromptResponse
+class CodeExecutionNodeStringResult(pydantic.BaseModel):
+    id: str
+    value: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

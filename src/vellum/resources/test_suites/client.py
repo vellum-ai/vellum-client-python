@@ -7,7 +7,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...types.test_case_variable_value_request import TestCaseVariableValueRequest
+from ...types.named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
 from ...types.test_suite_test_case import TestSuiteTestCase
 
 try:
@@ -27,10 +27,10 @@ class TestSuitesClient:
         self,
         id: str,
         *,
-        test_suite_test_case_request_id: typing.Optional[str] = OMIT,
+        upsert_test_suite_test_case_request_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
-        input_values: typing.List[TestCaseVariableValueRequest],
-        evaluation_values: typing.List[TestCaseVariableValueRequest],
+        input_values: typing.List[NamedTestCaseVariableValueRequest],
+        evaluation_values: typing.List[NamedTestCaseVariableValueRequest],
     ) -> TestSuiteTestCase:
         """
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
@@ -44,13 +44,13 @@ class TestSuitesClient:
         Parameters:
             - id: str. A UUID string identifying this test suite.
 
-            - test_suite_test_case_request_id: typing.Optional[str].
+            - upsert_test_suite_test_case_request_id: typing.Optional[str].
 
             - label: typing.Optional[str].
 
-            - input_values: typing.List[TestCaseVariableValueRequest].
+            - input_values: typing.List[NamedTestCaseVariableValueRequest].
 
-            - evaluation_values: typing.List[TestCaseVariableValueRequest].
+            - evaluation_values: typing.List[NamedTestCaseVariableValueRequest].
         ---
         from vellum.client import Vellum
 
@@ -64,8 +64,8 @@ class TestSuitesClient:
         )
         """
         _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_values": evaluation_values}
-        if test_suite_test_case_request_id is not OMIT:
-            _request["id"] = test_suite_test_case_request_id
+        if upsert_test_suite_test_case_request_id is not OMIT:
+            _request["id"] = upsert_test_suite_test_case_request_id
         if label is not OMIT:
             _request["label"] = label
         _response = self._client_wrapper.httpx_client.request(
@@ -129,10 +129,10 @@ class AsyncTestSuitesClient:
         self,
         id: str,
         *,
-        test_suite_test_case_request_id: typing.Optional[str] = OMIT,
+        upsert_test_suite_test_case_request_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
-        input_values: typing.List[TestCaseVariableValueRequest],
-        evaluation_values: typing.List[TestCaseVariableValueRequest],
+        input_values: typing.List[NamedTestCaseVariableValueRequest],
+        evaluation_values: typing.List[NamedTestCaseVariableValueRequest],
     ) -> TestSuiteTestCase:
         """
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
@@ -146,13 +146,13 @@ class AsyncTestSuitesClient:
         Parameters:
             - id: str. A UUID string identifying this test suite.
 
-            - test_suite_test_case_request_id: typing.Optional[str].
+            - upsert_test_suite_test_case_request_id: typing.Optional[str].
 
             - label: typing.Optional[str].
 
-            - input_values: typing.List[TestCaseVariableValueRequest].
+            - input_values: typing.List[NamedTestCaseVariableValueRequest].
 
-            - evaluation_values: typing.List[TestCaseVariableValueRequest].
+            - evaluation_values: typing.List[NamedTestCaseVariableValueRequest].
         ---
         from vellum.client import AsyncVellum
 
@@ -166,8 +166,8 @@ class AsyncTestSuitesClient:
         )
         """
         _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_values": evaluation_values}
-        if test_suite_test_case_request_id is not OMIT:
-            _request["id"] = test_suite_test_case_request_id
+        if upsert_test_suite_test_case_request_id is not OMIT:
+            _request["id"] = upsert_test_suite_test_case_request_id
         if label is not OMIT:
             _request["label"] = label
         _response = await self._client_wrapper.httpx_client.request(

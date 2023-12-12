@@ -7,6 +7,23 @@ from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_message import ChatMessage
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
+from .code_execution_node_chat_history_result import CodeExecutionNodeChatHistoryResult
+from .code_execution_node_error_result import CodeExecutionNodeErrorResult
+from .code_execution_node_json_result import CodeExecutionNodeJsonResult
+from .code_execution_node_number_result import CodeExecutionNodeNumberResult
+from .code_execution_node_result import CodeExecutionNodeResult
+from .code_execution_node_result_data import CodeExecutionNodeResultData
+from .code_execution_node_result_output import (
+    CodeExecutionNodeResultOutput,
+    CodeExecutionNodeResultOutput_ChatHistory,
+    CodeExecutionNodeResultOutput_Error,
+    CodeExecutionNodeResultOutput_Json,
+    CodeExecutionNodeResultOutput_Number,
+    CodeExecutionNodeResultOutput_SearchResults,
+    CodeExecutionNodeResultOutput_String,
+)
+from .code_execution_node_search_results_result import CodeExecutionNodeSearchResultsResult
+from .code_execution_node_string_result import CodeExecutionNodeStringResult
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
@@ -19,27 +36,10 @@ from .document_read import DocumentRead
 from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .environment_enum import EnvironmentEnum
-from .error_execute_prompt_response import ErrorExecutePromptResponse
 from .evaluation_params import EvaluationParams
 from .evaluation_params_request import EvaluationParamsRequest
-from .execute_prompt_api_error_response import ExecutePromptApiErrorResponse
-from .execute_prompt_request import ExecutePromptRequest
-from .execute_prompt_response import (
-    ExecutePromptResponse,
-    ExecutePromptResponse_Error,
-    ExecutePromptResponse_Json,
-    ExecutePromptResponse_String,
-)
-from .execute_prompt_streaming_response import (
-    ExecutePromptStreamingResponse,
-    ExecutePromptStreamingResponse_Fulfilled,
-    ExecutePromptStreamingResponse_Initiated,
-    ExecutePromptStreamingResponse_Rejected,
-    ExecutePromptStreamingResponse_Streaming,
-)
 from .execute_workflow_stream_error_response import ExecuteWorkflowStreamErrorResponse
 from .finish_reason_enum import FinishReasonEnum
-from .fulfilled_execute_prompt_streaming_response import FulfilledExecutePromptStreamingResponse
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -51,9 +51,6 @@ from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
 from .indexing_state_enum import IndexingStateEnum
-from .initiated_execute_prompt_response import InitiatedExecutePromptResponse
-from .initiated_execute_prompt_streaming_response import InitiatedExecutePromptStreamingResponse
-from .json_execute_prompt_response import JsonExecutePromptResponse
 from .json_input_request import JsonInputRequest
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
@@ -66,6 +63,21 @@ from .model_version_exec_config_parameters import ModelVersionExecConfigParamete
 from .model_version_read import ModelVersionRead
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
+from .named_test_case_chat_history_variable_value_request import NamedTestCaseChatHistoryVariableValueRequest
+from .named_test_case_error_variable_value_request import NamedTestCaseErrorVariableValueRequest
+from .named_test_case_json_variable_value_request import NamedTestCaseJsonVariableValueRequest
+from .named_test_case_number_variable_value_request import NamedTestCaseNumberVariableValueRequest
+from .named_test_case_search_results_variable_value_request import NamedTestCaseSearchResultsVariableValueRequest
+from .named_test_case_string_variable_value_request import NamedTestCaseStringVariableValueRequest
+from .named_test_case_variable_value_request import (
+    NamedTestCaseVariableValueRequest,
+    NamedTestCaseVariableValueRequest_ChatHistory,
+    NamedTestCaseVariableValueRequest_Error,
+    NamedTestCaseVariableValueRequest_Json,
+    NamedTestCaseVariableValueRequest_Number,
+    NamedTestCaseVariableValueRequest_SearchResults,
+    NamedTestCaseVariableValueRequest_String,
+)
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
 from .node_input_compiled_error_value import NodeInputCompiledErrorValue
 from .node_input_compiled_json_value import NodeInputCompiledJsonValue
@@ -111,8 +123,6 @@ from .registered_prompt_input_variable_request import RegisteredPromptInputVaria
 from .registered_prompt_model_version import RegisteredPromptModelVersion
 from .registered_prompt_sandbox import RegisteredPromptSandbox
 from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
-from .rejected_execute_prompt_response import RejectedExecutePromptResponse
-from .rejected_execute_prompt_streaming_response import RejectedExecutePromptStreamingResponse
 from .sandbox_metric_input_params import SandboxMetricInputParams
 from .sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from .sandbox_scenario import SandboxScenario
@@ -132,8 +142,6 @@ from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_request import SearchResultRequest
 from .search_weights_request import SearchWeightsRequest
 from .slim_document import SlimDocument
-from .streaming_execute_prompt_streaming_response import StreamingExecutePromptStreamingResponse
-from .string_execute_prompt_response import StringExecutePromptResponse
 from .string_input_request import StringInputRequest
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
@@ -178,17 +186,11 @@ from .terminal_node_result_output import (
 from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
 from .terminal_node_string_result import TerminalNodeStringResult
 from .test_case_chat_history_variable_value import TestCaseChatHistoryVariableValue
-from .test_case_chat_history_variable_value_request import TestCaseChatHistoryVariableValueRequest
 from .test_case_error_variable_value import TestCaseErrorVariableValue
-from .test_case_error_variable_value_request import TestCaseErrorVariableValueRequest
 from .test_case_json_variable_value import TestCaseJsonVariableValue
-from .test_case_json_variable_value_request import TestCaseJsonVariableValueRequest
 from .test_case_number_variable_value import TestCaseNumberVariableValue
-from .test_case_number_variable_value_request import TestCaseNumberVariableValueRequest
 from .test_case_search_results_variable_value import TestCaseSearchResultsVariableValue
-from .test_case_search_results_variable_value_request import TestCaseSearchResultsVariableValueRequest
 from .test_case_string_variable_value import TestCaseStringVariableValue
-from .test_case_string_variable_value_request import TestCaseStringVariableValueRequest
 from .test_case_variable_value import (
     TestCaseVariableValue,
     TestCaseVariableValue_ChatHistory,
@@ -197,15 +199,6 @@ from .test_case_variable_value import (
     TestCaseVariableValue_Number,
     TestCaseVariableValue_SearchResults,
     TestCaseVariableValue_String,
-)
-from .test_case_variable_value_request import (
-    TestCaseVariableValueRequest,
-    TestCaseVariableValueRequest_ChatHistory,
-    TestCaseVariableValueRequest_Error,
-    TestCaseVariableValueRequest_Json,
-    TestCaseVariableValueRequest_Number,
-    TestCaseVariableValueRequest_SearchResults,
-    TestCaseVariableValueRequest_String,
 )
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
@@ -226,6 +219,7 @@ from .workflow_execution_workflow_result_event import WorkflowExecutionWorkflowR
 from .workflow_node_result_data import (
     WorkflowNodeResultData,
     WorkflowNodeResultData_Api,
+    WorkflowNodeResultData_CodeExecution,
     WorkflowNodeResultData_Conditional,
     WorkflowNodeResultData_Prompt,
     WorkflowNodeResultData_Search,
@@ -269,6 +263,21 @@ __all__ = [
     "ChatMessage",
     "ChatMessageRequest",
     "ChatMessageRole",
+    "CodeExecutionNodeChatHistoryResult",
+    "CodeExecutionNodeErrorResult",
+    "CodeExecutionNodeJsonResult",
+    "CodeExecutionNodeNumberResult",
+    "CodeExecutionNodeResult",
+    "CodeExecutionNodeResultData",
+    "CodeExecutionNodeResultOutput",
+    "CodeExecutionNodeResultOutput_ChatHistory",
+    "CodeExecutionNodeResultOutput_Error",
+    "CodeExecutionNodeResultOutput_Json",
+    "CodeExecutionNodeResultOutput_Number",
+    "CodeExecutionNodeResultOutput_SearchResults",
+    "CodeExecutionNodeResultOutput_String",
+    "CodeExecutionNodeSearchResultsResult",
+    "CodeExecutionNodeStringResult",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
     "DeploymentProviderPayloadResponse",
@@ -281,23 +290,10 @@ __all__ = [
     "DocumentStatus",
     "EnrichedNormalizedCompletion",
     "EnvironmentEnum",
-    "ErrorExecutePromptResponse",
     "EvaluationParams",
     "EvaluationParamsRequest",
-    "ExecutePromptApiErrorResponse",
-    "ExecutePromptRequest",
-    "ExecutePromptResponse",
-    "ExecutePromptResponse_Error",
-    "ExecutePromptResponse_Json",
-    "ExecutePromptResponse_String",
-    "ExecutePromptStreamingResponse",
-    "ExecutePromptStreamingResponse_Fulfilled",
-    "ExecutePromptStreamingResponse_Initiated",
-    "ExecutePromptStreamingResponse_Rejected",
-    "ExecutePromptStreamingResponse_Streaming",
     "ExecuteWorkflowStreamErrorResponse",
     "FinishReasonEnum",
-    "FulfilledExecutePromptStreamingResponse",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
@@ -309,9 +305,6 @@ __all__ = [
     "GenerateStreamResult",
     "GenerateStreamResultData",
     "IndexingStateEnum",
-    "InitiatedExecutePromptResponse",
-    "InitiatedExecutePromptStreamingResponse",
-    "JsonExecutePromptResponse",
     "JsonInputRequest",
     "LogicalOperator",
     "LogprobsEnum",
@@ -324,6 +317,19 @@ __all__ = [
     "ModelVersionRead",
     "ModelVersionReadStatusEnum",
     "ModelVersionSandboxSnapshot",
+    "NamedTestCaseChatHistoryVariableValueRequest",
+    "NamedTestCaseErrorVariableValueRequest",
+    "NamedTestCaseJsonVariableValueRequest",
+    "NamedTestCaseNumberVariableValueRequest",
+    "NamedTestCaseSearchResultsVariableValueRequest",
+    "NamedTestCaseStringVariableValueRequest",
+    "NamedTestCaseVariableValueRequest",
+    "NamedTestCaseVariableValueRequest_ChatHistory",
+    "NamedTestCaseVariableValueRequest_Error",
+    "NamedTestCaseVariableValueRequest_Json",
+    "NamedTestCaseVariableValueRequest_Number",
+    "NamedTestCaseVariableValueRequest_SearchResults",
+    "NamedTestCaseVariableValueRequest_String",
     "NodeInputCompiledChatHistoryValue",
     "NodeInputCompiledErrorValue",
     "NodeInputCompiledJsonValue",
@@ -365,8 +371,6 @@ __all__ = [
     "RegisteredPromptModelVersion",
     "RegisteredPromptSandbox",
     "RegisteredPromptSandboxSnapshot",
-    "RejectedExecutePromptResponse",
-    "RejectedExecutePromptStreamingResponse",
     "SandboxMetricInputParams",
     "SandboxMetricInputParamsRequest",
     "SandboxScenario",
@@ -386,8 +390,6 @@ __all__ = [
     "SearchResultRequest",
     "SearchWeightsRequest",
     "SlimDocument",
-    "StreamingExecutePromptStreamingResponse",
-    "StringExecutePromptResponse",
     "StringInputRequest",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
@@ -426,25 +428,12 @@ __all__ = [
     "TerminalNodeSearchResultsResult",
     "TerminalNodeStringResult",
     "TestCaseChatHistoryVariableValue",
-    "TestCaseChatHistoryVariableValueRequest",
     "TestCaseErrorVariableValue",
-    "TestCaseErrorVariableValueRequest",
     "TestCaseJsonVariableValue",
-    "TestCaseJsonVariableValueRequest",
     "TestCaseNumberVariableValue",
-    "TestCaseNumberVariableValueRequest",
     "TestCaseSearchResultsVariableValue",
-    "TestCaseSearchResultsVariableValueRequest",
     "TestCaseStringVariableValue",
-    "TestCaseStringVariableValueRequest",
     "TestCaseVariableValue",
-    "TestCaseVariableValueRequest",
-    "TestCaseVariableValueRequest_ChatHistory",
-    "TestCaseVariableValueRequest_Error",
-    "TestCaseVariableValueRequest_Json",
-    "TestCaseVariableValueRequest_Number",
-    "TestCaseVariableValueRequest_SearchResults",
-    "TestCaseVariableValueRequest_String",
     "TestCaseVariableValue_ChatHistory",
     "TestCaseVariableValue_Error",
     "TestCaseVariableValue_Json",
@@ -469,6 +458,7 @@ __all__ = [
     "WorkflowExecutionWorkflowResultEvent",
     "WorkflowNodeResultData",
     "WorkflowNodeResultData_Api",
+    "WorkflowNodeResultData_CodeExecution",
     "WorkflowNodeResultData_Conditional",
     "WorkflowNodeResultData_Prompt",
     "WorkflowNodeResultData_Search",

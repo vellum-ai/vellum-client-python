@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .code_execution_node_result_data import CodeExecutionNodeResultData
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,9 +12,8 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class TestCaseStringVariableValueRequest(pydantic.BaseModel):
-    variable_id: str
-    value: typing.Optional[str]
+class CodeExecutionNodeResult(pydantic.BaseModel):
+    data: CodeExecutionNodeResultData
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

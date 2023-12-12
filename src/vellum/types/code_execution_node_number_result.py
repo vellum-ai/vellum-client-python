@@ -4,7 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .prompt_deployment_input_request import PromptDeploymentInputRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,18 +11,9 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class ExecutePromptRequest(pydantic.BaseModel):
-    inputs: typing.List[PromptDeploymentInputRequest]
-    prompt_deployment_id: typing.Optional[str] = pydantic.Field(
-        description="The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name."
-    )
-    prompt_deployment_name: typing.Optional[str] = pydantic.Field(
-        description="The name of the Prompt Deployment. Must provide either this or prompt_deployment_id."
-    )
-    release_tag: typing.Optional[str] = pydantic.Field(
-        description="Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment"
-    )
-    external_id: typing.Optional[str]
+class CodeExecutionNodeNumberResult(pydantic.BaseModel):
+    id: str
+    value: typing.Optional[float]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

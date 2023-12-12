@@ -11,8 +11,9 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class ExecutePromptApiErrorResponse(pydantic.BaseModel):
-    detail: str = pydantic.Field(description="Details about why the request failed.")
+class NamedTestCaseJsonVariableValueRequest(pydantic.BaseModel):
+    name: str
+    value: typing.Optional[typing.Dict[str, typing.Any]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

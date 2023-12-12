@@ -22,9 +22,7 @@ from .resources.model_versions.client import AsyncModelVersionsClient, ModelVers
 from .resources.registered_prompts.client import AsyncRegisteredPromptsClient, RegisteredPromptsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
 from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
-from .types.execute_prompt_request import ExecutePromptRequest
-from .types.execute_prompt_response import ExecutePromptResponse
-from .types.execute_prompt_streaming_response import ExecutePromptStreamingResponse
+from .types.generate_error_response import GenerateErrorResponse
 from .types.generate_options_request import GenerateOptionsRequest
 from .types.generate_request import GenerateRequest
 from .types.generate_response import GenerateResponse
@@ -67,66 +65,6 @@ class Vellum:
         self.registered_prompts = RegisteredPromptsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
-
-    def execute_prompt(self, *, request: ExecutePromptRequest) -> ExecutePromptResponse:
-        """
-        Executes a deployed Prompt and returns the result.
-
-        Parameters:
-            - request: ExecutePromptRequest.
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-prompt"),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def execute_prompt_stream(self, *, request: ExecutePromptRequest) -> ExecutePromptStreamingResponse:
-        """
-        Executes a deployed Prompt and streams back the results.
-
-        Parameters:
-            - request: ExecutePromptRequest.
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-prompt-stream"),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExecutePromptStreamingResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def execute_workflow_stream(
         self,
@@ -249,7 +187,7 @@ class Vellum:
         if _response.status_code == 400:
             raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise ForbiddenError(pydantic.parse_obj_as(GenerateErrorResponse, _response.json()))  # type: ignore
         if _response.status_code == 404:
             raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
@@ -306,7 +244,7 @@ class Vellum:
             if _response.status_code == 400:
                 raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 403:
-                raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise ForbiddenError(pydantic.parse_obj_as(GenerateErrorResponse, _response.json()))  # type: ignore
             if _response.status_code == 404:
                 raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
@@ -494,66 +432,6 @@ class AsyncVellum:
         self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
 
-    async def execute_prompt(self, *, request: ExecutePromptRequest) -> ExecutePromptResponse:
-        """
-        Executes a deployed Prompt and returns the result.
-
-        Parameters:
-            - request: ExecutePromptRequest.
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-prompt"),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def execute_prompt_stream(self, *, request: ExecutePromptRequest) -> ExecutePromptStreamingResponse:
-        """
-        Executes a deployed Prompt and streams back the results.
-
-        Parameters:
-            - request: ExecutePromptRequest.
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-prompt-stream"),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExecutePromptStreamingResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
     async def execute_workflow_stream(
         self,
         *,
@@ -675,7 +553,7 @@ class AsyncVellum:
         if _response.status_code == 400:
             raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise ForbiddenError(pydantic.parse_obj_as(GenerateErrorResponse, _response.json()))  # type: ignore
         if _response.status_code == 404:
             raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
@@ -732,7 +610,7 @@ class AsyncVellum:
             if _response.status_code == 400:
                 raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 403:
-                raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise ForbiddenError(pydantic.parse_obj_as(GenerateErrorResponse, _response.json()))  # type: ignore
             if _response.status_code == 404:
                 raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:

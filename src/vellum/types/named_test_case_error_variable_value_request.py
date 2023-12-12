@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .vellum_error_request import VellumErrorRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,9 +12,9 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class TestCaseJsonVariableValueRequest(pydantic.BaseModel):
-    variable_id: str
-    value: typing.Optional[typing.Dict[str, typing.Any]]
+class NamedTestCaseErrorVariableValueRequest(pydantic.BaseModel):
+    name: str
+    value: typing.Optional[VellumErrorRequest]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

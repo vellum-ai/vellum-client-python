@@ -4,7 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .chat_message_request import ChatMessageRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,9 +11,9 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class TestCaseChatHistoryVariableValueRequest(pydantic.BaseModel):
-    variable_id: str
-    value: typing.Optional[typing.List[ChatMessageRequest]]
+class NamedTestCaseNumberVariableValueRequest(pydantic.BaseModel):
+    name: str
+    value: typing.Optional[float]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

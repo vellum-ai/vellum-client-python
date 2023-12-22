@@ -20,16 +20,16 @@ class DocumentIndexRead(pydantic.BaseModel):
     name: str = pydantic.Field(description="A name that uniquely identifies this index within its workspace")
     status: typing.Optional[DocumentIndexStatus] = pydantic.Field(
         description=(
-            "The current status of the document index\n" "\n" "* `ACTIVE` - Active\n" "* `ARCHIVED` - Archived\n"
+            "The current status of the document index\n" "\n" "- `ACTIVE` - Active\n" "- `ARCHIVED` - Archived\n"
         )
     )
     environment: typing.Optional[EnvironmentEnum] = pydantic.Field(
         description=(
             "The environment this document index is used in\n"
             "\n"
-            "* `DEVELOPMENT` - Development\n"
-            "* `STAGING` - Staging\n"
-            "* `PRODUCTION` - Production\n"
+            "- `DEVELOPMENT` - Development\n"
+            "- `STAGING` - Staging\n"
+            "- `PRODUCTION` - Production\n"
         )
     )
     indexing_config: typing.Dict[str, typing.Any] = pydantic.Field(

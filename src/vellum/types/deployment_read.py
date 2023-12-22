@@ -23,18 +23,18 @@ class DeploymentRead(pydantic.BaseModel):
         description=(
             "The current status of the deployment\n"
             "\n"
-            "* `ACTIVE` - Active\n"
-            "* `INACTIVE` - Inactive\n"
-            "* `ARCHIVED` - Archived\n"
+            "- `ACTIVE` - Active\n"
+            "- `INACTIVE` - Inactive\n"
+            "- `ARCHIVED` - Archived\n"
         )
     )
     environment: typing.Optional[EnvironmentEnum] = pydantic.Field(
         description=(
             "The environment this deployment is used in\n"
             "\n"
-            "* `DEVELOPMENT` - Development\n"
-            "* `STAGING` - Staging\n"
-            "* `PRODUCTION` - Production\n"
+            "- `DEVELOPMENT` - Development\n"
+            "- `STAGING` - Staging\n"
+            "- `PRODUCTION` - Production\n"
         )
     )
     active_model_version_ids: typing.List[str] = pydantic.Field(

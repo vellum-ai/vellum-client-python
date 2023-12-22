@@ -8,8 +8,8 @@ T_Result = typing.TypeVar("T_Result")
 
 class DocumentIndexStatus(str, enum.Enum):
     """
-    * `ACTIVE` - Active
-    * `ARCHIVED` - Archived
+    - `ACTIVE` - Active
+    - `ARCHIVED` - Archived
     """
 
     ACTIVE = "ACTIVE"

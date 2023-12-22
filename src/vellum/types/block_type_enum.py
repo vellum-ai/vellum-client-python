@@ -8,10 +8,10 @@ T_Result = typing.TypeVar("T_Result")
 
 class BlockTypeEnum(str, enum.Enum):
     """
-    * `CHAT_MESSAGE` - CHAT_MESSAGE
-    * `CHAT_HISTORY` - CHAT_HISTORY
-    * `JINJA` - JINJA
-    * `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
+    - `CHAT_MESSAGE` - CHAT_MESSAGE
+    - `CHAT_HISTORY` - CHAT_HISTORY
+    - `JINJA` - JINJA
+    - `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
     """
 
     CHAT_MESSAGE = "CHAT_MESSAGE"

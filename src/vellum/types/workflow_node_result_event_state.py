@@ -8,10 +8,10 @@ T_Result = typing.TypeVar("T_Result")
 
 class WorkflowNodeResultEventState(str, enum.Enum):
     """
-    * `INITIATED` - INITIATED
-    * `STREAMING` - STREAMING
-    * `FULFILLED` - FULFILLED
-    * `REJECTED` - REJECTED
+    - `INITIATED` - INITIATED
+    - `STREAMING` - STREAMING
+    - `FULFILLED` - FULFILLED
+    - `REJECTED` - REJECTED
     """
 
     INITIATED = "INITIATED"

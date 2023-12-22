@@ -63,6 +63,7 @@ class RegisteredPromptsClient:
                                                        * `HOSTED` - Hosted
                                                        * `MOSAICML` - MosaicML
                                                        * `OPENAI` - OpenAI
+                                                       * `FIREWORKS_AI` - Fireworks AI
                                                        * `HUGGINGFACE` - HuggingFace
                                                        * `MYSTIC` - Mystic
                                                        * `PYQ` - Pyq
@@ -146,6 +147,7 @@ class AsyncRegisteredPromptsClient:
                                                        * `HOSTED` - Hosted
                                                        * `MOSAICML` - MosaicML
                                                        * `OPENAI` - OpenAI
+                                                       * `FIREWORKS_AI` - Fireworks AI
                                                        * `HUGGINGFACE` - HuggingFace
                                                        * `MYSTIC` - Mystic
                                                        * `PYQ` - Pyq

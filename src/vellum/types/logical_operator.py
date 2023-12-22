@@ -8,24 +8,24 @@ T_Result = typing.TypeVar("T_Result")
 
 class LogicalOperator(str, enum.Enum):
     """
-    * `=` - EQUALS
-    * `!=` - DOES_NOT_EQUAL
-    * `<` - LESS_THAN
-    * `>` - GREATER_THAN
-    * `<=` - LESS_THAN_OR_EQUAL_TO
-    * `>=` - GREATER_THAN_OR_EQUAL_TO
-    * `contains` - CONTAINS
-    * `beginsWith` - BEGINS_WITH
-    * `endsWith` - ENDS_WITH
-    * `doesNotContain` - DOES_NOT_CONTAIN
-    * `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
-    * `doesNotEndWith` - DOES_NOT_END_WITH
-    * `null` - NULL
-    * `notNull` - NOT_NULL
-    * `in` - IN
-    * `notIn` - NOT_IN
-    * `between` - BETWEEN
-    * `notBetween` - NOT_BETWEEN
+    - `=` - EQUALS
+    - `!=` - DOES_NOT_EQUAL
+    - `<` - LESS_THAN
+    - `>` - GREATER_THAN
+    - `<=` - LESS_THAN_OR_EQUAL_TO
+    - `>=` - GREATER_THAN_OR_EQUAL_TO
+    - `contains` - CONTAINS
+    - `beginsWith` - BEGINS_WITH
+    - `endsWith` - ENDS_WITH
+    - `doesNotContain` - DOES_NOT_CONTAIN
+    - `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
+    - `doesNotEndWith` - DOES_NOT_END_WITH
+    - `null` - NULL
+    - `notNull` - NOT_NULL
+    - `in` - IN
+    - `notIn` - NOT_IN
+    - `between` - BETWEEN
+    - `notBetween` - NOT_BETWEEN
     """
 
     EQUALS = "="

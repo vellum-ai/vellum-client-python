@@ -8,10 +8,10 @@ T_Result = typing.TypeVar("T_Result")
 
 class ChatMessageRole(str, enum.Enum):
     """
-    * `SYSTEM` - System
-    * `ASSISTANT` - Assistant
-    * `USER` - User
-    * `FUNCTION` - Function
+    - `SYSTEM` - System
+    - `ASSISTANT` - Assistant
+    - `USER` - User
+    - `FUNCTION` - Function
     """
 
     SYSTEM = "SYSTEM"

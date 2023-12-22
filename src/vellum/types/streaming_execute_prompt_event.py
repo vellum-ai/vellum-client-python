@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .indexing_state_enum import IndexingStateEnum
+from .prompt_output import PromptOutput
+from .streaming_prompt_execution_meta import StreamingPromptExecutionMeta
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,21 +13,17 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
-    id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this link.")
-    document_index_id: str = pydantic.Field(
-        description="Vellum-generated ID that uniquely identifies the index this document is included in."
-    )
-    indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(
-        description=(
-            "An enum value representing where this document is along its indexing lifecycle for this index.\n"
-            "\n"
-            "- `AWAITING_PROCESSING` - Awaiting Processing\n"
-            "- `QUEUED` - Queued\n"
-            "- `INDEXING` - Indexing\n"
-            "- `INDEXED` - Indexed\n"
-            "- `FAILED` - Failed\n"
-        )
+class StreamingExecutePromptEvent(pydantic.BaseModel):
+    """
+    The data returned for each delta during the prompt execution stream.
+    """
+
+    output: PromptOutput
+    output_index: int
+    execution_id: str
+    meta: typing.Optional[StreamingPromptExecutionMeta]
+    raw: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
+        description="The subset of the raw response from the model that the request opted into with `expand_raw`."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

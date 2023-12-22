@@ -8,8 +8,8 @@ T_Result = typing.TypeVar("T_Result")
 
 class WorkflowExecutionEventType(str, enum.Enum):
     """
-    * `NODE` - Node
-    * `WORKFLOW` - Workflow
+    - `NODE` - Node
+    - `WORKFLOW` - Workflow
     """
 
     NODE = "NODE"

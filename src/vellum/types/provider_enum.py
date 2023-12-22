@@ -8,18 +8,19 @@ T_Result = typing.TypeVar("T_Result")
 
 class ProviderEnum(str, enum.Enum):
     """
-    * `ANTHROPIC` - Anthropic
-    * `AWS_BEDROCK` - AWS Bedrock
-    * `AZURE_OPENAI` - Azure OpenAI
-    * `COHERE` - Cohere
-    * `GOOGLE` - Google
-    * `HOSTED` - Hosted
-    * `MOSAICML` - MosaicML
-    * `OPENAI` - OpenAI
-    * `HUGGINGFACE` - HuggingFace
-    * `MYSTIC` - Mystic
-    * `PYQ` - Pyq
-    * `REPLICATE` - Replicate
+    - `ANTHROPIC` - Anthropic
+    - `AWS_BEDROCK` - AWS Bedrock
+    - `AZURE_OPENAI` - Azure OpenAI
+    - `COHERE` - Cohere
+    - `GOOGLE` - Google
+    - `HOSTED` - Hosted
+    - `MOSAICML` - MosaicML
+    - `OPENAI` - OpenAI
+    - `FIREWORKS_AI` - Fireworks AI
+    - `HUGGINGFACE` - HuggingFace
+    - `MYSTIC` - Mystic
+    - `PYQ` - Pyq
+    - `REPLICATE` - Replicate
     """
 
     ANTHROPIC = "ANTHROPIC"
@@ -30,6 +31,7 @@ class ProviderEnum(str, enum.Enum):
     HOSTED = "HOSTED"
     MOSAICML = "MOSAICML"
     OPENAI = "OPENAI"
+    FIREWORKS_AI = "FIREWORKS_AI"
     HUGGINGFACE = "HUGGINGFACE"
     MYSTIC = "MYSTIC"
     PYQ = "PYQ"
@@ -45,6 +47,7 @@ class ProviderEnum(str, enum.Enum):
         hosted: typing.Callable[[], T_Result],
         mosaicml: typing.Callable[[], T_Result],
         openai: typing.Callable[[], T_Result],
+        fireworks_ai: typing.Callable[[], T_Result],
         huggingface: typing.Callable[[], T_Result],
         mystic: typing.Callable[[], T_Result],
         pyq: typing.Callable[[], T_Result],
@@ -66,6 +69,8 @@ class ProviderEnum(str, enum.Enum):
             return mosaicml()
         if self is ProviderEnum.OPENAI:
             return openai()
+        if self is ProviderEnum.FIREWORKS_AI:
+            return fireworks_ai()
         if self is ProviderEnum.HUGGINGFACE:
             return huggingface()
         if self is ProviderEnum.MYSTIC:

@@ -8,9 +8,9 @@ T_Result = typing.TypeVar("T_Result")
 
 class FinishReasonEnum(str, enum.Enum):
     """
-    * `LENGTH` - LENGTH
-    * `STOP` - STOP
-    * `UNKNOWN` - UNKNOWN
+    - `LENGTH` - LENGTH
+    - `STOP` - STOP
+    - `UNKNOWN` - UNKNOWN
     """
 
     LENGTH = "LENGTH"

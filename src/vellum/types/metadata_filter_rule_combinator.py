@@ -8,8 +8,8 @@ T_Result = typing.TypeVar("T_Result")
 
 class MetadataFilterRuleCombinator(str, enum.Enum):
     """
-    * `and` - AND
-    * `or` - OR
+    - `and` - AND
+    - `or` - OR
     """
 
     AND = "and"

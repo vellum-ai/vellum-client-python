@@ -8,6 +8,7 @@ import typing_extensions
 
 from .workflow_request_chat_history_input_request import WorkflowRequestChatHistoryInputRequest
 from .workflow_request_json_input_request import WorkflowRequestJsonInputRequest
+from .workflow_request_number_input_request import WorkflowRequestNumberInputRequest
 from .workflow_request_string_input_request import WorkflowRequestStringInputRequest
 
 
@@ -38,6 +39,18 @@ class WorkflowRequestInputRequest_ChatHistory(WorkflowRequestChatHistoryInputReq
         allow_population_by_field_name = True
 
 
+class WorkflowRequestInputRequest_Number(WorkflowRequestNumberInputRequest):
+    type: typing_extensions.Literal["NUMBER"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 WorkflowRequestInputRequest = typing.Union[
-    WorkflowRequestInputRequest_String, WorkflowRequestInputRequest_Json, WorkflowRequestInputRequest_ChatHistory
+    WorkflowRequestInputRequest_String,
+    WorkflowRequestInputRequest_Json,
+    WorkflowRequestInputRequest_ChatHistory,
+    WorkflowRequestInputRequest_Number,
 ]

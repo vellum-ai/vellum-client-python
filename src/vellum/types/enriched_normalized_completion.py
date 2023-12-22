@@ -24,9 +24,9 @@ class EnrichedNormalizedCompletion(pydantic.BaseModel):
         description=(
             "The reason the generation finished.\n"
             "\n"
-            "* `LENGTH` - LENGTH\n"
-            "* `STOP` - STOP\n"
-            "* `UNKNOWN` - UNKNOWN\n"
+            "- `LENGTH` - LENGTH\n"
+            "- `STOP` - STOP\n"
+            "- `UNKNOWN` - UNKNOWN\n"
         )
     )
     logprobs: typing.Optional[NormalizedLogProbs] = pydantic.Field(

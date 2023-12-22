@@ -27,14 +27,14 @@ class DocumentRead(pydantic.BaseModel):
         description=(
             "The current processing state of the document\n"
             "\n"
-            "* `QUEUED` - Queued\n"
-            "* `PROCESSING` - Processing\n"
-            "* `PROCESSED` - Processed\n"
-            "* `FAILED` - Failed\n"
+            "- `QUEUED` - Queued\n"
+            "- `PROCESSING` - Processing\n"
+            "- `PROCESSED` - Processed\n"
+            "- `FAILED` - Failed\n"
         )
     )
     status: typing.Optional[DocumentStatus] = pydantic.Field(
-        description=("The current status of the document\n" "\n" "* `ACTIVE` - Active\n")
+        description=("The current status of the document\n" "\n" "- `ACTIVE` - Active\n")
     )
     original_file_url: typing.Optional[str]
     processed_file_url: typing.Optional[str]

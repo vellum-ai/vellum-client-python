@@ -8,8 +8,8 @@ T_Result = typing.TypeVar("T_Result")
 
 class ProcessingFailureReasonEnum(str, enum.Enum):
     """
-    * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
-    * `INVALID_FILE` - Invalid File
+    - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
+    - `INVALID_FILE` - Invalid File
     """
 
     EXCEEDED_CHARACTER_LIMIT = "EXCEEDED_CHARACTER_LIMIT"

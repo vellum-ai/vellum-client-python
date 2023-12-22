@@ -4,7 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .indexing_state_enum import IndexingStateEnum
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,22 +11,12 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
-    id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this link.")
-    document_index_id: str = pydantic.Field(
-        description="Vellum-generated ID that uniquely identifies the index this document is included in."
+class RawPromptExecutionOverridesRequest(pydantic.BaseModel):
+    body: typing.Optional[typing.Dict[str, typing.Any]]
+    headers: typing.Optional[typing.Dict[str, typing.Optional[str]]] = pydantic.Field(
+        description="The raw headers to send to the model host."
     )
-    indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(
-        description=(
-            "An enum value representing where this document is along its indexing lifecycle for this index.\n"
-            "\n"
-            "- `AWAITING_PROCESSING` - Awaiting Processing\n"
-            "- `QUEUED` - Queued\n"
-            "- `INDEXING` - Indexing\n"
-            "- `INDEXED` - Indexed\n"
-            "- `FAILED` - Failed\n"
-        )
-    )
+    url: typing.Optional[str] = pydantic.Field(description="The raw URL to send to the model host.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

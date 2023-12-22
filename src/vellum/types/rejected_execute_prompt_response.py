@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .indexing_state_enum import IndexingStateEnum
+from .prompt_execution_meta import PromptExecutionMeta
+from .vellum_error import VellumError
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,22 +13,17 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
-    id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this link.")
-    document_index_id: str = pydantic.Field(
-        description="Vellum-generated ID that uniquely identifies the index this document is included in."
+class RejectedExecutePromptResponse(pydantic.BaseModel):
+    """
+    The unsuccessful response from the model containing an error of what went wrong.
+    """
+
+    meta: typing.Optional[PromptExecutionMeta]
+    raw: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
+        description="The subset of the raw response from the model that the request opted into with `expand_raw`."
     )
-    indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(
-        description=(
-            "An enum value representing where this document is along its indexing lifecycle for this index.\n"
-            "\n"
-            "- `AWAITING_PROCESSING` - Awaiting Processing\n"
-            "- `QUEUED` - Queued\n"
-            "- `INDEXING` - Indexing\n"
-            "- `INDEXED` - Indexed\n"
-            "- `FAILED` - Failed\n"
-        )
-    )
+    execution_id: str = pydantic.Field(description="The ID of the execution.")
+    error: VellumError
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

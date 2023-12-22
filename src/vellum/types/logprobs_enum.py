@@ -8,8 +8,8 @@ T_Result = typing.TypeVar("T_Result")
 
 class LogprobsEnum(str, enum.Enum):
     """
-    * `ALL` - ALL
-    * `NONE` - NONE
+    - `ALL` - ALL
+    - `NONE` - NONE
     """
 
     ALL = "ALL"

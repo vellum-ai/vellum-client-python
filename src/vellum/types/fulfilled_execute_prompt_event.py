@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .logprobs_enum import LogprobsEnum
+from .fulfilled_prompt_execution_meta import FulfilledPromptExecutionMeta
+from .prompt_output import PromptOutput
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,12 +13,14 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class GenerateOptionsRequest(pydantic.BaseModel):
-    logprobs: typing.Optional[LogprobsEnum] = pydantic.Field(
-        description=(
-            "Which logprobs to include, if any. Defaults to NONE.\n" "\n" "- `ALL` - ALL\n" "- `NONE` - NONE\n"
-        )
-    )
+class FulfilledExecutePromptEvent(pydantic.BaseModel):
+    """
+    The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
+    """
+
+    outputs: typing.List[PromptOutput]
+    execution_id: str
+    meta: typing.Optional[FulfilledPromptExecutionMeta]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

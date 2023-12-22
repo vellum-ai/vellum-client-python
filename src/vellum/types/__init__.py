@@ -36,10 +36,28 @@ from .document_read import DocumentRead
 from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .environment_enum import EnvironmentEnum
+from .error_variable_value import ErrorVariableValue
 from .evaluation_params import EvaluationParams
 from .evaluation_params_request import EvaluationParamsRequest
+from .execute_prompt_api_error_response import ExecutePromptApiErrorResponse
+from .execute_prompt_event import (
+    ExecutePromptEvent,
+    ExecutePromptEvent_Fulfilled,
+    ExecutePromptEvent_Initiated,
+    ExecutePromptEvent_Rejected,
+    ExecutePromptEvent_Streaming,
+)
+from .execute_prompt_response import (
+    ExecutePromptResponse,
+    ExecutePromptResponse_Fulfilled,
+    ExecutePromptResponse_Rejected,
+)
 from .execute_workflow_stream_error_response import ExecuteWorkflowStreamErrorResponse
 from .finish_reason_enum import FinishReasonEnum
+from .fulfilled_enum import FulfilledEnum
+from .fulfilled_execute_prompt_event import FulfilledExecutePromptEvent
+from .fulfilled_execute_prompt_response import FulfilledExecutePromptResponse
+from .fulfilled_prompt_execution_meta import FulfilledPromptExecutionMeta
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -51,7 +69,11 @@ from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
 from .indexing_state_enum import IndexingStateEnum
+from .initiated_enum import InitiatedEnum
+from .initiated_execute_prompt_event import InitiatedExecutePromptEvent
+from .initiated_prompt_execution_meta import InitiatedPromptExecutionMeta
 from .json_input_request import JsonInputRequest
+from .json_variable_value import JsonVariableValue
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
 from .metadata_filter_config_request import MetadataFilterConfigRequest
@@ -98,14 +120,17 @@ from .normalized_token_log_probs import NormalizedTokenLogProbs
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
+from .prompt_deployment_expand_meta_request_request import PromptDeploymentExpandMetaRequestRequest
 from .prompt_deployment_input_request import (
     PromptDeploymentInputRequest,
     PromptDeploymentInputRequest_ChatHistory,
     PromptDeploymentInputRequest_Json,
     PromptDeploymentInputRequest_String,
 )
+from .prompt_execution_meta import PromptExecutionMeta
 from .prompt_node_result import PromptNodeResult
 from .prompt_node_result_data import PromptNodeResultData
+from .prompt_output import PromptOutput, PromptOutput_Error, PromptOutput_Json, PromptOutput_String
 from .prompt_template_block import PromptTemplateBlock
 from .prompt_template_block_data import PromptTemplateBlockData
 from .prompt_template_block_data_request import PromptTemplateBlockDataRequest
@@ -113,6 +138,7 @@ from .prompt_template_block_properties import PromptTemplateBlockProperties
 from .prompt_template_block_properties_request import PromptTemplateBlockPropertiesRequest
 from .prompt_template_block_request import PromptTemplateBlockRequest
 from .provider_enum import ProviderEnum
+from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .register_prompt_error_response import RegisterPromptErrorResponse
 from .register_prompt_model_parameters_request import RegisterPromptModelParametersRequest
 from .register_prompt_prompt import RegisterPromptPrompt
@@ -123,6 +149,10 @@ from .registered_prompt_input_variable_request import RegisteredPromptInputVaria
 from .registered_prompt_model_version import RegisteredPromptModelVersion
 from .registered_prompt_sandbox import RegisteredPromptSandbox
 from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
+from .rejected_enum import RejectedEnum
+from .rejected_execute_prompt_event import RejectedExecutePromptEvent
+from .rejected_execute_prompt_response import RejectedExecutePromptResponse
+from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .sandbox_metric_input_params import SandboxMetricInputParams
 from .sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from .sandbox_scenario import SandboxScenario
@@ -142,7 +172,11 @@ from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_request import SearchResultRequest
 from .search_weights_request import SearchWeightsRequest
 from .slim_document import SlimDocument
+from .streaming_enum import StreamingEnum
+from .streaming_execute_prompt_event import StreamingExecutePromptEvent
+from .streaming_prompt_execution_meta import StreamingPromptExecutionMeta
 from .string_input_request import StringInputRequest
+from .string_variable_value import StringVariableValue
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
 from .submit_workflow_execution_actual_request import (
@@ -233,9 +267,11 @@ from .workflow_request_input_request import (
     WorkflowRequestInputRequest,
     WorkflowRequestInputRequest_ChatHistory,
     WorkflowRequestInputRequest_Json,
+    WorkflowRequestInputRequest_Number,
     WorkflowRequestInputRequest_String,
 )
 from .workflow_request_json_input_request import WorkflowRequestJsonInputRequest
+from .workflow_request_number_input_request import WorkflowRequestNumberInputRequest
 from .workflow_request_string_input_request import WorkflowRequestStringInputRequest
 from .workflow_result_event import WorkflowResultEvent
 from .workflow_result_event_output_data import (
@@ -290,10 +326,24 @@ __all__ = [
     "DocumentStatus",
     "EnrichedNormalizedCompletion",
     "EnvironmentEnum",
+    "ErrorVariableValue",
     "EvaluationParams",
     "EvaluationParamsRequest",
+    "ExecutePromptApiErrorResponse",
+    "ExecutePromptEvent",
+    "ExecutePromptEvent_Fulfilled",
+    "ExecutePromptEvent_Initiated",
+    "ExecutePromptEvent_Rejected",
+    "ExecutePromptEvent_Streaming",
+    "ExecutePromptResponse",
+    "ExecutePromptResponse_Fulfilled",
+    "ExecutePromptResponse_Rejected",
     "ExecuteWorkflowStreamErrorResponse",
     "FinishReasonEnum",
+    "FulfilledEnum",
+    "FulfilledExecutePromptEvent",
+    "FulfilledExecutePromptResponse",
+    "FulfilledPromptExecutionMeta",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
@@ -305,7 +355,11 @@ __all__ = [
     "GenerateStreamResult",
     "GenerateStreamResultData",
     "IndexingStateEnum",
+    "InitiatedEnum",
+    "InitiatedExecutePromptEvent",
+    "InitiatedPromptExecutionMeta",
     "JsonInputRequest",
+    "JsonVariableValue",
     "LogicalOperator",
     "LogprobsEnum",
     "MetadataFilterConfigRequest",
@@ -348,12 +402,18 @@ __all__ = [
     "PaginatedSlimDocumentList",
     "ProcessingFailureReasonEnum",
     "ProcessingStateEnum",
+    "PromptDeploymentExpandMetaRequestRequest",
     "PromptDeploymentInputRequest",
     "PromptDeploymentInputRequest_ChatHistory",
     "PromptDeploymentInputRequest_Json",
     "PromptDeploymentInputRequest_String",
+    "PromptExecutionMeta",
     "PromptNodeResult",
     "PromptNodeResultData",
+    "PromptOutput",
+    "PromptOutput_Error",
+    "PromptOutput_Json",
+    "PromptOutput_String",
     "PromptTemplateBlock",
     "PromptTemplateBlockData",
     "PromptTemplateBlockDataRequest",
@@ -361,6 +421,7 @@ __all__ = [
     "PromptTemplateBlockPropertiesRequest",
     "PromptTemplateBlockRequest",
     "ProviderEnum",
+    "RawPromptExecutionOverridesRequest",
     "RegisterPromptErrorResponse",
     "RegisterPromptModelParametersRequest",
     "RegisterPromptPrompt",
@@ -371,6 +432,10 @@ __all__ = [
     "RegisteredPromptModelVersion",
     "RegisteredPromptSandbox",
     "RegisteredPromptSandboxSnapshot",
+    "RejectedEnum",
+    "RejectedExecutePromptEvent",
+    "RejectedExecutePromptResponse",
+    "RejectedPromptExecutionMeta",
     "SandboxMetricInputParams",
     "SandboxMetricInputParamsRequest",
     "SandboxScenario",
@@ -390,7 +455,11 @@ __all__ = [
     "SearchResultRequest",
     "SearchWeightsRequest",
     "SlimDocument",
+    "StreamingEnum",
+    "StreamingExecutePromptEvent",
+    "StreamingPromptExecutionMeta",
     "StringInputRequest",
+    "StringVariableValue",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
     "SubmitWorkflowExecutionActualRequest",
@@ -470,8 +539,10 @@ __all__ = [
     "WorkflowRequestInputRequest",
     "WorkflowRequestInputRequest_ChatHistory",
     "WorkflowRequestInputRequest_Json",
+    "WorkflowRequestInputRequest_Number",
     "WorkflowRequestInputRequest_String",
     "WorkflowRequestJsonInputRequest",
+    "WorkflowRequestNumberInputRequest",
     "WorkflowRequestStringInputRequest",
     "WorkflowResultEvent",
     "WorkflowResultEventOutputData",

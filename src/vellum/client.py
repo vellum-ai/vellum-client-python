@@ -86,6 +86,9 @@ class Vellum:
         """
         Executes a deployed Prompt and returns the result.
 
+        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
+        In the meantime, we recommend still using the `/generate` endpoint for prompts with function calling.
+
         Parameters:
             - inputs: typing.List[PromptDeploymentInputRequest].
 
@@ -160,6 +163,9 @@ class Vellum:
     ) -> typing.Iterator[ExecutePromptEvent]:
         """
         Executes a deployed Prompt and streams back the results.
+
+        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
+        In the meantime, we recommend still using the `/generate-stream` endpoint for prompts with function calling
 
         Parameters:
             - inputs: typing.List[PromptDeploymentInputRequest].
@@ -607,6 +613,9 @@ class AsyncVellum:
         """
         Executes a deployed Prompt and returns the result.
 
+        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
+        In the meantime, we recommend still using the `/generate` endpoint for prompts with function calling.
+
         Parameters:
             - inputs: typing.List[PromptDeploymentInputRequest].
 
@@ -681,6 +690,9 @@ class AsyncVellum:
     ) -> typing.AsyncIterator[ExecutePromptEvent]:
         """
         Executes a deployed Prompt and streams back the results.
+
+        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
+        In the meantime, we recommend still using the `/generate-stream` endpoint for prompts with function calling
 
         Parameters:
             - inputs: typing.List[PromptDeploymentInputRequest].

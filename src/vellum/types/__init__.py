@@ -57,7 +57,10 @@ from .finish_reason_enum import FinishReasonEnum
 from .fulfilled_enum import FulfilledEnum
 from .fulfilled_execute_prompt_event import FulfilledExecutePromptEvent
 from .fulfilled_execute_prompt_response import FulfilledExecutePromptResponse
+from .fulfilled_function_call import FulfilledFunctionCall
 from .fulfilled_prompt_execution_meta import FulfilledPromptExecutionMeta
+from .function_call import FunctionCall, FunctionCall_Fulfilled, FunctionCall_Rejected
+from .function_call_variable_value import FunctionCallVariableValue
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -130,7 +133,13 @@ from .prompt_deployment_input_request import (
 from .prompt_execution_meta import PromptExecutionMeta
 from .prompt_node_result import PromptNodeResult
 from .prompt_node_result_data import PromptNodeResultData
-from .prompt_output import PromptOutput, PromptOutput_Error, PromptOutput_Json, PromptOutput_String
+from .prompt_output import (
+    PromptOutput,
+    PromptOutput_Error,
+    PromptOutput_FunctionCall,
+    PromptOutput_Json,
+    PromptOutput_String,
+)
 from .prompt_template_block import PromptTemplateBlock
 from .prompt_template_block_data import PromptTemplateBlockData
 from .prompt_template_block_data_request import PromptTemplateBlockDataRequest
@@ -152,6 +161,7 @@ from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
 from .rejected_enum import RejectedEnum
 from .rejected_execute_prompt_event import RejectedExecutePromptEvent
 from .rejected_execute_prompt_response import RejectedExecutePromptResponse
+from .rejected_function_call import RejectedFunctionCall
 from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .sandbox_metric_input_params import SandboxMetricInputParams
 from .sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
@@ -343,7 +353,12 @@ __all__ = [
     "FulfilledEnum",
     "FulfilledExecutePromptEvent",
     "FulfilledExecutePromptResponse",
+    "FulfilledFunctionCall",
     "FulfilledPromptExecutionMeta",
+    "FunctionCall",
+    "FunctionCallVariableValue",
+    "FunctionCall_Fulfilled",
+    "FunctionCall_Rejected",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
@@ -412,6 +427,7 @@ __all__ = [
     "PromptNodeResultData",
     "PromptOutput",
     "PromptOutput_Error",
+    "PromptOutput_FunctionCall",
     "PromptOutput_Json",
     "PromptOutput_String",
     "PromptTemplateBlock",
@@ -435,6 +451,7 @@ __all__ = [
     "RejectedEnum",
     "RejectedExecutePromptEvent",
     "RejectedExecutePromptResponse",
+    "RejectedFunctionCall",
     "RejectedPromptExecutionMeta",
     "SandboxMetricInputParams",
     "SandboxMetricInputParamsRequest",

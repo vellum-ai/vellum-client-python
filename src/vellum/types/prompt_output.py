@@ -7,6 +7,7 @@ import typing
 import typing_extensions
 
 from .error_variable_value import ErrorVariableValue
+from .function_call_variable_value import FunctionCallVariableValue
 from .json_variable_value import JsonVariableValue
 from .string_variable_value import StringVariableValue
 
@@ -38,4 +39,13 @@ class PromptOutput_Error(ErrorVariableValue):
         allow_population_by_field_name = True
 
 
-PromptOutput = typing.Union[PromptOutput_String, PromptOutput_Json, PromptOutput_Error]
+class PromptOutput_FunctionCall(FunctionCallVariableValue):
+    type: typing_extensions.Literal["FUNCTION_CALL"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
+PromptOutput = typing.Union[PromptOutput_String, PromptOutput_Json, PromptOutput_Error, PromptOutput_FunctionCall]

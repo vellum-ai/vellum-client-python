@@ -20,6 +20,7 @@ class ModelVersionExecConfigParameters(pydantic.BaseModel):
     logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]]
     stop: typing.Optional[typing.List[str]]
     top_k: typing.Optional[float]
+    custom_parameters: typing.Optional[typing.Dict[str, typing.Any]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

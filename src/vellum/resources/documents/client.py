@@ -84,7 +84,7 @@ class DocumentsClient:
             api_key="YOUR_API_KEY",
         )
         client.documents.destroy(
-            id="id",
+            id="string",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -121,6 +121,16 @@ class DocumentsClient:
 
                                                        * `ACTIVE` - Active
             - metadata: typing.Optional[typing.Dict[str, typing.Any]]. A JSON object containing any metadata associated with the document that you'd like to filter upon later.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.documents.partial_update(
+            id="string",
+            status="ACTIVE",
+        )
         """
         _request: typing.Dict[str, typing.Any] = {}
         if label is not OMIT:
@@ -262,7 +272,7 @@ class AsyncDocumentsClient:
             api_key="YOUR_API_KEY",
         )
         await client.documents.destroy(
-            id="id",
+            id="string",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -299,6 +309,16 @@ class AsyncDocumentsClient:
 
                                                        * `ACTIVE` - Active
             - metadata: typing.Optional[typing.Dict[str, typing.Any]]. A JSON object containing any metadata associated with the document that you'd like to filter upon later.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.documents.partial_update(
+            id="string",
+            status="ACTIVE",
+        )
         """
         _request: typing.Dict[str, typing.Any] = {}
         if label is not OMIT:

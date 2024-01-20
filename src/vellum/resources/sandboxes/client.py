@@ -52,6 +52,37 @@ class SandboxesClient:
             - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 
             - metric_input_params: typing.Optional[SandboxMetricInputParamsRequest].
+        ---
+        from vellum import (
+            ChatMessageRequest,
+            ChatMessageRole,
+            EvaluationParamsRequest,
+            SandboxMetricInputParamsRequest,
+            ScenarioInputRequest,
+            ScenarioInputTypeEnum,
+        )
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.sandboxes.upsert_sandbox_scenario(
+            id="string",
+            inputs=[
+                ScenarioInputRequest(
+                    key="string",
+                    type=ScenarioInputTypeEnum.TEXT,
+                    chat_history=[
+                        ChatMessageRequest(
+                            role=ChatMessageRole.SYSTEM,
+                        )
+                    ],
+                )
+            ],
+            metric_input_params=SandboxMetricInputParamsRequest(
+                params=EvaluationParamsRequest(),
+            ),
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if label is not OMIT:
@@ -90,8 +121,8 @@ class SandboxesClient:
             api_key="YOUR_API_KEY",
         )
         client.sandboxes.delete_sandbox_scenario(
-            id="id",
-            scenario_id="scenario-id",
+            id="string",
+            scenario_id="string",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -143,6 +174,37 @@ class AsyncSandboxesClient:
             - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 
             - metric_input_params: typing.Optional[SandboxMetricInputParamsRequest].
+        ---
+        from vellum import (
+            ChatMessageRequest,
+            ChatMessageRole,
+            EvaluationParamsRequest,
+            SandboxMetricInputParamsRequest,
+            ScenarioInputRequest,
+            ScenarioInputTypeEnum,
+        )
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.sandboxes.upsert_sandbox_scenario(
+            id="string",
+            inputs=[
+                ScenarioInputRequest(
+                    key="string",
+                    type=ScenarioInputTypeEnum.TEXT,
+                    chat_history=[
+                        ChatMessageRequest(
+                            role=ChatMessageRole.SYSTEM,
+                        )
+                    ],
+                )
+            ],
+            metric_input_params=SandboxMetricInputParamsRequest(
+                params=EvaluationParamsRequest(),
+            ),
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if label is not OMIT:
@@ -181,8 +243,8 @@ class AsyncSandboxesClient:
             api_key="YOUR_API_KEY",
         )
         await client.sandboxes.delete_sandbox_scenario(
-            id="id",
-            scenario_id="scenario-id",
+            id="string",
+            scenario_id="string",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(

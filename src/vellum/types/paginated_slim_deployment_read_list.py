@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .slim_deployment_read import SlimDeploymentRead
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,13 +12,11 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class JsonInputRequest(pydantic.BaseModel):
-    """
-    A user input representing a JSON object
-    """
-
-    name: str = pydantic.Field(description="The variable's name, as defined in the deployment.")
-    value: typing.Dict[str, typing.Any]
+class PaginatedSlimDeploymentReadList(pydantic.BaseModel):
+    count: typing.Optional[int]
+    next: typing.Optional[str]
+    previous: typing.Optional[str]
+    results: typing.Optional[typing.List[SlimDeploymentRead]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

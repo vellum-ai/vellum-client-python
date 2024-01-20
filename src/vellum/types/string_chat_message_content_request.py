@@ -11,13 +11,12 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class JsonInputRequest(pydantic.BaseModel):
+class StringChatMessageContentRequest(pydantic.BaseModel):
     """
-    A user input representing a JSON object
+    A string value that is used in a chat message.
     """
 
-    name: str = pydantic.Field(description="The variable's name, as defined in the deployment.")
-    value: typing.Dict[str, typing.Any]
+    value: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

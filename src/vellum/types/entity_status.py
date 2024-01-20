@@ -6,7 +6,7 @@ import typing
 T_Result = typing.TypeVar("T_Result")
 
 
-class DocumentIndexStatus(str, enum.Enum):
+class EntityStatus(str, enum.Enum):
     """
     - `ACTIVE` - Active
     - `ARCHIVED` - Archived
@@ -16,7 +16,7 @@ class DocumentIndexStatus(str, enum.Enum):
     ARCHIVED = "ARCHIVED"
 
     def visit(self, active: typing.Callable[[], T_Result], archived: typing.Callable[[], T_Result]) -> T_Result:
-        if self is DocumentIndexStatus.ACTIVE:
+        if self is EntityStatus.ACTIVE:
             return active()
-        if self is DocumentIndexStatus.ARCHIVED:
+        if self is EntityStatus.ARCHIVED:
             return archived()

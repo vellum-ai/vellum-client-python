@@ -73,6 +73,58 @@ class RegisteredPromptsClient:
             - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
 
             - meta: typing.Optional[typing.Dict[str, typing.Any]]. Optionally include additional metadata to store along with the prompt.
+        ---
+        from vellum import (
+            BlockTypeEnum,
+            ChatMessageRole,
+            PromptTemplateBlockDataRequest,
+            PromptTemplateBlockPropertiesRequest,
+            PromptTemplateBlockRequest,
+            ProviderEnum,
+            RegisteredPromptInputVariableRequest,
+            RegisterPromptModelParametersRequest,
+            RegisterPromptPromptInfoRequest,
+            VellumVariableType,
+        )
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.registered_prompts.register_prompt(
+            label="string",
+            name="string",
+            prompt=RegisterPromptPromptInfoRequest(
+                prompt_block_data=PromptTemplateBlockDataRequest(
+                    version=1,
+                    blocks=[
+                        PromptTemplateBlockRequest(
+                            id="string",
+                            block_type=BlockTypeEnum.CHAT_MESSAGE,
+                            properties=PromptTemplateBlockPropertiesRequest(
+                                chat_role=ChatMessageRole.SYSTEM,
+                                template_type=VellumVariableType.STRING,
+                            ),
+                        )
+                    ],
+                ),
+                input_variables=[
+                    RegisteredPromptInputVariableRequest(
+                        key="string",
+                        type=VellumVariableType.STRING,
+                    )
+                ],
+            ),
+            provider=ProviderEnum.ANTHROPIC,
+            model="string",
+            parameters=RegisterPromptModelParametersRequest(
+                temperature=1.1,
+                max_tokens=1,
+                top_p=1.1,
+                frequency_penalty=1.1,
+                presence_penalty=1.1,
+            ),
+        )
         """
         _request: typing.Dict[str, typing.Any] = {
             "label": label,
@@ -157,6 +209,58 @@ class AsyncRegisteredPromptsClient:
             - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
 
             - meta: typing.Optional[typing.Dict[str, typing.Any]]. Optionally include additional metadata to store along with the prompt.
+        ---
+        from vellum import (
+            BlockTypeEnum,
+            ChatMessageRole,
+            PromptTemplateBlockDataRequest,
+            PromptTemplateBlockPropertiesRequest,
+            PromptTemplateBlockRequest,
+            ProviderEnum,
+            RegisteredPromptInputVariableRequest,
+            RegisterPromptModelParametersRequest,
+            RegisterPromptPromptInfoRequest,
+            VellumVariableType,
+        )
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.registered_prompts.register_prompt(
+            label="string",
+            name="string",
+            prompt=RegisterPromptPromptInfoRequest(
+                prompt_block_data=PromptTemplateBlockDataRequest(
+                    version=1,
+                    blocks=[
+                        PromptTemplateBlockRequest(
+                            id="string",
+                            block_type=BlockTypeEnum.CHAT_MESSAGE,
+                            properties=PromptTemplateBlockPropertiesRequest(
+                                chat_role=ChatMessageRole.SYSTEM,
+                                template_type=VellumVariableType.STRING,
+                            ),
+                        )
+                    ],
+                ),
+                input_variables=[
+                    RegisteredPromptInputVariableRequest(
+                        key="string",
+                        type=VellumVariableType.STRING,
+                    )
+                ],
+            ),
+            provider=ProviderEnum.ANTHROPIC,
+            model="string",
+            parameters=RegisterPromptModelParametersRequest(
+                temperature=1.1,
+                max_tokens=1,
+                top_p=1.1,
+                frequency_penalty=1.1,
+                presence_penalty=1.1,
+            ),
+        )
         """
         _request: typing.Dict[str, typing.Any] = {
             "label": label,

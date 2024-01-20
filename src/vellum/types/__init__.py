@@ -2,9 +2,37 @@
 
 from .api_node_result import ApiNodeResult
 from .api_node_result_data import ApiNodeResultData
+from .array_chat_message_content import ArrayChatMessageContent
+from .array_chat_message_content_item import (
+    ArrayChatMessageContentItem,
+    ArrayChatMessageContentItem_FunctionCall,
+    ArrayChatMessageContentItem_Image,
+    ArrayChatMessageContentItem_String,
+)
+from .array_chat_message_content_item_request import (
+    ArrayChatMessageContentItemRequest,
+    ArrayChatMessageContentItemRequest_FunctionCall,
+    ArrayChatMessageContentItemRequest_Image,
+    ArrayChatMessageContentItemRequest_String,
+)
+from .array_chat_message_content_request import ArrayChatMessageContentRequest
 from .block_type_enum import BlockTypeEnum
 from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_message import ChatMessage
+from .chat_message_content import (
+    ChatMessageContent,
+    ChatMessageContent_Array,
+    ChatMessageContent_FunctionCall,
+    ChatMessageContent_Image,
+    ChatMessageContent_String,
+)
+from .chat_message_content_request import (
+    ChatMessageContentRequest,
+    ChatMessageContentRequest_Array,
+    ChatMessageContentRequest_FunctionCall,
+    ChatMessageContentRequest_Image,
+    ChatMessageContentRequest_String,
+)
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
 from .code_execution_node_chat_history_result import CodeExecutionNodeChatHistoryResult
@@ -28,13 +56,12 @@ from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from .deployment_read import DeploymentRead
-from .deployment_status import DeploymentStatus
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .document_index_read import DocumentIndexRead
-from .document_index_status import DocumentIndexStatus
 from .document_read import DocumentRead
 from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
+from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
 from .error_variable_value import ErrorVariableValue
 from .evaluation_params import EvaluationParams
@@ -60,6 +87,11 @@ from .fulfilled_execute_prompt_response import FulfilledExecutePromptResponse
 from .fulfilled_function_call import FulfilledFunctionCall
 from .fulfilled_prompt_execution_meta import FulfilledPromptExecutionMeta
 from .function_call import FunctionCall, FunctionCall_Fulfilled, FunctionCall_Rejected
+from .function_call_chat_message_content import FunctionCallChatMessageContent
+from .function_call_chat_message_content_request import FunctionCallChatMessageContentRequest
+from .function_call_chat_message_content_value import FunctionCallChatMessageContentValue
+from .function_call_chat_message_content_value_request import FunctionCallChatMessageContentValueRequest
+from .function_call_enum import FunctionCallEnum
 from .function_call_variable_value import FunctionCallVariableValue
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
@@ -71,6 +103,9 @@ from .generate_result_error import GenerateResultError
 from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
+from .image_chat_message_content import ImageChatMessageContent
+from .image_chat_message_content_request import ImageChatMessageContentRequest
+from .image_enum import ImageEnum
 from .indexing_state_enum import IndexingStateEnum
 from .initiated_enum import InitiatedEnum
 from .initiated_execute_prompt_event import InitiatedExecutePromptEvent
@@ -120,7 +155,9 @@ from .node_input_variable_compiled_value import (
 )
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
+from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from .paginated_slim_document_list import PaginatedSlimDocumentList
+from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 from .prompt_deployment_expand_meta_request_request import PromptDeploymentExpandMetaRequestRequest
@@ -181,10 +218,15 @@ from .search_result_document_request import SearchResultDocumentRequest
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_request import SearchResultRequest
 from .search_weights_request import SearchWeightsRequest
+from .slim_deployment_read import SlimDeploymentRead
 from .slim_document import SlimDocument
+from .slim_workflow_deployment import SlimWorkflowDeployment
 from .streaming_enum import StreamingEnum
 from .streaming_execute_prompt_event import StreamingExecutePromptEvent
 from .streaming_prompt_execution_meta import StreamingPromptExecutionMeta
+from .string_chat_message_content import StringChatMessageContent
+from .string_chat_message_content_request import StringChatMessageContentRequest
+from .string_enum import StringEnum
 from .string_input_request import StringInputRequest
 from .string_variable_value import StringVariableValue
 from .submit_completion_actual_request import SubmitCompletionActualRequest
@@ -250,6 +292,8 @@ from .upload_document_response import UploadDocumentResponse
 from .vellum_error import VellumError
 from .vellum_error_code_enum import VellumErrorCodeEnum
 from .vellum_error_request import VellumErrorRequest
+from .vellum_image import VellumImage
+from .vellum_image_request import VellumImageRequest
 from .vellum_variable import VellumVariable
 from .vellum_variable_type import VellumVariableType
 from .workflow_event_error import WorkflowEventError
@@ -304,9 +348,29 @@ from .workflow_stream_event import WorkflowStreamEvent, WorkflowStreamEvent_Node
 __all__ = [
     "ApiNodeResult",
     "ApiNodeResultData",
+    "ArrayChatMessageContent",
+    "ArrayChatMessageContentItem",
+    "ArrayChatMessageContentItemRequest",
+    "ArrayChatMessageContentItemRequest_FunctionCall",
+    "ArrayChatMessageContentItemRequest_Image",
+    "ArrayChatMessageContentItemRequest_String",
+    "ArrayChatMessageContentItem_FunctionCall",
+    "ArrayChatMessageContentItem_Image",
+    "ArrayChatMessageContentItem_String",
+    "ArrayChatMessageContentRequest",
     "BlockTypeEnum",
     "ChatHistoryInputRequest",
     "ChatMessage",
+    "ChatMessageContent",
+    "ChatMessageContentRequest",
+    "ChatMessageContentRequest_Array",
+    "ChatMessageContentRequest_FunctionCall",
+    "ChatMessageContentRequest_Image",
+    "ChatMessageContentRequest_String",
+    "ChatMessageContent_Array",
+    "ChatMessageContent_FunctionCall",
+    "ChatMessageContent_Image",
+    "ChatMessageContent_String",
     "ChatMessageRequest",
     "ChatMessageRole",
     "CodeExecutionNodeChatHistoryResult",
@@ -328,13 +392,12 @@ __all__ = [
     "ConditionalNodeResultData",
     "DeploymentProviderPayloadResponse",
     "DeploymentRead",
-    "DeploymentStatus",
     "DocumentDocumentToDocumentIndex",
     "DocumentIndexRead",
-    "DocumentIndexStatus",
     "DocumentRead",
     "DocumentStatus",
     "EnrichedNormalizedCompletion",
+    "EntityStatus",
     "EnvironmentEnum",
     "ErrorVariableValue",
     "EvaluationParams",
@@ -356,6 +419,11 @@ __all__ = [
     "FulfilledFunctionCall",
     "FulfilledPromptExecutionMeta",
     "FunctionCall",
+    "FunctionCallChatMessageContent",
+    "FunctionCallChatMessageContentRequest",
+    "FunctionCallChatMessageContentValue",
+    "FunctionCallChatMessageContentValueRequest",
+    "FunctionCallEnum",
     "FunctionCallVariableValue",
     "FunctionCall_Fulfilled",
     "FunctionCall_Rejected",
@@ -369,6 +437,9 @@ __all__ = [
     "GenerateStreamResponse",
     "GenerateStreamResult",
     "GenerateStreamResultData",
+    "ImageChatMessageContent",
+    "ImageChatMessageContentRequest",
+    "ImageEnum",
     "IndexingStateEnum",
     "InitiatedEnum",
     "InitiatedExecutePromptEvent",
@@ -414,7 +485,9 @@ __all__ = [
     "NodeInputVariableCompiledValue_String",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
+    "PaginatedSlimDeploymentReadList",
     "PaginatedSlimDocumentList",
+    "PaginatedSlimWorkflowDeploymentList",
     "ProcessingFailureReasonEnum",
     "ProcessingStateEnum",
     "PromptDeploymentExpandMetaRequestRequest",
@@ -471,10 +544,15 @@ __all__ = [
     "SearchResultMergingRequest",
     "SearchResultRequest",
     "SearchWeightsRequest",
+    "SlimDeploymentRead",
     "SlimDocument",
+    "SlimWorkflowDeployment",
     "StreamingEnum",
     "StreamingExecutePromptEvent",
     "StreamingPromptExecutionMeta",
+    "StringChatMessageContent",
+    "StringChatMessageContentRequest",
+    "StringEnum",
     "StringInputRequest",
     "StringVariableValue",
     "SubmitCompletionActualRequest",
@@ -532,6 +610,8 @@ __all__ = [
     "VellumError",
     "VellumErrorCodeEnum",
     "VellumErrorRequest",
+    "VellumImage",
+    "VellumImageRequest",
     "VellumVariable",
     "VellumVariableType",
     "WorkflowEventError",

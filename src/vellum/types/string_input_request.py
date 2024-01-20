@@ -12,6 +12,10 @@ except ImportError:
 
 
 class StringInputRequest(pydantic.BaseModel):
+    """
+    A user input representing a string value
+    """
+
     name: str = pydantic.Field(description="The variable's name, as defined in the deployment.")
     value: str
 

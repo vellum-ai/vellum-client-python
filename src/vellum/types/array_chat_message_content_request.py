@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .array_chat_message_content_item_request import ArrayChatMessageContentItemRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,13 +12,12 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class JsonInputRequest(pydantic.BaseModel):
+class ArrayChatMessageContentRequest(pydantic.BaseModel):
     """
-    A user input representing a JSON object
+    A list of chat message content items.
     """
 
-    name: str = pydantic.Field(description="The variable's name, as defined in the deployment.")
-    value: typing.Dict[str, typing.Any]
+    value: typing.List[ArrayChatMessageContentItemRequest]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

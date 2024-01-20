@@ -14,7 +14,7 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class DeploymentRead(pydantic.BaseModel):
+class SlimDeploymentRead(pydantic.BaseModel):
     id: str
     created: dt.datetime
     label: str = pydantic.Field(description="A human-readable label for the deployment")
@@ -33,9 +33,6 @@ class DeploymentRead(pydantic.BaseModel):
     )
     last_deployed_on: dt.datetime
     input_variables: typing.List[VellumVariable]
-    active_model_version_ids: typing.List[str] = pydantic.Field(
-        description="Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead."
-    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

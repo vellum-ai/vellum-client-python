@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .chat_message_content import ChatMessageContent
 from .chat_message_role import ChatMessageRole
 
 try:
@@ -13,8 +14,9 @@ except ImportError:
 
 
 class ChatMessage(pydantic.BaseModel):
-    text: str
+    text: typing.Optional[str]
     role: ChatMessageRole
+    content: typing.Optional[ChatMessageContent]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

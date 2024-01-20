@@ -11,13 +11,14 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class JsonInputRequest(pydantic.BaseModel):
+class FunctionCallChatMessageContentValue(pydantic.BaseModel):
     """
-    A user input representing a JSON object
+    The final resolved function call value.
     """
 
-    name: str = pydantic.Field(description="The variable's name, as defined in the deployment.")
-    value: typing.Dict[str, typing.Any]
+    name: str
+    arguments: typing.Dict[str, typing.Any]
+    id: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

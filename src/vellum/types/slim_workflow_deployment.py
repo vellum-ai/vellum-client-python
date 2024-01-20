@@ -14,27 +14,33 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class DeploymentRead(pydantic.BaseModel):
+class SlimWorkflowDeployment(pydantic.BaseModel):
     id: str
-    created: dt.datetime
-    label: str = pydantic.Field(description="A human-readable label for the deployment")
-    name: str = pydantic.Field(description="A name that uniquely identifies this deployment within its workspace")
+    name: str = pydantic.Field(
+        description="A name that uniquely identifies this workflow deployment within its workspace"
+    )
+    label: str = pydantic.Field(description="A human-readable label for the workflow deployment")
     status: typing.Optional[EntityStatus] = pydantic.Field(
-        description=("The current status of the deployment\n" "\n" "- `ACTIVE` - Active\n" "- `ARCHIVED` - Archived\n")
+        description=(
+            "The current status of the workflow deployment\n" "\n" "- `ACTIVE` - Active\n" "- `ARCHIVED` - Archived\n"
+        )
     )
     environment: typing.Optional[EnvironmentEnum] = pydantic.Field(
         description=(
-            "The environment this deployment is used in\n"
+            "The environment this workflow deployment is used in\n"
             "\n"
             "- `DEVELOPMENT` - Development\n"
             "- `STAGING` - Staging\n"
             "- `PRODUCTION` - Production\n"
         )
     )
+    created: dt.datetime
     last_deployed_on: dt.datetime
-    input_variables: typing.List[VellumVariable]
-    active_model_version_ids: typing.List[str] = pydantic.Field(
-        description="Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead."
+    input_variables: typing.List[VellumVariable] = pydantic.Field(
+        description="The input variables this Workflow Deployment expects to receive values for when it is executed."
+    )
+    output_variables: typing.List[VellumVariable] = pydantic.Field(
+        description="The output variables this Workflow Deployment will produce when it is executed."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

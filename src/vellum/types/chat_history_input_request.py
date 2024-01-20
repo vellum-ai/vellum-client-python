@@ -13,6 +13,10 @@ except ImportError:
 
 
 class ChatHistoryInputRequest(pydantic.BaseModel):
+    """
+    A user input representing a list of chat messages
+    """
+
     name: str = pydantic.Field(description="The variable's name, as defined in the deployment.")
     value: typing.List[ChatMessageRequest]
 

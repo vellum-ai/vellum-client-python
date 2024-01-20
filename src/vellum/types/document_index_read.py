@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .document_index_status import DocumentIndexStatus
+from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
 
 try:
@@ -18,7 +18,7 @@ class DocumentIndexRead(pydantic.BaseModel):
     created: dt.datetime
     label: str = pydantic.Field(description="A human-readable label for the document index")
     name: str = pydantic.Field(description="A name that uniquely identifies this index within its workspace")
-    status: typing.Optional[DocumentIndexStatus] = pydantic.Field(
+    status: typing.Optional[EntityStatus] = pydantic.Field(
         description=(
             "The current status of the document index\n" "\n" "- `ACTIVE` - Active\n" "- `ARCHIVED` - Archived\n"
         )

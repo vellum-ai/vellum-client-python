@@ -22,6 +22,7 @@ from .resources.model_versions.client import AsyncModelVersionsClient, ModelVers
 from .resources.registered_prompts.client import AsyncRegisteredPromptsClient, RegisteredPromptsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
 from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
+from .resources.workflow_deployments.client import AsyncWorkflowDeploymentsClient, WorkflowDeploymentsClient
 from .types.execute_prompt_event import ExecutePromptEvent
 from .types.execute_prompt_response import ExecutePromptResponse
 from .types.generate_options_request import GenerateOptionsRequest
@@ -69,6 +70,7 @@ class Vellum:
         self.registered_prompts = RegisteredPromptsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
+        self.workflow_deployments = WorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
 
     def execute_prompt(
         self,
@@ -90,7 +92,7 @@ class Vellum:
         In the meantime, we recommend still using the `/generate` endpoint for prompts with function calling.
 
         Parameters:
-            - inputs: typing.List[PromptDeploymentInputRequest].
+            - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
             - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
@@ -168,7 +170,7 @@ class Vellum:
         In the meantime, we recommend still using the `/generate-stream` endpoint for prompts with function calling
 
         Parameters:
-            - inputs: typing.List[PromptDeploymentInputRequest].
+            - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
             - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
@@ -316,7 +318,13 @@ class Vellum:
 
             - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
         ---
-        from vellum import GenerateOptionsRequest, GenerateRequest, LogprobsEnum
+        from vellum import (
+            ChatMessageRequest,
+            ChatMessageRole,
+            GenerateOptionsRequest,
+            GenerateRequest,
+            LogprobsEnum,
+        )
         from vellum.client import Vellum
 
         client = Vellum(
@@ -325,7 +333,12 @@ class Vellum:
         client.generate(
             requests=[
                 GenerateRequest(
-                    input_values={},
+                    input_values={"string": {"unknown": "string", "type": "unknown"}},
+                    chat_history=[
+                        ChatMessageRequest(
+                            role=ChatMessageRole.SYSTEM,
+                        )
+                    ],
                 )
             ],
             options=GenerateOptionsRequest(
@@ -441,6 +454,41 @@ class Vellum:
             - query: str. The query to search for.
 
             - options: typing.Optional[SearchRequestOptionsRequest]. Configuration options for the search.
+        ---
+        from vellum import (
+            LogicalOperator,
+            MetadataFilterConfigRequest,
+            MetadataFilterRuleCombinator,
+            MetadataFilterRuleRequest,
+            SearchFiltersRequest,
+            SearchRequestOptionsRequest,
+            SearchResultMergingRequest,
+            SearchWeightsRequest,
+        )
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.search(
+            query="string",
+            options=SearchRequestOptionsRequest(
+                weights=SearchWeightsRequest(),
+                result_merging=SearchResultMergingRequest(),
+                filters=SearchFiltersRequest(
+                    metadata=MetadataFilterConfigRequest(
+                        combinator=MetadataFilterRuleCombinator.AND,
+                        rules=[
+                            MetadataFilterRuleRequest(
+                                combinator=MetadataFilterRuleCombinator.AND,
+                                operator=LogicalOperator.EQUALS,
+                            )
+                        ],
+                        operator=LogicalOperator.EQUALS,
+                    ),
+                ),
+            ),
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"query": query}
         if index_id is not OMIT:
@@ -489,13 +537,14 @@ class Vellum:
 
             - actuals: typing.List[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
         ---
+        from vellum import SubmitCompletionActualRequest
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         client.submit_completion_actuals(
-            actuals=[],
+            actuals=[SubmitCompletionActualRequest()],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
@@ -596,6 +645,7 @@ class AsyncVellum:
         self.registered_prompts = AsyncRegisteredPromptsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
+        self.workflow_deployments = AsyncWorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
 
     async def execute_prompt(
         self,
@@ -617,7 +667,7 @@ class AsyncVellum:
         In the meantime, we recommend still using the `/generate` endpoint for prompts with function calling.
 
         Parameters:
-            - inputs: typing.List[PromptDeploymentInputRequest].
+            - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
             - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
@@ -695,7 +745,7 @@ class AsyncVellum:
         In the meantime, we recommend still using the `/generate-stream` endpoint for prompts with function calling
 
         Parameters:
-            - inputs: typing.List[PromptDeploymentInputRequest].
+            - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
             - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
@@ -843,7 +893,13 @@ class AsyncVellum:
 
             - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
         ---
-        from vellum import GenerateOptionsRequest, GenerateRequest, LogprobsEnum
+        from vellum import (
+            ChatMessageRequest,
+            ChatMessageRole,
+            GenerateOptionsRequest,
+            GenerateRequest,
+            LogprobsEnum,
+        )
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -852,7 +908,12 @@ class AsyncVellum:
         await client.generate(
             requests=[
                 GenerateRequest(
-                    input_values={},
+                    input_values={"string": {"unknown": "string", "type": "unknown"}},
+                    chat_history=[
+                        ChatMessageRequest(
+                            role=ChatMessageRole.SYSTEM,
+                        )
+                    ],
                 )
             ],
             options=GenerateOptionsRequest(
@@ -968,6 +1029,41 @@ class AsyncVellum:
             - query: str. The query to search for.
 
             - options: typing.Optional[SearchRequestOptionsRequest]. Configuration options for the search.
+        ---
+        from vellum import (
+            LogicalOperator,
+            MetadataFilterConfigRequest,
+            MetadataFilterRuleCombinator,
+            MetadataFilterRuleRequest,
+            SearchFiltersRequest,
+            SearchRequestOptionsRequest,
+            SearchResultMergingRequest,
+            SearchWeightsRequest,
+        )
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.search(
+            query="string",
+            options=SearchRequestOptionsRequest(
+                weights=SearchWeightsRequest(),
+                result_merging=SearchResultMergingRequest(),
+                filters=SearchFiltersRequest(
+                    metadata=MetadataFilterConfigRequest(
+                        combinator=MetadataFilterRuleCombinator.AND,
+                        rules=[
+                            MetadataFilterRuleRequest(
+                                combinator=MetadataFilterRuleCombinator.AND,
+                                operator=LogicalOperator.EQUALS,
+                            )
+                        ],
+                        operator=LogicalOperator.EQUALS,
+                    ),
+                ),
+            ),
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"query": query}
         if index_id is not OMIT:
@@ -1016,13 +1112,14 @@ class AsyncVellum:
 
             - actuals: typing.List[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
         ---
+        from vellum import SubmitCompletionActualRequest
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
         await client.submit_completion_actuals(
-            actuals=[],
+            actuals=[SubmitCompletionActualRequest()],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}

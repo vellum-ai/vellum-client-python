@@ -23,6 +23,15 @@ class ModelVersionsClient:
 
         Parameters:
             - id: str. A UUID string identifying this model version.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.model_versions.retrieve(
+            id="string",
+        )
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
@@ -49,6 +58,15 @@ class AsyncModelVersionsClient:
 
         Parameters:
             - id: str. A UUID string identifying this model version.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.model_versions.retrieve(
+            id="string",
+        )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",

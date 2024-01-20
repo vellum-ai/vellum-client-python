@@ -8,7 +8,7 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
 from ...types.document_index_read import DocumentIndexRead
-from ...types.document_index_status import DocumentIndexStatus
+from ...types.entity_status import EntityStatus
 from ...types.environment_enum import EnvironmentEnum
 
 try:
@@ -29,7 +29,7 @@ class DocumentIndexesClient:
         *,
         label: str,
         name: str,
-        status: typing.Optional[DocumentIndexStatus] = OMIT,
+        status: typing.Optional[EntityStatus] = OMIT,
         environment: typing.Optional[EnvironmentEnum] = OMIT,
         indexing_config: typing.Dict[str, typing.Any],
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
@@ -42,10 +42,10 @@ class DocumentIndexesClient:
 
             - name: str. A name that uniquely identifies this index within its workspace
 
-            - status: typing.Optional[DocumentIndexStatus]. The current status of the document index
+            - status: typing.Optional[EntityStatus]. The current status of the document index
 
-                                                            * `ACTIVE` - Active
-                                                            * `ARCHIVED` - Archived
+                                                     * `ACTIVE` - Active
+                                                     * `ARCHIVED` - Archived
             - environment: typing.Optional[EnvironmentEnum]. The environment this document index is used in
 
                                                              * `DEVELOPMENT` - Development
@@ -54,6 +54,20 @@ class DocumentIndexesClient:
             - indexing_config: typing.Dict[str, typing.Any]. Configuration representing how documents should be indexed
 
             - copy_documents_from_index_id: typing.Optional[str]. Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
+        ---
+        from vellum import EntityStatus, EnvironmentEnum
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.document_indexes.create(
+            label="string",
+            name="string",
+            status=EntityStatus.ACTIVE,
+            environment=EnvironmentEnum.DEVELOPMENT,
+            indexing_config={"string": {"unknown": "string", "type": "unknown"}},
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"label": label, "name": name, "indexing_config": indexing_config}
         if status is not OMIT:
@@ -83,6 +97,15 @@ class DocumentIndexesClient:
 
         Parameters:
             - id: str. Either the Document Index's ID or its unique name
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.document_indexes.retrieve(
+            id="string",
+        )
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
@@ -108,7 +131,7 @@ class AsyncDocumentIndexesClient:
         *,
         label: str,
         name: str,
-        status: typing.Optional[DocumentIndexStatus] = OMIT,
+        status: typing.Optional[EntityStatus] = OMIT,
         environment: typing.Optional[EnvironmentEnum] = OMIT,
         indexing_config: typing.Dict[str, typing.Any],
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
@@ -121,10 +144,10 @@ class AsyncDocumentIndexesClient:
 
             - name: str. A name that uniquely identifies this index within its workspace
 
-            - status: typing.Optional[DocumentIndexStatus]. The current status of the document index
+            - status: typing.Optional[EntityStatus]. The current status of the document index
 
-                                                            * `ACTIVE` - Active
-                                                            * `ARCHIVED` - Archived
+                                                     * `ACTIVE` - Active
+                                                     * `ARCHIVED` - Archived
             - environment: typing.Optional[EnvironmentEnum]. The environment this document index is used in
 
                                                              * `DEVELOPMENT` - Development
@@ -133,6 +156,20 @@ class AsyncDocumentIndexesClient:
             - indexing_config: typing.Dict[str, typing.Any]. Configuration representing how documents should be indexed
 
             - copy_documents_from_index_id: typing.Optional[str]. Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
+        ---
+        from vellum import EntityStatus, EnvironmentEnum
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.document_indexes.create(
+            label="string",
+            name="string",
+            status=EntityStatus.ACTIVE,
+            environment=EnvironmentEnum.DEVELOPMENT,
+            indexing_config={"string": {"unknown": "string", "type": "unknown"}},
+        )
         """
         _request: typing.Dict[str, typing.Any] = {"label": label, "name": name, "indexing_config": indexing_config}
         if status is not OMIT:
@@ -162,6 +199,15 @@ class AsyncDocumentIndexesClient:
 
         Parameters:
             - id: str. Either the Document Index's ID or its unique name
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.document_indexes.retrieve(
+            id="string",
+        )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",

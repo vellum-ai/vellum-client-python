@@ -6,6 +6,7 @@ import typing
 
 import typing_extensions
 
+from .array_variable_value import ArrayVariableValue
 from .chat_history_variable_value import ChatHistoryVariableValue
 from .error_variable_value import ErrorVariableValue
 from .function_call_variable_value import FunctionCallVariableValue
@@ -97,6 +98,5 @@ VariableValue = typing.Union[
     VariableValue_Array,
     VariableValue_FunctionCall,
 ]
-from .array_variable_value import ArrayVariableValue  # noqa: E402
 
-VariableValue_Array.update_forward_refs(ArrayVariableValue=ArrayVariableValue, VariableValue=VariableValue)
+VariableValue_Array.update_forward_refs()

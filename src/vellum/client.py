@@ -25,6 +25,7 @@ from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClien
 from .resources.workflow_deployments.client import AsyncWorkflowDeploymentsClient, WorkflowDeploymentsClient
 from .types.execute_prompt_event import ExecutePromptEvent
 from .types.execute_prompt_response import ExecutePromptResponse
+from .types.execute_workflow_response import ExecuteWorkflowResponse
 from .types.generate_options_request import GenerateOptionsRequest
 from .types.generate_request import GenerateRequest
 from .types.generate_response import GenerateResponse
@@ -232,6 +233,59 @@ class Vellum:
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
             raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def execute_workflow(
+        self,
+        *,
+        workflow_deployment_id: typing.Optional[str] = OMIT,
+        workflow_deployment_name: typing.Optional[str] = OMIT,
+        release_tag: typing.Optional[str] = OMIT,
+        inputs: typing.List[WorkflowRequestInputRequest],
+        external_id: typing.Optional[str] = OMIT,
+    ) -> ExecuteWorkflowResponse:
+        """
+        Executes a deployed Workflow and returns its outputs.
+
+        Parameters:
+            - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
+
+            - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
+
+            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+
+            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for monitoring purposes.
+        """
+        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if workflow_deployment_id is not OMIT:
+            _request["workflow_deployment_id"] = workflow_deployment_id
+        if workflow_deployment_name is not OMIT:
+            _request["workflow_deployment_name"] = workflow_deployment_name
+        if release_tag is not OMIT:
+            _request["release_tag"] = release_tag
+        if external_id is not OMIT:
+            _request["external_id"] = external_id
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-workflow"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 500:
+            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def execute_workflow_stream(
         self,
@@ -807,6 +861,59 @@ class AsyncVellum:
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
             raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def execute_workflow(
+        self,
+        *,
+        workflow_deployment_id: typing.Optional[str] = OMIT,
+        workflow_deployment_name: typing.Optional[str] = OMIT,
+        release_tag: typing.Optional[str] = OMIT,
+        inputs: typing.List[WorkflowRequestInputRequest],
+        external_id: typing.Optional[str] = OMIT,
+    ) -> ExecuteWorkflowResponse:
+        """
+        Executes a deployed Workflow and returns its outputs.
+
+        Parameters:
+            - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
+
+            - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
+
+            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+
+            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for monitoring purposes.
+        """
+        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if workflow_deployment_id is not OMIT:
+            _request["workflow_deployment_id"] = workflow_deployment_id
+        if workflow_deployment_name is not OMIT:
+            _request["workflow_deployment_name"] = workflow_deployment_name
+        if release_tag is not OMIT:
+            _request["release_tag"] = release_tag
+        if external_id is not OMIT:
+            _request["external_id"] = external_id
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-workflow"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 500:
+            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     async def execute_workflow_stream(
         self,

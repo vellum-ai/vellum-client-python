@@ -16,8 +16,12 @@ from .array_chat_message_content_item_request import (
     ArrayChatMessageContentItemRequest_String,
 )
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
+from .array_enum import ArrayEnum
+from .array_variable_value import ArrayVariableValue
 from .block_type_enum import BlockTypeEnum
+from .chat_history_enum import ChatHistoryEnum
 from .chat_history_input_request import ChatHistoryInputRequest
+from .chat_history_variable_value import ChatHistoryVariableValue
 from .chat_message import ChatMessage
 from .chat_message_content import (
     ChatMessageContent,
@@ -63,6 +67,7 @@ from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
+from .error_enum import ErrorEnum
 from .error_variable_value import ErrorVariableValue
 from .evaluation_params import EvaluationParams
 from .evaluation_params_request import EvaluationParamsRequest
@@ -79,11 +84,19 @@ from .execute_prompt_response import (
     ExecutePromptResponse_Fulfilled,
     ExecutePromptResponse_Rejected,
 )
+from .execute_workflow_error_response import ExecuteWorkflowErrorResponse
+from .execute_workflow_response import ExecuteWorkflowResponse
 from .execute_workflow_stream_error_response import ExecuteWorkflowStreamErrorResponse
+from .execute_workflow_workflow_result_event import (
+    ExecuteWorkflowWorkflowResultEvent,
+    ExecuteWorkflowWorkflowResultEvent_Fulfilled,
+    ExecuteWorkflowWorkflowResultEvent_Rejected,
+)
 from .finish_reason_enum import FinishReasonEnum
 from .fulfilled_enum import FulfilledEnum
 from .fulfilled_execute_prompt_event import FulfilledExecutePromptEvent
 from .fulfilled_execute_prompt_response import FulfilledExecutePromptResponse
+from .fulfilled_execute_workflow_workflow_result_event import FulfilledExecuteWorkflowWorkflowResultEvent
 from .fulfilled_function_call import FulfilledFunctionCall
 from .fulfilled_prompt_execution_meta import FulfilledPromptExecutionMeta
 from .function_call import FunctionCall, FunctionCall_Fulfilled, FunctionCall_Rejected
@@ -110,6 +123,7 @@ from .indexing_state_enum import IndexingStateEnum
 from .initiated_enum import InitiatedEnum
 from .initiated_execute_prompt_event import InitiatedExecutePromptEvent
 from .initiated_prompt_execution_meta import InitiatedPromptExecutionMeta
+from .json_enum import JsonEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
 from .logical_operator import LogicalOperator
@@ -155,6 +169,8 @@ from .node_input_variable_compiled_value import (
 )
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
+from .number_enum import NumberEnum
+from .number_variable_value import NumberVariableValue
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
@@ -198,6 +214,7 @@ from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
 from .rejected_enum import RejectedEnum
 from .rejected_execute_prompt_event import RejectedExecutePromptEvent
 from .rejected_execute_prompt_response import RejectedExecutePromptResponse
+from .rejected_execute_workflow_workflow_result_event import RejectedExecuteWorkflowWorkflowResultEvent
 from .rejected_function_call import RejectedFunctionCall
 from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .sandbox_metric_input_params import SandboxMetricInputParams
@@ -217,6 +234,8 @@ from .search_result_document import SearchResultDocument
 from .search_result_document_request import SearchResultDocumentRequest
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_request import SearchResultRequest
+from .search_results_enum import SearchResultsEnum
+from .search_results_variable_value import SearchResultsVariableValue
 from .search_weights_request import SearchWeightsRequest
 from .slim_deployment_read import SlimDeploymentRead
 from .slim_document import SlimDocument
@@ -289,6 +308,17 @@ from .test_case_variable_value import (
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
+from .variable_value import (
+    VariableValue,
+    VariableValue_Array,
+    VariableValue_ChatHistory,
+    VariableValue_Error,
+    VariableValue_FunctionCall,
+    VariableValue_Json,
+    VariableValue_Number,
+    VariableValue_SearchResults,
+    VariableValue_String,
+)
 from .vellum_error import VellumError
 from .vellum_error_code_enum import VellumErrorCodeEnum
 from .vellum_error_request import VellumErrorRequest
@@ -316,6 +346,27 @@ from .workflow_node_result_data import (
 )
 from .workflow_node_result_event import WorkflowNodeResultEvent
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
+from .workflow_output import (
+    WorkflowOutput,
+    WorkflowOutput_Array,
+    WorkflowOutput_ChatHistory,
+    WorkflowOutput_Error,
+    WorkflowOutput_FunctionCall,
+    WorkflowOutput_Image,
+    WorkflowOutput_Json,
+    WorkflowOutput_Number,
+    WorkflowOutput_SearchResults,
+    WorkflowOutput_String,
+)
+from .workflow_output_array import WorkflowOutputArray
+from .workflow_output_chat_history import WorkflowOutputChatHistory
+from .workflow_output_error import WorkflowOutputError
+from .workflow_output_function_call import WorkflowOutputFunctionCall
+from .workflow_output_image import WorkflowOutputImage
+from .workflow_output_json import WorkflowOutputJson
+from .workflow_output_number import WorkflowOutputNumber
+from .workflow_output_search_results import WorkflowOutputSearchResults
+from .workflow_output_string import WorkflowOutputString
 from .workflow_request_chat_history_input_request import WorkflowRequestChatHistoryInputRequest
 from .workflow_request_input_request import (
     WorkflowRequestInputRequest,
@@ -358,8 +409,12 @@ __all__ = [
     "ArrayChatMessageContentItem_Image",
     "ArrayChatMessageContentItem_String",
     "ArrayChatMessageContentRequest",
+    "ArrayEnum",
+    "ArrayVariableValue",
     "BlockTypeEnum",
+    "ChatHistoryEnum",
     "ChatHistoryInputRequest",
+    "ChatHistoryVariableValue",
     "ChatMessage",
     "ChatMessageContent",
     "ChatMessageContentRequest",
@@ -399,6 +454,7 @@ __all__ = [
     "EnrichedNormalizedCompletion",
     "EntityStatus",
     "EnvironmentEnum",
+    "ErrorEnum",
     "ErrorVariableValue",
     "EvaluationParams",
     "EvaluationParamsRequest",
@@ -411,11 +467,17 @@ __all__ = [
     "ExecutePromptResponse",
     "ExecutePromptResponse_Fulfilled",
     "ExecutePromptResponse_Rejected",
+    "ExecuteWorkflowErrorResponse",
+    "ExecuteWorkflowResponse",
     "ExecuteWorkflowStreamErrorResponse",
+    "ExecuteWorkflowWorkflowResultEvent",
+    "ExecuteWorkflowWorkflowResultEvent_Fulfilled",
+    "ExecuteWorkflowWorkflowResultEvent_Rejected",
     "FinishReasonEnum",
     "FulfilledEnum",
     "FulfilledExecutePromptEvent",
     "FulfilledExecutePromptResponse",
+    "FulfilledExecuteWorkflowWorkflowResultEvent",
     "FulfilledFunctionCall",
     "FulfilledPromptExecutionMeta",
     "FunctionCall",
@@ -444,6 +506,7 @@ __all__ = [
     "InitiatedEnum",
     "InitiatedExecutePromptEvent",
     "InitiatedPromptExecutionMeta",
+    "JsonEnum",
     "JsonInputRequest",
     "JsonVariableValue",
     "LogicalOperator",
@@ -485,6 +548,8 @@ __all__ = [
     "NodeInputVariableCompiledValue_String",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
+    "NumberEnum",
+    "NumberVariableValue",
     "PaginatedSlimDeploymentReadList",
     "PaginatedSlimDocumentList",
     "PaginatedSlimWorkflowDeploymentList",
@@ -524,6 +589,7 @@ __all__ = [
     "RejectedEnum",
     "RejectedExecutePromptEvent",
     "RejectedExecutePromptResponse",
+    "RejectedExecuteWorkflowWorkflowResultEvent",
     "RejectedFunctionCall",
     "RejectedPromptExecutionMeta",
     "SandboxMetricInputParams",
@@ -543,6 +609,8 @@ __all__ = [
     "SearchResultDocumentRequest",
     "SearchResultMergingRequest",
     "SearchResultRequest",
+    "SearchResultsEnum",
+    "SearchResultsVariableValue",
     "SearchWeightsRequest",
     "SlimDeploymentRead",
     "SlimDocument",
@@ -607,6 +675,15 @@ __all__ = [
     "TestSuiteTestCase",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
+    "VariableValue",
+    "VariableValue_Array",
+    "VariableValue_ChatHistory",
+    "VariableValue_Error",
+    "VariableValue_FunctionCall",
+    "VariableValue_Json",
+    "VariableValue_Number",
+    "VariableValue_SearchResults",
+    "VariableValue_String",
     "VellumError",
     "VellumErrorCodeEnum",
     "VellumErrorRequest",
@@ -632,6 +709,25 @@ __all__ = [
     "WorkflowNodeResultData_Terminal",
     "WorkflowNodeResultEvent",
     "WorkflowNodeResultEventState",
+    "WorkflowOutput",
+    "WorkflowOutputArray",
+    "WorkflowOutputChatHistory",
+    "WorkflowOutputError",
+    "WorkflowOutputFunctionCall",
+    "WorkflowOutputImage",
+    "WorkflowOutputJson",
+    "WorkflowOutputNumber",
+    "WorkflowOutputSearchResults",
+    "WorkflowOutputString",
+    "WorkflowOutput_Array",
+    "WorkflowOutput_ChatHistory",
+    "WorkflowOutput_Error",
+    "WorkflowOutput_FunctionCall",
+    "WorkflowOutput_Image",
+    "WorkflowOutput_Json",
+    "WorkflowOutput_Number",
+    "WorkflowOutput_SearchResults",
+    "WorkflowOutput_String",
     "WorkflowRequestChatHistoryInputRequest",
     "WorkflowRequestInputRequest",
     "WorkflowRequestInputRequest_ChatHistory",

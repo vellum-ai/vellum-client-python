@@ -4,10 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .workflow_event_error import WorkflowEventError
-from .workflow_node_result_event_state import WorkflowNodeResultEventState
-from .workflow_output import WorkflowOutput
-from .workflow_result_event_output_data import WorkflowResultEventOutputData
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -15,13 +11,14 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class WorkflowResultEvent(pydantic.BaseModel):
+class WorkflowOutputString(pydantic.BaseModel):
+    """
+    A string output from a Workflow execution.
+    """
+
     id: str
-    state: WorkflowNodeResultEventState
-    ts: dt.datetime
-    output: typing.Optional[WorkflowResultEventOutputData]
-    error: typing.Optional[WorkflowEventError]
-    outputs: typing.Optional[typing.List[WorkflowOutput]]
+    name: str = pydantic.Field(description="The output's name, as defined in the workflow")
+    value: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

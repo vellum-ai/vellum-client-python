@@ -8,8 +8,8 @@ T_Result = typing.TypeVar("T_Result")
 
 class ScenarioInputTypeEnum(str, enum.Enum):
     """
-    - `TEXT` - Text
-    - `CHAT_HISTORY` - Chat History
+    - `TEXT` - TEXT
+    - `CHAT_HISTORY` - CHAT_HISTORY
     """
 
     TEXT = "TEXT"

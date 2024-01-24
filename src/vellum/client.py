@@ -268,7 +268,7 @@ class Vellum:
             _request["external_id"] = external_id
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-workflow"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,
@@ -896,7 +896,7 @@ class AsyncVellum:
             _request["external_id"] = external_id
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/execute-workflow"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow"),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=None,

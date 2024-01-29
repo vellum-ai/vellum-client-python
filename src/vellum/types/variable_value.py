@@ -99,4 +99,4 @@ VariableValue = typing.Union[
     VariableValue_FunctionCall,
 ]
 
-VariableValue_Array.update_forward_refs()
+VariableValue_Array.update_forward_refs(ArrayVariableValue=ArrayVariableValue, VariableValue=VariableValue)

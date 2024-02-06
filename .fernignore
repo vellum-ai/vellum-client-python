@@ -3,5 +3,8 @@
 README.md
 LICENSE
 
+
+src/vellum/types/variable_value.py
+
 # added computed properties
 src/vellum/types/generate_response.py

@@ -62,11 +62,33 @@ class DocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         client.document_indexes.create(
-            label="string",
-            name="string",
+            label="My Document Index",
+            name="my-document-index",
             status=EntityStatus.ACTIVE,
             environment=EnvironmentEnum.DEVELOPMENT,
-            indexing_config={"string": {"unknown": "string", "type": "unknown"}},
+            indexing_config={
+                "chunking": {
+                    "unknown": {
+                        "chunker_name": "sentence-chunker",
+                        "chunker_config": {
+                            "character_limit": 1000,
+                            "min_overlap_ratio": 0.5,
+                        },
+                    },
+                    "type": "unknown",
+                },
+                "vectorizer": {
+                    "unknown": {
+                        "model_name": "hkunlp/instructor-xl",
+                        "config": {
+                            "instruction_domain": "",
+                            "instruction_document_text_type": "plain_text",
+                            "instruction_query_text_type": "plain_text",
+                        },
+                    },
+                    "type": "unknown",
+                },
+            },
         )
         """
         _request: typing.Dict[str, typing.Any] = {"label": label, "name": name, "indexing_config": indexing_config}
@@ -164,11 +186,33 @@ class AsyncDocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         await client.document_indexes.create(
-            label="string",
-            name="string",
+            label="My Document Index",
+            name="my-document-index",
             status=EntityStatus.ACTIVE,
             environment=EnvironmentEnum.DEVELOPMENT,
-            indexing_config={"string": {"unknown": "string", "type": "unknown"}},
+            indexing_config={
+                "chunking": {
+                    "unknown": {
+                        "chunker_name": "sentence-chunker",
+                        "chunker_config": {
+                            "character_limit": 1000,
+                            "min_overlap_ratio": 0.5,
+                        },
+                    },
+                    "type": "unknown",
+                },
+                "vectorizer": {
+                    "unknown": {
+                        "model_name": "hkunlp/instructor-xl",
+                        "config": {
+                            "instruction_domain": "",
+                            "instruction_document_text_type": "plain_text",
+                            "instruction_query_text_type": "plain_text",
+                        },
+                    },
+                    "type": "unknown",
+                },
+            },
         )
         """
         _request: typing.Dict[str, typing.Any] = {"label": label, "name": name, "indexing_config": indexing_config}

@@ -13,6 +13,10 @@ except ImportError:
 
 
 class TerminalNodeResult(pydantic.BaseModel):
+    """
+    A Node Result Event emitted from a Terminal Node.
+    """
+
     data: TerminalNodeResultData
 
     def json(self, **kwargs: typing.Any) -> str:

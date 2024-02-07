@@ -13,6 +13,10 @@ except ImportError:
 
 
 class CodeExecutionNodeResult(pydantic.BaseModel):
+    """
+    A Node Result Event emitted from a Code Execution Node.
+    """
+
     data: CodeExecutionNodeResultData
 
     def json(self, **kwargs: typing.Any) -> str:

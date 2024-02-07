@@ -75,16 +75,10 @@ class RegisteredPromptsClient:
             - meta: typing.Optional[typing.Dict[str, typing.Any]]. Optionally include additional metadata to store along with the prompt.
         ---
         from vellum import (
-            BlockTypeEnum,
-            ChatMessageRole,
             PromptTemplateBlockDataRequest,
-            PromptTemplateBlockPropertiesRequest,
-            PromptTemplateBlockRequest,
             ProviderEnum,
-            RegisteredPromptInputVariableRequest,
             RegisterPromptModelParametersRequest,
             RegisterPromptPromptInfoRequest,
-            VellumVariableType,
         )
         from vellum.client import Vellum
 
@@ -97,23 +91,9 @@ class RegisteredPromptsClient:
             prompt=RegisterPromptPromptInfoRequest(
                 prompt_block_data=PromptTemplateBlockDataRequest(
                     version=1,
-                    blocks=[
-                        PromptTemplateBlockRequest(
-                            id="string",
-                            block_type=BlockTypeEnum.CHAT_MESSAGE,
-                            properties=PromptTemplateBlockPropertiesRequest(
-                                chat_role=ChatMessageRole.SYSTEM,
-                                template_type=VellumVariableType.STRING,
-                            ),
-                        )
-                    ],
+                    blocks=[],
                 ),
-                input_variables=[
-                    RegisteredPromptInputVariableRequest(
-                        key="string",
-                        type=VellumVariableType.STRING,
-                    )
-                ],
+                input_variables=[],
             ),
             provider=ProviderEnum.ANTHROPIC,
             model="string",
@@ -211,16 +191,10 @@ class AsyncRegisteredPromptsClient:
             - meta: typing.Optional[typing.Dict[str, typing.Any]]. Optionally include additional metadata to store along with the prompt.
         ---
         from vellum import (
-            BlockTypeEnum,
-            ChatMessageRole,
             PromptTemplateBlockDataRequest,
-            PromptTemplateBlockPropertiesRequest,
-            PromptTemplateBlockRequest,
             ProviderEnum,
-            RegisteredPromptInputVariableRequest,
             RegisterPromptModelParametersRequest,
             RegisterPromptPromptInfoRequest,
-            VellumVariableType,
         )
         from vellum.client import AsyncVellum
 
@@ -233,23 +207,9 @@ class AsyncRegisteredPromptsClient:
             prompt=RegisterPromptPromptInfoRequest(
                 prompt_block_data=PromptTemplateBlockDataRequest(
                     version=1,
-                    blocks=[
-                        PromptTemplateBlockRequest(
-                            id="string",
-                            block_type=BlockTypeEnum.CHAT_MESSAGE,
-                            properties=PromptTemplateBlockPropertiesRequest(
-                                chat_role=ChatMessageRole.SYSTEM,
-                                template_type=VellumVariableType.STRING,
-                            ),
-                        )
-                    ],
+                    blocks=[],
                 ),
-                input_variables=[
-                    RegisteredPromptInputVariableRequest(
-                        key="string",
-                        type=VellumVariableType.STRING,
-                    )
-                ],
+                input_variables=[],
             ),
             provider=ProviderEnum.ANTHROPIC,
             model="string",

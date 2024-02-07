@@ -13,6 +13,10 @@ except ImportError:
 
 
 class ApiNodeResult(pydantic.BaseModel):
+    """
+    A Node Result Event emitted from an API Node.
+    """
+
     data: ApiNodeResultData
 
     def json(self, **kwargs: typing.Any) -> str:

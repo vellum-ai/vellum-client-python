@@ -13,6 +13,10 @@ except ImportError:
 
 
 class WorkflowExecutionNodeResultEvent(pydantic.BaseModel):
+    """
+    A NODE-level event emitted from the workflow's execution.
+    """
+
     execution_id: str
     run_id: typing.Optional[str]
     external_id: typing.Optional[str]

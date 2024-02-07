@@ -4,7 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .sandbox_metric_input_params import SandboxMetricInputParams
 from .scenario_input import ScenarioInput
 
 try:
@@ -17,7 +16,6 @@ class SandboxScenario(pydantic.BaseModel):
     label: typing.Optional[str]
     inputs: typing.List[ScenarioInput] = pydantic.Field(description="The inputs for the scenario")
     id: str = pydantic.Field(description="The id of the scenario")
-    metric_input_params: SandboxMetricInputParams
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

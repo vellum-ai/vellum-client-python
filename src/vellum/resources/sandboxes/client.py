@@ -7,7 +7,6 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
-from ...types.sandbox_metric_input_params_request import SandboxMetricInputParamsRequest
 from ...types.sandbox_scenario import SandboxScenario
 from ...types.scenario_input_request import ScenarioInputRequest
 
@@ -31,7 +30,6 @@ class SandboxesClient:
         label: typing.Optional[str] = OMIT,
         inputs: typing.List[ScenarioInputRequest],
         scenario_id: typing.Optional[str] = OMIT,
-        metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = OMIT,
     ) -> SandboxScenario:
         """
         Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
@@ -50,17 +48,8 @@ class SandboxesClient:
             - inputs: typing.List[ScenarioInputRequest]. The inputs for the scenario
 
             - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
-
-            - metric_input_params: typing.Optional[SandboxMetricInputParamsRequest].
         ---
-        from vellum import (
-            ChatMessageRequest,
-            ChatMessageRole,
-            EvaluationParamsRequest,
-            SandboxMetricInputParamsRequest,
-            ScenarioInputRequest,
-            ScenarioInputTypeEnum,
-        )
+        from vellum import ScenarioInputRequest, ScenarioInputTypeEnum
         from vellum.client import Vellum
 
         client = Vellum(
@@ -68,20 +57,19 @@ class SandboxesClient:
         )
         client.sandboxes.upsert_sandbox_scenario(
             id="string",
+            label="Scenario 1",
             inputs=[
                 ScenarioInputRequest(
-                    key="string",
+                    key="var_1",
                     type=ScenarioInputTypeEnum.TEXT,
-                    chat_history=[
-                        ChatMessageRequest(
-                            role=ChatMessageRole.SYSTEM,
-                        )
-                    ],
-                )
+                    value="Hello, world!",
+                ),
+                ScenarioInputRequest(
+                    key="var_2",
+                    type=ScenarioInputTypeEnum.TEXT,
+                    value="Why hello, there!",
+                ),
             ],
-            metric_input_params=SandboxMetricInputParamsRequest(
-                params=EvaluationParamsRequest(),
-            ),
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
@@ -89,8 +77,6 @@ class SandboxesClient:
             _request["label"] = label
         if scenario_id is not OMIT:
             _request["scenario_id"] = scenario_id
-        if metric_input_params is not OMIT:
-            _request["metric_input_params"] = metric_input_params
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios"),
@@ -153,7 +139,6 @@ class AsyncSandboxesClient:
         label: typing.Optional[str] = OMIT,
         inputs: typing.List[ScenarioInputRequest],
         scenario_id: typing.Optional[str] = OMIT,
-        metric_input_params: typing.Optional[SandboxMetricInputParamsRequest] = OMIT,
     ) -> SandboxScenario:
         """
         Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
@@ -172,17 +157,8 @@ class AsyncSandboxesClient:
             - inputs: typing.List[ScenarioInputRequest]. The inputs for the scenario
 
             - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
-
-            - metric_input_params: typing.Optional[SandboxMetricInputParamsRequest].
         ---
-        from vellum import (
-            ChatMessageRequest,
-            ChatMessageRole,
-            EvaluationParamsRequest,
-            SandboxMetricInputParamsRequest,
-            ScenarioInputRequest,
-            ScenarioInputTypeEnum,
-        )
+        from vellum import ScenarioInputRequest, ScenarioInputTypeEnum
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -190,20 +166,19 @@ class AsyncSandboxesClient:
         )
         await client.sandboxes.upsert_sandbox_scenario(
             id="string",
+            label="Scenario 1",
             inputs=[
                 ScenarioInputRequest(
-                    key="string",
+                    key="var_1",
                     type=ScenarioInputTypeEnum.TEXT,
-                    chat_history=[
-                        ChatMessageRequest(
-                            role=ChatMessageRole.SYSTEM,
-                        )
-                    ],
-                )
+                    value="Hello, world!",
+                ),
+                ScenarioInputRequest(
+                    key="var_2",
+                    type=ScenarioInputTypeEnum.TEXT,
+                    value="Why hello, there!",
+                ),
             ],
-            metric_input_params=SandboxMetricInputParamsRequest(
-                params=EvaluationParamsRequest(),
-            ),
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
@@ -211,8 +186,6 @@ class AsyncSandboxesClient:
             _request["label"] = label
         if scenario_id is not OMIT:
             _request["scenario_id"] = scenario_id
-        if metric_input_params is not OMIT:
-            _request["metric_input_params"] = metric_input_params
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios"),

@@ -13,6 +13,10 @@ except ImportError:
 
 
 class ConditionalNodeResult(pydantic.BaseModel):
+    """
+    A Node Result Event emitted from a Conditional Node.
+    """
+
     data: ConditionalNodeResultData
 
     def json(self, **kwargs: typing.Any) -> str:

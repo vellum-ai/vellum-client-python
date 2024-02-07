@@ -4,7 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .variable_value import VariableValue
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,14 +11,9 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class WorkflowOutputArray(pydantic.BaseModel):
-    """
-    An array of outputs from a Workflow execution.
-    """
-
-    id: str
-    name: str = pydantic.Field(description="The output's name, as defined in the workflow")
-    value: typing.List[VariableValue]
+class NodeOutputCompiledJsonValue(pydantic.BaseModel):
+    node_output_id: str
+    value: typing.Optional[typing.Dict[str, typing.Any]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

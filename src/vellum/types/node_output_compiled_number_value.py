@@ -11,7 +11,8 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class NumberVariableValue(pydantic.BaseModel):
+class NodeOutputCompiledNumberValue(pydantic.BaseModel):
+    node_output_id: str
     value: typing.Optional[float]
 
     def json(self, **kwargs: typing.Any) -> str:

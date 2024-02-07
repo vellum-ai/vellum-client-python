@@ -14,6 +14,10 @@ except ImportError:
 
 
 class WorkflowResultEventOutputDataChatHistory(pydantic.BaseModel):
+    """
+    A Chat History output streamed from a Workflow execution.
+    """
+
     id: typing.Optional[str]
     name: str
     state: WorkflowNodeResultEventState

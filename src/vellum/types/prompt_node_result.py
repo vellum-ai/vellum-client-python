@@ -13,6 +13,10 @@ except ImportError:
 
 
 class PromptNodeResult(pydantic.BaseModel):
+    """
+    A Node Result Event emitted from a Prompt Node.
+    """
+
     data: PromptNodeResultData
 
     def json(self, **kwargs: typing.Any) -> str:

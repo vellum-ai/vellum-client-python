@@ -4,6 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .node_output_compiled_value import NodeOutputCompiledValue
+from .workflow_node_result_data import WorkflowNodeResultData
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,10 +13,17 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class EvaluationParamsRequest(pydantic.BaseModel):
-    target: typing.Optional[str] = pydantic.Field(
-        description="The target value to compare the LLM output against. Typically what you expect or desire the LLM output to be."
-    )
+class FulfilledWorkflowNodeResultEvent(pydantic.BaseModel):
+    """
+    An event that indicates that the node has fulfilled its execution.
+    """
+
+    id: str
+    node_id: str
+    node_result_id: str
+    ts: typing.Optional[dt.datetime]
+    data: typing.Optional[WorkflowNodeResultData]
+    output_values: typing.Optional[typing.List[NodeOutputCompiledValue]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

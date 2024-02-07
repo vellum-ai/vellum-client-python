@@ -13,6 +13,10 @@ except ImportError:
 
 
 class TemplatingNodeResult(pydantic.BaseModel):
+    """
+    A Node Result Event emitted from a Templating Node.
+    """
+
     data: TemplatingNodeResultData
 
     def json(self, **kwargs: typing.Any) -> str:

@@ -44,9 +44,7 @@ class DeploymentsClient:
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
             - status: typing.Optional[DeploymentsListRequestStatus]. The current status of the deployment
-
-                                                                     - `ACTIVE` - Active
-                                                                     - `ARCHIVED` - Archived---
+        ---
         from vellum import DeploymentsListRequestStatus
         from vellum.client import Vellum
 
@@ -170,9 +168,7 @@ class AsyncDeploymentsClient:
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
             - status: typing.Optional[DeploymentsListRequestStatus]. The current status of the deployment
-
-                                                                     - `ACTIVE` - Active
-                                                                     - `ARCHIVED` - Archived---
+        ---
         from vellum import DeploymentsListRequestStatus
         from vellum.client import AsyncVellum
 

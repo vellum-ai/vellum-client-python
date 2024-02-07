@@ -372,29 +372,14 @@ class Vellum:
 
             - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
         ---
-        from vellum import (
-            ChatMessageRequest,
-            ChatMessageRole,
-            GenerateOptionsRequest,
-            GenerateRequest,
-            LogprobsEnum,
-        )
+        from vellum import GenerateOptionsRequest, LogprobsEnum
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         client.generate(
-            requests=[
-                GenerateRequest(
-                    input_values={"string": {"unknown": "string", "type": "unknown"}},
-                    chat_history=[
-                        ChatMessageRequest(
-                            role=ChatMessageRole.SYSTEM,
-                        )
-                    ],
-                )
-            ],
+            requests=[],
             options=GenerateOptionsRequest(
                 logprobs=LogprobsEnum.ALL,
             ),
@@ -513,7 +498,6 @@ class Vellum:
             LogicalOperator,
             MetadataFilterConfigRequest,
             MetadataFilterRuleCombinator,
-            MetadataFilterRuleRequest,
             SearchFiltersRequest,
             SearchRequestOptionsRequest,
             SearchResultMergingRequest,
@@ -532,12 +516,6 @@ class Vellum:
                 filters=SearchFiltersRequest(
                     metadata=MetadataFilterConfigRequest(
                         combinator=MetadataFilterRuleCombinator.AND,
-                        rules=[
-                            MetadataFilterRuleRequest(
-                                combinator=MetadataFilterRuleCombinator.AND,
-                                operator=LogicalOperator.EQUALS,
-                            )
-                        ],
                         operator=LogicalOperator.EQUALS,
                     ),
                 ),
@@ -591,14 +569,13 @@ class Vellum:
 
             - actuals: typing.List[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
         ---
-        from vellum import SubmitCompletionActualRequest
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         client.submit_completion_actuals(
-            actuals=[SubmitCompletionActualRequest()],
+            actuals=[],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
@@ -1000,29 +977,14 @@ class AsyncVellum:
 
             - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
         ---
-        from vellum import (
-            ChatMessageRequest,
-            ChatMessageRole,
-            GenerateOptionsRequest,
-            GenerateRequest,
-            LogprobsEnum,
-        )
+        from vellum import GenerateOptionsRequest, LogprobsEnum
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
         await client.generate(
-            requests=[
-                GenerateRequest(
-                    input_values={"string": {"unknown": "string", "type": "unknown"}},
-                    chat_history=[
-                        ChatMessageRequest(
-                            role=ChatMessageRole.SYSTEM,
-                        )
-                    ],
-                )
-            ],
+            requests=[],
             options=GenerateOptionsRequest(
                 logprobs=LogprobsEnum.ALL,
             ),
@@ -1141,7 +1103,6 @@ class AsyncVellum:
             LogicalOperator,
             MetadataFilterConfigRequest,
             MetadataFilterRuleCombinator,
-            MetadataFilterRuleRequest,
             SearchFiltersRequest,
             SearchRequestOptionsRequest,
             SearchResultMergingRequest,
@@ -1160,12 +1121,6 @@ class AsyncVellum:
                 filters=SearchFiltersRequest(
                     metadata=MetadataFilterConfigRequest(
                         combinator=MetadataFilterRuleCombinator.AND,
-                        rules=[
-                            MetadataFilterRuleRequest(
-                                combinator=MetadataFilterRuleCombinator.AND,
-                                operator=LogicalOperator.EQUALS,
-                            )
-                        ],
                         operator=LogicalOperator.EQUALS,
                     ),
                 ),
@@ -1219,14 +1174,13 @@ class AsyncVellum:
 
             - actuals: typing.List[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
         ---
-        from vellum import SubmitCompletionActualRequest
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
         await client.submit_completion_actuals(
-            actuals=[SubmitCompletionActualRequest()],
+            actuals=[],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}

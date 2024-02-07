@@ -13,6 +13,10 @@ except ImportError:
 
 
 class WorkflowResultEventOutputDataString(pydantic.BaseModel):
+    """
+    A string output streamed from a Workflow execution.
+    """
+
     id: typing.Optional[str]
     name: str
     state: WorkflowNodeResultEventState

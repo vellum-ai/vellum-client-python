@@ -56,7 +56,7 @@ class SandboxesClient:
             api_key="YOUR_API_KEY",
         )
         client.sandboxes.upsert_sandbox_scenario(
-            id="string",
+            id="id",
             label="Scenario 1",
             inputs=[
                 ScenarioInputRequest(
@@ -68,6 +68,9 @@ class SandboxesClient:
                     key="var_2",
                     type=ScenarioInputTypeEnum.TEXT,
                     value="Why hello, there!",
+                ),
+                ScenarioInputRequest(
+                    key="key",
                 ),
             ],
         )
@@ -107,8 +110,8 @@ class SandboxesClient:
             api_key="YOUR_API_KEY",
         )
         client.sandboxes.delete_sandbox_scenario(
-            id="string",
-            scenario_id="string",
+            id="id",
+            scenario_id="scenario_id",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -165,7 +168,7 @@ class AsyncSandboxesClient:
             api_key="YOUR_API_KEY",
         )
         await client.sandboxes.upsert_sandbox_scenario(
-            id="string",
+            id="id",
             label="Scenario 1",
             inputs=[
                 ScenarioInputRequest(
@@ -177,6 +180,9 @@ class AsyncSandboxesClient:
                     key="var_2",
                     type=ScenarioInputTypeEnum.TEXT,
                     value="Why hello, there!",
+                ),
+                ScenarioInputRequest(
+                    key="key",
                 ),
             ],
         )
@@ -216,8 +222,8 @@ class AsyncSandboxesClient:
             api_key="YOUR_API_KEY",
         )
         await client.sandboxes.delete_sandbox_scenario(
-            id="string",
-            scenario_id="string",
+            id="id",
+            scenario_id="scenario_id",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(

@@ -58,7 +58,7 @@ class TestSuitesClient:
             api_key="YOUR_API_KEY",
         )
         client.test_suites.upsert_test_suite_test_case(
-            id="string",
+            id="id",
             input_values=[],
             evaluation_values=[],
         )
@@ -100,8 +100,8 @@ class TestSuitesClient:
             api_key="YOUR_API_KEY",
         )
         client.test_suites.delete_test_suite_test_case(
-            id="string",
-            test_case_id="string",
+            id="id",
+            test_case_id="test_case_id",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -160,7 +160,7 @@ class AsyncTestSuitesClient:
             api_key="YOUR_API_KEY",
         )
         await client.test_suites.upsert_test_suite_test_case(
-            id="string",
+            id="id",
             input_values=[],
             evaluation_values=[],
         )
@@ -202,8 +202,8 @@ class AsyncTestSuitesClient:
             api_key="YOUR_API_KEY",
         )
         await client.test_suites.delete_test_suite_test_case(
-            id="string",
-            test_case_id="string",
+            id="id",
+            test_case_id="test_case_id",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(

@@ -30,7 +30,7 @@ class ModelVersionsClient:
             api_key="YOUR_API_KEY",
         )
         client.model_versions.retrieve(
-            id="string",
+            id="id",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -65,7 +65,7 @@ class AsyncModelVersionsClient:
             api_key="YOUR_API_KEY",
         )
         await client.model_versions.retrieve(
-            id="string",
+            id="id",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(

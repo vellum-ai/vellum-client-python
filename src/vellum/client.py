@@ -89,9 +89,6 @@ class Vellum:
         """
         Executes a deployed Prompt and returns the result.
 
-        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
-        In the meantime, we recommend still using the `/generate` endpoint for prompts with function calling.
-
         Parameters:
             - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
@@ -166,9 +163,6 @@ class Vellum:
     ) -> typing.Iterator[ExecutePromptEvent]:
         """
         Executes a deployed Prompt and streams back the results.
-
-        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
-        In the meantime, we recommend still using the `/generate-stream` endpoint for prompts with function calling
 
         Parameters:
             - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
@@ -372,17 +366,18 @@ class Vellum:
 
             - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
         ---
-        from vellum import GenerateOptionsRequest, LogprobsEnum
+        from vellum import GenerateRequest
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         client.generate(
-            requests=[],
-            options=GenerateOptionsRequest(
-                logprobs=LogprobsEnum.ALL,
-            ),
+            requests=[
+                GenerateRequest(
+                    input_values={},
+                )
+            ],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"requests": requests}
@@ -494,32 +489,13 @@ class Vellum:
 
             - options: typing.Optional[SearchRequestOptionsRequest]. Configuration options for the search.
         ---
-        from vellum import (
-            LogicalOperator,
-            MetadataFilterConfigRequest,
-            MetadataFilterRuleCombinator,
-            SearchFiltersRequest,
-            SearchRequestOptionsRequest,
-            SearchResultMergingRequest,
-            SearchWeightsRequest,
-        )
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         client.search(
-            query="string",
-            options=SearchRequestOptionsRequest(
-                weights=SearchWeightsRequest(),
-                result_merging=SearchResultMergingRequest(),
-                filters=SearchFiltersRequest(
-                    metadata=MetadataFilterConfigRequest(
-                        combinator=MetadataFilterRuleCombinator.AND,
-                        operator=LogicalOperator.EQUALS,
-                    ),
-                ),
-            ),
+            query="query",
         )
         """
         _request: typing.Dict[str, typing.Any] = {"query": query}
@@ -569,13 +545,14 @@ class Vellum:
 
             - actuals: typing.List[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
         ---
+        from vellum import SubmitCompletionActualRequest
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         client.submit_completion_actuals(
-            actuals=[],
+            actuals=[SubmitCompletionActualRequest()],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
@@ -694,9 +671,6 @@ class AsyncVellum:
         """
         Executes a deployed Prompt and returns the result.
 
-        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
-        In the meantime, we recommend still using the `/generate` endpoint for prompts with function calling.
-
         Parameters:
             - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
@@ -771,9 +745,6 @@ class AsyncVellum:
     ) -> typing.AsyncIterator[ExecutePromptEvent]:
         """
         Executes a deployed Prompt and streams back the results.
-
-        Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
-        In the meantime, we recommend still using the `/generate-stream` endpoint for prompts with function calling
 
         Parameters:
             - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
@@ -977,17 +948,18 @@ class AsyncVellum:
 
             - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
         ---
-        from vellum import GenerateOptionsRequest, LogprobsEnum
+        from vellum import GenerateRequest
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
         await client.generate(
-            requests=[],
-            options=GenerateOptionsRequest(
-                logprobs=LogprobsEnum.ALL,
-            ),
+            requests=[
+                GenerateRequest(
+                    input_values={},
+                )
+            ],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"requests": requests}
@@ -1099,32 +1071,13 @@ class AsyncVellum:
 
             - options: typing.Optional[SearchRequestOptionsRequest]. Configuration options for the search.
         ---
-        from vellum import (
-            LogicalOperator,
-            MetadataFilterConfigRequest,
-            MetadataFilterRuleCombinator,
-            SearchFiltersRequest,
-            SearchRequestOptionsRequest,
-            SearchResultMergingRequest,
-            SearchWeightsRequest,
-        )
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
         await client.search(
-            query="string",
-            options=SearchRequestOptionsRequest(
-                weights=SearchWeightsRequest(),
-                result_merging=SearchResultMergingRequest(),
-                filters=SearchFiltersRequest(
-                    metadata=MetadataFilterConfigRequest(
-                        combinator=MetadataFilterRuleCombinator.AND,
-                        operator=LogicalOperator.EQUALS,
-                    ),
-                ),
-            ),
+            query="query",
         )
         """
         _request: typing.Dict[str, typing.Any] = {"query": query}
@@ -1174,13 +1127,14 @@ class AsyncVellum:
 
             - actuals: typing.List[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
         ---
+        from vellum import SubmitCompletionActualRequest
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
         await client.submit_completion_actuals(
-            actuals=[],
+            actuals=[SubmitCompletionActualRequest()],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"actuals": actuals}

@@ -40,15 +40,12 @@ class WorkflowDeploymentsClient:
 
                                                                              - `ACTIVE` - Active
                                                                              - `ARCHIVED` - Archived---
-        from vellum import WorkflowDeploymentsListRequestStatus
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.workflow_deployments.list(
-            status=WorkflowDeploymentsListRequestStatus.ACTIVE,
-        )
+        client.workflow_deployments.list()
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
@@ -90,15 +87,12 @@ class AsyncWorkflowDeploymentsClient:
 
                                                                              - `ACTIVE` - Active
                                                                              - `ARCHIVED` - Archived---
-        from vellum import WorkflowDeploymentsListRequestStatus
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.workflow_deployments.list(
-            status=WorkflowDeploymentsListRequestStatus.ACTIVE,
-        )
+        await client.workflow_deployments.list()
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",

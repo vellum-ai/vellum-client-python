@@ -45,15 +45,12 @@ class DeploymentsClient:
 
             - status: typing.Optional[DeploymentsListRequestStatus]. The current status of the deployment
         ---
-        from vellum import DeploymentsListRequestStatus
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.deployments.list(
-            status=DeploymentsListRequestStatus.ACTIVE,
-        )
+        client.deployments.list()
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
@@ -83,7 +80,7 @@ class DeploymentsClient:
             api_key="YOUR_API_KEY",
         )
         client.deployments.retrieve(
-            id="string",
+            id="id",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -169,15 +166,12 @@ class AsyncDeploymentsClient:
 
             - status: typing.Optional[DeploymentsListRequestStatus]. The current status of the deployment
         ---
-        from vellum import DeploymentsListRequestStatus
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.deployments.list(
-            status=DeploymentsListRequestStatus.ACTIVE,
-        )
+        await client.deployments.list()
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
@@ -207,7 +201,7 @@ class AsyncDeploymentsClient:
             api_key="YOUR_API_KEY",
         )
         await client.deployments.retrieve(
-            id="string",
+            id="id",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(

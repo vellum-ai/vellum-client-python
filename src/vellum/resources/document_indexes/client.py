@@ -55,7 +55,6 @@ class DocumentIndexesClient:
 
             - copy_documents_from_index_id: typing.Optional[str]. Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
         ---
-        from vellum import EntityStatus, EnvironmentEnum
         from vellum.client import Vellum
 
         client = Vellum(
@@ -64,8 +63,6 @@ class DocumentIndexesClient:
         client.document_indexes.create(
             label="My Document Index",
             name="my-document-index",
-            status=EntityStatus.ACTIVE,
-            environment=EnvironmentEnum.DEVELOPMENT,
             indexing_config={
                 "chunking": {
                     "unknown": {
@@ -126,7 +123,7 @@ class DocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         client.document_indexes.retrieve(
-            id="string",
+            id="id",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -179,7 +176,6 @@ class AsyncDocumentIndexesClient:
 
             - copy_documents_from_index_id: typing.Optional[str]. Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
         ---
-        from vellum import EntityStatus, EnvironmentEnum
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -188,8 +184,6 @@ class AsyncDocumentIndexesClient:
         await client.document_indexes.create(
             label="My Document Index",
             name="my-document-index",
-            status=EntityStatus.ACTIVE,
-            environment=EnvironmentEnum.DEVELOPMENT,
             indexing_config={
                 "chunking": {
                     "unknown": {
@@ -250,7 +244,7 @@ class AsyncDocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         await client.document_indexes.retrieve(
-            id="string",
+            id="id",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(

@@ -84,7 +84,7 @@ class DocumentsClient:
             api_key="YOUR_API_KEY",
         )
         client.documents.destroy(
-            id="string",
+            id="id",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -128,8 +128,7 @@ class DocumentsClient:
             api_key="YOUR_API_KEY",
         )
         client.documents.partial_update(
-            id="string",
-            status="ACTIVE",
+            id="id",
         )
         """
         _request: typing.Dict[str, typing.Any] = {}
@@ -280,7 +279,7 @@ class AsyncDocumentsClient:
             api_key="YOUR_API_KEY",
         )
         await client.documents.destroy(
-            id="string",
+            id="id",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -324,8 +323,7 @@ class AsyncDocumentsClient:
             api_key="YOUR_API_KEY",
         )
         await client.documents.partial_update(
-            id="string",
-            status="ACTIVE",
+            id="id",
         )
         """
         _request: typing.Dict[str, typing.Any] = {}

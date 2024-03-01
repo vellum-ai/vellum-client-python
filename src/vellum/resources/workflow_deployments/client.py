@@ -8,6 +8,7 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.remove_none_from_dict import remove_none_from_dict
 from ...types.paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
+from ...types.workflow_deployment_read import WorkflowDeploymentRead
 from .types.workflow_deployments_list_request_status import WorkflowDeploymentsListRequestStatus
 
 try:
@@ -36,10 +37,8 @@ class WorkflowDeploymentsClient:
 
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
-            - status: typing.Optional[WorkflowDeploymentsListRequestStatus]. The current status of the workflow deployment
-
-                                                                             - `ACTIVE` - Active
-                                                                             - `ARCHIVED` - Archived---
+            - status: typing.Optional[WorkflowDeploymentsListRequestStatus]. status
+        ---
         from vellum.client import Vellum
 
         client = Vellum(
@@ -56,6 +55,36 @@ class WorkflowDeploymentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimWorkflowDeploymentList, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def retrieve(self, id: str) -> WorkflowDeploymentRead:
+        """
+        Used to retrieve a workflow deployment given its ID or name.
+
+        Parameters:
+            - id: str. Either the Workflow Deployment's ID or its unique name
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.workflow_deployments.retrieve(
+            id="id",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/workflow-deployments/{id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -83,10 +112,8 @@ class AsyncWorkflowDeploymentsClient:
 
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
-            - status: typing.Optional[WorkflowDeploymentsListRequestStatus]. The current status of the workflow deployment
-
-                                                                             - `ACTIVE` - Active
-                                                                             - `ARCHIVED` - Archived---
+            - status: typing.Optional[WorkflowDeploymentsListRequestStatus]. status
+        ---
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -103,6 +130,36 @@ class AsyncWorkflowDeploymentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimWorkflowDeploymentList, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def retrieve(self, id: str) -> WorkflowDeploymentRead:
+        """
+        Used to retrieve a workflow deployment given its ID or name.
+
+        Parameters:
+            - id: str. Either the Workflow Deployment's ID or its unique name
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.workflow_deployments.retrieve(
+            id="id",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/workflow-deployments/{id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

@@ -6,6 +6,7 @@ import typing
 
 import typing_extensions
 
+from .node_input_compiled_array_value import NodeInputCompiledArrayValue
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
 from .node_input_compiled_error_value import NodeInputCompiledErrorValue
 from .node_input_compiled_json_value import NodeInputCompiledJsonValue
@@ -68,6 +69,15 @@ class NodeInputVariableCompiledValue_Error(NodeInputCompiledErrorValue):
         allow_population_by_field_name = True
 
 
+class NodeInputVariableCompiledValue_Array(NodeInputCompiledArrayValue):
+    type: typing_extensions.Literal["ARRAY"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 NodeInputVariableCompiledValue = typing.Union[
     NodeInputVariableCompiledValue_String,
     NodeInputVariableCompiledValue_Number,
@@ -75,4 +85,5 @@ NodeInputVariableCompiledValue = typing.Union[
     NodeInputVariableCompiledValue_ChatHistory,
     NodeInputVariableCompiledValue_SearchResults,
     NodeInputVariableCompiledValue_Error,
+    NodeInputVariableCompiledValue_Array,
 ]

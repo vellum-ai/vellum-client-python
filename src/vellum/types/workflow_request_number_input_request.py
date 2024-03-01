@@ -12,6 +12,10 @@ except ImportError:
 
 
 class WorkflowRequestNumberInputRequest(pydantic.BaseModel):
+    """
+    The input for a number variable in a Workflow.
+    """
+
     name: str = pydantic.Field(description="The variable's name, as defined in the Workflow.")
     value: float
 

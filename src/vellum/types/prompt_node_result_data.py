@@ -13,6 +13,7 @@ except ImportError:
 
 class PromptNodeResultData(pydantic.BaseModel):
     output_id: str
+    array_output_id: typing.Optional[str]
     text: typing.Optional[str]
     delta: typing.Optional[str]
 

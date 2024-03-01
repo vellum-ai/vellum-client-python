@@ -6,8 +6,10 @@ import typing
 
 import typing_extensions
 
+from .node_output_compiled_array_value import NodeOutputCompiledArrayValue
 from .node_output_compiled_chat_history_value import NodeOutputCompiledChatHistoryValue
 from .node_output_compiled_error_value import NodeOutputCompiledErrorValue
+from .node_output_compiled_function_value import NodeOutputCompiledFunctionValue
 from .node_output_compiled_json_value import NodeOutputCompiledJsonValue
 from .node_output_compiled_number_value import NodeOutputCompiledNumberValue
 from .node_output_compiled_search_results_value import NodeOutputCompiledSearchResultsValue
@@ -68,6 +70,24 @@ class NodeOutputCompiledValue_Error(NodeOutputCompiledErrorValue):
         allow_population_by_field_name = True
 
 
+class NodeOutputCompiledValue_Array(NodeOutputCompiledArrayValue):
+    type: typing_extensions.Literal["ARRAY"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
+class NodeOutputCompiledValue_FunctionCall(NodeOutputCompiledFunctionValue):
+    type: typing_extensions.Literal["FUNCTION_CALL"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 NodeOutputCompiledValue = typing.Union[
     NodeOutputCompiledValue_String,
     NodeOutputCompiledValue_Number,
@@ -75,4 +95,6 @@ NodeOutputCompiledValue = typing.Union[
     NodeOutputCompiledValue_ChatHistory,
     NodeOutputCompiledValue_SearchResults,
     NodeOutputCompiledValue_Error,
+    NodeOutputCompiledValue_Array,
+    NodeOutputCompiledValue_FunctionCall,
 ]

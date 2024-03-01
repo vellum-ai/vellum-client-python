@@ -16,9 +16,21 @@ from .array_chat_message_content_item_request import (
     ArrayChatMessageContentItemRequest_String,
 )
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
+from .array_enum import ArrayEnum
+from .array_variable_value_item import (
+    ArrayVariableValueItem,
+    ArrayVariableValueItem_ChatHistory,
+    ArrayVariableValueItem_Error,
+    ArrayVariableValueItem_FunctionCall,
+    ArrayVariableValueItem_Json,
+    ArrayVariableValueItem_Number,
+    ArrayVariableValueItem_SearchResults,
+    ArrayVariableValueItem_String,
+)
 from .block_type_enum import BlockTypeEnum
 from .chat_history_enum import ChatHistoryEnum
 from .chat_history_input_request import ChatHistoryInputRequest
+from .chat_history_variable_value import ChatHistoryVariableValue
 from .chat_message import ChatMessage
 from .chat_message_content import (
     ChatMessageContent,
@@ -149,6 +161,7 @@ from .named_test_case_variable_value_request import (
     NamedTestCaseVariableValueRequest_SearchResults,
     NamedTestCaseVariableValueRequest_String,
 )
+from .node_input_compiled_array_value import NodeInputCompiledArrayValue
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
 from .node_input_compiled_error_value import NodeInputCompiledErrorValue
 from .node_input_compiled_json_value import NodeInputCompiledJsonValue
@@ -157,6 +170,7 @@ from .node_input_compiled_search_results_value import NodeInputCompiledSearchRes
 from .node_input_compiled_string_value import NodeInputCompiledStringValue
 from .node_input_variable_compiled_value import (
     NodeInputVariableCompiledValue,
+    NodeInputVariableCompiledValue_Array,
     NodeInputVariableCompiledValue_ChatHistory,
     NodeInputVariableCompiledValue_Error,
     NodeInputVariableCompiledValue_Json,
@@ -164,16 +178,20 @@ from .node_input_variable_compiled_value import (
     NodeInputVariableCompiledValue_SearchResults,
     NodeInputVariableCompiledValue_String,
 )
+from .node_output_compiled_array_value import NodeOutputCompiledArrayValue
 from .node_output_compiled_chat_history_value import NodeOutputCompiledChatHistoryValue
 from .node_output_compiled_error_value import NodeOutputCompiledErrorValue
+from .node_output_compiled_function_value import NodeOutputCompiledFunctionValue
 from .node_output_compiled_json_value import NodeOutputCompiledJsonValue
 from .node_output_compiled_number_value import NodeOutputCompiledNumberValue
 from .node_output_compiled_search_results_value import NodeOutputCompiledSearchResultsValue
 from .node_output_compiled_string_value import NodeOutputCompiledStringValue
 from .node_output_compiled_value import (
     NodeOutputCompiledValue,
+    NodeOutputCompiledValue_Array,
     NodeOutputCompiledValue_ChatHistory,
     NodeOutputCompiledValue_Error,
+    NodeOutputCompiledValue_FunctionCall,
     NodeOutputCompiledValue_Json,
     NodeOutputCompiledValue_Number,
     NodeOutputCompiledValue_SearchResults,
@@ -182,6 +200,7 @@ from .node_output_compiled_value import (
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
 from .number_enum import NumberEnum
+from .number_variable_value import NumberVariableValue
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
@@ -245,6 +264,7 @@ from .search_result_document_request import SearchResultDocumentRequest
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_request import SearchResultRequest
 from .search_results_enum import SearchResultsEnum
+from .search_results_variable_value import SearchResultsVariableValue
 from .search_weights_request import SearchWeightsRequest
 from .slim_deployment_read import SlimDeploymentRead
 from .slim_document import SlimDocument
@@ -325,6 +345,7 @@ from .vellum_image import VellumImage
 from .vellum_image_request import VellumImageRequest
 from .vellum_variable import VellumVariable
 from .vellum_variable_type import VellumVariableType
+from .workflow_deployment_read import WorkflowDeploymentRead
 from .workflow_event_error import WorkflowEventError
 from .workflow_execution_actual_chat_history_request import WorkflowExecutionActualChatHistoryRequest
 from .workflow_execution_actual_json_request import WorkflowExecutionActualJsonRequest
@@ -412,9 +433,19 @@ __all__ = [
     "ArrayChatMessageContentItem_Image",
     "ArrayChatMessageContentItem_String",
     "ArrayChatMessageContentRequest",
+    "ArrayEnum",
+    "ArrayVariableValueItem",
+    "ArrayVariableValueItem_ChatHistory",
+    "ArrayVariableValueItem_Error",
+    "ArrayVariableValueItem_FunctionCall",
+    "ArrayVariableValueItem_Json",
+    "ArrayVariableValueItem_Number",
+    "ArrayVariableValueItem_SearchResults",
+    "ArrayVariableValueItem_String",
     "BlockTypeEnum",
     "ChatHistoryEnum",
     "ChatHistoryInputRequest",
+    "ChatHistoryVariableValue",
     "ChatMessage",
     "ChatMessageContent",
     "ChatMessageContentRequest",
@@ -533,6 +564,7 @@ __all__ = [
     "NamedTestCaseVariableValueRequest_Number",
     "NamedTestCaseVariableValueRequest_SearchResults",
     "NamedTestCaseVariableValueRequest_String",
+    "NodeInputCompiledArrayValue",
     "NodeInputCompiledChatHistoryValue",
     "NodeInputCompiledErrorValue",
     "NodeInputCompiledJsonValue",
@@ -540,21 +572,26 @@ __all__ = [
     "NodeInputCompiledSearchResultsValue",
     "NodeInputCompiledStringValue",
     "NodeInputVariableCompiledValue",
+    "NodeInputVariableCompiledValue_Array",
     "NodeInputVariableCompiledValue_ChatHistory",
     "NodeInputVariableCompiledValue_Error",
     "NodeInputVariableCompiledValue_Json",
     "NodeInputVariableCompiledValue_Number",
     "NodeInputVariableCompiledValue_SearchResults",
     "NodeInputVariableCompiledValue_String",
+    "NodeOutputCompiledArrayValue",
     "NodeOutputCompiledChatHistoryValue",
     "NodeOutputCompiledErrorValue",
+    "NodeOutputCompiledFunctionValue",
     "NodeOutputCompiledJsonValue",
     "NodeOutputCompiledNumberValue",
     "NodeOutputCompiledSearchResultsValue",
     "NodeOutputCompiledStringValue",
     "NodeOutputCompiledValue",
+    "NodeOutputCompiledValue_Array",
     "NodeOutputCompiledValue_ChatHistory",
     "NodeOutputCompiledValue_Error",
+    "NodeOutputCompiledValue_FunctionCall",
     "NodeOutputCompiledValue_Json",
     "NodeOutputCompiledValue_Number",
     "NodeOutputCompiledValue_SearchResults",
@@ -562,6 +599,7 @@ __all__ = [
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
     "NumberEnum",
+    "NumberVariableValue",
     "PaginatedSlimDeploymentReadList",
     "PaginatedSlimDocumentList",
     "PaginatedSlimWorkflowDeploymentList",
@@ -621,6 +659,7 @@ __all__ = [
     "SearchResultMergingRequest",
     "SearchResultRequest",
     "SearchResultsEnum",
+    "SearchResultsVariableValue",
     "SearchWeightsRequest",
     "SlimDeploymentRead",
     "SlimDocument",
@@ -693,6 +732,7 @@ __all__ = [
     "VellumImageRequest",
     "VellumVariable",
     "VellumVariableType",
+    "WorkflowDeploymentRead",
     "WorkflowEventError",
     "WorkflowExecutionActualChatHistoryRequest",
     "WorkflowExecutionActualJsonRequest",

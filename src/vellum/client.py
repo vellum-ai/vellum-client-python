@@ -100,7 +100,7 @@ class Vellum:
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str].
+            - external_id: typing.Optional[str]. "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
 
             - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
@@ -175,7 +175,7 @@ class Vellum:
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str].
+            - external_id: typing.Optional[str]. "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
 
             - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
@@ -251,7 +251,7 @@ class Vellum:
 
             - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for monitoring purposes.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for monitoring purposes. Must be unique for a given workflow deployment.
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if workflow_deployment_id is not OMIT:
@@ -305,7 +305,7 @@ class Vellum:
 
             - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's deployment with their corresponding values.
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 
             - event_types: typing.Optional[typing.List[WorkflowExecutionEventType]]. Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
         """
@@ -683,7 +683,7 @@ class AsyncVellum:
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str].
+            - external_id: typing.Optional[str]. "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
 
             - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
@@ -758,7 +758,7 @@ class AsyncVellum:
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str].
+            - external_id: typing.Optional[str]. "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
 
             - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
@@ -834,7 +834,7 @@ class AsyncVellum:
 
             - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for monitoring purposes.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for monitoring purposes. Must be unique for a given workflow deployment.
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if workflow_deployment_id is not OMIT:
@@ -888,7 +888,7 @@ class AsyncVellum:
 
             - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's deployment with their corresponding values.
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 
             - event_types: typing.Optional[typing.List[WorkflowExecutionEventType]]. Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
         """

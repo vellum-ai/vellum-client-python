@@ -13,6 +13,10 @@ except ImportError:
 
 
 class WorkflowRequestChatHistoryInputRequest(pydantic.BaseModel):
+    """
+    The input for a chat history variable in a Workflow.
+    """
+
     name: str = pydantic.Field(description="The variable's name, as defined in the Workflow.")
     value: typing.List[ChatMessageRequest]
 

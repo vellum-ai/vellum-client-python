@@ -12,6 +12,10 @@ except ImportError:
 
 
 class WorkflowRequestStringInputRequest(pydantic.BaseModel):
+    """
+    The input for a string variable in a Workflow.
+    """
+
     name: str = pydantic.Field(description="The variable's name, as defined in the Workflow.")
     value: str
 

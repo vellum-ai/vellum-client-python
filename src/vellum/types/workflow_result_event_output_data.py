@@ -6,8 +6,10 @@ import typing
 
 import typing_extensions
 
+from .workflow_result_event_output_data_array import WorkflowResultEventOutputDataArray
 from .workflow_result_event_output_data_chat_history import WorkflowResultEventOutputDataChatHistory
 from .workflow_result_event_output_data_error import WorkflowResultEventOutputDataError
+from .workflow_result_event_output_data_function_call import WorkflowResultEventOutputDataFunctionCall
 from .workflow_result_event_output_data_json import WorkflowResultEventOutputDataJson
 from .workflow_result_event_output_data_number import WorkflowResultEventOutputDataNumber
 from .workflow_result_event_output_data_search_results import WorkflowResultEventOutputDataSearchResults
@@ -59,6 +61,24 @@ class WorkflowResultEventOutputData_SearchResults(WorkflowResultEventOutputDataS
         allow_population_by_field_name = True
 
 
+class WorkflowResultEventOutputData_Array(WorkflowResultEventOutputDataArray):
+    type: typing_extensions.Literal["ARRAY"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
+class WorkflowResultEventOutputData_FunctionCall(WorkflowResultEventOutputDataFunctionCall):
+    type: typing_extensions.Literal["FUNCTION_CALL"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 class WorkflowResultEventOutputData_Error(WorkflowResultEventOutputDataError):
     type: typing_extensions.Literal["ERROR"]
 
@@ -74,5 +94,7 @@ WorkflowResultEventOutputData = typing.Union[
     WorkflowResultEventOutputData_Json,
     WorkflowResultEventOutputData_ChatHistory,
     WorkflowResultEventOutputData_SearchResults,
+    WorkflowResultEventOutputData_Array,
+    WorkflowResultEventOutputData_FunctionCall,
     WorkflowResultEventOutputData_Error,
 ]

@@ -11,6 +11,7 @@ from .code_execution_node_result import CodeExecutionNodeResult
 from .conditional_node_result import ConditionalNodeResult
 from .prompt_node_result import PromptNodeResult
 from .search_node_result import SearchNodeResult
+from .subworkflow_node_result import SubworkflowNodeResult
 from .templating_node_result import TemplatingNodeResult
 from .terminal_node_result import TerminalNodeResult
 
@@ -78,6 +79,15 @@ class WorkflowNodeResultData_Terminal(TerminalNodeResult):
         allow_population_by_field_name = True
 
 
+class WorkflowNodeResultData_Subworkflow(SubworkflowNodeResult):
+    type: typing_extensions.Literal["SUBWORKFLOW"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 WorkflowNodeResultData = typing.Union[
     WorkflowNodeResultData_Prompt,
     WorkflowNodeResultData_Search,
@@ -86,4 +96,5 @@ WorkflowNodeResultData = typing.Union[
     WorkflowNodeResultData_Conditional,
     WorkflowNodeResultData_Api,
     WorkflowNodeResultData_Terminal,
+    WorkflowNodeResultData_Subworkflow,
 ]

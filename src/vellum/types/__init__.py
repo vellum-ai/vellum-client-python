@@ -286,6 +286,8 @@ from .submit_workflow_execution_actual_request import (
     SubmitWorkflowExecutionActualRequest_Json,
     SubmitWorkflowExecutionActualRequest_String,
 )
+from .subworkflow_enum import SubworkflowEnum
+from .subworkflow_node_result import SubworkflowNodeResult
 from .templating_node_chat_history_result import TemplatingNodeChatHistoryResult
 from .templating_node_error_result import TemplatingNodeErrorResult
 from .templating_node_json_result import TemplatingNodeJsonResult
@@ -303,16 +305,20 @@ from .templating_node_result_output import (
 )
 from .templating_node_search_results_result import TemplatingNodeSearchResultsResult
 from .templating_node_string_result import TemplatingNodeStringResult
+from .terminal_node_array_result import TerminalNodeArrayResult
 from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
 from .terminal_node_error_result import TerminalNodeErrorResult
+from .terminal_node_function_call_result import TerminalNodeFunctionCallResult
 from .terminal_node_json_result import TerminalNodeJsonResult
 from .terminal_node_number_result import TerminalNodeNumberResult
 from .terminal_node_result import TerminalNodeResult
 from .terminal_node_result_data import TerminalNodeResultData
 from .terminal_node_result_output import (
     TerminalNodeResultOutput,
+    TerminalNodeResultOutput_Array,
     TerminalNodeResultOutput_ChatHistory,
     TerminalNodeResultOutput_Error,
+    TerminalNodeResultOutput_FunctionCall,
     TerminalNodeResultOutput_Json,
     TerminalNodeResultOutput_Number,
     TerminalNodeResultOutput_SearchResults,
@@ -361,6 +367,7 @@ from .workflow_node_result_data import (
     WorkflowNodeResultData_Conditional,
     WorkflowNodeResultData_Prompt,
     WorkflowNodeResultData_Search,
+    WorkflowNodeResultData_Subworkflow,
     WorkflowNodeResultData_Templating,
     WorkflowNodeResultData_Terminal,
 )
@@ -374,6 +381,7 @@ from .workflow_node_result_event import (
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
 from .workflow_output import (
     WorkflowOutput,
+    WorkflowOutput_Array,
     WorkflowOutput_ChatHistory,
     WorkflowOutput_Error,
     WorkflowOutput_FunctionCall,
@@ -383,6 +391,7 @@ from .workflow_output import (
     WorkflowOutput_SearchResults,
     WorkflowOutput_String,
 )
+from .workflow_output_array import WorkflowOutputArray
 from .workflow_output_chat_history import WorkflowOutputChatHistory
 from .workflow_output_error import WorkflowOutputError
 from .workflow_output_function_call import WorkflowOutputFunctionCall
@@ -405,15 +414,19 @@ from .workflow_request_string_input_request import WorkflowRequestStringInputReq
 from .workflow_result_event import WorkflowResultEvent
 from .workflow_result_event_output_data import (
     WorkflowResultEventOutputData,
+    WorkflowResultEventOutputData_Array,
     WorkflowResultEventOutputData_ChatHistory,
     WorkflowResultEventOutputData_Error,
+    WorkflowResultEventOutputData_FunctionCall,
     WorkflowResultEventOutputData_Json,
     WorkflowResultEventOutputData_Number,
     WorkflowResultEventOutputData_SearchResults,
     WorkflowResultEventOutputData_String,
 )
+from .workflow_result_event_output_data_array import WorkflowResultEventOutputDataArray
 from .workflow_result_event_output_data_chat_history import WorkflowResultEventOutputDataChatHistory
 from .workflow_result_event_output_data_error import WorkflowResultEventOutputDataError
+from .workflow_result_event_output_data_function_call import WorkflowResultEventOutputDataFunctionCall
 from .workflow_result_event_output_data_json import WorkflowResultEventOutputDataJson
 from .workflow_result_event_output_data_number import WorkflowResultEventOutputDataNumber
 from .workflow_result_event_output_data_search_results import WorkflowResultEventOutputDataSearchResults
@@ -679,6 +692,8 @@ __all__ = [
     "SubmitWorkflowExecutionActualRequest_ChatHistory",
     "SubmitWorkflowExecutionActualRequest_Json",
     "SubmitWorkflowExecutionActualRequest_String",
+    "SubworkflowEnum",
+    "SubworkflowNodeResult",
     "TemplatingNodeChatHistoryResult",
     "TemplatingNodeErrorResult",
     "TemplatingNodeJsonResult",
@@ -694,15 +709,19 @@ __all__ = [
     "TemplatingNodeResultOutput_String",
     "TemplatingNodeSearchResultsResult",
     "TemplatingNodeStringResult",
+    "TerminalNodeArrayResult",
     "TerminalNodeChatHistoryResult",
     "TerminalNodeErrorResult",
+    "TerminalNodeFunctionCallResult",
     "TerminalNodeJsonResult",
     "TerminalNodeNumberResult",
     "TerminalNodeResult",
     "TerminalNodeResultData",
     "TerminalNodeResultOutput",
+    "TerminalNodeResultOutput_Array",
     "TerminalNodeResultOutput_ChatHistory",
     "TerminalNodeResultOutput_Error",
+    "TerminalNodeResultOutput_FunctionCall",
     "TerminalNodeResultOutput_Json",
     "TerminalNodeResultOutput_Number",
     "TerminalNodeResultOutput_SearchResults",
@@ -747,6 +766,7 @@ __all__ = [
     "WorkflowNodeResultData_Conditional",
     "WorkflowNodeResultData_Prompt",
     "WorkflowNodeResultData_Search",
+    "WorkflowNodeResultData_Subworkflow",
     "WorkflowNodeResultData_Templating",
     "WorkflowNodeResultData_Terminal",
     "WorkflowNodeResultEvent",
@@ -756,6 +776,7 @@ __all__ = [
     "WorkflowNodeResultEvent_Rejected",
     "WorkflowNodeResultEvent_Streaming",
     "WorkflowOutput",
+    "WorkflowOutputArray",
     "WorkflowOutputChatHistory",
     "WorkflowOutputError",
     "WorkflowOutputFunctionCall",
@@ -764,6 +785,7 @@ __all__ = [
     "WorkflowOutputNumber",
     "WorkflowOutputSearchResults",
     "WorkflowOutputString",
+    "WorkflowOutput_Array",
     "WorkflowOutput_ChatHistory",
     "WorkflowOutput_Error",
     "WorkflowOutput_FunctionCall",
@@ -783,14 +805,18 @@ __all__ = [
     "WorkflowRequestStringInputRequest",
     "WorkflowResultEvent",
     "WorkflowResultEventOutputData",
+    "WorkflowResultEventOutputDataArray",
     "WorkflowResultEventOutputDataChatHistory",
     "WorkflowResultEventOutputDataError",
+    "WorkflowResultEventOutputDataFunctionCall",
     "WorkflowResultEventOutputDataJson",
     "WorkflowResultEventOutputDataNumber",
     "WorkflowResultEventOutputDataSearchResults",
     "WorkflowResultEventOutputDataString",
+    "WorkflowResultEventOutputData_Array",
     "WorkflowResultEventOutputData_ChatHistory",
     "WorkflowResultEventOutputData_Error",
+    "WorkflowResultEventOutputData_FunctionCall",
     "WorkflowResultEventOutputData_Json",
     "WorkflowResultEventOutputData_Number",
     "WorkflowResultEventOutputData_SearchResults",

@@ -14,6 +14,7 @@ except ImportError:
 
 class CodeExecutionNodeResultData(pydantic.BaseModel):
     output: CodeExecutionNodeResultOutput
+    log_output_id: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

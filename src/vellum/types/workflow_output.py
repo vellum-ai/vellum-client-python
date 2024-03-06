@@ -6,6 +6,7 @@ import typing
 
 import typing_extensions
 
+from .workflow_output_array import WorkflowOutputArray
 from .workflow_output_chat_history import WorkflowOutputChatHistory
 from .workflow_output_error import WorkflowOutputError
 from .workflow_output_function_call import WorkflowOutputFunctionCall
@@ -61,6 +62,15 @@ class WorkflowOutput_SearchResults(WorkflowOutputSearchResults):
         allow_population_by_field_name = True
 
 
+class WorkflowOutput_Array(WorkflowOutputArray):
+    type: typing_extensions.Literal["ARRAY"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 class WorkflowOutput_Error(WorkflowOutputError):
     type: typing_extensions.Literal["ERROR"]
 
@@ -94,6 +104,7 @@ WorkflowOutput = typing.Union[
     WorkflowOutput_Json,
     WorkflowOutput_ChatHistory,
     WorkflowOutput_SearchResults,
+    WorkflowOutput_Array,
     WorkflowOutput_Error,
     WorkflowOutput_FunctionCall,
     WorkflowOutput_Image,

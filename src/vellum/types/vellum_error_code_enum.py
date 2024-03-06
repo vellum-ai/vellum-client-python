@@ -11,17 +11,20 @@ class VellumErrorCodeEnum(str, enum.Enum):
     - `INVALID_REQUEST` - INVALID_REQUEST
     - `PROVIDER_ERROR` - PROVIDER_ERROR
     - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+    - `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
     """
 
     INVALID_REQUEST = "INVALID_REQUEST"
     PROVIDER_ERROR = "PROVIDER_ERROR"
     INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR"
+    USER_DEFINED_ERROR = "USER_DEFINED_ERROR"
 
     def visit(
         self,
         invalid_request: typing.Callable[[], T_Result],
         provider_error: typing.Callable[[], T_Result],
         internal_server_error: typing.Callable[[], T_Result],
+        user_defined_error: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is VellumErrorCodeEnum.INVALID_REQUEST:
             return invalid_request()
@@ -29,3 +32,5 @@ class VellumErrorCodeEnum(str, enum.Enum):
             return provider_error()
         if self is VellumErrorCodeEnum.INTERNAL_SERVER_ERROR:
             return internal_server_error()
+        if self is VellumErrorCodeEnum.USER_DEFINED_ERROR:
+            return user_defined_error()

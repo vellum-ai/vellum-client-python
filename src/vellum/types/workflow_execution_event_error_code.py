@@ -14,6 +14,7 @@ class WorkflowExecutionEventErrorCode(str, enum.Enum):
     - `NODE_EXECUTION` - NODE_EXECUTION
     - `LLM_PROVIDER` - LLM_PROVIDER
     - `INVALID_TEMPLATE` - INVALID_TEMPLATE
+    - `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
     """
 
     WORKFLOW_INITIALIZATION = "WORKFLOW_INITIALIZATION"
@@ -22,6 +23,7 @@ class WorkflowExecutionEventErrorCode(str, enum.Enum):
     NODE_EXECUTION = "NODE_EXECUTION"
     LLM_PROVIDER = "LLM_PROVIDER"
     INVALID_TEMPLATE = "INVALID_TEMPLATE"
+    USER_DEFINED_ERROR = "USER_DEFINED_ERROR"
 
     def visit(
         self,
@@ -31,6 +33,7 @@ class WorkflowExecutionEventErrorCode(str, enum.Enum):
         node_execution: typing.Callable[[], T_Result],
         llm_provider: typing.Callable[[], T_Result],
         invalid_template: typing.Callable[[], T_Result],
+        user_defined_error: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is WorkflowExecutionEventErrorCode.WORKFLOW_INITIALIZATION:
             return workflow_initialization()
@@ -44,3 +47,5 @@ class WorkflowExecutionEventErrorCode(str, enum.Enum):
             return llm_provider()
         if self is WorkflowExecutionEventErrorCode.INVALID_TEMPLATE:
             return invalid_template()
+        if self is WorkflowExecutionEventErrorCode.USER_DEFINED_ERROR:
+            return user_defined_error()

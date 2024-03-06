@@ -6,8 +6,10 @@ import typing
 
 import typing_extensions
 
+from .terminal_node_array_result import TerminalNodeArrayResult
 from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
 from .terminal_node_error_result import TerminalNodeErrorResult
+from .terminal_node_function_call_result import TerminalNodeFunctionCallResult
 from .terminal_node_json_result import TerminalNodeJsonResult
 from .terminal_node_number_result import TerminalNodeNumberResult
 from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
@@ -59,6 +61,24 @@ class TerminalNodeResultOutput_SearchResults(TerminalNodeSearchResultsResult):
         allow_population_by_field_name = True
 
 
+class TerminalNodeResultOutput_Array(TerminalNodeArrayResult):
+    type: typing_extensions.Literal["ARRAY"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
+class TerminalNodeResultOutput_FunctionCall(TerminalNodeFunctionCallResult):
+    type: typing_extensions.Literal["FUNCTION_CALL"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 class TerminalNodeResultOutput_Error(TerminalNodeErrorResult):
     type: typing_extensions.Literal["ERROR"]
 
@@ -74,5 +94,7 @@ TerminalNodeResultOutput = typing.Union[
     TerminalNodeResultOutput_Json,
     TerminalNodeResultOutput_ChatHistory,
     TerminalNodeResultOutput_SearchResults,
+    TerminalNodeResultOutput_Array,
+    TerminalNodeResultOutput_FunctionCall,
     TerminalNodeResultOutput_Error,
 ]

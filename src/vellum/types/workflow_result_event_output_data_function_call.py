@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .array_variable_value_item import ArrayVariableValueItem
+from .function_call import FunctionCall
+from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,9 +13,19 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class NodeOutputCompiledArrayValue(pydantic.BaseModel):
-    node_output_id: str
-    value: typing.Optional[typing.List[ArrayVariableValueItem]]
+class WorkflowResultEventOutputDataFunctionCall(pydantic.BaseModel):
+    """
+    A Function Call output returned from a Workflow execution.
+    """
+
+    id: typing.Optional[str]
+    name: str
+    state: WorkflowNodeResultEventState
+    node_id: str
+    delta: typing.Optional[str] = pydantic.Field(
+        description="The newly output string value. Only relevant for string outputs with a state of STREAMING."
+    )
+    value: typing.Optional[FunctionCall]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

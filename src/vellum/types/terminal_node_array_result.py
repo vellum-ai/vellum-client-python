@@ -12,8 +12,9 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class NodeOutputCompiledArrayValue(pydantic.BaseModel):
-    node_output_id: str
+class TerminalNodeArrayResult(pydantic.BaseModel):
+    id: typing.Optional[str]
+    name: str = pydantic.Field(description="The unique name given to the terminal node that produced this output.")
     value: typing.Optional[typing.List[ArrayVariableValueItem]]
 
     def json(self, **kwargs: typing.Any) -> str:

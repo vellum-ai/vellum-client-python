@@ -180,6 +180,7 @@ from .types import (
     NormalizedTokenLogProbs,
     NumberEnum,
     NumberVariableValue,
+    PaginatedDocumentIndexReadList,
     PaginatedSlimDeploymentReadList,
     PaginatedSlimDocumentList,
     PaginatedSlimWorkflowDeploymentList,
@@ -395,6 +396,7 @@ from .types import (
 from .errors import BadRequestError, ConflictError, ForbiddenError, InternalServerError, NotFoundError
 from .resources import (
     DeploymentsListRequestStatus,
+    DocumentIndexesListRequestStatus,
     WorkflowDeploymentsListRequestStatus,
     deployments,
     document_indexes,
@@ -471,6 +473,7 @@ __all__ = [
     "DeploymentsListRequestStatus",
     "DocumentDocumentToDocumentIndex",
     "DocumentIndexRead",
+    "DocumentIndexesListRequestStatus",
     "DocumentRead",
     "DocumentStatus",
     "EnrichedNormalizedCompletion",
@@ -594,6 +597,7 @@ __all__ = [
     "NotFoundError",
     "NumberEnum",
     "NumberVariableValue",
+    "PaginatedDocumentIndexReadList",
     "PaginatedSlimDeploymentReadList",
     "PaginatedSlimDocumentList",
     "PaginatedSlimWorkflowDeploymentList",

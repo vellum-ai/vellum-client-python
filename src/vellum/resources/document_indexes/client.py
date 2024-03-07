@@ -7,9 +7,12 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
+from ...core.remove_none_from_dict import remove_none_from_dict
 from ...types.document_index_read import DocumentIndexRead
 from ...types.entity_status import EntityStatus
 from ...types.environment_enum import EnvironmentEnum
+from ...types.paginated_document_index_read_list import PaginatedDocumentIndexReadList
+from .types.document_indexes_list_request_status import DocumentIndexesListRequestStatus
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -23,6 +26,50 @@ OMIT = typing.cast(typing.Any, ...)
 class DocumentIndexesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def list(
+        self,
+        *,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        ordering: typing.Optional[str] = None,
+        status: typing.Optional[DocumentIndexesListRequestStatus] = None,
+    ) -> PaginatedDocumentIndexReadList:
+        """
+        Used to retrieve a list of Document Indexes.
+
+        Parameters:
+            - limit: typing.Optional[int]. Number of results to return per page.
+
+            - offset: typing.Optional[int]. The initial index from which to return the results.
+
+            - ordering: typing.Optional[str]. Which field to use when ordering the results.
+
+            - status: typing.Optional[DocumentIndexesListRequestStatus]. The current status of the document index
+
+                                                                         - `ACTIVE` - Active
+                                                                         - `ARCHIVED` - Archived---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.document_indexes.list()
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
+            params=remove_none_from_dict({"limit": limit, "offset": offset, "ordering": ordering, "status": status}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PaginatedDocumentIndexReadList, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def create(
         self,
@@ -144,6 +191,50 @@ class DocumentIndexesClient:
 class AsyncDocumentIndexesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    async def list(
+        self,
+        *,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        ordering: typing.Optional[str] = None,
+        status: typing.Optional[DocumentIndexesListRequestStatus] = None,
+    ) -> PaginatedDocumentIndexReadList:
+        """
+        Used to retrieve a list of Document Indexes.
+
+        Parameters:
+            - limit: typing.Optional[int]. Number of results to return per page.
+
+            - offset: typing.Optional[int]. The initial index from which to return the results.
+
+            - ordering: typing.Optional[str]. Which field to use when ordering the results.
+
+            - status: typing.Optional[DocumentIndexesListRequestStatus]. The current status of the document index
+
+                                                                         - `ACTIVE` - Active
+                                                                         - `ARCHIVED` - Archived---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.document_indexes.list()
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
+            params=remove_none_from_dict({"limit": limit, "offset": offset, "ordering": ordering, "status": status}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=None,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PaginatedDocumentIndexReadList, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     async def create(
         self,

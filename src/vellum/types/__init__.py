@@ -201,6 +201,7 @@ from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
 from .number_enum import NumberEnum
 from .number_variable_value import NumberVariableValue
+from .paginated_document_index_read_list import PaginatedDocumentIndexReadList
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
@@ -613,6 +614,7 @@ __all__ = [
     "NormalizedTokenLogProbs",
     "NumberEnum",
     "NumberVariableValue",
+    "PaginatedDocumentIndexReadList",
     "PaginatedSlimDeploymentReadList",
     "PaginatedSlimDocumentList",
     "PaginatedSlimWorkflowDeploymentList",

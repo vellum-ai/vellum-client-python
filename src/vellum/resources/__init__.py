@@ -12,10 +12,12 @@ from . import (
     workflow_deployments,
 )
 from .deployments import DeploymentsListRequestStatus
+from .document_indexes import DocumentIndexesListRequestStatus
 from .workflow_deployments import WorkflowDeploymentsListRequestStatus
 
 __all__ = [
     "DeploymentsListRequestStatus",
+    "DocumentIndexesListRequestStatus",
     "WorkflowDeploymentsListRequestStatus",
     "deployments",
     "document_indexes",

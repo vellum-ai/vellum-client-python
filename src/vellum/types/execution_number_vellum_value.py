@@ -4,8 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .chat_message_content_request import ChatMessageContentRequest
-from .chat_message_role import ChatMessageRole
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -13,13 +11,10 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class ChatMessageRequest(pydantic.BaseModel):
-    text: typing.Optional[str]
-    role: ChatMessageRole
-    content: typing.Optional[ChatMessageContentRequest]
-    source: typing.Optional[str] = pydantic.Field(
-        description="An optional identifier representing who or what generated this message."
-    )
+class ExecutionNumberVellumValue(pydantic.BaseModel):
+    id: str = pydantic.Field(description="The variable's uniquely identifying internal id.")
+    name: str
+    value: typing.Optional[float]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

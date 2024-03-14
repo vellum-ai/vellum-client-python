@@ -99,6 +99,25 @@ from .execute_workflow_workflow_result_event import (
     ExecuteWorkflowWorkflowResultEvent_Fulfilled,
     ExecuteWorkflowWorkflowResultEvent_Rejected,
 )
+from .execution_array_vellum_value import ExecutionArrayVellumValue
+from .execution_chat_history_vellum_value import ExecutionChatHistoryVellumValue
+from .execution_error_vellum_value import ExecutionErrorVellumValue
+from .execution_function_call_vellum_value import ExecutionFunctionCallVellumValue
+from .execution_json_vellum_value import ExecutionJsonVellumValue
+from .execution_number_vellum_value import ExecutionNumberVellumValue
+from .execution_search_results_vellum_value import ExecutionSearchResultsVellumValue
+from .execution_string_vellum_value import ExecutionStringVellumValue
+from .execution_vellum_value import (
+    ExecutionVellumValue,
+    ExecutionVellumValue_Array,
+    ExecutionVellumValue_ChatHistory,
+    ExecutionVellumValue_Error,
+    ExecutionVellumValue_FunctionCall,
+    ExecutionVellumValue_Json,
+    ExecutionVellumValue_Number,
+    ExecutionVellumValue_SearchResults,
+    ExecutionVellumValue_String,
+)
 from .finish_reason_enum import FinishReasonEnum
 from .fulfilled_enum import FulfilledEnum
 from .fulfilled_execute_prompt_event import FulfilledExecutePromptEvent
@@ -516,6 +535,23 @@ __all__ = [
     "ExecuteWorkflowWorkflowResultEvent",
     "ExecuteWorkflowWorkflowResultEvent_Fulfilled",
     "ExecuteWorkflowWorkflowResultEvent_Rejected",
+    "ExecutionArrayVellumValue",
+    "ExecutionChatHistoryVellumValue",
+    "ExecutionErrorVellumValue",
+    "ExecutionFunctionCallVellumValue",
+    "ExecutionJsonVellumValue",
+    "ExecutionNumberVellumValue",
+    "ExecutionSearchResultsVellumValue",
+    "ExecutionStringVellumValue",
+    "ExecutionVellumValue",
+    "ExecutionVellumValue_Array",
+    "ExecutionVellumValue_ChatHistory",
+    "ExecutionVellumValue_Error",
+    "ExecutionVellumValue_FunctionCall",
+    "ExecutionVellumValue_Json",
+    "ExecutionVellumValue_Number",
+    "ExecutionVellumValue_SearchResults",
+    "ExecutionVellumValue_String",
     "FinishReasonEnum",
     "FulfilledEnum",
     "FulfilledExecutePromptEvent",

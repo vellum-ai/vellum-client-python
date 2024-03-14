@@ -8,6 +8,10 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_dict import remove_none_from_dict
+from ...errors.bad_request_error import BadRequestError
+from ...errors.forbidden_error import ForbiddenError
+from ...errors.internal_server_error import InternalServerError
+from ...errors.not_found_error import NotFoundError
 from ...types.deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from ...types.deployment_read import DeploymentRead
 from ...types.paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
@@ -103,6 +107,7 @@ class DeploymentsClient:
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
         inputs: typing.List[PromptDeploymentInputRequest],
+        release_tag: typing.Optional[str] = OMIT,
     ) -> DeploymentProviderPayloadResponse:
         """
         Parameters:
@@ -111,6 +116,8 @@ class DeploymentsClient:
             - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
 
             - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+
+            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
         ---
         from vellum.client import Vellum
 
@@ -126,6 +133,8 @@ class DeploymentsClient:
             _request["deployment_id"] = deployment_id
         if deployment_name is not OMIT:
             _request["deployment_name"] = deployment_name
+        if release_tag is not OMIT:
+            _request["release_tag"] = release_tag
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
@@ -137,6 +146,14 @@ class DeploymentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DeploymentProviderPayloadResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 403:
+            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 500:
+            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -224,6 +241,7 @@ class AsyncDeploymentsClient:
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
         inputs: typing.List[PromptDeploymentInputRequest],
+        release_tag: typing.Optional[str] = OMIT,
     ) -> DeploymentProviderPayloadResponse:
         """
         Parameters:
@@ -232,6 +250,8 @@ class AsyncDeploymentsClient:
             - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
 
             - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+
+            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
         ---
         from vellum.client import AsyncVellum
 
@@ -247,6 +267,8 @@ class AsyncDeploymentsClient:
             _request["deployment_id"] = deployment_id
         if deployment_name is not OMIT:
             _request["deployment_name"] = deployment_name
+        if release_tag is not OMIT:
+            _request["release_tag"] = release_tag
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
@@ -258,6 +280,14 @@ class AsyncDeploymentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DeploymentProviderPayloadResponse, _response.json())  # type: ignore
+        if _response.status_code == 400:
+            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 403:
+            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 404:
+            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+        if _response.status_code == 500:
+            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

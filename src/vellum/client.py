@@ -233,25 +233,25 @@ class Vellum:
     def execute_workflow(
         self,
         *,
+        inputs: typing.List[WorkflowRequestInputRequest],
         workflow_deployment_id: typing.Optional[str] = OMIT,
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
-        inputs: typing.List[WorkflowRequestInputRequest],
         external_id: typing.Optional[str] = OMIT,
     ) -> ExecuteWorkflowResponse:
         """
         Executes a deployed Workflow and returns its outputs.
 
         Parameters:
+            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+
             - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
             - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 
-            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
-
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for monitoring purposes. Must be unique for a given workflow deployment.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if workflow_deployment_id is not OMIT:
@@ -286,10 +286,10 @@ class Vellum:
     def execute_workflow_stream(
         self,
         *,
+        inputs: typing.List[WorkflowRequestInputRequest],
         workflow_deployment_id: typing.Optional[str] = OMIT,
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
-        inputs: typing.List[WorkflowRequestInputRequest],
         external_id: typing.Optional[str] = OMIT,
         event_types: typing.Optional[typing.List[WorkflowExecutionEventType]] = OMIT,
     ) -> typing.Iterator[WorkflowStreamEvent]:
@@ -297,13 +297,13 @@ class Vellum:
         Executes a deployed Workflow and streams back its results.
 
         Parameters:
+            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+
             - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
             - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
-
-            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's deployment with their corresponding values.
 
             - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 
@@ -816,25 +816,25 @@ class AsyncVellum:
     async def execute_workflow(
         self,
         *,
+        inputs: typing.List[WorkflowRequestInputRequest],
         workflow_deployment_id: typing.Optional[str] = OMIT,
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
-        inputs: typing.List[WorkflowRequestInputRequest],
         external_id: typing.Optional[str] = OMIT,
     ) -> ExecuteWorkflowResponse:
         """
         Executes a deployed Workflow and returns its outputs.
 
         Parameters:
+            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+
             - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
             - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 
-            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
-
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for monitoring purposes. Must be unique for a given workflow deployment.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
         if workflow_deployment_id is not OMIT:
@@ -869,10 +869,10 @@ class AsyncVellum:
     async def execute_workflow_stream(
         self,
         *,
+        inputs: typing.List[WorkflowRequestInputRequest],
         workflow_deployment_id: typing.Optional[str] = OMIT,
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
-        inputs: typing.List[WorkflowRequestInputRequest],
         external_id: typing.Optional[str] = OMIT,
         event_types: typing.Optional[typing.List[WorkflowExecutionEventType]] = OMIT,
     ) -> typing.AsyncIterator[WorkflowStreamEvent]:
@@ -880,13 +880,13 @@ class AsyncVellum:
         Executes a deployed Workflow and streams back its results.
 
         Parameters:
+            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+
             - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
             - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
-
-            - inputs: typing.List[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's deployment with their corresponding values.
 
             - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 

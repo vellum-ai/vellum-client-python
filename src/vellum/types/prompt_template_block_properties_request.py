@@ -18,6 +18,7 @@ except ImportError:
 class PromptTemplateBlockPropertiesRequest(pydantic.BaseModel):
     chat_role: typing.Optional[ChatMessageRole]
     chat_message_unterminated: typing.Optional[bool]
+    chat_source: typing.Optional[str]
     template: typing.Optional[str]
     template_type: typing.Optional[VellumVariableType]
     function_name: typing.Optional[str]

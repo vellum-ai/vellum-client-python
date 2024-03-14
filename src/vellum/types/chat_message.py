@@ -17,6 +17,9 @@ class ChatMessage(pydantic.BaseModel):
     text: typing.Optional[str]
     role: ChatMessageRole
     content: typing.Optional[ChatMessageContent]
+    source: typing.Optional[str] = pydantic.Field(
+        description="An optional identifier representing who or what generated this message."
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

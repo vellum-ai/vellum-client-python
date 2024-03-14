@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .execution_vellum_value import ExecutionVellumValue
 from .workflow_event_error import WorkflowEventError
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
 from .workflow_output import WorkflowOutput
@@ -22,6 +23,7 @@ class WorkflowResultEvent(pydantic.BaseModel):
     output: typing.Optional[WorkflowResultEventOutputData]
     error: typing.Optional[WorkflowEventError]
     outputs: typing.Optional[typing.List[WorkflowOutput]]
+    inputs: typing.Optional[typing.List[ExecutionVellumValue]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

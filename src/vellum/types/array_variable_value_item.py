@@ -9,6 +9,7 @@ import typing_extensions
 from .chat_history_variable_value import ChatHistoryVariableValue
 from .error_variable_value import ErrorVariableValue
 from .function_call_variable_value import FunctionCallVariableValue
+from .image_variable_value import ImageVariableValue
 from .json_variable_value import JsonVariableValue
 from .number_variable_value import NumberVariableValue
 from .search_results_variable_value import SearchResultsVariableValue
@@ -78,6 +79,15 @@ class ArrayVariableValueItem_FunctionCall(FunctionCallVariableValue):
         allow_population_by_field_name = True
 
 
+class ArrayVariableValueItem_Image(ImageVariableValue):
+    type: typing_extensions.Literal["IMAGE"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
 ArrayVariableValueItem = typing.Union[
     ArrayVariableValueItem_String,
     ArrayVariableValueItem_Number,
@@ -86,4 +96,5 @@ ArrayVariableValueItem = typing.Union[
     ArrayVariableValueItem_SearchResults,
     ArrayVariableValueItem_Error,
     ArrayVariableValueItem_FunctionCall,
+    ArrayVariableValueItem_Image,
 ]

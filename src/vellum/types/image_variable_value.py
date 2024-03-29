@@ -4,8 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .workflow_event_error import WorkflowEventError
-from .workflow_node_result_data import WorkflowNodeResultData
+from .vellum_image import VellumImage
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -13,18 +12,12 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class RejectedWorkflowNodeResultEvent(pydantic.BaseModel):
+class ImageVariableValue(pydantic.BaseModel):
     """
-    An event that indicates that the node has rejected its execution.
+    A base Vellum primitive value representing an image.
     """
 
-    id: str
-    node_id: str
-    node_result_id: str
-    ts: typing.Optional[dt.datetime]
-    data: typing.Optional[WorkflowNodeResultData]
-    source_execution_id: typing.Optional[str]
-    error: WorkflowEventError
+    value: typing.Optional[VellumImage]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

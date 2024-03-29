@@ -22,6 +22,7 @@ from .array_variable_value_item import (
     ArrayVariableValueItem_ChatHistory,
     ArrayVariableValueItem_Error,
     ArrayVariableValueItem_FunctionCall,
+    ArrayVariableValueItem_Image,
     ArrayVariableValueItem_Json,
     ArrayVariableValueItem_Number,
     ArrayVariableValueItem_SearchResults,
@@ -146,6 +147,7 @@ from .generate_stream_result_data import GenerateStreamResultData
 from .image_chat_message_content import ImageChatMessageContent
 from .image_chat_message_content_request import ImageChatMessageContentRequest
 from .image_enum import ImageEnum
+from .image_variable_value import ImageVariableValue
 from .indexing_state_enum import IndexingStateEnum
 from .initiated_enum import InitiatedEnum
 from .initiated_execute_prompt_event import InitiatedExecutePromptEvent
@@ -471,6 +473,7 @@ __all__ = [
     "ArrayVariableValueItem_ChatHistory",
     "ArrayVariableValueItem_Error",
     "ArrayVariableValueItem_FunctionCall",
+    "ArrayVariableValueItem_Image",
     "ArrayVariableValueItem_Json",
     "ArrayVariableValueItem_Number",
     "ArrayVariableValueItem_SearchResults",
@@ -582,6 +585,7 @@ __all__ = [
     "ImageChatMessageContent",
     "ImageChatMessageContentRequest",
     "ImageEnum",
+    "ImageVariableValue",
     "IndexingStateEnum",
     "InitiatedEnum",
     "InitiatedExecutePromptEvent",

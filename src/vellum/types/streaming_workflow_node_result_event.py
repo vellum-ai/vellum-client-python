@@ -23,6 +23,7 @@ class StreamingWorkflowNodeResultEvent(pydantic.BaseModel):
     node_result_id: str
     ts: typing.Optional[dt.datetime]
     data: typing.Optional[WorkflowNodeResultData]
+    source_execution_id: typing.Optional[str]
     output: typing.Optional[NodeOutputCompiledValue]
     output_index: typing.Optional[int]
 

@@ -23,6 +23,7 @@ class InitiatedWorkflowNodeResultEvent(pydantic.BaseModel):
     node_result_id: str
     ts: typing.Optional[dt.datetime]
     data: typing.Optional[WorkflowNodeResultData]
+    source_execution_id: typing.Optional[str]
     input_values: typing.Optional[typing.List[NodeInputVariableCompiledValue]]
 
     def json(self, **kwargs: typing.Any) -> str:

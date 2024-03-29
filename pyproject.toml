@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vellum-ai"
-version = "0.3.11"
+version = "0.3.12"
 description = ""
 readme = "README.md"
 authors = []

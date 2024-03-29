@@ -9,6 +9,7 @@ T_Result = typing.TypeVar("T_Result")
 class WorkflowExecutionEventErrorCode(str, enum.Enum):
     """
     - `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
+    - `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
     - `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
     - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
     - `NODE_EXECUTION` - NODE_EXECUTION
@@ -18,6 +19,7 @@ class WorkflowExecutionEventErrorCode(str, enum.Enum):
     """
 
     WORKFLOW_INITIALIZATION = "WORKFLOW_INITIALIZATION"
+    WORKFLOW_CANCELLED = "WORKFLOW_CANCELLED"
     NODE_EXECUTION_COUNT_LIMIT_REACHED = "NODE_EXECUTION_COUNT_LIMIT_REACHED"
     INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR"
     NODE_EXECUTION = "NODE_EXECUTION"
@@ -28,6 +30,7 @@ class WorkflowExecutionEventErrorCode(str, enum.Enum):
     def visit(
         self,
         workflow_initialization: typing.Callable[[], T_Result],
+        workflow_cancelled: typing.Callable[[], T_Result],
         node_execution_count_limit_reached: typing.Callable[[], T_Result],
         internal_server_error: typing.Callable[[], T_Result],
         node_execution: typing.Callable[[], T_Result],
@@ -37,6 +40,8 @@ class WorkflowExecutionEventErrorCode(str, enum.Enum):
     ) -> T_Result:
         if self is WorkflowExecutionEventErrorCode.WORKFLOW_INITIALIZATION:
             return workflow_initialization()
+        if self is WorkflowExecutionEventErrorCode.WORKFLOW_CANCELLED:
+            return workflow_cancelled()
         if self is WorkflowExecutionEventErrorCode.NODE_EXECUTION_COUNT_LIMIT_REACHED:
             return node_execution_count_limit_reached()
         if self is WorkflowExecutionEventErrorCode.INTERNAL_SERVER_ERROR:

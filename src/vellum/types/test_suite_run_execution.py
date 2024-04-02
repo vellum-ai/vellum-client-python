@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .function_call import FunctionCall
+from .test_suite_run_execution_metric_result import TestSuiteRunExecutionMetricResult
+from .test_suite_run_execution_output import TestSuiteRunExecutionOutput
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,14 +13,11 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class WorkflowOutputFunctionCall(pydantic.BaseModel):
-    """
-    A function call output from a Workflow execution.
-    """
-
+class TestSuiteRunExecution(pydantic.BaseModel):
     id: str
-    name: str = pydantic.Field(description="The output's name, as defined in the workflow")
-    value: typing.Optional[FunctionCall]
+    test_case_id: str
+    outputs: typing.List[TestSuiteRunExecutionOutput]
+    metric_results: typing.List[TestSuiteRunExecutionMetricResult]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

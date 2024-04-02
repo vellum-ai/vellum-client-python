@@ -8,6 +8,7 @@ from . import (
     model_versions,
     registered_prompts,
     sandboxes,
+    test_suite_runs,
     test_suites,
     workflow_deployments,
 )
@@ -26,6 +27,7 @@ __all__ = [
     "model_versions",
     "registered_prompts",
     "sandboxes",
+    "test_suite_runs",
     "test_suites",
     "workflow_deployments",
 ]

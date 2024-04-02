@@ -19,7 +19,7 @@ class WorkflowOutputArray(pydantic.BaseModel):
 
     id: str
     name: str = pydantic.Field(description="The output's name, as defined in the workflow")
-    value: typing.List[ArrayVariableValueItem]
+    value: typing.Optional[typing.List[ArrayVariableValueItem]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

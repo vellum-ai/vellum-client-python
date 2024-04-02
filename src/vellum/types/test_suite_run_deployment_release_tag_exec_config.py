@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .function_call import FunctionCall
+from .test_suite_run_deployment_release_tag_exec_config_data import TestSuiteRunDeploymentReleaseTagExecConfigData
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,14 +12,15 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class WorkflowOutputFunctionCall(pydantic.BaseModel):
+class TestSuiteRunDeploymentReleaseTagExecConfig(pydantic.BaseModel):
     """
-    A function call output from a Workflow execution.
+    Execution configuration for running a Test Suite against a Prompt Deployment
     """
 
-    id: str
-    name: str = pydantic.Field(description="The output's name, as defined in the workflow")
-    value: typing.Optional[FunctionCall]
+    data: TestSuiteRunDeploymentReleaseTagExecConfigData
+    test_case_ids: typing.Optional[typing.List[str]] = pydantic.Field(
+        description="Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default."
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

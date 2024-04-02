@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .function_call import FunctionCall
+from .vellum_error import VellumError
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,14 +12,13 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class WorkflowOutputFunctionCall(pydantic.BaseModel):
+class TestSuiteRunMetricErrorOutput(pydantic.BaseModel):
     """
-    A function call output from a Workflow execution.
+    Output for a test suite run metric that is of type ERROR
     """
 
-    id: str
-    name: str = pydantic.Field(description="The output's name, as defined in the workflow")
-    value: typing.Optional[FunctionCall]
+    value: VellumError
+    name: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

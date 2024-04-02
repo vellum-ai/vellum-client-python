@@ -22,6 +22,7 @@ from .resources.folder_entities.client import AsyncFolderEntitiesClient, FolderE
 from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
 from .resources.registered_prompts.client import AsyncRegisteredPromptsClient, RegisteredPromptsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
+from .resources.test_suite_runs.client import AsyncTestSuiteRunsClient, TestSuiteRunsClient
 from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
 from .resources.workflow_deployments.client import AsyncWorkflowDeploymentsClient, WorkflowDeploymentsClient
 from .types.execute_prompt_event import ExecutePromptEvent
@@ -72,6 +73,7 @@ class Vellum:
         self.model_versions = ModelVersionsClient(client_wrapper=self._client_wrapper)
         self.registered_prompts = RegisteredPromptsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
+        self.test_suite_runs = TestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = WorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
 
@@ -655,6 +657,7 @@ class AsyncVellum:
         self.model_versions = AsyncModelVersionsClient(client_wrapper=self._client_wrapper)
         self.registered_prompts = AsyncRegisteredPromptsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
+        self.test_suite_runs = AsyncTestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = AsyncWorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
 

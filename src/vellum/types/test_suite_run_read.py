@@ -4,7 +4,9 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .function_call import FunctionCall
+from .test_suite_run_exec_config import TestSuiteRunExecConfig
+from .test_suite_run_state import TestSuiteRunState
+from .test_suite_run_test_suite import TestSuiteRunTestSuite
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,14 +14,24 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class WorkflowOutputFunctionCall(pydantic.BaseModel):
-    """
-    A function call output from a Workflow execution.
-    """
-
+class TestSuiteRunRead(pydantic.BaseModel):
     id: str
-    name: str = pydantic.Field(description="The output's name, as defined in the workflow")
-    value: typing.Optional[FunctionCall]
+    created: dt.datetime
+    test_suite: TestSuiteRunTestSuite
+    state: typing.Optional[TestSuiteRunState] = pydantic.Field(
+        description=(
+            "The current state of this run\n"
+            "\n"
+            "- `QUEUED` - Queued\n"
+            "- `RUNNING` - Running\n"
+            "- `COMPLETE` - Complete\n"
+            "- `FAILED` - Failed\n"
+            "- `CANCELLED` - Cancelled\n"
+        )
+    )
+    exec_config: typing.Optional[TestSuiteRunExecConfig] = pydantic.Field(
+        description="Configuration that defines how the Test Suite should be run"
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -226,6 +226,7 @@ from .paginated_document_index_read_list import PaginatedDocumentIndexReadList
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
+from .paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 from .prompt_deployment_expand_meta_request_request import PromptDeploymentExpandMetaRequestRequest
@@ -363,6 +364,61 @@ from .test_case_variable_value import (
     TestCaseVariableValue_SearchResults,
     TestCaseVariableValue_String,
 )
+from .test_suite_run_deployment_release_tag_exec_config import TestSuiteRunDeploymentReleaseTagExecConfig
+from .test_suite_run_deployment_release_tag_exec_config_data import TestSuiteRunDeploymentReleaseTagExecConfigData
+from .test_suite_run_deployment_release_tag_exec_config_data_request import (
+    TestSuiteRunDeploymentReleaseTagExecConfigDataRequest,
+)
+from .test_suite_run_deployment_release_tag_exec_config_request import TestSuiteRunDeploymentReleaseTagExecConfigRequest
+from .test_suite_run_deployment_release_tag_exec_config_type_enum import (
+    TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum,
+)
+from .test_suite_run_exec_config import (
+    TestSuiteRunExecConfig,
+    TestSuiteRunExecConfig_DeploymentReleaseTag,
+    TestSuiteRunExecConfig_WorkflowReleaseTag,
+)
+from .test_suite_run_exec_config_request import (
+    TestSuiteRunExecConfigRequest,
+    TestSuiteRunExecConfigRequest_DeploymentReleaseTag,
+    TestSuiteRunExecConfigRequest_WorkflowReleaseTag,
+)
+from .test_suite_run_execution import TestSuiteRunExecution
+from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
+from .test_suite_run_execution_error_output import TestSuiteRunExecutionErrorOutput
+from .test_suite_run_execution_json_output import TestSuiteRunExecutionJsonOutput
+from .test_suite_run_execution_metric_result import TestSuiteRunExecutionMetricResult
+from .test_suite_run_execution_number_output import TestSuiteRunExecutionNumberOutput
+from .test_suite_run_execution_output import (
+    TestSuiteRunExecutionOutput,
+    TestSuiteRunExecutionOutput_ChatHistory,
+    TestSuiteRunExecutionOutput_Error,
+    TestSuiteRunExecutionOutput_Json,
+    TestSuiteRunExecutionOutput_Number,
+    TestSuiteRunExecutionOutput_SearchResults,
+    TestSuiteRunExecutionOutput_String,
+)
+from .test_suite_run_execution_search_results_output import TestSuiteRunExecutionSearchResultsOutput
+from .test_suite_run_execution_string_output import TestSuiteRunExecutionStringOutput
+from .test_suite_run_metric_error_output import TestSuiteRunMetricErrorOutput
+from .test_suite_run_metric_error_output_type_enum import TestSuiteRunMetricErrorOutputTypeEnum
+from .test_suite_run_metric_number_output import TestSuiteRunMetricNumberOutput
+from .test_suite_run_metric_number_output_type_enum import TestSuiteRunMetricNumberOutputTypeEnum
+from .test_suite_run_metric_output import (
+    TestSuiteRunMetricOutput,
+    TestSuiteRunMetricOutput_Error,
+    TestSuiteRunMetricOutput_Number,
+)
+from .test_suite_run_read import TestSuiteRunRead
+from .test_suite_run_state import TestSuiteRunState
+from .test_suite_run_test_suite import TestSuiteRunTestSuite
+from .test_suite_run_workflow_release_tag_exec_config import TestSuiteRunWorkflowReleaseTagExecConfig
+from .test_suite_run_workflow_release_tag_exec_config_data import TestSuiteRunWorkflowReleaseTagExecConfigData
+from .test_suite_run_workflow_release_tag_exec_config_data_request import (
+    TestSuiteRunWorkflowReleaseTagExecConfigDataRequest,
+)
+from .test_suite_run_workflow_release_tag_exec_config_request import TestSuiteRunWorkflowReleaseTagExecConfigRequest
+from .test_suite_run_workflow_release_tag_exec_config_type_enum import TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum
 from .test_suite_test_case import TestSuiteTestCase
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
@@ -658,6 +714,7 @@ __all__ = [
     "PaginatedSlimDeploymentReadList",
     "PaginatedSlimDocumentList",
     "PaginatedSlimWorkflowDeploymentList",
+    "PaginatedTestSuiteRunExecutionList",
     "ProcessingFailureReasonEnum",
     "ProcessingStateEnum",
     "PromptDeploymentExpandMetaRequestRequest",
@@ -783,6 +840,47 @@ __all__ = [
     "TestCaseVariableValue_Number",
     "TestCaseVariableValue_SearchResults",
     "TestCaseVariableValue_String",
+    "TestSuiteRunDeploymentReleaseTagExecConfig",
+    "TestSuiteRunDeploymentReleaseTagExecConfigData",
+    "TestSuiteRunDeploymentReleaseTagExecConfigDataRequest",
+    "TestSuiteRunDeploymentReleaseTagExecConfigRequest",
+    "TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum",
+    "TestSuiteRunExecConfig",
+    "TestSuiteRunExecConfigRequest",
+    "TestSuiteRunExecConfigRequest_DeploymentReleaseTag",
+    "TestSuiteRunExecConfigRequest_WorkflowReleaseTag",
+    "TestSuiteRunExecConfig_DeploymentReleaseTag",
+    "TestSuiteRunExecConfig_WorkflowReleaseTag",
+    "TestSuiteRunExecution",
+    "TestSuiteRunExecutionChatHistoryOutput",
+    "TestSuiteRunExecutionErrorOutput",
+    "TestSuiteRunExecutionJsonOutput",
+    "TestSuiteRunExecutionMetricResult",
+    "TestSuiteRunExecutionNumberOutput",
+    "TestSuiteRunExecutionOutput",
+    "TestSuiteRunExecutionOutput_ChatHistory",
+    "TestSuiteRunExecutionOutput_Error",
+    "TestSuiteRunExecutionOutput_Json",
+    "TestSuiteRunExecutionOutput_Number",
+    "TestSuiteRunExecutionOutput_SearchResults",
+    "TestSuiteRunExecutionOutput_String",
+    "TestSuiteRunExecutionSearchResultsOutput",
+    "TestSuiteRunExecutionStringOutput",
+    "TestSuiteRunMetricErrorOutput",
+    "TestSuiteRunMetricErrorOutputTypeEnum",
+    "TestSuiteRunMetricNumberOutput",
+    "TestSuiteRunMetricNumberOutputTypeEnum",
+    "TestSuiteRunMetricOutput",
+    "TestSuiteRunMetricOutput_Error",
+    "TestSuiteRunMetricOutput_Number",
+    "TestSuiteRunRead",
+    "TestSuiteRunState",
+    "TestSuiteRunTestSuite",
+    "TestSuiteRunWorkflowReleaseTagExecConfig",
+    "TestSuiteRunWorkflowReleaseTagExecConfigData",
+    "TestSuiteRunWorkflowReleaseTagExecConfigDataRequest",
+    "TestSuiteRunWorkflowReleaseTagExecConfigRequest",
+    "TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum",
     "TestSuiteTestCase",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",

@@ -4,38 +4,39 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .chat_history_input_request import ChatHistoryInputRequest
 from .json_input_request import JsonInputRequest
 from .string_input_request import StringInputRequest
 
 
 class PromptDeploymentInputRequest_String(StringInputRequest):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class PromptDeploymentInputRequest_Json(JsonInputRequest):
-    type: typing_extensions.Literal["JSON"]
+    type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class PromptDeploymentInputRequest_ChatHistory(ChatHistoryInputRequest):
-    type: typing_extensions.Literal["CHAT_HISTORY"]
+    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 PromptDeploymentInputRequest = typing.Union[

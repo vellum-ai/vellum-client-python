@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .chat_history_variable_value import ChatHistoryVariableValue
 from .error_variable_value import ErrorVariableValue
 from .function_call_variable_value import FunctionCallVariableValue
@@ -17,75 +15,83 @@ from .string_variable_value import StringVariableValue
 
 
 class ArrayVariableValueItem_String(StringVariableValue):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayVariableValueItem_Number(NumberVariableValue):
-    type: typing_extensions.Literal["NUMBER"]
+    type: typing.Literal["NUMBER"] = "NUMBER"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayVariableValueItem_Json(JsonVariableValue):
-    type: typing_extensions.Literal["JSON"]
+    type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayVariableValueItem_ChatHistory(ChatHistoryVariableValue):
-    type: typing_extensions.Literal["CHAT_HISTORY"]
+    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayVariableValueItem_SearchResults(SearchResultsVariableValue):
-    type: typing_extensions.Literal["SEARCH_RESULTS"]
+    type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayVariableValueItem_Error(ErrorVariableValue):
-    type: typing_extensions.Literal["ERROR"]
+    type: typing.Literal["ERROR"] = "ERROR"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayVariableValueItem_FunctionCall(FunctionCallVariableValue):
-    type: typing_extensions.Literal["FUNCTION_CALL"]
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayVariableValueItem_Image(ImageVariableValue):
-    type: typing_extensions.Literal["IMAGE"]
+    type: typing.Literal["IMAGE"] = "IMAGE"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 ArrayVariableValueItem = typing.Union[

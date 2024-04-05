@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
 from .function_call_chat_message_content_request import FunctionCallChatMessageContentRequest
 from .image_chat_message_content_request import ImageChatMessageContentRequest
@@ -13,39 +11,43 @@ from .string_chat_message_content_request import StringChatMessageContentRequest
 
 
 class ChatMessageContentRequest_String(StringChatMessageContentRequest):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ChatMessageContentRequest_FunctionCall(FunctionCallChatMessageContentRequest):
-    type: typing_extensions.Literal["FUNCTION_CALL"]
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ChatMessageContentRequest_Array(ArrayChatMessageContentRequest):
-    type: typing_extensions.Literal["ARRAY"]
+    type: typing.Literal["ARRAY"] = "ARRAY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ChatMessageContentRequest_Image(ImageChatMessageContentRequest):
-    type: typing_extensions.Literal["IMAGE"]
+    type: typing.Literal["IMAGE"] = "IMAGE"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 ChatMessageContentRequest = typing.Union[

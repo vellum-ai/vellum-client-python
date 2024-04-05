@@ -16,38 +16,56 @@ except ImportError:
 
 
 class ModelVersionRead(pydantic.BaseModel):
-    id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this model version.")
-    created: dt.datetime = pydantic.Field(description="Timestamp of when this model version was created.")
-    label: str = pydantic.Field(description="Human-friendly name for this model version.")
-    provider: ProviderEnum = pydantic.Field(
-        description=(
-            "Which LLM provider this model version is associated with.\n"
-            "\n"
-            "- `ANTHROPIC` - Anthropic\n"
-            "- `AWS_BEDROCK` - AWS Bedrock\n"
-            "- `AZURE_OPENAI` - Azure OpenAI\n"
-            "- `COHERE` - Cohere\n"
-            "- `GOOGLE` - Google\n"
-            "- `HOSTED` - Hosted\n"
-            "- `MOSAICML` - MosaicML\n"
-            "- `OPENAI` - OpenAI\n"
-            "- `FIREWORKS_AI` - Fireworks AI\n"
-            "- `HUGGINGFACE` - HuggingFace\n"
-            "- `MYSTIC` - Mystic\n"
-            "- `PYQ` - Pyq\n"
-            "- `REPLICATE` - Replicate\n"
-        )
-    )
-    external_id: str = pydantic.Field(
-        description="The unique id of this model version as it exists in the above provider's system."
-    )
-    build_config: ModelVersionBuildConfig = pydantic.Field(
-        description="Configuration used to build this model version."
-    )
-    exec_config: ModelVersionExecConfig = pydantic.Field(
-        description="Configuration used to execute this model version."
-    )
-    status: typing.Optional[ModelVersionReadStatusEnum]
+    id: str = pydantic.Field()
+    """
+    Vellum-generated ID that uniquely identifies this model version.
+    """
+
+    created: dt.datetime = pydantic.Field()
+    """
+    Timestamp of when this model version was created.
+    """
+
+    label: str = pydantic.Field()
+    """
+    Human-friendly name for this model version.
+    """
+
+    provider: ProviderEnum = pydantic.Field()
+    """
+    Which LLM provider this model version is associated with.
+    
+    - `ANTHROPIC` - Anthropic
+    - `AWS_BEDROCK` - AWS Bedrock
+    - `AZURE_OPENAI` - Azure OpenAI
+    - `COHERE` - Cohere
+    - `GOOGLE` - Google
+    - `HOSTED` - Hosted
+    - `MOSAICML` - MosaicML
+    - `OPENAI` - OpenAI
+    - `FIREWORKS_AI` - Fireworks AI
+    - `HUGGINGFACE` - HuggingFace
+    - `MYSTIC` - Mystic
+    - `PYQ` - Pyq
+    - `REPLICATE` - Replicate
+    """
+
+    external_id: str = pydantic.Field()
+    """
+    The unique id of this model version as it exists in the above provider's system.
+    """
+
+    build_config: ModelVersionBuildConfig = pydantic.Field()
+    """
+    Configuration used to build this model version.
+    """
+
+    exec_config: ModelVersionExecConfig = pydantic.Field()
+    """
+    Configuration used to execute this model version.
+    """
+
+    status: typing.Optional[ModelVersionReadStatusEnum] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -60,4 +78,5 @@ class ModelVersionRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

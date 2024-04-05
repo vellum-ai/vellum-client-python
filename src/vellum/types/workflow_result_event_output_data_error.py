@@ -18,14 +18,16 @@ class WorkflowResultEventOutputDataError(pydantic.BaseModel):
     An Error output streamed from a Workflow execution.
     """
 
-    id: typing.Optional[str]
+    id: typing.Optional[str] = None
     name: str
     state: WorkflowNodeResultEventState
     node_id: str
-    delta: typing.Optional[str] = pydantic.Field(
-        description="The newly output string value. Only relevant for string outputs with a state of STREAMING."
-    )
-    value: typing.Optional[VellumError]
+    delta: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The newly output string value. Only relevant for string outputs with a state of STREAMING.
+    """
+
+    value: typing.Optional[VellumError] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -38,4 +40,5 @@ class WorkflowResultEventOutputDataError(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -4,28 +4,28 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .fulfilled_function_call import FulfilledFunctionCall
 from .rejected_function_call import RejectedFunctionCall
 
 
 class FunctionCall_Fulfilled(FulfilledFunctionCall):
-    state: typing_extensions.Literal["FULFILLED"]
+    state: typing.Literal["FULFILLED"] = "FULFILLED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class FunctionCall_Rejected(RejectedFunctionCall):
-    state: typing_extensions.Literal["REJECTED"]
+    state: typing.Literal["REJECTED"] = "REJECTED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 FunctionCall = typing.Union[FunctionCall_Fulfilled, FunctionCall_Rejected]

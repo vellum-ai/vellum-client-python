@@ -13,11 +13,13 @@ except ImportError:
 
 
 class GenerateOptionsRequest(pydantic.BaseModel):
-    logprobs: typing.Optional[LogprobsEnum] = pydantic.Field(
-        description=(
-            "Which logprobs to include, if any. Defaults to NONE.\n" "\n" "- `ALL` - ALL\n" "- `NONE` - NONE\n"
-        )
-    )
+    logprobs: typing.Optional[LogprobsEnum] = pydantic.Field(default=None)
+    """
+    Which logprobs to include, if any. Defaults to NONE.
+    
+    - `ALL` - ALL
+    - `NONE` - NONE
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -30,4 +32,5 @@ class GenerateOptionsRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

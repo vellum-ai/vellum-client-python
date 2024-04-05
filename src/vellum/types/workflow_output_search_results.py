@@ -18,8 +18,12 @@ class WorkflowOutputSearchResults(pydantic.BaseModel):
     """
 
     id: str
-    name: str = pydantic.Field(description="The output's name, as defined in the workflow")
-    value: typing.Optional[typing.List[SearchResult]]
+    name: str = pydantic.Field()
+    """
+    The output's name, as defined in the workflow
+    """
+
+    value: typing.Optional[typing.List[SearchResult]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -32,4 +36,5 @@ class WorkflowOutputSearchResults(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

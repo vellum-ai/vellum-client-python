@@ -16,7 +16,7 @@ class StreamingPromptExecutionMeta(pydantic.BaseModel):
     The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
     """
 
-    latency: typing.Optional[int]
+    latency: typing.Optional[int] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -29,4 +29,5 @@ class StreamingPromptExecutionMeta(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .workflow_output_array import WorkflowOutputArray
 from .workflow_output_chat_history import WorkflowOutputChatHistory
 from .workflow_output_error import WorkflowOutputError
@@ -18,84 +16,93 @@ from .workflow_output_string import WorkflowOutputString
 
 
 class WorkflowOutput_String(WorkflowOutputString):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowOutput_Number(WorkflowOutputNumber):
-    type: typing_extensions.Literal["NUMBER"]
+    type: typing.Literal["NUMBER"] = "NUMBER"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowOutput_Json(WorkflowOutputJson):
-    type: typing_extensions.Literal["JSON"]
+    type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowOutput_ChatHistory(WorkflowOutputChatHistory):
-    type: typing_extensions.Literal["CHAT_HISTORY"]
+    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowOutput_SearchResults(WorkflowOutputSearchResults):
-    type: typing_extensions.Literal["SEARCH_RESULTS"]
+    type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowOutput_Array(WorkflowOutputArray):
-    type: typing_extensions.Literal["ARRAY"]
+    type: typing.Literal["ARRAY"] = "ARRAY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowOutput_Error(WorkflowOutputError):
-    type: typing_extensions.Literal["ERROR"]
+    type: typing.Literal["ERROR"] = "ERROR"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowOutput_FunctionCall(WorkflowOutputFunctionCall):
-    type: typing_extensions.Literal["FUNCTION_CALL"]
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowOutput_Image(WorkflowOutputImage):
-    type: typing_extensions.Literal["IMAGE"]
+    type: typing.Literal["IMAGE"] = "IMAGE"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 WorkflowOutput = typing.Union[

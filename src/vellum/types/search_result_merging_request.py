@@ -12,7 +12,10 @@ except ImportError:
 
 
 class SearchResultMergingRequest(pydantic.BaseModel):
-    enabled: typing.Optional[bool] = pydantic.Field(description="Whether to enable merging results")
+    enabled: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    Whether to enable merging results
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -25,4 +28,5 @@ class SearchResultMergingRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

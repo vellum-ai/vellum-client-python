@@ -13,13 +13,17 @@ except ImportError:
 
 
 class ModelVersionBuildConfig(pydantic.BaseModel):
-    base_model: str = pydantic.Field(
-        description="The name of the base model used to create this model version, as identified by the LLM provider."
-    )
-    sandbox_snapshot: typing.Optional[ModelVersionSandboxSnapshot] = pydantic.Field(
-        description="Information about the sandbox snapshot that was used to create this model version, if applicable."
-    )
-    prompt_version_id: typing.Optional[str]
+    base_model: str = pydantic.Field()
+    """
+    The name of the base model used to create this model version, as identified by the LLM provider.
+    """
+
+    sandbox_snapshot: typing.Optional[ModelVersionSandboxSnapshot] = pydantic.Field(default=None)
+    """
+    Information about the sandbox snapshot that was used to create this model version, if applicable.
+    """
+
+    prompt_version_id: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -32,4 +36,5 @@ class ModelVersionBuildConfig(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

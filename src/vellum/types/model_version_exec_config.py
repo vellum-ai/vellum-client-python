@@ -15,17 +15,23 @@ except ImportError:
 
 
 class ModelVersionExecConfig(pydantic.BaseModel):
-    parameters: ModelVersionExecConfigParameters = pydantic.Field(
-        description="The generation parameters that are passed to the LLM provider at runtime."
-    )
-    input_variables: typing.List[VellumVariable] = pydantic.Field(
-        description="Input variables specified in the prompt template."
-    )
-    prompt_template: typing.Optional[str] = pydantic.Field(
-        description="The template used to generate prompts for this model version."
-    )
-    prompt_block_data: typing.Optional[PromptTemplateBlockData]
-    prompt_syntax_version: typing.Optional[int]
+    parameters: ModelVersionExecConfigParameters = pydantic.Field()
+    """
+    The generation parameters that are passed to the LLM provider at runtime.
+    """
+
+    input_variables: typing.List[VellumVariable] = pydantic.Field()
+    """
+    Input variables specified in the prompt template.
+    """
+
+    prompt_template: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The template used to generate prompts for this model version.
+    """
+
+    prompt_block_data: typing.Optional[PromptTemplateBlockData] = None
+    prompt_syntax_version: typing.Optional[int] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -38,4 +44,5 @@ class ModelVersionExecConfig(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

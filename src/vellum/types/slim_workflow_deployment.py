@@ -16,32 +16,44 @@ except ImportError:
 
 class SlimWorkflowDeployment(pydantic.BaseModel):
     id: str
-    name: str = pydantic.Field(
-        description="A name that uniquely identifies this workflow deployment within its workspace"
-    )
-    label: str = pydantic.Field(description="A human-readable label for the workflow deployment")
-    status: typing.Optional[EntityStatus] = pydantic.Field(
-        description=(
-            "The current status of the workflow deployment\n" "\n" "- `ACTIVE` - Active\n" "- `ARCHIVED` - Archived\n"
-        )
-    )
-    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(
-        description=(
-            "The environment this workflow deployment is used in\n"
-            "\n"
-            "- `DEVELOPMENT` - Development\n"
-            "- `STAGING` - Staging\n"
-            "- `PRODUCTION` - Production\n"
-        )
-    )
+    name: str = pydantic.Field()
+    """
+    A name that uniquely identifies this workflow deployment within its workspace
+    """
+
+    label: str = pydantic.Field()
+    """
+    A human-readable label for the workflow deployment
+    """
+
+    status: typing.Optional[EntityStatus] = pydantic.Field(default=None)
+    """
+    The current status of the workflow deployment
+    
+    - `ACTIVE` - Active
+    - `ARCHIVED` - Archived
+    """
+
+    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(default=None)
+    """
+    The environment this workflow deployment is used in
+    
+    - `DEVELOPMENT` - Development
+    - `STAGING` - Staging
+    - `PRODUCTION` - Production
+    """
+
     created: dt.datetime
     last_deployed_on: dt.datetime
-    input_variables: typing.List[VellumVariable] = pydantic.Field(
-        description="The input variables this Workflow Deployment expects to receive values for when it is executed."
-    )
-    output_variables: typing.List[VellumVariable] = pydantic.Field(
-        description="The output variables this Workflow Deployment will produce when it is executed."
-    )
+    input_variables: typing.List[VellumVariable] = pydantic.Field()
+    """
+    The input variables this Workflow Deployment expects to receive values for when it is executed.
+    """
+
+    output_variables: typing.List[VellumVariable] = pydantic.Field()
+    """
+    The output variables this Workflow Deployment will produce when it is executed.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -54,4 +66,5 @@ class SlimWorkflowDeployment(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

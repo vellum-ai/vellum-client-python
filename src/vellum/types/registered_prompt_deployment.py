@@ -12,9 +12,20 @@ except ImportError:
 
 
 class RegisteredPromptDeployment(pydantic.BaseModel):
-    id: str = pydantic.Field(description="The ID of the generated deployment.")
-    name: str = pydantic.Field(description="A uniquely-identifying name for generated deployment.")
-    label: str = pydantic.Field(description="A human-friendly label for the generated deployment.")
+    id: str = pydantic.Field()
+    """
+    The ID of the generated deployment.
+    """
+
+    name: str = pydantic.Field()
+    """
+    A uniquely-identifying name for generated deployment.
+    """
+
+    label: str = pydantic.Field()
+    """
+    A human-friendly label for the generated deployment.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -27,4 +38,5 @@ class RegisteredPromptDeployment(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

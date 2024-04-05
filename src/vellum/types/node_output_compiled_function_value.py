@@ -14,7 +14,7 @@ except ImportError:
 
 class NodeOutputCompiledFunctionValue(pydantic.BaseModel):
     node_output_id: str
-    value: typing.Optional[FunctionCall]
+    value: typing.Optional[FunctionCall] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -27,4 +27,5 @@ class NodeOutputCompiledFunctionValue(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

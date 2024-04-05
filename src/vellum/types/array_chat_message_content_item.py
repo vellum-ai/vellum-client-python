@@ -4,38 +4,39 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .function_call_chat_message_content import FunctionCallChatMessageContent
 from .image_chat_message_content import ImageChatMessageContent
 from .string_chat_message_content import StringChatMessageContent
 
 
 class ArrayChatMessageContentItem_String(StringChatMessageContent):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayChatMessageContentItem_FunctionCall(FunctionCallChatMessageContent):
-    type: typing_extensions.Literal["FUNCTION_CALL"]
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ArrayChatMessageContentItem_Image(ImageChatMessageContent):
-    type: typing_extensions.Literal["IMAGE"]
+    type: typing.Literal["IMAGE"] = "IMAGE"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 ArrayChatMessageContentItem = typing.Union[

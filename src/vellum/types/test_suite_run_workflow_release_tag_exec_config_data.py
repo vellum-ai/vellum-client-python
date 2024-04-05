@@ -12,12 +12,15 @@ except ImportError:
 
 
 class TestSuiteRunWorkflowReleaseTagExecConfigData(pydantic.BaseModel):
-    workflow_deployment_id: str = pydantic.Field(
-        description="The ID of the Workflow Deployment to run the Test Suite against."
-    )
-    tag: typing.Optional[str] = pydantic.Field(
-        description="A tag identifying which release of the Workflow Deployment to run the Test Suite against. Useful for testing past versions of the Workflow Deployment"
-    )
+    workflow_deployment_id: str = pydantic.Field()
+    """
+    The ID of the Workflow Deployment to run the Test Suite against.
+    """
+
+    tag: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    A tag identifying which release of the Workflow Deployment to run the Test Suite against. Useful for testing past versions of the Workflow Deployment
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -30,4 +33,5 @@ class TestSuiteRunWorkflowReleaseTagExecConfigData(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

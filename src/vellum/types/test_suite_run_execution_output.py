@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
 from .test_suite_run_execution_error_output import TestSuiteRunExecutionErrorOutput
 from .test_suite_run_execution_json_output import TestSuiteRunExecutionJsonOutput
@@ -15,57 +13,63 @@ from .test_suite_run_execution_string_output import TestSuiteRunExecutionStringO
 
 
 class TestSuiteRunExecutionOutput_String(TestSuiteRunExecutionStringOutput):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TestSuiteRunExecutionOutput_Number(TestSuiteRunExecutionNumberOutput):
-    type: typing_extensions.Literal["NUMBER"]
+    type: typing.Literal["NUMBER"] = "NUMBER"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TestSuiteRunExecutionOutput_Json(TestSuiteRunExecutionJsonOutput):
-    type: typing_extensions.Literal["JSON"]
+    type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TestSuiteRunExecutionOutput_ChatHistory(TestSuiteRunExecutionChatHistoryOutput):
-    type: typing_extensions.Literal["CHAT_HISTORY"]
+    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TestSuiteRunExecutionOutput_SearchResults(TestSuiteRunExecutionSearchResultsOutput):
-    type: typing_extensions.Literal["SEARCH_RESULTS"]
+    type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TestSuiteRunExecutionOutput_Error(TestSuiteRunExecutionErrorOutput):
-    type: typing_extensions.Literal["ERROR"]
+    type: typing.Literal["ERROR"] = "ERROR"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 TestSuiteRunExecutionOutput = typing.Union[

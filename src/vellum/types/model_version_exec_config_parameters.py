@@ -12,15 +12,15 @@ except ImportError:
 
 
 class ModelVersionExecConfigParameters(pydantic.BaseModel):
-    temperature: typing.Optional[float]
-    max_tokens: typing.Optional[int]
+    temperature: typing.Optional[float] = None
+    max_tokens: typing.Optional[int] = None
     top_p: float
     frequency_penalty: float
     presence_penalty: float
-    logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]]
-    stop: typing.Optional[typing.List[str]]
-    top_k: typing.Optional[float]
-    custom_parameters: typing.Optional[typing.Dict[str, typing.Any]]
+    logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]] = None
+    stop: typing.Optional[typing.List[str]] = None
+    top_k: typing.Optional[float] = None
+    custom_parameters: typing.Optional[typing.Dict[str, typing.Any]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -33,4 +33,5 @@ class ModelVersionExecConfigParameters(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

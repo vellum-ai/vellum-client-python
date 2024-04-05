@@ -13,7 +13,7 @@ except ImportError:
 
 class NodeOutputCompiledJsonValue(pydantic.BaseModel):
     node_output_id: str
-    value: typing.Optional[typing.Dict[str, typing.Any]]
+    value: typing.Optional[typing.Dict[str, typing.Any]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -26,4 +26,5 @@ class NodeOutputCompiledJsonValue(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

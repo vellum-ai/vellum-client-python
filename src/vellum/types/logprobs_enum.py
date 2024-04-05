@@ -15,8 +15,8 @@ class LogprobsEnum(str, enum.Enum):
     ALL = "ALL"
     NONE = "NONE"
 
-    def visit(self, all: typing.Callable[[], T_Result], none: typing.Callable[[], T_Result]) -> T_Result:
+    def visit(self, all_: typing.Callable[[], T_Result], none: typing.Callable[[], T_Result]) -> T_Result:
         if self is LogprobsEnum.ALL:
-            return all()
+            return all_()
         if self is LogprobsEnum.NONE:
             return none()

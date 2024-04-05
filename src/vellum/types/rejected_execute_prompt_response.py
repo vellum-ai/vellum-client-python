@@ -18,11 +18,17 @@ class RejectedExecutePromptResponse(pydantic.BaseModel):
     The unsuccessful response from the model containing an error of what went wrong.
     """
 
-    meta: typing.Optional[PromptExecutionMeta]
-    raw: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
-        description="The subset of the raw response from the model that the request opted into with `expand_raw`."
-    )
-    execution_id: str = pydantic.Field(description="The ID of the execution.")
+    meta: typing.Optional[PromptExecutionMeta] = None
+    raw: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    """
+    The subset of the raw response from the model that the request opted into with `expand_raw`.
+    """
+
+    execution_id: str = pydantic.Field()
+    """
+    The ID of the execution.
+    """
+
     error: VellumError
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -36,4 +42,5 @@ class RejectedExecutePromptResponse(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

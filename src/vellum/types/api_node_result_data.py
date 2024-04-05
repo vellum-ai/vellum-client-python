@@ -13,9 +13,9 @@ except ImportError:
 
 class ApiNodeResultData(pydantic.BaseModel):
     text_output_id: str
-    text: typing.Optional[str]
+    text: typing.Optional[str] = None
     json_output_id: str
-    json_: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(alias="json")
+    json_: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(alias="json", default=None)
     status_code_output_id: str
     status_code: int
 
@@ -31,4 +31,6 @@ class ApiNodeResultData(pydantic.BaseModel):
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

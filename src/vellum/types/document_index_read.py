@@ -16,25 +16,37 @@ except ImportError:
 class DocumentIndexRead(pydantic.BaseModel):
     id: str
     created: dt.datetime
-    label: str = pydantic.Field(description="A human-readable label for the document index")
-    name: str = pydantic.Field(description="A name that uniquely identifies this index within its workspace")
-    status: typing.Optional[EntityStatus] = pydantic.Field(
-        description=(
-            "The current status of the document index\n" "\n" "- `ACTIVE` - Active\n" "- `ARCHIVED` - Archived\n"
-        )
-    )
-    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(
-        description=(
-            "The environment this document index is used in\n"
-            "\n"
-            "- `DEVELOPMENT` - Development\n"
-            "- `STAGING` - Staging\n"
-            "- `PRODUCTION` - Production\n"
-        )
-    )
-    indexing_config: typing.Dict[str, typing.Any] = pydantic.Field(
-        description="Configuration representing how documents should be indexed"
-    )
+    label: str = pydantic.Field()
+    """
+    A human-readable label for the document index
+    """
+
+    name: str = pydantic.Field()
+    """
+    A name that uniquely identifies this index within its workspace
+    """
+
+    status: typing.Optional[EntityStatus] = pydantic.Field(default=None)
+    """
+    The current status of the document index
+    
+    - `ACTIVE` - Active
+    - `ARCHIVED` - Archived
+    """
+
+    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(default=None)
+    """
+    The environment this document index is used in
+    
+    - `DEVELOPMENT` - Development
+    - `STAGING` - Staging
+    - `PRODUCTION` - Production
+    """
+
+    indexing_config: typing.Dict[str, typing.Any] = pydantic.Field()
+    """
+    Configuration representing how documents should be indexed
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -47,4 +59,5 @@ class DocumentIndexRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

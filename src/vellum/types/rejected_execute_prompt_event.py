@@ -20,7 +20,7 @@ class RejectedExecutePromptEvent(pydantic.BaseModel):
 
     error: VellumError
     execution_id: str
-    meta: typing.Optional[RejectedPromptExecutionMeta]
+    meta: typing.Optional[RejectedPromptExecutionMeta] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -33,4 +33,5 @@ class RejectedExecutePromptEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

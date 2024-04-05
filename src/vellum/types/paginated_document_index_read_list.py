@@ -13,10 +13,10 @@ except ImportError:
 
 
 class PaginatedDocumentIndexReadList(pydantic.BaseModel):
-    count: typing.Optional[int]
-    next: typing.Optional[str]
-    previous: typing.Optional[str]
-    results: typing.Optional[typing.List[DocumentIndexRead]]
+    count: typing.Optional[int] = None
+    next: typing.Optional[str] = None
+    previous: typing.Optional[str] = None
+    results: typing.Optional[typing.List[DocumentIndexRead]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -29,4 +29,5 @@ class PaginatedDocumentIndexReadList(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

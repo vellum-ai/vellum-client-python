@@ -12,11 +12,16 @@ except ImportError:
 
 
 class RawPromptExecutionOverridesRequest(pydantic.BaseModel):
-    body: typing.Optional[typing.Dict[str, typing.Any]]
-    headers: typing.Optional[typing.Dict[str, typing.Optional[str]]] = pydantic.Field(
-        description="The raw headers to send to the model host."
-    )
-    url: typing.Optional[str] = pydantic.Field(description="The raw URL to send to the model host.")
+    body: typing.Optional[typing.Dict[str, typing.Any]] = None
+    headers: typing.Optional[typing.Dict[str, typing.Optional[str]]] = pydantic.Field(default=None)
+    """
+    The raw headers to send to the model host.
+    """
+
+    url: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The raw URL to send to the model host.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -29,4 +34,5 @@ class RawPromptExecutionOverridesRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

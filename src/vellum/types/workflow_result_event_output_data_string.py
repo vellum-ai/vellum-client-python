@@ -17,16 +17,19 @@ class WorkflowResultEventOutputDataString(pydantic.BaseModel):
     A string output streamed from a Workflow execution.
     """
 
-    id: typing.Optional[str]
+    id: typing.Optional[str] = None
     name: str
     state: WorkflowNodeResultEventState
     node_id: str
-    delta: typing.Optional[str] = pydantic.Field(
-        description="The newly output string value, meant to be concatenated with all previous. Will be non-null for events of state STREAMING."
-    )
-    value: typing.Optional[str] = pydantic.Field(
-        description="The entire string value. Will be non-null for events of state FULFILLED."
-    )
+    delta: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The newly output string value, meant to be concatenated with all previous. Will be non-null for events of state STREAMING.
+    """
+
+    value: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The entire string value. Will be non-null for events of state FULFILLED.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -39,4 +42,5 @@ class WorkflowResultEventOutputDataString(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

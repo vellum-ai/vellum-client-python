@@ -13,9 +13,9 @@ except ImportError:
 
 class PromptNodeResultData(pydantic.BaseModel):
     output_id: str
-    array_output_id: typing.Optional[str]
-    text: typing.Optional[str]
-    delta: typing.Optional[str]
+    array_output_id: typing.Optional[str] = None
+    text: typing.Optional[str] = None
+    delta: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -28,4 +28,5 @@ class PromptNodeResultData(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

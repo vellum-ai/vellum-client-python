@@ -4,28 +4,28 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .fulfilled_execute_workflow_workflow_result_event import FulfilledExecuteWorkflowWorkflowResultEvent
 from .rejected_execute_workflow_workflow_result_event import RejectedExecuteWorkflowWorkflowResultEvent
 
 
 class ExecuteWorkflowWorkflowResultEvent_Fulfilled(FulfilledExecuteWorkflowWorkflowResultEvent):
-    state: typing_extensions.Literal["FULFILLED"]
+    state: typing.Literal["FULFILLED"] = "FULFILLED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecuteWorkflowWorkflowResultEvent_Rejected(RejectedExecuteWorkflowWorkflowResultEvent):
-    state: typing_extensions.Literal["REJECTED"]
+    state: typing.Literal["REJECTED"] = "REJECTED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 ExecuteWorkflowWorkflowResultEvent = typing.Union[

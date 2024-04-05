@@ -13,9 +13,16 @@ except ImportError:
 
 
 class SandboxScenario(pydantic.BaseModel):
-    label: typing.Optional[str]
-    inputs: typing.List[ScenarioInput] = pydantic.Field(description="The inputs for the scenario")
-    id: str = pydantic.Field(description="The id of the scenario")
+    label: typing.Optional[str] = None
+    inputs: typing.List[ScenarioInput] = pydantic.Field()
+    """
+    The inputs for the scenario
+    """
+
+    id: str = pydantic.Field()
+    """
+    The id of the scenario
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -28,4 +35,5 @@ class SandboxScenario(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

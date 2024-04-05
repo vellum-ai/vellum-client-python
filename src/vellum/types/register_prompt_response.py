@@ -17,16 +17,35 @@ except ImportError:
 
 
 class RegisterPromptResponse(pydantic.BaseModel):
-    prompt: RegisterPromptPrompt = pydantic.Field(description="Information about the generated prompt")
-    sandbox_snapshot: RegisteredPromptSandboxSnapshot = pydantic.Field(
-        description="Information about the generated sandbox snapshot"
-    )
-    sandbox: RegisteredPromptSandbox = pydantic.Field(description="Information about the generated sandbox")
-    model_version: RegisteredPromptModelVersion = pydantic.Field(
-        description="Information about the generated model version"
-    )
-    prompt_version_id: str = pydantic.Field(description="The ID of the generated prompt version")
-    deployment: RegisteredPromptDeployment = pydantic.Field(description="Information about the generated deployment")
+    prompt: RegisterPromptPrompt = pydantic.Field()
+    """
+    Information about the generated prompt
+    """
+
+    sandbox_snapshot: RegisteredPromptSandboxSnapshot = pydantic.Field()
+    """
+    Information about the generated sandbox snapshot
+    """
+
+    sandbox: RegisteredPromptSandbox = pydantic.Field()
+    """
+    Information about the generated sandbox
+    """
+
+    model_version: RegisteredPromptModelVersion = pydantic.Field()
+    """
+    Information about the generated model version
+    """
+
+    prompt_version_id: str = pydantic.Field()
+    """
+    The ID of the generated prompt version
+    """
+
+    deployment: RegisteredPromptDeployment = pydantic.Field()
+    """
+    Information about the generated deployment
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -39,4 +58,5 @@ class RegisterPromptResponse(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -49,16 +49,20 @@ from .chat_message_content_request import (
 )
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
+from .code_execution_node_array_result import CodeExecutionNodeArrayResult
 from .code_execution_node_chat_history_result import CodeExecutionNodeChatHistoryResult
 from .code_execution_node_error_result import CodeExecutionNodeErrorResult
+from .code_execution_node_function_call_result import CodeExecutionNodeFunctionCallResult
 from .code_execution_node_json_result import CodeExecutionNodeJsonResult
 from .code_execution_node_number_result import CodeExecutionNodeNumberResult
 from .code_execution_node_result import CodeExecutionNodeResult
 from .code_execution_node_result_data import CodeExecutionNodeResultData
 from .code_execution_node_result_output import (
     CodeExecutionNodeResultOutput,
+    CodeExecutionNodeResultOutput_Array,
     CodeExecutionNodeResultOutput_ChatHistory,
     CodeExecutionNodeResultOutput_Error,
+    CodeExecutionNodeResultOutput_FunctionCall,
     CodeExecutionNodeResultOutput_Json,
     CodeExecutionNodeResultOutput_Number,
     CodeExecutionNodeResultOutput_SearchResults,
@@ -185,6 +189,7 @@ from .named_test_case_variable_value_request import (
 from .node_input_compiled_array_value import NodeInputCompiledArrayValue
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
 from .node_input_compiled_error_value import NodeInputCompiledErrorValue
+from .node_input_compiled_function_call import NodeInputCompiledFunctionCall
 from .node_input_compiled_json_value import NodeInputCompiledJsonValue
 from .node_input_compiled_number_value import NodeInputCompiledNumberValue
 from .node_input_compiled_search_results_value import NodeInputCompiledSearchResultsValue
@@ -194,6 +199,7 @@ from .node_input_variable_compiled_value import (
     NodeInputVariableCompiledValue_Array,
     NodeInputVariableCompiledValue_ChatHistory,
     NodeInputVariableCompiledValue_Error,
+    NodeInputVariableCompiledValue_FunctionCall,
     NodeInputVariableCompiledValue_Json,
     NodeInputVariableCompiledValue_Number,
     NodeInputVariableCompiledValue_SearchResults,
@@ -311,16 +317,20 @@ from .submit_workflow_execution_actual_request import (
 )
 from .subworkflow_enum import SubworkflowEnum
 from .subworkflow_node_result import SubworkflowNodeResult
+from .templating_node_array_result import TemplatingNodeArrayResult
 from .templating_node_chat_history_result import TemplatingNodeChatHistoryResult
 from .templating_node_error_result import TemplatingNodeErrorResult
+from .templating_node_function_call_result import TemplatingNodeFunctionCallResult
 from .templating_node_json_result import TemplatingNodeJsonResult
 from .templating_node_number_result import TemplatingNodeNumberResult
 from .templating_node_result import TemplatingNodeResult
 from .templating_node_result_data import TemplatingNodeResultData
 from .templating_node_result_output import (
     TemplatingNodeResultOutput,
+    TemplatingNodeResultOutput_Array,
     TemplatingNodeResultOutput_ChatHistory,
     TemplatingNodeResultOutput_Error,
+    TemplatingNodeResultOutput_FunctionCall,
     TemplatingNodeResultOutput_Json,
     TemplatingNodeResultOutput_Number,
     TemplatingNodeResultOutput_SearchResults,
@@ -551,15 +561,19 @@ __all__ = [
     "ChatMessageContent_String",
     "ChatMessageRequest",
     "ChatMessageRole",
+    "CodeExecutionNodeArrayResult",
     "CodeExecutionNodeChatHistoryResult",
     "CodeExecutionNodeErrorResult",
+    "CodeExecutionNodeFunctionCallResult",
     "CodeExecutionNodeJsonResult",
     "CodeExecutionNodeNumberResult",
     "CodeExecutionNodeResult",
     "CodeExecutionNodeResultData",
     "CodeExecutionNodeResultOutput",
+    "CodeExecutionNodeResultOutput_Array",
     "CodeExecutionNodeResultOutput_ChatHistory",
     "CodeExecutionNodeResultOutput_Error",
+    "CodeExecutionNodeResultOutput_FunctionCall",
     "CodeExecutionNodeResultOutput_Json",
     "CodeExecutionNodeResultOutput_Number",
     "CodeExecutionNodeResultOutput_SearchResults",
@@ -677,6 +691,7 @@ __all__ = [
     "NodeInputCompiledArrayValue",
     "NodeInputCompiledChatHistoryValue",
     "NodeInputCompiledErrorValue",
+    "NodeInputCompiledFunctionCall",
     "NodeInputCompiledJsonValue",
     "NodeInputCompiledNumberValue",
     "NodeInputCompiledSearchResultsValue",
@@ -685,6 +700,7 @@ __all__ = [
     "NodeInputVariableCompiledValue_Array",
     "NodeInputVariableCompiledValue_ChatHistory",
     "NodeInputVariableCompiledValue_Error",
+    "NodeInputVariableCompiledValue_FunctionCall",
     "NodeInputVariableCompiledValue_Json",
     "NodeInputVariableCompiledValue_Number",
     "NodeInputVariableCompiledValue_SearchResults",
@@ -793,15 +809,19 @@ __all__ = [
     "SubmitWorkflowExecutionActualRequest_String",
     "SubworkflowEnum",
     "SubworkflowNodeResult",
+    "TemplatingNodeArrayResult",
     "TemplatingNodeChatHistoryResult",
     "TemplatingNodeErrorResult",
+    "TemplatingNodeFunctionCallResult",
     "TemplatingNodeJsonResult",
     "TemplatingNodeNumberResult",
     "TemplatingNodeResult",
     "TemplatingNodeResultData",
     "TemplatingNodeResultOutput",
+    "TemplatingNodeResultOutput_Array",
     "TemplatingNodeResultOutput_ChatHistory",
     "TemplatingNodeResultOutput_Error",
+    "TemplatingNodeResultOutput_FunctionCall",
     "TemplatingNodeResultOutput_Json",
     "TemplatingNodeResultOutput_Number",
     "TemplatingNodeResultOutput_SearchResults",

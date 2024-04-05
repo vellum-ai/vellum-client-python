@@ -18,20 +18,21 @@ class TestSuiteRunRead(pydantic.BaseModel):
     id: str
     created: dt.datetime
     test_suite: TestSuiteRunTestSuite
-    state: typing.Optional[TestSuiteRunState] = pydantic.Field(
-        description=(
-            "The current state of this run\n"
-            "\n"
-            "- `QUEUED` - Queued\n"
-            "- `RUNNING` - Running\n"
-            "- `COMPLETE` - Complete\n"
-            "- `FAILED` - Failed\n"
-            "- `CANCELLED` - Cancelled\n"
-        )
-    )
-    exec_config: typing.Optional[TestSuiteRunExecConfig] = pydantic.Field(
-        description="Configuration that defines how the Test Suite should be run"
-    )
+    state: TestSuiteRunState = pydantic.Field()
+    """
+    The current state of this run
+    
+    - `QUEUED` - Queued
+    - `RUNNING` - Running
+    - `COMPLETE` - Complete
+    - `FAILED` - Failed
+    - `CANCELLED` - Cancelled
+    """
+
+    exec_config: typing.Optional[TestSuiteRunExecConfig] = pydantic.Field(default=None)
+    """
+    Configuration that defines how the Test Suite should be run
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -44,4 +45,5 @@ class TestSuiteRunRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

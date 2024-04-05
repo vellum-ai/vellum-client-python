@@ -12,13 +12,20 @@ except ImportError:
 
 
 class SearchResultDocumentRequest(pydantic.BaseModel):
-    label: str = pydantic.Field(description="The human-readable name for the document.")
-    external_id: typing.Optional[str] = pydantic.Field(
-        description="The unique ID of the document as represented in an external system and specified when it was originally uploaded."
-    )
-    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
-        description="A previously supplied JSON object containing metadata that can be filtered on when searching."
-    )
+    label: str = pydantic.Field()
+    """
+    The human-readable name for the document.
+    """
+
+    external_id: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The unique ID of the document as represented in an external system and specified when it was originally uploaded.
+    """
+
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    """
+    A previously supplied JSON object containing metadata that can be filtered on when searching.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -31,4 +38,5 @@ class SearchResultDocumentRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

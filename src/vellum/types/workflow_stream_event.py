@@ -4,28 +4,28 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .workflow_execution_node_result_event import WorkflowExecutionNodeResultEvent
 from .workflow_execution_workflow_result_event import WorkflowExecutionWorkflowResultEvent
 
 
 class WorkflowStreamEvent_Workflow(WorkflowExecutionWorkflowResultEvent):
-    type: typing_extensions.Literal["WORKFLOW"]
+    type: typing.Literal["WORKFLOW"] = "WORKFLOW"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowStreamEvent_Node(WorkflowExecutionNodeResultEvent):
-    type: typing_extensions.Literal["NODE"]
+    type: typing.Literal["NODE"] = "NODE"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 WorkflowStreamEvent = typing.Union[WorkflowStreamEvent_Workflow, WorkflowStreamEvent_Node]

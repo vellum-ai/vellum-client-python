@@ -14,8 +14,8 @@ except ImportError:
 
 class RegisteredPromptInputVariableRequest(pydantic.BaseModel):
     key: str
-    id: typing.Optional[str]
-    type: typing.Optional[VellumVariableType]
+    id: typing.Optional[str] = None
+    type: typing.Optional[VellumVariableType] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -28,4 +28,5 @@ class RegisteredPromptInputVariableRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

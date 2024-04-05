@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .named_test_case_chat_history_variable_value_request import NamedTestCaseChatHistoryVariableValueRequest
 from .named_test_case_error_variable_value_request import NamedTestCaseErrorVariableValueRequest
 from .named_test_case_json_variable_value_request import NamedTestCaseJsonVariableValueRequest
@@ -15,57 +13,63 @@ from .named_test_case_string_variable_value_request import NamedTestCaseStringVa
 
 
 class NamedTestCaseVariableValueRequest_String(NamedTestCaseStringVariableValueRequest):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class NamedTestCaseVariableValueRequest_Number(NamedTestCaseNumberVariableValueRequest):
-    type: typing_extensions.Literal["NUMBER"]
+    type: typing.Literal["NUMBER"] = "NUMBER"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class NamedTestCaseVariableValueRequest_Json(NamedTestCaseJsonVariableValueRequest):
-    type: typing_extensions.Literal["JSON"]
+    type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class NamedTestCaseVariableValueRequest_ChatHistory(NamedTestCaseChatHistoryVariableValueRequest):
-    type: typing_extensions.Literal["CHAT_HISTORY"]
+    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class NamedTestCaseVariableValueRequest_SearchResults(NamedTestCaseSearchResultsVariableValueRequest):
-    type: typing_extensions.Literal["SEARCH_RESULTS"]
+    type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class NamedTestCaseVariableValueRequest_Error(NamedTestCaseErrorVariableValueRequest):
-    type: typing_extensions.Literal["ERROR"]
+    type: typing.Literal["ERROR"] = "ERROR"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 NamedTestCaseVariableValueRequest = typing.Union[

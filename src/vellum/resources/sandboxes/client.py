@@ -7,6 +7,8 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
+from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
 from ...types.sandbox_scenario import SandboxScenario
 from ...types.scenario_input_request import ScenarioInputRequest
 
@@ -28,8 +30,9 @@ class SandboxesClient:
         id: str,
         *,
         label: typing.Optional[str] = OMIT,
-        inputs: typing.List[ScenarioInputRequest],
+        inputs: typing.Sequence[ScenarioInputRequest],
         scenario_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> SandboxScenario:
         """
         Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
@@ -45,9 +48,11 @@ class SandboxesClient:
 
             - label: typing.Optional[str].
 
-            - inputs: typing.List[ScenarioInputRequest]. The inputs for the scenario
+            - inputs: typing.Sequence[ScenarioInputRequest]. The inputs for the scenario
 
             - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum import ScenarioInputRequest, ScenarioInputTypeEnum
         from vellum.client import Vellum
@@ -69,9 +74,6 @@ class SandboxesClient:
                     type=ScenarioInputTypeEnum.TEXT,
                     value="Why hello, there!",
                 ),
-                ScenarioInputRequest(
-                    key="key",
-                ),
             ],
         )
         """
@@ -82,10 +84,31 @@ class SandboxesClient:
             _request["scenario_id"] = scenario_id
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{jsonable_encoder(id)}/scenarios"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(SandboxScenario, _response.json())  # type: ignore
@@ -95,7 +118,9 @@ class SandboxesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete_sandbox_scenario(self, id: str, scenario_id: str) -> None:
+    def delete_sandbox_scenario(
+        self, id: str, scenario_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
 
@@ -103,6 +128,8 @@ class SandboxesClient:
             - id: str. A UUID string identifying this sandbox.
 
             - scenario_id: str. An id identifying the scenario that you'd like to delete
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -117,10 +144,25 @@ class SandboxesClient:
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/sandboxes/{jsonable_encoder(id)}/scenarios/{jsonable_encoder(scenario_id)}",
             ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return
@@ -140,8 +182,9 @@ class AsyncSandboxesClient:
         id: str,
         *,
         label: typing.Optional[str] = OMIT,
-        inputs: typing.List[ScenarioInputRequest],
+        inputs: typing.Sequence[ScenarioInputRequest],
         scenario_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> SandboxScenario:
         """
         Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
@@ -157,9 +200,11 @@ class AsyncSandboxesClient:
 
             - label: typing.Optional[str].
 
-            - inputs: typing.List[ScenarioInputRequest]. The inputs for the scenario
+            - inputs: typing.Sequence[ScenarioInputRequest]. The inputs for the scenario
 
             - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum import ScenarioInputRequest, ScenarioInputTypeEnum
         from vellum.client import AsyncVellum
@@ -181,9 +226,6 @@ class AsyncSandboxesClient:
                     type=ScenarioInputTypeEnum.TEXT,
                     value="Why hello, there!",
                 ),
-                ScenarioInputRequest(
-                    key="key",
-                ),
             ],
         )
         """
@@ -194,10 +236,31 @@ class AsyncSandboxesClient:
             _request["scenario_id"] = scenario_id
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{jsonable_encoder(id)}/scenarios"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(SandboxScenario, _response.json())  # type: ignore
@@ -207,7 +270,9 @@ class AsyncSandboxesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def delete_sandbox_scenario(self, id: str, scenario_id: str) -> None:
+    async def delete_sandbox_scenario(
+        self, id: str, scenario_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
 
@@ -215,6 +280,8 @@ class AsyncSandboxesClient:
             - id: str. A UUID string identifying this sandbox.
 
             - scenario_id: str. An id identifying the scenario that you'd like to delete
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -229,10 +296,25 @@ class AsyncSandboxesClient:
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{id}/scenarios/{scenario_id}"
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/sandboxes/{jsonable_encoder(id)}/scenarios/{jsonable_encoder(scenario_id)}",
             ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return

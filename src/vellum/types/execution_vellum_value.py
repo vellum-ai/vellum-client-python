@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .execution_array_vellum_value import ExecutionArrayVellumValue
 from .execution_chat_history_vellum_value import ExecutionChatHistoryVellumValue
 from .execution_error_vellum_value import ExecutionErrorVellumValue
@@ -17,75 +15,83 @@ from .execution_string_vellum_value import ExecutionStringVellumValue
 
 
 class ExecutionVellumValue_String(ExecutionStringVellumValue):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecutionVellumValue_Number(ExecutionNumberVellumValue):
-    type: typing_extensions.Literal["NUMBER"]
+    type: typing.Literal["NUMBER"] = "NUMBER"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecutionVellumValue_Json(ExecutionJsonVellumValue):
-    type: typing_extensions.Literal["JSON"]
+    type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecutionVellumValue_ChatHistory(ExecutionChatHistoryVellumValue):
-    type: typing_extensions.Literal["CHAT_HISTORY"]
+    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecutionVellumValue_SearchResults(ExecutionSearchResultsVellumValue):
-    type: typing_extensions.Literal["SEARCH_RESULTS"]
+    type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecutionVellumValue_Error(ExecutionErrorVellumValue):
-    type: typing_extensions.Literal["ERROR"]
+    type: typing.Literal["ERROR"] = "ERROR"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecutionVellumValue_Array(ExecutionArrayVellumValue):
-    type: typing_extensions.Literal["ARRAY"]
+    type: typing.Literal["ARRAY"] = "ARRAY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecutionVellumValue_FunctionCall(ExecutionFunctionCallVellumValue):
-    type: typing_extensions.Literal["FUNCTION_CALL"]
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 ExecutionVellumValue = typing.Union[

@@ -4,28 +4,28 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .fulfilled_execute_prompt_response import FulfilledExecutePromptResponse
 from .rejected_execute_prompt_response import RejectedExecutePromptResponse
 
 
 class ExecutePromptResponse_Fulfilled(FulfilledExecutePromptResponse):
-    state: typing_extensions.Literal["FULFILLED"]
+    state: typing.Literal["FULFILLED"] = "FULFILLED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class ExecutePromptResponse_Rejected(RejectedExecutePromptResponse):
-    state: typing_extensions.Literal["REJECTED"]
+    state: typing.Literal["REJECTED"] = "REJECTED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 ExecutePromptResponse = typing.Union[ExecutePromptResponse_Fulfilled, ExecutePromptResponse_Rejected]

@@ -20,10 +20,10 @@ class WorkflowResultEvent(pydantic.BaseModel):
     id: str
     state: WorkflowNodeResultEventState
     ts: dt.datetime
-    output: typing.Optional[WorkflowResultEventOutputData]
-    error: typing.Optional[WorkflowEventError]
-    outputs: typing.Optional[typing.List[WorkflowOutput]]
-    inputs: typing.Optional[typing.List[ExecutionVellumValue]]
+    output: typing.Optional[WorkflowResultEventOutputData] = None
+    error: typing.Optional[WorkflowEventError] = None
+    outputs: typing.Optional[typing.List[WorkflowOutput]] = None
+    inputs: typing.Optional[typing.List[ExecutionVellumValue]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -36,4 +36,5 @@ class WorkflowResultEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

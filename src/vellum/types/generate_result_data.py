@@ -13,9 +13,10 @@ except ImportError:
 
 
 class GenerateResultData(pydantic.BaseModel):
-    completions: typing.List[EnrichedNormalizedCompletion] = pydantic.Field(
-        description="The generated completions. This will generally be a list of length one."
-    )
+    completions: typing.List[EnrichedNormalizedCompletion] = pydantic.Field()
+    """
+    The generated completions. This will generally be a list of length one.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -28,4 +29,5 @@ class GenerateResultData(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

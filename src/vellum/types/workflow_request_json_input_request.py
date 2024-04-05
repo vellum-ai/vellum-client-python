@@ -16,7 +16,11 @@ class WorkflowRequestJsonInputRequest(pydantic.BaseModel):
     The input for a JSON variable in a Workflow.
     """
 
-    name: str = pydantic.Field(description="The variable's name, as defined in the Workflow.")
+    name: str = pydantic.Field()
+    """
+    The variable's name, as defined in the Workflow.
+    """
+
     value: typing.Dict[str, typing.Any]
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -30,4 +34,5 @@ class WorkflowRequestJsonInputRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

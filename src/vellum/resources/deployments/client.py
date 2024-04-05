@@ -8,6 +8,7 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
 from ...errors.bad_request_error import BadRequestError
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.internal_server_error import InternalServerError
@@ -38,6 +39,7 @@ class DeploymentsClient:
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
         status: typing.Optional[DeploymentsListRequestStatus] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimDeploymentReadList:
         """
         Parameters:
@@ -48,6 +50,8 @@ class DeploymentsClient:
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
             - status: typing.Optional[DeploymentsListRequestStatus]. status
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -59,9 +63,34 @@ class DeploymentsClient:
         _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/deployments"),
-            params=remove_none_from_dict({"limit": limit, "offset": offset, "ordering": ordering, "status": status}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                        "ordering": ordering,
+                        "status": status,
+                        **(
+                            request_options.get("additional_query_parameters", {})
+                            if request_options is not None
+                            else {}
+                        ),
+                    }
+                )
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDeploymentReadList, _response.json())  # type: ignore
@@ -71,12 +100,14 @@ class DeploymentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def retrieve(self, id: str) -> DeploymentRead:
+    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DeploymentRead:
         """
         Used to retrieve a deployment given its ID or name.
 
         Parameters:
             - id: str. Either the Deployment's ID or its unique name
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -89,9 +120,25 @@ class DeploymentsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/deployments/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/deployments/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DeploymentRead, _response.json())  # type: ignore
@@ -106,8 +153,9 @@ class DeploymentsClient:
         *,
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
-        inputs: typing.List[PromptDeploymentInputRequest],
+        inputs: typing.Sequence[PromptDeploymentInputRequest],
         release_tag: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DeploymentProviderPayloadResponse:
         """
         Parameters:
@@ -115,9 +163,11 @@ class DeploymentsClient:
 
             - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
 
-            - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+            - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -140,9 +190,28 @@ class DeploymentsClient:
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", "v1/deployments/provider-payload"
             ),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DeploymentProviderPayloadResponse, _response.json())  # type: ignore
@@ -172,6 +241,7 @@ class AsyncDeploymentsClient:
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
         status: typing.Optional[DeploymentsListRequestStatus] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimDeploymentReadList:
         """
         Parameters:
@@ -182,6 +252,8 @@ class AsyncDeploymentsClient:
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
             - status: typing.Optional[DeploymentsListRequestStatus]. status
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -193,9 +265,34 @@ class AsyncDeploymentsClient:
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/deployments"),
-            params=remove_none_from_dict({"limit": limit, "offset": offset, "ordering": ordering, "status": status}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                        "ordering": ordering,
+                        "status": status,
+                        **(
+                            request_options.get("additional_query_parameters", {})
+                            if request_options is not None
+                            else {}
+                        ),
+                    }
+                )
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDeploymentReadList, _response.json())  # type: ignore
@@ -205,12 +302,14 @@ class AsyncDeploymentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def retrieve(self, id: str) -> DeploymentRead:
+    async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DeploymentRead:
         """
         Used to retrieve a deployment given its ID or name.
 
         Parameters:
             - id: str. Either the Deployment's ID or its unique name
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -223,9 +322,25 @@ class AsyncDeploymentsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/deployments/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/deployments/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DeploymentRead, _response.json())  # type: ignore
@@ -240,8 +355,9 @@ class AsyncDeploymentsClient:
         *,
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
-        inputs: typing.List[PromptDeploymentInputRequest],
+        inputs: typing.Sequence[PromptDeploymentInputRequest],
         release_tag: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DeploymentProviderPayloadResponse:
         """
         Parameters:
@@ -249,9 +365,11 @@ class AsyncDeploymentsClient:
 
             - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
 
-            - inputs: typing.List[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+            - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -274,9 +392,28 @@ class AsyncDeploymentsClient:
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", "v1/deployments/provider-payload"
             ),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DeploymentProviderPayloadResponse, _response.json())  # type: ignore

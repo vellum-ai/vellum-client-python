@@ -15,9 +15,10 @@ except ImportError:
 
 class RegisterPromptPromptInfoRequest(pydantic.BaseModel):
     prompt_block_data: PromptTemplateBlockDataRequest
-    input_variables: typing.List[RegisteredPromptInputVariableRequest] = pydantic.Field(
-        description="The input variables specified in the prompt template."
-    )
+    input_variables: typing.List[RegisteredPromptInputVariableRequest] = pydantic.Field()
+    """
+    The input variables specified in the prompt template.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -30,4 +31,5 @@ class RegisterPromptPromptInfoRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

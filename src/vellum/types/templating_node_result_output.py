@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
+from .templating_node_array_result import TemplatingNodeArrayResult
 from .templating_node_chat_history_result import TemplatingNodeChatHistoryResult
 from .templating_node_error_result import TemplatingNodeErrorResult
+from .templating_node_function_call_result import TemplatingNodeFunctionCallResult
 from .templating_node_json_result import TemplatingNodeJsonResult
 from .templating_node_number_result import TemplatingNodeNumberResult
 from .templating_node_search_results_result import TemplatingNodeSearchResultsResult
@@ -15,57 +15,83 @@ from .templating_node_string_result import TemplatingNodeStringResult
 
 
 class TemplatingNodeResultOutput_String(TemplatingNodeStringResult):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TemplatingNodeResultOutput_Number(TemplatingNodeNumberResult):
-    type: typing_extensions.Literal["NUMBER"]
+    type: typing.Literal["NUMBER"] = "NUMBER"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TemplatingNodeResultOutput_Json(TemplatingNodeJsonResult):
-    type: typing_extensions.Literal["JSON"]
+    type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TemplatingNodeResultOutput_ChatHistory(TemplatingNodeChatHistoryResult):
-    type: typing_extensions.Literal["CHAT_HISTORY"]
+    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TemplatingNodeResultOutput_SearchResults(TemplatingNodeSearchResultsResult):
-    type: typing_extensions.Literal["SEARCH_RESULTS"]
+    type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TemplatingNodeResultOutput_Error(TemplatingNodeErrorResult):
-    type: typing_extensions.Literal["ERROR"]
+    type: typing.Literal["ERROR"] = "ERROR"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
+
+
+class TemplatingNodeResultOutput_Array(TemplatingNodeArrayResult):
+    type: typing.Literal["ARRAY"] = "ARRAY"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
+class TemplatingNodeResultOutput_FunctionCall(TemplatingNodeFunctionCallResult):
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
 
 
 TemplatingNodeResultOutput = typing.Union[
@@ -75,4 +101,6 @@ TemplatingNodeResultOutput = typing.Union[
     TemplatingNodeResultOutput_ChatHistory,
     TemplatingNodeResultOutput_SearchResults,
     TemplatingNodeResultOutput_Error,
+    TemplatingNodeResultOutput_Array,
+    TemplatingNodeResultOutput_FunctionCall,
 ]

@@ -17,7 +17,7 @@ class ImageVariableValue(pydantic.BaseModel):
     A base Vellum primitive value representing an image.
     """
 
-    value: typing.Optional[VellumImage]
+    value: typing.Optional[VellumImage] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -30,4 +30,5 @@ class ImageVariableValue(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

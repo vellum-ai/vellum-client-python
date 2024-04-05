@@ -17,11 +17,11 @@ class PromptExecutionMeta(pydantic.BaseModel):
     The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
     """
 
-    model_name: typing.Optional[str]
-    latency: typing.Optional[int]
-    deployment_release_tag: typing.Optional[str]
-    prompt_version_id: typing.Optional[str]
-    finish_reason: typing.Optional[FinishReasonEnum]
+    model_name: typing.Optional[str] = None
+    latency: typing.Optional[int] = None
+    deployment_release_tag: typing.Optional[str] = None
+    prompt_version_id: typing.Optional[str] = None
+    finish_reason: typing.Optional[FinishReasonEnum] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -34,4 +34,5 @@ class PromptExecutionMeta(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -18,7 +18,7 @@ class RejectedFunctionCall(pydantic.BaseModel):
     """
 
     error: VellumError
-    id: typing.Optional[str]
+    id: typing.Optional[str] = None
     name: str
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -32,4 +32,5 @@ class RejectedFunctionCall(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

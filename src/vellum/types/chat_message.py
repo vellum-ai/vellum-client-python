@@ -14,12 +14,13 @@ except ImportError:
 
 
 class ChatMessage(pydantic.BaseModel):
-    text: typing.Optional[str]
+    text: typing.Optional[str] = None
     role: ChatMessageRole
-    content: typing.Optional[ChatMessageContent]
-    source: typing.Optional[str] = pydantic.Field(
-        description="An optional identifier representing who or what generated this message."
-    )
+    content: typing.Optional[ChatMessageContent] = None
+    source: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    An optional identifier representing who or what generated this message.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -32,4 +33,5 @@ class ChatMessage(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

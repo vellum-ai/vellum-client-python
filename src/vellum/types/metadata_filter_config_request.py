@@ -15,12 +15,12 @@ except ImportError:
 
 
 class MetadataFilterConfigRequest(pydantic.BaseModel):
-    combinator: typing.Optional[MetadataFilterRuleCombinator]
-    negated: typing.Optional[bool]
-    rules: typing.Optional[typing.List[MetadataFilterRuleRequest]]
-    field: typing.Optional[str]
-    operator: typing.Optional[LogicalOperator]
-    value: typing.Optional[str]
+    combinator: typing.Optional[MetadataFilterRuleCombinator] = None
+    negated: typing.Optional[bool] = None
+    rules: typing.Optional[typing.List[MetadataFilterRuleRequest]] = None
+    field: typing.Optional[str] = None
+    operator: typing.Optional[LogicalOperator] = None
+    value: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -33,4 +33,5 @@ class MetadataFilterConfigRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

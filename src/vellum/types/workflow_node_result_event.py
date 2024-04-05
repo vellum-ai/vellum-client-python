@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .fulfilled_workflow_node_result_event import FulfilledWorkflowNodeResultEvent
 from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEvent
 from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
@@ -13,39 +11,43 @@ from .streaming_workflow_node_result_event import StreamingWorkflowNodeResultEve
 
 
 class WorkflowNodeResultEvent_Initiated(InitiatedWorkflowNodeResultEvent):
-    state: typing_extensions.Literal["INITIATED"]
+    state: typing.Literal["INITIATED"] = "INITIATED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultEvent_Streaming(StreamingWorkflowNodeResultEvent):
-    state: typing_extensions.Literal["STREAMING"]
+    state: typing.Literal["STREAMING"] = "STREAMING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultEvent_Fulfilled(FulfilledWorkflowNodeResultEvent):
-    state: typing_extensions.Literal["FULFILLED"]
+    state: typing.Literal["FULFILLED"] = "FULFILLED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultEvent_Rejected(RejectedWorkflowNodeResultEvent):
-    state: typing_extensions.Literal["REJECTED"]
+    state: typing.Literal["REJECTED"] = "REJECTED"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 WorkflowNodeResultEvent = typing.Union[

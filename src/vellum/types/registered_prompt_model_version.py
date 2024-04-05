@@ -12,8 +12,15 @@ except ImportError:
 
 
 class RegisteredPromptModelVersion(pydantic.BaseModel):
-    id: str = pydantic.Field(description="The ID of the generated model version.")
-    label: str = pydantic.Field(description="A human-friendly label for the generated model version.")
+    id: str = pydantic.Field()
+    """
+    The ID of the generated model version.
+    """
+
+    label: str = pydantic.Field()
+    """
+    A human-friendly label for the generated model version.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -26,4 +33,5 @@ class RegisteredPromptModelVersion(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

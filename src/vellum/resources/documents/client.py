@@ -4,10 +4,12 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
+from ... import core
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
 from ...errors.bad_request_error import BadRequestError
 from ...errors.internal_server_error import InternalServerError
 from ...errors.not_found_error import NotFoundError
@@ -36,6 +38,7 @@ class DocumentsClient:
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimDocumentList:
         """
         Used to list documents. Optionally filter on supported fields.
@@ -48,6 +51,8 @@ class DocumentsClient:
             - offset: typing.Optional[int]. The initial index from which to return the results.
 
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -59,11 +64,34 @@ class DocumentsClient:
         _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/documents"),
-            params=remove_none_from_dict(
-                {"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering}
+            params=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "document_index_id": document_index_id,
+                        "limit": limit,
+                        "offset": offset,
+                        "ordering": ordering,
+                        **(
+                            request_options.get("additional_query_parameters", {})
+                            if request_options is not None
+                            else {}
+                        ),
+                    }
+                )
             ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
@@ -73,10 +101,12 @@ class DocumentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def destroy(self, id: str) -> None:
+    def destroy(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> None:
         """
         Parameters:
             - id: str. A UUID string identifying this document.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -89,9 +119,25 @@ class DocumentsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return
@@ -108,6 +154,7 @@ class DocumentsClient:
         label: typing.Optional[str] = OMIT,
         status: typing.Optional[DocumentStatus] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentRead:
         """
         Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
@@ -121,6 +168,8 @@ class DocumentsClient:
 
                                                        * `ACTIVE` - Active
             - metadata: typing.Optional[typing.Dict[str, typing.Any]]. A JSON object containing any metadata associated with the document that you'd like to filter upon later.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -140,10 +189,31 @@ class DocumentsClient:
             _request["metadata"] = metadata
         _response = self._client_wrapper.httpx_client.request(
             "PATCH",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
@@ -159,9 +229,10 @@ class DocumentsClient:
         add_to_index_names: typing.Optional[typing.List[str]] = None,
         external_id: typing.Optional[str] = None,
         label: str,
-        contents: typing.IO,
+        contents: core.File,
         keywords: typing.Optional[typing.List[str]] = None,
         metadata: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> UploadDocumentResponse:
         """
         Upload a document to be indexed and used for search.
@@ -177,33 +248,73 @@ class DocumentsClient:
         - `metadata: dict[str, Any]` - A stringified JSON object containing any metadata associated with the document that you'd like to filter upon later.
 
         Parameters:
-            - add_to_index_names: typing.Optional[typing.List[str]].
+            - add_to_index_names: typing.Optional[typing.List[str]]. Optionally include the names of all indexes that you'd like this document to be included in
 
-            - external_id: typing.Optional[str].
+            - external_id: typing.Optional[str]. Optionally include an external ID for this document. This is useful if you want to re-upload the same document later when its contents change and would like it to be re-indexed.
 
-            - label: str.
+            - label: str. A human-friendly name for this document. Typically the filename.
 
-            - contents: typing.IO.
+            - contents: core.File. See core.File for more documentation
 
-            - keywords: typing.Optional[typing.List[str]].
+            - keywords: typing.Optional[typing.List[str]]. Optionally include a list of keywords that'll be associated with this document. Used when performing keyword searches.
 
-            - metadata: typing.Optional[str].
+            - metadata: typing.Optional[str]. A stringified JSON object containing any metadata associated with the document that you'd like to filter upon later.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.documents.upload()
         """
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().documents}/", "v1/upload-document"),
-            data=jsonable_encoder(
-                {
-                    "add_to_index_names": add_to_index_names,
-                    "external_id": external_id,
-                    "label": label,
-                    "keywords": keywords,
-                    "metadata": metadata,
-                }
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
             ),
-            files={"contents": contents},
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            data=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "add_to_index_names": add_to_index_names,
+                        "external_id": external_id,
+                        "label": label,
+                        "keywords": keywords,
+                        "metadata": metadata,
+                    }
+                )
+            )
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(
+                    remove_none_from_dict(
+                        {
+                            "add_to_index_names": add_to_index_names,
+                            "external_id": external_id,
+                            "label": label,
+                            "keywords": keywords,
+                            "metadata": metadata,
+                        }
+                    )
+                ),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            files=core.convert_file_dict_to_httpx_tuples(remove_none_from_dict({"contents": contents})),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
@@ -231,6 +342,7 @@ class AsyncDocumentsClient:
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimDocumentList:
         """
         Used to list documents. Optionally filter on supported fields.
@@ -243,6 +355,8 @@ class AsyncDocumentsClient:
             - offset: typing.Optional[int]. The initial index from which to return the results.
 
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -254,11 +368,34 @@ class AsyncDocumentsClient:
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/documents"),
-            params=remove_none_from_dict(
-                {"document_index_id": document_index_id, "limit": limit, "offset": offset, "ordering": ordering}
+            params=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "document_index_id": document_index_id,
+                        "limit": limit,
+                        "offset": offset,
+                        "ordering": ordering,
+                        **(
+                            request_options.get("additional_query_parameters", {})
+                            if request_options is not None
+                            else {}
+                        ),
+                    }
+                )
             ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
@@ -268,10 +405,12 @@ class AsyncDocumentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def destroy(self, id: str) -> None:
+    async def destroy(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> None:
         """
         Parameters:
             - id: str. A UUID string identifying this document.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -284,9 +423,25 @@ class AsyncDocumentsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return
@@ -303,6 +458,7 @@ class AsyncDocumentsClient:
         label: typing.Optional[str] = OMIT,
         status: typing.Optional[DocumentStatus] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentRead:
         """
         Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
@@ -316,6 +472,8 @@ class AsyncDocumentsClient:
 
                                                        * `ACTIVE` - Active
             - metadata: typing.Optional[typing.Dict[str, typing.Any]]. A JSON object containing any metadata associated with the document that you'd like to filter upon later.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -335,10 +493,31 @@ class AsyncDocumentsClient:
             _request["metadata"] = metadata
         _response = await self._client_wrapper.httpx_client.request(
             "PATCH",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{id}"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
@@ -354,9 +533,10 @@ class AsyncDocumentsClient:
         add_to_index_names: typing.Optional[typing.List[str]] = None,
         external_id: typing.Optional[str] = None,
         label: str,
-        contents: typing.IO,
+        contents: core.File,
         keywords: typing.Optional[typing.List[str]] = None,
         metadata: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> UploadDocumentResponse:
         """
         Upload a document to be indexed and used for search.
@@ -372,33 +552,73 @@ class AsyncDocumentsClient:
         - `metadata: dict[str, Any]` - A stringified JSON object containing any metadata associated with the document that you'd like to filter upon later.
 
         Parameters:
-            - add_to_index_names: typing.Optional[typing.List[str]].
+            - add_to_index_names: typing.Optional[typing.List[str]]. Optionally include the names of all indexes that you'd like this document to be included in
 
-            - external_id: typing.Optional[str].
+            - external_id: typing.Optional[str]. Optionally include an external ID for this document. This is useful if you want to re-upload the same document later when its contents change and would like it to be re-indexed.
 
-            - label: str.
+            - label: str. A human-friendly name for this document. Typically the filename.
 
-            - contents: typing.IO.
+            - contents: core.File. See core.File for more documentation
 
-            - keywords: typing.Optional[typing.List[str]].
+            - keywords: typing.Optional[typing.List[str]]. Optionally include a list of keywords that'll be associated with this document. Used when performing keyword searches.
 
-            - metadata: typing.Optional[str].
+            - metadata: typing.Optional[str]. A stringified JSON object containing any metadata associated with the document that you'd like to filter upon later.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.documents.upload()
         """
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().documents}/", "v1/upload-document"),
-            data=jsonable_encoder(
-                {
-                    "add_to_index_names": add_to_index_names,
-                    "external_id": external_id,
-                    "label": label,
-                    "keywords": keywords,
-                    "metadata": metadata,
-                }
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
             ),
-            files={"contents": contents},
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            data=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "add_to_index_names": add_to_index_names,
+                        "external_id": external_id,
+                        "label": label,
+                        "keywords": keywords,
+                        "metadata": metadata,
+                    }
+                )
+            )
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(
+                    remove_none_from_dict(
+                        {
+                            "add_to_index_names": add_to_index_names,
+                            "external_id": external_id,
+                            "label": label,
+                            "keywords": keywords,
+                            "metadata": metadata,
+                        }
+                    )
+                ),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            files=core.convert_file_dict_to_httpx_tuples(remove_none_from_dict({"contents": contents})),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore

@@ -7,6 +7,8 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
+from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -16,7 +18,9 @@ class FolderEntitiesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def add_entity_to_folder(self, folder_id: str, *, entity_id: str) -> None:
+    def add_entity_to_folder(
+        self, folder_id: str, *, entity_id: str, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Add an entity to a specific folder or root directory.
 
@@ -26,6 +30,8 @@ class FolderEntitiesClient:
             - folder_id: str. The ID of the folder to which the entity should be added. This can be a UUID of a folder, or the name of a root directory (e.g. "PROMPT_SANDBOX").
 
             - entity_id: str. The ID of the entity you would like to move.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -40,11 +46,31 @@ class FolderEntitiesClient:
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/folders/{folder_id}/add-entity"
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/folders/{jsonable_encoder(folder_id)}/add-entity",
             ),
-            json=jsonable_encoder({"entity_id": entity_id}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder({"entity_id": entity_id})
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder({"entity_id": entity_id}),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return
@@ -59,7 +85,9 @@ class AsyncFolderEntitiesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def add_entity_to_folder(self, folder_id: str, *, entity_id: str) -> None:
+    async def add_entity_to_folder(
+        self, folder_id: str, *, entity_id: str, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Add an entity to a specific folder or root directory.
 
@@ -69,6 +97,8 @@ class AsyncFolderEntitiesClient:
             - folder_id: str. The ID of the folder to which the entity should be added. This can be a UUID of a folder, or the name of a root directory (e.g. "PROMPT_SANDBOX").
 
             - entity_id: str. The ID of the entity you would like to move.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -83,11 +113,31 @@ class AsyncFolderEntitiesClient:
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/folders/{folder_id}/add-entity"
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/folders/{jsonable_encoder(folder_id)}/add-entity",
             ),
-            json=jsonable_encoder({"entity_id": entity_id}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder({"entity_id": entity_id})
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder({"entity_id": entity_id}),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return

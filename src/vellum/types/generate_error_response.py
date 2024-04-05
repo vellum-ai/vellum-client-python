@@ -12,7 +12,10 @@ except ImportError:
 
 
 class GenerateErrorResponse(pydantic.BaseModel):
-    detail: str = pydantic.Field(description="Details about why the request failed.")
+    detail: str = pydantic.Field()
+    """
+    Details about why the request failed.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -25,4 +28,5 @@ class GenerateErrorResponse(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

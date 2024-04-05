@@ -13,12 +13,15 @@ except ImportError:
 
 
 class SearchFiltersRequest(pydantic.BaseModel):
-    external_ids: typing.Optional[typing.List[str]] = pydantic.Field(
-        description="The document external IDs to filter by"
-    )
-    metadata: typing.Optional[MetadataFilterConfigRequest] = pydantic.Field(
-        description="The metadata filters to apply to the search"
-    )
+    external_ids: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    """
+    The document external IDs to filter by
+    """
+
+    metadata: typing.Optional[MetadataFilterConfigRequest] = pydantic.Field(default=None)
+    """
+    The metadata filters to apply to the search
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -31,4 +34,5 @@ class SearchFiltersRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

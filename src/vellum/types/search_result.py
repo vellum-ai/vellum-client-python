@@ -13,12 +13,21 @@ except ImportError:
 
 
 class SearchResult(pydantic.BaseModel):
-    text: str = pydantic.Field(description="The text of the chunk that matched the search query.")
-    score: float = pydantic.Field(description="A score representing how well the chunk matches the search query.")
+    text: str = pydantic.Field()
+    """
+    The text of the chunk that matched the search query.
+    """
+
+    score: float = pydantic.Field()
+    """
+    A score representing how well the chunk matches the search query.
+    """
+
     keywords: typing.List[str]
-    document: SearchResultDocument = pydantic.Field(
-        description="The document that contains the chunk that matched the search query."
-    )
+    document: SearchResultDocument = pydantic.Field()
+    """
+    The document that contains the chunk that matched the search query.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -31,4 +40,5 @@ class SearchResult(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -21,9 +21,9 @@ class RejectedWorkflowNodeResultEvent(pydantic.BaseModel):
     id: str
     node_id: str
     node_result_id: str
-    ts: typing.Optional[dt.datetime]
-    data: typing.Optional[WorkflowNodeResultData]
-    source_execution_id: typing.Optional[str]
+    ts: typing.Optional[dt.datetime] = None
+    data: typing.Optional[WorkflowNodeResultData] = None
+    source_execution_id: typing.Optional[str] = None
     error: WorkflowEventError
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -37,4 +37,5 @@ class RejectedWorkflowNodeResultEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

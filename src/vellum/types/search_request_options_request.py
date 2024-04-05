@@ -15,14 +15,25 @@ except ImportError:
 
 
 class SearchRequestOptionsRequest(pydantic.BaseModel):
-    limit: typing.Optional[int] = pydantic.Field(description="The maximum number of results to return.")
-    weights: typing.Optional[SearchWeightsRequest] = pydantic.Field(
-        description="The weights to use for the search. Must add up to 1.0."
-    )
-    result_merging: typing.Optional[SearchResultMergingRequest] = pydantic.Field(
-        description="The configuration for merging results."
-    )
-    filters: typing.Optional[SearchFiltersRequest] = pydantic.Field(description="The filters to apply to the search.")
+    limit: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    The maximum number of results to return.
+    """
+
+    weights: typing.Optional[SearchWeightsRequest] = pydantic.Field(default=None)
+    """
+    The weights to use for the search. Must add up to 1.0.
+    """
+
+    result_merging: typing.Optional[SearchResultMergingRequest] = pydantic.Field(default=None)
+    """
+    The configuration for merging results.
+    """
+
+    filters: typing.Optional[SearchFiltersRequest] = pydantic.Field(default=None)
+    """
+    The filters to apply to the search.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -35,4 +46,5 @@ class SearchRequestOptionsRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

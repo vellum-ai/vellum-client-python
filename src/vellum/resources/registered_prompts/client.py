@@ -7,6 +7,8 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
+from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
 from ...errors.bad_request_error import BadRequestError
 from ...errors.conflict_error import ConflictError
 from ...errors.not_found_error import NotFoundError
@@ -39,6 +41,7 @@ class RegisteredPromptsClient:
         model: str,
         parameters: RegisterPromptModelParametersRequest,
         meta: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> RegisterPromptResponse:
         """
         Registers a prompt within Vellum and creates associated Vellum entities. Intended to be used by integration
@@ -73,6 +76,8 @@ class RegisteredPromptsClient:
             - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
 
             - meta: typing.Optional[typing.Dict[str, typing.Any]]. Optionally include additional metadata to store along with the prompt.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum import (
             BlockTypeEnum,
@@ -134,9 +139,28 @@ class RegisteredPromptsClient:
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", "v1/registered-prompts/register"
             ),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(RegisterPromptResponse, _response.json())  # type: ignore
@@ -167,6 +191,7 @@ class AsyncRegisteredPromptsClient:
         model: str,
         parameters: RegisterPromptModelParametersRequest,
         meta: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> RegisterPromptResponse:
         """
         Registers a prompt within Vellum and creates associated Vellum entities. Intended to be used by integration
@@ -201,6 +226,8 @@ class AsyncRegisteredPromptsClient:
             - parameters: RegisterPromptModelParametersRequest. The initial model parameters to use for  this prompt
 
             - meta: typing.Optional[typing.Dict[str, typing.Any]]. Optionally include additional metadata to store along with the prompt.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum import (
             BlockTypeEnum,
@@ -262,9 +289,28 @@ class AsyncRegisteredPromptsClient:
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", "v1/registered-prompts/register"
             ),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(RegisterPromptResponse, _response.json())  # type: ignore

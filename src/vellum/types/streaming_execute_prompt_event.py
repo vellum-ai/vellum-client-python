@@ -21,10 +21,11 @@ class StreamingExecutePromptEvent(pydantic.BaseModel):
     output: PromptOutput
     output_index: int
     execution_id: str
-    meta: typing.Optional[StreamingPromptExecutionMeta]
-    raw: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
-        description="The subset of the raw response from the model that the request opted into with `expand_raw`."
-    )
+    meta: typing.Optional[StreamingPromptExecutionMeta] = None
+    raw: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    """
+    The subset of the raw response from the model that the request opted into with `expand_raw`.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -37,4 +38,5 @@ class StreamingExecutePromptEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

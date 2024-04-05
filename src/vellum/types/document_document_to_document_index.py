@@ -13,21 +13,26 @@ except ImportError:
 
 
 class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
-    id: str = pydantic.Field(description="Vellum-generated ID that uniquely identifies this link.")
-    document_index_id: str = pydantic.Field(
-        description="Vellum-generated ID that uniquely identifies the index this document is included in."
-    )
-    indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(
-        description=(
-            "An enum value representing where this document is along its indexing lifecycle for this index.\n"
-            "\n"
-            "- `AWAITING_PROCESSING` - Awaiting Processing\n"
-            "- `QUEUED` - Queued\n"
-            "- `INDEXING` - Indexing\n"
-            "- `INDEXED` - Indexed\n"
-            "- `FAILED` - Failed\n"
-        )
-    )
+    id: str = pydantic.Field()
+    """
+    Vellum-generated ID that uniquely identifies this link.
+    """
+
+    document_index_id: str = pydantic.Field()
+    """
+    Vellum-generated ID that uniquely identifies the index this document is included in.
+    """
+
+    indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(default=None)
+    """
+    An enum value representing where this document is along its indexing lifecycle for this index.
+    
+    - `AWAITING_PROCESSING` - Awaiting Processing
+    - `QUEUED` - Queued
+    - `INDEXING` - Indexing
+    - `INDEXED` - Indexed
+    - `FAILED` - Failed
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -40,4 +45,5 @@ class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

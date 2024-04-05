@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .error_variable_value import ErrorVariableValue
 from .function_call_variable_value import FunctionCallVariableValue
 from .json_variable_value import JsonVariableValue
@@ -13,39 +11,43 @@ from .string_variable_value import StringVariableValue
 
 
 class PromptOutput_String(StringVariableValue):
-    type: typing_extensions.Literal["STRING"]
+    type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class PromptOutput_Json(JsonVariableValue):
-    type: typing_extensions.Literal["JSON"]
+    type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class PromptOutput_Error(ErrorVariableValue):
-    type: typing_extensions.Literal["ERROR"]
+    type: typing.Literal["ERROR"] = "ERROR"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class PromptOutput_FunctionCall(FunctionCallVariableValue):
-    type: typing_extensions.Literal["FUNCTION_CALL"]
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 PromptOutput = typing.Union[PromptOutput_String, PromptOutput_Json, PromptOutput_Error, PromptOutput_FunctionCall]

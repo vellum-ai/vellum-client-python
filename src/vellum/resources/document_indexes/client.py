@@ -8,6 +8,7 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
 from ...types.document_index_read import DocumentIndexRead
 from ...types.entity_status import EntityStatus
 from ...types.environment_enum import EnvironmentEnum
@@ -34,6 +35,7 @@ class DocumentIndexesClient:
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
         status: typing.Optional[DocumentIndexesListRequestStatus] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedDocumentIndexReadList:
         """
         Used to retrieve a list of Document Indexes.
@@ -48,7 +50,9 @@ class DocumentIndexesClient:
             - status: typing.Optional[DocumentIndexesListRequestStatus]. The current status of the document index
 
                                                                          - `ACTIVE` - Active
-                                                                         - `ARCHIVED` - Archived---
+                                                                         - `ARCHIVED` - Archived
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
         from vellum.client import Vellum
 
         client = Vellum(
@@ -59,9 +63,34 @@ class DocumentIndexesClient:
         _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
-            params=remove_none_from_dict({"limit": limit, "offset": offset, "ordering": ordering, "status": status}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                        "ordering": ordering,
+                        "status": status,
+                        **(
+                            request_options.get("additional_query_parameters", {})
+                            if request_options is not None
+                            else {}
+                        ),
+                    }
+                )
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedDocumentIndexReadList, _response.json())  # type: ignore
@@ -80,6 +109,7 @@ class DocumentIndexesClient:
         environment: typing.Optional[EnvironmentEnum] = OMIT,
         indexing_config: typing.Dict[str, typing.Any],
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentIndexRead:
         """
         Creates a new document index.
@@ -101,6 +131,8 @@ class DocumentIndexesClient:
             - indexing_config: typing.Dict[str, typing.Any]. Configuration representing how documents should be indexed
 
             - copy_documents_from_index_id: typing.Optional[str]. Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -112,25 +144,19 @@ class DocumentIndexesClient:
             name="my-document-index",
             indexing_config={
                 "chunking": {
-                    "unknown": {
-                        "chunker_name": "sentence-chunker",
-                        "chunker_config": {
-                            "character_limit": 1000,
-                            "min_overlap_ratio": 0.5,
-                        },
+                    "chunker_name": "sentence-chunker",
+                    "chunker_config": {
+                        "character_limit": 1000,
+                        "min_overlap_ratio": 0.5,
                     },
-                    "type": "unknown",
                 },
                 "vectorizer": {
-                    "unknown": {
-                        "model_name": "hkunlp/instructor-xl",
-                        "config": {
-                            "instruction_domain": "",
-                            "instruction_document_text_type": "plain_text",
-                            "instruction_query_text_type": "plain_text",
-                        },
+                    "model_name": "hkunlp/instructor-xl",
+                    "config": {
+                        "instruction_domain": "",
+                        "instruction_document_text_type": "plain_text",
+                        "instruction_query_text_type": "plain_text",
                     },
-                    "type": "unknown",
                 },
             },
         )
@@ -145,9 +171,28 @@ class DocumentIndexesClient:
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
@@ -157,12 +202,14 @@ class DocumentIndexesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def retrieve(self, id: str) -> DocumentIndexRead:
+    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DocumentIndexRead:
         """
         Used to retrieve a Document Index given its ID or name.
 
         Parameters:
             - id: str. Either the Document Index's ID or its unique name
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -175,9 +222,25 @@ class DocumentIndexesClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
@@ -194,6 +257,7 @@ class DocumentIndexesClient:
         label: str,
         status: typing.Optional[EntityStatus] = OMIT,
         environment: typing.Optional[EnvironmentEnum] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentIndexRead:
         """
         Used to fully update a Document Index given its ID.
@@ -211,7 +275,9 @@ class DocumentIndexesClient:
 
                                                              * `DEVELOPMENT` - Development
                                                              * `STAGING` - Staging
-                                                             * `PRODUCTION` - Production---
+                                                             * `PRODUCTION` - Production
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
         from vellum.client import Vellum
 
         client = Vellum(
@@ -229,10 +295,31 @@ class DocumentIndexesClient:
             _request["environment"] = environment
         _response = self._client_wrapper.httpx_client.request(
             "PUT",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
@@ -242,12 +329,14 @@ class DocumentIndexesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def destroy(self, id: str) -> None:
+    def destroy(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> None:
         """
         Used to delete a Document Index given its ID.
 
         Parameters:
             - id: str. A UUID string identifying this document index.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -260,9 +349,25 @@ class DocumentIndexesClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return
@@ -279,6 +384,7 @@ class DocumentIndexesClient:
         label: typing.Optional[str] = OMIT,
         status: typing.Optional[EntityStatus] = OMIT,
         environment: typing.Optional[EnvironmentEnum] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentIndexRead:
         """
         Used to partial update a Document Index given its ID.
@@ -296,7 +402,9 @@ class DocumentIndexesClient:
 
                                                              * `DEVELOPMENT` - Development
                                                              * `STAGING` - Staging
-                                                             * `PRODUCTION` - Production---
+                                                             * `PRODUCTION` - Production
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
         from vellum.client import Vellum
 
         client = Vellum(
@@ -315,10 +423,31 @@ class DocumentIndexesClient:
             _request["environment"] = environment
         _response = self._client_wrapper.httpx_client.request(
             "PATCH",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
@@ -340,6 +469,7 @@ class AsyncDocumentIndexesClient:
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
         status: typing.Optional[DocumentIndexesListRequestStatus] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedDocumentIndexReadList:
         """
         Used to retrieve a list of Document Indexes.
@@ -354,7 +484,9 @@ class AsyncDocumentIndexesClient:
             - status: typing.Optional[DocumentIndexesListRequestStatus]. The current status of the document index
 
                                                                          - `ACTIVE` - Active
-                                                                         - `ARCHIVED` - Archived---
+                                                                         - `ARCHIVED` - Archived
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -365,9 +497,34 @@ class AsyncDocumentIndexesClient:
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
-            params=remove_none_from_dict({"limit": limit, "offset": offset, "ordering": ordering, "status": status}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                        "ordering": ordering,
+                        "status": status,
+                        **(
+                            request_options.get("additional_query_parameters", {})
+                            if request_options is not None
+                            else {}
+                        ),
+                    }
+                )
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedDocumentIndexReadList, _response.json())  # type: ignore
@@ -386,6 +543,7 @@ class AsyncDocumentIndexesClient:
         environment: typing.Optional[EnvironmentEnum] = OMIT,
         indexing_config: typing.Dict[str, typing.Any],
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentIndexRead:
         """
         Creates a new document index.
@@ -407,6 +565,8 @@ class AsyncDocumentIndexesClient:
             - indexing_config: typing.Dict[str, typing.Any]. Configuration representing how documents should be indexed
 
             - copy_documents_from_index_id: typing.Optional[str]. Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -418,25 +578,19 @@ class AsyncDocumentIndexesClient:
             name="my-document-index",
             indexing_config={
                 "chunking": {
-                    "unknown": {
-                        "chunker_name": "sentence-chunker",
-                        "chunker_config": {
-                            "character_limit": 1000,
-                            "min_overlap_ratio": 0.5,
-                        },
+                    "chunker_name": "sentence-chunker",
+                    "chunker_config": {
+                        "character_limit": 1000,
+                        "min_overlap_ratio": 0.5,
                     },
-                    "type": "unknown",
                 },
                 "vectorizer": {
-                    "unknown": {
-                        "model_name": "hkunlp/instructor-xl",
-                        "config": {
-                            "instruction_domain": "",
-                            "instruction_document_text_type": "plain_text",
-                            "instruction_query_text_type": "plain_text",
-                        },
+                    "model_name": "hkunlp/instructor-xl",
+                    "config": {
+                        "instruction_domain": "",
+                        "instruction_document_text_type": "plain_text",
+                        "instruction_query_text_type": "plain_text",
                     },
-                    "type": "unknown",
                 },
             },
         )
@@ -451,9 +605,28 @@ class AsyncDocumentIndexesClient:
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
@@ -463,12 +636,14 @@ class AsyncDocumentIndexesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def retrieve(self, id: str) -> DocumentIndexRead:
+    async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DocumentIndexRead:
         """
         Used to retrieve a Document Index given its ID or name.
 
         Parameters:
             - id: str. Either the Document Index's ID or its unique name
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -481,9 +656,25 @@ class AsyncDocumentIndexesClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
@@ -500,6 +691,7 @@ class AsyncDocumentIndexesClient:
         label: str,
         status: typing.Optional[EntityStatus] = OMIT,
         environment: typing.Optional[EnvironmentEnum] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentIndexRead:
         """
         Used to fully update a Document Index given its ID.
@@ -517,7 +709,9 @@ class AsyncDocumentIndexesClient:
 
                                                              * `DEVELOPMENT` - Development
                                                              * `STAGING` - Staging
-                                                             * `PRODUCTION` - Production---
+                                                             * `PRODUCTION` - Production
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -535,10 +729,31 @@ class AsyncDocumentIndexesClient:
             _request["environment"] = environment
         _response = await self._client_wrapper.httpx_client.request(
             "PUT",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
@@ -548,12 +763,14 @@ class AsyncDocumentIndexesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def destroy(self, id: str) -> None:
+    async def destroy(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> None:
         """
         Used to delete a Document Index given its ID.
 
         Parameters:
             - id: str. A UUID string identifying this document index.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -566,9 +783,25 @@ class AsyncDocumentIndexesClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return
@@ -585,6 +818,7 @@ class AsyncDocumentIndexesClient:
         label: typing.Optional[str] = OMIT,
         status: typing.Optional[EntityStatus] = OMIT,
         environment: typing.Optional[EnvironmentEnum] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentIndexRead:
         """
         Used to partial update a Document Index given its ID.
@@ -602,7 +836,9 @@ class AsyncDocumentIndexesClient:
 
                                                              * `DEVELOPMENT` - Development
                                                              * `STAGING` - Staging
-                                                             * `PRODUCTION` - Production---
+                                                             * `PRODUCTION` - Production
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -621,10 +857,31 @@ class AsyncDocumentIndexesClient:
             _request["environment"] = environment
         _response = await self._client_wrapper.httpx_client.request(
             "PATCH",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{id}"),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore

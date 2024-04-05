@@ -17,20 +17,33 @@ except ImportError:
 class SlimDeploymentRead(pydantic.BaseModel):
     id: str
     created: dt.datetime
-    label: str = pydantic.Field(description="A human-readable label for the deployment")
-    name: str = pydantic.Field(description="A name that uniquely identifies this deployment within its workspace")
-    status: typing.Optional[EntityStatus] = pydantic.Field(
-        description=("The current status of the deployment\n" "\n" "- `ACTIVE` - Active\n" "- `ARCHIVED` - Archived\n")
-    )
-    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(
-        description=(
-            "The environment this deployment is used in\n"
-            "\n"
-            "- `DEVELOPMENT` - Development\n"
-            "- `STAGING` - Staging\n"
-            "- `PRODUCTION` - Production\n"
-        )
-    )
+    label: str = pydantic.Field()
+    """
+    A human-readable label for the deployment
+    """
+
+    name: str = pydantic.Field()
+    """
+    A name that uniquely identifies this deployment within its workspace
+    """
+
+    status: typing.Optional[EntityStatus] = pydantic.Field(default=None)
+    """
+    The current status of the deployment
+    
+    - `ACTIVE` - Active
+    - `ARCHIVED` - Archived
+    """
+
+    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(default=None)
+    """
+    The environment this deployment is used in
+    
+    - `DEVELOPMENT` - Development
+    - `STAGING` - Staging
+    - `PRODUCTION` - Production
+    """
+
     last_deployed_on: dt.datetime
     input_variables: typing.List[VellumVariable]
 
@@ -45,4 +58,5 @@ class SlimDeploymentRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

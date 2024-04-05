@@ -6,7 +6,9 @@ from json.decoder import JSONDecodeError
 
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
 from ...types.paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
 from ...types.workflow_deployment_read import WorkflowDeploymentRead
 from .types.workflow_deployments_list_request_status import WorkflowDeploymentsListRequestStatus
@@ -28,6 +30,7 @@ class WorkflowDeploymentsClient:
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
         status: typing.Optional[WorkflowDeploymentsListRequestStatus] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimWorkflowDeploymentList:
         """
         Parameters:
@@ -38,6 +41,8 @@ class WorkflowDeploymentsClient:
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
             - status: typing.Optional[WorkflowDeploymentsListRequestStatus]. status
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -49,9 +54,34 @@ class WorkflowDeploymentsClient:
         _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/workflow-deployments"),
-            params=remove_none_from_dict({"limit": limit, "offset": offset, "ordering": ordering, "status": status}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                        "ordering": ordering,
+                        "status": status,
+                        **(
+                            request_options.get("additional_query_parameters", {})
+                            if request_options is not None
+                            else {}
+                        ),
+                    }
+                )
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimWorkflowDeploymentList, _response.json())  # type: ignore
@@ -61,12 +91,14 @@ class WorkflowDeploymentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def retrieve(self, id: str) -> WorkflowDeploymentRead:
+    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> WorkflowDeploymentRead:
         """
         Used to retrieve a workflow deployment given its ID or name.
 
         Parameters:
             - id: str. Either the Workflow Deployment's ID or its unique name
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -79,9 +111,25 @@ class WorkflowDeploymentsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/workflow-deployments/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/workflow-deployments/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
@@ -103,6 +151,7 @@ class AsyncWorkflowDeploymentsClient:
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
         status: typing.Optional[WorkflowDeploymentsListRequestStatus] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimWorkflowDeploymentList:
         """
         Parameters:
@@ -113,6 +162,8 @@ class AsyncWorkflowDeploymentsClient:
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
             - status: typing.Optional[WorkflowDeploymentsListRequestStatus]. status
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -124,9 +175,34 @@ class AsyncWorkflowDeploymentsClient:
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/workflow-deployments"),
-            params=remove_none_from_dict({"limit": limit, "offset": offset, "ordering": ordering, "status": status}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                        "ordering": ordering,
+                        "status": status,
+                        **(
+                            request_options.get("additional_query_parameters", {})
+                            if request_options is not None
+                            else {}
+                        ),
+                    }
+                )
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedSlimWorkflowDeploymentList, _response.json())  # type: ignore
@@ -136,12 +212,16 @@ class AsyncWorkflowDeploymentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def retrieve(self, id: str) -> WorkflowDeploymentRead:
+    async def retrieve(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowDeploymentRead:
         """
         Used to retrieve a workflow deployment given its ID or name.
 
         Parameters:
             - id: str. Either the Workflow Deployment's ID or its unique name
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -154,9 +234,25 @@ class AsyncWorkflowDeploymentsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", f"v1/workflow-deployments/{id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/workflow-deployments/{jsonable_encoder(id)}"
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore

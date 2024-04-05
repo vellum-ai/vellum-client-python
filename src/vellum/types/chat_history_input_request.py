@@ -17,7 +17,11 @@ class ChatHistoryInputRequest(pydantic.BaseModel):
     A user input representing a list of chat messages
     """
 
-    name: str = pydantic.Field(description="The variable's name, as defined in the deployment.")
+    name: str = pydantic.Field()
+    """
+    The variable's name, as defined in the deployment.
+    """
+
     value: typing.List[ChatMessageRequest]
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -31,4 +35,5 @@ class ChatHistoryInputRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

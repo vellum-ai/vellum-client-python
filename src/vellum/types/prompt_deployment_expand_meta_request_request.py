@@ -12,21 +12,30 @@ except ImportError:
 
 
 class PromptDeploymentExpandMetaRequestRequest(pydantic.BaseModel):
-    model_name: typing.Optional[bool] = pydantic.Field(
-        description="If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt Deployment."
-    )
-    latency: typing.Optional[bool] = pydantic.Field(
-        description="If enabled, the response will include the time in nanoseconds it took to execute the Prompt Deployment."
-    )
-    deployment_release_tag: typing.Optional[bool] = pydantic.Field(
-        description="If enabled, the response will include the release tag of the Prompt Deployment."
-    )
-    prompt_version_id: typing.Optional[bool] = pydantic.Field(
-        description="If enabled, the response will include the ID of the Prompt Version backing the deployment."
-    )
-    finish_reason: typing.Optional[bool] = pydantic.Field(
-        description="If enabled, the response will include the reason provided by the model for why the execution finished."
-    )
+    model_name: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt Deployment.
+    """
+
+    latency: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    If enabled, the response will include the time in nanoseconds it took to execute the Prompt Deployment.
+    """
+
+    deployment_release_tag: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    If enabled, the response will include the release tag of the Prompt Deployment.
+    """
+
+    prompt_version_id: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    If enabled, the response will include the ID of the Prompt Version backing the deployment.
+    """
+
+    finish_reason: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    If enabled, the response will include the reason provided by the model for why the execution finished.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -39,4 +48,5 @@ class PromptDeploymentExpandMetaRequestRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -17,7 +17,11 @@ class WorkflowRequestChatHistoryInputRequest(pydantic.BaseModel):
     The input for a chat history variable in a Workflow.
     """
 
-    name: str = pydantic.Field(description="The variable's name, as defined in the Workflow.")
+    name: str = pydantic.Field()
+    """
+    The variable's name, as defined in the Workflow.
+    """
+
     value: typing.List[ChatMessageRequest]
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -31,4 +35,5 @@ class WorkflowRequestChatHistoryInputRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

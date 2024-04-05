@@ -13,8 +13,8 @@ except ImportError:
 
 class NormalizedTokenLogProbs(pydantic.BaseModel):
     token: str
-    logprob: typing.Optional[float]
-    top_logprobs: typing.Optional[typing.Dict[str, typing.Optional[float]]]
+    logprob: typing.Optional[float] = None
+    top_logprobs: typing.Optional[typing.Dict[str, typing.Optional[float]]] = None
     text_offset: int
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -28,4 +28,5 @@ class NormalizedTokenLogProbs(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -14,11 +14,13 @@ except ImportError:
 
 class SearchNodeResultData(pydantic.BaseModel):
     results_output_id: str
-    results: typing.List[SearchResult] = pydantic.Field(
-        description="The results of the search. Each result represents a chunk that matches the search query."
-    )
+    results: typing.List[SearchResult] = pydantic.Field()
+    """
+    The results of the search. Each result represents a chunk that matches the search query.
+    """
+
     text_output_id: str
-    text: typing.Optional[str]
+    text: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -31,4 +33,5 @@ class SearchNodeResultData(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

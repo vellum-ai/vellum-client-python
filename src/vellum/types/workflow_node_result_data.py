@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .api_node_result import ApiNodeResult
 from .code_execution_node_result import CodeExecutionNodeResult
 from .conditional_node_result import ConditionalNodeResult
@@ -17,75 +15,83 @@ from .terminal_node_result import TerminalNodeResult
 
 
 class WorkflowNodeResultData_Prompt(PromptNodeResult):
-    type: typing_extensions.Literal["PROMPT"]
+    type: typing.Literal["PROMPT"] = "PROMPT"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultData_Search(SearchNodeResult):
-    type: typing_extensions.Literal["SEARCH"]
+    type: typing.Literal["SEARCH"] = "SEARCH"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultData_Templating(TemplatingNodeResult):
-    type: typing_extensions.Literal["TEMPLATING"]
+    type: typing.Literal["TEMPLATING"] = "TEMPLATING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultData_CodeExecution(CodeExecutionNodeResult):
-    type: typing_extensions.Literal["CODE_EXECUTION"]
+    type: typing.Literal["CODE_EXECUTION"] = "CODE_EXECUTION"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultData_Conditional(ConditionalNodeResult):
-    type: typing_extensions.Literal["CONDITIONAL"]
+    type: typing.Literal["CONDITIONAL"] = "CONDITIONAL"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultData_Api(ApiNodeResult):
-    type: typing_extensions.Literal["API"]
+    type: typing.Literal["API"] = "API"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultData_Terminal(TerminalNodeResult):
-    type: typing_extensions.Literal["TERMINAL"]
+    type: typing.Literal["TERMINAL"] = "TERMINAL"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class WorkflowNodeResultData_Subworkflow(SubworkflowNodeResult):
-    type: typing_extensions.Literal["SUBWORKFLOW"]
+    type: typing.Literal["SUBWORKFLOW"] = "SUBWORKFLOW"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 WorkflowNodeResultData = typing.Union[

@@ -17,7 +17,7 @@ class InitiatedExecutePromptEvent(pydantic.BaseModel):
     The initial data returned indicating that the response from the model has returned and begun streaming.
     """
 
-    meta: typing.Optional[InitiatedPromptExecutionMeta]
+    meta: typing.Optional[InitiatedPromptExecutionMeta] = None
     execution_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -31,4 +31,5 @@ class InitiatedExecutePromptEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

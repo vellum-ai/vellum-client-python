@@ -12,7 +12,10 @@ except ImportError:
 
 
 class UploadDocumentResponse(pydantic.BaseModel):
-    document_id: str = pydantic.Field(description="The ID of the newly created document.")
+    document_id: str = pydantic.Field()
+    """
+    The ID of the newly created document.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -25,4 +28,5 @@ class UploadDocumentResponse(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

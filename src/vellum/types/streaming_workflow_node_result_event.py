@@ -21,11 +21,11 @@ class StreamingWorkflowNodeResultEvent(pydantic.BaseModel):
     id: str
     node_id: str
     node_result_id: str
-    ts: typing.Optional[dt.datetime]
-    data: typing.Optional[WorkflowNodeResultData]
-    source_execution_id: typing.Optional[str]
-    output: typing.Optional[NodeOutputCompiledValue]
-    output_index: typing.Optional[int]
+    ts: typing.Optional[dt.datetime] = None
+    data: typing.Optional[WorkflowNodeResultData] = None
+    source_execution_id: typing.Optional[str] = None
+    output: typing.Optional[NodeOutputCompiledValue] = None
+    output_index: typing.Optional[int] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -38,4 +38,5 @@ class StreamingWorkflowNodeResultEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

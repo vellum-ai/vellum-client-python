@@ -16,32 +16,41 @@ except ImportError:
 
 class DocumentRead(pydantic.BaseModel):
     id: str
-    external_id: typing.Optional[str] = pydantic.Field(
-        description="The unique id of this document as it exists in the user's system."
-    )
+    external_id: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The unique id of this document as it exists in the user's system.
+    """
+
     last_uploaded_at: dt.datetime
-    label: str = pydantic.Field(
-        description="A human-readable label for the document. Defaults to the originally uploaded file's file name."
-    )
-    processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(
-        description=(
-            "The current processing state of the document\n"
-            "\n"
-            "- `QUEUED` - Queued\n"
-            "- `PROCESSING` - Processing\n"
-            "- `PROCESSED` - Processed\n"
-            "- `FAILED` - Failed\n"
-        )
-    )
-    status: typing.Optional[DocumentStatus] = pydantic.Field(
-        description=("The current status of the document\n" "\n" "- `ACTIVE` - Active\n")
-    )
-    original_file_url: typing.Optional[str]
-    processed_file_url: typing.Optional[str]
+    label: str = pydantic.Field()
+    """
+    A human-readable label for the document. Defaults to the originally uploaded file's file name.
+    """
+
+    processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(default=None)
+    """
+    The current processing state of the document
+    
+    - `QUEUED` - Queued
+    - `PROCESSING` - Processing
+    - `PROCESSED` - Processed
+    - `FAILED` - Failed
+    """
+
+    status: typing.Optional[DocumentStatus] = pydantic.Field(default=None)
+    """
+    The current status of the document
+    
+    - `ACTIVE` - Active
+    """
+
+    original_file_url: typing.Optional[str] = None
+    processed_file_url: typing.Optional[str] = None
     document_to_document_indexes: typing.List[DocumentDocumentToDocumentIndex]
-    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(
-        description="A previously supplied JSON object containing metadata that can be filtered on when searching."
-    )
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    """
+    A previously supplied JSON object containing metadata that can be filtered on when searching.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -54,4 +63,5 @@ class DocumentRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

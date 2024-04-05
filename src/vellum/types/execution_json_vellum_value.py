@@ -12,9 +12,13 @@ except ImportError:
 
 
 class ExecutionJsonVellumValue(pydantic.BaseModel):
-    id: str = pydantic.Field(description="The variable's uniquely identifying internal id.")
+    id: str = pydantic.Field()
+    """
+    The variable's uniquely identifying internal id.
+    """
+
     name: str
-    value: typing.Optional[typing.Dict[str, typing.Any]]
+    value: typing.Optional[typing.Dict[str, typing.Any]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -27,4 +31,5 @@ class ExecutionJsonVellumValue(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

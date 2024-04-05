@@ -4,28 +4,28 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .test_suite_run_deployment_release_tag_exec_config import TestSuiteRunDeploymentReleaseTagExecConfig
 from .test_suite_run_workflow_release_tag_exec_config import TestSuiteRunWorkflowReleaseTagExecConfig
 
 
 class TestSuiteRunExecConfig_DeploymentReleaseTag(TestSuiteRunDeploymentReleaseTagExecConfig):
-    type: typing_extensions.Literal["DEPLOYMENT_RELEASE_TAG"]
+    type: typing.Literal["DEPLOYMENT_RELEASE_TAG"] = "DEPLOYMENT_RELEASE_TAG"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TestSuiteRunExecConfig_WorkflowReleaseTag(TestSuiteRunWorkflowReleaseTagExecConfig):
-    type: typing_extensions.Literal["WORKFLOW_RELEASE_TAG"]
+    type: typing.Literal["WORKFLOW_RELEASE_TAG"] = "WORKFLOW_RELEASE_TAG"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 TestSuiteRunExecConfig = typing.Union[

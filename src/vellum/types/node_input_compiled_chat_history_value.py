@@ -15,7 +15,7 @@ except ImportError:
 class NodeInputCompiledChatHistoryValue(pydantic.BaseModel):
     node_input_id: str
     key: str
-    value: typing.Optional[typing.List[ChatMessage]]
+    value: typing.Optional[typing.List[ChatMessage]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -28,4 +28,5 @@ class NodeInputCompiledChatHistoryValue(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

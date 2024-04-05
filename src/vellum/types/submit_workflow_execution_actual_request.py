@@ -4,38 +4,39 @@ from __future__ import annotations
 
 import typing
 
-import typing_extensions
-
 from .workflow_execution_actual_chat_history_request import WorkflowExecutionActualChatHistoryRequest
 from .workflow_execution_actual_json_request import WorkflowExecutionActualJsonRequest
 from .workflow_execution_actual_string_request import WorkflowExecutionActualStringRequest
 
 
 class SubmitWorkflowExecutionActualRequest_String(WorkflowExecutionActualStringRequest):
-    output_type: typing_extensions.Literal["STRING"]
+    output_type: typing.Literal["STRING"] = "STRING"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class SubmitWorkflowExecutionActualRequest_Json(WorkflowExecutionActualJsonRequest):
-    output_type: typing_extensions.Literal["JSON"]
+    output_type: typing.Literal["JSON"] = "JSON"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class SubmitWorkflowExecutionActualRequest_ChatHistory(WorkflowExecutionActualChatHistoryRequest):
-    output_type: typing_extensions.Literal["CHAT_HISTORY"]
+    output_type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
+        populate_by_name = True
 
 
 SubmitWorkflowExecutionActualRequest = typing.Union[

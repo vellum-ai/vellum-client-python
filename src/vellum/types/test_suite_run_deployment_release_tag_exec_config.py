@@ -18,9 +18,10 @@ class TestSuiteRunDeploymentReleaseTagExecConfig(pydantic.BaseModel):
     """
 
     data: TestSuiteRunDeploymentReleaseTagExecConfigData
-    test_case_ids: typing.Optional[typing.List[str]] = pydantic.Field(
-        description="Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default."
-    )
+    test_case_ids: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    """
+    Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -33,4 +34,5 @@ class TestSuiteRunDeploymentReleaseTagExecConfig(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

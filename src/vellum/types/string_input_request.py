@@ -16,7 +16,11 @@ class StringInputRequest(pydantic.BaseModel):
     A user input representing a string value
     """
 
-    name: str = pydantic.Field(description="The variable's name, as defined in the deployment.")
+    name: str = pydantic.Field()
+    """
+    The variable's name, as defined in the deployment.
+    """
+
     value: str
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -30,4 +34,5 @@ class StringInputRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

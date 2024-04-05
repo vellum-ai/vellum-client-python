@@ -13,8 +13,8 @@ except ImportError:
 
 
 class TestSuiteTestCase(pydantic.BaseModel):
-    id: typing.Optional[str]
-    label: typing.Optional[str]
+    id: typing.Optional[str] = None
+    label: typing.Optional[str] = None
     input_values: typing.List[TestCaseVariableValue]
     evaluation_values: typing.List[TestCaseVariableValue]
 
@@ -29,4 +29,5 @@ class TestSuiteTestCase(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

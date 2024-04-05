@@ -14,13 +14,13 @@ except ImportError:
 class RegisterPromptModelParametersRequest(pydantic.BaseModel):
     temperature: float
     max_tokens: int
-    stop: typing.Optional[typing.List[str]]
+    stop: typing.Optional[typing.List[str]] = None
     top_p: float
-    top_k: typing.Optional[int]
+    top_k: typing.Optional[int] = None
     frequency_penalty: float
     presence_penalty: float
-    logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]]
-    custom_parameters: typing.Optional[typing.Dict[str, typing.Any]]
+    logit_bias: typing.Optional[typing.Dict[str, typing.Optional[float]]] = None
+    custom_parameters: typing.Optional[typing.Dict[str, typing.Any]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -33,4 +33,5 @@ class RegisterPromptModelParametersRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

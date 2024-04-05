@@ -7,6 +7,8 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
+from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
 from ...types.named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
 from ...types.test_suite_test_case import TestSuiteTestCase
 
@@ -29,8 +31,9 @@ class TestSuitesClient:
         *,
         upsert_test_suite_test_case_request_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
-        input_values: typing.List[NamedTestCaseVariableValueRequest],
-        evaluation_values: typing.List[NamedTestCaseVariableValueRequest],
+        input_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> TestSuiteTestCase:
         """
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
@@ -48,9 +51,11 @@ class TestSuitesClient:
 
             - label: typing.Optional[str].
 
-            - input_values: typing.List[NamedTestCaseVariableValueRequest].
+            - input_values: typing.Sequence[NamedTestCaseVariableValueRequest].
 
-            - evaluation_values: typing.List[NamedTestCaseVariableValueRequest].
+            - evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest].
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -71,11 +76,31 @@ class TestSuitesClient:
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/test-suites/{id}/test-cases"
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
             ),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
@@ -85,7 +110,9 @@ class TestSuitesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete_test_suite_test_case(self, id: str, test_case_id: str) -> None:
+    def delete_test_suite_test_case(
+        self, id: str, test_case_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Deletes an existing test case for a test suite, keying off of the test case id.
 
@@ -93,6 +120,8 @@ class TestSuitesClient:
             - id: str. A UUID string identifying this test suite.
 
             - test_case_id: str. An id identifying the test case that you'd like to delete
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import Vellum
 
@@ -107,10 +136,25 @@ class TestSuitesClient:
         _response = self._client_wrapper.httpx_client.request(
             "DELETE",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases/{jsonable_encoder(test_case_id)}",
             ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return
@@ -131,8 +175,9 @@ class AsyncTestSuitesClient:
         *,
         upsert_test_suite_test_case_request_id: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
-        input_values: typing.List[NamedTestCaseVariableValueRequest],
-        evaluation_values: typing.List[NamedTestCaseVariableValueRequest],
+        input_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> TestSuiteTestCase:
         """
         Upserts a new test case for a test suite, keying off of the optionally provided test case id.
@@ -150,9 +195,11 @@ class AsyncTestSuitesClient:
 
             - label: typing.Optional[str].
 
-            - input_values: typing.List[NamedTestCaseVariableValueRequest].
+            - input_values: typing.Sequence[NamedTestCaseVariableValueRequest].
 
-            - evaluation_values: typing.List[NamedTestCaseVariableValueRequest].
+            - evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest].
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -173,11 +220,31 @@ class AsyncTestSuitesClient:
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/test-suites/{id}/test-cases"
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
             ),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
@@ -187,7 +254,9 @@ class AsyncTestSuitesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def delete_test_suite_test_case(self, id: str, test_case_id: str) -> None:
+    async def delete_test_suite_test_case(
+        self, id: str, test_case_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Deletes an existing test case for a test suite, keying off of the test case id.
 
@@ -195,6 +264,8 @@ class AsyncTestSuitesClient:
             - id: str. A UUID string identifying this test suite.
 
             - test_case_id: str. An id identifying the test case that you'd like to delete
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum.client import AsyncVellum
 
@@ -209,10 +280,25 @@ class AsyncTestSuitesClient:
         _response = await self._client_wrapper.httpx_client.request(
             "DELETE",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/test-suites/{id}/test-cases/{test_case_id}"
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases/{jsonable_encoder(test_case_id)}",
             ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=None,
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
             return

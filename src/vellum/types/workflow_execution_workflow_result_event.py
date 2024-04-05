@@ -18,8 +18,8 @@ class WorkflowExecutionWorkflowResultEvent(pydantic.BaseModel):
     """
 
     execution_id: str
-    run_id: typing.Optional[str]
-    external_id: typing.Optional[str]
+    run_id: typing.Optional[str] = None
+    external_id: typing.Optional[str] = None
     data: WorkflowResultEvent
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -33,4 +33,5 @@ class WorkflowExecutionWorkflowResultEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

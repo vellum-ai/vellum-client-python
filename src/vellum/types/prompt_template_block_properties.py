@@ -16,16 +16,16 @@ except ImportError:
 
 
 class PromptTemplateBlockProperties(pydantic.BaseModel):
-    chat_role: typing.Optional[ChatMessageRole]
-    chat_message_unterminated: typing.Optional[bool]
-    chat_source: typing.Optional[str]
-    template: typing.Optional[str]
-    template_type: typing.Optional[VellumVariableType]
-    function_name: typing.Optional[str]
-    function_description: typing.Optional[str]
-    function_parameters: typing.Optional[typing.Dict[str, typing.Any]]
-    function_forced: typing.Optional[bool]
-    blocks: typing.Optional[typing.List[PromptTemplateBlock]]
+    chat_role: typing.Optional[ChatMessageRole] = None
+    chat_message_unterminated: typing.Optional[bool] = None
+    chat_source: typing.Optional[str] = None
+    template: typing.Optional[str] = None
+    template_type: typing.Optional[VellumVariableType] = None
+    function_name: typing.Optional[str] = None
+    function_description: typing.Optional[str] = None
+    function_parameters: typing.Optional[typing.Dict[str, typing.Any]] = None
+    function_forced: typing.Optional[bool] = None
+    blocks: typing.Optional[typing.List[PromptTemplateBlock]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -38,6 +38,7 @@ class PromptTemplateBlockProperties(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}
 
 

@@ -15,9 +15,9 @@ except ImportError:
 
 class ScenarioInputRequest(pydantic.BaseModel):
     key: str
-    type: typing.Optional[ScenarioInputTypeEnum]
-    value: typing.Optional[str]
-    chat_history: typing.Optional[typing.List[ChatMessageRequest]]
+    type: typing.Optional[ScenarioInputTypeEnum] = None
+    value: typing.Optional[str] = None
+    chat_history: typing.Optional[typing.List[ChatMessageRequest]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -30,4 +30,5 @@ class ScenarioInputRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

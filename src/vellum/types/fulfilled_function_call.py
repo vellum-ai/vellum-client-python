@@ -17,7 +17,7 @@ class FulfilledFunctionCall(pydantic.BaseModel):
     """
 
     arguments: typing.Dict[str, typing.Any]
-    id: typing.Optional[str]
+    id: typing.Optional[str] = None
     name: str
 
     def json(self, **kwargs: typing.Any) -> str:
@@ -31,4 +31,5 @@ class FulfilledFunctionCall(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
+        extra = pydantic.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

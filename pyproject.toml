@@ -33,3 +33,6 @@ plugins = ["pydantic.mypy"]
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[mypy-publication.*]
+ignore_missing_imports = True

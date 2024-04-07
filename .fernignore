@@ -2,6 +2,7 @@
 
 README.md
 LICENSE
+pyproject.toml
 
 
 # added computed properties

@@ -6,6 +6,17 @@ import typing
 
 from .test_suite_run_metric_error_output import TestSuiteRunMetricErrorOutput
 from .test_suite_run_metric_number_output import TestSuiteRunMetricNumberOutput
+from .test_suite_run_metric_string_output import TestSuiteRunMetricStringOutput
+
+
+class TestSuiteRunMetricOutput_String(TestSuiteRunMetricStringOutput):
+    type: typing.Literal["STRING"] = "STRING"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class TestSuiteRunMetricOutput_Number(TestSuiteRunMetricNumberOutput):
@@ -28,4 +39,6 @@ class TestSuiteRunMetricOutput_Error(TestSuiteRunMetricErrorOutput):
         populate_by_name = True
 
 
-TestSuiteRunMetricOutput = typing.Union[TestSuiteRunMetricOutput_Number, TestSuiteRunMetricOutput_Error]
+TestSuiteRunMetricOutput = typing.Union[
+    TestSuiteRunMetricOutput_String, TestSuiteRunMetricOutput_Number, TestSuiteRunMetricOutput_Error
+]

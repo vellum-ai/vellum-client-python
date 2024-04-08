@@ -233,6 +233,7 @@ from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
 from .paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
+from .paginated_test_suite_test_case_list import PaginatedTestSuiteTestCaseList
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 from .prompt_deployment_expand_meta_request_request import PromptDeploymentExpandMetaRequestRequest
@@ -418,7 +419,10 @@ from .test_suite_run_metric_output import (
     TestSuiteRunMetricOutput,
     TestSuiteRunMetricOutput_Error,
     TestSuiteRunMetricOutput_Number,
+    TestSuiteRunMetricOutput_String,
 )
+from .test_suite_run_metric_string_output import TestSuiteRunMetricStringOutput
+from .test_suite_run_metric_string_output_type_enum import TestSuiteRunMetricStringOutputTypeEnum
 from .test_suite_run_read import TestSuiteRunRead
 from .test_suite_run_state import TestSuiteRunState
 from .test_suite_run_test_suite import TestSuiteRunTestSuite
@@ -731,6 +735,7 @@ __all__ = [
     "PaginatedSlimDocumentList",
     "PaginatedSlimWorkflowDeploymentList",
     "PaginatedTestSuiteRunExecutionList",
+    "PaginatedTestSuiteTestCaseList",
     "ProcessingFailureReasonEnum",
     "ProcessingStateEnum",
     "PromptDeploymentExpandMetaRequestRequest",
@@ -893,6 +898,9 @@ __all__ = [
     "TestSuiteRunMetricOutput",
     "TestSuiteRunMetricOutput_Error",
     "TestSuiteRunMetricOutput_Number",
+    "TestSuiteRunMetricOutput_String",
+    "TestSuiteRunMetricStringOutput",
+    "TestSuiteRunMetricStringOutputTypeEnum",
     "TestSuiteRunRead",
     "TestSuiteRunState",
     "TestSuiteRunTestSuite",

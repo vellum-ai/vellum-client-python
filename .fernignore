@@ -2,6 +2,7 @@
 
 README.md
 LICENSE
+mypy.ini
 
 
 # added computed properties

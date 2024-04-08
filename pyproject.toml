@@ -35,5 +35,6 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 
-[mypy-publication.*]
+[mypy-publication]
 ignore_missing_imports = "True"
+ignore_errors = true

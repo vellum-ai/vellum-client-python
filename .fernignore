@@ -2,7 +2,7 @@
 
 README.md
 LICENSE
-pyproject.toml
+mypy.ini
 
 
 # added computed properties

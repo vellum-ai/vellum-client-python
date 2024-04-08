@@ -36,5 +36,5 @@ build-backend = "poetry.core.masonry.api"
 
 
 [mypy-publication]
-ignore_missing_imports = "True"
+ignore_missing_imports = true
 ignore_errors = true

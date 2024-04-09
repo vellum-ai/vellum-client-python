@@ -165,6 +165,7 @@ from .logprobs_enum import LogprobsEnum
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
+from .ml_model_usage import MlModelUsage
 from .model_version_build_config import ModelVersionBuildConfig
 from .model_version_exec_config import ModelVersionExecConfig
 from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
@@ -673,6 +674,7 @@ __all__ = [
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
+    "MlModelUsage",
     "ModelVersionBuildConfig",
     "ModelVersionExecConfig",
     "ModelVersionExecConfigParameters",

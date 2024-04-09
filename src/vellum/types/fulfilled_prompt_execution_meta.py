@@ -5,6 +5,7 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from .finish_reason_enum import FinishReasonEnum
+from .ml_model_usage import MlModelUsage
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -19,6 +20,7 @@ class FulfilledPromptExecutionMeta(pydantic.BaseModel):
 
     latency: typing.Optional[int] = None
     finish_reason: typing.Optional[FinishReasonEnum] = None
+    usage: typing.Optional[MlModelUsage] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

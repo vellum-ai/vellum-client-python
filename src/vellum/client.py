@@ -167,6 +167,7 @@ class Vellum:
                 deployment_release_tag=True,
                 prompt_version_id=True,
                 finish_reason=True,
+                usage=True,
             ),
             raw_overrides=RawPromptExecutionOverridesRequest(
                 body={"string": {"key": "value"}},
@@ -301,6 +302,7 @@ class Vellum:
                 deployment_release_tag=True,
                 prompt_version_id=True,
                 finish_reason=True,
+                usage=True,
             ),
             raw_overrides=RawPromptExecutionOverridesRequest(
                 body={"string": {"key": "value"}},
@@ -1123,6 +1125,7 @@ class AsyncVellum:
                 deployment_release_tag=True,
                 prompt_version_id=True,
                 finish_reason=True,
+                usage=True,
             ),
             raw_overrides=RawPromptExecutionOverridesRequest(
                 body={"string": {"key": "value"}},
@@ -1257,6 +1260,7 @@ class AsyncVellum:
                 deployment_release_tag=True,
                 prompt_version_id=True,
                 finish_reason=True,
+                usage=True,
             ),
             raw_overrides=RawPromptExecutionOverridesRequest(
                 body={"string": {"key": "value"}},

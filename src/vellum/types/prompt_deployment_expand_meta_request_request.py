@@ -37,6 +37,11 @@ class PromptDeploymentExpandMetaRequestRequest(pydantic.BaseModel):
     If enabled, the response will include the reason provided by the model for why the execution finished.
     """
 
+    usage: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
+    """
+
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
         return super().json(**kwargs_with_defaults)

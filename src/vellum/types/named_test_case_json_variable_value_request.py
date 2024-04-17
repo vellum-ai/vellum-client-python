@@ -12,8 +12,12 @@ except ImportError:
 
 
 class NamedTestCaseJsonVariableValueRequest(pydantic.BaseModel):
-    name: str
+    """
+    Named Test Case value that is of type JSON
+    """
+
     value: typing.Optional[typing.Dict[str, typing.Any]] = None
+    name: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

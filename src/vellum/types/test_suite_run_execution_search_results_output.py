@@ -13,8 +13,13 @@ except ImportError:
 
 
 class TestSuiteRunExecutionSearchResultsOutput(pydantic.BaseModel):
-    output_variable_id: str
+    """
+    Execution output of an entity evaluated during a Test Suite Run that is of type SEARCH_RESULTS
+    """
+
+    name: str
     value: typing.Optional[typing.List[SearchResult]] = None
+    output_variable_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

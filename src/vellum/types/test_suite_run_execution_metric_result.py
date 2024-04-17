@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .test_suite_run_execution_metric_definition import TestSuiteRunExecutionMetricDefinition
 from .test_suite_run_metric_output import TestSuiteRunMetricOutput
 
 try:
@@ -15,6 +16,8 @@ except ImportError:
 class TestSuiteRunExecutionMetricResult(pydantic.BaseModel):
     metric_id: str
     outputs: typing.List[TestSuiteRunMetricOutput]
+    metric_label: typing.Optional[str] = None
+    metric_definition: typing.Optional[TestSuiteRunExecutionMetricDefinition] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

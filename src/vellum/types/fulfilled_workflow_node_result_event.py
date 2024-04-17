@@ -24,7 +24,7 @@ class FulfilledWorkflowNodeResultEvent(pydantic.BaseModel):
     ts: typing.Optional[dt.datetime] = None
     data: typing.Optional[WorkflowNodeResultData] = None
     source_execution_id: typing.Optional[str] = None
-    output_values: typing.Optional[typing.List[NodeOutputCompiledValue]] = None
+    output_values: typing.List[NodeOutputCompiledValue]
     mocked: typing.Optional[bool] = None
 
     def json(self, **kwargs: typing.Any) -> str:

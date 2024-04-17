@@ -149,6 +149,7 @@ class TestSuiteRunsClient:
         self,
         id: str,
         *,
+        expand: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -157,6 +158,11 @@ class TestSuiteRunsClient:
         Parameters:
             - id: str. A UUID string identifying this test suite run.
 
+            - expand: typing.Optional[typing.Union[str, typing.Sequence[str]]]. The response fields to expand for more information.
+
+                                                                                - 'results.metric_results.metric_label' expands the metric label for each metric result.
+                                                                                - 'results.metric_results.metric_definition' expands the metric definition for each metric result.
+                                                                                - 'results.metric_results.metric_definition.name' expands the metric definition name for each metric result.
             - limit: typing.Optional[int]. Number of results to return per page.
 
             - offset: typing.Optional[int]. The initial index from which to return the results.
@@ -181,6 +187,7 @@ class TestSuiteRunsClient:
             params=jsonable_encoder(
                 remove_none_from_dict(
                     {
+                        "expand": expand,
                         "limit": limit,
                         "offset": offset,
                         **(
@@ -341,6 +348,7 @@ class AsyncTestSuiteRunsClient:
         self,
         id: str,
         *,
+        expand: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         request_options: typing.Optional[RequestOptions] = None,
@@ -349,6 +357,11 @@ class AsyncTestSuiteRunsClient:
         Parameters:
             - id: str. A UUID string identifying this test suite run.
 
+            - expand: typing.Optional[typing.Union[str, typing.Sequence[str]]]. The response fields to expand for more information.
+
+                                                                                - 'results.metric_results.metric_label' expands the metric label for each metric result.
+                                                                                - 'results.metric_results.metric_definition' expands the metric definition for each metric result.
+                                                                                - 'results.metric_results.metric_definition.name' expands the metric definition name for each metric result.
             - limit: typing.Optional[int]. Number of results to return per page.
 
             - offset: typing.Optional[int]. The initial index from which to return the results.
@@ -373,6 +386,7 @@ class AsyncTestSuiteRunsClient:
             params=jsonable_encoder(
                 remove_none_from_dict(
                     {
+                        "expand": expand,
                         "limit": limit,
                         "offset": offset,
                         **(

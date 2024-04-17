@@ -7,6 +7,7 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from .block_type_enum import BlockTypeEnum
+from .prompt_template_block_state import PromptTemplateBlockState
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -18,6 +19,7 @@ class PromptTemplateBlockRequest(pydantic.BaseModel):
     id: str
     block_type: BlockTypeEnum
     properties: PromptTemplateBlockPropertiesRequest
+    state: typing.Optional[PromptTemplateBlockState] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

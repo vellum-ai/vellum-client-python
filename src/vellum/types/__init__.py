@@ -260,6 +260,7 @@ from .prompt_template_block_data_request import PromptTemplateBlockDataRequest
 from .prompt_template_block_properties import PromptTemplateBlockProperties
 from .prompt_template_block_properties_request import PromptTemplateBlockPropertiesRequest
 from .prompt_template_block_request import PromptTemplateBlockRequest
+from .prompt_template_block_state import PromptTemplateBlockState
 from .provider_enum import ProviderEnum
 from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .register_prompt_error_response import RegisterPromptErrorResponse
@@ -399,6 +400,7 @@ from .test_suite_run_execution import TestSuiteRunExecution
 from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
 from .test_suite_run_execution_error_output import TestSuiteRunExecutionErrorOutput
 from .test_suite_run_execution_json_output import TestSuiteRunExecutionJsonOutput
+from .test_suite_run_execution_metric_definition import TestSuiteRunExecutionMetricDefinition
 from .test_suite_run_execution_metric_result import TestSuiteRunExecutionMetricResult
 from .test_suite_run_execution_number_output import TestSuiteRunExecutionNumberOutput
 from .test_suite_run_execution_output import (
@@ -759,6 +761,7 @@ __all__ = [
     "PromptTemplateBlockProperties",
     "PromptTemplateBlockPropertiesRequest",
     "PromptTemplateBlockRequest",
+    "PromptTemplateBlockState",
     "ProviderEnum",
     "RawPromptExecutionOverridesRequest",
     "RegisterPromptErrorResponse",
@@ -882,6 +885,7 @@ __all__ = [
     "TestSuiteRunExecutionChatHistoryOutput",
     "TestSuiteRunExecutionErrorOutput",
     "TestSuiteRunExecutionJsonOutput",
+    "TestSuiteRunExecutionMetricDefinition",
     "TestSuiteRunExecutionMetricResult",
     "TestSuiteRunExecutionNumberOutput",
     "TestSuiteRunExecutionOutput",

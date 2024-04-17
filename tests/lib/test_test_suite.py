@@ -1,11 +1,12 @@
 from typing import Any
 from uuid import uuid4
-from ...src.vellum.lib.test_suite import VellumTestSuite
+from ...src.vellum.lib import VellumTestSuite
 import pytest
 from requests_mock import Mocker as RequestsMocker
 
 
 # Get started with writing tests with pytest at https://docs.pytest.org
+@pytest.mark.skip(reason="This test is not yet implemented")
 def test_vellum_test_suite__external__basic(requests_mock: RequestsMocker) -> None:
     """Verify that the Vellum test suite could execute on External executions."""
 

@@ -1,24 +1,34 @@
 from typing import Any
 from uuid import uuid4
-from ...src.vellum.lib import VellumTestSuite
+
+from vellum.types.test_case_variable_value import TestCaseVariableValue
+from ...src.vellum.lib.test_suites import VellumTestSuite
+from ...src.vellum.types import (
+    NamedTestCaseVariableValueRequest,
+    NamedTestCaseStringVariableValueRequest,
+    NamedTestCaseJsonVariableValueRequest,
+)
 import pytest
 from requests_mock import Mocker as RequestsMocker
 
 
-# Get started with writing tests with pytest at https://docs.pytest.org
 @pytest.mark.skip(reason="This test is not yet implemented")
 def test_vellum_test_suite__external__basic(requests_mock: RequestsMocker) -> None:
-    """Verify that the Vellum test suite could execute on External executions."""
+    """Verify that the Vellum test suite can execute on external executions."""
 
     # GIVEN an external execution
-    def mock_execute_thing(input_a: str, input_b: dict[str, Any]) -> dict[str, Any]:
+    def mock_execute_thing(inputs: list[TestCaseVariableValue]) -> list[NamedTestCaseVariableValueRequest]:
         """This could be the invocation of a Prompt, Langchain chain, etc."""
 
-        return {"output_a": "Example string output", "output_b": {"key": "value"}}
+        return [
+            NamedTestCaseStringVariableValueRequest(name="output_a", value="Example string output"),
+            NamedTestCaseJsonVariableValueRequest(name="output_b", value={"key": "value"}),
+        ]
 
     # AND a vellum test suite setup to handle that external eval
     # - Note that with TestSuites as code, we could define the test suite inline
-    example_test_suite = VellumTestSuite("example_test_suite")
+    test_suite_id = uuid4()
+    example_test_suite = VellumTestSuite(id=test_suite_id)
 
     # AND Vellum successfully evaluates the external execution
     test_suite_run_id = uuid4()

@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,14 +12,13 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class TestCaseNumberVariableValue(pydantic.BaseModel):
+class ExternalTestCaseExecutionRequest(pydantic.BaseModel):
+    outputs: typing.List[NamedTestCaseVariableValueRequest] = pydantic.Field()
     """
-    A numerical value for a variable in a Test Case.
+    The output values of a callable that was executed against a Test Case outside of Vellum
     """
 
-    variable_id: str
-    name: str
-    value: typing.Optional[float] = None
+    test_case_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

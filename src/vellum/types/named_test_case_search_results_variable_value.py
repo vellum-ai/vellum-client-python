@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .search_result import SearchResult
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,14 +12,13 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class TestCaseNumberVariableValue(pydantic.BaseModel):
+class NamedTestCaseSearchResultsVariableValue(pydantic.BaseModel):
     """
-    A numerical value for a variable in a Test Case.
+    Named Test Case value that is of type SEARCH_RESULTS
     """
 
-    variable_id: str
+    value: typing.Optional[typing.List[SearchResult]] = None
     name: str
-    value: typing.Optional[float] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

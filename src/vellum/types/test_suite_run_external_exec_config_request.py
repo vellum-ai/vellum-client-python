@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .test_suite_run_external_exec_config_data_request import TestSuiteRunExternalExecConfigDataRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,14 +12,16 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class TestCaseNumberVariableValue(pydantic.BaseModel):
+class TestSuiteRunExternalExecConfigRequest(pydantic.BaseModel):
     """
-    A numerical value for a variable in a Test Case.
+    Execution configuration for running a Vellum Test Suite against an external callable
     """
 
-    variable_id: str
-    name: str
-    value: typing.Optional[float] = None
+    data: TestSuiteRunExternalExecConfigDataRequest
+    test_case_ids: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    """
+    Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

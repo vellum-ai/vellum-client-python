@@ -13,6 +13,10 @@ except ImportError:
 
 
 class SandboxScenario(pydantic.BaseModel):
+    """
+    Sandbox Scenario
+    """
+
     label: typing.Optional[str] = None
     inputs: typing.List[ScenarioInput] = pydantic.Field()
     """

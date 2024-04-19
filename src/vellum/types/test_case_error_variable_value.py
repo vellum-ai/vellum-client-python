@@ -13,7 +13,12 @@ except ImportError:
 
 
 class TestCaseErrorVariableValue(pydantic.BaseModel):
+    """
+    An error value for a variable in a Test Case.
+    """
+
     variable_id: str
+    name: str
     value: typing.Optional[VellumError] = None
 
     def json(self, **kwargs: typing.Any) -> str:

@@ -13,7 +13,12 @@ except ImportError:
 
 
 class TestCaseSearchResultsVariableValue(pydantic.BaseModel):
+    """
+    A search results value for a variable in a Test Case.
+    """
+
     variable_id: str
+    name: str
     value: typing.Optional[typing.List[SearchResult]] = None
 
     def json(self, **kwargs: typing.Any) -> str:

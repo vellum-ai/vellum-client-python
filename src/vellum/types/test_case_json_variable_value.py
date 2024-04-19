@@ -12,7 +12,12 @@ except ImportError:
 
 
 class TestCaseJsonVariableValue(pydantic.BaseModel):
+    """
+    A JSON value for a variable in a Test Case.
+    """
+
     variable_id: str
+    name: str
     value: typing.Optional[typing.Dict[str, typing.Any]] = None
 
     def json(self, **kwargs: typing.Any) -> str:

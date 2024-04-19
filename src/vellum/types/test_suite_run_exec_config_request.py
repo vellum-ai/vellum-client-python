@@ -5,6 +5,7 @@ from __future__ import annotations
 import typing
 
 from .test_suite_run_deployment_release_tag_exec_config_request import TestSuiteRunDeploymentReleaseTagExecConfigRequest
+from .test_suite_run_external_exec_config_request import TestSuiteRunExternalExecConfigRequest
 from .test_suite_run_workflow_release_tag_exec_config_request import TestSuiteRunWorkflowReleaseTagExecConfigRequest
 
 
@@ -28,6 +29,18 @@ class TestSuiteRunExecConfigRequest_WorkflowReleaseTag(TestSuiteRunWorkflowRelea
         populate_by_name = True
 
 
+class TestSuiteRunExecConfigRequest_External(TestSuiteRunExternalExecConfigRequest):
+    type: typing.Literal["EXTERNAL"] = "EXTERNAL"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
 TestSuiteRunExecConfigRequest = typing.Union[
-    TestSuiteRunExecConfigRequest_DeploymentReleaseTag, TestSuiteRunExecConfigRequest_WorkflowReleaseTag
+    TestSuiteRunExecConfigRequest_DeploymentReleaseTag,
+    TestSuiteRunExecConfigRequest_WorkflowReleaseTag,
+    TestSuiteRunExecConfigRequest_External,
 ]

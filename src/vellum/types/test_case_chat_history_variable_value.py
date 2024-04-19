@@ -13,7 +13,12 @@ except ImportError:
 
 
 class TestCaseChatHistoryVariableValue(pydantic.BaseModel):
+    """
+    A chat history value for a variable in a Test Case.
+    """
+
     variable_id: str
+    name: str
     value: typing.Optional[typing.List[ChatMessage]] = None
 
     def json(self, **kwargs: typing.Any) -> str:

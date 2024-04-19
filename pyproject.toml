@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vellum-ai"
-version = "0.3.22"
+version = "0.3.23"
 description = ""
 readme = "README.md"
 authors = []
@@ -14,6 +14,7 @@ cdktf = "^0.20.5"
 httpx = ">=0.21.2"
 publication = "0.0.3"
 pydantic = ">= 1.9.2"
+requests_mock = "^1.11.0"
 typing_extensions = ">= 4.0.0"
 
 [tool.poetry.dev-dependencies]

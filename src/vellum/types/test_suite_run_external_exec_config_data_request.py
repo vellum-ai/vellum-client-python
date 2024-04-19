@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .external_test_case_execution_request import ExternalTestCaseExecutionRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -11,14 +12,11 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class TestCaseNumberVariableValue(pydantic.BaseModel):
+class TestSuiteRunExternalExecConfigDataRequest(pydantic.BaseModel):
+    executions: typing.List[ExternalTestCaseExecutionRequest] = pydantic.Field()
     """
-    A numerical value for a variable in a Test Case.
+    The executions of some callable external to Vellum whose outputs you would like to evaluate.
     """
-
-    variable_id: str
-    name: str
-    value: typing.Optional[float] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -123,6 +123,8 @@ from .execution_vellum_value import (
     ExecutionVellumValue_SearchResults,
     ExecutionVellumValue_String,
 )
+from .external_test_case_execution import ExternalTestCaseExecution
+from .external_test_case_execution_request import ExternalTestCaseExecutionRequest
 from .finish_reason_enum import FinishReasonEnum
 from .fulfilled_enum import FulfilledEnum
 from .fulfilled_execute_prompt_event import FulfilledExecutePromptEvent
@@ -172,12 +174,27 @@ from .model_version_exec_config_parameters import ModelVersionExecConfigParamete
 from .model_version_read import ModelVersionRead
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
+from .named_test_case_chat_history_variable_value import NamedTestCaseChatHistoryVariableValue
 from .named_test_case_chat_history_variable_value_request import NamedTestCaseChatHistoryVariableValueRequest
+from .named_test_case_error_variable_value import NamedTestCaseErrorVariableValue
 from .named_test_case_error_variable_value_request import NamedTestCaseErrorVariableValueRequest
+from .named_test_case_json_variable_value import NamedTestCaseJsonVariableValue
 from .named_test_case_json_variable_value_request import NamedTestCaseJsonVariableValueRequest
+from .named_test_case_number_variable_value import NamedTestCaseNumberVariableValue
 from .named_test_case_number_variable_value_request import NamedTestCaseNumberVariableValueRequest
+from .named_test_case_search_results_variable_value import NamedTestCaseSearchResultsVariableValue
 from .named_test_case_search_results_variable_value_request import NamedTestCaseSearchResultsVariableValueRequest
+from .named_test_case_string_variable_value import NamedTestCaseStringVariableValue
 from .named_test_case_string_variable_value_request import NamedTestCaseStringVariableValueRequest
+from .named_test_case_variable_value import (
+    NamedTestCaseVariableValue,
+    NamedTestCaseVariableValue_ChatHistory,
+    NamedTestCaseVariableValue_Error,
+    NamedTestCaseVariableValue_Json,
+    NamedTestCaseVariableValue_Number,
+    NamedTestCaseVariableValue_SearchResults,
+    NamedTestCaseVariableValue_String,
+)
 from .named_test_case_variable_value_request import (
     NamedTestCaseVariableValueRequest,
     NamedTestCaseVariableValueRequest_ChatHistory,
@@ -389,11 +406,13 @@ from .test_suite_run_deployment_release_tag_exec_config_type_enum import (
 from .test_suite_run_exec_config import (
     TestSuiteRunExecConfig,
     TestSuiteRunExecConfig_DeploymentReleaseTag,
+    TestSuiteRunExecConfig_External,
     TestSuiteRunExecConfig_WorkflowReleaseTag,
 )
 from .test_suite_run_exec_config_request import (
     TestSuiteRunExecConfigRequest,
     TestSuiteRunExecConfigRequest_DeploymentReleaseTag,
+    TestSuiteRunExecConfigRequest_External,
     TestSuiteRunExecConfigRequest_WorkflowReleaseTag,
 )
 from .test_suite_run_execution import TestSuiteRunExecution
@@ -414,6 +433,11 @@ from .test_suite_run_execution_output import (
 )
 from .test_suite_run_execution_search_results_output import TestSuiteRunExecutionSearchResultsOutput
 from .test_suite_run_execution_string_output import TestSuiteRunExecutionStringOutput
+from .test_suite_run_external_exec_config import TestSuiteRunExternalExecConfig
+from .test_suite_run_external_exec_config_data import TestSuiteRunExternalExecConfigData
+from .test_suite_run_external_exec_config_data_request import TestSuiteRunExternalExecConfigDataRequest
+from .test_suite_run_external_exec_config_request import TestSuiteRunExternalExecConfigRequest
+from .test_suite_run_external_exec_config_type_enum import TestSuiteRunExternalExecConfigTypeEnum
 from .test_suite_run_metric_error_output import TestSuiteRunMetricErrorOutput
 from .test_suite_run_metric_error_output_type_enum import TestSuiteRunMetricErrorOutputTypeEnum
 from .test_suite_run_metric_number_output import TestSuiteRunMetricNumberOutput
@@ -632,6 +656,8 @@ __all__ = [
     "ExecutionVellumValue_Number",
     "ExecutionVellumValue_SearchResults",
     "ExecutionVellumValue_String",
+    "ExternalTestCaseExecution",
+    "ExternalTestCaseExecutionRequest",
     "FinishReasonEnum",
     "FulfilledEnum",
     "FulfilledExecutePromptEvent",
@@ -683,12 +709,19 @@ __all__ = [
     "ModelVersionRead",
     "ModelVersionReadStatusEnum",
     "ModelVersionSandboxSnapshot",
+    "NamedTestCaseChatHistoryVariableValue",
     "NamedTestCaseChatHistoryVariableValueRequest",
+    "NamedTestCaseErrorVariableValue",
     "NamedTestCaseErrorVariableValueRequest",
+    "NamedTestCaseJsonVariableValue",
     "NamedTestCaseJsonVariableValueRequest",
+    "NamedTestCaseNumberVariableValue",
     "NamedTestCaseNumberVariableValueRequest",
+    "NamedTestCaseSearchResultsVariableValue",
     "NamedTestCaseSearchResultsVariableValueRequest",
+    "NamedTestCaseStringVariableValue",
     "NamedTestCaseStringVariableValueRequest",
+    "NamedTestCaseVariableValue",
     "NamedTestCaseVariableValueRequest",
     "NamedTestCaseVariableValueRequest_ChatHistory",
     "NamedTestCaseVariableValueRequest_Error",
@@ -696,6 +729,12 @@ __all__ = [
     "NamedTestCaseVariableValueRequest_Number",
     "NamedTestCaseVariableValueRequest_SearchResults",
     "NamedTestCaseVariableValueRequest_String",
+    "NamedTestCaseVariableValue_ChatHistory",
+    "NamedTestCaseVariableValue_Error",
+    "NamedTestCaseVariableValue_Json",
+    "NamedTestCaseVariableValue_Number",
+    "NamedTestCaseVariableValue_SearchResults",
+    "NamedTestCaseVariableValue_String",
     "NodeInputCompiledArrayValue",
     "NodeInputCompiledChatHistoryValue",
     "NodeInputCompiledErrorValue",
@@ -878,8 +917,10 @@ __all__ = [
     "TestSuiteRunExecConfig",
     "TestSuiteRunExecConfigRequest",
     "TestSuiteRunExecConfigRequest_DeploymentReleaseTag",
+    "TestSuiteRunExecConfigRequest_External",
     "TestSuiteRunExecConfigRequest_WorkflowReleaseTag",
     "TestSuiteRunExecConfig_DeploymentReleaseTag",
+    "TestSuiteRunExecConfig_External",
     "TestSuiteRunExecConfig_WorkflowReleaseTag",
     "TestSuiteRunExecution",
     "TestSuiteRunExecutionChatHistoryOutput",
@@ -897,6 +938,11 @@ __all__ = [
     "TestSuiteRunExecutionOutput_String",
     "TestSuiteRunExecutionSearchResultsOutput",
     "TestSuiteRunExecutionStringOutput",
+    "TestSuiteRunExternalExecConfig",
+    "TestSuiteRunExternalExecConfigData",
+    "TestSuiteRunExternalExecConfigDataRequest",
+    "TestSuiteRunExternalExecConfigRequest",
+    "TestSuiteRunExternalExecConfigTypeEnum",
     "TestSuiteRunMetricErrorOutput",
     "TestSuiteRunMetricErrorOutputTypeEnum",
     "TestSuiteRunMetricNumberOutput",

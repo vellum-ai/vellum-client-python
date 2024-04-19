@@ -11,14 +11,13 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class TestCaseNumberVariableValue(pydantic.BaseModel):
+class NamedTestCaseStringVariableValue(pydantic.BaseModel):
     """
-    A numerical value for a variable in a Test Case.
+    Named Test Case value that is of type STRING
     """
 
-    variable_id: str
+    value: typing.Optional[str] = None
     name: str
-    value: typing.Optional[float] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

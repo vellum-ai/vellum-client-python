@@ -2,12 +2,12 @@ import os
 import time
 from typing import Callable
 
-from vellum.lib.test_suites.constants import DEFAULT_MAX_POLLING_DURATION_MS, DEFAULT_POLLING_INTERVAL_MS
-from vellum.lib.test_suites.exceptions import TestSuiteRunResultsException
-from vellum.types.named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
-from vellum.types.test_case_variable_value import TestCaseVariableValue
-from ...client import Vellum
-from ...types import (
+from src.vellum.lib.test_suites.constants import DEFAULT_MAX_POLLING_DURATION_MS, DEFAULT_POLLING_INTERVAL_MS
+from src.vellum.lib.test_suites.exceptions import TestSuiteRunResultsException
+from src.vellum.types.named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
+from src.vellum.types.test_case_variable_value import TestCaseVariableValue
+from src.vellum.client import Vellum
+from src.vellum.types import (
     TestSuiteRunExecution,
     TestSuiteRunMetricOutput,
     TestSuiteRunState,
@@ -35,7 +35,7 @@ class VellumTestSuiteResults:
 
     def get_metric_outputs(
         self, metric_identifier: str | None = None, output_identifier: str | None = None
-    ) -> list[list[TestSuiteRunMetricOutput]]:
+    ) -> list[TestSuiteRunMetricOutput]:
         executions = self._get_test_suite_run_executions()
 
         all_metric_results = [execution.metric_results for execution in executions]
@@ -53,12 +53,10 @@ class VellumTestSuiteResults:
         ]
 
         filtered_metric_filtered_outputs = [
-            [
-                metric_output
-                for metric_output in metric_output_execution
-                if not output_identifier or metric_output.name == output_identifier
-            ]
+            metric_output
             for metric_output_execution in filtered_metric_outputs
+            for metric_output in metric_output_execution
+            if not output_identifier or metric_output.name == output_identifier
         ]
 
         return filtered_metric_filtered_outputs
@@ -74,7 +72,7 @@ class VellumTestSuiteResults:
         start_time = time.time_ns()
         while True:
             self._refresh_test_suite_run()
-            if self._state in {TestSuiteRunState.QUEUED, TestSuiteRunState.RUNNING}:
+            if self._state not in {TestSuiteRunState.QUEUED, TestSuiteRunState.RUNNING}:
                 break
 
             current_time = time.time_ns()
@@ -90,7 +88,7 @@ class VellumTestSuiteResults:
             raise TestSuiteRunResultsException("Test suite run was cancelled")
 
         response = self.client.test_suite_runs.list_executions(
-            self.id, expand=["results.metric_results.metric_definition"]
+            self.id, expand=["results.metric_results.metric_definition", "results.metric_results.metric_label"]
         )
         self._executions = response.results
         return self._executions

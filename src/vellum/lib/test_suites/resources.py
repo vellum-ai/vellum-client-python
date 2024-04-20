@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 import time
 from typing import Callable
@@ -17,7 +18,59 @@ from src.vellum.types import (
 )
 
 
-class VellumTestSuiteResults:
+class VellumTestSuiteRunExecution(TestSuiteRunExecution):
+    @staticmethod
+    def from_api(execution: TestSuiteRunExecution) -> VellumTestSuiteRunExecution:
+        return VellumTestSuiteRunExecution(
+            **execution,
+        )
+
+    def get_metric_output(
+        self,
+        metric_identifier: str | None = None,
+        output_identifier: str | None = None,
+    ) -> TestSuiteRunMetricOutput:
+        metric_outputs = self.get_metric_outputs(metric_identifier)
+
+        filtered_metric_outputs = [
+            metric_output
+            for metric_output in metric_outputs
+            if not output_identifier or metric_output.name == output_identifier
+        ]
+
+        if len(filtered_metric_outputs) == 0:
+            raise TestSuiteRunResultsException(f"No metric outputs found with identifier: {output_identifier}")
+
+        if len(filtered_metric_outputs) > 1:
+            raise TestSuiteRunResultsException(f"Multiple metric outputs found with identifier: {output_identifier}")
+
+        return filtered_metric_outputs[0]
+
+    def get_metric_outputs(
+        self,
+        metric_identifier: str | None = None,
+    ) -> list[TestSuiteRunMetricOutput]:
+        filtered_metric_results = [
+            metric_output
+            for metric_output in self.metric_results
+            if not metric_identifier
+            or (metric_output.metric_id == metric_identifier)
+            or (metric_output.metric_label == metric_identifier)
+            or (metric_output.metric_definition and metric_output.metric_definition.id == metric_identifier)
+            or (metric_output.metric_definition and metric_output.metric_definition.name == metric_identifier)
+            or (metric_output.metric_definition and metric_output.metric_definition.label == metric_identifier)
+        ]
+
+        if len(filtered_metric_results) == 0:
+            raise TestSuiteRunResultsException(f"No metric results found with identifier: {metric_identifier}")
+
+        if len(filtered_metric_results) > 1:
+            raise TestSuiteRunResultsException(f"Multiple metric results found with identifier: {metric_identifier}")
+
+        return filtered_metric_results[0].outputs
+
+
+class VellumTestSuiteRunResults:
     def __init__(
         self,
         id: str,
@@ -59,7 +112,7 @@ class VellumTestSuiteResults:
             if not output_identifier or metric_output.name == output_identifier
         ]
 
-        return filtered_metric_filtered_outputs
+        return [execution for execution in executions]
 
     def _refresh_test_suite_run(self):
         test_suite_run = self.client.test_suite_runs.retrieve(self.id)
@@ -109,7 +162,7 @@ class VellumTestSuite:
 
     def run_external(
         self, executable: Callable[[list[TestCaseVariableValue]], list[NamedTestCaseVariableValueRequest]]
-    ) -> VellumTestSuiteResults:
+    ) -> VellumTestSuiteRunResults:
         test_cases = self.client.test_suites.list_test_suite_test_cases(id=self._id)
         executions: list[ExternalTestCaseExecution] = []
 
@@ -131,4 +184,4 @@ class VellumTestSuite:
                 ),
             ),
         )
-        return VellumTestSuiteResults(test_suite_run.id)
+        return VellumTestSuiteRunResults(test_suite_run.id)

@@ -11,19 +11,12 @@ from src.vellum.types import (
 )
 from pytest_httpx import HTTPXMock
 
-# TODO: We should try to resolve this warning:
-# src/vellum/types/test_case_variable_value.py:15
-#   /Users/dvargas/vellum-ai/vellum-client-python/src/vellum/types/test_case_variable_value.py:15: \
-#   PytestCollectionWarning: cannot collect test class 'TestCaseVariableValue_String' because it has a __init__ constructor (from: tests/lib/test_test_suites.py)
-#     class TestCaseVariableValue_String(TestCaseStringVariableValue):
-
 
 def test_vellum_test_suite__external__basic(httpx_mock: HTTPXMock) -> None:
     """Verify that the Vellum test suite can execute on external executions."""
 
     # GIVEN an external execution
     mock_execute_thing = Mock(
-        # Less than ideal classes blocked on Fern: https://github.com/fern-api/fern/issues/2701
         return_value=[
             NamedTestCaseVariableValueRequest_String(name="output_a", value="Example string output"),
             NamedTestCaseVariableValueRequest_Json(name="output_b", value={"key": "value"}),
@@ -85,7 +78,7 @@ def test_vellum_test_suite__external__basic(httpx_mock: HTTPXMock) -> None:
         json={**test_suite_run_base, "state": "COMPLETE"},
     )
     httpx_mock.add_response(
-        url=f"https://api.vellum.ai/v1/test-suite-runs/{test_suite_run_id}/executions?expand=results.metric_results.metric_definition&expand=results.metric_results.metric_label",
+        url=f"https://api.vellum.ai/v1/test-suite-runs/{test_suite_run_id}/executions?expand=results.metric_results.metric_definition&expand=results.metric_results.metric_label&offset=0",
         method="GET",
         json={
             "count": 1,
@@ -116,7 +109,6 @@ def test_vellum_test_suite__external__basic(httpx_mock: HTTPXMock) -> None:
     assert all([mo.type == "NUMBER" and mo.value == 1.0 for mo in all_metrics])
 
     # AND the external executable should have been called
-    # Fern doesn't yet support mock_execute_thing.assert_called_once_with(input_values)
     mock_execute_thing.assert_called_once()
     call_args = mock_execute_thing.call_args[0][0]
     for index, inp in enumerate(input_values):

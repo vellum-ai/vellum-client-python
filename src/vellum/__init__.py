@@ -510,7 +510,7 @@ from .resources import (
     workflow_deployments,
 )
 from .environment import VellumEnvironment
-# from .version import __version__
+from .version import __version__
 
 __all__ = [
     "ApiNodeResult",
@@ -1013,7 +1013,7 @@ __all__ = [
     "WorkflowStreamEvent",
     "WorkflowStreamEvent_Node",
     "WorkflowStreamEvent_Workflow",
-    # "__version__",
+    "__version__",
     "deployments",
     "document_indexes",
     "documents",

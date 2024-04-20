@@ -16,13 +16,17 @@ from src.vellum.types import (
     TestSuiteRunExternalExecConfigDataRequest,
     ExternalTestCaseExecution,
 )
+from src.vellum.lib.utils.paginator import PaginatedResults, get_all_results
 
 
 class VellumTestSuiteRunExecution(TestSuiteRunExecution):
     @staticmethod
     def from_api(execution: TestSuiteRunExecution) -> VellumTestSuiteRunExecution:
         return VellumTestSuiteRunExecution(
-            **execution,
+            id=execution.id,
+            test_case_id=execution.test_case_id,
+            outputs=execution.outputs,
+            metric_results=execution.metric_results,
         )
 
     def get_metric_output(
@@ -73,16 +77,17 @@ class VellumTestSuiteRunExecution(TestSuiteRunExecution):
 class VellumTestSuiteRunResults:
     def __init__(
         self,
-        id: str,
+        test_suite_run_id: str,
+        client: Vellum | None = None,
         polling_inteval: int = DEFAULT_POLLING_INTERVAL_MS,
         max_polling_duration: int = DEFAULT_MAX_POLLING_DURATION_MS,
     ) -> None:
-        self.id = id
-        self.client = Vellum(
+        self._test_suite_run_id = test_suite_run_id
+        self._client = client or Vellum(
             api_key=os.environ.get("VELLUM_API_KEY"),
         )
         self._state = TestSuiteRunState.QUEUED
-        self._executions: list[TestSuiteRunExecution] | None = None
+        self._executions: list[VellumTestSuiteRunExecution] | None = None
         self._polling_interval = polling_inteval
         self._max_polling_duration = max_polling_duration
 
@@ -91,40 +96,33 @@ class VellumTestSuiteRunResults:
     ) -> list[TestSuiteRunMetricOutput]:
         executions = self._get_test_suite_run_executions()
 
-        all_metric_results = [execution.metric_results for execution in executions]
-
-        filtered_metric_outputs = [
-            metric_result.outputs
-            for metric_result_execution in all_metric_results
-            for metric_result in metric_result_execution
-            if not metric_identifier
-            or (metric_result.metric_id == metric_identifier)
-            or (metric_result.metric_label == metric_identifier)
-            or (metric_result.metric_definition and metric_result.metric_definition.id == metric_identifier)
-            or (metric_result.metric_definition and metric_result.metric_definition.name == metric_identifier)
-            or (metric_result.metric_definition and metric_result.metric_definition.label == metric_identifier)
+        return [
+            execution.get_metric_output(metric_identifier=metric_identifier, output_identifier=output_identifier)
+            for execution in executions
         ]
 
-        filtered_metric_filtered_outputs = [
-            metric_output
-            for metric_output_execution in filtered_metric_outputs
-            for metric_output in metric_output_execution
-            if not output_identifier or metric_output.name == output_identifier
-        ]
-
-        return [execution for execution in executions]
-
-    def _refresh_test_suite_run(self):
-        test_suite_run = self.client.test_suite_runs.retrieve(self.id)
+    def _refresh_test_suite_run_state(self):
+        test_suite_run = self._client.test_suite_runs.retrieve(self._test_suite_run_id)
         self._state = test_suite_run.state
 
-    def _get_test_suite_run_executions(self):
+    def _list_paginated_executions(
+        self, offset: int | None, limit: int | None
+    ) -> PaginatedResults[TestSuiteRunExecution]:
+        response = self._client.test_suite_runs.list_executions(
+            self._test_suite_run_id,
+            offset=offset,
+            limit=limit,
+            expand=["results.metric_results.metric_definition", "results.metric_results.metric_label"],
+        )
+        return PaginatedResults(results=response.results, count=response.count)
+
+    def _get_test_suite_run_executions(self) -> list[VellumTestSuiteRunExecution]:
         if self._executions is not None:
             return self._executions
 
         start_time = time.time_ns()
         while True:
-            self._refresh_test_suite_run()
+            self._refresh_test_suite_run_state()
             if self._state not in {TestSuiteRunState.QUEUED, TestSuiteRunState.RUNNING}:
                 break
 
@@ -140,30 +138,29 @@ class VellumTestSuiteRunResults:
         if self._state == TestSuiteRunState.CANCELLED:
             raise TestSuiteRunResultsException("Test suite run was cancelled")
 
-        response = self.client.test_suite_runs.list_executions(
-            self.id, expand=["results.metric_results.metric_definition", "results.metric_results.metric_label"]
-        )
-        self._executions = response.results
+        raw_api_executions = get_all_results(self._list_paginated_executions)
+        self._executions = [VellumTestSuiteRunExecution.from_api(execution) for execution in raw_api_executions]
         return self._executions
 
 
 class VellumTestSuite:
     def __init__(
         self,
-        id: str | None = None,
-        # TODO: Support APIs that query by name
-        # https://app.shortcut.com/vellum/story/2689
-        # name: str | None = None,
+        test_suite_id: str | None = None,
     ) -> None:
         self.client = Vellum(
             api_key=os.environ.get("VELLUM_API_KEY"),
         )
-        self._id = id
+        self._test_suite_id = test_suite_id
 
     def run_external(
         self, executable: Callable[[list[TestCaseVariableValue]], list[NamedTestCaseVariableValueRequest]]
     ) -> VellumTestSuiteRunResults:
-        test_cases = self.client.test_suites.list_test_suite_test_cases(id=self._id)
+        """
+        Runs this Vellum Test Suite on any executable function defined external to Vellum. Returns a results
+        wrapper that polls the generated Test Suite Run for the latest metric results.
+        """
+        test_cases = self.client.test_suites.list_test_suite_test_cases(id=self._test_suite_id)
         executions: list[ExternalTestCaseExecution] = []
 
         for test_case in test_cases.results:
@@ -177,7 +174,7 @@ class VellumTestSuite:
             )
 
         test_suite_run = self.client.test_suite_runs.create(
-            test_suite_id=self._id,
+            test_suite_id=self._test_suite_id,
             exec_config=TestSuiteRunExternalExecConfigRequest(
                 data=TestSuiteRunExternalExecConfigDataRequest(
                     executions=executions,

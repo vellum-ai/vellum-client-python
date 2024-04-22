@@ -1,5 +1,8 @@
+from typing import Any
 from unittest.mock import Mock
 from uuid import uuid4
+
+import pytest
 
 from src.vellum.lib import VellumTestSuite
 from src.vellum.types import (
@@ -9,10 +12,16 @@ from src.vellum.types import (
     NamedTestCaseVariableValueRequest_Json,
     TestCaseVariableValue,
 )
-from pytest_httpx import HTTPXMock
 
 
-def test_vellum_test_suite__external__basic(httpx_mock: HTTPXMock) -> None:
+@pytest.mark.skip(reason="""\
+Blocked on Fern resolving:
+- importing src.vellum.version has a runtime failure
+- pytest-httpx fails to install from client-generator
+
+Please run test locally before pushing up changes.
+""")
+def test_vellum_test_suite__external__basic(httpx_mock: Any) -> None:
     """Verify that the Vellum test suite can execute on external executions."""
 
     # GIVEN an external execution

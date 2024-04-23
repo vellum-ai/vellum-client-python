@@ -192,6 +192,7 @@ class VellumTestSuite:
         test_suite_run = self.client.test_suite_runs.create(
             test_suite_id=self._test_suite_id,
             exec_config=TestSuiteRunExecConfigRequest_External(
+                type="EXTERNAL",
                 data=TestSuiteRunExternalExecConfigDataRequest(
                     executions=executions,
                 ),

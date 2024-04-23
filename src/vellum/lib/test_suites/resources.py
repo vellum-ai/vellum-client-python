@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging
 import time
-from typing import Callable, Generator
+from typing import Callable, Generator, List
 
 from .constants import DEFAULT_MAX_POLLING_DURATION_MS, DEFAULT_POLLING_INTERVAL_MS
 from .exceptions import TestSuiteRunResultsException
@@ -58,7 +58,7 @@ class VellumTestSuiteRunExecution(TestSuiteRunExecution):
     def get_metric_outputs(
         self,
         metric_identifier: str | None = None,
-    ) -> list[TestSuiteRunMetricOutput]:
+    ) -> List[TestSuiteRunMetricOutput]:
         """Return a metric's output across all executions by providing the info needed to uniquely identify that metric."""
 
         filtered_metric_results = [

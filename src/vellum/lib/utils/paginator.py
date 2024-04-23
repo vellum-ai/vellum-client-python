@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable, Generator, Generic, TypeVar
+from typing import Callable, Generator, Generic, List, TypeVar, Union
 
 
 Result = TypeVar("Result")
@@ -8,11 +8,11 @@ Result = TypeVar("Result")
 @dataclass
 class PaginatedResults(Generic[Result]):
     count: int
-    results: list[Result]
+    results: List[Result]
 
 
 def get_all_results(
-    paginated_api: Callable[[int, int | None], PaginatedResults[Result]], page_size: int | None = None
+    paginated_api: Callable[[int, int | None], PaginatedResults[Result]], page_size: Union[int, None] = None
 ) -> Generator[Result, None, None]:
     offset = 0
     count = 0

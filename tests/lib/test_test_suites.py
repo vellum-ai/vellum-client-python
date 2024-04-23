@@ -4,8 +4,8 @@ from uuid import uuid4
 
 import pytest
 
-from src.vellum.lib import VellumTestSuite
-from src.vellum.types import (
+from vellum.lib.test_suites import VellumTestSuite
+from vellum.types import (
     TestCaseVariableValue_String,
     TestCaseVariableValue_Json,
     NamedTestCaseVariableValueRequest_String,

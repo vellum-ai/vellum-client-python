@@ -12,7 +12,7 @@ class PaginatedResults(Generic[Result]):
 
 
 def get_all_results(
-    paginated_api: Callable[[int, int | None], PaginatedResults[Result]], page_size: Union[int, None] = None
+    paginated_api: Callable[[int, Union[int, None]], PaginatedResults[Result]], page_size: Union[int, None] = None
 ) -> Generator[Result, None, None]:
     offset = 0
     count = 0

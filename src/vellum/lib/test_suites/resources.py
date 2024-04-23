@@ -169,7 +169,7 @@ class VellumTestSuite:
         self._test_suite_id = test_suite_id
 
     def run_external(
-        self, executable: Callable[[list[TestCaseVariableValue]], list[NamedTestCaseVariableValueRequest]]
+        self, executable: Callable[[List[TestCaseVariableValue]], List[NamedTestCaseVariableValueRequest]]
     ) -> VellumTestSuiteRunResults:
         """
         Runs this Vellum Test Suite on any executable function defined external to Vellum.
@@ -177,7 +177,7 @@ class VellumTestSuite:
         Returns a results wrapper that polls the generated Test Suite Run for the latest metric results.
         """
         test_cases = self.client.test_suites.list_test_suite_test_cases(id=self._test_suite_id)
-        executions: list[ExternalTestCaseExecutionRequest] = []
+        executions: List[ExternalTestCaseExecutionRequest] = []
 
         for test_case in test_cases.results:
             outputs = executable(test_case.input_values)

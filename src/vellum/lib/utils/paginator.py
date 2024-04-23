@@ -25,4 +25,4 @@ def get_all_results(
         if paginated_results.count <= count:
             break
 
-        offset += page_size
+        offset = count

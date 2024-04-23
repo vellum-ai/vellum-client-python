@@ -1,23 +1,23 @@
 from __future__ import annotations
 import logging
-import os
 import time
 from typing import Callable, Generator
 
-from src.vellum.lib.test_suites.constants import DEFAULT_MAX_POLLING_DURATION_MS, DEFAULT_POLLING_INTERVAL_MS
-from src.vellum.lib.test_suites.exceptions import TestSuiteRunResultsException
-from src.vellum.types.named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
-from src.vellum.types.test_case_variable_value import TestCaseVariableValue
-from src.vellum.client import Vellum
-from src.vellum.types import (
+from .constants import DEFAULT_MAX_POLLING_DURATION_MS, DEFAULT_POLLING_INTERVAL_MS
+from .exceptions import TestSuiteRunResultsException
+from ..utils.env import get_api_key
+from ...client import Vellum
+from ...types import (
+    ExternalTestCaseExecutionRequest,
+    NamedTestCaseVariableValueRequest,
+    TestCaseVariableValue,
     TestSuiteRunExecution,
     TestSuiteRunMetricOutput,
     TestSuiteRunState,
-    TestSuiteRunExternalExecConfigRequest,
+    TestSuiteRunExecConfigRequest_External,
     TestSuiteRunExternalExecConfigDataRequest,
-    ExternalTestCaseExecution,
 )
-from src.vellum.lib.utils.paginator import PaginatedResults, get_all_results
+from ..utils.paginator import PaginatedResults, get_all_results
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +92,7 @@ class VellumTestSuiteRunResults:
     ) -> None:
         self._test_suite_run_id = test_suite_run_id
         self._client = client or Vellum(
-            api_key=os.environ.get("VELLUM_API_KEY"),
+            api_key=get_api_key(),
         )
         self._state = TestSuiteRunState.QUEUED
         self._executions: Generator[VellumTestSuiteRunExecution, None, None] | None = None
@@ -104,10 +104,8 @@ class VellumTestSuiteRunResults:
     ) -> Generator[TestSuiteRunMetricOutput, None, None]:
         executions = self._get_test_suite_run_executions()
 
-        return [
-            execution.get_metric_output(metric_identifier=metric_identifier, output_identifier=output_identifier)
-            for execution in executions
-        ]
+        for execution in executions:
+            yield execution.get_metric_output(metric_identifier=metric_identifier, output_identifier=output_identifier)
 
     def _refresh_test_suite_run_state(self):
         test_suite_run = self._client.test_suite_runs.retrieve(self._test_suite_run_id)
@@ -161,10 +159,12 @@ class VellumTestSuiteRunResults:
 class VellumTestSuite:
     def __init__(
         self,
-        test_suite_id: str | None = None,
+        test_suite_id: str,
+        *,
+        client: Vellum | None = None,
     ) -> None:
-        self.client = Vellum(
-            api_key=os.environ.get("VELLUM_API_KEY"),
+        self.client = client or Vellum(
+            api_key=get_api_key(),
         )
         self._test_suite_id = test_suite_id
 
@@ -177,24 +177,24 @@ class VellumTestSuite:
         Returns a results wrapper that polls the generated Test Suite Run for the latest metric results.
         """
         test_cases = self.client.test_suites.list_test_suite_test_cases(id=self._test_suite_id)
-        executions: list[ExternalTestCaseExecution] = []
+        executions: list[ExternalTestCaseExecutionRequest] = []
 
         for test_case in test_cases.results:
             outputs = executable(test_case.input_values)
 
             executions.append(
-                ExternalTestCaseExecution(
-                    test_case_id=test_case.id,
+                ExternalTestCaseExecutionRequest(
+                    test_case_id=test_case.id,  # type: ignore[arg-type]
                     outputs=outputs,
                 )
             )
 
         test_suite_run = self.client.test_suite_runs.create(
             test_suite_id=self._test_suite_id,
-            exec_config=TestSuiteRunExternalExecConfigRequest(
+            exec_config=TestSuiteRunExecConfigRequest_External(
                 data=TestSuiteRunExternalExecConfigDataRequest(
                     executions=executions,
                 ),
             ),
         )
-        return VellumTestSuiteRunResults(test_suite_run.id)
+        return VellumTestSuiteRunResults(test_suite_run.id, client=self.client)

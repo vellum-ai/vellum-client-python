@@ -1,0 +1,2 @@
+class VellumClientException(Exception):
+    pass

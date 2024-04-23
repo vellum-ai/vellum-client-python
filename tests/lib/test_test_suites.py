@@ -36,7 +36,7 @@ def test_vellum_test_suite__external__basic(httpx_mock: Any) -> None:
     test_suite_id = str(uuid4())
     input_variable_a_id = str(uuid4())
     input_variable_b_id = str(uuid4())
-    example_test_suite = VellumTestSuite(id=test_suite_id)
+    example_test_suite = VellumTestSuite(test_suite_id=test_suite_id)
 
     # AND the test suite is configured with relevant test cases
     test_case_id = str(uuid4())

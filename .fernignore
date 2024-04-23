@@ -9,4 +9,3 @@ mypy.ini
 src/vellum/types/generate_response.py
 src/vellum/terraform
 src/vellum/lib
-examples

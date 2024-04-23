@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 from unittest.mock import Mock
 from uuid import uuid4
 
@@ -40,7 +40,7 @@ def test_vellum_test_suite__external__basic(httpx_mock: Any) -> None:
 
     # AND the test suite is configured with relevant test cases
     test_case_id = str(uuid4())
-    input_values: list[TestCaseVariableValue] = [
+    input_values: List[TestCaseVariableValue] = [
         TestCaseVariableValue_String(name="input_a", value="Example string input", variable_id=input_variable_a_id),
         TestCaseVariableValue_Json(name="input_b", value={"key": "value"}, variable_id=input_variable_b_id),
     ]

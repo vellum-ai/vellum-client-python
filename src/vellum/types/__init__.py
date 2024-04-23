@@ -28,9 +28,10 @@ from .array_variable_value_item import (
     ArrayVariableValueItem_SearchResults,
     ArrayVariableValueItem_String,
 )
-from .block_type_enum import BlockTypeEnum
 from .chat_history_enum import ChatHistoryEnum
 from .chat_history_input_request import ChatHistoryInputRequest
+from .chat_history_prompt_template_block import ChatHistoryPromptTemplateBlock
+from .chat_history_prompt_template_block_request import ChatHistoryPromptTemplateBlockRequest
 from .chat_history_variable_value import ChatHistoryVariableValue
 from .chat_message import ChatMessage
 from .chat_message_content import (
@@ -47,6 +48,11 @@ from .chat_message_content_request import (
     ChatMessageContentRequest_Image,
     ChatMessageContentRequest_String,
 )
+from .chat_message_enum import ChatMessageEnum
+from .chat_message_prompt_template_block import ChatMessagePromptTemplateBlock
+from .chat_message_prompt_template_block_properties import ChatMessagePromptTemplateBlockProperties
+from .chat_message_prompt_template_block_properties_request import ChatMessagePromptTemplateBlockPropertiesRequest
+from .chat_message_prompt_template_block_request import ChatMessagePromptTemplateBlockRequest
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
 from .code_execution_node_array_result import CodeExecutionNodeArrayResult
@@ -131,6 +137,7 @@ from .fulfilled_execute_prompt_event import FulfilledExecutePromptEvent
 from .fulfilled_execute_prompt_response import FulfilledExecutePromptResponse
 from .fulfilled_execute_workflow_workflow_result_event import FulfilledExecuteWorkflowWorkflowResultEvent
 from .fulfilled_function_call import FulfilledFunctionCall
+from .fulfilled_function_call_request import FulfilledFunctionCallRequest
 from .fulfilled_prompt_execution_meta import FulfilledPromptExecutionMeta
 from .fulfilled_workflow_node_result_event import FulfilledWorkflowNodeResultEvent
 from .function_call import FunctionCall, FunctionCall_Fulfilled, FunctionCall_Rejected
@@ -140,6 +147,13 @@ from .function_call_chat_message_content_value import FunctionCallChatMessageCon
 from .function_call_chat_message_content_value_request import FunctionCallChatMessageContentValueRequest
 from .function_call_enum import FunctionCallEnum
 from .function_call_variable_value import FunctionCallVariableValue
+from .function_definition_enum import FunctionDefinitionEnum
+from .function_definition_prompt_template_block import FunctionDefinitionPromptTemplateBlock
+from .function_definition_prompt_template_block_properties import FunctionDefinitionPromptTemplateBlockProperties
+from .function_definition_prompt_template_block_properties_request import (
+    FunctionDefinitionPromptTemplateBlockPropertiesRequest,
+)
+from .function_definition_prompt_template_block_request import FunctionDefinitionPromptTemplateBlockRequest
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -159,6 +173,11 @@ from .initiated_enum import InitiatedEnum
 from .initiated_execute_prompt_event import InitiatedExecutePromptEvent
 from .initiated_prompt_execution_meta import InitiatedPromptExecutionMeta
 from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEvent
+from .jinja_enum import JinjaEnum
+from .jinja_prompt_template_block import JinjaPromptTemplateBlock
+from .jinja_prompt_template_block_properties import JinjaPromptTemplateBlockProperties
+from .jinja_prompt_template_block_properties_request import JinjaPromptTemplateBlockPropertiesRequest
+from .jinja_prompt_template_block_request import JinjaPromptTemplateBlockRequest
 from .json_enum import JsonEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
@@ -174,10 +193,19 @@ from .model_version_exec_config_parameters import ModelVersionExecConfigParamete
 from .model_version_read import ModelVersionRead
 from .model_version_read_status_enum import ModelVersionReadStatusEnum
 from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
+from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
+from .named_scenario_input_request import (
+    NamedScenarioInputRequest,
+    NamedScenarioInputRequest_ChatHistory,
+    NamedScenarioInputRequest_String,
+)
+from .named_scenario_input_string_variable_value_request import NamedScenarioInputStringVariableValueRequest
 from .named_test_case_chat_history_variable_value import NamedTestCaseChatHistoryVariableValue
 from .named_test_case_chat_history_variable_value_request import NamedTestCaseChatHistoryVariableValueRequest
 from .named_test_case_error_variable_value import NamedTestCaseErrorVariableValue
 from .named_test_case_error_variable_value_request import NamedTestCaseErrorVariableValueRequest
+from .named_test_case_function_call_variable_value import NamedTestCaseFunctionCallVariableValue
+from .named_test_case_function_call_variable_value_request import NamedTestCaseFunctionCallVariableValueRequest
 from .named_test_case_json_variable_value import NamedTestCaseJsonVariableValue
 from .named_test_case_json_variable_value_request import NamedTestCaseJsonVariableValueRequest
 from .named_test_case_number_variable_value import NamedTestCaseNumberVariableValue
@@ -190,6 +218,7 @@ from .named_test_case_variable_value import (
     NamedTestCaseVariableValue,
     NamedTestCaseVariableValue_ChatHistory,
     NamedTestCaseVariableValue_Error,
+    NamedTestCaseVariableValue_FunctionCall,
     NamedTestCaseVariableValue_Json,
     NamedTestCaseVariableValue_Number,
     NamedTestCaseVariableValue_SearchResults,
@@ -199,6 +228,7 @@ from .named_test_case_variable_value_request import (
     NamedTestCaseVariableValueRequest,
     NamedTestCaseVariableValueRequest_ChatHistory,
     NamedTestCaseVariableValueRequest_Error,
+    NamedTestCaseVariableValueRequest_FunctionCall,
     NamedTestCaseVariableValueRequest_Json,
     NamedTestCaseVariableValueRequest_Number,
     NamedTestCaseVariableValueRequest_SearchResults,
@@ -271,12 +301,22 @@ from .prompt_output import (
     PromptOutput_Json,
     PromptOutput_String,
 )
-from .prompt_template_block import PromptTemplateBlock
+from .prompt_template_block import (
+    PromptTemplateBlock,
+    PromptTemplateBlock_ChatHistory,
+    PromptTemplateBlock_ChatMessage,
+    PromptTemplateBlock_FunctionDefinition,
+    PromptTemplateBlock_Jinja,
+)
 from .prompt_template_block_data import PromptTemplateBlockData
 from .prompt_template_block_data_request import PromptTemplateBlockDataRequest
-from .prompt_template_block_properties import PromptTemplateBlockProperties
-from .prompt_template_block_properties_request import PromptTemplateBlockPropertiesRequest
-from .prompt_template_block_request import PromptTemplateBlockRequest
+from .prompt_template_block_request import (
+    PromptTemplateBlockRequest,
+    PromptTemplateBlockRequest_ChatHistory,
+    PromptTemplateBlockRequest_ChatMessage,
+    PromptTemplateBlockRequest_FunctionDefinition,
+    PromptTemplateBlockRequest_Jinja,
+)
 from .prompt_template_block_state import PromptTemplateBlockState
 from .provider_enum import ProviderEnum
 from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
@@ -298,9 +338,9 @@ from .rejected_function_call import RejectedFunctionCall
 from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
 from .sandbox_scenario import SandboxScenario
-from .scenario_input import ScenarioInput
-from .scenario_input_request import ScenarioInputRequest
-from .scenario_input_type_enum import ScenarioInputTypeEnum
+from .scenario_input import ScenarioInput, ScenarioInput_ChatHistory, ScenarioInput_String
+from .scenario_input_chat_history_variable_value import ScenarioInputChatHistoryVariableValue
+from .scenario_input_string_variable_value import ScenarioInputStringVariableValue
 from .search_error_response import SearchErrorResponse
 from .search_filters_request import SearchFiltersRequest
 from .search_node_result import SearchNodeResult
@@ -381,6 +421,7 @@ from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
 from .terminal_node_string_result import TerminalNodeStringResult
 from .test_case_chat_history_variable_value import TestCaseChatHistoryVariableValue
 from .test_case_error_variable_value import TestCaseErrorVariableValue
+from .test_case_function_call_variable_value import TestCaseFunctionCallVariableValue
 from .test_case_json_variable_value import TestCaseJsonVariableValue
 from .test_case_number_variable_value import TestCaseNumberVariableValue
 from .test_case_search_results_variable_value import TestCaseSearchResultsVariableValue
@@ -389,6 +430,7 @@ from .test_case_variable_value import (
     TestCaseVariableValue,
     TestCaseVariableValue_ChatHistory,
     TestCaseVariableValue_Error,
+    TestCaseVariableValue_FunctionCall,
     TestCaseVariableValue_Json,
     TestCaseVariableValue_Number,
     TestCaseVariableValue_SearchResults,
@@ -418,6 +460,7 @@ from .test_suite_run_exec_config_request import (
 from .test_suite_run_execution import TestSuiteRunExecution
 from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
 from .test_suite_run_execution_error_output import TestSuiteRunExecutionErrorOutput
+from .test_suite_run_execution_function_call_output import TestSuiteRunExecutionFunctionCallOutput
 from .test_suite_run_execution_json_output import TestSuiteRunExecutionJsonOutput
 from .test_suite_run_execution_metric_definition import TestSuiteRunExecutionMetricDefinition
 from .test_suite_run_execution_metric_result import TestSuiteRunExecutionMetricResult
@@ -426,6 +469,7 @@ from .test_suite_run_execution_output import (
     TestSuiteRunExecutionOutput,
     TestSuiteRunExecutionOutput_ChatHistory,
     TestSuiteRunExecutionOutput_Error,
+    TestSuiteRunExecutionOutput_FunctionCall,
     TestSuiteRunExecutionOutput_Json,
     TestSuiteRunExecutionOutput_Number,
     TestSuiteRunExecutionOutput_SearchResults,
@@ -575,9 +619,10 @@ __all__ = [
     "ArrayVariableValueItem_Number",
     "ArrayVariableValueItem_SearchResults",
     "ArrayVariableValueItem_String",
-    "BlockTypeEnum",
     "ChatHistoryEnum",
     "ChatHistoryInputRequest",
+    "ChatHistoryPromptTemplateBlock",
+    "ChatHistoryPromptTemplateBlockRequest",
     "ChatHistoryVariableValue",
     "ChatMessage",
     "ChatMessageContent",
@@ -590,6 +635,11 @@ __all__ = [
     "ChatMessageContent_FunctionCall",
     "ChatMessageContent_Image",
     "ChatMessageContent_String",
+    "ChatMessageEnum",
+    "ChatMessagePromptTemplateBlock",
+    "ChatMessagePromptTemplateBlockProperties",
+    "ChatMessagePromptTemplateBlockPropertiesRequest",
+    "ChatMessagePromptTemplateBlockRequest",
     "ChatMessageRequest",
     "ChatMessageRole",
     "CodeExecutionNodeArrayResult",
@@ -664,6 +714,7 @@ __all__ = [
     "FulfilledExecutePromptResponse",
     "FulfilledExecuteWorkflowWorkflowResultEvent",
     "FulfilledFunctionCall",
+    "FulfilledFunctionCallRequest",
     "FulfilledPromptExecutionMeta",
     "FulfilledWorkflowNodeResultEvent",
     "FunctionCall",
@@ -675,6 +726,11 @@ __all__ = [
     "FunctionCallVariableValue",
     "FunctionCall_Fulfilled",
     "FunctionCall_Rejected",
+    "FunctionDefinitionEnum",
+    "FunctionDefinitionPromptTemplateBlock",
+    "FunctionDefinitionPromptTemplateBlockProperties",
+    "FunctionDefinitionPromptTemplateBlockPropertiesRequest",
+    "FunctionDefinitionPromptTemplateBlockRequest",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
@@ -694,6 +750,11 @@ __all__ = [
     "InitiatedExecutePromptEvent",
     "InitiatedPromptExecutionMeta",
     "InitiatedWorkflowNodeResultEvent",
+    "JinjaEnum",
+    "JinjaPromptTemplateBlock",
+    "JinjaPromptTemplateBlockProperties",
+    "JinjaPromptTemplateBlockPropertiesRequest",
+    "JinjaPromptTemplateBlockRequest",
     "JsonEnum",
     "JsonInputRequest",
     "JsonVariableValue",
@@ -709,10 +770,17 @@ __all__ = [
     "ModelVersionRead",
     "ModelVersionReadStatusEnum",
     "ModelVersionSandboxSnapshot",
+    "NamedScenarioInputChatHistoryVariableValueRequest",
+    "NamedScenarioInputRequest",
+    "NamedScenarioInputRequest_ChatHistory",
+    "NamedScenarioInputRequest_String",
+    "NamedScenarioInputStringVariableValueRequest",
     "NamedTestCaseChatHistoryVariableValue",
     "NamedTestCaseChatHistoryVariableValueRequest",
     "NamedTestCaseErrorVariableValue",
     "NamedTestCaseErrorVariableValueRequest",
+    "NamedTestCaseFunctionCallVariableValue",
+    "NamedTestCaseFunctionCallVariableValueRequest",
     "NamedTestCaseJsonVariableValue",
     "NamedTestCaseJsonVariableValueRequest",
     "NamedTestCaseNumberVariableValue",
@@ -725,12 +793,14 @@ __all__ = [
     "NamedTestCaseVariableValueRequest",
     "NamedTestCaseVariableValueRequest_ChatHistory",
     "NamedTestCaseVariableValueRequest_Error",
+    "NamedTestCaseVariableValueRequest_FunctionCall",
     "NamedTestCaseVariableValueRequest_Json",
     "NamedTestCaseVariableValueRequest_Number",
     "NamedTestCaseVariableValueRequest_SearchResults",
     "NamedTestCaseVariableValueRequest_String",
     "NamedTestCaseVariableValue_ChatHistory",
     "NamedTestCaseVariableValue_Error",
+    "NamedTestCaseVariableValue_FunctionCall",
     "NamedTestCaseVariableValue_Json",
     "NamedTestCaseVariableValue_Number",
     "NamedTestCaseVariableValue_SearchResults",
@@ -797,10 +867,16 @@ __all__ = [
     "PromptTemplateBlock",
     "PromptTemplateBlockData",
     "PromptTemplateBlockDataRequest",
-    "PromptTemplateBlockProperties",
-    "PromptTemplateBlockPropertiesRequest",
     "PromptTemplateBlockRequest",
+    "PromptTemplateBlockRequest_ChatHistory",
+    "PromptTemplateBlockRequest_ChatMessage",
+    "PromptTemplateBlockRequest_FunctionDefinition",
+    "PromptTemplateBlockRequest_Jinja",
     "PromptTemplateBlockState",
+    "PromptTemplateBlock_ChatHistory",
+    "PromptTemplateBlock_ChatMessage",
+    "PromptTemplateBlock_FunctionDefinition",
+    "PromptTemplateBlock_Jinja",
     "ProviderEnum",
     "RawPromptExecutionOverridesRequest",
     "RegisterPromptErrorResponse",
@@ -822,8 +898,10 @@ __all__ = [
     "RejectedWorkflowNodeResultEvent",
     "SandboxScenario",
     "ScenarioInput",
-    "ScenarioInputRequest",
-    "ScenarioInputTypeEnum",
+    "ScenarioInputChatHistoryVariableValue",
+    "ScenarioInputStringVariableValue",
+    "ScenarioInput_ChatHistory",
+    "ScenarioInput_String",
     "SearchErrorResponse",
     "SearchFiltersRequest",
     "SearchNodeResult",
@@ -898,6 +976,7 @@ __all__ = [
     "TerminalNodeStringResult",
     "TestCaseChatHistoryVariableValue",
     "TestCaseErrorVariableValue",
+    "TestCaseFunctionCallVariableValue",
     "TestCaseJsonVariableValue",
     "TestCaseNumberVariableValue",
     "TestCaseSearchResultsVariableValue",
@@ -905,6 +984,7 @@ __all__ = [
     "TestCaseVariableValue",
     "TestCaseVariableValue_ChatHistory",
     "TestCaseVariableValue_Error",
+    "TestCaseVariableValue_FunctionCall",
     "TestCaseVariableValue_Json",
     "TestCaseVariableValue_Number",
     "TestCaseVariableValue_SearchResults",
@@ -925,6 +1005,7 @@ __all__ = [
     "TestSuiteRunExecution",
     "TestSuiteRunExecutionChatHistoryOutput",
     "TestSuiteRunExecutionErrorOutput",
+    "TestSuiteRunExecutionFunctionCallOutput",
     "TestSuiteRunExecutionJsonOutput",
     "TestSuiteRunExecutionMetricDefinition",
     "TestSuiteRunExecutionMetricResult",
@@ -932,6 +1013,7 @@ __all__ = [
     "TestSuiteRunExecutionOutput",
     "TestSuiteRunExecutionOutput_ChatHistory",
     "TestSuiteRunExecutionOutput_Error",
+    "TestSuiteRunExecutionOutput_FunctionCall",
     "TestSuiteRunExecutionOutput_Json",
     "TestSuiteRunExecutionOutput_Number",
     "TestSuiteRunExecutionOutput_SearchResults",

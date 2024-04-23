@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .prompt_template_block import PromptTemplateBlock
+from .chat_message_request import ChatMessageRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,9 +12,13 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class PromptTemplateBlockData(pydantic.BaseModel):
-    blocks: typing.List[PromptTemplateBlock]
-    version: int
+class NamedScenarioInputChatHistoryVariableValueRequest(pydantic.BaseModel):
+    """
+    Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
+    """
+
+    value: typing.Optional[typing.List[ChatMessageRequest]] = None
+    name: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

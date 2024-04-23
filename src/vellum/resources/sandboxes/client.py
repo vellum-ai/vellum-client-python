@@ -9,8 +9,8 @@ from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_dict import remove_none_from_dict
 from ...core.request_options import RequestOptions
+from ...types.named_scenario_input_request import NamedScenarioInputRequest
 from ...types.sandbox_scenario import SandboxScenario
-from ...types.scenario_input_request import ScenarioInputRequest
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -30,7 +30,7 @@ class SandboxesClient:
         id: str,
         *,
         label: typing.Optional[str] = OMIT,
-        inputs: typing.Sequence[ScenarioInputRequest],
+        inputs: typing.Sequence[NamedScenarioInputRequest],
         scenario_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SandboxScenario:
@@ -48,13 +48,12 @@ class SandboxesClient:
 
             - label: typing.Optional[str].
 
-            - inputs: typing.Sequence[ScenarioInputRequest]. The inputs for the scenario
+            - inputs: typing.Sequence[NamedScenarioInputRequest]. The inputs for the scenario
 
             - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
-        from vellum import ScenarioInputRequest, ScenarioInputTypeEnum
         from vellum.client import Vellum
 
         client = Vellum(
@@ -63,18 +62,7 @@ class SandboxesClient:
         client.sandboxes.upsert_sandbox_scenario(
             id="id",
             label="Scenario 1",
-            inputs=[
-                ScenarioInputRequest(
-                    key="var_1",
-                    type=ScenarioInputTypeEnum.TEXT,
-                    value="Hello, world!",
-                ),
-                ScenarioInputRequest(
-                    key="var_2",
-                    type=ScenarioInputTypeEnum.TEXT,
-                    value="Why hello, there!",
-                ),
-            ],
+            inputs=[],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
@@ -182,7 +170,7 @@ class AsyncSandboxesClient:
         id: str,
         *,
         label: typing.Optional[str] = OMIT,
-        inputs: typing.Sequence[ScenarioInputRequest],
+        inputs: typing.Sequence[NamedScenarioInputRequest],
         scenario_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SandboxScenario:
@@ -200,13 +188,12 @@ class AsyncSandboxesClient:
 
             - label: typing.Optional[str].
 
-            - inputs: typing.Sequence[ScenarioInputRequest]. The inputs for the scenario
+            - inputs: typing.Sequence[NamedScenarioInputRequest]. The inputs for the scenario
 
             - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
-        from vellum import ScenarioInputRequest, ScenarioInputTypeEnum
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -215,18 +202,7 @@ class AsyncSandboxesClient:
         await client.sandboxes.upsert_sandbox_scenario(
             id="id",
             label="Scenario 1",
-            inputs=[
-                ScenarioInputRequest(
-                    key="var_1",
-                    type=ScenarioInputTypeEnum.TEXT,
-                    value="Hello, world!",
-                ),
-                ScenarioInputRequest(
-                    key="var_2",
-                    type=ScenarioInputTypeEnum.TEXT,
-                    value="Why hello, there!",
-                ),
-            ],
+            inputs=[],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}

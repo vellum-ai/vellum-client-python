@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .prompt_template_block import PromptTemplateBlock
+from .fulfilled_function_call import FulfilledFunctionCall
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,9 +12,14 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class PromptTemplateBlockData(pydantic.BaseModel):
-    blocks: typing.List[PromptTemplateBlock]
-    version: int
+class TestSuiteRunExecutionFunctionCallOutput(pydantic.BaseModel):
+    """
+    Execution output of an entity evaluated during a Test Suite Run that is of type FUNCTION_CALL
+    """
+
+    name: str
+    value: typing.Optional[FulfilledFunctionCall] = None
+    output_variable_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

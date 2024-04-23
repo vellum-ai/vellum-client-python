@@ -80,10 +80,7 @@ class RegisteredPromptsClient:
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum import (
-            BlockTypeEnum,
             PromptTemplateBlockDataRequest,
-            PromptTemplateBlockPropertiesRequest,
-            PromptTemplateBlockRequest,
             RegisteredPromptInputVariableRequest,
             RegisterPromptModelParametersRequest,
             RegisterPromptPromptInfoRequest,
@@ -98,14 +95,8 @@ class RegisteredPromptsClient:
             name="name",
             prompt=RegisterPromptPromptInfoRequest(
                 prompt_block_data=PromptTemplateBlockDataRequest(
+                    blocks=[],
                     version=1,
-                    blocks=[
-                        PromptTemplateBlockRequest(
-                            id="id",
-                            block_type=BlockTypeEnum.CHAT_MESSAGE,
-                            properties=PromptTemplateBlockPropertiesRequest(),
-                        )
-                    ],
                 ),
                 input_variables=[
                     RegisteredPromptInputVariableRequest(
@@ -230,10 +221,7 @@ class AsyncRegisteredPromptsClient:
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
         from vellum import (
-            BlockTypeEnum,
             PromptTemplateBlockDataRequest,
-            PromptTemplateBlockPropertiesRequest,
-            PromptTemplateBlockRequest,
             RegisteredPromptInputVariableRequest,
             RegisterPromptModelParametersRequest,
             RegisterPromptPromptInfoRequest,
@@ -248,14 +236,8 @@ class AsyncRegisteredPromptsClient:
             name="name",
             prompt=RegisterPromptPromptInfoRequest(
                 prompt_block_data=PromptTemplateBlockDataRequest(
+                    blocks=[],
                     version=1,
-                    blocks=[
-                        PromptTemplateBlockRequest(
-                            id="id",
-                            block_type=BlockTypeEnum.CHAT_MESSAGE,
-                            properties=PromptTemplateBlockPropertiesRequest(),
-                        )
-                    ],
                 ),
                 input_variables=[
                     RegisteredPromptInputVariableRequest(

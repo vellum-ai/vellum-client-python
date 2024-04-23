@@ -6,6 +6,7 @@ import typing
 
 from .test_case_chat_history_variable_value import TestCaseChatHistoryVariableValue
 from .test_case_error_variable_value import TestCaseErrorVariableValue
+from .test_case_function_call_variable_value import TestCaseFunctionCallVariableValue
 from .test_case_json_variable_value import TestCaseJsonVariableValue
 from .test_case_number_variable_value import TestCaseNumberVariableValue
 from .test_case_search_results_variable_value import TestCaseSearchResultsVariableValue
@@ -72,6 +73,16 @@ class TestCaseVariableValue_Error(TestCaseErrorVariableValue):
         populate_by_name = True
 
 
+class TestCaseVariableValue_FunctionCall(TestCaseFunctionCallVariableValue):
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
 TestCaseVariableValue = typing.Union[
     TestCaseVariableValue_String,
     TestCaseVariableValue_Number,
@@ -79,4 +90,5 @@ TestCaseVariableValue = typing.Union[
     TestCaseVariableValue_ChatHistory,
     TestCaseVariableValue_SearchResults,
     TestCaseVariableValue_Error,
+    TestCaseVariableValue_FunctionCall,
 ]

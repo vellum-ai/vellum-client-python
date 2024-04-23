@@ -6,6 +6,7 @@ import typing
 
 from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
 from .test_suite_run_execution_error_output import TestSuiteRunExecutionErrorOutput
+from .test_suite_run_execution_function_call_output import TestSuiteRunExecutionFunctionCallOutput
 from .test_suite_run_execution_json_output import TestSuiteRunExecutionJsonOutput
 from .test_suite_run_execution_number_output import TestSuiteRunExecutionNumberOutput
 from .test_suite_run_execution_search_results_output import TestSuiteRunExecutionSearchResultsOutput
@@ -72,6 +73,16 @@ class TestSuiteRunExecutionOutput_Error(TestSuiteRunExecutionErrorOutput):
         populate_by_name = True
 
 
+class TestSuiteRunExecutionOutput_FunctionCall(TestSuiteRunExecutionFunctionCallOutput):
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
 TestSuiteRunExecutionOutput = typing.Union[
     TestSuiteRunExecutionOutput_String,
     TestSuiteRunExecutionOutput_Number,
@@ -79,4 +90,5 @@ TestSuiteRunExecutionOutput = typing.Union[
     TestSuiteRunExecutionOutput_ChatHistory,
     TestSuiteRunExecutionOutput_SearchResults,
     TestSuiteRunExecutionOutput_Error,
+    TestSuiteRunExecutionOutput_FunctionCall,
 ]

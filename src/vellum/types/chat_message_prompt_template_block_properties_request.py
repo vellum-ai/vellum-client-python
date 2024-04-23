@@ -7,7 +7,6 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from .chat_message_role import ChatMessageRole
-from .vellum_variable_type import VellumVariableType
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -15,17 +14,15 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class PromptTemplateBlockProperties(pydantic.BaseModel):
+class ChatMessagePromptTemplateBlockPropertiesRequest(pydantic.BaseModel):
+    """
+    The properties of a ChatMessagePromptTemplateBlock
+    """
+
+    blocks: typing.List[PromptTemplateBlockRequest]
     chat_role: typing.Optional[ChatMessageRole] = None
-    chat_message_unterminated: typing.Optional[bool] = None
     chat_source: typing.Optional[str] = None
-    template: typing.Optional[str] = None
-    template_type: typing.Optional[VellumVariableType] = None
-    function_name: typing.Optional[str] = None
-    function_description: typing.Optional[str] = None
-    function_parameters: typing.Optional[typing.Dict[str, typing.Any]] = None
-    function_forced: typing.Optional[bool] = None
-    blocks: typing.Optional[typing.List[PromptTemplateBlock]] = None
+    chat_message_unterminated: typing.Optional[bool] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
@@ -42,6 +39,6 @@ class PromptTemplateBlockProperties(pydantic.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-from .prompt_template_block import PromptTemplateBlock  # noqa: E402
+from .prompt_template_block_request import PromptTemplateBlockRequest  # noqa: E402
 
-PromptTemplateBlockProperties.update_forward_refs()
+ChatMessagePromptTemplateBlockPropertiesRequest.update_forward_refs()

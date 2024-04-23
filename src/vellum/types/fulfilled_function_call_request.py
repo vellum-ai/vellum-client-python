@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .prompt_template_block import PromptTemplateBlock
+from .fulfilled_enum import FulfilledEnum
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,9 +12,15 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class PromptTemplateBlockData(pydantic.BaseModel):
-    blocks: typing.List[PromptTemplateBlock]
-    version: int
+class FulfilledFunctionCallRequest(pydantic.BaseModel):
+    """
+    The final resolved function call value.
+    """
+
+    state: FulfilledEnum
+    arguments: typing.Dict[str, typing.Any]
+    id: typing.Optional[str] = None
+    name: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .prompt_template_block import PromptTemplateBlock
+from .function_definition_prompt_template_block_properties import FunctionDefinitionPromptTemplateBlockProperties
+from .prompt_template_block_state import PromptTemplateBlockState
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,9 +13,14 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class PromptTemplateBlockData(pydantic.BaseModel):
-    blocks: typing.List[PromptTemplateBlock]
-    version: int
+class FunctionDefinitionPromptTemplateBlock(pydantic.BaseModel):
+    """
+    A block of that represents a function definition in a prompt template.
+    """
+
+    id: str
+    state: typing.Optional[PromptTemplateBlockState] = None
+    properties: FunctionDefinitionPromptTemplateBlockProperties
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

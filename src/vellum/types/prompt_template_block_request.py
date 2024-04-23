@@ -2,40 +2,64 @@
 
 from __future__ import annotations
 
-import datetime as dt
 import typing
 
-from ..core.datetime_utils import serialize_datetime
-from .block_type_enum import BlockTypeEnum
-from .prompt_template_block_state import PromptTemplateBlockState
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from .chat_history_prompt_template_block_request import ChatHistoryPromptTemplateBlockRequest
+from .chat_message_prompt_template_block_properties_request import ChatMessagePromptTemplateBlockPropertiesRequest
+from .function_definition_prompt_template_block_request import FunctionDefinitionPromptTemplateBlockRequest
+from .jinja_prompt_template_block_request import JinjaPromptTemplateBlockRequest
 
 
-class PromptTemplateBlockRequest(pydantic.BaseModel):
-    id: str
-    block_type: BlockTypeEnum
-    properties: PromptTemplateBlockPropertiesRequest
-    state: typing.Optional[PromptTemplateBlockState] = None
-
-    def json(self, **kwargs: typing.Any) -> str:
-        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
-        return super().json(**kwargs_with_defaults)
-
-    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
-        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
-        return super().dict(**kwargs_with_defaults)
+class PromptTemplateBlockRequest_Jinja(JinjaPromptTemplateBlockRequest):
+    block_type: typing.Literal["JINJA"] = "JINJA"
 
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
-        json_encoders = {dt.datetime: serialize_datetime}
+        allow_population_by_field_name = True
+        populate_by_name = True
 
 
-from .prompt_template_block_properties_request import PromptTemplateBlockPropertiesRequest  # noqa: E402
+class PromptTemplateBlockRequest_ChatHistory(ChatHistoryPromptTemplateBlockRequest):
+    block_type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
-PromptTemplateBlockRequest.update_forward_refs()
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
+class PromptTemplateBlockRequest_ChatMessage(ChatMessagePromptTemplateBlockRequest):
+    block_type: typing.Literal["CHAT_MESSAGE"] = "CHAT_MESSAGE"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
+class PromptTemplateBlockRequest_FunctionDefinition(FunctionDefinitionPromptTemplateBlockRequest):
+    block_type: typing.Literal["FUNCTION_DEFINITION"] = "FUNCTION_DEFINITION"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
+PromptTemplateBlockRequest = typing.Union[
+    PromptTemplateBlockRequest_Jinja,
+    PromptTemplateBlockRequest_ChatHistory,
+    PromptTemplateBlockRequest_ChatMessage,
+    PromptTemplateBlockRequest_FunctionDefinition,
+]
+from .chat_message_prompt_template_block_request import ChatMessagePromptTemplateBlockRequest  # noqa: E402
+
+PromptTemplateBlockRequest_ChatMessage.update_forward_refs(
+    ChatMessagePromptTemplateBlockPropertiesRequest=ChatMessagePromptTemplateBlockPropertiesRequest,
+    ChatMessagePromptTemplateBlockRequest=ChatMessagePromptTemplateBlockRequest,
+    PromptTemplateBlockRequest=PromptTemplateBlockRequest,
+)

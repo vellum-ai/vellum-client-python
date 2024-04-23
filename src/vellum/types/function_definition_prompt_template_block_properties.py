@@ -4,7 +4,6 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .prompt_template_block import PromptTemplateBlock
 
 try:
     import pydantic.v1 as pydantic  # type: ignore
@@ -12,9 +11,26 @@ except ImportError:
     import pydantic  # type: ignore
 
 
-class PromptTemplateBlockData(pydantic.BaseModel):
-    blocks: typing.List[PromptTemplateBlock]
-    version: int
+class FunctionDefinitionPromptTemplateBlockProperties(pydantic.BaseModel):
+    function_name: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The name identifying the function.
+    """
+
+    function_description: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    A description to help guide the model when to invoke this function.
+    """
+
+    function_parameters: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    """
+    An OpenAPI specification of parameters that are supported by this function.
+    """
+
+    function_forced: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    Set this option to true to force the model to return a function call of this function.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

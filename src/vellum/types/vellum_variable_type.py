@@ -17,6 +17,7 @@ class VellumVariableType(str, enum.Enum):
     - `ARRAY` - ARRAY
     - `FUNCTION_CALL` - FUNCTION_CALL
     - `IMAGE` - IMAGE
+    - `NULL` - NULL
     """
 
     STRING = "STRING"
@@ -28,6 +29,7 @@ class VellumVariableType(str, enum.Enum):
     ARRAY = "ARRAY"
     FUNCTION_CALL = "FUNCTION_CALL"
     IMAGE = "IMAGE"
+    NULL = "NULL"
 
     def visit(
         self,
@@ -40,6 +42,7 @@ class VellumVariableType(str, enum.Enum):
         array: typing.Callable[[], T_Result],
         function_call: typing.Callable[[], T_Result],
         image: typing.Callable[[], T_Result],
+        null: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is VellumVariableType.STRING:
             return string()
@@ -59,3 +62,5 @@ class VellumVariableType(str, enum.Enum):
             return function_call()
         if self is VellumVariableType.IMAGE:
             return image()
+        if self is VellumVariableType.NULL:
+            return null()

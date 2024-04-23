@@ -8,3 +8,4 @@ mypy.ini
 # added computed properties
 src/vellum/types/generate_response.py
 src/vellum/terraform
+src/vellum/lib

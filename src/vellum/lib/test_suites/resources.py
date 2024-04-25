@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import logging
 import time
-from typing import Callable, Generator, List
+from functools import cached_property
+from typing import Callable, Generator, List, Any
 
+from vellum import TestSuiteRunRead, TestSuiteRunMetricOutput_Number
 from vellum.client import Vellum
 from vellum.lib.test_suites.constants import (
     DEFAULT_MAX_POLLING_DURATION_MS,
@@ -11,6 +13,7 @@ from vellum.lib.test_suites.constants import (
 )
 from vellum.lib.test_suites.exceptions import TestSuiteRunResultsException
 from vellum.lib.utils.env import get_api_key
+from vellum.lib.utils.paginator import PaginatedResults, get_all_results
 from vellum.types import (
     ExternalTestCaseExecutionRequest,
     NamedTestCaseVariableValueRequest,
@@ -21,9 +24,6 @@ from vellum.types import (
     TestSuiteRunMetricOutput,
     TestSuiteRunState,
 )
-
-from vellum.lib.utils.paginator import PaginatedResults, get_all_results
-
 
 logger = logging.getLogger(__name__)
 
@@ -116,44 +116,141 @@ class VellumTestSuiteRunResults:
 
     def __init__(
         self,
-        test_suite_run_id: str,
+        test_suite_run: TestSuiteRunRead,
         *,
         client: Vellum | None = None,
         polling_interval: int = DEFAULT_POLLING_INTERVAL_MS,
         max_polling_duration: int = DEFAULT_MAX_POLLING_DURATION_MS,
     ) -> None:
-        self._test_suite_run_id = test_suite_run_id
+        self._test_suite_run = test_suite_run
         self._client = client or Vellum(
             api_key=get_api_key(),
         )
-        self._state = "QUEUED"
         self._executions: Generator[VellumTestSuiteRunExecution, None, None] | None = (
             None
         )
         self._polling_interval = polling_interval
         self._max_polling_duration = max_polling_duration
 
+    @property
+    def state(self) -> TestSuiteRunState:
+        return self._test_suite_run.state
+
+    @cached_property
+    def all_executions(self) -> list[VellumTestSuiteRunExecution]:
+        return list(self._get_test_suite_run_executions())
+
     def get_metric_outputs(
         self, metric_identifier: str | None = None, output_identifier: str | None = None
-    ) -> Generator[TestSuiteRunMetricOutput, None, None]:
+    ) -> List[TestSuiteRunMetricOutput]:
         """Retrieve a metric's output across all executions by providing the info needed to uniquely identify it."""
 
-        executions = self._get_test_suite_run_executions()
-
-        for execution in executions:
-            yield execution.get_metric_output(
+        return [
+            execution.get_metric_output(
                 metric_identifier=metric_identifier, output_identifier=output_identifier
             )
+            for execution in self.all_executions
+        ]
 
-    def _refresh_test_suite_run_state(self):
-        test_suite_run = self._client.test_suite_runs.retrieve(self._test_suite_run_id)
-        self._state = test_suite_run.state
+    def get_count_metric_outputs(
+        self,
+        metric_identifier: str | None = None,
+        output_identifier: str | None = None,
+        *,
+        predicate: Callable[[TestSuiteRunMetricOutput], bool] | None = None,
+    ) -> int:
+        """Returns the count of all metric outputs that match the given criteria."""
+
+        metric_outputs = self.get_metric_outputs(
+            metric_identifier=metric_identifier, output_identifier=output_identifier
+        )
+
+        if predicate is None:
+            return len(metric_outputs)
+
+        return len([output for output in metric_outputs if predicate(output)])
+
+    def get_numeric_metric_output_values(
+        self,
+        metric_identifier: str | None = None,
+        output_identifier: str | None = None,
+    ) -> List[float]:
+        """Returns the values of a numeric metric output that match the given criteria."""
+
+        metric_outputs: list[TestSuiteRunMetricOutput_Number] = []
+
+        for output in self.get_metric_outputs(
+            metric_identifier=metric_identifier, output_identifier=output_identifier
+        ):
+            if output.type != "NUMBER":
+                raise TestSuiteRunResultsException(
+                    f"Expected a numeric metric output, but got a {output.type} output instead."
+                )
+
+            metric_outputs.append(output)
+
+        return [output.value for output in metric_outputs]
+
+    def get_mean_metric_output(
+        self, metric_identifier: str | None = None, output_identifier: str | None = None
+    ) -> float:
+        """Returns the mean of all metric outputs that match the given criteria."""
+        output_values = self.get_numeric_metric_output_values(
+            metric_identifier=metric_identifier, output_identifier=output_identifier
+        )
+        return sum(output_values) / len(output_values)
+
+    def get_min_metric_output(
+        self, metric_identifier: str | None = None, output_identifier: str | None = None
+    ) -> float:
+        """Returns the min value across= all metric outputs that match the given criteria."""
+        output_values = self.get_numeric_metric_output_values(
+            metric_identifier=metric_identifier, output_identifier=output_identifier
+        )
+        return min(output_values)
+
+    def get_max_metric_output(
+        self, metric_identifier: str | None = None, output_identifier: str | None = None
+    ) -> float:
+        """Returns the max value across all metric outputs that match the given criteria."""
+        output_values = self.get_numeric_metric_output_values(
+            metric_identifier=metric_identifier, output_identifier=output_identifier
+        )
+        return max(output_values)
+
+    def wait_until_complete(self) -> None:
+        """Wait until the Test Suite Run is no longer in a QUEUED or RUNNING state."""
+
+        start_time = time.time_ns()
+        while True:
+            logger.debug("Polling for latest test suite run state...")
+            self._refresh_test_suite_run()
+            if self.state not in {"QUEUED", "RUNNING"}:
+                break
+
+            current_time = time.time_ns()
+            if ((current_time - start_time) / 1e6) > self._max_polling_duration:
+                raise TestSuiteRunResultsException(
+                    "Test suite run timed out polling for executions"
+                )
+
+            time.sleep(self._polling_interval / 1000.0)
+
+        if self.state == "FAILED":
+            raise TestSuiteRunResultsException("Test suite run failed")
+
+        if self.state == "CANCELLED":
+            raise TestSuiteRunResultsException("Test suite run was cancelled")
+
+    def _refresh_test_suite_run(self):
+        test_suite_run = self._client.test_suite_runs.retrieve(self._test_suite_run.id)
+        self._test_suite_run = test_suite_run
 
     def _list_paginated_executions(
         self, offset: int | None, limit: int | None
     ) -> PaginatedResults[TestSuiteRunExecution]:
         response = self._client.test_suite_runs.list_executions(
-            self._test_suite_run_id,
+            self._test_suite_run.id,
             offset=offset,
             limit=limit,
             expand=[
@@ -175,26 +272,7 @@ class VellumTestSuiteRunResults:
         if self._executions is not None:
             return self._executions
 
-        start_time = time.time_ns()
-        while True:
-            logger.debug("Polling for latest test suite run state...")
-            self._refresh_test_suite_run_state()
-            if self._state not in {"QUEUED", "RUNNING"}:
-                break
-
-            current_time = time.time_ns()
-            if ((current_time - start_time) / 1e6) > self._max_polling_duration:
-                raise TestSuiteRunResultsException(
-                    "Test suite run timed out polling for executions"
-                )
-
-            time.sleep(self._polling_interval / 1000.0)
-
-        if self._state == "FAILED":
-            raise TestSuiteRunResultsException("Test suite run failed")
-
-        if self._state == "CANCELLED":
-            raise TestSuiteRunResultsException("Test suite run was cancelled")
+        self.wait_until_complete()
 
         raw_api_executions = get_all_results(self._list_paginated_executions)
         self._executions = self._wrap_api_executions(raw_api_executions)
@@ -250,4 +328,4 @@ class VellumTestSuite:
                 ),
             ),
         )
-        return VellumTestSuiteRunResults(test_suite_run.id, client=self.client)
+        return VellumTestSuiteRunResults(test_suite_run, client=self.client)

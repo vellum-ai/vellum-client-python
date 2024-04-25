@@ -1,23 +1,29 @@
 from __future__ import annotations
+
 import logging
 import time
 from typing import Callable, Generator, List
 
-from .constants import DEFAULT_MAX_POLLING_DURATION_MS, DEFAULT_POLLING_INTERVAL_MS
-from .exceptions import TestSuiteRunResultsException
-from ..utils.env import get_api_key
-from ...client import Vellum
-from ...types import (
+from vellum.client import Vellum
+from vellum.lib.test_suites.constants import (
+    DEFAULT_MAX_POLLING_DURATION_MS,
+    DEFAULT_POLLING_INTERVAL_MS,
+)
+from vellum.lib.test_suites.exceptions import TestSuiteRunResultsException
+from vellum.lib.utils.env import get_api_key
+from vellum.types import (
     ExternalTestCaseExecutionRequest,
     NamedTestCaseVariableValueRequest,
     TestCaseVariableValue,
+    TestSuiteRunExecConfigRequest_External,
     TestSuiteRunExecution,
+    TestSuiteRunExternalExecConfigDataRequest,
     TestSuiteRunMetricOutput,
     TestSuiteRunState,
-    TestSuiteRunExecConfigRequest_External,
-    TestSuiteRunExternalExecConfigDataRequest,
 )
-from ..utils.paginator import PaginatedResults, get_all_results
+
+from vellum.lib.utils.paginator import PaginatedResults, get_all_results
+
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +43,11 @@ class VellumTestSuiteRunExecution(TestSuiteRunExecution):
         metric_identifier: str | None = None,
         output_identifier: str | None = None,
     ) -> TestSuiteRunMetricOutput:
-        """Retrieve a metric's output by specifying the info needed to uniquely identify that metric and output."""
+        """Retrieve a metric's output by specifying the info needed to uniquely identify that metric and output.
+
+        metric_identifier: Anything that uniquely identifies the metric to retrieve (e.g. it's label, name or id)
+        output_identifier: Anything that uniquely identifies the output to retrieve (e.g. it's name)
+        """
 
         metric_outputs = self.get_metric_outputs(metric_identifier)
 
@@ -48,10 +58,14 @@ class VellumTestSuiteRunExecution(TestSuiteRunExecution):
         ]
 
         if len(filtered_metric_outputs) == 0:
-            raise TestSuiteRunResultsException(f"No metric outputs found with identifier: {output_identifier}")
+            raise TestSuiteRunResultsException(
+                f"No metric outputs found with identifier: {output_identifier}"
+            )
 
         if len(filtered_metric_outputs) > 1:
-            raise TestSuiteRunResultsException(f"Multiple metric outputs found with identifier: {output_identifier}")
+            raise TestSuiteRunResultsException(
+                f"Multiple metric outputs found with identifier: {output_identifier}"
+            )
 
         return filtered_metric_outputs[0]
 
@@ -59,7 +73,10 @@ class VellumTestSuiteRunExecution(TestSuiteRunExecution):
         self,
         metric_identifier: str | None = None,
     ) -> List[TestSuiteRunMetricOutput]:
-        """Return a metric's output across all executions by providing the info needed to uniquely identify that metric."""
+        """Return a metric's output across all executions by providing the info needed to uniquely identify it.
+
+        metric_identifier: Anything that uniquely identifies the metric to retrieve (e.g. it's label, name or id).
+        """
 
         filtered_metric_results = [
             metric_output
@@ -67,27 +84,42 @@ class VellumTestSuiteRunExecution(TestSuiteRunExecution):
             if metric_identifier is None
             or (metric_output.metric_id == metric_identifier)
             or (metric_output.metric_label == metric_identifier)
-            or (metric_output.metric_definition and metric_output.metric_definition.id == metric_identifier)
-            or (metric_output.metric_definition and metric_output.metric_definition.name == metric_identifier)
-            or (metric_output.metric_definition and metric_output.metric_definition.label == metric_identifier)
+            or (
+                metric_output.metric_definition
+                and metric_output.metric_definition.id == metric_identifier
+            )
+            or (
+                metric_output.metric_definition
+                and metric_output.metric_definition.name == metric_identifier
+            )
+            or (
+                metric_output.metric_definition
+                and metric_output.metric_definition.label == metric_identifier
+            )
         ]
 
         if len(filtered_metric_results) == 0:
-            raise TestSuiteRunResultsException(f"No metric results found with identifier: {metric_identifier}")
+            raise TestSuiteRunResultsException(
+                f"No metric results found with identifier: {metric_identifier}"
+            )
 
         if len(filtered_metric_results) > 1:
-            raise TestSuiteRunResultsException(f"Multiple metric results found with identifier: {metric_identifier}")
+            raise TestSuiteRunResultsException(
+                f"Multiple metric results found with identifier: {metric_identifier}"
+            )
 
         return filtered_metric_results[0].outputs
 
 
 class VellumTestSuiteRunResults:
+    """A utility class with methods for conveniently operating on a Test Suite Run and its results."""
+
     def __init__(
         self,
         test_suite_run_id: str,
         *,
         client: Vellum | None = None,
-        polling_inteval: int = DEFAULT_POLLING_INTERVAL_MS,
+        polling_interval: int = DEFAULT_POLLING_INTERVAL_MS,
         max_polling_duration: int = DEFAULT_MAX_POLLING_DURATION_MS,
     ) -> None:
         self._test_suite_run_id = test_suite_run_id
@@ -95,17 +127,23 @@ class VellumTestSuiteRunResults:
             api_key=get_api_key(),
         )
         self._state = TestSuiteRunState.QUEUED
-        self._executions: Generator[VellumTestSuiteRunExecution, None, None] | None = None
-        self._polling_interval = polling_inteval
+        self._executions: Generator[VellumTestSuiteRunExecution, None, None] | None = (
+            None
+        )
+        self._polling_interval = polling_interval
         self._max_polling_duration = max_polling_duration
 
     def get_metric_outputs(
         self, metric_identifier: str | None = None, output_identifier: str | None = None
     ) -> Generator[TestSuiteRunMetricOutput, None, None]:
+        """Retrieve a metric's output across all executions by providing the info needed to uniquely identify it."""
+
         executions = self._get_test_suite_run_executions()
 
         for execution in executions:
-            yield execution.get_metric_output(metric_identifier=metric_identifier, output_identifier=output_identifier)
+            yield execution.get_metric_output(
+                metric_identifier=metric_identifier, output_identifier=output_identifier
+            )
 
     def _refresh_test_suite_run_state(self):
         test_suite_run = self._client.test_suite_runs.retrieve(self._test_suite_run_id)
@@ -118,7 +156,10 @@ class VellumTestSuiteRunResults:
             self._test_suite_run_id,
             offset=offset,
             limit=limit,
-            expand=["results.metric_results.metric_definition", "results.metric_results.metric_label"],
+            expand=[
+                "results.metric_results.metric_definition",
+                "results.metric_results.metric_label",
+            ],
         )
         return PaginatedResults(results=response.results, count=response.count)
 
@@ -128,7 +169,9 @@ class VellumTestSuiteRunResults:
         for execution in executions:
             yield VellumTestSuiteRunExecution.from_api(execution)
 
-    def _get_test_suite_run_executions(self) -> Generator[VellumTestSuiteRunExecution, None, None]:
+    def _get_test_suite_run_executions(
+        self,
+    ) -> Generator[VellumTestSuiteRunExecution, None, None]:
         if self._executions is not None:
             return self._executions
 
@@ -141,7 +184,9 @@ class VellumTestSuiteRunResults:
 
             current_time = time.time_ns()
             if ((current_time - start_time) / 1e6) > self._max_polling_duration:
-                raise TestSuiteRunResultsException("Test suite run timed out polling for executions")
+                raise TestSuiteRunResultsException(
+                    "Test suite run timed out polling for executions"
+                )
 
             time.sleep(self._polling_interval / 1000.0)
 
@@ -157,6 +202,8 @@ class VellumTestSuiteRunResults:
 
 
 class VellumTestSuite:
+    """A utility class that provides methods for running a Vellum Test Suite and interacting with its results."""
+
     def __init__(
         self,
         test_suite_id: str,
@@ -169,14 +216,19 @@ class VellumTestSuite:
         self._test_suite_id = test_suite_id
 
     def run_external(
-        self, executable: Callable[[List[TestCaseVariableValue]], List[NamedTestCaseVariableValueRequest]]
+        self,
+        executable: Callable[
+            [List[TestCaseVariableValue]], List[NamedTestCaseVariableValueRequest]
+        ],
     ) -> VellumTestSuiteRunResults:
         """
         Runs this Vellum Test Suite on any executable function defined external to Vellum.
 
-        Returns a results wrapper that polls the generated Test Suite Run for the latest metric results.
+        Returns a wrapper that polls the generated Test Suite Run until it's done running and returns its results.
         """
-        test_cases = self.client.test_suites.list_test_suite_test_cases(id=self._test_suite_id)
+        test_cases = self.client.test_suites.list_test_suite_test_cases(
+            id=self._test_suite_id
+        )
         executions: List[ExternalTestCaseExecutionRequest] = []
 
         for test_case in test_cases.results:

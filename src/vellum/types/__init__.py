@@ -31,7 +31,6 @@ from .array_variable_value_item import (
 from .chat_history_enum import ChatHistoryEnum
 from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_history_prompt_template_block import ChatHistoryPromptTemplateBlock
-from .chat_history_prompt_template_block_request import ChatHistoryPromptTemplateBlockRequest
 from .chat_history_variable_value import ChatHistoryVariableValue
 from .chat_message import ChatMessage
 from .chat_message_content import (
@@ -51,8 +50,6 @@ from .chat_message_content_request import (
 from .chat_message_enum import ChatMessageEnum
 from .chat_message_prompt_template_block import ChatMessagePromptTemplateBlock
 from .chat_message_prompt_template_block_properties import ChatMessagePromptTemplateBlockProperties
-from .chat_message_prompt_template_block_properties_request import ChatMessagePromptTemplateBlockPropertiesRequest
-from .chat_message_prompt_template_block_request import ChatMessagePromptTemplateBlockRequest
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
 from .code_execution_node_array_result import CodeExecutionNodeArrayResult
@@ -150,10 +147,6 @@ from .function_call_variable_value import FunctionCallVariableValue
 from .function_definition_enum import FunctionDefinitionEnum
 from .function_definition_prompt_template_block import FunctionDefinitionPromptTemplateBlock
 from .function_definition_prompt_template_block_properties import FunctionDefinitionPromptTemplateBlockProperties
-from .function_definition_prompt_template_block_properties_request import (
-    FunctionDefinitionPromptTemplateBlockPropertiesRequest,
-)
-from .function_definition_prompt_template_block_request import FunctionDefinitionPromptTemplateBlockRequest
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -176,8 +169,6 @@ from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEve
 from .jinja_enum import JinjaEnum
 from .jinja_prompt_template_block import JinjaPromptTemplateBlock
 from .jinja_prompt_template_block_properties import JinjaPromptTemplateBlockProperties
-from .jinja_prompt_template_block_properties_request import JinjaPromptTemplateBlockPropertiesRequest
-from .jinja_prompt_template_block_request import JinjaPromptTemplateBlockRequest
 from .json_enum import JsonEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
@@ -309,27 +300,9 @@ from .prompt_template_block import (
     PromptTemplateBlock_Jinja,
 )
 from .prompt_template_block_data import PromptTemplateBlockData
-from .prompt_template_block_data_request import PromptTemplateBlockDataRequest
-from .prompt_template_block_request import (
-    PromptTemplateBlockRequest,
-    PromptTemplateBlockRequest_ChatHistory,
-    PromptTemplateBlockRequest_ChatMessage,
-    PromptTemplateBlockRequest_FunctionDefinition,
-    PromptTemplateBlockRequest_Jinja,
-)
 from .prompt_template_block_state import PromptTemplateBlockState
 from .provider_enum import ProviderEnum
 from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
-from .register_prompt_error_response import RegisterPromptErrorResponse
-from .register_prompt_model_parameters_request import RegisterPromptModelParametersRequest
-from .register_prompt_prompt import RegisterPromptPrompt
-from .register_prompt_prompt_info_request import RegisterPromptPromptInfoRequest
-from .register_prompt_response import RegisterPromptResponse
-from .registered_prompt_deployment import RegisteredPromptDeployment
-from .registered_prompt_input_variable_request import RegisteredPromptInputVariableRequest
-from .registered_prompt_model_version import RegisteredPromptModelVersion
-from .registered_prompt_sandbox import RegisteredPromptSandbox
-from .registered_prompt_sandbox_snapshot import RegisteredPromptSandboxSnapshot
 from .rejected_enum import RejectedEnum
 from .rejected_execute_prompt_event import RejectedExecutePromptEvent
 from .rejected_execute_prompt_response import RejectedExecutePromptResponse
@@ -622,7 +595,6 @@ __all__ = [
     "ChatHistoryEnum",
     "ChatHistoryInputRequest",
     "ChatHistoryPromptTemplateBlock",
-    "ChatHistoryPromptTemplateBlockRequest",
     "ChatHistoryVariableValue",
     "ChatMessage",
     "ChatMessageContent",
@@ -638,8 +610,6 @@ __all__ = [
     "ChatMessageEnum",
     "ChatMessagePromptTemplateBlock",
     "ChatMessagePromptTemplateBlockProperties",
-    "ChatMessagePromptTemplateBlockPropertiesRequest",
-    "ChatMessagePromptTemplateBlockRequest",
     "ChatMessageRequest",
     "ChatMessageRole",
     "CodeExecutionNodeArrayResult",
@@ -729,8 +699,6 @@ __all__ = [
     "FunctionDefinitionEnum",
     "FunctionDefinitionPromptTemplateBlock",
     "FunctionDefinitionPromptTemplateBlockProperties",
-    "FunctionDefinitionPromptTemplateBlockPropertiesRequest",
-    "FunctionDefinitionPromptTemplateBlockRequest",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
@@ -753,8 +721,6 @@ __all__ = [
     "JinjaEnum",
     "JinjaPromptTemplateBlock",
     "JinjaPromptTemplateBlockProperties",
-    "JinjaPromptTemplateBlockPropertiesRequest",
-    "JinjaPromptTemplateBlockRequest",
     "JsonEnum",
     "JsonInputRequest",
     "JsonVariableValue",
@@ -866,12 +832,6 @@ __all__ = [
     "PromptOutput_String",
     "PromptTemplateBlock",
     "PromptTemplateBlockData",
-    "PromptTemplateBlockDataRequest",
-    "PromptTemplateBlockRequest",
-    "PromptTemplateBlockRequest_ChatHistory",
-    "PromptTemplateBlockRequest_ChatMessage",
-    "PromptTemplateBlockRequest_FunctionDefinition",
-    "PromptTemplateBlockRequest_Jinja",
     "PromptTemplateBlockState",
     "PromptTemplateBlock_ChatHistory",
     "PromptTemplateBlock_ChatMessage",
@@ -879,16 +839,6 @@ __all__ = [
     "PromptTemplateBlock_Jinja",
     "ProviderEnum",
     "RawPromptExecutionOverridesRequest",
-    "RegisterPromptErrorResponse",
-    "RegisterPromptModelParametersRequest",
-    "RegisterPromptPrompt",
-    "RegisterPromptPromptInfoRequest",
-    "RegisterPromptResponse",
-    "RegisteredPromptDeployment",
-    "RegisteredPromptInputVariableRequest",
-    "RegisteredPromptModelVersion",
-    "RegisteredPromptSandbox",
-    "RegisteredPromptSandboxSnapshot",
     "RejectedEnum",
     "RejectedExecutePromptEvent",
     "RejectedExecutePromptResponse",

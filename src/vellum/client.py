@@ -21,7 +21,6 @@ from .resources.deployments.client import AsyncDeploymentsClient, DeploymentsCli
 from .resources.document_indexes.client import AsyncDocumentIndexesClient, DocumentIndexesClient
 from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
 from .resources.folder_entities.client import AsyncFolderEntitiesClient, FolderEntitiesClient
-from .resources.model_versions.client import AsyncModelVersionsClient, ModelVersionsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
 from .resources.test_suite_runs.client import AsyncTestSuiteRunsClient, TestSuiteRunsClient
 from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
@@ -94,7 +93,6 @@ class Vellum:
         self.document_indexes = DocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = DocumentsClient(client_wrapper=self._client_wrapper)
         self.folder_entities = FolderEntitiesClient(client_wrapper=self._client_wrapper)
-        self.model_versions = ModelVersionsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suite_runs = TestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
@@ -1051,7 +1049,6 @@ class AsyncVellum:
         self.document_indexes = AsyncDocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = AsyncDocumentsClient(client_wrapper=self._client_wrapper)
         self.folder_entities = AsyncFolderEntitiesClient(client_wrapper=self._client_wrapper)
-        self.model_versions = AsyncModelVersionsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suite_runs = AsyncTestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)

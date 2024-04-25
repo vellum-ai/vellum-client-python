@@ -30,7 +30,6 @@ from .array_variable_value_item import (
 )
 from .chat_history_enum import ChatHistoryEnum
 from .chat_history_input_request import ChatHistoryInputRequest
-from .chat_history_prompt_template_block import ChatHistoryPromptTemplateBlock
 from .chat_history_variable_value import ChatHistoryVariableValue
 from .chat_message import ChatMessage
 from .chat_message_content import (
@@ -47,9 +46,6 @@ from .chat_message_content_request import (
     ChatMessageContentRequest_Image,
     ChatMessageContentRequest_String,
 )
-from .chat_message_enum import ChatMessageEnum
-from .chat_message_prompt_template_block import ChatMessagePromptTemplateBlock
-from .chat_message_prompt_template_block_properties import ChatMessagePromptTemplateBlockProperties
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
 from .code_execution_node_array_result import CodeExecutionNodeArrayResult
@@ -144,9 +140,6 @@ from .function_call_chat_message_content_value import FunctionCallChatMessageCon
 from .function_call_chat_message_content_value_request import FunctionCallChatMessageContentValueRequest
 from .function_call_enum import FunctionCallEnum
 from .function_call_variable_value import FunctionCallVariableValue
-from .function_definition_enum import FunctionDefinitionEnum
-from .function_definition_prompt_template_block import FunctionDefinitionPromptTemplateBlock
-from .function_definition_prompt_template_block_properties import FunctionDefinitionPromptTemplateBlockProperties
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -166,9 +159,6 @@ from .initiated_enum import InitiatedEnum
 from .initiated_execute_prompt_event import InitiatedExecutePromptEvent
 from .initiated_prompt_execution_meta import InitiatedPromptExecutionMeta
 from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEvent
-from .jinja_enum import JinjaEnum
-from .jinja_prompt_template_block import JinjaPromptTemplateBlock
-from .jinja_prompt_template_block_properties import JinjaPromptTemplateBlockProperties
 from .json_enum import JsonEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
@@ -178,12 +168,6 @@ from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
 from .ml_model_usage import MlModelUsage
-from .model_version_build_config import ModelVersionBuildConfig
-from .model_version_exec_config import ModelVersionExecConfig
-from .model_version_exec_config_parameters import ModelVersionExecConfigParameters
-from .model_version_read import ModelVersionRead
-from .model_version_read_status_enum import ModelVersionReadStatusEnum
-from .model_version_sandbox_snapshot import ModelVersionSandboxSnapshot
 from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
 from .named_scenario_input_request import (
     NamedScenarioInputRequest,
@@ -292,16 +276,6 @@ from .prompt_output import (
     PromptOutput_Json,
     PromptOutput_String,
 )
-from .prompt_template_block import (
-    PromptTemplateBlock,
-    PromptTemplateBlock_ChatHistory,
-    PromptTemplateBlock_ChatMessage,
-    PromptTemplateBlock_FunctionDefinition,
-    PromptTemplateBlock_Jinja,
-)
-from .prompt_template_block_data import PromptTemplateBlockData
-from .prompt_template_block_state import PromptTemplateBlockState
-from .provider_enum import ProviderEnum
 from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .rejected_enum import RejectedEnum
 from .rejected_execute_prompt_event import RejectedExecutePromptEvent
@@ -594,7 +568,6 @@ __all__ = [
     "ArrayVariableValueItem_String",
     "ChatHistoryEnum",
     "ChatHistoryInputRequest",
-    "ChatHistoryPromptTemplateBlock",
     "ChatHistoryVariableValue",
     "ChatMessage",
     "ChatMessageContent",
@@ -607,9 +580,6 @@ __all__ = [
     "ChatMessageContent_FunctionCall",
     "ChatMessageContent_Image",
     "ChatMessageContent_String",
-    "ChatMessageEnum",
-    "ChatMessagePromptTemplateBlock",
-    "ChatMessagePromptTemplateBlockProperties",
     "ChatMessageRequest",
     "ChatMessageRole",
     "CodeExecutionNodeArrayResult",
@@ -696,9 +666,6 @@ __all__ = [
     "FunctionCallVariableValue",
     "FunctionCall_Fulfilled",
     "FunctionCall_Rejected",
-    "FunctionDefinitionEnum",
-    "FunctionDefinitionPromptTemplateBlock",
-    "FunctionDefinitionPromptTemplateBlockProperties",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
@@ -718,9 +685,6 @@ __all__ = [
     "InitiatedExecutePromptEvent",
     "InitiatedPromptExecutionMeta",
     "InitiatedWorkflowNodeResultEvent",
-    "JinjaEnum",
-    "JinjaPromptTemplateBlock",
-    "JinjaPromptTemplateBlockProperties",
     "JsonEnum",
     "JsonInputRequest",
     "JsonVariableValue",
@@ -730,12 +694,6 @@ __all__ = [
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
     "MlModelUsage",
-    "ModelVersionBuildConfig",
-    "ModelVersionExecConfig",
-    "ModelVersionExecConfigParameters",
-    "ModelVersionRead",
-    "ModelVersionReadStatusEnum",
-    "ModelVersionSandboxSnapshot",
     "NamedScenarioInputChatHistoryVariableValueRequest",
     "NamedScenarioInputRequest",
     "NamedScenarioInputRequest_ChatHistory",
@@ -830,14 +788,6 @@ __all__ = [
     "PromptOutput_FunctionCall",
     "PromptOutput_Json",
     "PromptOutput_String",
-    "PromptTemplateBlock",
-    "PromptTemplateBlockData",
-    "PromptTemplateBlockState",
-    "PromptTemplateBlock_ChatHistory",
-    "PromptTemplateBlock_ChatMessage",
-    "PromptTemplateBlock_FunctionDefinition",
-    "PromptTemplateBlock_Jinja",
-    "ProviderEnum",
     "RawPromptExecutionOverridesRequest",
     "RejectedEnum",
     "RejectedExecutePromptEvent",

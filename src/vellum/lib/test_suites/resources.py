@@ -126,7 +126,7 @@ class VellumTestSuiteRunResults:
         self._client = client or Vellum(
             api_key=get_api_key(),
         )
-        self._state = TestSuiteRunState.QUEUED
+        self._state = "QUEUED"
         self._executions: Generator[VellumTestSuiteRunExecution, None, None] | None = (
             None
         )
@@ -179,7 +179,7 @@ class VellumTestSuiteRunResults:
         while True:
             logger.debug("Polling for latest test suite run state...")
             self._refresh_test_suite_run_state()
-            if self._state not in {TestSuiteRunState.QUEUED, TestSuiteRunState.RUNNING}:
+            if self._state not in {"QUEUED", "RUNNING"}:
                 break
 
             current_time = time.time_ns()
@@ -190,10 +190,10 @@ class VellumTestSuiteRunResults:
 
             time.sleep(self._polling_interval / 1000.0)
 
-        if self._state == TestSuiteRunState.FAILED:
+        if self._state == "FAILED":
             raise TestSuiteRunResultsException("Test suite run failed")
 
-        if self._state == TestSuiteRunState.CANCELLED:
+        if self._state == "CANCELLED":
             raise TestSuiteRunResultsException("Test suite run was cancelled")
 
         raw_api_executions = get_all_results(self._list_paginated_executions)

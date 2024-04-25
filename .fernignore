@@ -3,6 +3,7 @@
 README.md
 LICENSE
 mypy.ini
+examples
 
 
 # added computed properties

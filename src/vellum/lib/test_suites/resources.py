@@ -184,7 +184,7 @@ class VellumTestSuiteRunResults:
         ):
             if output.type != "NUMBER":
                 raise TestSuiteRunResultsException(
-                    "Cannot calculate mean of non-numeric metric outputs"
+                    f"Expected a numeric metric output, but got a {output.type} output instead."
                 )
 
             metric_outputs.append(output)

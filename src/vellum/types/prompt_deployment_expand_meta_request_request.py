@@ -4,40 +4,36 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from ..core.pydantic_utilities import pydantic_v1
 
 
-class PromptDeploymentExpandMetaRequestRequest(pydantic.BaseModel):
-    model_name: typing.Optional[bool] = pydantic.Field(default=None)
+class PromptDeploymentExpandMetaRequestRequest(pydantic_v1.BaseModel):
+    model_name: typing.Optional[bool] = pydantic_v1.Field(default=None)
     """
     If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt Deployment.
     """
 
-    latency: typing.Optional[bool] = pydantic.Field(default=None)
+    latency: typing.Optional[bool] = pydantic_v1.Field(default=None)
     """
     If enabled, the response will include the time in nanoseconds it took to execute the Prompt Deployment.
     """
 
-    deployment_release_tag: typing.Optional[bool] = pydantic.Field(default=None)
+    deployment_release_tag: typing.Optional[bool] = pydantic_v1.Field(default=None)
     """
     If enabled, the response will include the release tag of the Prompt Deployment.
     """
 
-    prompt_version_id: typing.Optional[bool] = pydantic.Field(default=None)
+    prompt_version_id: typing.Optional[bool] = pydantic_v1.Field(default=None)
     """
     If enabled, the response will include the ID of the Prompt Version backing the deployment.
     """
 
-    finish_reason: typing.Optional[bool] = pydantic.Field(default=None)
+    finish_reason: typing.Optional[bool] = pydantic_v1.Field(default=None)
     """
     If enabled, the response will include the reason provided by the model for why the execution finished.
     """
 
-    usage: typing.Optional[bool] = pydantic.Field(default=None)
+    usage: typing.Optional[bool] = pydantic_v1.Field(default=None)
     """
     If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
     """
@@ -53,5 +49,5 @@ class PromptDeploymentExpandMetaRequestRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

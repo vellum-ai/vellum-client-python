@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .prompt_output import PromptOutput
 from .streaming_prompt_execution_meta import StreamingPromptExecutionMeta
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class StreamingExecutePromptEvent(pydantic.BaseModel):
+class StreamingExecutePromptEvent(pydantic_v1.BaseModel):
     """
     The data returned for each delta during the prompt execution stream.
     """
@@ -22,7 +18,7 @@ class StreamingExecutePromptEvent(pydantic.BaseModel):
     output_index: int
     execution_id: str
     meta: typing.Optional[StreamingPromptExecutionMeta] = None
-    raw: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    raw: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(default=None)
     """
     The subset of the raw response from the model that the request opted into with `expand_raw`.
     """
@@ -38,5 +34,5 @@ class StreamingExecutePromptEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

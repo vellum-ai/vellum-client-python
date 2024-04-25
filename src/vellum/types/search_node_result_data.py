@@ -4,17 +4,13 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .search_result import SearchResult
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class SearchNodeResultData(pydantic.BaseModel):
+class SearchNodeResultData(pydantic_v1.BaseModel):
     results_output_id: str
-    results: typing.List[SearchResult] = pydantic.Field()
+    results: typing.List[SearchResult] = pydantic_v1.Field()
     """
     The results of the search. Each result represents a chunk that matches the search query.
     """
@@ -33,5 +29,5 @@ class SearchNodeResultData(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

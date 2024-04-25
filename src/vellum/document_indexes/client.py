@@ -4,21 +4,17 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-from ...core.api_error import ApiError
-from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_dict import remove_none_from_dict
-from ...core.request_options import RequestOptions
-from ...types.document_index_read import DocumentIndexRead
-from ...types.entity_status import EntityStatus
-from ...types.environment_enum import EnvironmentEnum
-from ...types.paginated_document_index_read_list import PaginatedDocumentIndexReadList
+from ..core.api_error import ApiError
+from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ..core.jsonable_encoder import jsonable_encoder
+from ..core.pydantic_utilities import pydantic_v1
+from ..core.remove_none_from_dict import remove_none_from_dict
+from ..core.request_options import RequestOptions
+from ..types.document_index_read import DocumentIndexRead
+from ..types.entity_status import EntityStatus
+from ..types.environment_enum import EnvironmentEnum
+from ..types.paginated_document_index_read_list import PaginatedDocumentIndexReadList
 from .types.document_indexes_list_request_status import DocumentIndexesListRequestStatus
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -61,8 +57,8 @@ class DocumentIndexesClient:
         client.document_indexes.list()
         """
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
+            method="GET",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
             params=jsonable_encoder(
                 remove_none_from_dict(
                     {
@@ -93,7 +89,7 @@ class DocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedDocumentIndexReadList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(PaginatedDocumentIndexReadList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -169,8 +165,8 @@ class DocumentIndexesClient:
         if copy_documents_from_index_id is not OMIT:
             _request["copy_documents_from_index_id"] = copy_documents_from_index_id
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -195,7 +191,7 @@ class DocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -221,8 +217,8 @@ class DocumentIndexesClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
+            method="GET",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -243,7 +239,7 @@ class DocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -294,8 +290,8 @@ class DocumentIndexesClient:
         if environment is not OMIT:
             _request["environment"] = environment
         _response = self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(
+            method="PUT",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -322,7 +318,7 @@ class DocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -348,8 +344,8 @@ class DocumentIndexesClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(
+            method="DELETE",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -422,8 +418,8 @@ class DocumentIndexesClient:
         if environment is not OMIT:
             _request["environment"] = environment
         _response = self._client_wrapper.httpx_client.request(
-            "PATCH",
-            urllib.parse.urljoin(
+            method="PATCH",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -450,7 +446,7 @@ class DocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -495,8 +491,8 @@ class AsyncDocumentIndexesClient:
         await client.document_indexes.list()
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
+            method="GET",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
             params=jsonable_encoder(
                 remove_none_from_dict(
                     {
@@ -527,7 +523,7 @@ class AsyncDocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedDocumentIndexReadList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(PaginatedDocumentIndexReadList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -603,8 +599,8 @@ class AsyncDocumentIndexesClient:
         if copy_documents_from_index_id is not OMIT:
             _request["copy_documents_from_index_id"] = copy_documents_from_index_id
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/document-indexes"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -629,7 +625,7 @@ class AsyncDocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -655,8 +651,8 @@ class AsyncDocumentIndexesClient:
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
+            method="GET",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -677,7 +673,7 @@ class AsyncDocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -728,8 +724,8 @@ class AsyncDocumentIndexesClient:
         if environment is not OMIT:
             _request["environment"] = environment
         _response = await self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(
+            method="PUT",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -756,7 +752,7 @@ class AsyncDocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -782,8 +778,8 @@ class AsyncDocumentIndexesClient:
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(
+            method="DELETE",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -856,8 +852,8 @@ class AsyncDocumentIndexesClient:
         if environment is not OMIT:
             _request["environment"] = environment
         _response = await self._client_wrapper.httpx_client.request(
-            "PATCH",
-            urllib.parse.urljoin(
+            method="PATCH",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/document-indexes/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -884,7 +880,7 @@ class AsyncDocumentIndexesClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

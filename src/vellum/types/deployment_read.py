@@ -4,30 +4,26 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
 from .vellum_variable import VellumVariable
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class DeploymentRead(pydantic.BaseModel):
+class DeploymentRead(pydantic_v1.BaseModel):
     id: str
     created: dt.datetime
-    label: str = pydantic.Field()
+    label: str = pydantic_v1.Field()
     """
     A human-readable label for the deployment
     """
 
-    name: str = pydantic.Field()
+    name: str = pydantic_v1.Field()
     """
     A name that uniquely identifies this deployment within its workspace
     """
 
-    status: typing.Optional[EntityStatus] = pydantic.Field(default=None)
+    status: typing.Optional[EntityStatus] = pydantic_v1.Field(default=None)
     """
     The current status of the deployment
     
@@ -35,7 +31,7 @@ class DeploymentRead(pydantic.BaseModel):
     - `ARCHIVED` - Archived
     """
 
-    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(default=None)
+    environment: typing.Optional[EnvironmentEnum] = pydantic_v1.Field(default=None)
     """
     The environment this deployment is used in
     
@@ -46,7 +42,7 @@ class DeploymentRead(pydantic.BaseModel):
 
     last_deployed_on: dt.datetime
     input_variables: typing.List[VellumVariable]
-    active_model_version_ids: typing.List[str] = pydantic.Field()
+    active_model_version_ids: typing.List[str] = pydantic_v1.Field()
     """
     Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.
     """
@@ -62,5 +58,5 @@ class DeploymentRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

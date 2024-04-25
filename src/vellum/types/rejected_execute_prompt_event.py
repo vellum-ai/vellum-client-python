@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .vellum_error import VellumError
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class RejectedExecutePromptEvent(pydantic.BaseModel):
+class RejectedExecutePromptEvent(pydantic_v1.BaseModel):
     """
     The final data returned indicating an error occurred during the stream.
     """
@@ -33,5 +29,5 @@ class RejectedExecutePromptEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

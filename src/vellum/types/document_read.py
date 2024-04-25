@@ -4,30 +4,26 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .document_status import DocumentStatus
 from .processing_state_enum import ProcessingStateEnum
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class DocumentRead(pydantic.BaseModel):
+class DocumentRead(pydantic_v1.BaseModel):
     id: str
-    external_id: typing.Optional[str] = pydantic.Field(default=None)
+    external_id: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     The unique id of this document as it exists in the user's system.
     """
 
     last_uploaded_at: dt.datetime
-    label: str = pydantic.Field()
+    label: str = pydantic_v1.Field()
     """
     A human-readable label for the document. Defaults to the originally uploaded file's file name.
     """
 
-    processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(default=None)
+    processing_state: typing.Optional[ProcessingStateEnum] = pydantic_v1.Field(default=None)
     """
     The current processing state of the document
     
@@ -37,7 +33,7 @@ class DocumentRead(pydantic.BaseModel):
     - `FAILED` - Failed
     """
 
-    status: typing.Optional[DocumentStatus] = pydantic.Field(default=None)
+    status: typing.Optional[DocumentStatus] = pydantic_v1.Field(default=None)
     """
     The current status of the document
     
@@ -47,7 +43,7 @@ class DocumentRead(pydantic.BaseModel):
     original_file_url: typing.Optional[str] = None
     processed_file_url: typing.Optional[str] = None
     document_to_document_indexes: typing.List[DocumentDocumentToDocumentIndex]
-    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(default=None)
     """
     A previously supplied JSON object containing metadata that can be filtered on when searching.
     """
@@ -63,5 +59,5 @@ class DocumentRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -4,19 +4,15 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .execution_vellum_value import ExecutionVellumValue
 from .workflow_event_error import WorkflowEventError
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
 from .workflow_output import WorkflowOutput
 from .workflow_result_event_output_data import WorkflowResultEventOutputData
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class WorkflowResultEvent(pydantic.BaseModel):
+class WorkflowResultEvent(pydantic_v1.BaseModel):
     id: str
     state: WorkflowNodeResultEventState
     ts: dt.datetime
@@ -36,5 +32,5 @@ class WorkflowResultEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -4,25 +4,21 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from ..core.pydantic_utilities import pydantic_v1
 
 
-class SearchResultDocumentRequest(pydantic.BaseModel):
-    label: str = pydantic.Field()
+class SearchResultDocumentRequest(pydantic_v1.BaseModel):
+    label: str = pydantic_v1.Field()
     """
     The human-readable name for the document.
     """
 
-    external_id: typing.Optional[str] = pydantic.Field(default=None)
+    external_id: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     The unique ID of the document as represented in an external system and specified when it was originally uploaded.
     """
 
-    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(default=None)
     """
     A previously supplied JSON object containing metadata that can be filtered on when searching.
     """
@@ -38,5 +34,5 @@ class SearchResultDocumentRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

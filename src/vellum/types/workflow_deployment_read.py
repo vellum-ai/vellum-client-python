@@ -4,29 +4,25 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
 from .vellum_variable import VellumVariable
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class WorkflowDeploymentRead(pydantic.BaseModel):
+class WorkflowDeploymentRead(pydantic_v1.BaseModel):
     id: str
-    name: str = pydantic.Field()
+    name: str = pydantic_v1.Field()
     """
     A name that uniquely identifies this workflow deployment within its workspace
     """
 
-    label: str = pydantic.Field()
+    label: str = pydantic_v1.Field()
     """
     A human-readable label for the workflow deployment
     """
 
-    status: typing.Optional[EntityStatus] = pydantic.Field(default=None)
+    status: typing.Optional[EntityStatus] = pydantic_v1.Field(default=None)
     """
     The current status of the workflow deployment
     
@@ -34,7 +30,7 @@ class WorkflowDeploymentRead(pydantic.BaseModel):
     - `ARCHIVED` - Archived
     """
 
-    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(default=None)
+    environment: typing.Optional[EnvironmentEnum] = pydantic_v1.Field(default=None)
     """
     The environment this workflow deployment is used in
     
@@ -45,12 +41,12 @@ class WorkflowDeploymentRead(pydantic.BaseModel):
 
     created: dt.datetime
     last_deployed_on: dt.datetime
-    input_variables: typing.List[VellumVariable] = pydantic.Field()
+    input_variables: typing.List[VellumVariable] = pydantic_v1.Field()
     """
     The input variables this Workflow Deployment expects to receive values for when it is executed.
     """
 
-    output_variables: typing.List[VellumVariable] = pydantic.Field()
+    output_variables: typing.List[VellumVariable] = pydantic_v1.Field()
     """
     The output variables this Workflow Deployment produces values for when it's executed.
     """
@@ -66,5 +62,5 @@ class WorkflowDeploymentRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

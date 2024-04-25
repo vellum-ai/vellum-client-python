@@ -4,35 +4,31 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from ..core.pydantic_utilities import pydantic_v1
 
 
-class SubmitCompletionActualRequest(pydantic.BaseModel):
-    id: typing.Optional[str] = pydantic.Field(default=None)
+class SubmitCompletionActualRequest(pydantic_v1.BaseModel):
+    id: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     The Vellum-generated ID of a previously generated completion. Must provide either this or external_id.
     """
 
-    external_id: typing.Optional[str] = pydantic.Field(default=None)
+    external_id: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     The external ID that was originally provided when generating the completion that you'd now like to submit actuals for. Must provide either this or id.
     """
 
-    text: typing.Optional[str] = pydantic.Field(default=None)
+    text: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     Text representing what the completion _should_ have been.
     """
 
-    quality: typing.Optional[float] = pydantic.Field(default=None)
+    quality: typing.Optional[float] = pydantic_v1.Field(default=None)
     """
     A number between 0 and 1 representing the quality of the completion. 0 is the worst, 1 is the best.
     """
 
-    timestamp: typing.Optional[dt.datetime] = pydantic.Field(default=None)
+    timestamp: typing.Optional[dt.datetime] = pydantic_v1.Field(default=None)
     """
     Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
     """
@@ -48,5 +44,5 @@ class SubmitCompletionActualRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

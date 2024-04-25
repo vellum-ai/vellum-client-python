@@ -4,11 +4,11 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-from ...core.api_error import ApiError
-from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_dict import remove_none_from_dict
-from ...core.request_options import RequestOptions
+from ..core.api_error import ApiError
+from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ..core.jsonable_encoder import jsonable_encoder
+from ..core.remove_none_from_dict import remove_none_from_dict
+from ..core.request_options import RequestOptions
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -44,8 +44,8 @@ class FolderEntitiesClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(
+            method="POST",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/",
                 f"v1/folders/{jsonable_encoder(folder_id)}/add-entity",
             ),
@@ -111,8 +111,8 @@ class AsyncFolderEntitiesClient:
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(
+            method="POST",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/",
                 f"v1/folders/{jsonable_encoder(folder_id)}/add-entity",
             ),

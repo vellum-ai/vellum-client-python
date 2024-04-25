@@ -4,20 +4,16 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .chat_message_request import ChatMessageRequest
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class ChatHistoryInputRequest(pydantic.BaseModel):
+class ChatHistoryInputRequest(pydantic_v1.BaseModel):
     """
     A user input representing a list of chat messages
     """
 
-    name: str = pydantic.Field()
+    name: str = pydantic_v1.Field()
     """
     The variable's name, as defined in the deployment.
     """
@@ -35,5 +31,5 @@ class ChatHistoryInputRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

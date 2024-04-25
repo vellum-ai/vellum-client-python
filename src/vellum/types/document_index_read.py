@@ -4,29 +4,25 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class DocumentIndexRead(pydantic.BaseModel):
+class DocumentIndexRead(pydantic_v1.BaseModel):
     id: str
     created: dt.datetime
-    label: str = pydantic.Field()
+    label: str = pydantic_v1.Field()
     """
     A human-readable label for the document index
     """
 
-    name: str = pydantic.Field()
+    name: str = pydantic_v1.Field()
     """
     A name that uniquely identifies this index within its workspace
     """
 
-    status: typing.Optional[EntityStatus] = pydantic.Field(default=None)
+    status: typing.Optional[EntityStatus] = pydantic_v1.Field(default=None)
     """
     The current status of the document index
     
@@ -34,7 +30,7 @@ class DocumentIndexRead(pydantic.BaseModel):
     - `ARCHIVED` - Archived
     """
 
-    environment: typing.Optional[EnvironmentEnum] = pydantic.Field(default=None)
+    environment: typing.Optional[EnvironmentEnum] = pydantic_v1.Field(default=None)
     """
     The environment this document index is used in
     
@@ -43,7 +39,7 @@ class DocumentIndexRead(pydantic.BaseModel):
     - `PRODUCTION` - Production
     """
 
-    indexing_config: typing.Dict[str, typing.Any] = pydantic.Field()
+    indexing_config: typing.Dict[str, typing.Any] = pydantic_v1.Field()
     """
     Configuration representing how documents should be indexed
     """
@@ -59,5 +55,5 @@ class DocumentIndexRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

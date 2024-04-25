@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .external_test_case_execution import ExternalTestCaseExecution
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class TestSuiteRunExternalExecConfigData(pydantic.BaseModel):
-    executions: typing.List[ExternalTestCaseExecution] = pydantic.Field()
+class TestSuiteRunExternalExecConfigData(pydantic_v1.BaseModel):
+    executions: typing.List[ExternalTestCaseExecution] = pydantic_v1.Field()
     """
     The executions of some callable external to Vellum whose outputs you would like to evaluate.
     """
@@ -29,5 +25,5 @@ class TestSuiteRunExternalExecConfigData(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

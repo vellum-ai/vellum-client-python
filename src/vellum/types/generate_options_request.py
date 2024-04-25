@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .logprobs_enum import LogprobsEnum
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class GenerateOptionsRequest(pydantic.BaseModel):
-    logprobs: typing.Optional[LogprobsEnum] = pydantic.Field(default=None)
+class GenerateOptionsRequest(pydantic_v1.BaseModel):
+    logprobs: typing.Optional[LogprobsEnum] = pydantic_v1.Field(default=None)
     """
     Which logprobs to include, if any. Defaults to NONE.
     
@@ -32,5 +28,5 @@ class GenerateOptionsRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

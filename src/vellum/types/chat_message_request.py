@@ -4,20 +4,16 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .chat_message_content_request import ChatMessageContentRequest
 from .chat_message_role import ChatMessageRole
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class ChatMessageRequest(pydantic.BaseModel):
+class ChatMessageRequest(pydantic_v1.BaseModel):
     text: typing.Optional[str] = None
     role: ChatMessageRole
     content: typing.Optional[ChatMessageContentRequest] = None
-    source: typing.Optional[str] = pydantic.Field(default=None)
+    source: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     An optional identifier representing who or what generated this message.
     """
@@ -33,5 +29,5 @@ class ChatMessageRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

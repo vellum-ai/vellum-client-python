@@ -4,52 +4,41 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-from ...core.api_error import ApiError
-from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_dict import remove_none_from_dict
-from ...core.request_options import RequestOptions
-from ...errors.bad_request_error import BadRequestError
-from ...errors.forbidden_error import ForbiddenError
-from ...errors.internal_server_error import InternalServerError
-from ...errors.not_found_error import NotFoundError
-from ...types.deployment_provider_payload_response import DeploymentProviderPayloadResponse
-from ...types.deployment_read import DeploymentRead
-from ...types.paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
-from ...types.prompt_deployment_input_request import PromptDeploymentInputRequest
-from .types.deployments_list_request_status import DeploymentsListRequestStatus
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from ..core.api_error import ApiError
+from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ..core.jsonable_encoder import jsonable_encoder
+from ..core.pydantic_utilities import pydantic_v1
+from ..core.remove_none_from_dict import remove_none_from_dict
+from ..core.request_options import RequestOptions
+from ..types.named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
+from ..types.paginated_test_suite_test_case_list import PaginatedTestSuiteTestCaseList
+from ..types.test_suite_test_case import TestSuiteTestCase
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class DeploymentsClient:
+class TestSuitesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list(
+    def list_test_suite_test_cases(
         self,
+        id: str,
         *,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-        ordering: typing.Optional[str] = None,
-        status: typing.Optional[DeploymentsListRequestStatus] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PaginatedSlimDeploymentReadList:
+    ) -> PaginatedTestSuiteTestCaseList:
         """
+        List the Test Cases associated with a Test Suite
+
         Parameters:
+            - id: str. A UUID string identifying this test suite.
+
             - limit: typing.Optional[int]. Number of results to return per page.
 
             - offset: typing.Optional[int]. The initial index from which to return the results.
-
-            - ordering: typing.Optional[str]. Which field to use when ordering the results.
-
-            - status: typing.Optional[DeploymentsListRequestStatus]. status
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -58,18 +47,21 @@ class DeploymentsClient:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.deployments.list()
+        client.test_suites.list_test_suite_test_cases(
+            id="id",
+        )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/deployments"),
+            method="GET",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
+            ),
             params=jsonable_encoder(
                 remove_none_from_dict(
                     {
                         "limit": limit,
                         "offset": offset,
-                        "ordering": ordering,
-                        "status": status,
                         **(
                             request_options.get("additional_query_parameters", {})
                             if request_options is not None
@@ -93,79 +85,42 @@ class DeploymentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedSlimDeploymentReadList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(PaginatedTestSuiteTestCaseList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DeploymentRead:
-        """
-        Used to retrieve a deployment given its ID or name.
-
-        Parameters:
-            - id: str. Either the Deployment's ID or its unique name
-
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
-        from vellum.client import Vellum
-
-        client = Vellum(
-            api_key="YOUR_API_KEY",
-        )
-        client.deployments.retrieve(
-            id="id",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/deployments/{jsonable_encoder(id)}"
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DeploymentRead, _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def retrieve_provider_payload(
+    def upsert_test_suite_test_case(
         self,
+        id: str,
         *,
-        deployment_id: typing.Optional[str] = OMIT,
-        deployment_name: typing.Optional[str] = OMIT,
-        inputs: typing.Sequence[PromptDeploymentInputRequest],
-        release_tag: typing.Optional[str] = OMIT,
+        upsert_test_suite_test_case_request_id: typing.Optional[str] = OMIT,
+        label: typing.Optional[str] = OMIT,
+        input_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> DeploymentProviderPayloadResponse:
+    ) -> TestSuiteTestCase:
         """
+        Upserts a new test case for a test suite, keying off of the optionally provided test case id.
+
+        If an id is provided and has a match, the test case will be updated. If no id is provided or no match
+        is found, a new test case will be appended to the end.
+
+        Note that a full replacement of the test case is performed, so any fields not provided will be removed
+        or overwritten with default values.
+
         Parameters:
-            - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
+            - id: str. A UUID string identifying this test suite.
 
-            - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
+            - upsert_test_suite_test_case_request_id: typing.Optional[str].
 
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+            - label: typing.Optional[str].
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+            - input_values: typing.Sequence[NamedTestCaseVariableValueRequest].
+
+            - evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest].
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -174,21 +129,22 @@ class DeploymentsClient:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.deployments.retrieve_provider_payload(
-            inputs=[],
+        client.test_suites.upsert_test_suite_test_case(
+            id="id",
+            input_values=[],
+            evaluation_values=[],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if deployment_id is not OMIT:
-            _request["deployment_id"] = deployment_id
-        if deployment_name is not OMIT:
-            _request["deployment_name"] = deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
+        _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_values": evaluation_values}
+        if upsert_test_suite_test_case_request_id is not OMIT:
+            _request["id"] = upsert_test_suite_test_case_request_id
+        if label is not OMIT:
+            _request["label"] = label
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", "v1/deployments/provider-payload"
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
             ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
@@ -214,15 +170,61 @@ class DeploymentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DeploymentProviderPayloadResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            return pydantic_v1.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def delete_test_suite_test_case(
+        self, id: str, test_case_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
+        """
+        Deletes an existing test case for a test suite, keying off of the test case id.
+
+        Parameters:
+            - id: str. A UUID string identifying this test suite.
+
+            - test_case_id: str. An id identifying the test case that you'd like to delete
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.test_suites.delete_test_suite_test_case(
+            id="id",
+            test_case_id="test_case_id",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            method="DELETE",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases/{jsonable_encoder(test_case_id)}",
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+        )
+        if 200 <= _response.status_code < 300:
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -230,28 +232,27 @@ class DeploymentsClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
 
-class AsyncDeploymentsClient:
+class AsyncTestSuitesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list(
+    async def list_test_suite_test_cases(
         self,
+        id: str,
         *,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-        ordering: typing.Optional[str] = None,
-        status: typing.Optional[DeploymentsListRequestStatus] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PaginatedSlimDeploymentReadList:
+    ) -> PaginatedTestSuiteTestCaseList:
         """
+        List the Test Cases associated with a Test Suite
+
         Parameters:
+            - id: str. A UUID string identifying this test suite.
+
             - limit: typing.Optional[int]. Number of results to return per page.
 
             - offset: typing.Optional[int]. The initial index from which to return the results.
-
-            - ordering: typing.Optional[str]. Which field to use when ordering the results.
-
-            - status: typing.Optional[DeploymentsListRequestStatus]. status
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -260,18 +261,21 @@ class AsyncDeploymentsClient:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.deployments.list()
+        await client.test_suites.list_test_suite_test_cases(
+            id="id",
+        )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/deployments"),
+            method="GET",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
+            ),
             params=jsonable_encoder(
                 remove_none_from_dict(
                     {
                         "limit": limit,
                         "offset": offset,
-                        "ordering": ordering,
-                        "status": status,
                         **(
                             request_options.get("additional_query_parameters", {})
                             if request_options is not None
@@ -295,79 +299,42 @@ class AsyncDeploymentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedSlimDeploymentReadList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(PaginatedTestSuiteTestCaseList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DeploymentRead:
-        """
-        Used to retrieve a deployment given its ID or name.
-
-        Parameters:
-            - id: str. Either the Deployment's ID or its unique name
-
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
-        from vellum.client import AsyncVellum
-
-        client = AsyncVellum(
-            api_key="YOUR_API_KEY",
-        )
-        await client.deployments.retrieve(
-            id="id",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/deployments/{jsonable_encoder(id)}"
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DeploymentRead, _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def retrieve_provider_payload(
+    async def upsert_test_suite_test_case(
         self,
+        id: str,
         *,
-        deployment_id: typing.Optional[str] = OMIT,
-        deployment_name: typing.Optional[str] = OMIT,
-        inputs: typing.Sequence[PromptDeploymentInputRequest],
-        release_tag: typing.Optional[str] = OMIT,
+        upsert_test_suite_test_case_request_id: typing.Optional[str] = OMIT,
+        label: typing.Optional[str] = OMIT,
+        input_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> DeploymentProviderPayloadResponse:
+    ) -> TestSuiteTestCase:
         """
+        Upserts a new test case for a test suite, keying off of the optionally provided test case id.
+
+        If an id is provided and has a match, the test case will be updated. If no id is provided or no match
+        is found, a new test case will be appended to the end.
+
+        Note that a full replacement of the test case is performed, so any fields not provided will be removed
+        or overwritten with default values.
+
         Parameters:
-            - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
+            - id: str. A UUID string identifying this test suite.
 
-            - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
+            - upsert_test_suite_test_case_request_id: typing.Optional[str].
 
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+            - label: typing.Optional[str].
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+            - input_values: typing.Sequence[NamedTestCaseVariableValueRequest].
+
+            - evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest].
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -376,21 +343,22 @@ class AsyncDeploymentsClient:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.deployments.retrieve_provider_payload(
-            inputs=[],
+        await client.test_suites.upsert_test_suite_test_case(
+            id="id",
+            input_values=[],
+            evaluation_values=[],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if deployment_id is not OMIT:
-            _request["deployment_id"] = deployment_id
-        if deployment_name is not OMIT:
-            _request["deployment_name"] = deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
+        _request: typing.Dict[str, typing.Any] = {"input_values": input_values, "evaluation_values": evaluation_values}
+        if upsert_test_suite_test_case_request_id is not OMIT:
+            _request["id"] = upsert_test_suite_test_case_request_id
+        if label is not OMIT:
+            _request["label"] = label
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", "v1/deployments/provider-payload"
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
             ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
@@ -416,15 +384,61 @@ class AsyncDeploymentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DeploymentProviderPayloadResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            return pydantic_v1.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def delete_test_suite_test_case(
+        self, id: str, test_case_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
+        """
+        Deletes an existing test case for a test suite, keying off of the test case id.
+
+        Parameters:
+            - id: str. A UUID string identifying this test suite.
+
+            - test_case_id: str. An id identifying the test case that you'd like to delete
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.test_suites.delete_test_suite_test_case(
+            id="id",
+            test_case_id="test_case_id",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            method="DELETE",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/test-suites/{jsonable_encoder(id)}/test-cases/{jsonable_encoder(test_case_id)}",
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+        )
+        if 200 <= _response.status_code < 300:
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:

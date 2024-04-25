@@ -4,43 +4,49 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-from ...core.api_error import ApiError
-from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_dict import remove_none_from_dict
-from ...core.request_options import RequestOptions
-from ...types.paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
-from ...types.workflow_deployment_read import WorkflowDeploymentRead
-from .types.workflow_deployments_list_request_status import WorkflowDeploymentsListRequestStatus
+from ..core.api_error import ApiError
+from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ..core.jsonable_encoder import jsonable_encoder
+from ..core.pydantic_utilities import pydantic_v1
+from ..core.remove_none_from_dict import remove_none_from_dict
+from ..core.request_options import RequestOptions
+from ..types.named_scenario_input_request import NamedScenarioInputRequest
+from ..types.sandbox_scenario import SandboxScenario
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
 
 
-class WorkflowDeploymentsClient:
+class SandboxesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list(
+    def upsert_sandbox_scenario(
         self,
+        id: str,
         *,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        ordering: typing.Optional[str] = None,
-        status: typing.Optional[WorkflowDeploymentsListRequestStatus] = None,
+        label: typing.Optional[str] = OMIT,
+        inputs: typing.Sequence[NamedScenarioInputRequest],
+        scenario_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PaginatedSlimWorkflowDeploymentList:
+    ) -> SandboxScenario:
         """
+        Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
+
+        If an id is provided and has a match, the scenario will be updated. If no id is provided or no match
+        is found, a new scenario will be appended to the end.
+
+        Note that a full replacement of the scenario is performed, so any fields not provided will be removed
+        or overwritten with default values.
+
         Parameters:
-            - limit: typing.Optional[int]. Number of results to return per page.
+            - id: str. A UUID string identifying this sandbox.
 
-            - offset: typing.Optional[int]. The initial index from which to return the results.
+            - label: typing.Optional[str].
 
-            - ordering: typing.Optional[str]. Which field to use when ordering the results.
+            - inputs: typing.Sequence[NamedScenarioInputRequest]. The inputs for the scenario
 
-            - status: typing.Optional[WorkflowDeploymentsListRequestStatus]. status
+            - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -49,26 +55,31 @@ class WorkflowDeploymentsClient:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.workflow_deployments.list()
+        client.sandboxes.upsert_sandbox_scenario(
+            id="id",
+            label="Scenario 1",
+            inputs=[],
+        )
         """
+        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if label is not OMIT:
+            _request["label"] = label
+        if scenario_id is not OMIT:
+            _request["scenario_id"] = scenario_id
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/workflow-deployments"),
-            params=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                        "ordering": ordering,
-                        "status": status,
-                        **(
-                            request_options.get("additional_query_parameters", {})
-                            if request_options is not None
-                            else {}
-                        ),
-                    }
-                )
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{jsonable_encoder(id)}/scenarios"
             ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
             headers=jsonable_encoder(
                 remove_none_from_dict(
                     {
@@ -84,19 +95,23 @@ class WorkflowDeploymentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedSlimWorkflowDeploymentList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(SandboxScenario, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> WorkflowDeploymentRead:
+    def delete_sandbox_scenario(
+        self, id: str, scenario_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
-        Used to retrieve a workflow deployment given its ID or name.
+        Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
 
         Parameters:
-            - id: str. Either the Workflow Deployment's ID or its unique name
+            - id: str. A UUID string identifying this sandbox.
+
+            - scenario_id: str. An id identifying the scenario that you'd like to delete
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -105,14 +120,16 @@ class WorkflowDeploymentsClient:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.workflow_deployments.retrieve(
+        client.sandboxes.delete_sandbox_scenario(
             id="id",
+            scenario_id="scenario_id",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/workflow-deployments/{jsonable_encoder(id)}"
+            method="DELETE",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/sandboxes/{jsonable_encoder(id)}/scenarios/{jsonable_encoder(scenario_id)}",
             ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
@@ -132,7 +149,7 @@ class WorkflowDeploymentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -140,28 +157,36 @@ class WorkflowDeploymentsClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
 
-class AsyncWorkflowDeploymentsClient:
+class AsyncSandboxesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list(
+    async def upsert_sandbox_scenario(
         self,
+        id: str,
         *,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
-        ordering: typing.Optional[str] = None,
-        status: typing.Optional[WorkflowDeploymentsListRequestStatus] = None,
+        label: typing.Optional[str] = OMIT,
+        inputs: typing.Sequence[NamedScenarioInputRequest],
+        scenario_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> PaginatedSlimWorkflowDeploymentList:
+    ) -> SandboxScenario:
         """
+        Upserts a new scenario for a sandbox, keying off of the optionally provided scenario id.
+
+        If an id is provided and has a match, the scenario will be updated. If no id is provided or no match
+        is found, a new scenario will be appended to the end.
+
+        Note that a full replacement of the scenario is performed, so any fields not provided will be removed
+        or overwritten with default values.
+
         Parameters:
-            - limit: typing.Optional[int]. Number of results to return per page.
+            - id: str. A UUID string identifying this sandbox.
 
-            - offset: typing.Optional[int]. The initial index from which to return the results.
+            - label: typing.Optional[str].
 
-            - ordering: typing.Optional[str]. Which field to use when ordering the results.
+            - inputs: typing.Sequence[NamedScenarioInputRequest]. The inputs for the scenario
 
-            - status: typing.Optional[WorkflowDeploymentsListRequestStatus]. status
+            - scenario_id: typing.Optional[str]. The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -170,26 +195,31 @@ class AsyncWorkflowDeploymentsClient:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.workflow_deployments.list()
+        await client.sandboxes.upsert_sandbox_scenario(
+            id="id",
+            label="Scenario 1",
+            inputs=[],
+        )
         """
+        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if label is not OMIT:
+            _request["label"] = label
+        if scenario_id is not OMIT:
+            _request["scenario_id"] = scenario_id
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/workflow-deployments"),
-            params=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                        "ordering": ordering,
-                        "status": status,
-                        **(
-                            request_options.get("additional_query_parameters", {})
-                            if request_options is not None
-                            else {}
-                        ),
-                    }
-                )
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/", f"v1/sandboxes/{jsonable_encoder(id)}/scenarios"
             ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
             headers=jsonable_encoder(
                 remove_none_from_dict(
                     {
@@ -205,21 +235,23 @@ class AsyncWorkflowDeploymentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedSlimWorkflowDeploymentList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(SandboxScenario, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> WorkflowDeploymentRead:
+    async def delete_sandbox_scenario(
+        self, id: str, scenario_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
-        Used to retrieve a workflow deployment given its ID or name.
+        Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
 
         Parameters:
-            - id: str. Either the Workflow Deployment's ID or its unique name
+            - id: str. A UUID string identifying this sandbox.
+
+            - scenario_id: str. An id identifying the scenario that you'd like to delete
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -228,14 +260,16 @@ class AsyncWorkflowDeploymentsClient:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.workflow_deployments.retrieve(
+        await client.sandboxes.delete_sandbox_scenario(
             id="id",
+            scenario_id="scenario_id",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/", f"v1/workflow-deployments/{jsonable_encoder(id)}"
+            method="DELETE",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/sandboxes/{jsonable_encoder(id)}/scenarios/{jsonable_encoder(scenario_id)}",
             ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
@@ -255,7 +289,7 @@ class AsyncWorkflowDeploymentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:

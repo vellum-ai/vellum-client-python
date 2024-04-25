@@ -4,26 +4,22 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .chat_message_request import ChatMessageRequest
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class GenerateRequest(pydantic.BaseModel):
-    input_values: typing.Dict[str, typing.Any] = pydantic.Field()
+class GenerateRequest(pydantic_v1.BaseModel):
+    input_values: typing.Dict[str, typing.Any] = pydantic_v1.Field()
     """
     Key/value pairs for each template variable defined in the deployment's prompt.
     """
 
-    chat_history: typing.Optional[typing.List[ChatMessageRequest]] = pydantic.Field(default=None)
+    chat_history: typing.Optional[typing.List[ChatMessageRequest]] = pydantic_v1.Field(default=None)
     """
     Optionally provide a list of chat messages that'll be used in place of the special chat_history variable, if included in the prompt.
     """
 
-    external_ids: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    external_ids: typing.Optional[typing.List[str]] = pydantic_v1.Field(default=None)
     """
     Optionally include a unique identifier for each generation, as represented outside of Vellum. Note that this should generally be a list of length one.
     """
@@ -39,5 +35,5 @@ class GenerateRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

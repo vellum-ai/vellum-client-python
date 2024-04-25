@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .function_call import FunctionCall
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class WorkflowResultEventOutputDataFunctionCall(pydantic.BaseModel):
+class WorkflowResultEventOutputDataFunctionCall(pydantic_v1.BaseModel):
     """
     A Function Call output returned from a Workflow execution.
     """
@@ -22,7 +18,7 @@ class WorkflowResultEventOutputDataFunctionCall(pydantic.BaseModel):
     name: str
     state: WorkflowNodeResultEventState
     node_id: str
-    delta: typing.Optional[str] = pydantic.Field(default=None)
+    delta: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     The newly output string value. Only relevant for string outputs with a state of STREAMING.
     """
@@ -40,5 +36,5 @@ class WorkflowResultEventOutputDataFunctionCall(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

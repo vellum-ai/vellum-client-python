@@ -4,21 +4,17 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .test_suite_run_exec_config import TestSuiteRunExecConfig
 from .test_suite_run_state import TestSuiteRunState
 from .test_suite_run_test_suite import TestSuiteRunTestSuite
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class TestSuiteRunRead(pydantic.BaseModel):
+class TestSuiteRunRead(pydantic_v1.BaseModel):
     id: str
     created: dt.datetime
     test_suite: TestSuiteRunTestSuite
-    state: TestSuiteRunState = pydantic.Field()
+    state: TestSuiteRunState = pydantic_v1.Field()
     """
     The current state of this run
     
@@ -29,7 +25,7 @@ class TestSuiteRunRead(pydantic.BaseModel):
     - `CANCELLED` - Cancelled
     """
 
-    exec_config: typing.Optional[TestSuiteRunExecConfig] = pydantic.Field(default=None)
+    exec_config: typing.Optional[TestSuiteRunExecConfig] = pydantic_v1.Field(default=None)
     """
     Configuration that defines how the Test Suite should be run
     """
@@ -45,5 +41,5 @@ class TestSuiteRunRead(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

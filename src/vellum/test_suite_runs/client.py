@@ -4,19 +4,15 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-from ...core.api_error import ApiError
-from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_dict import remove_none_from_dict
-from ...core.request_options import RequestOptions
-from ...types.paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
-from ...types.test_suite_run_exec_config_request import TestSuiteRunExecConfigRequest
-from ...types.test_suite_run_read import TestSuiteRunRead
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from ..core.api_error import ApiError
+from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ..core.jsonable_encoder import jsonable_encoder
+from ..core.pydantic_utilities import pydantic_v1
+from ..core.remove_none_from_dict import remove_none_from_dict
+from ..core.request_options import RequestOptions
+from ..types.paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
+from ..types.test_suite_run_exec_config_request import TestSuiteRunExecConfigRequest
+from ..types.test_suite_run_read import TestSuiteRunRead
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -64,8 +60,8 @@ class TestSuiteRunsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/test-suite-runs"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/test-suite-runs"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -90,7 +86,7 @@ class TestSuiteRunsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(TestSuiteRunRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(TestSuiteRunRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -116,8 +112,8 @@ class TestSuiteRunsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
+            method="GET",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/test-suite-runs/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -138,7 +134,7 @@ class TestSuiteRunsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(TestSuiteRunRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(TestSuiteRunRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -179,8 +175,8 @@ class TestSuiteRunsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
+            method="GET",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/",
                 f"v1/test-suite-runs/{jsonable_encoder(id)}/executions",
             ),
@@ -213,7 +209,7 @@ class TestSuiteRunsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedTestSuiteRunExecutionList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(PaginatedTestSuiteRunExecutionList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -263,8 +259,8 @@ class AsyncTestSuiteRunsClient:
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/test-suite-runs"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/test-suite-runs"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -289,7 +285,7 @@ class AsyncTestSuiteRunsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(TestSuiteRunRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(TestSuiteRunRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -315,8 +311,8 @@ class AsyncTestSuiteRunsClient:
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
+            method="GET",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/test-suite-runs/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -337,7 +333,7 @@ class AsyncTestSuiteRunsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(TestSuiteRunRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(TestSuiteRunRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -378,8 +374,8 @@ class AsyncTestSuiteRunsClient:
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
+            method="GET",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/",
                 f"v1/test-suite-runs/{jsonable_encoder(id)}/executions",
             ),
@@ -412,7 +408,7 @@ class AsyncTestSuiteRunsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedTestSuiteRunExecutionList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(PaginatedTestSuiteRunExecutionList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

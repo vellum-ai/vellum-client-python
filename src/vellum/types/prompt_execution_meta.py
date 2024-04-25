@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .finish_reason_enum import FinishReasonEnum
 from .ml_model_usage import MlModelUsage
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class PromptExecutionMeta(pydantic.BaseModel):
+class PromptExecutionMeta(pydantic_v1.BaseModel):
     """
     The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
     """
@@ -36,5 +32,5 @@ class PromptExecutionMeta(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

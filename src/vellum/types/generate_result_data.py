@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class GenerateResultData(pydantic.BaseModel):
-    completions: typing.List[EnrichedNormalizedCompletion] = pydantic.Field()
+class GenerateResultData(pydantic_v1.BaseModel):
+    completions: typing.List[EnrichedNormalizedCompletion] = pydantic_v1.Field()
     """
     The generated completions. This will generally be a list of length one.
     """
@@ -29,5 +25,5 @@ class GenerateResultData(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

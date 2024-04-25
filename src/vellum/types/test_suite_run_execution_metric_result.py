@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .test_suite_run_execution_metric_definition import TestSuiteRunExecutionMetricDefinition
 from .test_suite_run_metric_output import TestSuiteRunMetricOutput
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class TestSuiteRunExecutionMetricResult(pydantic.BaseModel):
+class TestSuiteRunExecutionMetricResult(pydantic_v1.BaseModel):
     metric_id: str
     outputs: typing.List[TestSuiteRunMetricOutput]
     metric_label: typing.Optional[str] = None
@@ -30,5 +26,5 @@ class TestSuiteRunExecutionMetricResult(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

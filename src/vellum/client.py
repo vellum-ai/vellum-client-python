@@ -10,21 +10,21 @@ import httpx
 from .core.api_error import ApiError
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .core.jsonable_encoder import jsonable_encoder
+from .core.pydantic_utilities import pydantic_v1
 from .core.remove_none_from_dict import remove_none_from_dict
 from .core.request_options import RequestOptions
+from .deployments.client import AsyncDeploymentsClient, DeploymentsClient
+from .document_indexes.client import AsyncDocumentIndexesClient, DocumentIndexesClient
+from .documents.client import AsyncDocumentsClient, DocumentsClient
 from .environment import VellumEnvironment
 from .errors.bad_request_error import BadRequestError
 from .errors.forbidden_error import ForbiddenError
 from .errors.internal_server_error import InternalServerError
 from .errors.not_found_error import NotFoundError
-from .resources.deployments.client import AsyncDeploymentsClient, DeploymentsClient
-from .resources.document_indexes.client import AsyncDocumentIndexesClient, DocumentIndexesClient
-from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
-from .resources.folder_entities.client import AsyncFolderEntitiesClient, FolderEntitiesClient
-from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
-from .resources.test_suite_runs.client import AsyncTestSuiteRunsClient, TestSuiteRunsClient
-from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
-from .resources.workflow_deployments.client import AsyncWorkflowDeploymentsClient, WorkflowDeploymentsClient
+from .folder_entities.client import AsyncFolderEntitiesClient, FolderEntitiesClient
+from .sandboxes.client import AsyncSandboxesClient, SandboxesClient
+from .test_suite_runs.client import AsyncTestSuiteRunsClient, TestSuiteRunsClient
+from .test_suites.client import AsyncTestSuitesClient, TestSuitesClient
 from .types.execute_prompt_event import ExecutePromptEvent
 from .types.execute_prompt_response import ExecutePromptResponse
 from .types.execute_workflow_response import ExecuteWorkflowResponse
@@ -42,11 +42,7 @@ from .types.submit_workflow_execution_actual_request import SubmitWorkflowExecut
 from .types.workflow_execution_event_type import WorkflowExecutionEventType
 from .types.workflow_request_input_request import WorkflowRequestInputRequest
 from .types.workflow_stream_event import WorkflowStreamEvent
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from .workflow_deployments.client import AsyncWorkflowDeploymentsClient, WorkflowDeploymentsClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -65,6 +61,8 @@ class Vellum:
 
         - timeout: typing.Optional[float]. The timeout to be used, in seconds, for requests by default the timeout is 60 seconds, unless a custom httpx client is used, in which case a default is not set.
 
+        - follow_redirects: typing.Optional[bool]. Whether the default httpx client follows redirects or not, this is irrelevant if a custom httpx client is passed in.
+
         - httpx_client: typing.Optional[httpx.Client]. The httpx client to use for making requests, a preconfigured client is used by default, however this is useful should you want to pass in any custom httpx configuration.
     ---
     from vellum.client import Vellum
@@ -80,13 +78,18 @@ class Vellum:
         environment: VellumEnvironment = VellumEnvironment.PRODUCTION,
         api_key: str,
         timeout: typing.Optional[float] = None,
+        follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.Client] = None,
     ):
         _defaulted_timeout = timeout if timeout is not None else None if httpx_client is None else None
         self._client_wrapper = SyncClientWrapper(
             environment=environment,
             api_key=api_key,
-            httpx_client=httpx.Client(timeout=_defaulted_timeout) if httpx_client is None else httpx_client,
+            httpx_client=httpx_client
+            if httpx_client is not None
+            else httpx.Client(timeout=_defaulted_timeout, follow_redirects=follow_redirects)
+            if follow_redirects is not None
+            else httpx.Client(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
         self.deployments = DeploymentsClient(client_wrapper=self._client_wrapper)
@@ -192,8 +195,8 @@ class Vellum:
         if metadata is not OMIT:
             _request["metadata"] = metadata
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -218,15 +221,15 @@ class Vellum:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -327,8 +330,8 @@ class Vellum:
         if metadata is not OMIT:
             _request["metadata"] = metadata
         with self._client_wrapper.httpx_client.stream(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt-stream"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt-stream"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -356,17 +359,17 @@ class Vellum:
                 for _text in _response.iter_lines():
                     if len(_text) == 0:
                         continue
-                    yield pydantic.parse_obj_as(ExecutePromptEvent, json.loads(_text))  # type: ignore
+                    yield pydantic_v1.parse_obj_as(ExecutePromptEvent, json.loads(_text))  # type: ignore
                 return
             _response.read()
             if _response.status_code == 400:
-                raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 403:
-                raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 404:
-                raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
-                raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
                 _response_json = _response.json()
             except JSONDecodeError:
@@ -428,8 +431,8 @@ class Vellum:
         if external_id is not OMIT:
             _request["external_id"] = external_id
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -454,13 +457,13 @@ class Vellum:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -496,10 +499,7 @@ class Vellum:
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
-        from vellum import (
-            WorkflowExecutionEventType,
-            WorkflowRequestInputRequest_String,
-        )
+        from vellum import WorkflowRequestInputRequest_String
         from vellum.client import Vellum
 
         client = Vellum(
@@ -516,7 +516,7 @@ class Vellum:
             workflow_deployment_name="string",
             release_tag="string",
             external_id="string",
-            event_types=[WorkflowExecutionEventType.NODE],
+            event_types=["NODE"],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
@@ -531,8 +531,10 @@ class Vellum:
         if event_types is not OMIT:
             _request["event_types"] = event_types
         with self._client_wrapper.httpx_client.stream(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow-stream"),
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow-stream"
+            ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -560,15 +562,15 @@ class Vellum:
                 for _text in _response.iter_lines():
                     if len(_text) == 0:
                         continue
-                    yield pydantic.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
+                    yield pydantic_v1.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
                 return
             _response.read()
             if _response.status_code == 400:
-                raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 404:
-                raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
-                raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
                 _response_json = _response.json()
             except JSONDecodeError:
@@ -622,8 +624,8 @@ class Vellum:
         if options is not OMIT:
             _request["options"] = options
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -648,15 +650,15 @@ class Vellum:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -691,10 +693,8 @@ class Vellum:
         from vellum import (
             ChatMessageContentRequest_String,
             ChatMessageRequest,
-            ChatMessageRole,
             GenerateOptionsRequest,
             GenerateRequest,
-            LogprobsEnum,
         )
         from vellum.client import Vellum
 
@@ -710,7 +710,7 @@ class Vellum:
                     chat_history=[
                         ChatMessageRequest(
                             text="string",
-                            role=ChatMessageRole.SYSTEM,
+                            role="SYSTEM",
                             content=ChatMessageContentRequest_String(),
                             source="string",
                         )
@@ -719,7 +719,7 @@ class Vellum:
                 )
             ],
             options=GenerateOptionsRequest(
-                logprobs=LogprobsEnum.ALL,
+                logprobs="ALL",
             ),
         )
         """
@@ -731,8 +731,8 @@ class Vellum:
         if options is not OMIT:
             _request["options"] = options
         with self._client_wrapper.httpx_client.stream(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate-stream"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate-stream"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -760,17 +760,17 @@ class Vellum:
                 for _text in _response.iter_lines():
                     if len(_text) == 0:
                         continue
-                    yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
+                    yield pydantic_v1.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
                 return
             _response.read()
             if _response.status_code == 400:
-                raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 403:
-                raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 404:
-                raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
-                raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
                 _response_json = _response.json()
             except JSONDecodeError:
@@ -819,8 +819,8 @@ class Vellum:
         if options is not OMIT:
             _request["options"] = options
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/search"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/search"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -845,13 +845,13 @@ class Vellum:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(SearchResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(SearchResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -896,8 +896,10 @@ class Vellum:
         if deployment_name is not OMIT:
             _request["deployment_name"] = deployment_name
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/submit-completion-actuals"),
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().predict}/", "v1/submit-completion-actuals"
+            ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -924,11 +926,11 @@ class Vellum:
         if 200 <= _response.status_code < 300:
             return
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -972,8 +974,8 @@ class Vellum:
         if external_id is not OMIT:
             _request["external_id"] = external_id
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(
+            method="POST",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().predict}/", "v1/submit-workflow-execution-actuals"
             ),
             params=jsonable_encoder(
@@ -1021,6 +1023,8 @@ class AsyncVellum:
 
         - timeout: typing.Optional[float]. The timeout to be used, in seconds, for requests by default the timeout is 60 seconds, unless a custom httpx client is used, in which case a default is not set.
 
+        - follow_redirects: typing.Optional[bool]. Whether the default httpx client follows redirects or not, this is irrelevant if a custom httpx client is passed in.
+
         - httpx_client: typing.Optional[httpx.AsyncClient]. The httpx client to use for making requests, a preconfigured client is used by default, however this is useful should you want to pass in any custom httpx configuration.
     ---
     from vellum.client import AsyncVellum
@@ -1036,13 +1040,18 @@ class AsyncVellum:
         environment: VellumEnvironment = VellumEnvironment.PRODUCTION,
         api_key: str,
         timeout: typing.Optional[float] = None,
+        follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.AsyncClient] = None,
     ):
         _defaulted_timeout = timeout if timeout is not None else None if httpx_client is None else None
         self._client_wrapper = AsyncClientWrapper(
             environment=environment,
             api_key=api_key,
-            httpx_client=httpx.AsyncClient(timeout=_defaulted_timeout) if httpx_client is None else httpx_client,
+            httpx_client=httpx_client
+            if httpx_client is not None
+            else httpx.AsyncClient(timeout=_defaulted_timeout, follow_redirects=follow_redirects)
+            if follow_redirects is not None
+            else httpx.AsyncClient(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
         self.deployments = AsyncDeploymentsClient(client_wrapper=self._client_wrapper)
@@ -1148,8 +1157,8 @@ class AsyncVellum:
         if metadata is not OMIT:
             _request["metadata"] = metadata
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -1174,15 +1183,15 @@ class AsyncVellum:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -1283,8 +1292,8 @@ class AsyncVellum:
         if metadata is not OMIT:
             _request["metadata"] = metadata
         async with self._client_wrapper.httpx_client.stream(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt-stream"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt-stream"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -1312,17 +1321,17 @@ class AsyncVellum:
                 async for _text in _response.aiter_lines():
                     if len(_text) == 0:
                         continue
-                    yield pydantic.parse_obj_as(ExecutePromptEvent, json.loads(_text))  # type: ignore
+                    yield pydantic_v1.parse_obj_as(ExecutePromptEvent, json.loads(_text))  # type: ignore
                 return
             await _response.aread()
             if _response.status_code == 400:
-                raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 403:
-                raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 404:
-                raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
-                raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
                 _response_json = _response.json()
             except JSONDecodeError:
@@ -1384,8 +1393,8 @@ class AsyncVellum:
         if external_id is not OMIT:
             _request["external_id"] = external_id
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -1410,13 +1419,13 @@ class AsyncVellum:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -1452,10 +1461,7 @@ class AsyncVellum:
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
-        from vellum import (
-            WorkflowExecutionEventType,
-            WorkflowRequestInputRequest_String,
-        )
+        from vellum import WorkflowRequestInputRequest_String
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -1472,7 +1478,7 @@ class AsyncVellum:
             workflow_deployment_name="string",
             release_tag="string",
             external_id="string",
-            event_types=[WorkflowExecutionEventType.NODE],
+            event_types=["NODE"],
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
@@ -1487,8 +1493,10 @@ class AsyncVellum:
         if event_types is not OMIT:
             _request["event_types"] = event_types
         async with self._client_wrapper.httpx_client.stream(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow-stream"),
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow-stream"
+            ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -1516,15 +1524,15 @@ class AsyncVellum:
                 async for _text in _response.aiter_lines():
                     if len(_text) == 0:
                         continue
-                    yield pydantic.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
+                    yield pydantic_v1.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
                 return
             await _response.aread()
             if _response.status_code == 400:
-                raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 404:
-                raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
-                raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
                 _response_json = _response.json()
             except JSONDecodeError:
@@ -1578,8 +1586,8 @@ class AsyncVellum:
         if options is not OMIT:
             _request["options"] = options
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -1604,15 +1612,15 @@ class AsyncVellum:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 403:
-            raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -1647,10 +1655,8 @@ class AsyncVellum:
         from vellum import (
             ChatMessageContentRequest_String,
             ChatMessageRequest,
-            ChatMessageRole,
             GenerateOptionsRequest,
             GenerateRequest,
-            LogprobsEnum,
         )
         from vellum.client import AsyncVellum
 
@@ -1666,7 +1672,7 @@ class AsyncVellum:
                     chat_history=[
                         ChatMessageRequest(
                             text="string",
-                            role=ChatMessageRole.SYSTEM,
+                            role="SYSTEM",
                             content=ChatMessageContentRequest_String(),
                             source="string",
                         )
@@ -1675,7 +1681,7 @@ class AsyncVellum:
                 )
             ],
             options=GenerateOptionsRequest(
-                logprobs=LogprobsEnum.ALL,
+                logprobs="ALL",
             ),
         )
         """
@@ -1687,8 +1693,8 @@ class AsyncVellum:
         if options is not OMIT:
             _request["options"] = options
         async with self._client_wrapper.httpx_client.stream(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate-stream"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate-stream"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -1716,17 +1722,17 @@ class AsyncVellum:
                 async for _text in _response.aiter_lines():
                     if len(_text) == 0:
                         continue
-                    yield pydantic.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
+                    yield pydantic_v1.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
                 return
             await _response.aread()
             if _response.status_code == 400:
-                raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 403:
-                raise ForbiddenError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 404:
-                raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             if _response.status_code == 500:
-                raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
                 _response_json = _response.json()
             except JSONDecodeError:
@@ -1775,8 +1781,8 @@ class AsyncVellum:
         if options is not OMIT:
             _request["options"] = options
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/search"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/search"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -1801,13 +1807,13 @@ class AsyncVellum:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(SearchResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(SearchResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -1852,8 +1858,10 @@ class AsyncVellum:
         if deployment_name is not OMIT:
             _request["deployment_name"] = deployment_name
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/submit-completion-actuals"),
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().predict}/", "v1/submit-completion-actuals"
+            ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -1880,11 +1888,11 @@ class AsyncVellum:
         if 200 <= _response.status_code < 300:
             return
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -1928,8 +1936,8 @@ class AsyncVellum:
         if external_id is not OMIT:
             _request["external_id"] = external_id
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(
+            method="POST",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().predict}/", "v1/submit-workflow-execution-actuals"
             ),
             params=jsonable_encoder(

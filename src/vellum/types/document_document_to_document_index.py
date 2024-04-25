@@ -4,26 +4,22 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .indexing_state_enum import IndexingStateEnum
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
-    id: str = pydantic.Field()
+class DocumentDocumentToDocumentIndex(pydantic_v1.BaseModel):
+    id: str = pydantic_v1.Field()
     """
     Vellum-generated ID that uniquely identifies this link.
     """
 
-    document_index_id: str = pydantic.Field()
+    document_index_id: str = pydantic_v1.Field()
     """
     Vellum-generated ID that uniquely identifies the index this document is included in.
     """
 
-    indexing_state: typing.Optional[IndexingStateEnum] = pydantic.Field(default=None)
+    indexing_state: typing.Optional[IndexingStateEnum] = pydantic_v1.Field(default=None)
     """
     An enum value representing where this document is along its indexing lifecycle for this index.
     
@@ -45,5 +41,5 @@ class DocumentDocumentToDocumentIndex(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

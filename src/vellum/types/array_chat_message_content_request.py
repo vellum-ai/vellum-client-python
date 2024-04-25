@@ -4,15 +4,11 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .array_chat_message_content_item_request import ArrayChatMessageContentItemRequest
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class ArrayChatMessageContentRequest(pydantic.BaseModel):
+class ArrayChatMessageContentRequest(pydantic_v1.BaseModel):
     """
     A list of chat message content items.
     """
@@ -30,5 +26,5 @@ class ArrayChatMessageContentRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

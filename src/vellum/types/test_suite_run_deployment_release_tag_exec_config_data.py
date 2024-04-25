@@ -4,20 +4,16 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from ..core.pydantic_utilities import pydantic_v1
 
 
-class TestSuiteRunDeploymentReleaseTagExecConfigData(pydantic.BaseModel):
-    deployment_id: str = pydantic.Field()
+class TestSuiteRunDeploymentReleaseTagExecConfigData(pydantic_v1.BaseModel):
+    deployment_id: str = pydantic_v1.Field()
     """
     The ID of the Prompt Deployment to run the Test Suite against.
     """
 
-    tag: typing.Optional[str] = pydantic.Field(default=None)
+    tag: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     A tag identifying which release of the Prompt Deployment to run the Test Suite against. Useful for testing past versions of the Prompt Deployment
     """
@@ -33,5 +29,5 @@ class TestSuiteRunDeploymentReleaseTagExecConfigData(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

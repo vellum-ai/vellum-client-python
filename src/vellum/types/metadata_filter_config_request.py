@@ -4,17 +4,13 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .logical_operator import LogicalOperator
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class MetadataFilterConfigRequest(pydantic.BaseModel):
+class MetadataFilterConfigRequest(pydantic_v1.BaseModel):
     combinator: typing.Optional[MetadataFilterRuleCombinator] = None
     negated: typing.Optional[bool] = None
     rules: typing.Optional[typing.List[MetadataFilterRuleRequest]] = None
@@ -33,5 +29,5 @@ class MetadataFilterConfigRequest(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

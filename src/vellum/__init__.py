@@ -485,10 +485,7 @@ from .types import (
     WorkflowStreamEvent_Workflow,
 )
 from .errors import BadRequestError, ForbiddenError, InternalServerError, NotFoundError
-from .resources import (
-    DeploymentsListRequestStatus,
-    DocumentIndexesListRequestStatus,
-    WorkflowDeploymentsListRequestStatus,
+from . import (
     deployments,
     document_indexes,
     documents,
@@ -498,8 +495,11 @@ from .resources import (
     test_suites,
     workflow_deployments,
 )
+from .deployments import DeploymentsListRequestStatus
+from .document_indexes import DocumentIndexesListRequestStatus
 from .environment import VellumEnvironment
 from .version import __version__
+from .workflow_deployments import WorkflowDeploymentsListRequestStatus
 
 __all__ = [
     "ApiNodeResult",

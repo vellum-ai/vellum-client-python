@@ -4,16 +4,12 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .fulfilled_prompt_execution_meta import FulfilledPromptExecutionMeta
 from .prompt_output import PromptOutput
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class FulfilledExecutePromptEvent(pydantic.BaseModel):
+class FulfilledExecutePromptEvent(pydantic_v1.BaseModel):
     """
     The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
     """
@@ -33,5 +29,5 @@ class FulfilledExecutePromptEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -4,39 +4,35 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .document_status import DocumentStatus
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class SlimDocument(pydantic.BaseModel):
-    id: str = pydantic.Field()
+class SlimDocument(pydantic_v1.BaseModel):
+    id: str = pydantic_v1.Field()
     """
     Vellum-generated ID that uniquely identifies this document.
     """
 
-    external_id: typing.Optional[str] = pydantic.Field(default=None)
+    external_id: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     The external ID that was originally provided when uploading the document.
     """
 
-    last_uploaded_at: dt.datetime = pydantic.Field()
+    last_uploaded_at: dt.datetime = pydantic_v1.Field()
     """
     A timestamp representing when this document was most recently uploaded.
     """
 
-    label: str = pydantic.Field()
+    label: str = pydantic_v1.Field()
     """
     Human-friendly name for this document.
     """
 
-    processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(default=None)
+    processing_state: typing.Optional[ProcessingStateEnum] = pydantic_v1.Field(default=None)
     """
     An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.
     
@@ -46,7 +42,7 @@ class SlimDocument(pydantic.BaseModel):
     - `FAILED` - Failed
     """
 
-    processing_failure_reason: typing.Optional[ProcessingFailureReasonEnum] = pydantic.Field(default=None)
+    processing_failure_reason: typing.Optional[ProcessingFailureReasonEnum] = pydantic_v1.Field(default=None)
     """
     An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.
     
@@ -54,19 +50,19 @@ class SlimDocument(pydantic.BaseModel):
     - `INVALID_FILE` - Invalid File
     """
 
-    status: typing.Optional[DocumentStatus] = pydantic.Field(default=None)
+    status: typing.Optional[DocumentStatus] = pydantic_v1.Field(default=None)
     """
     The document's current status.
     
     - `ACTIVE` - Active
     """
 
-    keywords: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    keywords: typing.Optional[typing.List[str]] = pydantic_v1.Field(default=None)
     """
     A list of keywords associated with this document. Originally provided when uploading the document.
     """
 
-    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(default=None)
     """
     A previously supplied JSON object containing metadata that can be filtered on when searching.
     """
@@ -84,5 +80,5 @@ class SlimDocument(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

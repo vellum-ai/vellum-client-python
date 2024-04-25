@@ -4,24 +4,20 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-from ... import core
-from ...core.api_error import ApiError
-from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...core.jsonable_encoder import jsonable_encoder
-from ...core.remove_none_from_dict import remove_none_from_dict
-from ...core.request_options import RequestOptions
-from ...errors.bad_request_error import BadRequestError
-from ...errors.internal_server_error import InternalServerError
-from ...errors.not_found_error import NotFoundError
-from ...types.document_read import DocumentRead
-from ...types.document_status import DocumentStatus
-from ...types.paginated_slim_document_list import PaginatedSlimDocumentList
-from ...types.upload_document_response import UploadDocumentResponse
-
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
+from .. import core
+from ..core.api_error import ApiError
+from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ..core.jsonable_encoder import jsonable_encoder
+from ..core.pydantic_utilities import pydantic_v1
+from ..core.remove_none_from_dict import remove_none_from_dict
+from ..core.request_options import RequestOptions
+from ..errors.bad_request_error import BadRequestError
+from ..errors.internal_server_error import InternalServerError
+from ..errors.not_found_error import NotFoundError
+from ..types.document_read import DocumentRead
+from ..types.document_status import DocumentStatus
+from ..types.paginated_slim_document_list import PaginatedSlimDocumentList
+from ..types.upload_document_response import UploadDocumentResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -62,8 +58,8 @@ class DocumentsClient:
         client.documents.list()
         """
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/documents"),
+            method="GET",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/documents"),
             params=jsonable_encoder(
                 remove_none_from_dict(
                     {
@@ -94,7 +90,7 @@ class DocumentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -120,8 +116,8 @@ class DocumentsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
+            method="GET",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -142,7 +138,7 @@ class DocumentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -166,8 +162,8 @@ class DocumentsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(
+            method="DELETE",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -236,8 +232,8 @@ class DocumentsClient:
         if metadata is not OMIT:
             _request["metadata"] = metadata
         _response = self._client_wrapper.httpx_client.request(
-            "PATCH",
-            urllib.parse.urljoin(
+            method="PATCH",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -264,7 +260,7 @@ class DocumentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -315,11 +311,13 @@ class DocumentsClient:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.documents.upload()
+        client.documents.upload(
+            label="label",
+        )
         """
         _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().documents}/", "v1/upload-document"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().documents}/", "v1/upload-document"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -365,13 +363,13 @@ class DocumentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -414,8 +412,8 @@ class AsyncDocumentsClient:
         await client.documents.list()
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/documents"),
+            method="GET",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().default}/", "v1/documents"),
             params=jsonable_encoder(
                 remove_none_from_dict(
                     {
@@ -446,7 +444,7 @@ class AsyncDocumentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(PaginatedSlimDocumentList, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -472,8 +470,8 @@ class AsyncDocumentsClient:
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
+            method="GET",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -494,7 +492,7 @@ class AsyncDocumentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -518,8 +516,8 @@ class AsyncDocumentsClient:
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(
+            method="DELETE",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -588,8 +586,8 @@ class AsyncDocumentsClient:
         if metadata is not OMIT:
             _request["metadata"] = metadata
         _response = await self._client_wrapper.httpx_client.request(
-            "PATCH",
-            urllib.parse.urljoin(
+            method="PATCH",
+            url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/", f"v1/documents/{jsonable_encoder(id)}"
             ),
             params=jsonable_encoder(
@@ -616,7 +614,7 @@ class AsyncDocumentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DocumentRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(DocumentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -667,11 +665,13 @@ class AsyncDocumentsClient:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.documents.upload()
+        await client.documents.upload(
+            label="label",
+        )
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_environment().documents}/", "v1/upload-document"),
+            method="POST",
+            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().documents}/", "v1/upload-document"),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
             ),
@@ -717,13 +717,13 @@ class AsyncDocumentsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(UploadDocumentResponse, _response.json())  # type: ignore
         if _response.status_code == 400:
-            raise BadRequestError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 404:
-            raise NotFoundError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
-            raise InternalServerError(pydantic.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

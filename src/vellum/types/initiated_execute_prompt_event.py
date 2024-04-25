@@ -4,15 +4,11 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .initiated_prompt_execution_meta import InitiatedPromptExecutionMeta
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class InitiatedExecutePromptEvent(pydantic.BaseModel):
+class InitiatedExecutePromptEvent(pydantic_v1.BaseModel):
     """
     The initial data returned indicating that the response from the model has returned and begun streaming.
     """
@@ -31,5 +27,5 @@ class InitiatedExecutePromptEvent(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

@@ -4,27 +4,23 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import pydantic_v1
 from .search_result_document import SearchResultDocument
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore
 
-
-class SearchResult(pydantic.BaseModel):
-    text: str = pydantic.Field()
+class SearchResult(pydantic_v1.BaseModel):
+    text: str = pydantic_v1.Field()
     """
     The text of the chunk that matched the search query.
     """
 
-    score: float = pydantic.Field()
+    score: float = pydantic_v1.Field()
     """
     A score representing how well the chunk matches the search query.
     """
 
     keywords: typing.List[str]
-    document: SearchResultDocument = pydantic.Field()
+    document: SearchResultDocument = pydantic_v1.Field()
     """
     The document that contains the chunk that matched the search query.
     """
@@ -40,5 +36,5 @@ class SearchResult(pydantic.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        extra = pydantic.Extra.allow
+        extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}

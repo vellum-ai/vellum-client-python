@@ -4,15 +4,15 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-from ..core.api_error import ApiError
-from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ..core.jsonable_encoder import jsonable_encoder
-from ..core.pydantic_utilities import pydantic_v1
-from ..core.remove_none_from_dict import remove_none_from_dict
-from ..core.request_options import RequestOptions
-from ..types.paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
-from ..types.test_suite_run_exec_config_request import TestSuiteRunExecConfigRequest
-from ..types.test_suite_run_read import TestSuiteRunRead
+from ...core.api_error import ApiError
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ...core.jsonable_encoder import jsonable_encoder
+from ...core.pydantic_utilities import pydantic_v1
+from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
+from ...types.paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
+from ...types.test_suite_run_exec_config_request import TestSuiteRunExecConfigRequest
+from ...types.test_suite_run_read import TestSuiteRunRead
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)

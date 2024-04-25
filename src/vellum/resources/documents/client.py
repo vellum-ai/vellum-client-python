@@ -4,20 +4,20 @@ import typing
 import urllib.parse
 from json.decoder import JSONDecodeError
 
-from .. import core
-from ..core.api_error import ApiError
-from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ..core.jsonable_encoder import jsonable_encoder
-from ..core.pydantic_utilities import pydantic_v1
-from ..core.remove_none_from_dict import remove_none_from_dict
-from ..core.request_options import RequestOptions
-from ..errors.bad_request_error import BadRequestError
-from ..errors.internal_server_error import InternalServerError
-from ..errors.not_found_error import NotFoundError
-from ..types.document_read import DocumentRead
-from ..types.document_status import DocumentStatus
-from ..types.paginated_slim_document_list import PaginatedSlimDocumentList
-from ..types.upload_document_response import UploadDocumentResponse
+from ... import core
+from ...core.api_error import ApiError
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ...core.jsonable_encoder import jsonable_encoder
+from ...core.pydantic_utilities import pydantic_v1
+from ...core.remove_none_from_dict import remove_none_from_dict
+from ...core.request_options import RequestOptions
+from ...errors.bad_request_error import BadRequestError
+from ...errors.internal_server_error import InternalServerError
+from ...errors.not_found_error import NotFoundError
+from ...types.document_read import DocumentRead
+from ...types.document_status import DocumentStatus
+from ...types.paginated_slim_document_list import PaginatedSlimDocumentList
+from ...types.upload_document_response import UploadDocumentResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)

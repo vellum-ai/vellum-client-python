@@ -13,18 +13,19 @@ from .core.jsonable_encoder import jsonable_encoder
 from .core.pydantic_utilities import pydantic_v1
 from .core.remove_none_from_dict import remove_none_from_dict
 from .core.request_options import RequestOptions
-from .deployments.client import AsyncDeploymentsClient, DeploymentsClient
-from .document_indexes.client import AsyncDocumentIndexesClient, DocumentIndexesClient
-from .documents.client import AsyncDocumentsClient, DocumentsClient
 from .environment import VellumEnvironment
 from .errors.bad_request_error import BadRequestError
 from .errors.forbidden_error import ForbiddenError
 from .errors.internal_server_error import InternalServerError
 from .errors.not_found_error import NotFoundError
-from .folder_entities.client import AsyncFolderEntitiesClient, FolderEntitiesClient
-from .sandboxes.client import AsyncSandboxesClient, SandboxesClient
-from .test_suite_runs.client import AsyncTestSuiteRunsClient, TestSuiteRunsClient
-from .test_suites.client import AsyncTestSuitesClient, TestSuitesClient
+from .resources.deployments.client import AsyncDeploymentsClient, DeploymentsClient
+from .resources.document_indexes.client import AsyncDocumentIndexesClient, DocumentIndexesClient
+from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
+from .resources.folder_entities.client import AsyncFolderEntitiesClient, FolderEntitiesClient
+from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
+from .resources.test_suite_runs.client import AsyncTestSuiteRunsClient, TestSuiteRunsClient
+from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
+from .resources.workflow_deployments.client import AsyncWorkflowDeploymentsClient, WorkflowDeploymentsClient
 from .types.execute_prompt_event import ExecutePromptEvent
 from .types.execute_prompt_response import ExecutePromptResponse
 from .types.execute_workflow_response import ExecuteWorkflowResponse
@@ -42,7 +43,6 @@ from .types.submit_workflow_execution_actual_request import SubmitWorkflowExecut
 from .types.workflow_execution_event_type import WorkflowExecutionEventType
 from .types.workflow_request_input_request import WorkflowRequestInputRequest
 from .types.workflow_stream_event import WorkflowStreamEvent
-from .workflow_deployments.client import AsyncWorkflowDeploymentsClient, WorkflowDeploymentsClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)

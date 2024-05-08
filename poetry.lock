@@ -247,13 +247,13 @@ files = [
 
 [[package]]
 name = "jsii"
-version = "1.97.0"
+version = "1.98.0"
 description = "Python client for jsii runtime"
 optional = false
 python-versions = "~=3.8"
 files = [
-    {file = "jsii-1.97.0-py3-none-any.whl", hash = "sha256:5dd347cc9d279072c109829aaff11dae1c7f13169ce60887f1c1ab2c4cd4abcd"},
-    {file = "jsii-1.97.0.tar.gz", hash = "sha256:e6db98e34730cd972d180b7f4e21182b9a5105f537672716940b930ee933a1f2"},
+    {file = "jsii-1.98.0-py3-none-any.whl", hash = "sha256:3067d523126ce8178374dd958c60350efc831fc2ef3eb94a0a755d64fa4cc22d"},
+    {file = "jsii-1.98.0.tar.gz", hash = "sha256:64bbaf9c494626bc0afd1b95834f0dba66a2f2ecbb0da97fa3000c4b01d67857"},
 ]
 
 [package.dependencies]

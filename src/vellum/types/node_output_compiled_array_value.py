@@ -6,11 +6,17 @@ import typing
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
 from .array_variable_value_item import ArrayVariableValueItem
+from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 
 class NodeOutputCompiledArrayValue(pydantic_v1.BaseModel):
-    node_output_id: str
+    """
+    An output returned by a node that is of type ARRAY.
+    """
+
     value: typing.Optional[typing.List[ArrayVariableValueItem]] = None
+    node_output_id: str
+    state: typing.Optional[WorkflowNodeResultEventState] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

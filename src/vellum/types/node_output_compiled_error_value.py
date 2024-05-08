@@ -6,11 +6,17 @@ import typing
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
 from .vellum_error import VellumError
+from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 
 class NodeOutputCompiledErrorValue(pydantic_v1.BaseModel):
-    node_output_id: str
+    """
+    An output returned by a node that is of type ERROR.
+    """
+
     value: typing.Optional[VellumError] = None
+    node_output_id: str
+    state: typing.Optional[WorkflowNodeResultEventState] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

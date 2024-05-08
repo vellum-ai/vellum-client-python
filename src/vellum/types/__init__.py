@@ -82,6 +82,7 @@ from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
 from .error_enum import ErrorEnum
 from .error_variable_value import ErrorVariableValue
+from .error_vellum_value import ErrorVellumValue
 from .execute_prompt_api_error_response import ExecutePromptApiErrorResponse
 from .execute_prompt_event import (
     ExecutePromptEvent,
@@ -140,6 +141,7 @@ from .function_call_chat_message_content_value import FunctionCallChatMessageCon
 from .function_call_chat_message_content_value_request import FunctionCallChatMessageContentValueRequest
 from .function_call_enum import FunctionCallEnum
 from .function_call_variable_value import FunctionCallVariableValue
+from .function_call_vellum_value import FunctionCallVellumValue
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -162,6 +164,7 @@ from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEve
 from .json_enum import JsonEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
+from .json_vellum_value import JsonVellumValue
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
 from .metadata_filter_config_request import MetadataFilterConfigRequest
@@ -231,7 +234,7 @@ from .node_input_variable_compiled_value import (
 from .node_output_compiled_array_value import NodeOutputCompiledArrayValue
 from .node_output_compiled_chat_history_value import NodeOutputCompiledChatHistoryValue
 from .node_output_compiled_error_value import NodeOutputCompiledErrorValue
-from .node_output_compiled_function_value import NodeOutputCompiledFunctionValue
+from .node_output_compiled_function_call_value import NodeOutputCompiledFunctionCallValue
 from .node_output_compiled_json_value import NodeOutputCompiledJsonValue
 from .node_output_compiled_number_value import NodeOutputCompiledNumberValue
 from .node_output_compiled_search_results_value import NodeOutputCompiledSearchResultsValue
@@ -314,6 +317,7 @@ from .string_chat_message_content_request import StringChatMessageContentRequest
 from .string_enum import StringEnum
 from .string_input_request import StringInputRequest
 from .string_variable_value import StringVariableValue
+from .string_vellum_value import StringVellumValue
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
 from .submit_workflow_execution_actual_request import (
@@ -614,6 +618,7 @@ __all__ = [
     "EnvironmentEnum",
     "ErrorEnum",
     "ErrorVariableValue",
+    "ErrorVellumValue",
     "ExecutePromptApiErrorResponse",
     "ExecutePromptEvent",
     "ExecutePromptEvent_Fulfilled",
@@ -664,6 +669,7 @@ __all__ = [
     "FunctionCallChatMessageContentValueRequest",
     "FunctionCallEnum",
     "FunctionCallVariableValue",
+    "FunctionCallVellumValue",
     "FunctionCall_Fulfilled",
     "FunctionCall_Rejected",
     "GenerateErrorResponse",
@@ -688,6 +694,7 @@ __all__ = [
     "JsonEnum",
     "JsonInputRequest",
     "JsonVariableValue",
+    "JsonVellumValue",
     "LogicalOperator",
     "LogprobsEnum",
     "MetadataFilterConfigRequest",
@@ -749,7 +756,7 @@ __all__ = [
     "NodeOutputCompiledArrayValue",
     "NodeOutputCompiledChatHistoryValue",
     "NodeOutputCompiledErrorValue",
-    "NodeOutputCompiledFunctionValue",
+    "NodeOutputCompiledFunctionCallValue",
     "NodeOutputCompiledJsonValue",
     "NodeOutputCompiledNumberValue",
     "NodeOutputCompiledSearchResultsValue",
@@ -828,6 +835,7 @@ __all__ = [
     "StringEnum",
     "StringInputRequest",
     "StringVariableValue",
+    "StringVellumValue",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
     "SubmitWorkflowExecutionActualRequest",

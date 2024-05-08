@@ -5,17 +5,14 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 
-class NodeOutputCompiledStringValue(pydantic_v1.BaseModel):
+class JsonVellumValue(pydantic_v1.BaseModel):
     """
-    An output returned by a node that is of type STRING.
+    A value representing a JSON object.
     """
 
-    value: typing.Optional[str] = None
-    node_output_id: str
-    state: typing.Optional[WorkflowNodeResultEventState] = None
+    value: typing.Optional[typing.Dict[str, typing.Any]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

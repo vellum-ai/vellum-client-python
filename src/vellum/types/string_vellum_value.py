@@ -5,12 +5,14 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .function_call import FunctionCall
 
 
-class NodeOutputCompiledFunctionValue(pydantic_v1.BaseModel):
-    node_output_id: str
-    value: typing.Optional[FunctionCall] = None
+class StringVellumValue(pydantic_v1.BaseModel):
+    """
+    A value representing a string.
+    """
+
+    value: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -5,17 +5,15 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .workflow_node_result_event_state import WorkflowNodeResultEventState
+from .function_call import FunctionCall
 
 
-class NodeOutputCompiledStringValue(pydantic_v1.BaseModel):
+class FunctionCallVellumValue(pydantic_v1.BaseModel):
     """
-    An output returned by a node that is of type STRING.
+    A value representing a Function Call.
     """
 
-    value: typing.Optional[str] = None
-    node_output_id: str
-    state: typing.Optional[WorkflowNodeResultEventState] = None
+    value: FunctionCall
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

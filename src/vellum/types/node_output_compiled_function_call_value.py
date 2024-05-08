@@ -5,15 +5,16 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
+from .function_call import FunctionCall
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 
-class NodeOutputCompiledStringValue(pydantic_v1.BaseModel):
+class NodeOutputCompiledFunctionCallValue(pydantic_v1.BaseModel):
     """
-    An output returned by a node that is of type STRING.
+    An output returned by a node that is of type FUNCTION_CALL.
     """
 
-    value: typing.Optional[str] = None
+    value: typing.Optional[FunctionCall] = None
     node_output_id: str
     state: typing.Optional[WorkflowNodeResultEventState] = None
 

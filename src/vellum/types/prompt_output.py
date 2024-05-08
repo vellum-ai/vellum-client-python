@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import typing
 
-from .error_variable_value import ErrorVariableValue
-from .function_call_variable_value import FunctionCallVariableValue
-from .json_variable_value import JsonVariableValue
-from .string_variable_value import StringVariableValue
+from .error_vellum_value import ErrorVellumValue
+from .function_call_vellum_value import FunctionCallVellumValue
+from .json_vellum_value import JsonVellumValue
+from .string_vellum_value import StringVellumValue
 
 
-class PromptOutput_String(StringVariableValue):
+class PromptOutput_String(StringVellumValue):
     type: typing.Literal["STRING"] = "STRING"
 
     class Config:
@@ -20,7 +20,7 @@ class PromptOutput_String(StringVariableValue):
         populate_by_name = True
 
 
-class PromptOutput_Json(JsonVariableValue):
+class PromptOutput_Json(JsonVellumValue):
     type: typing.Literal["JSON"] = "JSON"
 
     class Config:
@@ -30,7 +30,7 @@ class PromptOutput_Json(JsonVariableValue):
         populate_by_name = True
 
 
-class PromptOutput_Error(ErrorVariableValue):
+class PromptOutput_Error(ErrorVellumValue):
     type: typing.Literal["ERROR"] = "ERROR"
 
     class Config:
@@ -40,7 +40,7 @@ class PromptOutput_Error(ErrorVariableValue):
         populate_by_name = True
 
 
-class PromptOutput_FunctionCall(FunctionCallVariableValue):
+class PromptOutput_FunctionCall(FunctionCallVellumValue):
     type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
     class Config:

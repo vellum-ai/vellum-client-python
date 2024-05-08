@@ -7,7 +7,7 @@ import typing
 from .node_output_compiled_array_value import NodeOutputCompiledArrayValue
 from .node_output_compiled_chat_history_value import NodeOutputCompiledChatHistoryValue
 from .node_output_compiled_error_value import NodeOutputCompiledErrorValue
-from .node_output_compiled_function_value import NodeOutputCompiledFunctionValue
+from .node_output_compiled_function_call_value import NodeOutputCompiledFunctionCallValue
 from .node_output_compiled_json_value import NodeOutputCompiledJsonValue
 from .node_output_compiled_number_value import NodeOutputCompiledNumberValue
 from .node_output_compiled_search_results_value import NodeOutputCompiledSearchResultsValue
@@ -84,7 +84,7 @@ class NodeOutputCompiledValue_Array(NodeOutputCompiledArrayValue):
         populate_by_name = True
 
 
-class NodeOutputCompiledValue_FunctionCall(NodeOutputCompiledFunctionValue):
+class NodeOutputCompiledValue_FunctionCall(NodeOutputCompiledFunctionCallValue):
     type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
     class Config:

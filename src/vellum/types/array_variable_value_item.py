@@ -4,13 +4,11 @@ from __future__ import annotations
 
 import typing
 
-from .chat_history_variable_value import ChatHistoryVariableValue
 from .error_variable_value import ErrorVariableValue
 from .function_call_variable_value import FunctionCallVariableValue
 from .image_variable_value import ImageVariableValue
 from .json_variable_value import JsonVariableValue
 from .number_variable_value import NumberVariableValue
-from .search_results_variable_value import SearchResultsVariableValue
 from .string_variable_value import StringVariableValue
 
 
@@ -36,26 +34,6 @@ class ArrayVariableValueItem_Number(NumberVariableValue):
 
 class ArrayVariableValueItem_Json(JsonVariableValue):
     type: typing.Literal["JSON"] = "JSON"
-
-    class Config:
-        frozen = True
-        smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
-
-
-class ArrayVariableValueItem_ChatHistory(ChatHistoryVariableValue):
-    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
-
-    class Config:
-        frozen = True
-        smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
-
-
-class ArrayVariableValueItem_SearchResults(SearchResultsVariableValue):
-    type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
 
     class Config:
         frozen = True
@@ -98,8 +76,6 @@ ArrayVariableValueItem = typing.Union[
     ArrayVariableValueItem_String,
     ArrayVariableValueItem_Number,
     ArrayVariableValueItem_Json,
-    ArrayVariableValueItem_ChatHistory,
-    ArrayVariableValueItem_SearchResults,
     ArrayVariableValueItem_Error,
     ArrayVariableValueItem_FunctionCall,
     ArrayVariableValueItem_Image,

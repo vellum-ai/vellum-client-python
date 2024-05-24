@@ -7,6 +7,7 @@ import typing
 from .api_node_result import ApiNodeResult
 from .code_execution_node_result import CodeExecutionNodeResult
 from .conditional_node_result import ConditionalNodeResult
+from .metric_node_result import MetricNodeResult
 from .prompt_node_result import PromptNodeResult
 from .search_node_result import SearchNodeResult
 from .subworkflow_node_result import SubworkflowNodeResult
@@ -94,6 +95,16 @@ class WorkflowNodeResultData_Subworkflow(SubworkflowNodeResult):
         populate_by_name = True
 
 
+class WorkflowNodeResultData_Metric(MetricNodeResult):
+    type: typing.Literal["METRIC"] = "METRIC"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
 WorkflowNodeResultData = typing.Union[
     WorkflowNodeResultData_Prompt,
     WorkflowNodeResultData_Search,
@@ -103,4 +114,5 @@ WorkflowNodeResultData = typing.Union[
     WorkflowNodeResultData_Api,
     WorkflowNodeResultData_Terminal,
     WorkflowNodeResultData_Subworkflow,
+    WorkflowNodeResultData_Metric,
 ]

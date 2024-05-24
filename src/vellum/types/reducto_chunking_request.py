@@ -5,16 +5,15 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
+from .reducto_chunker_config_request import ReductoChunkerConfigRequest
 
 
-class FulfilledFunctionCall(pydantic_v1.BaseModel):
+class ReductoChunkingRequest(pydantic_v1.BaseModel):
     """
-    The final resolved function call value.
+    Reducto chunking
     """
 
-    arguments: typing.Dict[str, typing.Any]
-    id: typing.Optional[str] = None
-    name: str
+    chunker_config: typing.Optional[ReductoChunkerConfigRequest] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

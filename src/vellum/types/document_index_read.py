@@ -5,6 +5,7 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
+from .document_index_indexing_config import DocumentIndexIndexingConfig
 from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
 
@@ -39,10 +40,7 @@ class DocumentIndexRead(pydantic_v1.BaseModel):
     - `PRODUCTION` - Production
     """
 
-    indexing_config: typing.Dict[str, typing.Any] = pydantic_v1.Field()
-    """
-    Configuration representing how documents should be indexed
-    """
+    indexing_config: DocumentIndexIndexingConfig
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

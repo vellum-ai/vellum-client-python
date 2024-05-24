@@ -10,6 +10,7 @@ from ...core.jsonable_encoder import jsonable_encoder
 from ...core.pydantic_utilities import pydantic_v1
 from ...core.remove_none_from_dict import remove_none_from_dict
 from ...core.request_options import RequestOptions
+from ...types.document_index_indexing_config_request import DocumentIndexIndexingConfigRequest
 from ...types.document_index_read import DocumentIndexRead
 from ...types.entity_status import EntityStatus
 from ...types.environment_enum import EnvironmentEnum
@@ -30,6 +31,7 @@ class DocumentIndexesClient:
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         status: typing.Optional[DocumentIndexesListRequestStatus] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedDocumentIndexReadList:
@@ -43,7 +45,9 @@ class DocumentIndexesClient:
 
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
-            - status: typing.Optional[DocumentIndexesListRequestStatus]. The current status of the document index
+            - search: typing.Optional[str]. Search for document indices by name or label
+
+            - status: typing.Optional[DocumentIndexesListRequestStatus]. Filter down to only document indices that have a status matching the status specified
 
                                                                          - `ACTIVE` - Active
                                                                          - `ARCHIVED` - Archived
@@ -65,6 +69,7 @@ class DocumentIndexesClient:
                         "limit": limit,
                         "offset": offset,
                         "ordering": ordering,
+                        "search": search,
                         "status": status,
                         **(
                             request_options.get("additional_query_parameters", {})
@@ -103,7 +108,7 @@ class DocumentIndexesClient:
         name: str,
         status: typing.Optional[EntityStatus] = OMIT,
         environment: typing.Optional[EnvironmentEnum] = OMIT,
-        indexing_config: typing.Dict[str, typing.Any],
+        indexing_config: DocumentIndexIndexingConfigRequest,
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentIndexRead:
@@ -124,37 +129,32 @@ class DocumentIndexesClient:
                                                              * `DEVELOPMENT` - Development
                                                              * `STAGING` - Staging
                                                              * `PRODUCTION` - Production
-            - indexing_config: typing.Dict[str, typing.Any]. Configuration representing how documents should be indexed
+            - indexing_config: DocumentIndexIndexingConfigRequest.
 
             - copy_documents_from_index_id: typing.Optional[str]. Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
+        from vellum import (
+            DocumentIndexChunkingRequest_ReductoChunker,
+            DocumentIndexIndexingConfigRequest,
+            IndexingConfigVectorizerRequest_TextEmbedding3Small,
+        )
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         client.document_indexes.create(
-            label="My Document Index",
-            name="my-document-index",
-            indexing_config={
-                "chunking": {
-                    "chunker_name": "sentence-chunker",
-                    "chunker_config": {
-                        "character_limit": 1000,
-                        "min_overlap_ratio": 0.5,
-                    },
-                },
-                "vectorizer": {
-                    "model_name": "hkunlp/instructor-xl",
-                    "config": {
-                        "instruction_domain": "",
-                        "instruction_document_text_type": "plain_text",
-                        "instruction_query_text_type": "plain_text",
-                    },
-                },
-            },
+            label="string",
+            name="string",
+            status="ACTIVE",
+            environment="DEVELOPMENT",
+            indexing_config=DocumentIndexIndexingConfigRequest(
+                vectorizer=IndexingConfigVectorizerRequest_TextEmbedding3Small(),
+                chunking=DocumentIndexChunkingRequest_ReductoChunker(),
+            ),
+            copy_documents_from_index_id="string",
         )
         """
         _request: typing.Dict[str, typing.Any] = {"label": label, "name": name, "indexing_config": indexing_config}
@@ -213,7 +213,7 @@ class DocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         client.document_indexes.retrieve(
-            id="id",
+            id="string",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -280,8 +280,10 @@ class DocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         client.document_indexes.update(
-            id="id",
-            label="label",
+            id="string",
+            label="string",
+            status="ACTIVE",
+            environment="DEVELOPMENT",
         )
         """
         _request: typing.Dict[str, typing.Any] = {"label": label}
@@ -407,7 +409,10 @@ class DocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         client.document_indexes.partial_update(
-            id="id",
+            id="string",
+            label="string",
+            status="ACTIVE",
+            environment="DEVELOPMENT",
         )
         """
         _request: typing.Dict[str, typing.Any] = {}
@@ -464,6 +469,7 @@ class AsyncDocumentIndexesClient:
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
         ordering: typing.Optional[str] = None,
+        search: typing.Optional[str] = None,
         status: typing.Optional[DocumentIndexesListRequestStatus] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedDocumentIndexReadList:
@@ -477,7 +483,9 @@ class AsyncDocumentIndexesClient:
 
             - ordering: typing.Optional[str]. Which field to use when ordering the results.
 
-            - status: typing.Optional[DocumentIndexesListRequestStatus]. The current status of the document index
+            - search: typing.Optional[str]. Search for document indices by name or label
+
+            - status: typing.Optional[DocumentIndexesListRequestStatus]. Filter down to only document indices that have a status matching the status specified
 
                                                                          - `ACTIVE` - Active
                                                                          - `ARCHIVED` - Archived
@@ -499,6 +507,7 @@ class AsyncDocumentIndexesClient:
                         "limit": limit,
                         "offset": offset,
                         "ordering": ordering,
+                        "search": search,
                         "status": status,
                         **(
                             request_options.get("additional_query_parameters", {})
@@ -537,7 +546,7 @@ class AsyncDocumentIndexesClient:
         name: str,
         status: typing.Optional[EntityStatus] = OMIT,
         environment: typing.Optional[EnvironmentEnum] = OMIT,
-        indexing_config: typing.Dict[str, typing.Any],
+        indexing_config: DocumentIndexIndexingConfigRequest,
         copy_documents_from_index_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentIndexRead:
@@ -558,37 +567,32 @@ class AsyncDocumentIndexesClient:
                                                              * `DEVELOPMENT` - Development
                                                              * `STAGING` - Staging
                                                              * `PRODUCTION` - Production
-            - indexing_config: typing.Dict[str, typing.Any]. Configuration representing how documents should be indexed
+            - indexing_config: DocumentIndexIndexingConfigRequest.
 
             - copy_documents_from_index_id: typing.Optional[str]. Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
+        from vellum import (
+            DocumentIndexChunkingRequest_ReductoChunker,
+            DocumentIndexIndexingConfigRequest,
+            IndexingConfigVectorizerRequest_TextEmbedding3Small,
+        )
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
         await client.document_indexes.create(
-            label="My Document Index",
-            name="my-document-index",
-            indexing_config={
-                "chunking": {
-                    "chunker_name": "sentence-chunker",
-                    "chunker_config": {
-                        "character_limit": 1000,
-                        "min_overlap_ratio": 0.5,
-                    },
-                },
-                "vectorizer": {
-                    "model_name": "hkunlp/instructor-xl",
-                    "config": {
-                        "instruction_domain": "",
-                        "instruction_document_text_type": "plain_text",
-                        "instruction_query_text_type": "plain_text",
-                    },
-                },
-            },
+            label="string",
+            name="string",
+            status="ACTIVE",
+            environment="DEVELOPMENT",
+            indexing_config=DocumentIndexIndexingConfigRequest(
+                vectorizer=IndexingConfigVectorizerRequest_TextEmbedding3Small(),
+                chunking=DocumentIndexChunkingRequest_ReductoChunker(),
+            ),
+            copy_documents_from_index_id="string",
         )
         """
         _request: typing.Dict[str, typing.Any] = {"label": label, "name": name, "indexing_config": indexing_config}
@@ -647,7 +651,7 @@ class AsyncDocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         await client.document_indexes.retrieve(
-            id="id",
+            id="string",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -714,8 +718,10 @@ class AsyncDocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         await client.document_indexes.update(
-            id="id",
-            label="label",
+            id="string",
+            label="string",
+            status="ACTIVE",
+            environment="DEVELOPMENT",
         )
         """
         _request: typing.Dict[str, typing.Any] = {"label": label}
@@ -841,7 +847,10 @@ class AsyncDocumentIndexesClient:
             api_key="YOUR_API_KEY",
         )
         await client.document_indexes.partial_update(
-            id="id",
+            id="string",
+            label="string",
+            status="ACTIVE",
+            environment="DEVELOPMENT",
         )
         """
         _request: typing.Dict[str, typing.Any] = {}

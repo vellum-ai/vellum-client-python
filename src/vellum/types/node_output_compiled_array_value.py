@@ -5,7 +5,7 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .array_variable_value_item import ArrayVariableValueItem
+from .array_vellum_value_item import ArrayVellumValueItem
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
 
 
@@ -14,7 +14,7 @@ class NodeOutputCompiledArrayValue(pydantic_v1.BaseModel):
     An output returned by a node that is of type ARRAY.
     """
 
-    value: typing.Optional[typing.List[ArrayVariableValueItem]] = None
+    value: typing.Optional[typing.List[ArrayVellumValueItem]] = None
     node_output_id: str
     state: typing.Optional[WorkflowNodeResultEventState] = None
 

@@ -99,7 +99,7 @@ class DocumentsClient:
 
     def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DocumentRead:
         """
-        Retrieve a Document via its Vellum-generated ID.
+        Retrieve a Document, keying off of either its Vellum-generated ID or its external ID.
 
         Parameters:
             - id: str. A UUID string identifying this document.
@@ -147,6 +147,8 @@ class DocumentsClient:
 
     def destroy(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> None:
         """
+        Delete a Document, keying off of either its Vellum-generated ID or its external ID.
+
         Parameters:
             - id: str. A UUID string identifying this document.
 
@@ -201,7 +203,7 @@ class DocumentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentRead:
         """
-        Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
+        Update a Document, keying off of either its Vellum-generated ID or its external ID. Particularly useful for updating its metadata.
 
         Parameters:
             - id: str. A UUID string identifying this document.
@@ -453,7 +455,7 @@ class AsyncDocumentsClient:
 
     async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DocumentRead:
         """
-        Retrieve a Document via its Vellum-generated ID.
+        Retrieve a Document, keying off of either its Vellum-generated ID or its external ID.
 
         Parameters:
             - id: str. A UUID string identifying this document.
@@ -501,6 +503,8 @@ class AsyncDocumentsClient:
 
     async def destroy(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> None:
         """
+        Delete a Document, keying off of either its Vellum-generated ID or its external ID.
+
         Parameters:
             - id: str. A UUID string identifying this document.
 
@@ -555,7 +559,7 @@ class AsyncDocumentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentRead:
         """
-        Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
+        Update a Document, keying off of either its Vellum-generated ID or its external ID. Particularly useful for updating its metadata.
 
         Parameters:
             - id: str. A UUID string identifying this document.

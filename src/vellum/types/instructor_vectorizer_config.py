@@ -5,18 +5,16 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .fulfilled_enum import FulfilledEnum
 
 
-class FulfilledFunctionCallRequest(pydantic_v1.BaseModel):
+class InstructorVectorizerConfig(pydantic_v1.BaseModel):
     """
-    The final resolved function call value.
+    Configuration for using an Instructor vectorizer.
     """
 
-    state: FulfilledEnum
-    arguments: typing.Dict[str, typing.Any]
-    id: typing.Optional[str] = None
-    name: str
+    instruction_domain: str
+    instruction_query_text_type: str
+    instruction_document_text_type: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

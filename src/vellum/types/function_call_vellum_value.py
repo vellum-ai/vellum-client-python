@@ -13,7 +13,7 @@ class FunctionCallVellumValue(pydantic_v1.BaseModel):
     A value representing a Function Call.
     """
 
-    value: FunctionCall
+    value: typing.Optional[FunctionCall] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

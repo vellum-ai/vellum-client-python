@@ -5,11 +5,13 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .chat_message import ChatMessage
+from .document_index_chunking_request import DocumentIndexChunkingRequest
+from .indexing_config_vectorizer_request import IndexingConfigVectorizerRequest
 
 
-class ChatHistoryVariableValue(pydantic_v1.BaseModel):
-    value: typing.Optional[typing.List[ChatMessage]] = None
+class DocumentIndexIndexingConfigRequest(pydantic_v1.BaseModel):
+    vectorizer: IndexingConfigVectorizerRequest
+    chunking: typing.Optional[DocumentIndexChunkingRequest] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

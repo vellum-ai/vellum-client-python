@@ -5,11 +5,15 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .search_result import SearchResult
+from .open_ai_vectorizer_config import OpenAiVectorizerConfig
 
 
-class SearchResultsVariableValue(pydantic_v1.BaseModel):
-    value: typing.Optional[typing.List[SearchResult]] = None
+class OpenAiVectorizerTextEmbedding3Small(pydantic_v1.BaseModel):
+    """
+    OpenAI vectorizer for text-embedding-3-small.
+    """
+
+    config: OpenAiVectorizerConfig
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -5,7 +5,7 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .array_variable_value_item import ArrayVariableValueItem
+from .array_vellum_value_item import ArrayVellumValueItem
 
 
 class WorkflowOutputArray(pydantic_v1.BaseModel):
@@ -19,7 +19,7 @@ class WorkflowOutputArray(pydantic_v1.BaseModel):
     The output's name, as defined in the workflow
     """
 
-    value: typing.Optional[typing.List[ArrayVariableValueItem]] = None
+    value: typing.Optional[typing.List[ArrayVellumValueItem]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -5,7 +5,7 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .fulfilled_function_call_request import FulfilledFunctionCallRequest
+from .function_call_request import FunctionCallRequest
 
 
 class NamedTestCaseFunctionCallVariableValueRequest(pydantic_v1.BaseModel):
@@ -13,7 +13,7 @@ class NamedTestCaseFunctionCallVariableValueRequest(pydantic_v1.BaseModel):
     Named Test Case value that is of type FUNCTION_CALL
     """
 
-    value: typing.Optional[FulfilledFunctionCallRequest] = None
+    value: typing.Optional[FunctionCallRequest] = None
     name: str
 
     def json(self, **kwargs: typing.Any) -> str:

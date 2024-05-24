@@ -5,17 +5,14 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .vellum_error import VellumError
 
 
-class RejectedFunctionCall(pydantic_v1.BaseModel):
+class ReductoChunkerConfigRequest(pydantic_v1.BaseModel):
     """
-    Returned if the function call failed to parse for some reason.
+    Configuration for Reducto chunking
     """
 
-    error: VellumError
-    id: typing.Optional[str] = None
-    name: str
+    character_limit: typing.Optional[int] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

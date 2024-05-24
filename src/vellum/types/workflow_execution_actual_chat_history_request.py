@@ -24,6 +24,11 @@ class WorkflowExecutionActualChatHistoryRequest(pydantic_v1.BaseModel):
     Optionally provide a decimal number between 0.0 and 1.0 (inclusive) representing the quality of the output. 0 is the worst, 1 is the best.
     """
 
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(default=None)
+    """
+    Optionally provide additional metadata about the feedback submission.
+    """
+
     timestamp: typing.Optional[float] = pydantic_v1.Field(default=None)
     """
     Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.

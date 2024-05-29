@@ -33,6 +33,11 @@ class SubmitCompletionActualRequest(pydantic_v1.BaseModel):
     Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
     """
 
+    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(default=None)
+    """
+    Optionally provide additional metadata about the feedback submission.
+    """
+
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
         return super().json(**kwargs_with_defaults)

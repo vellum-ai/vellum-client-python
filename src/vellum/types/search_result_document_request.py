@@ -8,6 +8,11 @@ from ..core.pydantic_utilities import pydantic_v1
 
 
 class SearchResultDocumentRequest(pydantic_v1.BaseModel):
+    id: typing.Optional[str] = pydantic_v1.Field(default=None)
+    """
+    The ID of the document.
+    """
+
     label: str = pydantic_v1.Field()
     """
     The human-readable name for the document.

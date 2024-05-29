@@ -7,25 +7,9 @@ from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
 
 
-class SearchResultDocument(pydantic_v1.BaseModel):
-    id: typing.Optional[str] = pydantic_v1.Field(default=None)
+class MergeNodeResult(pydantic_v1.BaseModel):
     """
-    The ID of the document.
-    """
-
-    label: str = pydantic_v1.Field()
-    """
-    The human-readable name for the document.
-    """
-
-    external_id: typing.Optional[str] = pydantic_v1.Field(default=None)
-    """
-    The unique ID of the document as represented in an external system and specified when it was originally uploaded.
-    """
-
-    metadata: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(default=None)
-    """
-    A previously supplied JSON object containing metadata that can be filtered on when searching.
+    A Node Result Event emitted from a Merge Node.
     """
 
     def json(self, **kwargs: typing.Any) -> str:

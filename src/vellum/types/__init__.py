@@ -228,6 +228,8 @@ from .json_variable_value import JsonVariableValue
 from .json_vellum_value import JsonVellumValue
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
+from .merge_enum import MergeEnum
+from .merge_node_result import MergeNodeResult
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
@@ -569,6 +571,7 @@ from .workflow_node_result_data import (
     WorkflowNodeResultData_Api,
     WorkflowNodeResultData_CodeExecution,
     WorkflowNodeResultData_Conditional,
+    WorkflowNodeResultData_Merge,
     WorkflowNodeResultData_Metric,
     WorkflowNodeResultData_Prompt,
     WorkflowNodeResultData_Search,
@@ -829,6 +832,8 @@ __all__ = [
     "JsonVellumValue",
     "LogicalOperator",
     "LogprobsEnum",
+    "MergeEnum",
+    "MergeNodeResult",
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
@@ -1135,6 +1140,7 @@ __all__ = [
     "WorkflowNodeResultData_Api",
     "WorkflowNodeResultData_CodeExecution",
     "WorkflowNodeResultData_Conditional",
+    "WorkflowNodeResultData_Merge",
     "WorkflowNodeResultData_Metric",
     "WorkflowNodeResultData_Prompt",
     "WorkflowNodeResultData_Search",

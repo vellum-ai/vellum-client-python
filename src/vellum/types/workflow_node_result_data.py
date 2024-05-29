@@ -7,6 +7,7 @@ import typing
 from .api_node_result import ApiNodeResult
 from .code_execution_node_result import CodeExecutionNodeResult
 from .conditional_node_result import ConditionalNodeResult
+from .merge_node_result import MergeNodeResult
 from .metric_node_result import MetricNodeResult
 from .prompt_node_result import PromptNodeResult
 from .search_node_result import SearchNodeResult
@@ -85,6 +86,16 @@ class WorkflowNodeResultData_Terminal(TerminalNodeResult):
         populate_by_name = True
 
 
+class WorkflowNodeResultData_Merge(MergeNodeResult):
+    type: typing.Literal["MERGE"] = "MERGE"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
 class WorkflowNodeResultData_Subworkflow(SubworkflowNodeResult):
     type: typing.Literal["SUBWORKFLOW"] = "SUBWORKFLOW"
 
@@ -113,6 +124,7 @@ WorkflowNodeResultData = typing.Union[
     WorkflowNodeResultData_Conditional,
     WorkflowNodeResultData_Api,
     WorkflowNodeResultData_Terminal,
+    WorkflowNodeResultData_Merge,
     WorkflowNodeResultData_Subworkflow,
     WorkflowNodeResultData_Metric,
 ]

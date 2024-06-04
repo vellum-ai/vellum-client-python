@@ -5,15 +5,28 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .subworkflow_node_result_data import SubworkflowNodeResultData
+from .release_tag_source import ReleaseTagSource
+from .workflow_release_tag_workflow_deployment_history_item import WorkflowReleaseTagWorkflowDeploymentHistoryItem
 
 
-class SubworkflowNodeResult(pydantic_v1.BaseModel):
+class WorkflowReleaseTagRead(pydantic_v1.BaseModel):
+    name: str = pydantic_v1.Field()
     """
-    A Node Result Event emitted from a Subworkflow Node.
+    The name of the Release Tag
     """
 
-    data: typing.Optional[SubworkflowNodeResultData] = None
+    source: ReleaseTagSource = pydantic_v1.Field()
+    """
+    The source of how the Release Tag was originally created
+    
+    - `SYSTEM` - System
+    - `USER` - User
+    """
+
+    history_item: WorkflowReleaseTagWorkflowDeploymentHistoryItem = pydantic_v1.Field()
+    """
+    The Workflow Deployment History Item that this Release Tag is associated with
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

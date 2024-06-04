@@ -5,15 +5,18 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .subworkflow_node_result_data import SubworkflowNodeResultData
 
 
-class SubworkflowNodeResult(pydantic_v1.BaseModel):
+class WorkflowReleaseTagWorkflowDeploymentHistoryItem(pydantic_v1.BaseModel):
+    id: str = pydantic_v1.Field()
     """
-    A Node Result Event emitted from a Subworkflow Node.
+    The ID of the Workflow Deployment History Item
     """
 
-    data: typing.Optional[SubworkflowNodeResultData] = None
+    timestamp: dt.datetime = pydantic_v1.Field()
+    """
+    The timestamp representing when this History Item was created
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

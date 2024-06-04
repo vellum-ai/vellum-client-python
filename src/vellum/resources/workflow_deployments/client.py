@@ -12,7 +12,11 @@ from ...core.remove_none_from_dict import remove_none_from_dict
 from ...core.request_options import RequestOptions
 from ...types.paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
 from ...types.workflow_deployment_read import WorkflowDeploymentRead
+from ...types.workflow_release_tag_read import WorkflowReleaseTagRead
 from .types.workflow_deployments_list_request_status import WorkflowDeploymentsListRequestStatus
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
 
 
 class WorkflowDeploymentsClient:
@@ -129,6 +133,130 @@ class WorkflowDeploymentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic_v1.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def retrieve_workflow_release_tag(
+        self, id: str, name: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowReleaseTagRead:
+        """
+        Retrieve a Workflow Release Tag by tag name, associated with a specified Workflow Deployment.
+
+        Parameters:
+            - id: str. A UUID string identifying this workflow deployment.
+
+            - name: str. The name of the Release Tag associated with this Workflow Deployment that you'd like to retrieve.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.workflow_deployments.retrieve_workflow_release_tag(
+            id="id",
+            name="name",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            method="GET",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/workflow-deployments/{jsonable_encoder(id)}/release-tags/{jsonable_encoder(name)}",
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic_v1.parse_obj_as(WorkflowReleaseTagRead, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def update_workflow_release_tag(
+        self,
+        id: str,
+        name: str,
+        *,
+        history_item_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WorkflowReleaseTagRead:
+        """
+        Updates an existing Release Tag associated with the specified Workflow Deployment.
+
+        Parameters:
+            - id: str. A UUID string identifying this workflow deployment.
+
+            - name: str. The name of the Release Tag associated with this Workflow Deployment that you'd like to update.
+
+            - history_item_id: typing.Optional[str]. The ID of the Workflow Deployment History Item to tag
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.workflow_deployments.update_workflow_release_tag(
+            id="id",
+            name="name",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if history_item_id is not OMIT:
+            _request["history_item_id"] = history_item_id
+        _response = self._client_wrapper.httpx_client.request(
+            method="PATCH",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/workflow-deployments/{jsonable_encoder(id)}/release-tags/{jsonable_encoder(name)}",
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic_v1.parse_obj_as(WorkflowReleaseTagRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -252,6 +380,130 @@ class AsyncWorkflowDeploymentsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic_v1.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def retrieve_workflow_release_tag(
+        self, id: str, name: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowReleaseTagRead:
+        """
+        Retrieve a Workflow Release Tag by tag name, associated with a specified Workflow Deployment.
+
+        Parameters:
+            - id: str. A UUID string identifying this workflow deployment.
+
+            - name: str. The name of the Release Tag associated with this Workflow Deployment that you'd like to retrieve.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.workflow_deployments.retrieve_workflow_release_tag(
+            id="id",
+            name="name",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            method="GET",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/workflow-deployments/{jsonable_encoder(id)}/release-tags/{jsonable_encoder(name)}",
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic_v1.parse_obj_as(WorkflowReleaseTagRead, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def update_workflow_release_tag(
+        self,
+        id: str,
+        name: str,
+        *,
+        history_item_id: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WorkflowReleaseTagRead:
+        """
+        Updates an existing Release Tag associated with the specified Workflow Deployment.
+
+        Parameters:
+            - id: str. A UUID string identifying this workflow deployment.
+
+            - name: str. The name of the Release Tag associated with this Workflow Deployment that you'd like to update.
+
+            - history_item_id: typing.Optional[str]. The ID of the Workflow Deployment History Item to tag
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.workflow_deployments.update_workflow_release_tag(
+            id="id",
+            name="name",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if history_item_id is not OMIT:
+            _request["history_item_id"] = history_item_id
+        _response = await self._client_wrapper.httpx_client.request(
+            method="PATCH",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/workflow-deployments/{jsonable_encoder(id)}/release-tags/{jsonable_encoder(name)}",
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(_request)
+            if request_options is None or request_options.get("additional_body_parameters") is None
+            else {
+                **jsonable_encoder(_request),
+                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            },
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic_v1.parse_obj_as(WorkflowReleaseTagRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

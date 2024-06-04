@@ -94,6 +94,8 @@ from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from .deployment_read import DeploymentRead
+from .deployment_release_tag_deployment_history_item import DeploymentReleaseTagDeploymentHistoryItem
+from .deployment_release_tag_read import DeploymentReleaseTagRead
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .document_index_chunking import (
     DocumentIndexChunking,
@@ -365,6 +367,7 @@ from .rejected_execute_prompt_response import RejectedExecutePromptResponse
 from .rejected_execute_workflow_workflow_result_event import RejectedExecuteWorkflowWorkflowResultEvent
 from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
+from .release_tag_source import ReleaseTagSource
 from .sandbox_scenario import SandboxScenario
 from .scenario_input import ScenarioInput, ScenarioInput_ChatHistory, ScenarioInput_String
 from .scenario_input_chat_history_variable_value import ScenarioInputChatHistoryVariableValue
@@ -412,6 +415,7 @@ from .submit_workflow_execution_actual_request import (
 )
 from .subworkflow_enum import SubworkflowEnum
 from .subworkflow_node_result import SubworkflowNodeResult
+from .subworkflow_node_result_data import SubworkflowNodeResultData
 from .templating_node_array_result import TemplatingNodeArrayResult
 from .templating_node_chat_history_result import TemplatingNodeChatHistoryResult
 from .templating_node_error_result import TemplatingNodeErrorResult
@@ -608,6 +612,8 @@ from .workflow_output_json import WorkflowOutputJson
 from .workflow_output_number import WorkflowOutputNumber
 from .workflow_output_search_results import WorkflowOutputSearchResults
 from .workflow_output_string import WorkflowOutputString
+from .workflow_release_tag_read import WorkflowReleaseTagRead
+from .workflow_release_tag_workflow_deployment_history_item import WorkflowReleaseTagWorkflowDeploymentHistoryItem
 from .workflow_request_chat_history_input_request import WorkflowRequestChatHistoryInputRequest
 from .workflow_request_input_request import (
     WorkflowRequestInputRequest,
@@ -714,6 +720,8 @@ __all__ = [
     "ConditionalNodeResultData",
     "DeploymentProviderPayloadResponse",
     "DeploymentRead",
+    "DeploymentReleaseTagDeploymentHistoryItem",
+    "DeploymentReleaseTagRead",
     "DocumentDocumentToDocumentIndex",
     "DocumentIndexChunking",
     "DocumentIndexChunkingRequest",
@@ -955,6 +963,7 @@ __all__ = [
     "RejectedExecuteWorkflowWorkflowResultEvent",
     "RejectedPromptExecutionMeta",
     "RejectedWorkflowNodeResultEvent",
+    "ReleaseTagSource",
     "SandboxScenario",
     "ScenarioInput",
     "ScenarioInputChatHistoryVariableValue",
@@ -1002,6 +1011,7 @@ __all__ = [
     "SubmitWorkflowExecutionActualRequest_String",
     "SubworkflowEnum",
     "SubworkflowNodeResult",
+    "SubworkflowNodeResultData",
     "TemplatingNodeArrayResult",
     "TemplatingNodeChatHistoryResult",
     "TemplatingNodeErrorResult",
@@ -1172,6 +1182,8 @@ __all__ = [
     "WorkflowOutput_Number",
     "WorkflowOutput_SearchResults",
     "WorkflowOutput_String",
+    "WorkflowReleaseTagRead",
+    "WorkflowReleaseTagWorkflowDeploymentHistoryItem",
     "WorkflowRequestChatHistoryInputRequest",
     "WorkflowRequestInputRequest",
     "WorkflowRequestInputRequest_ChatHistory",

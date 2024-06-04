@@ -577,11 +577,11 @@ from .resources import (
     document_indexes,
     documents,
     folder_entities,
-    prompt_versions,
     sandboxes,
     test_suite_runs,
     test_suites,
     workflow_deployments,
+    workflow_sandboxes,
 )
 from .environment import VellumEnvironment
 from .version import __version__
@@ -1166,9 +1166,9 @@ __all__ = [
     "document_indexes",
     "documents",
     "folder_entities",
-    "prompt_versions",
     "sandboxes",
     "test_suite_runs",
     "test_suites",
     "workflow_deployments",
+    "workflow_sandboxes",
 ]

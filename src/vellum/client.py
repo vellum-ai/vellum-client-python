@@ -22,11 +22,11 @@ from .resources.deployments.client import AsyncDeploymentsClient, DeploymentsCli
 from .resources.document_indexes.client import AsyncDocumentIndexesClient, DocumentIndexesClient
 from .resources.documents.client import AsyncDocumentsClient, DocumentsClient
 from .resources.folder_entities.client import AsyncFolderEntitiesClient, FolderEntitiesClient
-from .resources.prompt_versions.client import AsyncPromptVersionsClient, PromptVersionsClient
 from .resources.sandboxes.client import AsyncSandboxesClient, SandboxesClient
 from .resources.test_suite_runs.client import AsyncTestSuiteRunsClient, TestSuiteRunsClient
 from .resources.test_suites.client import AsyncTestSuitesClient, TestSuitesClient
 from .resources.workflow_deployments.client import AsyncWorkflowDeploymentsClient, WorkflowDeploymentsClient
+from .resources.workflow_sandboxes.client import AsyncWorkflowSandboxesClient, WorkflowSandboxesClient
 from .types.execute_prompt_event import ExecutePromptEvent
 from .types.execute_prompt_response import ExecutePromptResponse
 from .types.execute_workflow_response import ExecuteWorkflowResponse
@@ -97,11 +97,11 @@ class Vellum:
         self.document_indexes = DocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = DocumentsClient(client_wrapper=self._client_wrapper)
         self.folder_entities = FolderEntitiesClient(client_wrapper=self._client_wrapper)
-        self.prompt_versions = PromptVersionsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suite_runs = TestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = WorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
+        self.workflow_sandboxes = WorkflowSandboxesClient(client_wrapper=self._client_wrapper)
 
     def execute_prompt(
         self,
@@ -1060,11 +1060,11 @@ class AsyncVellum:
         self.document_indexes = AsyncDocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = AsyncDocumentsClient(client_wrapper=self._client_wrapper)
         self.folder_entities = AsyncFolderEntitiesClient(client_wrapper=self._client_wrapper)
-        self.prompt_versions = AsyncPromptVersionsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suite_runs = AsyncTestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = AsyncWorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
+        self.workflow_sandboxes = AsyncWorkflowSandboxesClient(client_wrapper=self._client_wrapper)
 
     async def execute_prompt(
         self,

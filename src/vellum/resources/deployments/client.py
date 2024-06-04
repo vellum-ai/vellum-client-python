@@ -19,7 +19,6 @@ from ...types.deployment_read import DeploymentRead
 from ...types.deployment_release_tag_read import DeploymentReleaseTagRead
 from ...types.paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from ...types.prompt_deployment_input_request import PromptDeploymentInputRequest
-from ...types.workflow_deployment_read import WorkflowDeploymentRead
 from .types.deployments_list_request_status import DeploymentsListRequestStatus
 
 # this is used as the default value for optional parameters
@@ -351,89 +350,6 @@ class DeploymentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def deploy_workflow(
-        self,
-        id: str,
-        workflow_id: str,
-        *,
-        workflow_deployment_id: typing.Optional[str] = OMIT,
-        workflow_deployment_name: typing.Optional[str] = OMIT,
-        label: typing.Optional[str] = OMIT,
-        release_tags: typing.Optional[typing.Sequence[str]] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> WorkflowDeploymentRead:
-        """
-        Parameters:
-            - id: str. A UUID string identifying this workflow sandbox.
-
-            - workflow_id: str. An ID identifying the Workflow you'd like to deploy.
-
-            - workflow_deployment_id: typing.Optional[str]. The Vellum-generated ID of the Workflow Deployment you'd like to update. Cannot specify both this and workflow_deployment_name. Leave null to create a new Workflow Deployment.
-
-            - workflow_deployment_name: typing.Optional[str]. The unique name of the Workflow Deployment you'd like to either create or update. Cannot specify both this and workflow_deployment_id. If provided and matches an existing Workflow Deployment, that Workflow Deployment will be updated. Otherwise, a new Prompt Deployment will be created.
-
-            - label: typing.Optional[str]. In the event that a new Workflow Deployment is created, this will be the label it's given.
-
-            - release_tags: typing.Optional[typing.Sequence[str]]. Optionally provide the release tags that you'd like to be associated with the latest release of the created/updated Prompt Deployment.
-
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
-        from vellum.client import Vellum
-
-        client = Vellum(
-            api_key="YOUR_API_KEY",
-        )
-        client.deployments.deploy_workflow(
-            id="id",
-            workflow_id="workflow_id",
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {}
-        if workflow_deployment_id is not OMIT:
-            _request["workflow_deployment_id"] = workflow_deployment_id
-        if workflow_deployment_name is not OMIT:
-            _request["workflow_deployment_name"] = workflow_deployment_name
-        if label is not OMIT:
-            _request["label"] = label
-        if release_tags is not OMIT:
-            _request["release_tags"] = release_tags
-        _response = self._client_wrapper.httpx_client.request(
-            method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/workflow-sandboxes/{jsonable_encoder(id)}/workflows/{jsonable_encoder(workflow_id)}/deploy",
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
 
 class AsyncDeploymentsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -754,89 +670,6 @@ class AsyncDeploymentsClient:
             raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         if _response.status_code == 500:
             raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def deploy_workflow(
-        self,
-        id: str,
-        workflow_id: str,
-        *,
-        workflow_deployment_id: typing.Optional[str] = OMIT,
-        workflow_deployment_name: typing.Optional[str] = OMIT,
-        label: typing.Optional[str] = OMIT,
-        release_tags: typing.Optional[typing.Sequence[str]] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> WorkflowDeploymentRead:
-        """
-        Parameters:
-            - id: str. A UUID string identifying this workflow sandbox.
-
-            - workflow_id: str. An ID identifying the Workflow you'd like to deploy.
-
-            - workflow_deployment_id: typing.Optional[str]. The Vellum-generated ID of the Workflow Deployment you'd like to update. Cannot specify both this and workflow_deployment_name. Leave null to create a new Workflow Deployment.
-
-            - workflow_deployment_name: typing.Optional[str]. The unique name of the Workflow Deployment you'd like to either create or update. Cannot specify both this and workflow_deployment_id. If provided and matches an existing Workflow Deployment, that Workflow Deployment will be updated. Otherwise, a new Prompt Deployment will be created.
-
-            - label: typing.Optional[str]. In the event that a new Workflow Deployment is created, this will be the label it's given.
-
-            - release_tags: typing.Optional[typing.Sequence[str]]. Optionally provide the release tags that you'd like to be associated with the latest release of the created/updated Prompt Deployment.
-
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
-        from vellum.client import AsyncVellum
-
-        client = AsyncVellum(
-            api_key="YOUR_API_KEY",
-        )
-        await client.deployments.deploy_workflow(
-            id="id",
-            workflow_id="workflow_id",
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {}
-        if workflow_deployment_id is not OMIT:
-            _request["workflow_deployment_id"] = workflow_deployment_id
-        if workflow_deployment_name is not OMIT:
-            _request["workflow_deployment_name"] = workflow_deployment_name
-        if label is not OMIT:
-            _request["label"] = label
-        if release_tags is not OMIT:
-            _request["release_tags"] = release_tags
-        _response = await self._client_wrapper.httpx_client.request(
-            method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/workflow-sandboxes/{jsonable_encoder(id)}/workflows/{jsonable_encoder(workflow_id)}/deploy",
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

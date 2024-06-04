@@ -5,11 +5,11 @@ from . import (
     document_indexes,
     documents,
     folder_entities,
-    prompt_versions,
     sandboxes,
     test_suite_runs,
     test_suites,
     workflow_deployments,
+    workflow_sandboxes,
 )
 from .deployments import DeploymentsListRequestStatus
 from .document_indexes import DocumentIndexesListRequestStatus
@@ -23,9 +23,9 @@ __all__ = [
     "document_indexes",
     "documents",
     "folder_entities",
-    "prompt_versions",
     "sandboxes",
     "test_suite_runs",
     "test_suites",
     "workflow_deployments",
+    "workflow_sandboxes",
 ]

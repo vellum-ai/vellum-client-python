@@ -10,38 +10,38 @@ from ...core.jsonable_encoder import jsonable_encoder
 from ...core.pydantic_utilities import pydantic_v1
 from ...core.remove_none_from_dict import remove_none_from_dict
 from ...core.request_options import RequestOptions
-from ...types.deployment_read import DeploymentRead
+from ...types.workflow_deployment_read import WorkflowDeploymentRead
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class PromptVersionsClient:
+class WorkflowSandboxesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def deploy_prompt(
+    def deploy_workflow(
         self,
         id: str,
-        prompt_id: str,
+        workflow_id: str,
         *,
-        prompt_deployment_id: typing.Optional[str] = OMIT,
-        prompt_deployment_name: typing.Optional[str] = OMIT,
+        workflow_deployment_id: typing.Optional[str] = OMIT,
+        workflow_deployment_name: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         release_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> DeploymentRead:
+    ) -> WorkflowDeploymentRead:
         """
         Parameters:
-            - id: str. A UUID string identifying this sandbox.
+            - id: str. A UUID string identifying this workflow sandbox.
 
-            - prompt_id: str. An ID identifying the Prompt you'd like to deploy.
+            - workflow_id: str. An ID identifying the Workflow you'd like to deploy.
 
-            - prompt_deployment_id: typing.Optional[str]. The Vellum-generated ID of the Prompt Deployment you'd like to update. Cannot specify both this and prompt_deployment_name. Leave null to create a new Prompt Deployment.
+            - workflow_deployment_id: typing.Optional[str]. The Vellum-generated ID of the Workflow Deployment you'd like to update. Cannot specify both this and workflow_deployment_name. Leave null to create a new Workflow Deployment.
 
-            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment you'd like to either create or update. Cannot specify both this and prompt_deployment_id. If provided and matches an existing Prompt Deployment, that Prompt Deployment will be updated. Otherwise, a new Prompt Deployment will be created.
+            - workflow_deployment_name: typing.Optional[str]. The unique name of the Workflow Deployment you'd like to either create or update. Cannot specify both this and workflow_deployment_id. If provided and matches an existing Workflow Deployment, that Workflow Deployment will be updated. Otherwise, a new Prompt Deployment will be created.
 
-            - label: typing.Optional[str]. In the event that a new Prompt Deployment is created, this will be the label it's given.
+            - label: typing.Optional[str]. In the event that a new Workflow Deployment is created, this will be the label it's given.
 
             - release_tags: typing.Optional[typing.Sequence[str]]. Optionally provide the release tags that you'd like to be associated with the latest release of the created/updated Prompt Deployment.
 
@@ -52,16 +52,16 @@ class PromptVersionsClient:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.prompt_versions.deploy_prompt(
+        client.workflow_sandboxes.deploy_workflow(
             id="id",
-            prompt_id="prompt_id",
+            workflow_id="workflow_id",
         )
         """
         _request: typing.Dict[str, typing.Any] = {}
-        if prompt_deployment_id is not OMIT:
-            _request["prompt_deployment_id"] = prompt_deployment_id
-        if prompt_deployment_name is not OMIT:
-            _request["prompt_deployment_name"] = prompt_deployment_name
+        if workflow_deployment_id is not OMIT:
+            _request["workflow_deployment_id"] = workflow_deployment_id
+        if workflow_deployment_name is not OMIT:
+            _request["workflow_deployment_name"] = workflow_deployment_name
         if label is not OMIT:
             _request["label"] = label
         if release_tags is not OMIT:
@@ -70,7 +70,7 @@ class PromptVersionsClient:
             method="POST",
             url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/",
-                f"v1/sandboxes/{jsonable_encoder(id)}/prompts/{jsonable_encoder(prompt_id)}/deploy",
+                f"v1/workflow-sandboxes/{jsonable_encoder(id)}/workflows/{jsonable_encoder(workflow_id)}/deploy",
             ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
@@ -96,7 +96,7 @@ class PromptVersionsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(DeploymentRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
@@ -104,32 +104,32 @@ class PromptVersionsClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
 
-class AsyncPromptVersionsClient:
+class AsyncWorkflowSandboxesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def deploy_prompt(
+    async def deploy_workflow(
         self,
         id: str,
-        prompt_id: str,
+        workflow_id: str,
         *,
-        prompt_deployment_id: typing.Optional[str] = OMIT,
-        prompt_deployment_name: typing.Optional[str] = OMIT,
+        workflow_deployment_id: typing.Optional[str] = OMIT,
+        workflow_deployment_name: typing.Optional[str] = OMIT,
         label: typing.Optional[str] = OMIT,
         release_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> DeploymentRead:
+    ) -> WorkflowDeploymentRead:
         """
         Parameters:
-            - id: str. A UUID string identifying this sandbox.
+            - id: str. A UUID string identifying this workflow sandbox.
 
-            - prompt_id: str. An ID identifying the Prompt you'd like to deploy.
+            - workflow_id: str. An ID identifying the Workflow you'd like to deploy.
 
-            - prompt_deployment_id: typing.Optional[str]. The Vellum-generated ID of the Prompt Deployment you'd like to update. Cannot specify both this and prompt_deployment_name. Leave null to create a new Prompt Deployment.
+            - workflow_deployment_id: typing.Optional[str]. The Vellum-generated ID of the Workflow Deployment you'd like to update. Cannot specify both this and workflow_deployment_name. Leave null to create a new Workflow Deployment.
 
-            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment you'd like to either create or update. Cannot specify both this and prompt_deployment_id. If provided and matches an existing Prompt Deployment, that Prompt Deployment will be updated. Otherwise, a new Prompt Deployment will be created.
+            - workflow_deployment_name: typing.Optional[str]. The unique name of the Workflow Deployment you'd like to either create or update. Cannot specify both this and workflow_deployment_id. If provided and matches an existing Workflow Deployment, that Workflow Deployment will be updated. Otherwise, a new Prompt Deployment will be created.
 
-            - label: typing.Optional[str]. In the event that a new Prompt Deployment is created, this will be the label it's given.
+            - label: typing.Optional[str]. In the event that a new Workflow Deployment is created, this will be the label it's given.
 
             - release_tags: typing.Optional[typing.Sequence[str]]. Optionally provide the release tags that you'd like to be associated with the latest release of the created/updated Prompt Deployment.
 
@@ -140,16 +140,16 @@ class AsyncPromptVersionsClient:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.prompt_versions.deploy_prompt(
+        await client.workflow_sandboxes.deploy_workflow(
             id="id",
-            prompt_id="prompt_id",
+            workflow_id="workflow_id",
         )
         """
         _request: typing.Dict[str, typing.Any] = {}
-        if prompt_deployment_id is not OMIT:
-            _request["prompt_deployment_id"] = prompt_deployment_id
-        if prompt_deployment_name is not OMIT:
-            _request["prompt_deployment_name"] = prompt_deployment_name
+        if workflow_deployment_id is not OMIT:
+            _request["workflow_deployment_id"] = workflow_deployment_id
+        if workflow_deployment_name is not OMIT:
+            _request["workflow_deployment_name"] = workflow_deployment_name
         if label is not OMIT:
             _request["label"] = label
         if release_tags is not OMIT:
@@ -158,7 +158,7 @@ class AsyncPromptVersionsClient:
             method="POST",
             url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/",
-                f"v1/sandboxes/{jsonable_encoder(id)}/prompts/{jsonable_encoder(prompt_id)}/deploy",
+                f"v1/workflow-sandboxes/{jsonable_encoder(id)}/workflows/{jsonable_encoder(workflow_id)}/deploy",
             ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
@@ -184,7 +184,7 @@ class AsyncPromptVersionsClient:
             max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
         )
         if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(DeploymentRead, _response.json())  # type: ignore
+            return pydantic_v1.parse_obj_as(WorkflowDeploymentRead, _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:

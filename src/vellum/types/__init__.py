@@ -50,6 +50,8 @@ from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1 import 
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request import (
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
 )
+from .bulk_create_test_suite_test_case_data_request import BulkCreateTestSuiteTestCaseDataRequest
+from .bulk_replace_test_suite_test_case_data_request import BulkReplaceTestSuiteTestCaseDataRequest
 from .chat_history_enum import ChatHistoryEnum
 from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_message import ChatMessage
@@ -92,6 +94,10 @@ from .code_execution_node_search_results_result import CodeExecutionNodeSearchRe
 from .code_execution_node_string_result import CodeExecutionNodeStringResult
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
+from .create_enum import CreateEnum
+from .created_enum import CreatedEnum
+from .delete_enum import DeleteEnum
+from .deleted_enum import DeletedEnum
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from .deployment_read import DeploymentRead
 from .deployment_release_tag_deployment_history_item import DeploymentReleaseTagDeploymentHistoryItem
@@ -368,6 +374,8 @@ from .rejected_execute_workflow_workflow_result_event import RejectedExecuteWork
 from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
 from .release_tag_source import ReleaseTagSource
+from .replace_enum import ReplaceEnum
+from .replaced_enum import ReplacedEnum
 from .sandbox_scenario import SandboxScenario
 from .scenario_input import ScenarioInput, ScenarioInput_ChatHistory, ScenarioInput_String
 from .scenario_input_chat_history_variable_value import ScenarioInputChatHistoryVariableValue
@@ -544,6 +552,30 @@ from .test_suite_run_workflow_release_tag_exec_config_data_request import (
 from .test_suite_run_workflow_release_tag_exec_config_request import TestSuiteRunWorkflowReleaseTagExecConfigRequest
 from .test_suite_run_workflow_release_tag_exec_config_type_enum import TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum
 from .test_suite_test_case import TestSuiteTestCase
+from .test_suite_test_case_bulk_operation_request import (
+    TestSuiteTestCaseBulkOperationRequest,
+    TestSuiteTestCaseBulkOperationRequest_Create,
+    TestSuiteTestCaseBulkOperationRequest_Delete,
+    TestSuiteTestCaseBulkOperationRequest_Replace,
+)
+from .test_suite_test_case_bulk_result import (
+    TestSuiteTestCaseBulkResult,
+    TestSuiteTestCaseBulkResult_Created,
+    TestSuiteTestCaseBulkResult_Deleted,
+    TestSuiteTestCaseBulkResult_Rejected,
+    TestSuiteTestCaseBulkResult_Replaced,
+)
+from .test_suite_test_case_create_bulk_operation_request import TestSuiteTestCaseCreateBulkOperationRequest
+from .test_suite_test_case_created_bulk_result import TestSuiteTestCaseCreatedBulkResult
+from .test_suite_test_case_created_bulk_result_data import TestSuiteTestCaseCreatedBulkResultData
+from .test_suite_test_case_delete_bulk_operation_data_request import TestSuiteTestCaseDeleteBulkOperationDataRequest
+from .test_suite_test_case_delete_bulk_operation_request import TestSuiteTestCaseDeleteBulkOperationRequest
+from .test_suite_test_case_deleted_bulk_result import TestSuiteTestCaseDeletedBulkResult
+from .test_suite_test_case_deleted_bulk_result_data import TestSuiteTestCaseDeletedBulkResultData
+from .test_suite_test_case_rejected_bulk_result import TestSuiteTestCaseRejectedBulkResult
+from .test_suite_test_case_replace_bulk_operation_request import TestSuiteTestCaseReplaceBulkOperationRequest
+from .test_suite_test_case_replaced_bulk_result import TestSuiteTestCaseReplacedBulkResult
+from .test_suite_test_case_replaced_bulk_result_data import TestSuiteTestCaseReplacedBulkResultData
 from .text_embedding_3_large_enum import TextEmbedding3LargeEnum
 from .text_embedding_3_small_enum import TextEmbedding3SmallEnum
 from .text_embedding_ada_002_enum import TextEmbeddingAda002Enum
@@ -682,6 +714,8 @@ __all__ = [
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request",
+    "BulkCreateTestSuiteTestCaseDataRequest",
+    "BulkReplaceTestSuiteTestCaseDataRequest",
     "ChatHistoryEnum",
     "ChatHistoryInputRequest",
     "ChatMessage",
@@ -718,6 +752,10 @@ __all__ = [
     "CodeExecutionNodeStringResult",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
+    "CreateEnum",
+    "CreatedEnum",
+    "DeleteEnum",
+    "DeletedEnum",
     "DeploymentProviderPayloadResponse",
     "DeploymentRead",
     "DeploymentReleaseTagDeploymentHistoryItem",
@@ -964,6 +1002,8 @@ __all__ = [
     "RejectedPromptExecutionMeta",
     "RejectedWorkflowNodeResultEvent",
     "ReleaseTagSource",
+    "ReplaceEnum",
+    "ReplacedEnum",
     "SandboxScenario",
     "ScenarioInput",
     "ScenarioInputChatHistoryVariableValue",
@@ -1120,6 +1160,26 @@ __all__ = [
     "TestSuiteRunWorkflowReleaseTagExecConfigRequest",
     "TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum",
     "TestSuiteTestCase",
+    "TestSuiteTestCaseBulkOperationRequest",
+    "TestSuiteTestCaseBulkOperationRequest_Create",
+    "TestSuiteTestCaseBulkOperationRequest_Delete",
+    "TestSuiteTestCaseBulkOperationRequest_Replace",
+    "TestSuiteTestCaseBulkResult",
+    "TestSuiteTestCaseBulkResult_Created",
+    "TestSuiteTestCaseBulkResult_Deleted",
+    "TestSuiteTestCaseBulkResult_Rejected",
+    "TestSuiteTestCaseBulkResult_Replaced",
+    "TestSuiteTestCaseCreateBulkOperationRequest",
+    "TestSuiteTestCaseCreatedBulkResult",
+    "TestSuiteTestCaseCreatedBulkResultData",
+    "TestSuiteTestCaseDeleteBulkOperationDataRequest",
+    "TestSuiteTestCaseDeleteBulkOperationRequest",
+    "TestSuiteTestCaseDeletedBulkResult",
+    "TestSuiteTestCaseDeletedBulkResultData",
+    "TestSuiteTestCaseRejectedBulkResult",
+    "TestSuiteTestCaseReplaceBulkOperationRequest",
+    "TestSuiteTestCaseReplacedBulkResult",
+    "TestSuiteTestCaseReplacedBulkResultData",
     "TextEmbedding3LargeEnum",
     "TextEmbedding3SmallEnum",
     "TextEmbeddingAda002Enum",

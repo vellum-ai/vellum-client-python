@@ -591,7 +591,8 @@ class Vellum:
         """
         Generate a completion using a previously defined deployment.
 
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+        Important: This endpoint is DEPRECATED and has been superseded by
+        [execute-prompt](/api-reference/api-reference/execute-prompt).
 
         Parameters:
             - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
@@ -679,7 +680,8 @@ class Vellum:
         """
         Generate a stream of completions using a previously defined deployment.
 
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+        Important: This endpoint is DEPRECATED and has been superseded by
+        [execute-prompt-stream](/api-reference/api-reference/execute-prompt-stream).
 
         Parameters:
             - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
@@ -791,8 +793,6 @@ class Vellum:
         """
         Perform a search against a document index.
 
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
-
         Parameters:
             - index_id: typing.Optional[str]. The ID of the index to search against. Must provide either this or index_name.
 
@@ -870,8 +870,6 @@ class Vellum:
     ) -> None:
         """
         Used to submit feedback regarding the quality of previously generated completions.
-
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
 
         Parameters:
             - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
@@ -1554,7 +1552,8 @@ class AsyncVellum:
         """
         Generate a completion using a previously defined deployment.
 
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+        Important: This endpoint is DEPRECATED and has been superseded by
+        [execute-prompt](/api-reference/api-reference/execute-prompt).
 
         Parameters:
             - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
@@ -1642,7 +1641,8 @@ class AsyncVellum:
         """
         Generate a stream of completions using a previously defined deployment.
 
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
+        Important: This endpoint is DEPRECATED and has been superseded by
+        [execute-prompt-stream](/api-reference/api-reference/execute-prompt-stream).
 
         Parameters:
             - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
@@ -1754,8 +1754,6 @@ class AsyncVellum:
         """
         Perform a search against a document index.
 
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
-
         Parameters:
             - index_id: typing.Optional[str]. The ID of the index to search against. Must provide either this or index_name.
 
@@ -1833,8 +1831,6 @@ class AsyncVellum:
     ) -> None:
         """
         Used to submit feedback regarding the quality of previously generated completions.
-
-        **Note:** Uses a base url of `https://predict.vellum.ai`.
 
         Parameters:
             - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.

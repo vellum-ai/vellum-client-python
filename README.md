@@ -37,6 +37,7 @@ def execute() -> str:
         inputs=[
             PromptDeploymentInputRequest_String(
                 name="input_a",
+                type="STRING",
                 value="Hello, world!",
             )
         ],
@@ -101,6 +102,7 @@ tests/*
 README.md
 ```
 
-Any additions made to files beyond those directories and files above would have to be moved over to our generation code,
+Any additions made to files beyond those directories and files above would have to be moved over to our generation code
+(found in the separate [vellum-client-generator](https://github.com/vellum-ai/vellum-client-generator) repo),
 otherwise they would be overwritten upon the next generated release. Feel free to open a PR as a proof of concept,
 but know that we will not be able to merge it as-is. We suggest opening an issue first to discuss with us!

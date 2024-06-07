@@ -41,6 +41,11 @@ class WorkflowDeploymentRead(pydantic_v1.BaseModel):
 
     created: dt.datetime
     last_deployed_on: dt.datetime
+    last_deployed_history_item_id: str = pydantic_v1.Field()
+    """
+    The ID of the history item associated with this Workflow Deployment's LATEST Release Tag
+    """
+
     input_variables: typing.List[VellumVariable] = pydantic_v1.Field()
     """
     The input variables this Workflow Deployment expects to receive values for when it is executed.

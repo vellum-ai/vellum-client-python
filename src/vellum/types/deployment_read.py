@@ -47,6 +47,11 @@ class DeploymentRead(pydantic_v1.BaseModel):
     Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.
     """
 
+    last_deployed_history_item_id: str = pydantic_v1.Field()
+    """
+    The ID of the history item associated with this Deployment's LATEST Release Tag
+    """
+
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
         return super().json(**kwargs_with_defaults)

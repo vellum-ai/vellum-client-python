@@ -2,3 +2,6 @@ dist/
 .mypy_cache/
 __pycache__/
 poetry.toml
+
+# Jupyter Notebook
+examples/.ipynb_checkpoints/

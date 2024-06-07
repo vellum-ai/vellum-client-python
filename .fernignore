@@ -4,7 +4,7 @@ README.md
 LICENSE
 mypy.ini
 examples
-
+.gitignore
 
 # added computed properties
 src/vellum/types/generate_response.py

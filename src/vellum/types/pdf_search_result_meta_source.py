@@ -5,30 +5,21 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .search_result_document import SearchResultDocument
-from .search_result_meta import SearchResultMeta
 
 
-class SearchResult(pydantic_v1.BaseModel):
-    text: str = pydantic_v1.Field()
+class PdfSearchResultMetaSource(pydantic_v1.BaseModel):
     """
-    The text of the chunk that matched the search query.
-    """
-
-    score: float = pydantic_v1.Field()
-    """
-    A score representing how well the chunk matches the search query.
+    The source of a search result from a PDF document.
     """
 
-    keywords: typing.List[str]
-    document: SearchResultDocument = pydantic_v1.Field()
+    start_page_num: typing.Optional[int] = pydantic_v1.Field(default=None)
     """
-    The document that contains the chunk that matched the search query.
+    The 1-indexed page number where the chunk starts in the document. Only available for supported chunking strategies and document types.
     """
 
-    meta: typing.Optional[SearchResultMeta] = pydantic_v1.Field(default=None)
+    end_page_num: typing.Optional[int] = pydantic_v1.Field(default=None)
     """
-    Additional information about the search result.
+    The 1-indexed page number where the chunk ends in the document. Only available for supported chunking strategies and document types.
     """
 
     def json(self, **kwargs: typing.Any) -> str:

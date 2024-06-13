@@ -342,6 +342,9 @@ from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
 from .paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
 from .paginated_test_suite_test_case_list import PaginatedTestSuiteTestCaseList
+from .pdf_enum import PdfEnum
+from .pdf_search_result_meta_source import PdfSearchResultMetaSource
+from .pdf_search_result_meta_source_request import PdfSearchResultMetaSourceRequest
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 from .prompt_deployment_expand_meta_request_request import PromptDeploymentExpandMetaRequestRequest
@@ -390,6 +393,10 @@ from .search_result import SearchResult
 from .search_result_document import SearchResultDocument
 from .search_result_document_request import SearchResultDocumentRequest
 from .search_result_merging_request import SearchResultMergingRequest
+from .search_result_meta import SearchResultMeta
+from .search_result_meta_request import SearchResultMetaRequest
+from .search_result_meta_source import SearchResultMetaSource, SearchResultMetaSource_Pdf
+from .search_result_meta_source_request import SearchResultMetaSourceRequest, SearchResultMetaSourceRequest_Pdf
 from .search_result_request import SearchResultRequest
 from .search_results_enum import SearchResultsEnum
 from .search_weights_request import SearchWeightsRequest
@@ -974,6 +981,9 @@ __all__ = [
     "PaginatedSlimWorkflowDeploymentList",
     "PaginatedTestSuiteRunExecutionList",
     "PaginatedTestSuiteTestCaseList",
+    "PdfEnum",
+    "PdfSearchResultMetaSource",
+    "PdfSearchResultMetaSourceRequest",
     "ProcessingFailureReasonEnum",
     "ProcessingStateEnum",
     "PromptDeploymentExpandMetaRequestRequest",
@@ -1020,6 +1030,12 @@ __all__ = [
     "SearchResultDocument",
     "SearchResultDocumentRequest",
     "SearchResultMergingRequest",
+    "SearchResultMeta",
+    "SearchResultMetaRequest",
+    "SearchResultMetaSource",
+    "SearchResultMetaSourceRequest",
+    "SearchResultMetaSourceRequest_Pdf",
+    "SearchResultMetaSource_Pdf",
     "SearchResultRequest",
     "SearchResultsEnum",
     "SearchWeightsRequest",

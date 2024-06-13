@@ -5,31 +5,11 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .search_result_document import SearchResultDocument
-from .search_result_meta import SearchResultMeta
+from .search_result_meta_source_request import SearchResultMetaSourceRequest
 
 
-class SearchResult(pydantic_v1.BaseModel):
-    text: str = pydantic_v1.Field()
-    """
-    The text of the chunk that matched the search query.
-    """
-
-    score: float = pydantic_v1.Field()
-    """
-    A score representing how well the chunk matches the search query.
-    """
-
-    keywords: typing.List[str]
-    document: SearchResultDocument = pydantic_v1.Field()
-    """
-    The document that contains the chunk that matched the search query.
-    """
-
-    meta: typing.Optional[SearchResultMeta] = pydantic_v1.Field(default=None)
-    """
-    Additional information about the search result.
-    """
+class SearchResultMetaRequest(pydantic_v1.BaseModel):
+    source: SearchResultMetaSourceRequest
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

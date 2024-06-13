@@ -6,6 +6,7 @@ import typing
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
 from .search_result_document_request import SearchResultDocumentRequest
+from .search_result_meta_request import SearchResultMetaRequest
 
 
 class SearchResultRequest(pydantic_v1.BaseModel):
@@ -23,6 +24,11 @@ class SearchResultRequest(pydantic_v1.BaseModel):
     document: SearchResultDocumentRequest = pydantic_v1.Field()
     """
     The document that contains the chunk that matched the search query.
+    """
+
+    meta: typing.Optional[SearchResultMetaRequest] = pydantic_v1.Field(default=None)
+    """
+    Additional information about the search result.
     """
 
     def json(self, **kwargs: typing.Any) -> str:

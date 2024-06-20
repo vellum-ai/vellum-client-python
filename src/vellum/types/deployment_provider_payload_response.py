@@ -5,10 +5,11 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
+from .deployment_provider_payload_response_payload import DeploymentProviderPayloadResponsePayload
 
 
 class DeploymentProviderPayloadResponse(pydantic_v1.BaseModel):
-    payload: typing.Dict[str, typing.Any]
+    payload: DeploymentProviderPayloadResponsePayload
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

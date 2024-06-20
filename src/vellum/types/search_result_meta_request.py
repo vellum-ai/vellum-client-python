@@ -9,7 +9,7 @@ from .search_result_meta_source_request import SearchResultMetaSourceRequest
 
 
 class SearchResultMetaRequest(pydantic_v1.BaseModel):
-    source: SearchResultMetaSourceRequest
+    source: typing.Optional[SearchResultMetaSourceRequest] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

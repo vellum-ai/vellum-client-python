@@ -9,6 +9,10 @@ from .vellum_error import VellumError
 
 
 class ExecutionErrorVellumValue(pydantic_v1.BaseModel):
+    """
+    A value representing an Error.
+    """
+
     id: str = pydantic_v1.Field()
     """
     The variable's uniquely identifying internal id.

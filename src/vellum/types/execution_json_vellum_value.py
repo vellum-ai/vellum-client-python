@@ -8,6 +8,10 @@ from ..core.pydantic_utilities import pydantic_v1
 
 
 class ExecutionJsonVellumValue(pydantic_v1.BaseModel):
+    """
+    A value representing a JSON object.
+    """
+
     id: str = pydantic_v1.Field()
     """
     The variable's uniquely identifying internal id.

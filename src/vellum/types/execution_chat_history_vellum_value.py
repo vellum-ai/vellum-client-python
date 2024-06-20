@@ -9,6 +9,10 @@ from .chat_message import ChatMessage
 
 
 class ExecutionChatHistoryVellumValue(pydantic_v1.BaseModel):
+    """
+    A value representing Chat History.
+    """
+
     id: str = pydantic_v1.Field()
     """
     The variable's uniquely identifying internal id.

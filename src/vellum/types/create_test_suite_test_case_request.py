@@ -8,17 +8,16 @@ from ..core.pydantic_utilities import pydantic_v1
 from .named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
 
 
-class BulkReplaceTestSuiteTestCaseDataRequest(pydantic_v1.BaseModel):
+class CreateTestSuiteTestCaseRequest(pydantic_v1.BaseModel):
     """
-    Information about the Test Case to replace
-    """
-
-    id: str = pydantic_v1.Field()
-    """
-    The ID of the Test Case to replace.
+    Information about the Test Case to create
     """
 
-    label: typing.Optional[str] = None
+    label: typing.Optional[str] = pydantic_v1.Field(default=None)
+    """
+    A human-readable label used to convey the intention of this Test Case
+    """
+
     input_values: typing.List[NamedTestCaseVariableValueRequest] = pydantic_v1.Field()
     """
     Values for each of the Test Case's input variables
@@ -27,6 +26,11 @@ class BulkReplaceTestSuiteTestCaseDataRequest(pydantic_v1.BaseModel):
     evaluation_values: typing.List[NamedTestCaseVariableValueRequest] = pydantic_v1.Field()
     """
     Values for each of the Test Case's evaluation variables
+    """
+
+    external_id: typing.Optional[str] = pydantic_v1.Field(default=None)
+    """
+    Optionally provide an ID that uniquely identifies this Test Case in your system. Useful for updating this Test Cases data after initial creation. Cannot be changed later.
     """
 
     def json(self, **kwargs: typing.Any) -> str:

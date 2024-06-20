@@ -10,6 +10,7 @@ from .test_case_variable_value import TestCaseVariableValue
 
 class TestSuiteTestCase(pydantic_v1.BaseModel):
     id: typing.Optional[str] = None
+    external_id: typing.Optional[str] = None
     label: typing.Optional[str] = None
     input_values: typing.List[TestCaseVariableValue]
     evaluation_values: typing.List[TestCaseVariableValue]

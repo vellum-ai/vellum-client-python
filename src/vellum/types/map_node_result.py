@@ -5,24 +5,15 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
+from .map_node_result_data import MapNodeResultData
 
 
-class BulkCreateTestSuiteTestCaseDataRequest(pydantic_v1.BaseModel):
+class MapNodeResult(pydantic_v1.BaseModel):
     """
-    Information about the Test Case to create
-    """
-
-    label: typing.Optional[str] = None
-    input_values: typing.List[NamedTestCaseVariableValueRequest] = pydantic_v1.Field()
-    """
-    Values for each of the Test Case's input variables
+    A Node Result Event emitted from a Map Node.
     """
 
-    evaluation_values: typing.List[NamedTestCaseVariableValueRequest] = pydantic_v1.Field()
-    """
-    Values for each of the Test Case's evaluation variables
-    """
+    data: typing.Optional[MapNodeResultData] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

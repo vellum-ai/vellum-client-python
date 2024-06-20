@@ -5,7 +5,7 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .bulk_create_test_suite_test_case_data_request import BulkCreateTestSuiteTestCaseDataRequest
+from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
 
 
 class TestSuiteTestCaseCreateBulkOperationRequest(pydantic_v1.BaseModel):
@@ -18,7 +18,7 @@ class TestSuiteTestCaseCreateBulkOperationRequest(pydantic_v1.BaseModel):
     An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
     """
 
-    data: BulkCreateTestSuiteTestCaseDataRequest
+    data: CreateTestSuiteTestCaseRequest
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

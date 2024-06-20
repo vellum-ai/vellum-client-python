@@ -9,6 +9,10 @@ from .function_call import FunctionCall
 
 
 class ExecutionFunctionCallVellumValue(pydantic_v1.BaseModel):
+    """
+    A value representing a Function Call.
+    """
+
     id: str = pydantic_v1.Field()
     """
     The variable's uniquely identifying internal id.

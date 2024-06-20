@@ -50,8 +50,6 @@ from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1 import 
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request import (
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
 )
-from .bulk_create_test_suite_test_case_data_request import BulkCreateTestSuiteTestCaseDataRequest
-from .bulk_replace_test_suite_test_case_data_request import BulkReplaceTestSuiteTestCaseDataRequest
 from .chat_history_enum import ChatHistoryEnum
 from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_message import ChatMessage
@@ -95,10 +93,12 @@ from .code_execution_node_string_result import CodeExecutionNodeStringResult
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .create_enum import CreateEnum
+from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
 from .created_enum import CreatedEnum
 from .delete_enum import DeleteEnum
 from .deleted_enum import DeletedEnum
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
+from .deployment_provider_payload_response_payload import DeploymentProviderPayloadResponsePayload
 from .deployment_read import DeploymentRead
 from .deployment_release_tag_deployment_history_item import DeploymentReleaseTagDeploymentHistoryItem
 from .deployment_release_tag_read import DeploymentReleaseTagRead
@@ -236,6 +236,9 @@ from .json_variable_value import JsonVariableValue
 from .json_vellum_value import JsonVellumValue
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
+from .map_enum import MapEnum
+from .map_node_result import MapNodeResult
+from .map_node_result_data import MapNodeResultData
 from .merge_enum import MergeEnum
 from .merge_node_result import MergeNodeResult
 from .metadata_filter_config_request import MetadataFilterConfigRequest
@@ -378,6 +381,7 @@ from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
 from .release_tag_source import ReleaseTagSource
 from .replace_enum import ReplaceEnum
+from .replace_test_suite_test_case_request import ReplaceTestSuiteTestCaseRequest
 from .replaced_enum import ReplacedEnum
 from .sandbox_scenario import SandboxScenario
 from .scenario_input import ScenarioInput, ScenarioInput_ChatHistory, ScenarioInput_String
@@ -614,6 +618,7 @@ from .workflow_node_result_data import (
     WorkflowNodeResultData_Api,
     WorkflowNodeResultData_CodeExecution,
     WorkflowNodeResultData_Conditional,
+    WorkflowNodeResultData_Map,
     WorkflowNodeResultData_Merge,
     WorkflowNodeResultData_Metric,
     WorkflowNodeResultData_Prompt,
@@ -721,8 +726,6 @@ __all__ = [
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request",
-    "BulkCreateTestSuiteTestCaseDataRequest",
-    "BulkReplaceTestSuiteTestCaseDataRequest",
     "ChatHistoryEnum",
     "ChatHistoryInputRequest",
     "ChatMessage",
@@ -760,10 +763,12 @@ __all__ = [
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
     "CreateEnum",
+    "CreateTestSuiteTestCaseRequest",
     "CreatedEnum",
     "DeleteEnum",
     "DeletedEnum",
     "DeploymentProviderPayloadResponse",
+    "DeploymentProviderPayloadResponsePayload",
     "DeploymentRead",
     "DeploymentReleaseTagDeploymentHistoryItem",
     "DeploymentReleaseTagRead",
@@ -885,6 +890,9 @@ __all__ = [
     "JsonVellumValue",
     "LogicalOperator",
     "LogprobsEnum",
+    "MapEnum",
+    "MapNodeResult",
+    "MapNodeResultData",
     "MergeEnum",
     "MergeNodeResult",
     "MetadataFilterConfigRequest",
@@ -1013,6 +1021,7 @@ __all__ = [
     "RejectedWorkflowNodeResultEvent",
     "ReleaseTagSource",
     "ReplaceEnum",
+    "ReplaceTestSuiteTestCaseRequest",
     "ReplacedEnum",
     "SandboxScenario",
     "ScenarioInput",
@@ -1226,6 +1235,7 @@ __all__ = [
     "WorkflowNodeResultData_Api",
     "WorkflowNodeResultData_CodeExecution",
     "WorkflowNodeResultData_Conditional",
+    "WorkflowNodeResultData_Map",
     "WorkflowNodeResultData_Merge",
     "WorkflowNodeResultData_Metric",
     "WorkflowNodeResultData_Prompt",

@@ -5,17 +5,21 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .array_variable_value_item import ArrayVariableValueItem
+from .array_vellum_value_item import ArrayVellumValueItem
 
 
 class ExecutionArrayVellumValue(pydantic_v1.BaseModel):
+    """
+    A value representing an array of Vellum variable values.
+    """
+
     id: str = pydantic_v1.Field()
     """
     The variable's uniquely identifying internal id.
     """
 
     name: str
-    value: typing.Optional[typing.List[ArrayVariableValueItem]] = None
+    value: typing.Optional[typing.List[ArrayVellumValueItem]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -9,6 +9,10 @@ from .search_result import SearchResult
 
 
 class ExecutionSearchResultsVellumValue(pydantic_v1.BaseModel):
+    """
+    A value representing Search Results.
+    """
+
     id: str = pydantic_v1.Field()
     """
     The variable's uniquely identifying internal id.

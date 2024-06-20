@@ -7,18 +7,8 @@ from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
 
 
-class ExecutionNumberVellumValue(pydantic_v1.BaseModel):
-    """
-    A value representing a number.
-    """
-
-    id: str = pydantic_v1.Field()
-    """
-    The variable's uniquely identifying internal id.
-    """
-
-    name: str
-    value: typing.Optional[float] = None
+class MapNodeResultData(pydantic_v1.BaseModel):
+    execution_ids: typing.List[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

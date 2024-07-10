@@ -5,10 +5,12 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
+from .iteration_state_enum import IterationStateEnum
 
 
 class MapNodeResultData(pydantic_v1.BaseModel):
     execution_ids: typing.List[str]
+    iteration_state: typing.Optional[IterationStateEnum] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

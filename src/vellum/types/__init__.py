@@ -230,6 +230,7 @@ from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEve
 from .instructor_vectorizer_config import InstructorVectorizerConfig
 from .instructor_vectorizer_config_request import InstructorVectorizerConfigRequest
 from .intfloat_multilingual_e_5_large_enum import IntfloatMultilingualE5LargeEnum
+from .iteration_state_enum import IterationStateEnum
 from .json_enum import JsonEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
@@ -884,6 +885,7 @@ __all__ = [
     "InstructorVectorizerConfig",
     "InstructorVectorizerConfigRequest",
     "IntfloatMultilingualE5LargeEnum",
+    "IterationStateEnum",
     "JsonEnum",
     "JsonInputRequest",
     "JsonVariableValue",

@@ -121,23 +121,23 @@ class Vellum:
         Executes a deployed Prompt and returns the result.
 
         Parameters:
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+            - inputs: typing.Sequence[PromptDeploymentInputRequest]. A list consisting of the Prompt Deployment's input variables and their values.
 
             - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
-            - prompt_deployment_name: typing.Optional[str]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str]. "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
-            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest].
+            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest]. Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 
-            - expand_raw: typing.Optional[typing.Sequence[str]]. Returns the raw API response data sent from the model host. Combined with `raw_overrides`, it can be used to access new features from models.
+            - expand_raw: typing.Optional[typing.Sequence[str]]. A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
 
-            - metadata: typing.Optional[typing.Dict[str, typing.Any]].
+            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -256,23 +256,23 @@ class Vellum:
         Executes a deployed Prompt and streams back the results.
 
         Parameters:
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+            - inputs: typing.Sequence[PromptDeploymentInputRequest]. A list consisting of the Prompt Deployment's input variables and their values.
 
             - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
-            - prompt_deployment_name: typing.Optional[str]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str]. "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
-            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest].
+            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest]. Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 
-            - expand_raw: typing.Optional[typing.Sequence[str]]. Returns the raw API response data sent from the model host. Combined with `raw_overrides`, it can be used to access new features from models.
+            - expand_raw: typing.Optional[typing.Sequence[str]]. A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
 
-            - metadata: typing.Optional[typing.Dict[str, typing.Any]].
+            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -1082,23 +1082,23 @@ class AsyncVellum:
         Executes a deployed Prompt and returns the result.
 
         Parameters:
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+            - inputs: typing.Sequence[PromptDeploymentInputRequest]. A list consisting of the Prompt Deployment's input variables and their values.
 
             - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
-            - prompt_deployment_name: typing.Optional[str]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str]. "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
-            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest].
+            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest]. Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 
-            - expand_raw: typing.Optional[typing.Sequence[str]]. Returns the raw API response data sent from the model host. Combined with `raw_overrides`, it can be used to access new features from models.
+            - expand_raw: typing.Optional[typing.Sequence[str]]. A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
 
-            - metadata: typing.Optional[typing.Dict[str, typing.Any]].
+            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -1217,23 +1217,23 @@ class AsyncVellum:
         Executes a deployed Prompt and streams back the results.
 
         Parameters:
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
+            - inputs: typing.Sequence[PromptDeploymentInputRequest]. A list consisting of the Prompt Deployment's input variables and their values.
 
             - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
-            - prompt_deployment_name: typing.Optional[str]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str]. "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
+            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
-            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest].
+            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest]. Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 
-            - expand_raw: typing.Optional[typing.Sequence[str]]. Returns the raw API response data sent from the model host. Combined with `raw_overrides`, it can be used to access new features from models.
+            - expand_raw: typing.Optional[typing.Sequence[str]]. A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
 
-            - metadata: typing.Optional[typing.Dict[str, typing.Any]].
+            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---

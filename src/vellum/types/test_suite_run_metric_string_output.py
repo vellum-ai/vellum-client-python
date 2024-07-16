@@ -12,7 +12,7 @@ class TestSuiteRunMetricStringOutput(pydantic_v1.BaseModel):
     Output for a test suite run metric that is of type STRING
     """
 
-    value: str
+    value: typing.Optional[str] = None
     name: str
 
     def json(self, **kwargs: typing.Any) -> str:

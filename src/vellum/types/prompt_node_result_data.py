@@ -10,6 +10,7 @@ from ..core.pydantic_utilities import pydantic_v1
 class PromptNodeResultData(pydantic_v1.BaseModel):
     output_id: str
     array_output_id: typing.Optional[str] = None
+    execution_id: typing.Optional[str] = None
     text: typing.Optional[str] = None
     delta: typing.Optional[str] = None
 

@@ -458,6 +458,63 @@ class DocumentIndexesClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def add_document(
+        self, document_id: str, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
+        """
+        Adds a previously uploaded Document to the specified Document Index.
+
+        Parameters:
+            - document_id: str. Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to add.
+
+            - id: str. Either the Vellum-generated ID or the originally specified name that uniquely identifies the Document Index to which you'd like to add the Document.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.document_indexes.add_document(
+            document_id="document_id",
+            id="id",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/document-indexes/{jsonable_encoder(id)}/documents/{jsonable_encoder(document_id)}",
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))
+            if request_options is not None
+            else None,
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
     def remove_document(
         self, document_id: str, id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> None:
@@ -944,6 +1001,63 @@ class AsyncDocumentIndexesClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic_v1.parse_obj_as(DocumentIndexRead, _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def add_document(
+        self, document_id: str, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
+        """
+        Adds a previously uploaded Document to the specified Document Index.
+
+        Parameters:
+            - document_id: str. Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to add.
+
+            - id: str. Either the Vellum-generated ID or the originally specified name that uniquely identifies the Document Index to which you'd like to add the Document.
+
+            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
+        ---
+        from vellum.client import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+        await client.document_indexes.add_document(
+            document_id="document_id",
+            id="id",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            method="POST",
+            url=urllib.parse.urljoin(
+                f"{self._client_wrapper.get_environment().default}/",
+                f"v1/document-indexes/{jsonable_encoder(id)}/documents/{jsonable_encoder(document_id)}",
+            ),
+            params=jsonable_encoder(
+                request_options.get("additional_query_parameters") if request_options is not None else None
+            ),
+            json=jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))
+            if request_options is not None
+            else None,
+            headers=jsonable_encoder(
+                remove_none_from_dict(
+                    {
+                        **self._client_wrapper.get_headers(),
+                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
+                    }
+                )
+            ),
+            timeout=request_options.get("timeout_in_seconds")
+            if request_options is not None and request_options.get("timeout_in_seconds") is not None
+            else self._client_wrapper.get_timeout(),
+            retries=0,
+            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+        )
+        if 200 <= _response.status_code < 300:
+            return
         try:
             _response_json = _response.json()
         except JSONDecodeError:

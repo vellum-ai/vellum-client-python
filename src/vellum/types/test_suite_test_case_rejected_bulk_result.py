@@ -12,7 +12,7 @@ class TestSuiteTestCaseRejectedBulkResult(pydantic_v1.BaseModel):
     The result of a bulk operation that failed to operate on a Test Case.
     """
 
-    id: str = pydantic_v1.Field()
+    id: typing.Optional[str] = pydantic_v1.Field(default=None)
     """
     An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
     """

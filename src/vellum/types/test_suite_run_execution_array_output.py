@@ -5,15 +5,17 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .merge_node_result_data import MergeNodeResultData
+from .array_vellum_value_item import ArrayVellumValueItem
 
 
-class MergeNodeResult(pydantic_v1.BaseModel):
+class TestSuiteRunExecutionArrayOutput(pydantic_v1.BaseModel):
     """
-    A Node Result Event emitted from a Merge Node.
+    Execution output of an entity evaluated during a Test Suite Run that is of type ARRAY
     """
 
-    data: MergeNodeResultData
+    name: str
+    value: typing.Optional[typing.List[ArrayVellumValueItem]] = None
+    output_variable_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

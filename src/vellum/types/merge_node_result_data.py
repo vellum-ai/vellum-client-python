@@ -5,15 +5,10 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .merge_node_result_data import MergeNodeResultData
 
 
-class MergeNodeResult(pydantic_v1.BaseModel):
-    """
-    A Node Result Event emitted from a Merge Node.
-    """
-
-    data: MergeNodeResultData
+class MergeNodeResultData(pydantic_v1.BaseModel):
+    paused_node_data: typing.Optional[typing.Dict[str, typing.Any]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

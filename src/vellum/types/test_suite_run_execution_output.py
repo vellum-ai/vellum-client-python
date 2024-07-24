@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import typing
 
+from .test_suite_run_execution_array_output import TestSuiteRunExecutionArrayOutput
 from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
 from .test_suite_run_execution_error_output import TestSuiteRunExecutionErrorOutput
 from .test_suite_run_execution_function_call_output import TestSuiteRunExecutionFunctionCallOutput
@@ -83,6 +84,16 @@ class TestSuiteRunExecutionOutput_FunctionCall(TestSuiteRunExecutionFunctionCall
         populate_by_name = True
 
 
+class TestSuiteRunExecutionOutput_Array(TestSuiteRunExecutionArrayOutput):
+    type: typing.Literal["ARRAY"] = "ARRAY"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
 TestSuiteRunExecutionOutput = typing.Union[
     TestSuiteRunExecutionOutput_String,
     TestSuiteRunExecutionOutput_Number,
@@ -91,4 +102,5 @@ TestSuiteRunExecutionOutput = typing.Union[
     TestSuiteRunExecutionOutput_SearchResults,
     TestSuiteRunExecutionOutput_Error,
     TestSuiteRunExecutionOutput_FunctionCall,
+    TestSuiteRunExecutionOutput_Array,
 ]

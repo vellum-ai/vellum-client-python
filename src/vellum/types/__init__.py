@@ -242,6 +242,7 @@ from .map_node_result import MapNodeResult
 from .map_node_result_data import MapNodeResultData
 from .merge_enum import MergeEnum
 from .merge_node_result import MergeNodeResult
+from .merge_node_result_data import MergeNodeResultData
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
@@ -517,6 +518,7 @@ from .test_suite_run_exec_config_request import (
     TestSuiteRunExecConfigRequest_WorkflowReleaseTag,
 )
 from .test_suite_run_execution import TestSuiteRunExecution
+from .test_suite_run_execution_array_output import TestSuiteRunExecutionArrayOutput
 from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
 from .test_suite_run_execution_error_output import TestSuiteRunExecutionErrorOutput
 from .test_suite_run_execution_function_call_output import TestSuiteRunExecutionFunctionCallOutput
@@ -526,6 +528,7 @@ from .test_suite_run_execution_metric_result import TestSuiteRunExecutionMetricR
 from .test_suite_run_execution_number_output import TestSuiteRunExecutionNumberOutput
 from .test_suite_run_execution_output import (
     TestSuiteRunExecutionOutput,
+    TestSuiteRunExecutionOutput_Array,
     TestSuiteRunExecutionOutput_ChatHistory,
     TestSuiteRunExecutionOutput_Error,
     TestSuiteRunExecutionOutput_FunctionCall,
@@ -569,6 +572,7 @@ from .test_suite_test_case_bulk_operation_request import (
     TestSuiteTestCaseBulkOperationRequest_Create,
     TestSuiteTestCaseBulkOperationRequest_Delete,
     TestSuiteTestCaseBulkOperationRequest_Replace,
+    TestSuiteTestCaseBulkOperationRequest_Upsert,
 )
 from .test_suite_test_case_bulk_result import (
     TestSuiteTestCaseBulkResult,
@@ -588,6 +592,7 @@ from .test_suite_test_case_rejected_bulk_result import TestSuiteTestCaseRejected
 from .test_suite_test_case_replace_bulk_operation_request import TestSuiteTestCaseReplaceBulkOperationRequest
 from .test_suite_test_case_replaced_bulk_result import TestSuiteTestCaseReplacedBulkResult
 from .test_suite_test_case_replaced_bulk_result_data import TestSuiteTestCaseReplacedBulkResultData
+from .test_suite_test_case_upsert_bulk_operation_request import TestSuiteTestCaseUpsertBulkOperationRequest
 from .text_embedding_3_large_enum import TextEmbedding3LargeEnum
 from .text_embedding_3_small_enum import TextEmbedding3SmallEnum
 from .text_embedding_ada_002_enum import TextEmbeddingAda002Enum
@@ -598,6 +603,8 @@ from .token_overlapping_window_chunking import TokenOverlappingWindowChunking
 from .token_overlapping_window_chunking_request import TokenOverlappingWindowChunkingRequest
 from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
+from .upsert_enum import UpsertEnum
+from .upsert_test_suite_test_case_request import UpsertTestSuiteTestCaseRequest
 from .vellum_error import VellumError
 from .vellum_error_code_enum import VellumErrorCodeEnum
 from .vellum_error_request import VellumErrorRequest
@@ -897,6 +904,7 @@ __all__ = [
     "MapNodeResultData",
     "MergeEnum",
     "MergeNodeResult",
+    "MergeNodeResultData",
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
@@ -1146,6 +1154,7 @@ __all__ = [
     "TestSuiteRunExecConfig_External",
     "TestSuiteRunExecConfig_WorkflowReleaseTag",
     "TestSuiteRunExecution",
+    "TestSuiteRunExecutionArrayOutput",
     "TestSuiteRunExecutionChatHistoryOutput",
     "TestSuiteRunExecutionErrorOutput",
     "TestSuiteRunExecutionFunctionCallOutput",
@@ -1154,6 +1163,7 @@ __all__ = [
     "TestSuiteRunExecutionMetricResult",
     "TestSuiteRunExecutionNumberOutput",
     "TestSuiteRunExecutionOutput",
+    "TestSuiteRunExecutionOutput_Array",
     "TestSuiteRunExecutionOutput_ChatHistory",
     "TestSuiteRunExecutionOutput_Error",
     "TestSuiteRunExecutionOutput_FunctionCall",
@@ -1191,6 +1201,7 @@ __all__ = [
     "TestSuiteTestCaseBulkOperationRequest_Create",
     "TestSuiteTestCaseBulkOperationRequest_Delete",
     "TestSuiteTestCaseBulkOperationRequest_Replace",
+    "TestSuiteTestCaseBulkOperationRequest_Upsert",
     "TestSuiteTestCaseBulkResult",
     "TestSuiteTestCaseBulkResult_Created",
     "TestSuiteTestCaseBulkResult_Deleted",
@@ -1207,6 +1218,7 @@ __all__ = [
     "TestSuiteTestCaseReplaceBulkOperationRequest",
     "TestSuiteTestCaseReplacedBulkResult",
     "TestSuiteTestCaseReplacedBulkResultData",
+    "TestSuiteTestCaseUpsertBulkOperationRequest",
     "TextEmbedding3LargeEnum",
     "TextEmbedding3SmallEnum",
     "TextEmbeddingAda002Enum",
@@ -1217,6 +1229,8 @@ __all__ = [
     "TokenOverlappingWindowChunkingRequest",
     "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
+    "UpsertEnum",
+    "UpsertTestSuiteTestCaseRequest",
     "VellumError",
     "VellumErrorCodeEnum",
     "VellumErrorRequest",

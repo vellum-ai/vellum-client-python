@@ -13,7 +13,7 @@ class NodeOutputCompiledJsonValue(pydantic_v1.BaseModel):
     An output returned by a node that is of type JSON.
     """
 
-    value: typing.Optional[typing.Dict[str, typing.Any]] = None
+    value: typing.Any
     node_output_id: str
     state: typing.Optional[WorkflowNodeResultEventState] = None
 

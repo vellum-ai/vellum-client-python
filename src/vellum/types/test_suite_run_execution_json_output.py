@@ -13,7 +13,7 @@ class TestSuiteRunExecutionJsonOutput(pydantic_v1.BaseModel):
     """
 
     name: str
-    value: typing.Optional[typing.Dict[str, typing.Any]] = None
+    value: typing.Any
     output_variable_id: str
 
     def json(self, **kwargs: typing.Any) -> str:

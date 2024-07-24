@@ -12,7 +12,7 @@ class NamedTestCaseJsonVariableValueRequest(pydantic_v1.BaseModel):
     Named Test Case value that is of type JSON
     """
 
-    value: typing.Optional[typing.Dict[str, typing.Any]] = None
+    value: typing.Any
     name: str
 
     def json(self, **kwargs: typing.Any) -> str:

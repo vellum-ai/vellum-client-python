@@ -14,7 +14,7 @@ class TerminalNodeJsonResult(pydantic_v1.BaseModel):
     The unique name given to the terminal node that produced this output.
     """
 
-    value: typing.Optional[typing.Dict[str, typing.Any]] = None
+    value: typing.Any
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

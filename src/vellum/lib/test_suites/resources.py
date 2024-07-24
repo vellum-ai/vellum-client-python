@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import time
 from functools import cached_property
-from typing import Callable, Generator, List, Any
+from typing import Callable, Generator, List, cast, Iterable
 
 from vellum import TestSuiteRunRead, TestSuiteRunMetricOutput_Number
 from vellum.client import Vellum
@@ -174,7 +174,7 @@ class VellumTestSuiteRunResults:
         self,
         metric_identifier: str | None = None,
         output_identifier: str | None = None,
-    ) -> List[float]:
+    ) -> List[float | None]:
         """Returns the values of a numeric metric output that match the given criteria."""
 
         metric_outputs: list[TestSuiteRunMetricOutput_Number] = []
@@ -198,7 +198,7 @@ class VellumTestSuiteRunResults:
         output_values = self.get_numeric_metric_output_values(
             metric_identifier=metric_identifier, output_identifier=output_identifier
         )
-        return sum(output_values) / len(output_values)
+        return sum(cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values))) / len(output_values)
 
     def get_min_metric_output(
         self, metric_identifier: str | None = None, output_identifier: str | None = None
@@ -207,7 +207,7 @@ class VellumTestSuiteRunResults:
         output_values = self.get_numeric_metric_output_values(
             metric_identifier=metric_identifier, output_identifier=output_identifier
         )
-        return min(output_values)
+        return min(cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values)))
 
     def get_max_metric_output(
         self, metric_identifier: str | None = None, output_identifier: str | None = None
@@ -216,7 +216,7 @@ class VellumTestSuiteRunResults:
         output_values = self.get_numeric_metric_output_values(
             metric_identifier=metric_identifier, output_identifier=output_identifier
         )
-        return max(output_values)
+        return max(cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values)))
 
     def wait_until_complete(self) -> None:
         """Wait until the Test Suite Run is no longer in a QUEUED or RUNNING state."""

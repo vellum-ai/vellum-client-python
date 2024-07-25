@@ -10,7 +10,17 @@ from ..core.pydantic_utilities import pydantic_v1
 class PromptDeploymentExpandMetaRequestRequest(pydantic_v1.BaseModel):
     model_name: typing.Optional[bool] = pydantic_v1.Field(default=None)
     """
-    If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt Deployment.
+    If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
+    """
+
+    usage: typing.Optional[bool] = pydantic_v1.Field(default=None)
+    """
+    If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
+    """
+
+    finish_reason: typing.Optional[bool] = pydantic_v1.Field(default=None)
+    """
+    If enabled, the response will include the reason provided by the model for why the execution finished.
     """
 
     latency: typing.Optional[bool] = pydantic_v1.Field(default=None)
@@ -26,16 +36,6 @@ class PromptDeploymentExpandMetaRequestRequest(pydantic_v1.BaseModel):
     prompt_version_id: typing.Optional[bool] = pydantic_v1.Field(default=None)
     """
     If enabled, the response will include the ID of the Prompt Version backing the deployment.
-    """
-
-    finish_reason: typing.Optional[bool] = pydantic_v1.Field(default=None)
-    """
-    If enabled, the response will include the reason provided by the model for why the execution finished.
-    """
-
-    usage: typing.Optional[bool] = pydantic_v1.Field(default=None)
-    """
-    If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
     """
 
     def json(self, **kwargs: typing.Any) -> str:

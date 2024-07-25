@@ -36,6 +36,15 @@ from .array_vellum_value_item import (
     ArrayVellumValueItem_Number,
     ArrayVellumValueItem_String,
 )
+from .array_vellum_value_item_request import (
+    ArrayVellumValueItemRequest,
+    ArrayVellumValueItemRequest_Error,
+    ArrayVellumValueItemRequest_FunctionCall,
+    ArrayVellumValueItemRequest_Image,
+    ArrayVellumValueItemRequest_Json,
+    ArrayVellumValueItemRequest_Number,
+    ArrayVellumValueItemRequest_String,
+)
 from .basic_vectorizer_intfloat_multilingual_e_5_large import BasicVectorizerIntfloatMultilingualE5Large
 from .basic_vectorizer_intfloat_multilingual_e_5_large_request import BasicVectorizerIntfloatMultilingualE5LargeRequest
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_cos_v_1 import (
@@ -126,6 +135,7 @@ from .environment_enum import EnvironmentEnum
 from .error_enum import ErrorEnum
 from .error_variable_value import ErrorVariableValue
 from .error_vellum_value import ErrorVellumValue
+from .error_vellum_value_request import ErrorVellumValueRequest
 from .execute_prompt_api_error_response import ExecutePromptApiErrorResponse
 from .execute_prompt_event import (
     ExecutePromptEvent,
@@ -184,6 +194,7 @@ from .function_call_enum import FunctionCallEnum
 from .function_call_request import FunctionCallRequest
 from .function_call_variable_value import FunctionCallVariableValue
 from .function_call_vellum_value import FunctionCallVellumValue
+from .function_call_vellum_value_request import FunctionCallVellumValueRequest
 from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
@@ -202,6 +213,7 @@ from .image_chat_message_content_request import ImageChatMessageContentRequest
 from .image_enum import ImageEnum
 from .image_variable_value import ImageVariableValue
 from .image_vellum_value import ImageVellumValue
+from .image_vellum_value_request import ImageVellumValueRequest
 from .indexing_config_vectorizer import (
     IndexingConfigVectorizer,
     IndexingConfigVectorizer_HkunlpInstructorXl,
@@ -235,6 +247,7 @@ from .json_enum import JsonEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
 from .json_vellum_value import JsonVellumValue
+from .json_vellum_value_request import JsonVellumValueRequest
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
 from .map_enum import MapEnum
@@ -256,6 +269,8 @@ from .named_scenario_input_request import (
     NamedScenarioInputRequest_String,
 )
 from .named_scenario_input_string_variable_value_request import NamedScenarioInputStringVariableValueRequest
+from .named_test_case_array_variable_value import NamedTestCaseArrayVariableValue
+from .named_test_case_array_variable_value_request import NamedTestCaseArrayVariableValueRequest
 from .named_test_case_chat_history_variable_value import NamedTestCaseChatHistoryVariableValue
 from .named_test_case_chat_history_variable_value_request import NamedTestCaseChatHistoryVariableValueRequest
 from .named_test_case_error_variable_value import NamedTestCaseErrorVariableValue
@@ -272,6 +287,7 @@ from .named_test_case_string_variable_value import NamedTestCaseStringVariableVa
 from .named_test_case_string_variable_value_request import NamedTestCaseStringVariableValueRequest
 from .named_test_case_variable_value import (
     NamedTestCaseVariableValue,
+    NamedTestCaseVariableValue_Array,
     NamedTestCaseVariableValue_ChatHistory,
     NamedTestCaseVariableValue_Error,
     NamedTestCaseVariableValue_FunctionCall,
@@ -282,6 +298,7 @@ from .named_test_case_variable_value import (
 )
 from .named_test_case_variable_value_request import (
     NamedTestCaseVariableValueRequest,
+    NamedTestCaseVariableValueRequest_Array,
     NamedTestCaseVariableValueRequest_ChatHistory,
     NamedTestCaseVariableValueRequest_Error,
     NamedTestCaseVariableValueRequest_FunctionCall,
@@ -333,6 +350,7 @@ from .normalized_token_log_probs import NormalizedTokenLogProbs
 from .number_enum import NumberEnum
 from .number_variable_value import NumberVariableValue
 from .number_vellum_value import NumberVellumValue
+from .number_vellum_value_request import NumberVellumValueRequest
 from .open_ai_vectorizer_config import OpenAiVectorizerConfig
 from .open_ai_vectorizer_config_request import OpenAiVectorizerConfigRequest
 from .open_ai_vectorizer_text_embedding_3_large import OpenAiVectorizerTextEmbedding3Large
@@ -360,6 +378,7 @@ from .prompt_deployment_input_request import (
     PromptDeploymentInputRequest_String,
 )
 from .prompt_execution_meta import PromptExecutionMeta
+from .prompt_node_execution_meta import PromptNodeExecutionMeta
 from .prompt_node_result import PromptNodeResult
 from .prompt_node_result_data import PromptNodeResultData
 from .prompt_output import (
@@ -426,6 +445,7 @@ from .string_enum import StringEnum
 from .string_input_request import StringInputRequest
 from .string_variable_value import StringVariableValue
 from .string_vellum_value import StringVellumValue
+from .string_vellum_value_request import StringVellumValueRequest
 from .submit_completion_actual_request import SubmitCompletionActualRequest
 from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
 from .submit_workflow_execution_actual_request import (
@@ -479,6 +499,7 @@ from .terminal_node_result_output import (
 )
 from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
 from .terminal_node_string_result import TerminalNodeStringResult
+from .test_case_array_variable_value import TestCaseArrayVariableValue
 from .test_case_chat_history_variable_value import TestCaseChatHistoryVariableValue
 from .test_case_error_variable_value import TestCaseErrorVariableValue
 from .test_case_function_call_variable_value import TestCaseFunctionCallVariableValue
@@ -488,6 +509,7 @@ from .test_case_search_results_variable_value import TestCaseSearchResultsVariab
 from .test_case_string_variable_value import TestCaseStringVariableValue
 from .test_case_variable_value import (
     TestCaseVariableValue,
+    TestCaseVariableValue_Array,
     TestCaseVariableValue_ChatHistory,
     TestCaseVariableValue_Error,
     TestCaseVariableValue_FunctionCall,
@@ -621,6 +643,7 @@ from .workflow_execution_event_error_code import WorkflowExecutionEventErrorCode
 from .workflow_execution_event_type import WorkflowExecutionEventType
 from .workflow_execution_node_result_event import WorkflowExecutionNodeResultEvent
 from .workflow_execution_workflow_result_event import WorkflowExecutionWorkflowResultEvent
+from .workflow_expand_meta_request import WorkflowExpandMetaRequest
 from .workflow_node_result_data import (
     WorkflowNodeResultData,
     WorkflowNodeResultData_Api,
@@ -722,6 +745,13 @@ __all__ = [
     "ArrayVariableValueItem_Number",
     "ArrayVariableValueItem_String",
     "ArrayVellumValueItem",
+    "ArrayVellumValueItemRequest",
+    "ArrayVellumValueItemRequest_Error",
+    "ArrayVellumValueItemRequest_FunctionCall",
+    "ArrayVellumValueItemRequest_Image",
+    "ArrayVellumValueItemRequest_Json",
+    "ArrayVellumValueItemRequest_Number",
+    "ArrayVellumValueItemRequest_String",
     "ArrayVellumValueItem_Error",
     "ArrayVellumValueItem_FunctionCall",
     "ArrayVellumValueItem_Image",
@@ -800,6 +830,7 @@ __all__ = [
     "ErrorEnum",
     "ErrorVariableValue",
     "ErrorVellumValue",
+    "ErrorVellumValueRequest",
     "ExecutePromptApiErrorResponse",
     "ExecutePromptEvent",
     "ExecutePromptEvent_Fulfilled",
@@ -850,6 +881,7 @@ __all__ = [
     "FunctionCallRequest",
     "FunctionCallVariableValue",
     "FunctionCallVellumValue",
+    "FunctionCallVellumValueRequest",
     "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
@@ -868,6 +900,7 @@ __all__ = [
     "ImageEnum",
     "ImageVariableValue",
     "ImageVellumValue",
+    "ImageVellumValueRequest",
     "IndexingConfigVectorizer",
     "IndexingConfigVectorizerRequest",
     "IndexingConfigVectorizerRequest_HkunlpInstructorXl",
@@ -897,6 +930,7 @@ __all__ = [
     "JsonInputRequest",
     "JsonVariableValue",
     "JsonVellumValue",
+    "JsonVellumValueRequest",
     "LogicalOperator",
     "LogprobsEnum",
     "MapEnum",
@@ -916,6 +950,8 @@ __all__ = [
     "NamedScenarioInputRequest_ChatHistory",
     "NamedScenarioInputRequest_String",
     "NamedScenarioInputStringVariableValueRequest",
+    "NamedTestCaseArrayVariableValue",
+    "NamedTestCaseArrayVariableValueRequest",
     "NamedTestCaseChatHistoryVariableValue",
     "NamedTestCaseChatHistoryVariableValueRequest",
     "NamedTestCaseErrorVariableValue",
@@ -932,6 +968,7 @@ __all__ = [
     "NamedTestCaseStringVariableValueRequest",
     "NamedTestCaseVariableValue",
     "NamedTestCaseVariableValueRequest",
+    "NamedTestCaseVariableValueRequest_Array",
     "NamedTestCaseVariableValueRequest_ChatHistory",
     "NamedTestCaseVariableValueRequest_Error",
     "NamedTestCaseVariableValueRequest_FunctionCall",
@@ -939,6 +976,7 @@ __all__ = [
     "NamedTestCaseVariableValueRequest_Number",
     "NamedTestCaseVariableValueRequest_SearchResults",
     "NamedTestCaseVariableValueRequest_String",
+    "NamedTestCaseVariableValue_Array",
     "NamedTestCaseVariableValue_ChatHistory",
     "NamedTestCaseVariableValue_Error",
     "NamedTestCaseVariableValue_FunctionCall",
@@ -985,6 +1023,7 @@ __all__ = [
     "NumberEnum",
     "NumberVariableValue",
     "NumberVellumValue",
+    "NumberVellumValueRequest",
     "OpenAiVectorizerConfig",
     "OpenAiVectorizerConfigRequest",
     "OpenAiVectorizerTextEmbedding3Large",
@@ -1010,6 +1049,7 @@ __all__ = [
     "PromptDeploymentInputRequest_Json",
     "PromptDeploymentInputRequest_String",
     "PromptExecutionMeta",
+    "PromptNodeExecutionMeta",
     "PromptNodeResult",
     "PromptNodeResultData",
     "PromptOutput",
@@ -1078,6 +1118,7 @@ __all__ = [
     "StringInputRequest",
     "StringVariableValue",
     "StringVellumValue",
+    "StringVellumValueRequest",
     "SubmitCompletionActualRequest",
     "SubmitCompletionActualsErrorResponse",
     "SubmitWorkflowExecutionActualRequest",
@@ -1125,6 +1166,7 @@ __all__ = [
     "TerminalNodeResultOutput_String",
     "TerminalNodeSearchResultsResult",
     "TerminalNodeStringResult",
+    "TestCaseArrayVariableValue",
     "TestCaseChatHistoryVariableValue",
     "TestCaseErrorVariableValue",
     "TestCaseFunctionCallVariableValue",
@@ -1133,6 +1175,7 @@ __all__ = [
     "TestCaseSearchResultsVariableValue",
     "TestCaseStringVariableValue",
     "TestCaseVariableValue",
+    "TestCaseVariableValue_Array",
     "TestCaseVariableValue_ChatHistory",
     "TestCaseVariableValue_Error",
     "TestCaseVariableValue_FunctionCall",
@@ -1247,6 +1290,7 @@ __all__ = [
     "WorkflowExecutionEventType",
     "WorkflowExecutionNodeResultEvent",
     "WorkflowExecutionWorkflowResultEvent",
+    "WorkflowExpandMetaRequest",
     "WorkflowNodeResultData",
     "WorkflowNodeResultData_Api",
     "WorkflowNodeResultData_CodeExecution",

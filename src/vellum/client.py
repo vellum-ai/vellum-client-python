@@ -42,6 +42,7 @@ from .types.search_response import SearchResponse
 from .types.submit_completion_actual_request import SubmitCompletionActualRequest
 from .types.submit_workflow_execution_actual_request import SubmitWorkflowExecutionActualRequest
 from .types.workflow_execution_event_type import WorkflowExecutionEventType
+from .types.workflow_expand_meta_request import WorkflowExpandMetaRequest
 from .types.workflow_request_input_request import WorkflowRequestInputRequest
 from .types.workflow_stream_event import WorkflowStreamEvent
 
@@ -164,11 +165,11 @@ class Vellum:
             external_id="string",
             expand_meta=PromptDeploymentExpandMetaRequestRequest(
                 model_name=True,
+                usage=True,
+                finish_reason=True,
                 latency=True,
                 deployment_release_tag=True,
                 prompt_version_id=True,
-                finish_reason=True,
-                usage=True,
             ),
             raw_overrides=RawPromptExecutionOverridesRequest(
                 body={"string": {"key": "value"}},
@@ -299,11 +300,11 @@ class Vellum:
             external_id="string",
             expand_meta=PromptDeploymentExpandMetaRequestRequest(
                 model_name=True,
+                usage=True,
+                finish_reason=True,
                 latency=True,
                 deployment_release_tag=True,
                 prompt_version_id=True,
-                finish_reason=True,
-                usage=True,
             ),
             raw_overrides=RawPromptExecutionOverridesRequest(
                 body={"string": {"key": "value"}},
@@ -382,6 +383,7 @@ class Vellum:
         self,
         *,
         inputs: typing.Sequence[WorkflowRequestInputRequest],
+        expand_meta: typing.Optional[WorkflowExpandMetaRequest] = OMIT,
         workflow_deployment_id: typing.Optional[str] = OMIT,
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
@@ -394,6 +396,8 @@ class Vellum:
         Parameters:
             - inputs: typing.Sequence[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
+            - expand_meta: typing.Optional[WorkflowExpandMetaRequest]. An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+
             - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
             - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
@@ -404,7 +408,7 @@ class Vellum:
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
-        from vellum import WorkflowRequestInputRequest_String
+        from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
         from vellum.client import Vellum
 
         client = Vellum(
@@ -417,6 +421,9 @@ class Vellum:
                     value="string",
                 )
             ],
+            expand_meta=WorkflowExpandMetaRequest(
+                usage=True,
+            ),
             workflow_deployment_id="string",
             workflow_deployment_name="string",
             release_tag="string",
@@ -424,6 +431,8 @@ class Vellum:
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if expand_meta is not OMIT:
+            _request["expand_meta"] = expand_meta
         if workflow_deployment_id is not OMIT:
             _request["workflow_deployment_id"] = workflow_deployment_id
         if workflow_deployment_name is not OMIT:
@@ -476,6 +485,7 @@ class Vellum:
         self,
         *,
         inputs: typing.Sequence[WorkflowRequestInputRequest],
+        expand_meta: typing.Optional[WorkflowExpandMetaRequest] = OMIT,
         workflow_deployment_id: typing.Optional[str] = OMIT,
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
@@ -489,6 +499,8 @@ class Vellum:
         Parameters:
             - inputs: typing.Sequence[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
+            - expand_meta: typing.Optional[WorkflowExpandMetaRequest]. An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+
             - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
             - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
@@ -501,7 +513,7 @@ class Vellum:
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
-        from vellum import WorkflowRequestInputRequest_String
+        from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
         from vellum.client import Vellum
 
         client = Vellum(
@@ -514,6 +526,9 @@ class Vellum:
                     value="string",
                 )
             ],
+            expand_meta=WorkflowExpandMetaRequest(
+                usage=True,
+            ),
             workflow_deployment_id="string",
             workflow_deployment_name="string",
             release_tag="string",
@@ -522,6 +537,8 @@ class Vellum:
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if expand_meta is not OMIT:
+            _request["expand_meta"] = expand_meta
         if workflow_deployment_id is not OMIT:
             _request["workflow_deployment_id"] = workflow_deployment_id
         if workflow_deployment_name is not OMIT:
@@ -1125,11 +1142,11 @@ class AsyncVellum:
             external_id="string",
             expand_meta=PromptDeploymentExpandMetaRequestRequest(
                 model_name=True,
+                usage=True,
+                finish_reason=True,
                 latency=True,
                 deployment_release_tag=True,
                 prompt_version_id=True,
-                finish_reason=True,
-                usage=True,
             ),
             raw_overrides=RawPromptExecutionOverridesRequest(
                 body={"string": {"key": "value"}},
@@ -1260,11 +1277,11 @@ class AsyncVellum:
             external_id="string",
             expand_meta=PromptDeploymentExpandMetaRequestRequest(
                 model_name=True,
+                usage=True,
+                finish_reason=True,
                 latency=True,
                 deployment_release_tag=True,
                 prompt_version_id=True,
-                finish_reason=True,
-                usage=True,
             ),
             raw_overrides=RawPromptExecutionOverridesRequest(
                 body={"string": {"key": "value"}},
@@ -1343,6 +1360,7 @@ class AsyncVellum:
         self,
         *,
         inputs: typing.Sequence[WorkflowRequestInputRequest],
+        expand_meta: typing.Optional[WorkflowExpandMetaRequest] = OMIT,
         workflow_deployment_id: typing.Optional[str] = OMIT,
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
@@ -1355,6 +1373,8 @@ class AsyncVellum:
         Parameters:
             - inputs: typing.Sequence[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
+            - expand_meta: typing.Optional[WorkflowExpandMetaRequest]. An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+
             - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
             - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
@@ -1365,7 +1385,7 @@ class AsyncVellum:
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
-        from vellum import WorkflowRequestInputRequest_String
+        from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -1378,6 +1398,9 @@ class AsyncVellum:
                     value="string",
                 )
             ],
+            expand_meta=WorkflowExpandMetaRequest(
+                usage=True,
+            ),
             workflow_deployment_id="string",
             workflow_deployment_name="string",
             release_tag="string",
@@ -1385,6 +1408,8 @@ class AsyncVellum:
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if expand_meta is not OMIT:
+            _request["expand_meta"] = expand_meta
         if workflow_deployment_id is not OMIT:
             _request["workflow_deployment_id"] = workflow_deployment_id
         if workflow_deployment_name is not OMIT:
@@ -1437,6 +1462,7 @@ class AsyncVellum:
         self,
         *,
         inputs: typing.Sequence[WorkflowRequestInputRequest],
+        expand_meta: typing.Optional[WorkflowExpandMetaRequest] = OMIT,
         workflow_deployment_id: typing.Optional[str] = OMIT,
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
@@ -1450,6 +1476,8 @@ class AsyncVellum:
         Parameters:
             - inputs: typing.Sequence[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
+            - expand_meta: typing.Optional[WorkflowExpandMetaRequest]. An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+
             - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
             - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
@@ -1462,7 +1490,7 @@ class AsyncVellum:
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
-        from vellum import WorkflowRequestInputRequest_String
+        from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
@@ -1475,6 +1503,9 @@ class AsyncVellum:
                     value="string",
                 )
             ],
+            expand_meta=WorkflowExpandMetaRequest(
+                usage=True,
+            ),
             workflow_deployment_id="string",
             workflow_deployment_name="string",
             release_tag="string",
@@ -1483,6 +1514,8 @@ class AsyncVellum:
         )
         """
         _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
+        if expand_meta is not OMIT:
+            _request["expand_meta"] = expand_meta
         if workflow_deployment_id is not OMIT:
             _request["workflow_deployment_id"] = workflow_deployment_id
         if workflow_deployment_name is not OMIT:

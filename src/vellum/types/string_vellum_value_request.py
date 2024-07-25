@@ -5,21 +5,14 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .finish_reason_enum import FinishReasonEnum
-from .ml_model_usage import MlModelUsage
 
 
-class PromptExecutionMeta(pydantic_v1.BaseModel):
+class StringVellumValueRequest(pydantic_v1.BaseModel):
     """
-    The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+    A value representing a string.
     """
 
-    model_name: typing.Optional[str] = None
-    latency: typing.Optional[int] = None
-    deployment_release_tag: typing.Optional[str] = None
-    prompt_version_id: typing.Optional[str] = None
-    finish_reason: typing.Optional[FinishReasonEnum] = None
-    usage: typing.Optional[MlModelUsage] = None
+    value: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

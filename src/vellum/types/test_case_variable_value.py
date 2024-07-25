@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import typing
 
+from .test_case_array_variable_value import TestCaseArrayVariableValue
 from .test_case_chat_history_variable_value import TestCaseChatHistoryVariableValue
 from .test_case_error_variable_value import TestCaseErrorVariableValue
 from .test_case_function_call_variable_value import TestCaseFunctionCallVariableValue
@@ -83,6 +84,16 @@ class TestCaseVariableValue_FunctionCall(TestCaseFunctionCallVariableValue):
         populate_by_name = True
 
 
+class TestCaseVariableValue_Array(TestCaseArrayVariableValue):
+    type: typing.Literal["ARRAY"] = "ARRAY"
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+        populate_by_name = True
+
+
 TestCaseVariableValue = typing.Union[
     TestCaseVariableValue_String,
     TestCaseVariableValue_Number,
@@ -91,4 +102,5 @@ TestCaseVariableValue = typing.Union[
     TestCaseVariableValue_SearchResults,
     TestCaseVariableValue_Error,
     TestCaseVariableValue_FunctionCall,
+    TestCaseVariableValue_Array,
 ]

@@ -5,9 +5,11 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
+from .prompt_node_execution_meta import PromptNodeExecutionMeta
 
 
 class PromptNodeResultData(pydantic_v1.BaseModel):
+    execution_meta: typing.Optional[PromptNodeExecutionMeta] = None
     output_id: str
     array_output_id: typing.Optional[str] = None
     execution_id: typing.Optional[str] = None

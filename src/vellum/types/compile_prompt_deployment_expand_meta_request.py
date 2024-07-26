@@ -5,13 +5,23 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .compile_prompt_meta import CompilePromptMeta
-from .deployment_provider_payload_response_payload import DeploymentProviderPayloadResponsePayload
 
 
-class DeploymentProviderPayloadResponse(pydantic_v1.BaseModel):
-    payload: DeploymentProviderPayloadResponsePayload
-    meta: typing.Optional[CompilePromptMeta] = None
+class CompilePromptDeploymentExpandMetaRequest(pydantic_v1.BaseModel):
+    model_name: typing.Optional[bool] = pydantic_v1.Field(default=None)
+    """
+    If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
+    """
+
+    deployment_release_tag: typing.Optional[bool] = pydantic_v1.Field(default=None)
+    """
+    If enabled, the response will include the release tag of the Prompt Deployment.
+    """
+
+    prompt_version_id: typing.Optional[bool] = pydantic_v1.Field(default=None)
+    """
+    If enabled, the response will include the ID of the Prompt Version backing the deployment.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

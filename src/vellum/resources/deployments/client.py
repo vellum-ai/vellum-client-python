@@ -14,6 +14,7 @@ from ...errors.bad_request_error import BadRequestError
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.internal_server_error import InternalServerError
 from ...errors.not_found_error import NotFoundError
+from ...types.compile_prompt_deployment_expand_meta_request import CompilePromptDeploymentExpandMetaRequest
 from ...types.deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from ...types.deployment_read import DeploymentRead
 from ...types.deployment_release_tag_read import DeploymentReleaseTagRead
@@ -276,6 +277,7 @@ class DeploymentsClient:
         deployment_name: typing.Optional[str] = OMIT,
         inputs: typing.Sequence[PromptDeploymentInputRequest],
         release_tag: typing.Optional[str] = OMIT,
+        expand_meta: typing.Optional[CompilePromptDeploymentExpandMetaRequest] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeploymentProviderPayloadResponse:
         """
@@ -287,6 +289,8 @@ class DeploymentsClient:
             - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+
+            - expand_meta: typing.Optional[CompilePromptDeploymentExpandMetaRequest].
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -306,6 +310,8 @@ class DeploymentsClient:
             _request["deployment_name"] = deployment_name
         if release_tag is not OMIT:
             _request["release_tag"] = release_tag
+        if expand_meta is not OMIT:
+            _request["expand_meta"] = expand_meta
         _response = self._client_wrapper.httpx_client.request(
             method="POST",
             url=urllib.parse.urljoin(
@@ -602,6 +608,7 @@ class AsyncDeploymentsClient:
         deployment_name: typing.Optional[str] = OMIT,
         inputs: typing.Sequence[PromptDeploymentInputRequest],
         release_tag: typing.Optional[str] = OMIT,
+        expand_meta: typing.Optional[CompilePromptDeploymentExpandMetaRequest] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeploymentProviderPayloadResponse:
         """
@@ -613,6 +620,8 @@ class AsyncDeploymentsClient:
             - inputs: typing.Sequence[PromptDeploymentInputRequest]. The list of inputs defined in the Prompt's deployment with their corresponding values.
 
             - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+
+            - expand_meta: typing.Optional[CompilePromptDeploymentExpandMetaRequest].
 
             - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
         ---
@@ -632,6 +641,8 @@ class AsyncDeploymentsClient:
             _request["deployment_name"] = deployment_name
         if release_tag is not OMIT:
             _request["release_tag"] = release_tag
+        if expand_meta is not OMIT:
+            _request["expand_meta"] = expand_meta
         _response = await self._client_wrapper.httpx_client.request(
             method="POST",
             url=urllib.parse.urljoin(

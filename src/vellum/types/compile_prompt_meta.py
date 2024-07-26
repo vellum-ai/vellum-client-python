@@ -5,13 +5,16 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
-from .compile_prompt_meta import CompilePromptMeta
-from .deployment_provider_payload_response_payload import DeploymentProviderPayloadResponsePayload
 
 
-class DeploymentProviderPayloadResponse(pydantic_v1.BaseModel):
-    payload: DeploymentProviderPayloadResponsePayload
-    meta: typing.Optional[CompilePromptMeta] = None
+class CompilePromptMeta(pydantic_v1.BaseModel):
+    """
+    The subset of the metadata tracked by Vellum during Prompt Deployment compilation that the request opted into with `expand_meta`.
+    """
+
+    model_name: typing.Optional[str] = None
+    deployment_release_tag: typing.Optional[str] = None
+    prompt_version_id: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

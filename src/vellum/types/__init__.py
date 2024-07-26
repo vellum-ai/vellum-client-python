@@ -99,6 +99,8 @@ from .code_execution_node_result_output import (
 )
 from .code_execution_node_search_results_result import CodeExecutionNodeSearchResultsResult
 from .code_execution_node_string_result import CodeExecutionNodeStringResult
+from .compile_prompt_deployment_expand_meta_request import CompilePromptDeploymentExpandMetaRequest
+from .compile_prompt_meta import CompilePromptMeta
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .create_enum import CreateEnum
@@ -798,6 +800,8 @@ __all__ = [
     "CodeExecutionNodeResultOutput_String",
     "CodeExecutionNodeSearchResultsResult",
     "CodeExecutionNodeStringResult",
+    "CompilePromptDeploymentExpandMetaRequest",
+    "CompilePromptMeta",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
     "CreateEnum",

@@ -40,6 +40,8 @@ class DeploymentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimDeploymentReadList:
         """
+        Used to list all Prompt Deployments.
+
         Parameters:
             - limit: typing.Optional[int]. Number of results to return per page.
 
@@ -100,7 +102,7 @@ class DeploymentsClient:
 
     def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DeploymentRead:
         """
-        Used to retrieve a deployment given its ID or name.
+        Used to retrieve a Prompt Deployment given its ID or name.
 
         Parameters:
             - id: str. Either the Deployment's ID or its unique name
@@ -281,6 +283,17 @@ class DeploymentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeploymentProviderPayloadResponse:
         """
+        Given a set of input variable values, compile the exact payload that Vellum would send to the configured model provider
+        for execution if the execute-prompt endpoint had been invoked. Note that this endpoint does not actually execute the
+        prompt or make an API call to the model provider.
+
+        This endpoint is useful if you don't want to proxy LLM provider requests through Vellum and prefer to send them directly
+        to the provider yourself. Note that no guarantees are made on the format of this API's response schema, other than
+        that it will be a valid payload for the configured model provider. It's not recommended that you try to parse or
+        derive meaning from the response body and instead, should simply pass it directly to the model provider as is.
+
+        We encourage you to seek advise from Vellum Support before integrating with this API for production use.
+
         Parameters:
             - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
 
@@ -371,6 +384,8 @@ class AsyncDeploymentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimDeploymentReadList:
         """
+        Used to list all Prompt Deployments.
+
         Parameters:
             - limit: typing.Optional[int]. Number of results to return per page.
 
@@ -431,7 +446,7 @@ class AsyncDeploymentsClient:
 
     async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> DeploymentRead:
         """
-        Used to retrieve a deployment given its ID or name.
+        Used to retrieve a Prompt Deployment given its ID or name.
 
         Parameters:
             - id: str. Either the Deployment's ID or its unique name
@@ -612,6 +627,17 @@ class AsyncDeploymentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeploymentProviderPayloadResponse:
         """
+        Given a set of input variable values, compile the exact payload that Vellum would send to the configured model provider
+        for execution if the execute-prompt endpoint had been invoked. Note that this endpoint does not actually execute the
+        prompt or make an API call to the model provider.
+
+        This endpoint is useful if you don't want to proxy LLM provider requests through Vellum and prefer to send them directly
+        to the provider yourself. Note that no guarantees are made on the format of this API's response schema, other than
+        that it will be a valid payload for the configured model provider. It's not recommended that you try to parse or
+        derive meaning from the response body and instead, should simply pass it directly to the model provider as is.
+
+        We encourage you to seek advise from Vellum Support before integrating with this API for production use.
+
         Parameters:
             - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
 

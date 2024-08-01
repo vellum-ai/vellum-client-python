@@ -25,7 +25,7 @@ class SandboxesClient:
     def deploy_prompt(
         self,
         id: str,
-        prompt_id: str,
+        prompt_variant_id: str,
         *,
         prompt_deployment_id: typing.Optional[str] = OMIT,
         prompt_deployment_name: typing.Optional[str] = OMIT,
@@ -37,7 +37,7 @@ class SandboxesClient:
         Parameters:
             - id: str. A UUID string identifying this sandbox.
 
-            - prompt_id: str. An ID identifying the Prompt you'd like to deploy.
+            - prompt_variant_id: str. An ID identifying the Prompt you'd like to deploy.
 
             - prompt_deployment_id: typing.Optional[str]. The Vellum-generated ID of the Prompt Deployment you'd like to update. Cannot specify both this and prompt_deployment_name. Leave null to create a new Prompt Deployment.
 
@@ -56,7 +56,7 @@ class SandboxesClient:
         )
         client.sandboxes.deploy_prompt(
             id="id",
-            prompt_id="prompt_id",
+            prompt_variant_id="prompt_variant_id",
         )
         """
         _request: typing.Dict[str, typing.Any] = {}
@@ -72,7 +72,7 @@ class SandboxesClient:
             method="POST",
             url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/",
-                f"v1/sandboxes/{jsonable_encoder(id)}/prompts/{jsonable_encoder(prompt_id)}/deploy",
+                f"v1/sandboxes/{jsonable_encoder(id)}/prompts/{jsonable_encoder(prompt_variant_id)}/deploy",
             ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None
@@ -248,7 +248,7 @@ class AsyncSandboxesClient:
     async def deploy_prompt(
         self,
         id: str,
-        prompt_id: str,
+        prompt_variant_id: str,
         *,
         prompt_deployment_id: typing.Optional[str] = OMIT,
         prompt_deployment_name: typing.Optional[str] = OMIT,
@@ -260,7 +260,7 @@ class AsyncSandboxesClient:
         Parameters:
             - id: str. A UUID string identifying this sandbox.
 
-            - prompt_id: str. An ID identifying the Prompt you'd like to deploy.
+            - prompt_variant_id: str. An ID identifying the Prompt you'd like to deploy.
 
             - prompt_deployment_id: typing.Optional[str]. The Vellum-generated ID of the Prompt Deployment you'd like to update. Cannot specify both this and prompt_deployment_name. Leave null to create a new Prompt Deployment.
 
@@ -279,7 +279,7 @@ class AsyncSandboxesClient:
         )
         await client.sandboxes.deploy_prompt(
             id="id",
-            prompt_id="prompt_id",
+            prompt_variant_id="prompt_variant_id",
         )
         """
         _request: typing.Dict[str, typing.Any] = {}
@@ -295,7 +295,7 @@ class AsyncSandboxesClient:
             method="POST",
             url=urllib.parse.urljoin(
                 f"{self._client_wrapper.get_environment().default}/",
-                f"v1/sandboxes/{jsonable_encoder(id)}/prompts/{jsonable_encoder(prompt_id)}/deploy",
+                f"v1/sandboxes/{jsonable_encoder(id)}/prompts/{jsonable_encoder(prompt_variant_id)}/deploy",
             ),
             params=jsonable_encoder(
                 request_options.get("additional_query_parameters") if request_options is not None else None

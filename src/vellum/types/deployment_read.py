@@ -42,6 +42,11 @@ class DeploymentRead(pydantic_v1.BaseModel):
 
     last_deployed_on: dt.datetime
     input_variables: typing.List[VellumVariable]
+    description: typing.Optional[str] = pydantic_v1.Field(default=None)
+    """
+    A human-readable description of the deployment
+    """
+
     active_model_version_ids: typing.List[str] = pydantic_v1.Field()
     """
     Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.

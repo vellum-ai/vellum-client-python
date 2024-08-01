@@ -17,7 +17,8 @@ from .array_chat_message_content_item_request import (
     ArrayChatMessageContentItemRequest_String,
 )
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
-from .array_enum import ArrayEnum
+from .array_parameter_config import ArrayParameterConfig
+from .array_parameter_config_request import ArrayParameterConfigRequest
 from .array_variable_value_item import (
     ArrayVariableValueItem,
     ArrayVariableValueItem_Error,
@@ -59,7 +60,8 @@ from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1 import 
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request import (
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
 )
-from .chat_history_enum import ChatHistoryEnum
+from .boolean_parameter_config import BooleanParameterConfig
+from .boolean_parameter_config_request import BooleanParameterConfigRequest
 from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_message import ChatMessage
 from .chat_message_content import (
@@ -103,11 +105,9 @@ from .compile_prompt_deployment_expand_meta_request import CompilePromptDeployme
 from .compile_prompt_meta import CompilePromptMeta
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
-from .create_enum import CreateEnum
+from .const_parameter_config import ConstParameterConfig
+from .const_parameter_config_request import ConstParameterConfigRequest
 from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
-from .created_enum import CreatedEnum
-from .delete_enum import DeleteEnum
-from .deleted_enum import DeletedEnum
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from .deployment_provider_payload_response_payload import DeploymentProviderPayloadResponsePayload
 from .deployment_read import DeploymentRead
@@ -134,11 +134,9 @@ from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
-from .error_enum import ErrorEnum
 from .error_variable_value import ErrorVariableValue
 from .error_vellum_value import ErrorVellumValue
 from .error_vellum_value_request import ErrorVellumValueRequest
-from .execute_prompt_api_error_response import ExecutePromptApiErrorResponse
 from .execute_prompt_event import (
     ExecutePromptEvent,
     ExecutePromptEvent_Fulfilled,
@@ -151,9 +149,7 @@ from .execute_prompt_response import (
     ExecutePromptResponse_Fulfilled,
     ExecutePromptResponse_Rejected,
 )
-from .execute_workflow_error_response import ExecuteWorkflowErrorResponse
 from .execute_workflow_response import ExecuteWorkflowResponse
-from .execute_workflow_stream_error_response import ExecuteWorkflowStreamErrorResponse
 from .execute_workflow_workflow_result_event import (
     ExecuteWorkflowWorkflowResultEvent,
     ExecuteWorkflowWorkflowResultEvent_Fulfilled,
@@ -192,12 +188,10 @@ from .function_call_chat_message_content import FunctionCallChatMessageContent
 from .function_call_chat_message_content_request import FunctionCallChatMessageContentRequest
 from .function_call_chat_message_content_value import FunctionCallChatMessageContentValue
 from .function_call_chat_message_content_value_request import FunctionCallChatMessageContentValueRequest
-from .function_call_enum import FunctionCallEnum
 from .function_call_request import FunctionCallRequest
 from .function_call_variable_value import FunctionCallVariableValue
 from .function_call_vellum_value import FunctionCallVellumValue
 from .function_call_vellum_value_request import FunctionCallVellumValueRequest
-from .generate_error_response import GenerateErrorResponse
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
 from .generate_response import GenerateResponse
@@ -207,12 +201,13 @@ from .generate_result_error import GenerateResultError
 from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
-from .hkunlp_instructor_xl_enum import HkunlpInstructorXlEnum
 from .hkunlp_instructor_xl_vectorizer import HkunlpInstructorXlVectorizer
 from .hkunlp_instructor_xl_vectorizer_request import HkunlpInstructorXlVectorizerRequest
+from .hosted_by_enum import HostedByEnum
+from .hugging_face_tokenizer_config import HuggingFaceTokenizerConfig
+from .hugging_face_tokenizer_config_request import HuggingFaceTokenizerConfigRequest
 from .image_chat_message_content import ImageChatMessageContent
 from .image_chat_message_content_request import ImageChatMessageContentRequest
-from .image_enum import ImageEnum
 from .image_variable_value import ImageVariableValue
 from .image_vellum_value import ImageVellumValue
 from .image_vellum_value_request import ImageVellumValueRequest
@@ -237,32 +232,61 @@ from .indexing_config_vectorizer_request import (
     IndexingConfigVectorizerRequest_TextEmbeddingAda002,
 )
 from .indexing_state_enum import IndexingStateEnum
-from .initiated_enum import InitiatedEnum
 from .initiated_execute_prompt_event import InitiatedExecutePromptEvent
 from .initiated_prompt_execution_meta import InitiatedPromptExecutionMeta
 from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEvent
 from .instructor_vectorizer_config import InstructorVectorizerConfig
 from .instructor_vectorizer_config_request import InstructorVectorizerConfigRequest
-from .intfloat_multilingual_e_5_large_enum import IntfloatMultilingualE5LargeEnum
+from .integer_parameter_config import IntegerParameterConfig
+from .integer_parameter_config_request import IntegerParameterConfigRequest
 from .iteration_state_enum import IterationStateEnum
-from .json_enum import JsonEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
 from .json_vellum_value import JsonVellumValue
 from .json_vellum_value_request import JsonVellumValueRequest
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
-from .map_enum import MapEnum
 from .map_node_result import MapNodeResult
 from .map_node_result_data import MapNodeResultData
-from .merge_enum import MergeEnum
 from .merge_node_result import MergeNodeResult
 from .merge_node_result_data import MergeNodeResultData
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
-from .metric_enum import MetricEnum
 from .metric_node_result import MetricNodeResult
+from .ml_model_build_config import MlModelBuildConfig
+from .ml_model_build_config_request import MlModelBuildConfigRequest
+from .ml_model_developer import MlModelDeveloper
+from .ml_model_developer_enum_value_label import MlModelDeveloperEnumValueLabel
+from .ml_model_display_config_labelled import MlModelDisplayConfigLabelled
+from .ml_model_display_config_request import MlModelDisplayConfigRequest
+from .ml_model_display_tag import MlModelDisplayTag
+from .ml_model_display_tag_enum_value_label import MlModelDisplayTagEnumValueLabel
+from .ml_model_exec_config import MlModelExecConfig
+from .ml_model_exec_config_request import MlModelExecConfigRequest
+from .ml_model_family import MlModelFamily
+from .ml_model_family_enum_value_label import MlModelFamilyEnumValueLabel
+from .ml_model_feature import MlModelFeature
+from .ml_model_parameter_config import MlModelParameterConfig
+from .ml_model_parameter_config_request import MlModelParameterConfigRequest
+from .ml_model_read import MlModelRead
+from .ml_model_request_authorization_config import MlModelRequestAuthorizationConfig
+from .ml_model_request_authorization_config_request import MlModelRequestAuthorizationConfigRequest
+from .ml_model_request_authorization_config_type_enum import MlModelRequestAuthorizationConfigTypeEnum
+from .ml_model_request_config import MlModelRequestConfig
+from .ml_model_request_config_request import MlModelRequestConfigRequest
+from .ml_model_response_config import MlModelResponseConfig
+from .ml_model_response_config_request import MlModelResponseConfigRequest
+from .ml_model_tokenizer_config import (
+    MlModelTokenizerConfig,
+    MlModelTokenizerConfig_HuggingFace,
+    MlModelTokenizerConfig_Tiktoken,
+)
+from .ml_model_tokenizer_config_request import (
+    MlModelTokenizerConfigRequest,
+    MlModelTokenizerConfigRequest_HuggingFace,
+    MlModelTokenizerConfigRequest_Tiktoken,
+)
 from .ml_model_usage import MlModelUsage
 from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
 from .named_scenario_input_request import (
@@ -349,10 +373,15 @@ from .node_output_compiled_value import (
 )
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
-from .number_enum import NumberEnum
+from .number_parameter_config import NumberParameterConfig
+from .number_parameter_config_request import NumberParameterConfigRequest
 from .number_variable_value import NumberVariableValue
 from .number_vellum_value import NumberVellumValue
 from .number_vellum_value_request import NumberVellumValueRequest
+from .object_parameter_config import ObjectParameterConfig
+from .object_parameter_config_request import ObjectParameterConfigRequest
+from .one_of_parameter_config import OneOfParameterConfig
+from .one_of_parameter_config_request import OneOfParameterConfigRequest
 from .open_ai_vectorizer_config import OpenAiVectorizerConfig
 from .open_ai_vectorizer_config_request import OpenAiVectorizerConfigRequest
 from .open_ai_vectorizer_text_embedding_3_large import OpenAiVectorizerTextEmbedding3Large
@@ -362,12 +391,34 @@ from .open_ai_vectorizer_text_embedding_3_small_request import OpenAiVectorizerT
 from .open_ai_vectorizer_text_embedding_ada_002 import OpenAiVectorizerTextEmbeddingAda002
 from .open_ai_vectorizer_text_embedding_ada_002_request import OpenAiVectorizerTextEmbeddingAda002Request
 from .paginated_document_index_read_list import PaginatedDocumentIndexReadList
+from .paginated_ml_model_read_list import PaginatedMlModelReadList
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
 from .paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
 from .paginated_test_suite_test_case_list import PaginatedTestSuiteTestCaseList
-from .pdf_enum import PdfEnum
+from .parameter_config import (
+    ParameterConfig,
+    ParameterConfig_Array,
+    ParameterConfig_Boolean,
+    ParameterConfig_Const,
+    ParameterConfig_Integer,
+    ParameterConfig_Number,
+    ParameterConfig_Object,
+    ParameterConfig_OneOf,
+    ParameterConfig_String,
+)
+from .parameter_config_request import (
+    ParameterConfigRequest,
+    ParameterConfigRequest_Array,
+    ParameterConfigRequest_Boolean,
+    ParameterConfigRequest_Const,
+    ParameterConfigRequest_Integer,
+    ParameterConfigRequest_Number,
+    ParameterConfigRequest_Object,
+    ParameterConfigRequest_OneOf,
+    ParameterConfigRequest_String,
+)
 from .pdf_search_result_meta_source import PdfSearchResultMetaSource
 from .pdf_search_result_meta_source_request import PdfSearchResultMetaSourceRequest
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
@@ -393,24 +444,19 @@ from .prompt_output import (
 from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .reducto_chunker_config import ReductoChunkerConfig
 from .reducto_chunker_config_request import ReductoChunkerConfigRequest
-from .reducto_chunker_enum import ReductoChunkerEnum
 from .reducto_chunking import ReductoChunking
 from .reducto_chunking_request import ReductoChunkingRequest
-from .rejected_enum import RejectedEnum
 from .rejected_execute_prompt_event import RejectedExecutePromptEvent
 from .rejected_execute_prompt_response import RejectedExecutePromptResponse
 from .rejected_execute_workflow_workflow_result_event import RejectedExecuteWorkflowWorkflowResultEvent
 from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
 from .release_tag_source import ReleaseTagSource
-from .replace_enum import ReplaceEnum
 from .replace_test_suite_test_case_request import ReplaceTestSuiteTestCaseRequest
-from .replaced_enum import ReplacedEnum
 from .sandbox_scenario import SandboxScenario
 from .scenario_input import ScenarioInput, ScenarioInput_ChatHistory, ScenarioInput_String
 from .scenario_input_chat_history_variable_value import ScenarioInputChatHistoryVariableValue
 from .scenario_input_string_variable_value import ScenarioInputStringVariableValue
-from .search_error_response import SearchErrorResponse
 from .search_filters_request import SearchFiltersRequest
 from .search_node_result import SearchNodeResult
 from .search_node_result_data import SearchNodeResultData
@@ -425,38 +471,32 @@ from .search_result_meta_request import SearchResultMetaRequest
 from .search_result_meta_source import SearchResultMetaSource, SearchResultMetaSource_Pdf
 from .search_result_meta_source_request import SearchResultMetaSourceRequest, SearchResultMetaSourceRequest_Pdf
 from .search_result_request import SearchResultRequest
-from .search_results_enum import SearchResultsEnum
 from .search_weights_request import SearchWeightsRequest
 from .sentence_chunker_config import SentenceChunkerConfig
 from .sentence_chunker_config_request import SentenceChunkerConfigRequest
-from .sentence_chunker_enum import SentenceChunkerEnum
 from .sentence_chunking import SentenceChunking
 from .sentence_chunking_request import SentenceChunkingRequest
-from .sentence_transformers_multi_qa_mpnet_base_cos_v_1_enum import SentenceTransformersMultiQaMpnetBaseCosV1Enum
-from .sentence_transformers_multi_qa_mpnet_base_dot_v_1_enum import SentenceTransformersMultiQaMpnetBaseDotV1Enum
 from .slim_deployment_read import SlimDeploymentRead
 from .slim_document import SlimDocument
 from .slim_workflow_deployment import SlimWorkflowDeployment
-from .streaming_enum import StreamingEnum
 from .streaming_execute_prompt_event import StreamingExecutePromptEvent
 from .streaming_prompt_execution_meta import StreamingPromptExecutionMeta
 from .streaming_workflow_node_result_event import StreamingWorkflowNodeResultEvent
 from .string_chat_message_content import StringChatMessageContent
 from .string_chat_message_content_request import StringChatMessageContentRequest
-from .string_enum import StringEnum
 from .string_input_request import StringInputRequest
+from .string_parameter_config import StringParameterConfig
+from .string_parameter_config_request import StringParameterConfigRequest
 from .string_variable_value import StringVariableValue
 from .string_vellum_value import StringVellumValue
 from .string_vellum_value_request import StringVellumValueRequest
 from .submit_completion_actual_request import SubmitCompletionActualRequest
-from .submit_completion_actuals_error_response import SubmitCompletionActualsErrorResponse
 from .submit_workflow_execution_actual_request import (
     SubmitWorkflowExecutionActualRequest,
     SubmitWorkflowExecutionActualRequest_ChatHistory,
     SubmitWorkflowExecutionActualRequest_Json,
     SubmitWorkflowExecutionActualRequest_String,
 )
-from .subworkflow_enum import SubworkflowEnum
 from .subworkflow_node_result import SubworkflowNodeResult
 from .subworkflow_node_result_data import SubworkflowNodeResultData
 from .templating_node_array_result import TemplatingNodeArrayResult
@@ -526,9 +566,6 @@ from .test_suite_run_deployment_release_tag_exec_config_data_request import (
     TestSuiteRunDeploymentReleaseTagExecConfigDataRequest,
 )
 from .test_suite_run_deployment_release_tag_exec_config_request import TestSuiteRunDeploymentReleaseTagExecConfigRequest
-from .test_suite_run_deployment_release_tag_exec_config_type_enum import (
-    TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum,
-)
 from .test_suite_run_exec_config import (
     TestSuiteRunExecConfig,
     TestSuiteRunExecConfig_DeploymentReleaseTag,
@@ -567,11 +604,8 @@ from .test_suite_run_external_exec_config import TestSuiteRunExternalExecConfig
 from .test_suite_run_external_exec_config_data import TestSuiteRunExternalExecConfigData
 from .test_suite_run_external_exec_config_data_request import TestSuiteRunExternalExecConfigDataRequest
 from .test_suite_run_external_exec_config_request import TestSuiteRunExternalExecConfigRequest
-from .test_suite_run_external_exec_config_type_enum import TestSuiteRunExternalExecConfigTypeEnum
 from .test_suite_run_metric_error_output import TestSuiteRunMetricErrorOutput
-from .test_suite_run_metric_error_output_type_enum import TestSuiteRunMetricErrorOutputTypeEnum
 from .test_suite_run_metric_number_output import TestSuiteRunMetricNumberOutput
-from .test_suite_run_metric_number_output_type_enum import TestSuiteRunMetricNumberOutputTypeEnum
 from .test_suite_run_metric_output import (
     TestSuiteRunMetricOutput,
     TestSuiteRunMetricOutput_Error,
@@ -579,7 +613,6 @@ from .test_suite_run_metric_output import (
     TestSuiteRunMetricOutput_String,
 )
 from .test_suite_run_metric_string_output import TestSuiteRunMetricStringOutput
-from .test_suite_run_metric_string_output_type_enum import TestSuiteRunMetricStringOutputTypeEnum
 from .test_suite_run_read import TestSuiteRunRead
 from .test_suite_run_state import TestSuiteRunState
 from .test_suite_run_test_suite import TestSuiteRunTestSuite
@@ -589,7 +622,6 @@ from .test_suite_run_workflow_release_tag_exec_config_data_request import (
     TestSuiteRunWorkflowReleaseTagExecConfigDataRequest,
 )
 from .test_suite_run_workflow_release_tag_exec_config_request import TestSuiteRunWorkflowReleaseTagExecConfigRequest
-from .test_suite_run_workflow_release_tag_exec_config_type_enum import TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum
 from .test_suite_test_case import TestSuiteTestCase
 from .test_suite_test_case_bulk_operation_request import (
     TestSuiteTestCaseBulkOperationRequest,
@@ -617,17 +649,13 @@ from .test_suite_test_case_replace_bulk_operation_request import TestSuiteTestCa
 from .test_suite_test_case_replaced_bulk_result import TestSuiteTestCaseReplacedBulkResult
 from .test_suite_test_case_replaced_bulk_result_data import TestSuiteTestCaseReplacedBulkResultData
 from .test_suite_test_case_upsert_bulk_operation_request import TestSuiteTestCaseUpsertBulkOperationRequest
-from .text_embedding_3_large_enum import TextEmbedding3LargeEnum
-from .text_embedding_3_small_enum import TextEmbedding3SmallEnum
-from .text_embedding_ada_002_enum import TextEmbeddingAda002Enum
+from .tik_token_tokenizer_config import TikTokenTokenizerConfig
+from .tik_token_tokenizer_config_request import TikTokenTokenizerConfigRequest
 from .token_overlapping_window_chunker_config import TokenOverlappingWindowChunkerConfig
 from .token_overlapping_window_chunker_config_request import TokenOverlappingWindowChunkerConfigRequest
-from .token_overlapping_window_chunker_enum import TokenOverlappingWindowChunkerEnum
 from .token_overlapping_window_chunking import TokenOverlappingWindowChunking
 from .token_overlapping_window_chunking_request import TokenOverlappingWindowChunkingRequest
-from .upload_document_error_response import UploadDocumentErrorResponse
 from .upload_document_response import UploadDocumentResponse
-from .upsert_enum import UpsertEnum
 from .upsert_test_suite_test_case_request import UpsertTestSuiteTestCaseRequest
 from .vellum_error import VellumError
 from .vellum_error_code_enum import VellumErrorCodeEnum
@@ -636,6 +664,7 @@ from .vellum_image import VellumImage
 from .vellum_image_request import VellumImageRequest
 from .vellum_variable import VellumVariable
 from .vellum_variable_type import VellumVariableType
+from .visibility_enum import VisibilityEnum
 from .workflow_deployment_read import WorkflowDeploymentRead
 from .workflow_event_error import WorkflowEventError
 from .workflow_execution_actual_chat_history_request import WorkflowExecutionActualChatHistoryRequest
@@ -738,7 +767,8 @@ __all__ = [
     "ArrayChatMessageContentItem_Image",
     "ArrayChatMessageContentItem_String",
     "ArrayChatMessageContentRequest",
-    "ArrayEnum",
+    "ArrayParameterConfig",
+    "ArrayParameterConfigRequest",
     "ArrayVariableValueItem",
     "ArrayVariableValueItem_Error",
     "ArrayVariableValueItem_FunctionCall",
@@ -766,7 +796,8 @@ __all__ = [
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request",
-    "ChatHistoryEnum",
+    "BooleanParameterConfig",
+    "BooleanParameterConfigRequest",
     "ChatHistoryInputRequest",
     "ChatMessage",
     "ChatMessageContent",
@@ -804,11 +835,9 @@ __all__ = [
     "CompilePromptMeta",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
-    "CreateEnum",
+    "ConstParameterConfig",
+    "ConstParameterConfigRequest",
     "CreateTestSuiteTestCaseRequest",
-    "CreatedEnum",
-    "DeleteEnum",
-    "DeletedEnum",
     "DeploymentProviderPayloadResponse",
     "DeploymentProviderPayloadResponsePayload",
     "DeploymentRead",
@@ -831,11 +860,9 @@ __all__ = [
     "EnrichedNormalizedCompletion",
     "EntityStatus",
     "EnvironmentEnum",
-    "ErrorEnum",
     "ErrorVariableValue",
     "ErrorVellumValue",
     "ErrorVellumValueRequest",
-    "ExecutePromptApiErrorResponse",
     "ExecutePromptEvent",
     "ExecutePromptEvent_Fulfilled",
     "ExecutePromptEvent_Initiated",
@@ -844,9 +871,7 @@ __all__ = [
     "ExecutePromptResponse",
     "ExecutePromptResponse_Fulfilled",
     "ExecutePromptResponse_Rejected",
-    "ExecuteWorkflowErrorResponse",
     "ExecuteWorkflowResponse",
-    "ExecuteWorkflowStreamErrorResponse",
     "ExecuteWorkflowWorkflowResultEvent",
     "ExecuteWorkflowWorkflowResultEvent_Fulfilled",
     "ExecuteWorkflowWorkflowResultEvent_Rejected",
@@ -881,12 +906,10 @@ __all__ = [
     "FunctionCallChatMessageContentRequest",
     "FunctionCallChatMessageContentValue",
     "FunctionCallChatMessageContentValueRequest",
-    "FunctionCallEnum",
     "FunctionCallRequest",
     "FunctionCallVariableValue",
     "FunctionCallVellumValue",
     "FunctionCallVellumValueRequest",
-    "GenerateErrorResponse",
     "GenerateOptionsRequest",
     "GenerateRequest",
     "GenerateResponse",
@@ -896,12 +919,13 @@ __all__ = [
     "GenerateStreamResponse",
     "GenerateStreamResult",
     "GenerateStreamResultData",
-    "HkunlpInstructorXlEnum",
     "HkunlpInstructorXlVectorizer",
     "HkunlpInstructorXlVectorizerRequest",
+    "HostedByEnum",
+    "HuggingFaceTokenizerConfig",
+    "HuggingFaceTokenizerConfigRequest",
     "ImageChatMessageContent",
     "ImageChatMessageContentRequest",
-    "ImageEnum",
     "ImageVariableValue",
     "ImageVellumValue",
     "ImageVellumValueRequest",
@@ -922,32 +946,57 @@ __all__ = [
     "IndexingConfigVectorizer_TextEmbedding3Small",
     "IndexingConfigVectorizer_TextEmbeddingAda002",
     "IndexingStateEnum",
-    "InitiatedEnum",
     "InitiatedExecutePromptEvent",
     "InitiatedPromptExecutionMeta",
     "InitiatedWorkflowNodeResultEvent",
     "InstructorVectorizerConfig",
     "InstructorVectorizerConfigRequest",
-    "IntfloatMultilingualE5LargeEnum",
+    "IntegerParameterConfig",
+    "IntegerParameterConfigRequest",
     "IterationStateEnum",
-    "JsonEnum",
     "JsonInputRequest",
     "JsonVariableValue",
     "JsonVellumValue",
     "JsonVellumValueRequest",
     "LogicalOperator",
     "LogprobsEnum",
-    "MapEnum",
     "MapNodeResult",
     "MapNodeResultData",
-    "MergeEnum",
     "MergeNodeResult",
     "MergeNodeResultData",
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
-    "MetricEnum",
     "MetricNodeResult",
+    "MlModelBuildConfig",
+    "MlModelBuildConfigRequest",
+    "MlModelDeveloper",
+    "MlModelDeveloperEnumValueLabel",
+    "MlModelDisplayConfigLabelled",
+    "MlModelDisplayConfigRequest",
+    "MlModelDisplayTag",
+    "MlModelDisplayTagEnumValueLabel",
+    "MlModelExecConfig",
+    "MlModelExecConfigRequest",
+    "MlModelFamily",
+    "MlModelFamilyEnumValueLabel",
+    "MlModelFeature",
+    "MlModelParameterConfig",
+    "MlModelParameterConfigRequest",
+    "MlModelRead",
+    "MlModelRequestAuthorizationConfig",
+    "MlModelRequestAuthorizationConfigRequest",
+    "MlModelRequestAuthorizationConfigTypeEnum",
+    "MlModelRequestConfig",
+    "MlModelRequestConfigRequest",
+    "MlModelResponseConfig",
+    "MlModelResponseConfigRequest",
+    "MlModelTokenizerConfig",
+    "MlModelTokenizerConfigRequest",
+    "MlModelTokenizerConfigRequest_HuggingFace",
+    "MlModelTokenizerConfigRequest_Tiktoken",
+    "MlModelTokenizerConfig_HuggingFace",
+    "MlModelTokenizerConfig_Tiktoken",
     "MlModelUsage",
     "NamedScenarioInputChatHistoryVariableValueRequest",
     "NamedScenarioInputRequest",
@@ -1024,10 +1073,15 @@ __all__ = [
     "NodeOutputCompiledValue_String",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
-    "NumberEnum",
+    "NumberParameterConfig",
+    "NumberParameterConfigRequest",
     "NumberVariableValue",
     "NumberVellumValue",
     "NumberVellumValueRequest",
+    "ObjectParameterConfig",
+    "ObjectParameterConfigRequest",
+    "OneOfParameterConfig",
+    "OneOfParameterConfigRequest",
     "OpenAiVectorizerConfig",
     "OpenAiVectorizerConfigRequest",
     "OpenAiVectorizerTextEmbedding3Large",
@@ -1037,12 +1091,30 @@ __all__ = [
     "OpenAiVectorizerTextEmbeddingAda002",
     "OpenAiVectorizerTextEmbeddingAda002Request",
     "PaginatedDocumentIndexReadList",
+    "PaginatedMlModelReadList",
     "PaginatedSlimDeploymentReadList",
     "PaginatedSlimDocumentList",
     "PaginatedSlimWorkflowDeploymentList",
     "PaginatedTestSuiteRunExecutionList",
     "PaginatedTestSuiteTestCaseList",
-    "PdfEnum",
+    "ParameterConfig",
+    "ParameterConfigRequest",
+    "ParameterConfigRequest_Array",
+    "ParameterConfigRequest_Boolean",
+    "ParameterConfigRequest_Const",
+    "ParameterConfigRequest_Integer",
+    "ParameterConfigRequest_Number",
+    "ParameterConfigRequest_Object",
+    "ParameterConfigRequest_OneOf",
+    "ParameterConfigRequest_String",
+    "ParameterConfig_Array",
+    "ParameterConfig_Boolean",
+    "ParameterConfig_Const",
+    "ParameterConfig_Integer",
+    "ParameterConfig_Number",
+    "ParameterConfig_Object",
+    "ParameterConfig_OneOf",
+    "ParameterConfig_String",
     "PdfSearchResultMetaSource",
     "PdfSearchResultMetaSourceRequest",
     "ProcessingFailureReasonEnum",
@@ -1064,26 +1136,21 @@ __all__ = [
     "RawPromptExecutionOverridesRequest",
     "ReductoChunkerConfig",
     "ReductoChunkerConfigRequest",
-    "ReductoChunkerEnum",
     "ReductoChunking",
     "ReductoChunkingRequest",
-    "RejectedEnum",
     "RejectedExecutePromptEvent",
     "RejectedExecutePromptResponse",
     "RejectedExecuteWorkflowWorkflowResultEvent",
     "RejectedPromptExecutionMeta",
     "RejectedWorkflowNodeResultEvent",
     "ReleaseTagSource",
-    "ReplaceEnum",
     "ReplaceTestSuiteTestCaseRequest",
-    "ReplacedEnum",
     "SandboxScenario",
     "ScenarioInput",
     "ScenarioInputChatHistoryVariableValue",
     "ScenarioInputStringVariableValue",
     "ScenarioInput_ChatHistory",
     "ScenarioInput_String",
-    "SearchErrorResponse",
     "SearchFiltersRequest",
     "SearchNodeResult",
     "SearchNodeResultData",
@@ -1100,36 +1167,30 @@ __all__ = [
     "SearchResultMetaSourceRequest_Pdf",
     "SearchResultMetaSource_Pdf",
     "SearchResultRequest",
-    "SearchResultsEnum",
     "SearchWeightsRequest",
     "SentenceChunkerConfig",
     "SentenceChunkerConfigRequest",
-    "SentenceChunkerEnum",
     "SentenceChunking",
     "SentenceChunkingRequest",
-    "SentenceTransformersMultiQaMpnetBaseCosV1Enum",
-    "SentenceTransformersMultiQaMpnetBaseDotV1Enum",
     "SlimDeploymentRead",
     "SlimDocument",
     "SlimWorkflowDeployment",
-    "StreamingEnum",
     "StreamingExecutePromptEvent",
     "StreamingPromptExecutionMeta",
     "StreamingWorkflowNodeResultEvent",
     "StringChatMessageContent",
     "StringChatMessageContentRequest",
-    "StringEnum",
     "StringInputRequest",
+    "StringParameterConfig",
+    "StringParameterConfigRequest",
     "StringVariableValue",
     "StringVellumValue",
     "StringVellumValueRequest",
     "SubmitCompletionActualRequest",
-    "SubmitCompletionActualsErrorResponse",
     "SubmitWorkflowExecutionActualRequest",
     "SubmitWorkflowExecutionActualRequest_ChatHistory",
     "SubmitWorkflowExecutionActualRequest_Json",
     "SubmitWorkflowExecutionActualRequest_String",
-    "SubworkflowEnum",
     "SubworkflowNodeResult",
     "SubworkflowNodeResultData",
     "TemplatingNodeArrayResult",
@@ -1191,7 +1252,6 @@ __all__ = [
     "TestSuiteRunDeploymentReleaseTagExecConfigData",
     "TestSuiteRunDeploymentReleaseTagExecConfigDataRequest",
     "TestSuiteRunDeploymentReleaseTagExecConfigRequest",
-    "TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum",
     "TestSuiteRunExecConfig",
     "TestSuiteRunExecConfigRequest",
     "TestSuiteRunExecConfigRequest_DeploymentReleaseTag",
@@ -1224,17 +1284,13 @@ __all__ = [
     "TestSuiteRunExternalExecConfigData",
     "TestSuiteRunExternalExecConfigDataRequest",
     "TestSuiteRunExternalExecConfigRequest",
-    "TestSuiteRunExternalExecConfigTypeEnum",
     "TestSuiteRunMetricErrorOutput",
-    "TestSuiteRunMetricErrorOutputTypeEnum",
     "TestSuiteRunMetricNumberOutput",
-    "TestSuiteRunMetricNumberOutputTypeEnum",
     "TestSuiteRunMetricOutput",
     "TestSuiteRunMetricOutput_Error",
     "TestSuiteRunMetricOutput_Number",
     "TestSuiteRunMetricOutput_String",
     "TestSuiteRunMetricStringOutput",
-    "TestSuiteRunMetricStringOutputTypeEnum",
     "TestSuiteRunRead",
     "TestSuiteRunState",
     "TestSuiteRunTestSuite",
@@ -1242,7 +1298,6 @@ __all__ = [
     "TestSuiteRunWorkflowReleaseTagExecConfigData",
     "TestSuiteRunWorkflowReleaseTagExecConfigDataRequest",
     "TestSuiteRunWorkflowReleaseTagExecConfigRequest",
-    "TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum",
     "TestSuiteTestCase",
     "TestSuiteTestCaseBulkOperationRequest",
     "TestSuiteTestCaseBulkOperationRequest_Create",
@@ -1266,17 +1321,13 @@ __all__ = [
     "TestSuiteTestCaseReplacedBulkResult",
     "TestSuiteTestCaseReplacedBulkResultData",
     "TestSuiteTestCaseUpsertBulkOperationRequest",
-    "TextEmbedding3LargeEnum",
-    "TextEmbedding3SmallEnum",
-    "TextEmbeddingAda002Enum",
+    "TikTokenTokenizerConfig",
+    "TikTokenTokenizerConfigRequest",
     "TokenOverlappingWindowChunkerConfig",
     "TokenOverlappingWindowChunkerConfigRequest",
-    "TokenOverlappingWindowChunkerEnum",
     "TokenOverlappingWindowChunking",
     "TokenOverlappingWindowChunkingRequest",
-    "UploadDocumentErrorResponse",
     "UploadDocumentResponse",
-    "UpsertEnum",
     "UpsertTestSuiteTestCaseRequest",
     "VellumError",
     "VellumErrorCodeEnum",
@@ -1285,6 +1336,7 @@ __all__ = [
     "VellumImageRequest",
     "VellumVariable",
     "VellumVariableType",
+    "VisibilityEnum",
     "WorkflowDeploymentRead",
     "WorkflowEventError",
     "WorkflowExecutionActualChatHistoryRequest",

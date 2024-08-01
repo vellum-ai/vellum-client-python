@@ -42,6 +42,10 @@ class SlimDeploymentRead(pydantic_v1.BaseModel):
 
     last_deployed_on: dt.datetime
     input_variables: typing.List[VellumVariable]
+    description: typing.Optional[str] = pydantic_v1.Field(default=None)
+    """
+    A human-readable description of the deployment
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

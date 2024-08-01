@@ -7,14 +7,18 @@ from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
 
 
-class TestCaseJsonVariableValue(pydantic_v1.BaseModel):
+class StringParameterConfigRequest(pydantic_v1.BaseModel):
     """
-    A JSON value for a variable in a Test Case.
+    An OpenAPI specification of a parameter with type 'string'
     """
 
-    variable_id: str
-    name: str
-    value: typing.Any
+    min_length: typing.Optional[int] = None
+    max_length: typing.Optional[int] = None
+    pattern: typing.Optional[str] = None
+    format: typing.Optional[str] = None
+    default: typing.Optional[str] = None
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

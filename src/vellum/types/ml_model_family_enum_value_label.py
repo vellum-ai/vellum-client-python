@@ -5,16 +5,12 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
+from .ml_model_family import MlModelFamily
 
 
-class TestCaseJsonVariableValue(pydantic_v1.BaseModel):
-    """
-    A JSON value for a variable in a Test Case.
-    """
-
-    variable_id: str
-    name: str
-    value: typing.Any
+class MlModelFamilyEnumValueLabel(pydantic_v1.BaseModel):
+    label: str
+    value: MlModelFamily
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

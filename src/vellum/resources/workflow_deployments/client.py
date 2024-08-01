@@ -33,6 +33,8 @@ class WorkflowDeploymentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimWorkflowDeploymentList:
         """
+        Used to list all Workflow Deployments.
+
         Parameters:
             - limit: typing.Optional[int]. Number of results to return per page.
 
@@ -278,6 +280,8 @@ class AsyncWorkflowDeploymentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> PaginatedSlimWorkflowDeploymentList:
         """
+        Used to list all Workflow Deployments.
+
         Parameters:
             - limit: typing.Optional[int]. Number of results to return per page.
 

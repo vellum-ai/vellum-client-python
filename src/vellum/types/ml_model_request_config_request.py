@@ -5,16 +5,13 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import pydantic_v1
+from .ml_model_request_authorization_config_request import MlModelRequestAuthorizationConfigRequest
 
 
-class TestCaseJsonVariableValue(pydantic_v1.BaseModel):
-    """
-    A JSON value for a variable in a Test Case.
-    """
-
-    variable_id: str
-    name: str
-    value: typing.Any
+class MlModelRequestConfigRequest(pydantic_v1.BaseModel):
+    headers: typing.Optional[typing.Dict[str, typing.Optional[str]]] = None
+    authorization: typing.Optional[MlModelRequestAuthorizationConfigRequest] = None
+    body_template: typing.Optional[str] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

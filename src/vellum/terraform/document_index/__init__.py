@@ -1,7 +1,7 @@
 '''
 # `vellum_document_index`
 
-Refer to the Terraform Registry for docs: [`vellum_document_index`](https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index).
+Refer to the Terraform Registry for docs: [`vellum_document_index`](https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index).
 '''
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
@@ -29,7 +29,7 @@ class DocumentIndex(
     metaclass=jsii.JSIIMeta,
     jsii_type="vellum-ai_vellum.documentIndex.DocumentIndex",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index vellum_document_index}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index vellum_document_index}.'''
 
     def __init__(
         self,
@@ -48,14 +48,14 @@ class DocumentIndex(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index vellum_document_index} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index vellum_document_index} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param label: A human-readable label for the document index. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#label DocumentIndex#label}
-        :param name: A name that uniquely identifies this index within its workspace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#name DocumentIndex#name}
-        :param environment: The environment this document index is used in. - ``DEVELOPMENT`` - Development - ``STAGING`` - Staging - ``PRODUCTION`` - Production Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#environment DocumentIndex#environment}
-        :param status: The current status of the document index. - ``ACTIVE`` - Active - ``ARCHIVED`` - Archived Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#status DocumentIndex#status}
+        :param label: A human-readable label for the Document Index. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#label DocumentIndex#label}
+        :param name: A name that uniquely identifies this index within its workspace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#name DocumentIndex#name}
+        :param environment: The environment this document index is used in. - ``DEVELOPMENT`` - Development - ``STAGING`` - Staging - ``PRODUCTION`` - Production Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#environment DocumentIndex#environment}
+        :param status: The current status of the document index. - ``ACTIVE`` - Active - ``ARCHIVED`` - Archived Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#status DocumentIndex#status}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -97,7 +97,7 @@ class DocumentIndex(
 
         :param scope: The scope in which to define this construct.
         :param import_to_id: The construct id used in the generated config for the DocumentIndex to import.
-        :param import_from_id: The id of the existing DocumentIndex that should be imported. Refer to the {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#import import section} in the documentation of this resource for the id to use
+        :param import_from_id: The id of the existing DocumentIndex that should be imported. Refer to the {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#import import section} in the documentation of this resource for the id to use
         :param provider: ? Optional instance of the provider where the DocumentIndex to import is found.
         '''
         if __debug__:
@@ -249,10 +249,10 @@ class DocumentIndexConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param label: A human-readable label for the document index. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#label DocumentIndex#label}
-        :param name: A name that uniquely identifies this index within its workspace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#name DocumentIndex#name}
-        :param environment: The environment this document index is used in. - ``DEVELOPMENT`` - Development - ``STAGING`` - Staging - ``PRODUCTION`` - Production Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#environment DocumentIndex#environment}
-        :param status: The current status of the document index. - ``ACTIVE`` - Active - ``ARCHIVED`` - Archived Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#status DocumentIndex#status}
+        :param label: A human-readable label for the Document Index. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#label DocumentIndex#label}
+        :param name: A name that uniquely identifies this index within its workspace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#name DocumentIndex#name}
+        :param environment: The environment this document index is used in. - ``DEVELOPMENT`` - Development - ``STAGING`` - Staging - ``PRODUCTION`` - Production Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#environment DocumentIndex#environment}
+        :param status: The current status of the document index. - ``ACTIVE`` - Active - ``ARCHIVED`` - Archived Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#status DocumentIndex#status}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -358,9 +358,9 @@ class DocumentIndexConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def label(self) -> builtins.str:
-        '''A human-readable label for the document index.
+        '''A human-readable label for the Document Index.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#label DocumentIndex#label}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#label DocumentIndex#label}
         '''
         result = self._values.get("label")
         assert result is not None, "Required property 'label' is missing"
@@ -370,7 +370,7 @@ class DocumentIndexConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def name(self) -> builtins.str:
         '''A name that uniquely identifies this index within its workspace.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#name DocumentIndex#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#name DocumentIndex#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -384,7 +384,7 @@ class DocumentIndexConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         - ``STAGING`` - Staging
         - ``PRODUCTION`` - Production
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#environment DocumentIndex#environment}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#environment DocumentIndex#environment}
         '''
         result = self._values.get("environment")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -396,7 +396,7 @@ class DocumentIndexConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         - ``ACTIVE`` - Active
         - ``ARCHIVED`` - Archived
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs/resources/document_index#status DocumentIndex#status}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs/resources/document_index#status DocumentIndex#status}
         '''
         result = self._values.get("status")
         return typing.cast(typing.Optional[builtins.str], result)

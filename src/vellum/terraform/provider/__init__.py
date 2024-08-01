@@ -1,7 +1,7 @@
 '''
 # `provider`
 
-Refer to the Terraform Registry for docs: [`vellum`](https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs).
+Refer to the Terraform Registry for docs: [`vellum`](https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs).
 '''
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
@@ -29,7 +29,7 @@ class VellumProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="vellum-ai_vellum.provider.VellumProvider",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs vellum}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs vellum}.'''
 
     def __init__(
         self,
@@ -38,19 +38,21 @@ class VellumProvider(
         *,
         alias: typing.Optional[builtins.str] = None,
         api_key: typing.Optional[builtins.str] = None,
+        base_url: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs vellum} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs vellum} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs#alias VellumProvider#alias}
-        :param api_key: API Key to authenticate with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs#api_key VellumProvider#api_key}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#alias VellumProvider#alias}
+        :param api_key: API Key to authenticate with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#api_key VellumProvider#api_key}
+        :param base_url: Base URL to use with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#base_url VellumProvider#base_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8f332a1b6664893e57a3554abbbfd334296d68a0c02222521351772fec263177)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        config = VellumProviderConfig(alias=alias, api_key=api_key)
+        config = VellumProviderConfig(alias=alias, api_key=api_key, base_url=base_url)
 
         jsii.create(self.__class__, self, [scope, id, config])
 
@@ -67,7 +69,7 @@ class VellumProvider(
 
         :param scope: The scope in which to define this construct.
         :param import_to_id: The construct id used in the generated config for the VellumProvider to import.
-        :param import_from_id: The id of the existing VellumProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs#import import section} in the documentation of this resource for the id to use
+        :param import_from_id: The id of the existing VellumProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#import import section} in the documentation of this resource for the id to use
         :param provider: ? Optional instance of the provider where the VellumProvider to import is found.
         '''
         if __debug__:
@@ -85,6 +87,10 @@ class VellumProvider(
     @jsii.member(jsii_name="resetApiKey")
     def reset_api_key(self) -> None:
         return typing.cast(None, jsii.invoke(self, "resetApiKey", []))
+
+    @jsii.member(jsii_name="resetBaseUrl")
+    def reset_base_url(self) -> None:
+        return typing.cast(None, jsii.invoke(self, "resetBaseUrl", []))
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
@@ -110,6 +116,11 @@ class VellumProvider(
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "apiKeyInput"))
 
     @builtins.property
+    @jsii.member(jsii_name="baseUrlInput")
+    def base_url_input(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "baseUrlInput"))
+
+    @builtins.property
     @jsii.member(jsii_name="alias")
     def alias(self) -> typing.Optional[builtins.str]:
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "alias"))
@@ -133,11 +144,23 @@ class VellumProvider(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "apiKey", value)
 
+    @builtins.property
+    @jsii.member(jsii_name="baseUrl")
+    def base_url(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "baseUrl"))
+
+    @base_url.setter
+    def base_url(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__21ca70614f7725c87c92b1df4a963a8db586657ad82746778be178615bd2eb02)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "baseUrl", value)
+
 
 @jsii.data_type(
     jsii_type="vellum-ai_vellum.provider.VellumProviderConfig",
     jsii_struct_bases=[],
-    name_mapping={"alias": "alias", "api_key": "apiKey"},
+    name_mapping={"alias": "alias", "api_key": "apiKey", "base_url": "baseUrl"},
 )
 class VellumProviderConfig:
     def __init__(
@@ -145,26 +168,31 @@ class VellumProviderConfig:
         *,
         alias: typing.Optional[builtins.str] = None,
         api_key: typing.Optional[builtins.str] = None,
+        base_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs#alias VellumProvider#alias}
-        :param api_key: API Key to authenticate with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs#api_key VellumProvider#api_key}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#alias VellumProvider#alias}
+        :param api_key: API Key to authenticate with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#api_key VellumProvider#api_key}
+        :param base_url: Base URL to use with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#base_url VellumProvider#base_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb8c32f1d43f1344224f7a690abc6e2489c4dff67cb93921483ed2cc4b5410e1)
             check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
             check_type(argname="argument api_key", value=api_key, expected_type=type_hints["api_key"])
+            check_type(argname="argument base_url", value=base_url, expected_type=type_hints["base_url"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if alias is not None:
             self._values["alias"] = alias
         if api_key is not None:
             self._values["api_key"] = api_key
+        if base_url is not None:
+            self._values["base_url"] = base_url
 
     @builtins.property
     def alias(self) -> typing.Optional[builtins.str]:
         '''Alias name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs#alias VellumProvider#alias}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#alias VellumProvider#alias}
         '''
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -173,9 +201,18 @@ class VellumProviderConfig:
     def api_key(self) -> typing.Optional[builtins.str]:
         '''API Key to authenticate with the Vellum API.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.2/docs#api_key VellumProvider#api_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#api_key VellumProvider#api_key}
         '''
         result = self._values.get("api_key")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def base_url(self) -> typing.Optional[builtins.str]:
+        '''Base URL to use with the Vellum API.
+
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#base_url VellumProvider#base_url}
+        '''
+        result = self._values.get("base_url")
         return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -203,6 +240,7 @@ def _typecheckingstub__8f332a1b6664893e57a3554abbbfd334296d68a0c02222521351772fe
     *,
     alias: typing.Optional[builtins.str] = None,
     api_key: typing.Optional[builtins.str] = None,
+    base_url: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -228,10 +266,17 @@ def _typecheckingstub__402b9018cf60ba05eb9ab72153d7f52235bd10a5f5615a074a5388006
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__21ca70614f7725c87c92b1df4a963a8db586657ad82746778be178615bd2eb02(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bb8c32f1d43f1344224f7a690abc6e2489c4dff67cb93921483ed2cc4b5410e1(
     *,
     alias: typing.Optional[builtins.str] = None,
     api_key: typing.Optional[builtins.str] = None,
+    base_url: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

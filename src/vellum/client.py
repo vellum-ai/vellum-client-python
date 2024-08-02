@@ -2,16 +2,13 @@
 
 import json
 import typing
-import urllib.parse
 from json.decoder import JSONDecodeError
 
 import httpx
 
 from .core.api_error import ApiError
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from .core.jsonable_encoder import jsonable_encoder
 from .core.pydantic_utilities import pydantic_v1
-from .core.remove_none_from_dict import remove_none_from_dict
 from .core.request_options import RequestOptions
 from .environment import VellumEnvironment
 from .errors.bad_request_error import BadRequestError
@@ -53,21 +50,31 @@ OMIT = typing.cast(typing.Any, ...)
 
 class Vellum:
     """
-    Use this class to access the different functions within the SDK. You can instantiate any number of clients with different configuration that will propogate to these functions.
+    Use this class to access the different functions within the SDK. You can instantiate any number of clients with different configuration that will propagate to these functions.
 
-    Parameters:
-        - environment: VellumEnvironment. The environment to use for requests from the client. from .environment import VellumEnvironment
+    Parameters
+    ----------
+    environment : VellumEnvironment
+        The environment to use for requests from the client. from .environment import VellumEnvironment
 
-                                          Defaults to VellumEnvironment.PRODUCTION
 
-        - api_key: str.
 
-        - timeout: typing.Optional[float]. The timeout to be used, in seconds, for requests by default the timeout is 60 seconds, unless a custom httpx client is used, in which case a default is not set.
+        Defaults to VellumEnvironment.PRODUCTION
 
-        - follow_redirects: typing.Optional[bool]. Whether the default httpx client follows redirects or not, this is irrelevant if a custom httpx client is passed in.
 
-        - httpx_client: typing.Optional[httpx.Client]. The httpx client to use for making requests, a preconfigured client is used by default, however this is useful should you want to pass in any custom httpx configuration.
-    ---
+
+    api_key : str
+    timeout : typing.Optional[float]
+        The timeout to be used, in seconds, for requests. By default there is no timeout set, unless a custom httpx client is used, in which case this default is not enforced.
+
+    follow_redirects : typing.Optional[bool]
+        Whether the default httpx client follows redirects or not, this is irrelevant if a custom httpx client is passed in.
+
+    httpx_client : typing.Optional[httpx.Client]
+        The httpx client to use for making requests, a preconfigured client is used by default, however this is useful should you want to pass in any custom httpx configuration.
+
+    Examples
+    --------
     from vellum.client import Vellum
 
     client = Vellum(
@@ -82,7 +89,7 @@ class Vellum:
         api_key: str,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
-        httpx_client: typing.Optional[httpx.Client] = None,
+        httpx_client: typing.Optional[httpx.Client] = None
     ):
         _defaulted_timeout = timeout if timeout is not None else None if httpx_client is None else None
         self._client_wrapper = SyncClientWrapper(
@@ -118,32 +125,50 @@ class Vellum:
         raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest] = OMIT,
         expand_raw: typing.Optional[typing.Sequence[str]] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> ExecutePromptResponse:
         """
         Executes a deployed Prompt and returns the result.
 
-        Parameters:
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. A list consisting of the Prompt Deployment's input variables and their values.
+        Parameters
+        ----------
+        inputs : typing.Sequence[PromptDeploymentInputRequest]
+            A list consisting of the Prompt Deployment's input variables and their values.
 
-            - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
+        prompt_deployment_id : typing.Optional[str]
+            The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
-            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+        prompt_deployment_name : typing.Optional[str]
+            The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
+        release_tag : typing.Optional[str]
+            Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
+        external_id : typing.Optional[str]
+            Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequestRequest]
+            An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
-            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest]. Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
+        raw_overrides : typing.Optional[RawPromptExecutionOverridesRequest]
+            Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 
-            - expand_raw: typing.Optional[typing.Sequence[str]]. A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
+        expand_raw : typing.Optional[typing.Sequence[str]]
+            A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
 
-            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+        metadata : typing.Optional[typing.Dict[str, typing.Any]]
+            Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ExecutePromptResponse
+
+
+        Examples
+        --------
         from vellum import (
             PromptDeploymentExpandMetaRequestRequest,
             PromptDeploymentInputRequest_String,
@@ -182,60 +207,35 @@ class Vellum:
             metadata={"string": {"key": "value"}},
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if prompt_deployment_id is not OMIT:
-            _request["prompt_deployment_id"] = prompt_deployment_id
-        if prompt_deployment_name is not OMIT:
-            _request["prompt_deployment_name"] = prompt_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
-        if expand_meta is not OMIT:
-            _request["expand_meta"] = expand_meta
-        if raw_overrides is not OMIT:
-            _request["raw_overrides"] = raw_overrides
-        if expand_raw is not OMIT:
-            _request["expand_raw"] = expand_raw
-        if metadata is not OMIT:
-            _request["metadata"] = metadata
         _response = self._client_wrapper.httpx_client.request(
+            "v1/execute-prompt",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "inputs": inputs,
+                "prompt_deployment_id": prompt_deployment_id,
+                "prompt_deployment_name": prompt_deployment_name,
+                "release_tag": release_tag,
+                "external_id": external_id,
+                "expand_meta": expand_meta,
+                "raw_overrides": raw_overrides,
+                "expand_raw": expand_raw,
+                "metadata": metadata,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 403:
+                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -253,32 +253,50 @@ class Vellum:
         raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest] = OMIT,
         expand_raw: typing.Optional[typing.Sequence[str]] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Iterator[ExecutePromptEvent]:
         """
         Executes a deployed Prompt and streams back the results.
 
-        Parameters:
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. A list consisting of the Prompt Deployment's input variables and their values.
+        Parameters
+        ----------
+        inputs : typing.Sequence[PromptDeploymentInputRequest]
+            A list consisting of the Prompt Deployment's input variables and their values.
 
-            - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
+        prompt_deployment_id : typing.Optional[str]
+            The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
-            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+        prompt_deployment_name : typing.Optional[str]
+            The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
+        release_tag : typing.Optional[str]
+            Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
+        external_id : typing.Optional[str]
+            Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequestRequest]
+            An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
-            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest]. Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
+        raw_overrides : typing.Optional[RawPromptExecutionOverridesRequest]
+            Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 
-            - expand_raw: typing.Optional[typing.Sequence[str]]. A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
+        expand_raw : typing.Optional[typing.Sequence[str]]
+            A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
 
-            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+        metadata : typing.Optional[typing.Dict[str, typing.Any]]
+            Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Yields
+        ------
+        typing.Iterator[ExecutePromptEvent]
+
+
+        Examples
+        --------
         from vellum import (
             PromptDeploymentExpandMetaRequestRequest,
             PromptDeploymentInputRequest_String,
@@ -289,7 +307,7 @@ class Vellum:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.execute_prompt_stream(
+        response = client.execute_prompt_stream(
             inputs=[
                 PromptDeploymentInputRequest_String(
                     name="string",
@@ -316,66 +334,46 @@ class Vellum:
             expand_raw=["string"],
             metadata={"string": {"key": "value"}},
         )
+        for chunk in response:
+            yield chunk
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if prompt_deployment_id is not OMIT:
-            _request["prompt_deployment_id"] = prompt_deployment_id
-        if prompt_deployment_name is not OMIT:
-            _request["prompt_deployment_name"] = prompt_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
-        if expand_meta is not OMIT:
-            _request["expand_meta"] = expand_meta
-        if raw_overrides is not OMIT:
-            _request["raw_overrides"] = raw_overrides
-        if expand_raw is not OMIT:
-            _request["expand_raw"] = expand_raw
-        if metadata is not OMIT:
-            _request["metadata"] = metadata
         with self._client_wrapper.httpx_client.stream(
+            "v1/execute-prompt-stream",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt-stream"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "inputs": inputs,
+                "prompt_deployment_id": prompt_deployment_id,
+                "prompt_deployment_name": prompt_deployment_name,
+                "release_tag": release_tag,
+                "external_id": external_id,
+                "expand_meta": expand_meta,
+                "raw_overrides": raw_overrides,
+                "expand_raw": expand_raw,
+                "metadata": metadata,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         ) as _response:
-            if 200 <= _response.status_code < 300:
-                for _text in _response.iter_lines():
-                    if len(_text) == 0:
-                        continue
-                    yield pydantic_v1.parse_obj_as(ExecutePromptEvent, json.loads(_text))  # type: ignore
-                return
-            _response.read()
-            if _response.status_code == 400:
-                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 403:
-                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 404:
-                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 500:
-                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
+                if 200 <= _response.status_code < 300:
+                    for _text in _response.iter_lines():
+                        try:
+                            if len(_text) == 0:
+                                continue
+                            yield pydantic_v1.parse_obj_as(ExecutePromptEvent, json.loads(_text))  # type: ignore
+                        except:
+                            pass
+                    return
+                _response.read()
+                if _response.status_code == 400:
+                    raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 403:
+                    raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 404:
+                    raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 500:
+                    raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -390,26 +388,41 @@ class Vellum:
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> ExecuteWorkflowResponse:
         """
         Executes a deployed Workflow and returns its outputs.
 
-        Parameters:
-            - inputs: typing.Sequence[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+        Parameters
+        ----------
+        inputs : typing.Sequence[WorkflowRequestInputRequest]
+            The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
-            - expand_meta: typing.Optional[WorkflowExpandMetaRequest]. An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+        expand_meta : typing.Optional[WorkflowExpandMetaRequest]
+            An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
 
-            - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
+        workflow_deployment_id : typing.Optional[str]
+            The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
-            - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
+        workflow_deployment_name : typing.Optional[str]
+            The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+        release_tag : typing.Optional[str]
+            Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
+        external_id : typing.Optional[str]
+            Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ExecuteWorkflowResponse
+
+
+        Examples
+        --------
         from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
         from vellum.client import Vellum
 
@@ -432,52 +445,30 @@ class Vellum:
             external_id="string",
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if expand_meta is not OMIT:
-            _request["expand_meta"] = expand_meta
-        if workflow_deployment_id is not OMIT:
-            _request["workflow_deployment_id"] = workflow_deployment_id
-        if workflow_deployment_name is not OMIT:
-            _request["workflow_deployment_name"] = workflow_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
         _response = self._client_wrapper.httpx_client.request(
+            "v1/execute-workflow",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "inputs": inputs,
+                "expand_meta": expand_meta,
+                "workflow_deployment_id": workflow_deployment_id,
+                "workflow_deployment_name": workflow_deployment_name,
+                "release_tag": release_tag,
+                "external_id": external_id,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -493,35 +484,51 @@ class Vellum:
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
         event_types: typing.Optional[typing.Sequence[WorkflowExecutionEventType]] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Iterator[WorkflowStreamEvent]:
         """
         Executes a deployed Workflow and streams back its results.
 
-        Parameters:
-            - inputs: typing.Sequence[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+        Parameters
+        ----------
+        inputs : typing.Sequence[WorkflowRequestInputRequest]
+            The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
-            - expand_meta: typing.Optional[WorkflowExpandMetaRequest]. An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+        expand_meta : typing.Optional[WorkflowExpandMetaRequest]
+            An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
 
-            - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
+        workflow_deployment_id : typing.Optional[str]
+            The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
-            - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
+        workflow_deployment_name : typing.Optional[str]
+            The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+        release_tag : typing.Optional[str]
+            Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
+        external_id : typing.Optional[str]
+            Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 
-            - event_types: typing.Optional[typing.Sequence[WorkflowExecutionEventType]]. Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
+        event_types : typing.Optional[typing.Sequence[WorkflowExecutionEventType]]
+            Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Yields
+        ------
+        typing.Iterator[WorkflowStreamEvent]
+
+
+        Examples
+        --------
         from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.execute_workflow_stream(
+        response = client.execute_workflow_stream(
             inputs=[
                 WorkflowRequestInputRequest_String(
                     name="string",
@@ -537,62 +544,42 @@ class Vellum:
             external_id="string",
             event_types=["NODE"],
         )
+        for chunk in response:
+            yield chunk
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if expand_meta is not OMIT:
-            _request["expand_meta"] = expand_meta
-        if workflow_deployment_id is not OMIT:
-            _request["workflow_deployment_id"] = workflow_deployment_id
-        if workflow_deployment_name is not OMIT:
-            _request["workflow_deployment_name"] = workflow_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
-        if event_types is not OMIT:
-            _request["event_types"] = event_types
         with self._client_wrapper.httpx_client.stream(
+            "v1/execute-workflow-stream",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow-stream"
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "inputs": inputs,
+                "expand_meta": expand_meta,
+                "workflow_deployment_id": workflow_deployment_id,
+                "workflow_deployment_name": workflow_deployment_name,
+                "release_tag": release_tag,
+                "external_id": external_id,
+                "event_types": event_types,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         ) as _response:
-            if 200 <= _response.status_code < 300:
-                for _text in _response.iter_lines():
-                    if len(_text) == 0:
-                        continue
-                    yield pydantic_v1.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
-                return
-            _response.read()
-            if _response.status_code == 400:
-                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 404:
-                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 500:
-                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
+                if 200 <= _response.status_code < 300:
+                    for _text in _response.iter_lines():
+                        try:
+                            if len(_text) == 0:
+                                continue
+                            yield pydantic_v1.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
+                        except:
+                            pass
+                    return
+                _response.read()
+                if _response.status_code == 400:
+                    raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 404:
+                    raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 500:
+                    raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -601,11 +588,11 @@ class Vellum:
     def generate(
         self,
         *,
+        requests: typing.Sequence[GenerateRequest],
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
-        requests: typing.Sequence[GenerateRequest],
         options: typing.Optional[GenerateOptionsRequest] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> GenerateResponse:
         """
         Generate a completion using a previously defined deployment.
@@ -613,17 +600,30 @@ class Vellum:
         Important: This endpoint is DEPRECATED and has been superseded by
         [execute-prompt](/api-reference/api-reference/execute-prompt).
 
-        Parameters:
-            - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
+        Parameters
+        ----------
+        requests : typing.Sequence[GenerateRequest]
+            The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
 
-            - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
+        deployment_id : typing.Optional[str]
+            The ID of the deployment. Must provide either this or deployment_name.
 
-            - requests: typing.Sequence[GenerateRequest]. The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
+        deployment_name : typing.Optional[str]
+            The name of the deployment. Must provide either this or deployment_id.
 
-            - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
+        options : typing.Optional[GenerateOptionsRequest]
+            Additional configuration that can be used to control what's included in the response.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GenerateResponse
+
+
+        Examples
+        --------
         from vellum import GenerateRequest
         from vellum.client import Vellum
 
@@ -638,50 +638,30 @@ class Vellum:
             ],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"requests": requests}
-        if deployment_id is not OMIT:
-            _request["deployment_id"] = deployment_id
-        if deployment_name is not OMIT:
-            _request["deployment_name"] = deployment_name
-        if options is not OMIT:
-            _request["options"] = options
         _response = self._client_wrapper.httpx_client.request(
+            "v1/generate",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "deployment_id": deployment_id,
+                "deployment_name": deployment_name,
+                "requests": requests,
+                "options": options,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 403:
+                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -690,11 +670,11 @@ class Vellum:
     def generate_stream(
         self,
         *,
+        requests: typing.Sequence[GenerateRequest],
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
-        requests: typing.Sequence[GenerateRequest],
         options: typing.Optional[GenerateOptionsRequest] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Iterator[GenerateStreamResponse]:
         """
         Generate a stream of completions using a previously defined deployment.
@@ -702,17 +682,30 @@ class Vellum:
         Important: This endpoint is DEPRECATED and has been superseded by
         [execute-prompt-stream](/api-reference/api-reference/execute-prompt-stream).
 
-        Parameters:
-            - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
+        Parameters
+        ----------
+        requests : typing.Sequence[GenerateRequest]
+            The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
 
-            - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
+        deployment_id : typing.Optional[str]
+            The ID of the deployment. Must provide either this or deployment_name.
 
-            - requests: typing.Sequence[GenerateRequest]. The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
+        deployment_name : typing.Optional[str]
+            The name of the deployment. Must provide either this or deployment_id.
 
-            - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
+        options : typing.Optional[GenerateOptionsRequest]
+            Additional configuration that can be used to control what's included in the response.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Yields
+        ------
+        typing.Iterator[GenerateStreamResponse]
+
+
+        Examples
+        --------
         from vellum import (
             ChatMessageContentRequest_String,
             ChatMessageRequest,
@@ -724,7 +717,7 @@ class Vellum:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.generate_stream(
+        response = client.generate_stream(
             deployment_id="string",
             deployment_name="string",
             requests=[
@@ -745,56 +738,41 @@ class Vellum:
                 logprobs="ALL",
             ),
         )
+        for chunk in response:
+            yield chunk
         """
-        _request: typing.Dict[str, typing.Any] = {"requests": requests}
-        if deployment_id is not OMIT:
-            _request["deployment_id"] = deployment_id
-        if deployment_name is not OMIT:
-            _request["deployment_name"] = deployment_name
-        if options is not OMIT:
-            _request["options"] = options
         with self._client_wrapper.httpx_client.stream(
+            "v1/generate-stream",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate-stream"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "deployment_id": deployment_id,
+                "deployment_name": deployment_name,
+                "requests": requests,
+                "options": options,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         ) as _response:
-            if 200 <= _response.status_code < 300:
-                for _text in _response.iter_lines():
-                    if len(_text) == 0:
-                        continue
-                    yield pydantic_v1.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
-                return
-            _response.read()
-            if _response.status_code == 400:
-                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 403:
-                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 404:
-                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 500:
-                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
+                if 200 <= _response.status_code < 300:
+                    for _text in _response.iter_lines():
+                        try:
+                            if len(_text) == 0:
+                                continue
+                            yield pydantic_v1.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
+                        except:
+                            pass
+                    return
+                _response.read()
+                if _response.status_code == 400:
+                    raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 403:
+                    raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 404:
+                    raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 500:
+                    raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -803,26 +781,39 @@ class Vellum:
     def search(
         self,
         *,
+        query: str,
         index_id: typing.Optional[str] = OMIT,
         index_name: typing.Optional[str] = OMIT,
-        query: str,
         options: typing.Optional[SearchRequestOptionsRequest] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> SearchResponse:
         """
         Perform a search against a document index.
 
-        Parameters:
-            - index_id: typing.Optional[str]. The ID of the index to search against. Must provide either this or index_name.
+        Parameters
+        ----------
+        query : str
+            The query to search for.
 
-            - index_name: typing.Optional[str]. The name of the index to search against. Must provide either this or index_id.
+        index_id : typing.Optional[str]
+            The ID of the index to search against. Must provide either this or index_name.
 
-            - query: str. The query to search for.
+        index_name : typing.Optional[str]
+            The name of the index to search against. Must provide either this or index_id.
 
-            - options: typing.Optional[SearchRequestOptionsRequest]. Configuration options for the search.
+        options : typing.Optional[SearchRequestOptionsRequest]
+            Configuration options for the search.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SearchResponse
+
+
+        Examples
+        --------
         from vellum.client import Vellum
 
         client = Vellum(
@@ -832,48 +823,23 @@ class Vellum:
             query="query",
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"query": query}
-        if index_id is not OMIT:
-            _request["index_id"] = index_id
-        if index_name is not OMIT:
-            _request["index_name"] = index_name
-        if options is not OMIT:
-            _request["options"] = options
         _response = self._client_wrapper.httpx_client.request(
+            "v1/search",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/search"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            json={"index_id": index_id, "index_name": index_name, "query": query, "options": options},
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(SearchResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(SearchResponse, _response.json())  # type: ignore
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -882,23 +848,34 @@ class Vellum:
     def submit_completion_actuals(
         self,
         *,
+        actuals: typing.Sequence[SubmitCompletionActualRequest],
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
-        actuals: typing.Sequence[SubmitCompletionActualRequest],
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> None:
         """
         Used to submit feedback regarding the quality of previously generated completions.
 
-        Parameters:
-            - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
+        Parameters
+        ----------
+        actuals : typing.Sequence[SubmitCompletionActualRequest]
+            Feedback regarding the quality of previously generated completions
 
-            - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
+        deployment_id : typing.Optional[str]
+            The ID of the deployment. Must provide either this or deployment_name.
 
-            - actuals: typing.Sequence[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
+        deployment_name : typing.Optional[str]
+            The name of the deployment. Must provide either this or deployment_id.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
         from vellum import SubmitCompletionActualRequest
         from vellum.client import Vellum
 
@@ -909,48 +886,23 @@ class Vellum:
             actuals=[SubmitCompletionActualRequest()],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
-        if deployment_id is not OMIT:
-            _request["deployment_id"] = deployment_id
-        if deployment_name is not OMIT:
-            _request["deployment_name"] = deployment_name
         _response = self._client_wrapper.httpx_client.request(
+            "v1/submit-completion-actuals",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().predict}/", "v1/submit-completion-actuals"
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            json={"deployment_id": deployment_id, "deployment_name": deployment_name, "actuals": actuals},
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -962,22 +914,33 @@ class Vellum:
         actuals: typing.Sequence[SubmitWorkflowExecutionActualRequest],
         execution_id: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> None:
         """
             Used to submit feedback regarding the quality of previous workflow execution and its outputs.
 
             **Note:** Uses a base url of `https://predict.vellum.ai`.
 
-        Parameters:
-            - actuals: typing.Sequence[SubmitWorkflowExecutionActualRequest]. Feedback regarding the quality of an output on a previously executed workflow.
+        Parameters
+        ----------
+        actuals : typing.Sequence[SubmitWorkflowExecutionActualRequest]
+            Feedback regarding the quality of an output on a previously executed workflow.
 
-            - execution_id: typing.Optional[str]. The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
+        execution_id : typing.Optional[str]
+            The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
 
-            - external_id: typing.Optional[str]. The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
+        external_id : typing.Optional[str]
+            The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
         from vellum.client import Vellum
 
         client = Vellum(
@@ -987,42 +950,17 @@ class Vellum:
             actuals=[],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
-        if execution_id is not OMIT:
-            _request["execution_id"] = execution_id
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
         _response = self._client_wrapper.httpx_client.request(
+            "v1/submit-workflow-execution-actuals",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().predict}/", "v1/submit-workflow-execution-actuals"
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            json={"actuals": actuals, "execution_id": execution_id, "external_id": external_id},
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return
         try:
+            if 200 <= _response.status_code < 300:
+                return
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1031,21 +969,31 @@ class Vellum:
 
 class AsyncVellum:
     """
-    Use this class to access the different functions within the SDK. You can instantiate any number of clients with different configuration that will propogate to these functions.
+    Use this class to access the different functions within the SDK. You can instantiate any number of clients with different configuration that will propagate to these functions.
 
-    Parameters:
-        - environment: VellumEnvironment. The environment to use for requests from the client. from .environment import VellumEnvironment
+    Parameters
+    ----------
+    environment : VellumEnvironment
+        The environment to use for requests from the client. from .environment import VellumEnvironment
 
-                                          Defaults to VellumEnvironment.PRODUCTION
 
-        - api_key: str.
 
-        - timeout: typing.Optional[float]. The timeout to be used, in seconds, for requests by default the timeout is 60 seconds, unless a custom httpx client is used, in which case a default is not set.
+        Defaults to VellumEnvironment.PRODUCTION
 
-        - follow_redirects: typing.Optional[bool]. Whether the default httpx client follows redirects or not, this is irrelevant if a custom httpx client is passed in.
 
-        - httpx_client: typing.Optional[httpx.AsyncClient]. The httpx client to use for making requests, a preconfigured client is used by default, however this is useful should you want to pass in any custom httpx configuration.
-    ---
+
+    api_key : str
+    timeout : typing.Optional[float]
+        The timeout to be used, in seconds, for requests. By default there is no timeout set, unless a custom httpx client is used, in which case this default is not enforced.
+
+    follow_redirects : typing.Optional[bool]
+        Whether the default httpx client follows redirects or not, this is irrelevant if a custom httpx client is passed in.
+
+    httpx_client : typing.Optional[httpx.AsyncClient]
+        The httpx client to use for making requests, a preconfigured client is used by default, however this is useful should you want to pass in any custom httpx configuration.
+
+    Examples
+    --------
     from vellum.client import AsyncVellum
 
     client = AsyncVellum(
@@ -1060,7 +1008,7 @@ class AsyncVellum:
         api_key: str,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
-        httpx_client: typing.Optional[httpx.AsyncClient] = None,
+        httpx_client: typing.Optional[httpx.AsyncClient] = None
     ):
         _defaulted_timeout = timeout if timeout is not None else None if httpx_client is None else None
         self._client_wrapper = AsyncClientWrapper(
@@ -1096,32 +1044,52 @@ class AsyncVellum:
         raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest] = OMIT,
         expand_raw: typing.Optional[typing.Sequence[str]] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> ExecutePromptResponse:
         """
         Executes a deployed Prompt and returns the result.
 
-        Parameters:
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. A list consisting of the Prompt Deployment's input variables and their values.
+        Parameters
+        ----------
+        inputs : typing.Sequence[PromptDeploymentInputRequest]
+            A list consisting of the Prompt Deployment's input variables and their values.
 
-            - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
+        prompt_deployment_id : typing.Optional[str]
+            The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
-            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+        prompt_deployment_name : typing.Optional[str]
+            The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
+        release_tag : typing.Optional[str]
+            Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
+        external_id : typing.Optional[str]
+            Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequestRequest]
+            An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
-            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest]. Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
+        raw_overrides : typing.Optional[RawPromptExecutionOverridesRequest]
+            Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 
-            - expand_raw: typing.Optional[typing.Sequence[str]]. A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
+        expand_raw : typing.Optional[typing.Sequence[str]]
+            A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
 
-            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+        metadata : typing.Optional[typing.Dict[str, typing.Any]]
+            Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ExecutePromptResponse
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum import (
             PromptDeploymentExpandMetaRequestRequest,
             PromptDeploymentInputRequest_String,
@@ -1132,88 +1100,69 @@ class AsyncVellum:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.execute_prompt(
-            inputs=[
-                PromptDeploymentInputRequest_String(
-                    name="string",
-                    value="string",
-                )
-            ],
-            prompt_deployment_id="string",
-            prompt_deployment_name="string",
-            release_tag="string",
-            external_id="string",
-            expand_meta=PromptDeploymentExpandMetaRequestRequest(
-                model_name=True,
-                usage=True,
-                finish_reason=True,
-                latency=True,
-                deployment_release_tag=True,
-                prompt_version_id=True,
-            ),
-            raw_overrides=RawPromptExecutionOverridesRequest(
-                body={"string": {"key": "value"}},
-                headers={"string": {"key": "value"}},
-                url="string",
-            ),
-            expand_raw=["string"],
-            metadata={"string": {"key": "value"}},
-        )
+
+
+        async def main() -> None:
+            await client.execute_prompt(
+                inputs=[
+                    PromptDeploymentInputRequest_String(
+                        name="string",
+                        value="string",
+                    )
+                ],
+                prompt_deployment_id="string",
+                prompt_deployment_name="string",
+                release_tag="string",
+                external_id="string",
+                expand_meta=PromptDeploymentExpandMetaRequestRequest(
+                    model_name=True,
+                    usage=True,
+                    finish_reason=True,
+                    latency=True,
+                    deployment_release_tag=True,
+                    prompt_version_id=True,
+                ),
+                raw_overrides=RawPromptExecutionOverridesRequest(
+                    body={"string": {"key": "value"}},
+                    headers={"string": {"key": "value"}},
+                    url="string",
+                ),
+                expand_raw=["string"],
+                metadata={"string": {"key": "value"}},
+            )
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if prompt_deployment_id is not OMIT:
-            _request["prompt_deployment_id"] = prompt_deployment_id
-        if prompt_deployment_name is not OMIT:
-            _request["prompt_deployment_name"] = prompt_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
-        if expand_meta is not OMIT:
-            _request["expand_meta"] = expand_meta
-        if raw_overrides is not OMIT:
-            _request["raw_overrides"] = raw_overrides
-        if expand_raw is not OMIT:
-            _request["expand_raw"] = expand_raw
-        if metadata is not OMIT:
-            _request["metadata"] = metadata
         _response = await self._client_wrapper.httpx_client.request(
+            "v1/execute-prompt",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "inputs": inputs,
+                "prompt_deployment_id": prompt_deployment_id,
+                "prompt_deployment_name": prompt_deployment_name,
+                "release_tag": release_tag,
+                "external_id": external_id,
+                "expand_meta": expand_meta,
+                "raw_overrides": raw_overrides,
+                "expand_raw": expand_raw,
+                "metadata": metadata,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(ExecutePromptResponse, _response.json())  # type: ignore
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 403:
+                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1231,32 +1180,52 @@ class AsyncVellum:
         raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest] = OMIT,
         expand_raw: typing.Optional[typing.Sequence[str]] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> typing.AsyncIterator[ExecutePromptEvent]:
         """
         Executes a deployed Prompt and streams back the results.
 
-        Parameters:
-            - inputs: typing.Sequence[PromptDeploymentInputRequest]. A list consisting of the Prompt Deployment's input variables and their values.
+        Parameters
+        ----------
+        inputs : typing.Sequence[PromptDeploymentInputRequest]
+            A list consisting of the Prompt Deployment's input variables and their values.
 
-            - prompt_deployment_id: typing.Optional[str]. The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
+        prompt_deployment_id : typing.Optional[str]
+            The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 
-            - prompt_deployment_name: typing.Optional[str]. The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+        prompt_deployment_name : typing.Optional[str]
+            The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
+        release_tag : typing.Optional[str]
+            Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
+        external_id : typing.Optional[str]
+            Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-            - expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest]. An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequestRequest]
+            An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
-            - raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest]. Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
+        raw_overrides : typing.Optional[RawPromptExecutionOverridesRequest]
+            Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 
-            - expand_raw: typing.Optional[typing.Sequence[str]]. A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
+        expand_raw : typing.Optional[typing.Sequence[str]]
+            A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
 
-            - metadata: typing.Optional[typing.Dict[str, typing.Any]]. Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+        metadata : typing.Optional[typing.Dict[str, typing.Any]]
+            Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Yields
+        ------
+        typing.AsyncIterator[ExecutePromptEvent]
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum import (
             PromptDeploymentExpandMetaRequestRequest,
             PromptDeploymentInputRequest_String,
@@ -1267,93 +1236,79 @@ class AsyncVellum:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.execute_prompt_stream(
-            inputs=[
-                PromptDeploymentInputRequest_String(
-                    name="string",
-                    value="string",
-                )
-            ],
-            prompt_deployment_id="string",
-            prompt_deployment_name="string",
-            release_tag="string",
-            external_id="string",
-            expand_meta=PromptDeploymentExpandMetaRequestRequest(
-                model_name=True,
-                usage=True,
-                finish_reason=True,
-                latency=True,
-                deployment_release_tag=True,
-                prompt_version_id=True,
-            ),
-            raw_overrides=RawPromptExecutionOverridesRequest(
-                body={"string": {"key": "value"}},
-                headers={"string": {"key": "value"}},
-                url="string",
-            ),
-            expand_raw=["string"],
-            metadata={"string": {"key": "value"}},
-        )
+
+
+        async def main() -> None:
+            response = await client.execute_prompt_stream(
+                inputs=[
+                    PromptDeploymentInputRequest_String(
+                        name="string",
+                        value="string",
+                    )
+                ],
+                prompt_deployment_id="string",
+                prompt_deployment_name="string",
+                release_tag="string",
+                external_id="string",
+                expand_meta=PromptDeploymentExpandMetaRequestRequest(
+                    model_name=True,
+                    usage=True,
+                    finish_reason=True,
+                    latency=True,
+                    deployment_release_tag=True,
+                    prompt_version_id=True,
+                ),
+                raw_overrides=RawPromptExecutionOverridesRequest(
+                    body={"string": {"key": "value"}},
+                    headers={"string": {"key": "value"}},
+                    url="string",
+                ),
+                expand_raw=["string"],
+                metadata={"string": {"key": "value"}},
+            )
+            async for chunk in response:
+                yield chunk
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if prompt_deployment_id is not OMIT:
-            _request["prompt_deployment_id"] = prompt_deployment_id
-        if prompt_deployment_name is not OMIT:
-            _request["prompt_deployment_name"] = prompt_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
-        if expand_meta is not OMIT:
-            _request["expand_meta"] = expand_meta
-        if raw_overrides is not OMIT:
-            _request["raw_overrides"] = raw_overrides
-        if expand_raw is not OMIT:
-            _request["expand_raw"] = expand_raw
-        if metadata is not OMIT:
-            _request["metadata"] = metadata
         async with self._client_wrapper.httpx_client.stream(
+            "v1/execute-prompt-stream",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-prompt-stream"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "inputs": inputs,
+                "prompt_deployment_id": prompt_deployment_id,
+                "prompt_deployment_name": prompt_deployment_name,
+                "release_tag": release_tag,
+                "external_id": external_id,
+                "expand_meta": expand_meta,
+                "raw_overrides": raw_overrides,
+                "expand_raw": expand_raw,
+                "metadata": metadata,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         ) as _response:
-            if 200 <= _response.status_code < 300:
-                async for _text in _response.aiter_lines():
-                    if len(_text) == 0:
-                        continue
-                    yield pydantic_v1.parse_obj_as(ExecutePromptEvent, json.loads(_text))  # type: ignore
-                return
-            await _response.aread()
-            if _response.status_code == 400:
-                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 403:
-                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 404:
-                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 500:
-                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
+                if 200 <= _response.status_code < 300:
+                    async for _text in _response.aiter_lines():
+                        try:
+                            if len(_text) == 0:
+                                continue
+                            yield pydantic_v1.parse_obj_as(ExecutePromptEvent, json.loads(_text))  # type: ignore
+                        except:
+                            pass
+                    return
+                await _response.aread()
+                if _response.status_code == 400:
+                    raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 403:
+                    raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 404:
+                    raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 500:
+                    raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1368,94 +1323,95 @@ class AsyncVellum:
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> ExecuteWorkflowResponse:
         """
         Executes a deployed Workflow and returns its outputs.
 
-        Parameters:
-            - inputs: typing.Sequence[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+        Parameters
+        ----------
+        inputs : typing.Sequence[WorkflowRequestInputRequest]
+            The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
-            - expand_meta: typing.Optional[WorkflowExpandMetaRequest]. An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+        expand_meta : typing.Optional[WorkflowExpandMetaRequest]
+            An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
 
-            - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
+        workflow_deployment_id : typing.Optional[str]
+            The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
-            - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
+        workflow_deployment_name : typing.Optional[str]
+            The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+        release_tag : typing.Optional[str]
+            Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
+        external_id : typing.Optional[str]
+            Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ExecuteWorkflowResponse
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.execute_workflow(
-            inputs=[
-                WorkflowRequestInputRequest_String(
-                    name="string",
-                    value="string",
-                )
-            ],
-            expand_meta=WorkflowExpandMetaRequest(
-                usage=True,
-            ),
-            workflow_deployment_id="string",
-            workflow_deployment_name="string",
-            release_tag="string",
-            external_id="string",
-        )
+
+
+        async def main() -> None:
+            await client.execute_workflow(
+                inputs=[
+                    WorkflowRequestInputRequest_String(
+                        name="string",
+                        value="string",
+                    )
+                ],
+                expand_meta=WorkflowExpandMetaRequest(
+                    usage=True,
+                ),
+                workflow_deployment_id="string",
+                workflow_deployment_name="string",
+                release_tag="string",
+                external_id="string",
+            )
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if expand_meta is not OMIT:
-            _request["expand_meta"] = expand_meta
-        if workflow_deployment_id is not OMIT:
-            _request["workflow_deployment_id"] = workflow_deployment_id
-        if workflow_deployment_name is not OMIT:
-            _request["workflow_deployment_name"] = workflow_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
         _response = await self._client_wrapper.httpx_client.request(
+            "v1/execute-workflow",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "inputs": inputs,
+                "expand_meta": expand_meta,
+                "workflow_deployment_id": workflow_deployment_id,
+                "workflow_deployment_name": workflow_deployment_name,
+                "release_tag": release_tag,
+                "external_id": external_id,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(ExecuteWorkflowResponse, _response.json())  # type: ignore
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1471,106 +1427,110 @@ class AsyncVellum:
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
         event_types: typing.Optional[typing.Sequence[WorkflowExecutionEventType]] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> typing.AsyncIterator[WorkflowStreamEvent]:
         """
         Executes a deployed Workflow and streams back its results.
 
-        Parameters:
-            - inputs: typing.Sequence[WorkflowRequestInputRequest]. The list of inputs defined in the Workflow's Deployment with their corresponding values.
+        Parameters
+        ----------
+        inputs : typing.Sequence[WorkflowRequestInputRequest]
+            The list of inputs defined in the Workflow's Deployment with their corresponding values.
 
-            - expand_meta: typing.Optional[WorkflowExpandMetaRequest]. An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+        expand_meta : typing.Optional[WorkflowExpandMetaRequest]
+            An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
 
-            - workflow_deployment_id: typing.Optional[str]. The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
+        workflow_deployment_id : typing.Optional[str]
+            The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 
-            - workflow_deployment_name: typing.Optional[str]. The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
+        workflow_deployment_name : typing.Optional[str]
+            The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 
-            - release_tag: typing.Optional[str]. Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+        release_tag : typing.Optional[str]
+            Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 
-            - external_id: typing.Optional[str]. Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
+        external_id : typing.Optional[str]
+            Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 
-            - event_types: typing.Optional[typing.Sequence[WorkflowExecutionEventType]]. Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
+        event_types : typing.Optional[typing.Sequence[WorkflowExecutionEventType]]
+            Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Yields
+        ------
+        typing.AsyncIterator[WorkflowStreamEvent]
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.execute_workflow_stream(
-            inputs=[
-                WorkflowRequestInputRequest_String(
-                    name="string",
-                    value="string",
-                )
-            ],
-            expand_meta=WorkflowExpandMetaRequest(
-                usage=True,
-            ),
-            workflow_deployment_id="string",
-            workflow_deployment_name="string",
-            release_tag="string",
-            external_id="string",
-            event_types=["NODE"],
-        )
+
+
+        async def main() -> None:
+            response = await client.execute_workflow_stream(
+                inputs=[
+                    WorkflowRequestInputRequest_String(
+                        name="string",
+                        value="string",
+                    )
+                ],
+                expand_meta=WorkflowExpandMetaRequest(
+                    usage=True,
+                ),
+                workflow_deployment_id="string",
+                workflow_deployment_name="string",
+                release_tag="string",
+                external_id="string",
+                event_types=["NODE"],
+            )
+            async for chunk in response:
+                yield chunk
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"inputs": inputs}
-        if expand_meta is not OMIT:
-            _request["expand_meta"] = expand_meta
-        if workflow_deployment_id is not OMIT:
-            _request["workflow_deployment_id"] = workflow_deployment_id
-        if workflow_deployment_name is not OMIT:
-            _request["workflow_deployment_name"] = workflow_deployment_name
-        if release_tag is not OMIT:
-            _request["release_tag"] = release_tag
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
-        if event_types is not OMIT:
-            _request["event_types"] = event_types
         async with self._client_wrapper.httpx_client.stream(
+            "v1/execute-workflow-stream",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().predict}/", "v1/execute-workflow-stream"
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "inputs": inputs,
+                "expand_meta": expand_meta,
+                "workflow_deployment_id": workflow_deployment_id,
+                "workflow_deployment_name": workflow_deployment_name,
+                "release_tag": release_tag,
+                "external_id": external_id,
+                "event_types": event_types,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         ) as _response:
-            if 200 <= _response.status_code < 300:
-                async for _text in _response.aiter_lines():
-                    if len(_text) == 0:
-                        continue
-                    yield pydantic_v1.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
-                return
-            await _response.aread()
-            if _response.status_code == 400:
-                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 404:
-                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 500:
-                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
+                if 200 <= _response.status_code < 300:
+                    async for _text in _response.aiter_lines():
+                        try:
+                            if len(_text) == 0:
+                                continue
+                            yield pydantic_v1.parse_obj_as(WorkflowStreamEvent, json.loads(_text))  # type: ignore
+                        except:
+                            pass
+                    return
+                await _response.aread()
+                if _response.status_code == 400:
+                    raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 404:
+                    raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 500:
+                    raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1579,11 +1539,11 @@ class AsyncVellum:
     async def generate(
         self,
         *,
+        requests: typing.Sequence[GenerateRequest],
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
-        requests: typing.Sequence[GenerateRequest],
         options: typing.Optional[GenerateOptionsRequest] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> GenerateResponse:
         """
         Generate a completion using a previously defined deployment.
@@ -1591,75 +1551,76 @@ class AsyncVellum:
         Important: This endpoint is DEPRECATED and has been superseded by
         [execute-prompt](/api-reference/api-reference/execute-prompt).
 
-        Parameters:
-            - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
+        Parameters
+        ----------
+        requests : typing.Sequence[GenerateRequest]
+            The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
 
-            - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
+        deployment_id : typing.Optional[str]
+            The ID of the deployment. Must provide either this or deployment_name.
 
-            - requests: typing.Sequence[GenerateRequest]. The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
+        deployment_name : typing.Optional[str]
+            The name of the deployment. Must provide either this or deployment_id.
 
-            - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
+        options : typing.Optional[GenerateOptionsRequest]
+            Additional configuration that can be used to control what's included in the response.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        GenerateResponse
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum import GenerateRequest
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.generate(
-            requests=[
-                GenerateRequest(
-                    input_values={"key": "value"},
-                )
-            ],
-        )
+
+
+        async def main() -> None:
+            await client.generate(
+                requests=[
+                    GenerateRequest(
+                        input_values={"key": "value"},
+                    )
+                ],
+            )
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"requests": requests}
-        if deployment_id is not OMIT:
-            _request["deployment_id"] = deployment_id
-        if deployment_name is not OMIT:
-            _request["deployment_name"] = deployment_name
-        if options is not OMIT:
-            _request["options"] = options
         _response = await self._client_wrapper.httpx_client.request(
+            "v1/generate",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "deployment_id": deployment_id,
+                "deployment_name": deployment_name,
+                "requests": requests,
+                "options": options,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 403:
-            raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(GenerateResponse, _response.json())  # type: ignore
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 403:
+                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1668,11 +1629,11 @@ class AsyncVellum:
     async def generate_stream(
         self,
         *,
+        requests: typing.Sequence[GenerateRequest],
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
-        requests: typing.Sequence[GenerateRequest],
         options: typing.Optional[GenerateOptionsRequest] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> typing.AsyncIterator[GenerateStreamResponse]:
         """
         Generate a stream of completions using a previously defined deployment.
@@ -1680,17 +1641,32 @@ class AsyncVellum:
         Important: This endpoint is DEPRECATED and has been superseded by
         [execute-prompt-stream](/api-reference/api-reference/execute-prompt-stream).
 
-        Parameters:
-            - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
+        Parameters
+        ----------
+        requests : typing.Sequence[GenerateRequest]
+            The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
 
-            - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
+        deployment_id : typing.Optional[str]
+            The ID of the deployment. Must provide either this or deployment_name.
 
-            - requests: typing.Sequence[GenerateRequest]. The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
+        deployment_name : typing.Optional[str]
+            The name of the deployment. Must provide either this or deployment_id.
 
-            - options: typing.Optional[GenerateOptionsRequest]. Additional configuration that can be used to control what's included in the response.
+        options : typing.Optional[GenerateOptionsRequest]
+            Additional configuration that can be used to control what's included in the response.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Yields
+        ------
+        typing.AsyncIterator[GenerateStreamResponse]
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum import (
             ChatMessageContentRequest_String,
             ChatMessageRequest,
@@ -1702,77 +1678,68 @@ class AsyncVellum:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.generate_stream(
-            deployment_id="string",
-            deployment_name="string",
-            requests=[
-                GenerateRequest(
-                    input_values={"string": {"key": "value"}},
-                    chat_history=[
-                        ChatMessageRequest(
-                            text="string",
-                            role="SYSTEM",
-                            content=ChatMessageContentRequest_String(),
-                            source="string",
-                        )
-                    ],
-                    external_ids=["string"],
-                )
-            ],
-            options=GenerateOptionsRequest(
-                logprobs="ALL",
-            ),
-        )
+
+
+        async def main() -> None:
+            response = await client.generate_stream(
+                deployment_id="string",
+                deployment_name="string",
+                requests=[
+                    GenerateRequest(
+                        input_values={"string": {"key": "value"}},
+                        chat_history=[
+                            ChatMessageRequest(
+                                text="string",
+                                role="SYSTEM",
+                                content=ChatMessageContentRequest_String(),
+                                source="string",
+                            )
+                        ],
+                        external_ids=["string"],
+                    )
+                ],
+                options=GenerateOptionsRequest(
+                    logprobs="ALL",
+                ),
+            )
+            async for chunk in response:
+                yield chunk
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"requests": requests}
-        if deployment_id is not OMIT:
-            _request["deployment_id"] = deployment_id
-        if deployment_name is not OMIT:
-            _request["deployment_name"] = deployment_name
-        if options is not OMIT:
-            _request["options"] = options
         async with self._client_wrapper.httpx_client.stream(
+            "v1/generate-stream",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/generate-stream"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "deployment_id": deployment_id,
+                "deployment_name": deployment_name,
+                "requests": requests,
+                "options": options,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         ) as _response:
-            if 200 <= _response.status_code < 300:
-                async for _text in _response.aiter_lines():
-                    if len(_text) == 0:
-                        continue
-                    yield pydantic_v1.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
-                return
-            await _response.aread()
-            if _response.status_code == 400:
-                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 403:
-                raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 404:
-                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-            if _response.status_code == 500:
-                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             try:
+                if 200 <= _response.status_code < 300:
+                    async for _text in _response.aiter_lines():
+                        try:
+                            if len(_text) == 0:
+                                continue
+                            yield pydantic_v1.parse_obj_as(GenerateStreamResponse, json.loads(_text))  # type: ignore
+                        except:
+                            pass
+                    return
+                await _response.aread()
+                if _response.status_code == 400:
+                    raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 403:
+                    raise ForbiddenError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 404:
+                    raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+                if _response.status_code == 500:
+                    raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1781,77 +1748,73 @@ class AsyncVellum:
     async def search(
         self,
         *,
+        query: str,
         index_id: typing.Optional[str] = OMIT,
         index_name: typing.Optional[str] = OMIT,
-        query: str,
         options: typing.Optional[SearchRequestOptionsRequest] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> SearchResponse:
         """
         Perform a search against a document index.
 
-        Parameters:
-            - index_id: typing.Optional[str]. The ID of the index to search against. Must provide either this or index_name.
+        Parameters
+        ----------
+        query : str
+            The query to search for.
 
-            - index_name: typing.Optional[str]. The name of the index to search against. Must provide either this or index_id.
+        index_id : typing.Optional[str]
+            The ID of the index to search against. Must provide either this or index_name.
 
-            - query: str. The query to search for.
+        index_name : typing.Optional[str]
+            The name of the index to search against. Must provide either this or index_id.
 
-            - options: typing.Optional[SearchRequestOptionsRequest]. Configuration options for the search.
+        options : typing.Optional[SearchRequestOptionsRequest]
+            Configuration options for the search.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SearchResponse
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.search(
-            query="query",
-        )
+
+
+        async def main() -> None:
+            await client.search(
+                query="query",
+            )
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"query": query}
-        if index_id is not OMIT:
-            _request["index_id"] = index_id
-        if index_name is not OMIT:
-            _request["index_name"] = index_name
-        if options is not OMIT:
-            _request["options"] = options
         _response = await self._client_wrapper.httpx_client.request(
+            "v1/search",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(f"{self._client_wrapper.get_environment().predict}/", "v1/search"),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            json={"index_id": index_id, "index_name": index_name, "query": query, "options": options},
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(SearchResponse, _response.json())  # type: ignore
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(SearchResponse, _response.json())  # type: ignore
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1860,75 +1823,69 @@ class AsyncVellum:
     async def submit_completion_actuals(
         self,
         *,
+        actuals: typing.Sequence[SubmitCompletionActualRequest],
         deployment_id: typing.Optional[str] = OMIT,
         deployment_name: typing.Optional[str] = OMIT,
-        actuals: typing.Sequence[SubmitCompletionActualRequest],
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> None:
         """
         Used to submit feedback regarding the quality of previously generated completions.
 
-        Parameters:
-            - deployment_id: typing.Optional[str]. The ID of the deployment. Must provide either this or deployment_name.
+        Parameters
+        ----------
+        actuals : typing.Sequence[SubmitCompletionActualRequest]
+            Feedback regarding the quality of previously generated completions
 
-            - deployment_name: typing.Optional[str]. The name of the deployment. Must provide either this or deployment_id.
+        deployment_id : typing.Optional[str]
+            The ID of the deployment. Must provide either this or deployment_name.
 
-            - actuals: typing.Sequence[SubmitCompletionActualRequest]. Feedback regarding the quality of previously generated completions
+        deployment_name : typing.Optional[str]
+            The name of the deployment. Must provide either this or deployment_id.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
         from vellum import SubmitCompletionActualRequest
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.submit_completion_actuals(
-            actuals=[SubmitCompletionActualRequest()],
-        )
+
+
+        async def main() -> None:
+            await client.submit_completion_actuals(
+                actuals=[SubmitCompletionActualRequest()],
+            )
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
-        if deployment_id is not OMIT:
-            _request["deployment_id"] = deployment_id
-        if deployment_name is not OMIT:
-            _request["deployment_name"] = deployment_name
         _response = await self._client_wrapper.httpx_client.request(
+            "v1/submit-completion-actuals",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().predict}/", "v1/submit-completion-actuals"
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            json={"deployment_id": deployment_id, "deployment_name": deployment_name, "actuals": actuals},
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 400:
-            raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 404:
-            raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
-        if _response.status_code == 500:
-            raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return
+            if _response.status_code == 400:
+                raise BadRequestError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 404:
+                raise NotFoundError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
+            if _response.status_code == 500:
+                raise InternalServerError(pydantic_v1.parse_obj_as(typing.Any, _response.json()))  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -1940,67 +1897,61 @@ class AsyncVellum:
         actuals: typing.Sequence[SubmitWorkflowExecutionActualRequest],
         execution_id: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
+        request_options: typing.Optional[RequestOptions] = None
     ) -> None:
         """
             Used to submit feedback regarding the quality of previous workflow execution and its outputs.
 
             **Note:** Uses a base url of `https://predict.vellum.ai`.
 
-        Parameters:
-            - actuals: typing.Sequence[SubmitWorkflowExecutionActualRequest]. Feedback regarding the quality of an output on a previously executed workflow.
+        Parameters
+        ----------
+        actuals : typing.Sequence[SubmitWorkflowExecutionActualRequest]
+            Feedback regarding the quality of an output on a previously executed workflow.
 
-            - execution_id: typing.Optional[str]. The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
+        execution_id : typing.Optional[str]
+            The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
 
-            - external_id: typing.Optional[str]. The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
+        external_id : typing.Optional[str]
+            The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.submit_workflow_execution_actuals(
-            actuals=[],
-        )
+
+
+        async def main() -> None:
+            await client.submit_workflow_execution_actuals(
+                actuals=[],
+            )
+
+
+        asyncio.run(main())
         """
-        _request: typing.Dict[str, typing.Any] = {"actuals": actuals}
-        if execution_id is not OMIT:
-            _request["execution_id"] = execution_id
-        if external_id is not OMIT:
-            _request["external_id"] = external_id
         _response = await self._client_wrapper.httpx_client.request(
+            "v1/submit-workflow-execution-actuals",
+            base_url=self._client_wrapper.get_environment().predict,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().predict}/", "v1/submit-workflow-execution-actuals"
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(_request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(_request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            json={"actuals": actuals, "execution_id": execution_id, "external_id": external_id},
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return
         try:
+            if 200 <= _response.status_code < 300:
+                return
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)

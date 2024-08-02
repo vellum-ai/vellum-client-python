@@ -2,93 +2,241 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
-from .boolean_parameter_config import BooleanParameterConfig
-from .const_parameter_config import ConstParameterConfig
-from .integer_parameter_config import IntegerParameterConfig
-from .number_parameter_config import NumberParameterConfig
-from .string_parameter_config import StringParameterConfig
+from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 
-class ParameterConfig_Array(ArrayParameterConfig):
+class ParameterConfig_Array(pydantic_v1.BaseModel):
+    min_items: typing.Optional[int] = None
+    max_items: typing.Optional[int] = None
+    unique_items: typing.Optional[bool] = None
+    items: ParameterConfig
+    prefix_items: typing.Optional[typing.List[ParameterConfig]] = None
+    contains: typing.Optional[ParameterConfig] = None
+    min_contains: typing.Optional[int] = None
+    max_contains: typing.Optional[int] = None
+    default: typing.Optional[typing.List[typing.Any]] = None
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     type: typing.Literal["array"] = "array"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Object(ObjectParameterConfig):
+class ParameterConfig_Object(pydantic_v1.BaseModel):
+    properties: typing.Optional[typing.Dict[str, typing.Optional[ParameterConfig]]] = None
+    required: typing.Optional[typing.List[str]] = None
+    min_properties: typing.Optional[int] = None
+    max_properties: typing.Optional[int] = None
+    property_names: typing.Optional[ParameterConfig] = None
+    additional_properties: typing.Optional[ParameterConfig] = None
+    pattern_properties: typing.Optional[typing.Dict[str, typing.Optional[ParameterConfig]]] = None
+    default: typing.Optional[typing.Dict[str, typing.Any]] = None
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     type: typing.Literal["object"] = "object"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Integer(IntegerParameterConfig):
+class ParameterConfig_Integer(pydantic_v1.BaseModel):
+    minimum: typing.Optional[int] = None
+    maximum: typing.Optional[int] = None
+    exclusive_minimum: typing.Optional[bool] = None
+    exclusive_maximum: typing.Optional[bool] = None
+    default: typing.Optional[int] = None
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     type: typing.Literal["integer"] = "integer"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Number(NumberParameterConfig):
+class ParameterConfig_Number(pydantic_v1.BaseModel):
+    minimum: typing.Optional[float] = None
+    maximum: typing.Optional[float] = None
+    format: typing.Optional[str] = None
+    exclusive_minimum: typing.Optional[bool] = None
+    exclusive_maximum: typing.Optional[bool] = None
+    default: typing.Optional[float] = None
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     type: typing.Literal["number"] = "number"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_String(StringParameterConfig):
+class ParameterConfig_String(pydantic_v1.BaseModel):
+    min_length: typing.Optional[int] = None
+    max_length: typing.Optional[int] = None
+    pattern: typing.Optional[str] = None
+    format: typing.Optional[str] = None
+    default: typing.Optional[str] = None
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     type: typing.Literal["string"] = "string"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Boolean(BooleanParameterConfig):
+class ParameterConfig_Boolean(pydantic_v1.BaseModel):
+    default: typing.Optional[bool] = None
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     type: typing.Literal["boolean"] = "boolean"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_OneOf(OneOfParameterConfig):
+class ParameterConfig_OneOf(pydantic_v1.BaseModel):
+    one_of: typing.List[ParameterConfig] = pydantic_v1.Field(alias="oneOf")
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
     type: typing.Literal["oneOf"] = "oneOf"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
         allow_population_by_field_name = True
         populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Const(ConstParameterConfig):
+class ParameterConfig_Const(pydantic_v1.BaseModel):
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
+    const: str
     type: typing.Literal["const"] = "const"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
 ParameterConfig = typing.Union[
@@ -101,25 +249,3 @@ ParameterConfig = typing.Union[
     ParameterConfig_OneOf,
     ParameterConfig_Const,
 ]
-from .array_parameter_config import ArrayParameterConfig  # noqa: E402
-from .object_parameter_config import ObjectParameterConfig  # noqa: E402
-from .one_of_parameter_config import OneOfParameterConfig  # noqa: E402
-
-ParameterConfig_Array.update_forward_refs(
-    ArrayParameterConfig=ArrayParameterConfig,
-    ObjectParameterConfig=ObjectParameterConfig,
-    OneOfParameterConfig=OneOfParameterConfig,
-    ParameterConfig=ParameterConfig,
-)
-ParameterConfig_Object.update_forward_refs(
-    ArrayParameterConfig=ArrayParameterConfig,
-    ObjectParameterConfig=ObjectParameterConfig,
-    OneOfParameterConfig=OneOfParameterConfig,
-    ParameterConfig=ParameterConfig,
-)
-ParameterConfig_OneOf.update_forward_refs(
-    ArrayParameterConfig=ArrayParameterConfig,
-    ObjectParameterConfig=ObjectParameterConfig,
-    OneOfParameterConfig=OneOfParameterConfig,
-    ParameterConfig=ParameterConfig,
-)

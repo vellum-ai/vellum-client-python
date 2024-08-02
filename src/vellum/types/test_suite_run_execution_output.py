@@ -2,96 +2,216 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
-from .test_suite_run_execution_array_output import TestSuiteRunExecutionArrayOutput
-from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
-from .test_suite_run_execution_error_output import TestSuiteRunExecutionErrorOutput
-from .test_suite_run_execution_function_call_output import TestSuiteRunExecutionFunctionCallOutput
-from .test_suite_run_execution_json_output import TestSuiteRunExecutionJsonOutput
-from .test_suite_run_execution_number_output import TestSuiteRunExecutionNumberOutput
-from .test_suite_run_execution_search_results_output import TestSuiteRunExecutionSearchResultsOutput
-from .test_suite_run_execution_string_output import TestSuiteRunExecutionStringOutput
+from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
+from .array_vellum_value_item import ArrayVellumValueItem
+from .chat_message import ChatMessage
+from .function_call import FunctionCall
+from .search_result import SearchResult
+from .vellum_error import VellumError
 
 
-class TestSuiteRunExecutionOutput_String(TestSuiteRunExecutionStringOutput):
+class TestSuiteRunExecutionOutput_String(pydantic_v1.BaseModel):
+    name: str
+    value: typing.Optional[str] = None
+    output_variable_id: str
     type: typing.Literal["STRING"] = "STRING"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecutionOutput_Number(TestSuiteRunExecutionNumberOutput):
+class TestSuiteRunExecutionOutput_Number(pydantic_v1.BaseModel):
+    name: str
+    value: typing.Optional[float] = None
+    output_variable_id: str
     type: typing.Literal["NUMBER"] = "NUMBER"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecutionOutput_Json(TestSuiteRunExecutionJsonOutput):
+class TestSuiteRunExecutionOutput_Json(pydantic_v1.BaseModel):
+    name: str
+    value: typing.Any
+    output_variable_id: str
     type: typing.Literal["JSON"] = "JSON"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecutionOutput_ChatHistory(TestSuiteRunExecutionChatHistoryOutput):
+class TestSuiteRunExecutionOutput_ChatHistory(pydantic_v1.BaseModel):
+    name: str
+    value: typing.Optional[typing.List[ChatMessage]] = None
+    output_variable_id: str
     type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecutionOutput_SearchResults(TestSuiteRunExecutionSearchResultsOutput):
+class TestSuiteRunExecutionOutput_SearchResults(pydantic_v1.BaseModel):
+    name: str
+    value: typing.Optional[typing.List[SearchResult]] = None
+    output_variable_id: str
     type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecutionOutput_Error(TestSuiteRunExecutionErrorOutput):
+class TestSuiteRunExecutionOutput_Error(pydantic_v1.BaseModel):
+    name: str
+    value: typing.Optional[VellumError] = None
+    output_variable_id: str
     type: typing.Literal["ERROR"] = "ERROR"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecutionOutput_FunctionCall(TestSuiteRunExecutionFunctionCallOutput):
+class TestSuiteRunExecutionOutput_FunctionCall(pydantic_v1.BaseModel):
+    name: str
+    value: typing.Optional[FunctionCall] = None
+    output_variable_id: str
     type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecutionOutput_Array(TestSuiteRunExecutionArrayOutput):
+class TestSuiteRunExecutionOutput_Array(pydantic_v1.BaseModel):
+    name: str
+    value: typing.Optional[typing.List[ArrayVellumValueItem]] = None
+    output_variable_id: str
     type: typing.Literal["ARRAY"] = "ARRAY"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
 TestSuiteRunExecutionOutput = typing.Union[

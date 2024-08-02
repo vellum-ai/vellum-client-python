@@ -2,30 +2,60 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
-from .scenario_input_chat_history_variable_value import ScenarioInputChatHistoryVariableValue
-from .scenario_input_string_variable_value import ScenarioInputStringVariableValue
+from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
+from .chat_message import ChatMessage
 
 
-class ScenarioInput_String(ScenarioInputStringVariableValue):
+class ScenarioInput_String(pydantic_v1.BaseModel):
+    value: typing.Optional[str] = None
+    input_variable_id: str
     type: typing.Literal["STRING"] = "STRING"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ScenarioInput_ChatHistory(ScenarioInputChatHistoryVariableValue):
+class ScenarioInput_ChatHistory(pydantic_v1.BaseModel):
+    value: typing.Optional[typing.List[ChatMessage]] = None
+    input_variable_id: str
     type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
 ScenarioInput = typing.Union[ScenarioInput_String, ScenarioInput_ChatHistory]

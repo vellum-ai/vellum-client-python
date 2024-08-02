@@ -2,52 +2,110 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
-from .test_suite_test_case_created_bulk_result import TestSuiteTestCaseCreatedBulkResult
-from .test_suite_test_case_deleted_bulk_result import TestSuiteTestCaseDeletedBulkResult
-from .test_suite_test_case_rejected_bulk_result import TestSuiteTestCaseRejectedBulkResult
-from .test_suite_test_case_replaced_bulk_result import TestSuiteTestCaseReplacedBulkResult
+from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
+from .test_suite_test_case_created_bulk_result_data import TestSuiteTestCaseCreatedBulkResultData
+from .test_suite_test_case_deleted_bulk_result_data import TestSuiteTestCaseDeletedBulkResultData
+from .test_suite_test_case_replaced_bulk_result_data import TestSuiteTestCaseReplacedBulkResultData
 
 
-class TestSuiteTestCaseBulkResult_Created(TestSuiteTestCaseCreatedBulkResult):
+class TestSuiteTestCaseBulkResult_Created(pydantic_v1.BaseModel):
+    id: str
+    data: TestSuiteTestCaseCreatedBulkResultData
     type: typing.Literal["CREATED"] = "CREATED"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteTestCaseBulkResult_Replaced(TestSuiteTestCaseReplacedBulkResult):
+class TestSuiteTestCaseBulkResult_Replaced(pydantic_v1.BaseModel):
+    id: str
+    data: TestSuiteTestCaseReplacedBulkResultData
     type: typing.Literal["REPLACED"] = "REPLACED"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteTestCaseBulkResult_Deleted(TestSuiteTestCaseDeletedBulkResult):
+class TestSuiteTestCaseBulkResult_Deleted(pydantic_v1.BaseModel):
+    id: str
+    data: TestSuiteTestCaseDeletedBulkResultData
     type: typing.Literal["DELETED"] = "DELETED"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteTestCaseBulkResult_Rejected(TestSuiteTestCaseRejectedBulkResult):
+class TestSuiteTestCaseBulkResult_Rejected(pydantic_v1.BaseModel):
+    id: typing.Optional[str] = None
+    data: typing.Dict[str, typing.Any]
     type: typing.Literal["REJECTED"] = "REJECTED"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
 TestSuiteTestCaseBulkResult = typing.Union[

@@ -2,41 +2,90 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
-from .test_suite_run_deployment_release_tag_exec_config_request import TestSuiteRunDeploymentReleaseTagExecConfigRequest
-from .test_suite_run_external_exec_config_request import TestSuiteRunExternalExecConfigRequest
-from .test_suite_run_workflow_release_tag_exec_config_request import TestSuiteRunWorkflowReleaseTagExecConfigRequest
+from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
+from .test_suite_run_deployment_release_tag_exec_config_data_request import (
+    TestSuiteRunDeploymentReleaseTagExecConfigDataRequest,
+)
+from .test_suite_run_external_exec_config_data_request import TestSuiteRunExternalExecConfigDataRequest
+from .test_suite_run_workflow_release_tag_exec_config_data_request import (
+    TestSuiteRunWorkflowReleaseTagExecConfigDataRequest,
+)
 
 
-class TestSuiteRunExecConfigRequest_DeploymentReleaseTag(TestSuiteRunDeploymentReleaseTagExecConfigRequest):
+class TestSuiteRunExecConfigRequest_DeploymentReleaseTag(pydantic_v1.BaseModel):
+    data: TestSuiteRunDeploymentReleaseTagExecConfigDataRequest
+    test_case_ids: typing.Optional[typing.List[str]] = None
     type: typing.Literal["DEPLOYMENT_RELEASE_TAG"] = "DEPLOYMENT_RELEASE_TAG"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecConfigRequest_WorkflowReleaseTag(TestSuiteRunWorkflowReleaseTagExecConfigRequest):
+class TestSuiteRunExecConfigRequest_WorkflowReleaseTag(pydantic_v1.BaseModel):
+    data: TestSuiteRunWorkflowReleaseTagExecConfigDataRequest
+    test_case_ids: typing.Optional[typing.List[str]] = None
     type: typing.Literal["WORKFLOW_RELEASE_TAG"] = "WORKFLOW_RELEASE_TAG"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class TestSuiteRunExecConfigRequest_External(TestSuiteRunExternalExecConfigRequest):
+class TestSuiteRunExecConfigRequest_External(pydantic_v1.BaseModel):
+    data: TestSuiteRunExternalExecConfigDataRequest
+    test_case_ids: typing.Optional[typing.List[str]] = None
     type: typing.Literal["EXTERNAL"] = "EXTERNAL"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
 TestSuiteRunExecConfigRequest = typing.Union[

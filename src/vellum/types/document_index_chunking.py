@@ -2,41 +2,83 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
-from .reducto_chunking import ReductoChunking
-from .sentence_chunking import SentenceChunking
-from .token_overlapping_window_chunking import TokenOverlappingWindowChunking
+from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
+from .reducto_chunker_config import ReductoChunkerConfig
+from .sentence_chunker_config import SentenceChunkerConfig
+from .token_overlapping_window_chunker_config import TokenOverlappingWindowChunkerConfig
 
 
-class DocumentIndexChunking_ReductoChunker(ReductoChunking):
+class DocumentIndexChunking_ReductoChunker(pydantic_v1.BaseModel):
+    chunker_config: typing.Optional[ReductoChunkerConfig] = None
     chunker_name: typing.Literal["reducto-chunker"] = "reducto-chunker"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class DocumentIndexChunking_SentenceChunker(SentenceChunking):
+class DocumentIndexChunking_SentenceChunker(pydantic_v1.BaseModel):
+    chunker_config: typing.Optional[SentenceChunkerConfig] = None
     chunker_name: typing.Literal["sentence-chunker"] = "sentence-chunker"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class DocumentIndexChunking_TokenOverlappingWindowChunker(TokenOverlappingWindowChunking):
+class DocumentIndexChunking_TokenOverlappingWindowChunker(pydantic_v1.BaseModel):
+    chunker_config: typing.Optional[TokenOverlappingWindowChunkerConfig] = None
     chunker_name: typing.Literal["token-overlapping-window-chunker"] = "token-overlapping-window-chunker"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
 DocumentIndexChunking = typing.Union[

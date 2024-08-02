@@ -9,7 +9,6 @@ from ...core.jsonable_encoder import jsonable_encoder
 from ...core.pydantic_utilities import pydantic_v1
 from ...core.request_options import RequestOptions
 from ...types.hosted_by_enum import HostedByEnum
-from ...types.ml_model_build_config_request import MlModelBuildConfigRequest
 from ...types.ml_model_developer import MlModelDeveloper
 from ...types.ml_model_display_config_request import MlModelDisplayConfigRequest
 from ...types.ml_model_exec_config_request import MlModelExecConfigRequest
@@ -89,7 +88,6 @@ class MlModelsClient:
         exec_config: MlModelExecConfigRequest,
         hosted_by: typing.Optional[HostedByEnum] = OMIT,
         developed_by: typing.Optional[MlModelDeveloper] = OMIT,
-        build_config: typing.Optional[MlModelBuildConfigRequest] = OMIT,
         parameter_config: typing.Optional[MlModelParameterConfigRequest] = OMIT,
         display_config: typing.Optional[MlModelDisplayConfigRequest] = OMIT,
         visibility: typing.Optional[VisibilityEnum] = OMIT,
@@ -173,9 +171,6 @@ class MlModelsClient:
             * `TII` - TII
             * `WIZARDLM` - WIZARDLM
 
-        build_config : typing.Optional[MlModelBuildConfigRequest]
-            Configuration for how the ML Model was built.
-
         parameter_config : typing.Optional[MlModelParameterConfigRequest]
             Configuration for the ML Model's parameters.
 
@@ -226,7 +221,6 @@ class MlModelsClient:
                 "family": family,
                 "hosted_by": hosted_by,
                 "developed_by": developed_by,
-                "build_config": build_config,
                 "exec_config": exec_config,
                 "parameter_config": parameter_config,
                 "display_config": display_config,
@@ -484,7 +478,6 @@ class AsyncMlModelsClient:
         exec_config: MlModelExecConfigRequest,
         hosted_by: typing.Optional[HostedByEnum] = OMIT,
         developed_by: typing.Optional[MlModelDeveloper] = OMIT,
-        build_config: typing.Optional[MlModelBuildConfigRequest] = OMIT,
         parameter_config: typing.Optional[MlModelParameterConfigRequest] = OMIT,
         display_config: typing.Optional[MlModelDisplayConfigRequest] = OMIT,
         visibility: typing.Optional[VisibilityEnum] = OMIT,
@@ -568,9 +561,6 @@ class AsyncMlModelsClient:
             * `TII` - TII
             * `WIZARDLM` - WIZARDLM
 
-        build_config : typing.Optional[MlModelBuildConfigRequest]
-            Configuration for how the ML Model was built.
-
         parameter_config : typing.Optional[MlModelParameterConfigRequest]
             Configuration for the ML Model's parameters.
 
@@ -629,7 +619,6 @@ class AsyncMlModelsClient:
                 "family": family,
                 "hosted_by": hosted_by,
                 "developed_by": developed_by,
-                "build_config": build_config,
                 "exec_config": exec_config,
                 "parameter_config": parameter_config,
                 "display_config": display_config,

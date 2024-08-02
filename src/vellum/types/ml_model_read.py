@@ -6,7 +6,6 @@ import typing
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 from .hosted_by_enum import HostedByEnum
-from .ml_model_build_config import MlModelBuildConfig
 from .ml_model_developer_enum_value_label import MlModelDeveloperEnumValueLabel
 from .ml_model_display_config_labelled import MlModelDisplayConfigLabelled
 from .ml_model_exec_config import MlModelExecConfig
@@ -67,11 +66,6 @@ class MlModelRead(pydantic_v1.BaseModel):
     - `PUBLIC` - Public
     - `PRIVATE` - Private
     - `DISABLED` - Disabled
-    """
-
-    build_config: MlModelBuildConfig = pydantic_v1.Field()
-    """
-    Configuration for how the ML Model was built.
     """
 
     exec_config: MlModelExecConfig = pydantic_v1.Field()

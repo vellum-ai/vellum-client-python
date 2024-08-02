@@ -9,12 +9,12 @@ from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 
-class OneOfParameterConfigRequest(pydantic_v1.BaseModel):
+class OpenApiOneOfPropertyRequest(pydantic_v1.BaseModel):
     """
     An OpenAPI specification of a parameter with type 'oneOf'
     """
 
-    one_of: typing.List[ParameterConfigRequest] = pydantic_v1.Field(alias="oneOf")
+    one_of: typing.List[OpenApiPropertyRequest] = pydantic_v1.Field(alias="oneOf")
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
 
@@ -39,6 +39,6 @@ class OneOfParameterConfigRequest(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-from .parameter_config_request import ParameterConfigRequest  # noqa: E402
+from .open_api_property_request import OpenApiPropertyRequest  # noqa: E402
 
-OneOfParameterConfigRequest.update_forward_refs()
+OpenApiOneOfPropertyRequest.update_forward_refs()

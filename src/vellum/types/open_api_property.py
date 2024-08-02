@@ -9,13 +9,13 @@ from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 
-class ParameterConfig_Array(pydantic_v1.BaseModel):
+class OpenApiProperty_Array(pydantic_v1.BaseModel):
     min_items: typing.Optional[int] = None
     max_items: typing.Optional[int] = None
     unique_items: typing.Optional[bool] = None
-    items: ParameterConfig
-    prefix_items: typing.Optional[typing.List[ParameterConfig]] = None
-    contains: typing.Optional[ParameterConfig] = None
+    items: OpenApiProperty
+    prefix_items: typing.Optional[typing.List[OpenApiProperty]] = None
+    contains: typing.Optional[OpenApiProperty] = None
     min_contains: typing.Optional[int] = None
     max_contains: typing.Optional[int] = None
     default: typing.Optional[typing.List[typing.Any]] = None
@@ -42,14 +42,14 @@ class ParameterConfig_Array(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Object(pydantic_v1.BaseModel):
-    properties: typing.Optional[typing.Dict[str, typing.Optional[ParameterConfig]]] = None
+class OpenApiProperty_Object(pydantic_v1.BaseModel):
+    properties: typing.Optional[typing.Dict[str, typing.Optional[OpenApiProperty]]] = None
     required: typing.Optional[typing.List[str]] = None
     min_properties: typing.Optional[int] = None
     max_properties: typing.Optional[int] = None
-    property_names: typing.Optional[ParameterConfig] = None
-    additional_properties: typing.Optional[ParameterConfig] = None
-    pattern_properties: typing.Optional[typing.Dict[str, typing.Optional[ParameterConfig]]] = None
+    property_names: typing.Optional[OpenApiProperty] = None
+    additional_properties: typing.Optional[OpenApiProperty] = None
+    pattern_properties: typing.Optional[typing.Dict[str, typing.Optional[OpenApiProperty]]] = None
     default: typing.Optional[typing.Dict[str, typing.Any]] = None
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
@@ -74,7 +74,7 @@ class ParameterConfig_Object(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Integer(pydantic_v1.BaseModel):
+class OpenApiProperty_Integer(pydantic_v1.BaseModel):
     minimum: typing.Optional[int] = None
     maximum: typing.Optional[int] = None
     exclusive_minimum: typing.Optional[bool] = None
@@ -103,7 +103,7 @@ class ParameterConfig_Integer(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Number(pydantic_v1.BaseModel):
+class OpenApiProperty_Number(pydantic_v1.BaseModel):
     minimum: typing.Optional[float] = None
     maximum: typing.Optional[float] = None
     format: typing.Optional[str] = None
@@ -133,7 +133,7 @@ class ParameterConfig_Number(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_String(pydantic_v1.BaseModel):
+class OpenApiProperty_String(pydantic_v1.BaseModel):
     min_length: typing.Optional[int] = None
     max_length: typing.Optional[int] = None
     pattern: typing.Optional[str] = None
@@ -162,7 +162,7 @@ class ParameterConfig_String(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Boolean(pydantic_v1.BaseModel):
+class OpenApiProperty_Boolean(pydantic_v1.BaseModel):
     default: typing.Optional[bool] = None
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
@@ -187,8 +187,8 @@ class ParameterConfig_Boolean(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_OneOf(pydantic_v1.BaseModel):
-    one_of: typing.List[ParameterConfig] = pydantic_v1.Field(alias="oneOf")
+class OpenApiProperty_OneOf(pydantic_v1.BaseModel):
+    one_of: typing.List[OpenApiProperty] = pydantic_v1.Field(alias="oneOf")
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
     type: typing.Literal["oneOf"] = "oneOf"
@@ -214,7 +214,7 @@ class ParameterConfig_OneOf(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-class ParameterConfig_Const(pydantic_v1.BaseModel):
+class OpenApiProperty_Const(pydantic_v1.BaseModel):
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
     const: str
@@ -239,13 +239,13 @@ class ParameterConfig_Const(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-ParameterConfig = typing.Union[
-    ParameterConfig_Array,
-    ParameterConfig_Object,
-    ParameterConfig_Integer,
-    ParameterConfig_Number,
-    ParameterConfig_String,
-    ParameterConfig_Boolean,
-    ParameterConfig_OneOf,
-    ParameterConfig_Const,
+OpenApiProperty = typing.Union[
+    OpenApiProperty_Array,
+    OpenApiProperty_Object,
+    OpenApiProperty_Integer,
+    OpenApiProperty_Number,
+    OpenApiProperty_String,
+    OpenApiProperty_Boolean,
+    OpenApiProperty_OneOf,
+    OpenApiProperty_Const,
 ]

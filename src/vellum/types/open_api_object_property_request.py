@@ -9,12 +9,19 @@ from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 
-class OneOfParameterConfig(pydantic_v1.BaseModel):
+class OpenApiObjectPropertyRequest(pydantic_v1.BaseModel):
     """
-    An OpenAPI specification of a parameter with type 'oneOf'
+    An OpenAPI specification of a parameter with type 'object'
     """
 
-    one_of: typing.List[ParameterConfig] = pydantic_v1.Field(alias="oneOf")
+    properties: typing.Optional[typing.Dict[str, typing.Optional[OpenApiPropertyRequest]]] = None
+    required: typing.Optional[typing.List[str]] = None
+    min_properties: typing.Optional[int] = None
+    max_properties: typing.Optional[int] = None
+    property_names: typing.Optional[OpenApiPropertyRequest] = None
+    additional_properties: typing.Optional[OpenApiPropertyRequest] = None
+    pattern_properties: typing.Optional[typing.Dict[str, typing.Optional[OpenApiPropertyRequest]]] = None
+    default: typing.Optional[typing.Dict[str, typing.Any]] = None
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
 
@@ -33,12 +40,10 @@ class OneOfParameterConfig(pydantic_v1.BaseModel):
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
         extra = pydantic_v1.Extra.allow
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-from .parameter_config import ParameterConfig  # noqa: E402
+from .open_api_property_request import OpenApiPropertyRequest  # noqa: E402
 
-OneOfParameterConfig.update_forward_refs()
+OpenApiObjectPropertyRequest.update_forward_refs()

@@ -12,7 +12,6 @@ class MlModelDisplayConfigLabelled(pydantic_v1.BaseModel):
     label: str
     description: str
     tags: typing.List[MlModelDisplayTagEnumValueLabel]
-    default_display_priority: float
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

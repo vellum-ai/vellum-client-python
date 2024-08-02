@@ -5,23 +5,23 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
-from .array_parameter_config_request import ArrayParameterConfigRequest
-from .integer_parameter_config_request import IntegerParameterConfigRequest
-from .number_parameter_config_request import NumberParameterConfigRequest
-from .object_parameter_config_request import ObjectParameterConfigRequest
-from .parameter_config_request import ParameterConfigRequest
+from .open_api_array_property_request import OpenApiArrayPropertyRequest
+from .open_api_integer_property_request import OpenApiIntegerPropertyRequest
+from .open_api_number_property_request import OpenApiNumberPropertyRequest
+from .open_api_object_property_request import OpenApiObjectPropertyRequest
+from .open_api_property_request import OpenApiPropertyRequest
 
 
 class MlModelParameterConfigRequest(pydantic_v1.BaseModel):
-    temperature: typing.Optional[NumberParameterConfigRequest] = None
-    max_tokens: typing.Optional[IntegerParameterConfigRequest] = None
-    stop: typing.Optional[ArrayParameterConfigRequest] = None
-    top_p: typing.Optional[NumberParameterConfigRequest] = None
-    top_k: typing.Optional[IntegerParameterConfigRequest] = None
-    frequency_penalty: typing.Optional[NumberParameterConfigRequest] = None
-    presence_penalty: typing.Optional[NumberParameterConfigRequest] = None
-    logit_bias: typing.Optional[ObjectParameterConfigRequest] = None
-    custom_parameters: typing.Optional[typing.Dict[str, typing.Optional[ParameterConfigRequest]]] = None
+    temperature: typing.Optional[OpenApiNumberPropertyRequest] = None
+    max_tokens: typing.Optional[OpenApiIntegerPropertyRequest] = None
+    stop: typing.Optional[OpenApiArrayPropertyRequest] = None
+    top_p: typing.Optional[OpenApiNumberPropertyRequest] = None
+    top_k: typing.Optional[OpenApiIntegerPropertyRequest] = None
+    frequency_penalty: typing.Optional[OpenApiNumberPropertyRequest] = None
+    presence_penalty: typing.Optional[OpenApiNumberPropertyRequest] = None
+    logit_bias: typing.Optional[OpenApiObjectPropertyRequest] = None
+    custom_parameters: typing.Optional[typing.Dict[str, typing.Optional[OpenApiPropertyRequest]]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

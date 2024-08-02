@@ -3054,14 +3054,6 @@ The organization that developed the ML Model.
 <dl>
 <dd>
 
-**build_config:** `typing.Optional[MlModelBuildConfigRequest]` — Configuration for how the ML Model was built.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **parameter_config:** `typing.Optional[MlModelParameterConfigRequest]` — Configuration for the ML Model's parameters.
     
 </dd>

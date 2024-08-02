@@ -5,23 +5,23 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
-from .array_parameter_config import ArrayParameterConfig
-from .integer_parameter_config import IntegerParameterConfig
-from .number_parameter_config import NumberParameterConfig
-from .object_parameter_config import ObjectParameterConfig
-from .parameter_config import ParameterConfig
+from .open_api_array_property import OpenApiArrayProperty
+from .open_api_integer_property import OpenApiIntegerProperty
+from .open_api_number_property import OpenApiNumberProperty
+from .open_api_object_property import OpenApiObjectProperty
+from .open_api_property import OpenApiProperty
 
 
 class MlModelParameterConfig(pydantic_v1.BaseModel):
-    temperature: typing.Optional[NumberParameterConfig] = None
-    max_tokens: typing.Optional[IntegerParameterConfig] = None
-    stop: typing.Optional[ArrayParameterConfig] = None
-    top_p: typing.Optional[NumberParameterConfig] = None
-    top_k: typing.Optional[IntegerParameterConfig] = None
-    frequency_penalty: typing.Optional[NumberParameterConfig] = None
-    presence_penalty: typing.Optional[NumberParameterConfig] = None
-    logit_bias: typing.Optional[ObjectParameterConfig] = None
-    custom_parameters: typing.Optional[typing.Dict[str, typing.Optional[ParameterConfig]]] = None
+    temperature: typing.Optional[OpenApiNumberProperty] = None
+    max_tokens: typing.Optional[OpenApiIntegerProperty] = None
+    stop: typing.Optional[OpenApiArrayProperty] = None
+    top_p: typing.Optional[OpenApiNumberProperty] = None
+    top_k: typing.Optional[OpenApiIntegerProperty] = None
+    frequency_penalty: typing.Optional[OpenApiNumberProperty] = None
+    presence_penalty: typing.Optional[OpenApiNumberProperty] = None
+    logit_bias: typing.Optional[OpenApiObjectProperty] = None
+    custom_parameters: typing.Optional[typing.Dict[str, typing.Optional[OpenApiProperty]]] = None
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

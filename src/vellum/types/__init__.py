@@ -17,8 +17,6 @@ from .array_chat_message_content_item_request import (
     ArrayChatMessageContentItemRequest_String,
 )
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
-from .array_parameter_config import ArrayParameterConfig
-from .array_parameter_config_request import ArrayParameterConfigRequest
 from .array_variable_value_item import (
     ArrayVariableValueItem,
     ArrayVariableValueItem_Error,
@@ -60,8 +58,6 @@ from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1 import 
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request import (
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
 )
-from .boolean_parameter_config import BooleanParameterConfig
-from .boolean_parameter_config_request import BooleanParameterConfigRequest
 from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_message import ChatMessage
 from .chat_message_content import (
@@ -105,8 +101,6 @@ from .compile_prompt_deployment_expand_meta_request import CompilePromptDeployme
 from .compile_prompt_meta import CompilePromptMeta
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
-from .const_parameter_config import ConstParameterConfig
-from .const_parameter_config_request import ConstParameterConfigRequest
 from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from .deployment_provider_payload_response_payload import DeploymentProviderPayloadResponsePayload
@@ -237,8 +231,6 @@ from .initiated_prompt_execution_meta import InitiatedPromptExecutionMeta
 from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEvent
 from .instructor_vectorizer_config import InstructorVectorizerConfig
 from .instructor_vectorizer_config_request import InstructorVectorizerConfigRequest
-from .integer_parameter_config import IntegerParameterConfig
-from .integer_parameter_config_request import IntegerParameterConfigRequest
 from .iteration_state_enum import IterationStateEnum
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
@@ -254,8 +246,6 @@ from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
 from .metric_node_result import MetricNodeResult
-from .ml_model_build_config import MlModelBuildConfig
-from .ml_model_build_config_request import MlModelBuildConfigRequest
 from .ml_model_developer import MlModelDeveloper
 from .ml_model_developer_enum_value_label import MlModelDeveloperEnumValueLabel
 from .ml_model_display_config_labelled import MlModelDisplayConfigLabelled
@@ -373,15 +363,9 @@ from .node_output_compiled_value import (
 )
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
-from .number_parameter_config import NumberParameterConfig
-from .number_parameter_config_request import NumberParameterConfigRequest
 from .number_variable_value import NumberVariableValue
 from .number_vellum_value import NumberVellumValue
 from .number_vellum_value_request import NumberVellumValueRequest
-from .object_parameter_config import ObjectParameterConfig
-from .object_parameter_config_request import ObjectParameterConfigRequest
-from .one_of_parameter_config import OneOfParameterConfig
-from .one_of_parameter_config_request import OneOfParameterConfigRequest
 from .open_ai_vectorizer_config import OpenAiVectorizerConfig
 from .open_ai_vectorizer_config_request import OpenAiVectorizerConfigRequest
 from .open_ai_vectorizer_text_embedding_3_large import OpenAiVectorizerTextEmbedding3Large
@@ -390,6 +374,44 @@ from .open_ai_vectorizer_text_embedding_3_small import OpenAiVectorizerTextEmbed
 from .open_ai_vectorizer_text_embedding_3_small_request import OpenAiVectorizerTextEmbedding3SmallRequest
 from .open_ai_vectorizer_text_embedding_ada_002 import OpenAiVectorizerTextEmbeddingAda002
 from .open_ai_vectorizer_text_embedding_ada_002_request import OpenAiVectorizerTextEmbeddingAda002Request
+from .open_api_array_property import OpenApiArrayProperty
+from .open_api_array_property_request import OpenApiArrayPropertyRequest
+from .open_api_boolean_property import OpenApiBooleanProperty
+from .open_api_boolean_property_request import OpenApiBooleanPropertyRequest
+from .open_api_const_property import OpenApiConstProperty
+from .open_api_const_property_request import OpenApiConstPropertyRequest
+from .open_api_integer_property import OpenApiIntegerProperty
+from .open_api_integer_property_request import OpenApiIntegerPropertyRequest
+from .open_api_number_property import OpenApiNumberProperty
+from .open_api_number_property_request import OpenApiNumberPropertyRequest
+from .open_api_object_property import OpenApiObjectProperty
+from .open_api_object_property_request import OpenApiObjectPropertyRequest
+from .open_api_one_of_property import OpenApiOneOfProperty
+from .open_api_one_of_property_request import OpenApiOneOfPropertyRequest
+from .open_api_property import (
+    OpenApiProperty,
+    OpenApiProperty_Array,
+    OpenApiProperty_Boolean,
+    OpenApiProperty_Const,
+    OpenApiProperty_Integer,
+    OpenApiProperty_Number,
+    OpenApiProperty_Object,
+    OpenApiProperty_OneOf,
+    OpenApiProperty_String,
+)
+from .open_api_property_request import (
+    OpenApiPropertyRequest,
+    OpenApiPropertyRequest_Array,
+    OpenApiPropertyRequest_Boolean,
+    OpenApiPropertyRequest_Const,
+    OpenApiPropertyRequest_Integer,
+    OpenApiPropertyRequest_Number,
+    OpenApiPropertyRequest_Object,
+    OpenApiPropertyRequest_OneOf,
+    OpenApiPropertyRequest_String,
+)
+from .open_api_string_property import OpenApiStringProperty
+from .open_api_string_property_request import OpenApiStringPropertyRequest
 from .paginated_document_index_read_list import PaginatedDocumentIndexReadList
 from .paginated_ml_model_read_list import PaginatedMlModelReadList
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
@@ -397,28 +419,6 @@ from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
 from .paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
 from .paginated_test_suite_test_case_list import PaginatedTestSuiteTestCaseList
-from .parameter_config import (
-    ParameterConfig,
-    ParameterConfig_Array,
-    ParameterConfig_Boolean,
-    ParameterConfig_Const,
-    ParameterConfig_Integer,
-    ParameterConfig_Number,
-    ParameterConfig_Object,
-    ParameterConfig_OneOf,
-    ParameterConfig_String,
-)
-from .parameter_config_request import (
-    ParameterConfigRequest,
-    ParameterConfigRequest_Array,
-    ParameterConfigRequest_Boolean,
-    ParameterConfigRequest_Const,
-    ParameterConfigRequest_Integer,
-    ParameterConfigRequest_Number,
-    ParameterConfigRequest_Object,
-    ParameterConfigRequest_OneOf,
-    ParameterConfigRequest_String,
-)
 from .pdf_search_result_meta_source import PdfSearchResultMetaSource
 from .pdf_search_result_meta_source_request import PdfSearchResultMetaSourceRequest
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
@@ -485,8 +485,6 @@ from .streaming_workflow_node_result_event import StreamingWorkflowNodeResultEve
 from .string_chat_message_content import StringChatMessageContent
 from .string_chat_message_content_request import StringChatMessageContentRequest
 from .string_input_request import StringInputRequest
-from .string_parameter_config import StringParameterConfig
-from .string_parameter_config_request import StringParameterConfigRequest
 from .string_variable_value import StringVariableValue
 from .string_vellum_value import StringVellumValue
 from .string_vellum_value_request import StringVellumValueRequest
@@ -767,8 +765,6 @@ __all__ = [
     "ArrayChatMessageContentItem_Image",
     "ArrayChatMessageContentItem_String",
     "ArrayChatMessageContentRequest",
-    "ArrayParameterConfig",
-    "ArrayParameterConfigRequest",
     "ArrayVariableValueItem",
     "ArrayVariableValueItem_Error",
     "ArrayVariableValueItem_FunctionCall",
@@ -796,8 +792,6 @@ __all__ = [
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request",
-    "BooleanParameterConfig",
-    "BooleanParameterConfigRequest",
     "ChatHistoryInputRequest",
     "ChatMessage",
     "ChatMessageContent",
@@ -835,8 +829,6 @@ __all__ = [
     "CompilePromptMeta",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
-    "ConstParameterConfig",
-    "ConstParameterConfigRequest",
     "CreateTestSuiteTestCaseRequest",
     "DeploymentProviderPayloadResponse",
     "DeploymentProviderPayloadResponsePayload",
@@ -951,8 +943,6 @@ __all__ = [
     "InitiatedWorkflowNodeResultEvent",
     "InstructorVectorizerConfig",
     "InstructorVectorizerConfigRequest",
-    "IntegerParameterConfig",
-    "IntegerParameterConfigRequest",
     "IterationStateEnum",
     "JsonInputRequest",
     "JsonVariableValue",
@@ -968,8 +958,6 @@ __all__ = [
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
     "MetricNodeResult",
-    "MlModelBuildConfig",
-    "MlModelBuildConfigRequest",
     "MlModelDeveloper",
     "MlModelDeveloperEnumValueLabel",
     "MlModelDisplayConfigLabelled",
@@ -1073,15 +1061,9 @@ __all__ = [
     "NodeOutputCompiledValue_String",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
-    "NumberParameterConfig",
-    "NumberParameterConfigRequest",
     "NumberVariableValue",
     "NumberVellumValue",
     "NumberVellumValueRequest",
-    "ObjectParameterConfig",
-    "ObjectParameterConfigRequest",
-    "OneOfParameterConfig",
-    "OneOfParameterConfigRequest",
     "OpenAiVectorizerConfig",
     "OpenAiVectorizerConfigRequest",
     "OpenAiVectorizerTextEmbedding3Large",
@@ -1090,6 +1072,40 @@ __all__ = [
     "OpenAiVectorizerTextEmbedding3SmallRequest",
     "OpenAiVectorizerTextEmbeddingAda002",
     "OpenAiVectorizerTextEmbeddingAda002Request",
+    "OpenApiArrayProperty",
+    "OpenApiArrayPropertyRequest",
+    "OpenApiBooleanProperty",
+    "OpenApiBooleanPropertyRequest",
+    "OpenApiConstProperty",
+    "OpenApiConstPropertyRequest",
+    "OpenApiIntegerProperty",
+    "OpenApiIntegerPropertyRequest",
+    "OpenApiNumberProperty",
+    "OpenApiNumberPropertyRequest",
+    "OpenApiObjectProperty",
+    "OpenApiObjectPropertyRequest",
+    "OpenApiOneOfProperty",
+    "OpenApiOneOfPropertyRequest",
+    "OpenApiProperty",
+    "OpenApiPropertyRequest",
+    "OpenApiPropertyRequest_Array",
+    "OpenApiPropertyRequest_Boolean",
+    "OpenApiPropertyRequest_Const",
+    "OpenApiPropertyRequest_Integer",
+    "OpenApiPropertyRequest_Number",
+    "OpenApiPropertyRequest_Object",
+    "OpenApiPropertyRequest_OneOf",
+    "OpenApiPropertyRequest_String",
+    "OpenApiProperty_Array",
+    "OpenApiProperty_Boolean",
+    "OpenApiProperty_Const",
+    "OpenApiProperty_Integer",
+    "OpenApiProperty_Number",
+    "OpenApiProperty_Object",
+    "OpenApiProperty_OneOf",
+    "OpenApiProperty_String",
+    "OpenApiStringProperty",
+    "OpenApiStringPropertyRequest",
     "PaginatedDocumentIndexReadList",
     "PaginatedMlModelReadList",
     "PaginatedSlimDeploymentReadList",
@@ -1097,24 +1113,6 @@ __all__ = [
     "PaginatedSlimWorkflowDeploymentList",
     "PaginatedTestSuiteRunExecutionList",
     "PaginatedTestSuiteTestCaseList",
-    "ParameterConfig",
-    "ParameterConfigRequest",
-    "ParameterConfigRequest_Array",
-    "ParameterConfigRequest_Boolean",
-    "ParameterConfigRequest_Const",
-    "ParameterConfigRequest_Integer",
-    "ParameterConfigRequest_Number",
-    "ParameterConfigRequest_Object",
-    "ParameterConfigRequest_OneOf",
-    "ParameterConfigRequest_String",
-    "ParameterConfig_Array",
-    "ParameterConfig_Boolean",
-    "ParameterConfig_Const",
-    "ParameterConfig_Integer",
-    "ParameterConfig_Number",
-    "ParameterConfig_Object",
-    "ParameterConfig_OneOf",
-    "ParameterConfig_String",
     "PdfSearchResultMetaSource",
     "PdfSearchResultMetaSourceRequest",
     "ProcessingFailureReasonEnum",
@@ -1181,8 +1179,6 @@ __all__ = [
     "StringChatMessageContent",
     "StringChatMessageContentRequest",
     "StringInputRequest",
-    "StringParameterConfig",
-    "StringParameterConfigRequest",
     "StringVariableValue",
     "StringVellumValue",
     "StringVellumValueRequest",

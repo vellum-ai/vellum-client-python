@@ -7,17 +7,12 @@ from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 
-class NumberParameterConfig(pydantic_v1.BaseModel):
+class OpenApiBooleanPropertyRequest(pydantic_v1.BaseModel):
     """
-    An OpenAPI specification of a parameter with type 'number'
+    An OpenAPI specification of a parameter with type 'boolean'
     """
 
-    minimum: typing.Optional[float] = None
-    maximum: typing.Optional[float] = None
-    format: typing.Optional[str] = None
-    exclusive_minimum: typing.Optional[bool] = None
-    exclusive_maximum: typing.Optional[bool] = None
-    default: typing.Optional[float] = None
+    default: typing.Optional[bool] = None
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
 

@@ -7,14 +7,18 @@ from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 
-class ConstParameterConfig(pydantic_v1.BaseModel):
+class OpenApiIntegerProperty(pydantic_v1.BaseModel):
     """
-    An OpenAPI specification of a parameter with type 'const'
+    An OpenAPI specification of a parameter with type 'integer'
     """
 
+    minimum: typing.Optional[int] = None
+    maximum: typing.Optional[int] = None
+    exclusive_minimum: typing.Optional[bool] = None
+    exclusive_maximum: typing.Optional[bool] = None
+    default: typing.Optional[int] = None
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
-    const: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

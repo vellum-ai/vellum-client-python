@@ -2,20 +2,18 @@
 
 import json
 import typing
-import urllib.parse
 from json.decoder import JSONDecodeError
 
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.pydantic_utilities import pydantic_v1
-from ...core.remove_none_from_dict import remove_none_from_dict
 from ...core.request_options import RequestOptions
+from ...types.named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
 from ...types.paginated_test_suite_test_case_list import PaginatedTestSuiteTestCaseList
 from ...types.test_suite_test_case import TestSuiteTestCase
 from ...types.test_suite_test_case_bulk_operation_request import TestSuiteTestCaseBulkOperationRequest
 from ...types.test_suite_test_case_bulk_result import TestSuiteTestCaseBulkResult
-from ...types.upsert_test_suite_test_case_request import UpsertTestSuiteTestCaseRequest
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -36,15 +34,27 @@ class TestSuitesClient:
         """
         List the Test Cases associated with a Test Suite
 
-        Parameters:
-            - id: str. A UUID string identifying this test suite.
+        Parameters
+        ----------
+        id : str
+            A UUID string identifying this test suite.
 
-            - limit: typing.Optional[int]. Number of results to return per page.
+        limit : typing.Optional[int]
+            Number of results to return per page.
 
-            - offset: typing.Optional[int]. The initial index from which to return the results.
+        offset : typing.Optional[int]
+            The initial index from which to return the results.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PaginatedTestSuiteTestCaseList
+
+
+        Examples
+        --------
         from vellum.client import Vellum
 
         client = Vellum(
@@ -55,41 +65,15 @@ class TestSuitesClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
+            f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
+            base_url=self._client_wrapper.get_environment().default,
             method="GET",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
-            ),
-            params=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                        **(
-                            request_options.get("additional_query_parameters", {})
-                            if request_options is not None
-                            else {}
-                        ),
-                    }
-                )
-            ),
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            params={"limit": limit, "offset": offset},
+            request_options=request_options,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(PaginatedTestSuiteTestCaseList, _response.json())  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(PaginatedTestSuiteTestCaseList, _response.json())  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -97,9 +81,13 @@ class TestSuitesClient:
 
     def upsert_test_suite_test_case(
         self,
-        id: str,
+        id_: str,
         *,
-        request: UpsertTestSuiteTestCaseRequest,
+        input_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        label: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> TestSuiteTestCase:
         """
@@ -111,59 +99,64 @@ class TestSuitesClient:
         Note that a full replacement of the test case is performed, so any fields not provided will be removed
         or overwritten with default values.
 
-        Parameters:
-            - id: str. A UUID string identifying this test suite.
+        Parameters
+        ----------
+        id_ : str
+            A UUID string identifying this test suite.
 
-            - request: UpsertTestSuiteTestCaseRequest.
+        input_values : typing.Sequence[NamedTestCaseVariableValueRequest]
+            Values for each of the Test Case's input variables
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
-        from vellum import UpsertTestSuiteTestCaseRequest
+        evaluation_values : typing.Sequence[NamedTestCaseVariableValueRequest]
+            Values for each of the Test Case's evaluation variables
+
+        id : typing.Optional[str]
+            The Vellum-generated ID of an existing Test Case whose data you'd like to replace. If specified and no Test Case exists with this ID, a 404 will be returned.
+
+        external_id : typing.Optional[str]
+            An ID external to Vellum that uniquely identifies the Test Case that you'd like to create/update. If there's a match on a Test Case that was previously created with the same external_id, it will be updated. Otherwise, a new Test Case will be created with this value as its external_id. If no external_id is specified, then a new Test Case will always be created.
+
+        label : typing.Optional[str]
+            A human-readable label used to convey the intention of this Test Case
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        TestSuiteTestCase
+
+
+        Examples
+        --------
         from vellum.client import Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         client.test_suites.upsert_test_suite_test_case(
-            id="id",
-            request=UpsertTestSuiteTestCaseRequest(
-                input_values=[],
-                evaluation_values=[],
-            ),
+            id_="id",
+            input_values=[],
+            evaluation_values=[],
         )
         """
         _response = self._client_wrapper.httpx_client.request(
+            f"v1/test-suites/{jsonable_encoder(id_)}/test-cases",
+            base_url=self._client_wrapper.get_environment().default,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "id": id,
+                "external_id": external_id,
+                "label": label,
+                "input_values": input_values,
+                "evaluation_values": evaluation_values,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -179,13 +172,23 @@ class TestSuitesClient:
         """
         Created, replace, and delete Test Cases within the specified Test Suite in bulk
 
-        Parameters:
-            - id: str. A UUID string identifying this test suite.
+        Parameters
+        ----------
+        id : str
+            A UUID string identifying this test suite.
 
-            - request: typing.Sequence[TestSuiteTestCaseBulkOperationRequest].
+        request : typing.Sequence[TestSuiteTestCaseBulkOperationRequest]
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Yields
+        ------
+        typing.Iterator[typing.List[TestSuiteTestCaseBulkResult]]
+
+
+        Examples
+        --------
         from vellum import (
             CreateTestSuiteTestCaseRequest,
             NamedTestCaseVariableValueRequest_String,
@@ -196,7 +199,7 @@ class TestSuitesClient:
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
-        client.test_suites.test_suite_test_cases_bulk(
+        response = client.test_suites.test_suite_test_cases_bulk(
             id="string",
             request=[
                 TestSuiteTestCaseBulkOperationRequest_Create(
@@ -210,44 +213,28 @@ class TestSuitesClient:
                 )
             ],
         )
+        for chunk in response:
+            yield chunk
         """
         with self._client_wrapper.httpx_client.stream(
+            f"v1/test-suites/{jsonable_encoder(id)}/test-cases-bulk",
+            base_url=self._client_wrapper.get_environment().default,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/test-suites/{jsonable_encoder(id)}/test-cases-bulk",
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            json=request,
+            request_options=request_options,
+            omit=OMIT,
         ) as _response:
-            if 200 <= _response.status_code < 300:
-                for _text in _response.iter_lines():
-                    if len(_text) == 0:
-                        continue
-                    yield pydantic_v1.parse_obj_as(typing.List[TestSuiteTestCaseBulkResult], json.loads(_text))  # type: ignore
-                return
-            _response.read()
             try:
+                if 200 <= _response.status_code < 300:
+                    for _text in _response.iter_lines():
+                        try:
+                            if len(_text) == 0:
+                                continue
+                            yield pydantic_v1.parse_obj_as(typing.List[TestSuiteTestCaseBulkResult], json.loads(_text))  # type: ignore
+                        except:
+                            pass
+                    return
+                _response.read()
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -259,13 +246,23 @@ class TestSuitesClient:
         """
         Deletes an existing test case for a test suite, keying off of the test case id.
 
-        Parameters:
-            - id: str. A UUID string identifying this test suite.
+        Parameters
+        ----------
+        id : str
+            A UUID string identifying this test suite.
 
-            - test_case_id: str. An id identifying the test case that you'd like to delete
+        test_case_id : str
+            An id identifying the test case that you'd like to delete
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
         from vellum.client import Vellum
 
         client = Vellum(
@@ -277,31 +274,14 @@ class TestSuitesClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
+            f"v1/test-suites/{jsonable_encoder(id)}/test-cases/{jsonable_encoder(test_case_id)}",
+            base_url=self._client_wrapper.get_environment().default,
             method="DELETE",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/test-suites/{jsonable_encoder(id)}/test-cases/{jsonable_encoder(test_case_id)}",
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
         )
-        if 200 <= _response.status_code < 300:
-            return
         try:
+            if 200 <= _response.status_code < 300:
+                return
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -323,60 +303,54 @@ class AsyncTestSuitesClient:
         """
         List the Test Cases associated with a Test Suite
 
-        Parameters:
-            - id: str. A UUID string identifying this test suite.
+        Parameters
+        ----------
+        id : str
+            A UUID string identifying this test suite.
 
-            - limit: typing.Optional[int]. Number of results to return per page.
+        limit : typing.Optional[int]
+            Number of results to return per page.
 
-            - offset: typing.Optional[int]. The initial index from which to return the results.
+        offset : typing.Optional[int]
+            The initial index from which to return the results.
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PaginatedTestSuiteTestCaseList
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.test_suites.list_test_suite_test_cases(
-            id="id",
-        )
+
+
+        async def main() -> None:
+            await client.test_suites.list_test_suite_test_cases(
+                id="id",
+            )
+
+
+        asyncio.run(main())
         """
         _response = await self._client_wrapper.httpx_client.request(
+            f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
+            base_url=self._client_wrapper.get_environment().default,
             method="GET",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
-            ),
-            params=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                        **(
-                            request_options.get("additional_query_parameters", {})
-                            if request_options is not None
-                            else {}
-                        ),
-                    }
-                )
-            ),
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            params={"limit": limit, "offset": offset},
+            request_options=request_options,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(PaginatedTestSuiteTestCaseList, _response.json())  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(PaginatedTestSuiteTestCaseList, _response.json())  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -384,9 +358,13 @@ class AsyncTestSuitesClient:
 
     async def upsert_test_suite_test_case(
         self,
-        id: str,
+        id_: str,
         *,
-        request: UpsertTestSuiteTestCaseRequest,
+        input_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        evaluation_values: typing.Sequence[NamedTestCaseVariableValueRequest],
+        id: typing.Optional[str] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        label: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> TestSuiteTestCase:
         """
@@ -398,59 +376,72 @@ class AsyncTestSuitesClient:
         Note that a full replacement of the test case is performed, so any fields not provided will be removed
         or overwritten with default values.
 
-        Parameters:
-            - id: str. A UUID string identifying this test suite.
+        Parameters
+        ----------
+        id_ : str
+            A UUID string identifying this test suite.
 
-            - request: UpsertTestSuiteTestCaseRequest.
+        input_values : typing.Sequence[NamedTestCaseVariableValueRequest]
+            Values for each of the Test Case's input variables
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
-        from vellum import UpsertTestSuiteTestCaseRequest
+        evaluation_values : typing.Sequence[NamedTestCaseVariableValueRequest]
+            Values for each of the Test Case's evaluation variables
+
+        id : typing.Optional[str]
+            The Vellum-generated ID of an existing Test Case whose data you'd like to replace. If specified and no Test Case exists with this ID, a 404 will be returned.
+
+        external_id : typing.Optional[str]
+            An ID external to Vellum that uniquely identifies the Test Case that you'd like to create/update. If there's a match on a Test Case that was previously created with the same external_id, it will be updated. Otherwise, a new Test Case will be created with this value as its external_id. If no external_id is specified, then a new Test Case will always be created.
+
+        label : typing.Optional[str]
+            A human-readable label used to convey the intention of this Test Case
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        TestSuiteTestCase
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.test_suites.upsert_test_suite_test_case(
-            id="id",
-            request=UpsertTestSuiteTestCaseRequest(
+
+
+        async def main() -> None:
+            await client.test_suites.upsert_test_suite_test_case(
+                id_="id",
                 input_values=[],
                 evaluation_values=[],
-            ),
-        )
+            )
+
+
+        asyncio.run(main())
         """
         _response = await self._client_wrapper.httpx_client.request(
+            f"v1/test-suites/{jsonable_encoder(id_)}/test-cases",
+            base_url=self._client_wrapper.get_environment().default,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/test-suites/{jsonable_encoder(id)}/test-cases",
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
+            json={
+                "id": id,
+                "external_id": external_id,
+                "label": label,
+                "input_values": input_values,
+                "evaluation_values": evaluation_values,
             },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
+            omit=OMIT,
         )
-        if 200 <= _response.status_code < 300:
-            return pydantic_v1.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
         try:
+            if 200 <= _response.status_code < 300:
+                return pydantic_v1.parse_obj_as(TestSuiteTestCase, _response.json())  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -466,13 +457,25 @@ class AsyncTestSuitesClient:
         """
         Created, replace, and delete Test Cases within the specified Test Suite in bulk
 
-        Parameters:
-            - id: str. A UUID string identifying this test suite.
+        Parameters
+        ----------
+        id : str
+            A UUID string identifying this test suite.
 
-            - request: typing.Sequence[TestSuiteTestCaseBulkOperationRequest].
+        request : typing.Sequence[TestSuiteTestCaseBulkOperationRequest]
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Yields
+        ------
+        typing.AsyncIterator[typing.List[TestSuiteTestCaseBulkResult]]
+
+
+        Examples
+        --------
+        import asyncio
+
         from vellum import (
             CreateTestSuiteTestCaseRequest,
             NamedTestCaseVariableValueRequest_String,
@@ -483,58 +486,50 @@ class AsyncTestSuitesClient:
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.test_suites.test_suite_test_cases_bulk(
-            id="string",
-            request=[
-                TestSuiteTestCaseBulkOperationRequest_Create(
-                    id="string",
-                    data=CreateTestSuiteTestCaseRequest(
-                        label="string",
-                        input_values=[NamedTestCaseVariableValueRequest_String()],
-                        evaluation_values=[NamedTestCaseVariableValueRequest_String()],
-                        external_id="string",
-                    ),
-                )
-            ],
-        )
+
+
+        async def main() -> None:
+            response = await client.test_suites.test_suite_test_cases_bulk(
+                id="string",
+                request=[
+                    TestSuiteTestCaseBulkOperationRequest_Create(
+                        id="string",
+                        data=CreateTestSuiteTestCaseRequest(
+                            label="string",
+                            input_values=[NamedTestCaseVariableValueRequest_String()],
+                            evaluation_values=[
+                                NamedTestCaseVariableValueRequest_String()
+                            ],
+                            external_id="string",
+                        ),
+                    )
+                ],
+            )
+            async for chunk in response:
+                yield chunk
+
+
+        asyncio.run(main())
         """
         async with self._client_wrapper.httpx_client.stream(
+            f"v1/test-suites/{jsonable_encoder(id)}/test-cases-bulk",
+            base_url=self._client_wrapper.get_environment().default,
             method="POST",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/test-suites/{jsonable_encoder(id)}/test-cases-bulk",
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            json=jsonable_encoder(request)
-            if request_options is None or request_options.get("additional_body_parameters") is None
-            else {
-                **jsonable_encoder(request),
-                **(jsonable_encoder(remove_none_from_dict(request_options.get("additional_body_parameters", {})))),
-            },
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            json=request,
+            request_options=request_options,
+            omit=OMIT,
         ) as _response:
-            if 200 <= _response.status_code < 300:
-                async for _text in _response.aiter_lines():
-                    if len(_text) == 0:
-                        continue
-                    yield pydantic_v1.parse_obj_as(typing.List[TestSuiteTestCaseBulkResult], json.loads(_text))  # type: ignore
-                return
-            await _response.aread()
             try:
+                if 200 <= _response.status_code < 300:
+                    async for _text in _response.aiter_lines():
+                        try:
+                            if len(_text) == 0:
+                                continue
+                            yield pydantic_v1.parse_obj_as(typing.List[TestSuiteTestCaseBulkResult], json.loads(_text))  # type: ignore
+                        except:
+                            pass
+                    return
+                await _response.aread()
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -546,49 +541,50 @@ class AsyncTestSuitesClient:
         """
         Deletes an existing test case for a test suite, keying off of the test case id.
 
-        Parameters:
-            - id: str. A UUID string identifying this test suite.
+        Parameters
+        ----------
+        id : str
+            A UUID string identifying this test suite.
 
-            - test_case_id: str. An id identifying the test case that you'd like to delete
+        test_case_id : str
+            An id identifying the test case that you'd like to delete
 
-            - request_options: typing.Optional[RequestOptions]. Request-specific configuration.
-        ---
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
         from vellum.client import AsyncVellum
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
         )
-        await client.test_suites.delete_test_suite_test_case(
-            id="id",
-            test_case_id="test_case_id",
-        )
+
+
+        async def main() -> None:
+            await client.test_suites.delete_test_suite_test_case(
+                id="id",
+                test_case_id="test_case_id",
+            )
+
+
+        asyncio.run(main())
         """
         _response = await self._client_wrapper.httpx_client.request(
+            f"v1/test-suites/{jsonable_encoder(id)}/test-cases/{jsonable_encoder(test_case_id)}",
+            base_url=self._client_wrapper.get_environment().default,
             method="DELETE",
-            url=urllib.parse.urljoin(
-                f"{self._client_wrapper.get_environment().default}/",
-                f"v1/test-suites/{jsonable_encoder(id)}/test-cases/{jsonable_encoder(test_case_id)}",
-            ),
-            params=jsonable_encoder(
-                request_options.get("additional_query_parameters") if request_options is not None else None
-            ),
-            headers=jsonable_encoder(
-                remove_none_from_dict(
-                    {
-                        **self._client_wrapper.get_headers(),
-                        **(request_options.get("additional_headers", {}) if request_options is not None else {}),
-                    }
-                )
-            ),
-            timeout=request_options.get("timeout_in_seconds")
-            if request_options is not None and request_options.get("timeout_in_seconds") is not None
-            else self._client_wrapper.get_timeout(),
-            retries=0,
-            max_retries=request_options.get("max_retries") if request_options is not None else 0,  # type: ignore
+            request_options=request_options,
         )
-        if 200 <= _response.status_code < 300:
-            return
         try:
+            if 200 <= _response.status_code < 300:
+                return
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)

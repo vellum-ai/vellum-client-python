@@ -2,52 +2,133 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
-from .fulfilled_workflow_node_result_event import FulfilledWorkflowNodeResultEvent
-from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEvent
-from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
-from .streaming_workflow_node_result_event import StreamingWorkflowNodeResultEvent
+from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
+from .node_input_variable_compiled_value import NodeInputVariableCompiledValue
+from .node_output_compiled_value import NodeOutputCompiledValue
+from .workflow_event_error import WorkflowEventError
+from .workflow_node_result_data import WorkflowNodeResultData
 
 
-class WorkflowNodeResultEvent_Initiated(InitiatedWorkflowNodeResultEvent):
+class WorkflowNodeResultEvent_Initiated(pydantic_v1.BaseModel):
+    id: str
+    node_id: str
+    node_result_id: str
+    ts: typing.Optional[dt.datetime] = None
+    data: typing.Optional[WorkflowNodeResultData] = None
+    source_execution_id: typing.Optional[str] = None
+    input_values: typing.Optional[typing.List[NodeInputVariableCompiledValue]] = None
     state: typing.Literal["INITIATED"] = "INITIATED"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class WorkflowNodeResultEvent_Streaming(StreamingWorkflowNodeResultEvent):
+class WorkflowNodeResultEvent_Streaming(pydantic_v1.BaseModel):
+    id: str
+    node_id: str
+    node_result_id: str
+    ts: typing.Optional[dt.datetime] = None
+    data: typing.Optional[WorkflowNodeResultData] = None
+    source_execution_id: typing.Optional[str] = None
+    output: typing.Optional[NodeOutputCompiledValue] = None
+    output_index: typing.Optional[int] = None
     state: typing.Literal["STREAMING"] = "STREAMING"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class WorkflowNodeResultEvent_Fulfilled(FulfilledWorkflowNodeResultEvent):
+class WorkflowNodeResultEvent_Fulfilled(pydantic_v1.BaseModel):
+    id: str
+    node_id: str
+    node_result_id: str
+    ts: typing.Optional[dt.datetime] = None
+    data: typing.Optional[WorkflowNodeResultData] = None
+    source_execution_id: typing.Optional[str] = None
+    output_values: typing.List[NodeOutputCompiledValue]
+    mocked: typing.Optional[bool] = None
     state: typing.Literal["FULFILLED"] = "FULFILLED"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class WorkflowNodeResultEvent_Rejected(RejectedWorkflowNodeResultEvent):
+class WorkflowNodeResultEvent_Rejected(pydantic_v1.BaseModel):
+    id: str
+    node_id: str
+    node_result_id: str
+    ts: typing.Optional[dt.datetime] = None
+    data: typing.Optional[WorkflowNodeResultData] = None
+    source_execution_id: typing.Optional[str] = None
+    error: WorkflowEventError
     state: typing.Literal["REJECTED"] = "REJECTED"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
 WorkflowNodeResultEvent = typing.Union[

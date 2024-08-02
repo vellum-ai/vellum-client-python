@@ -2,97 +2,178 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import typing
 
-from .basic_vectorizer_intfloat_multilingual_e_5_large_request import BasicVectorizerIntfloatMultilingualE5LargeRequest
-from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_cos_v_1_request import (
-    BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request,
-)
-from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request import (
-    BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
-)
-from .hkunlp_instructor_xl_vectorizer_request import HkunlpInstructorXlVectorizerRequest
-from .open_ai_vectorizer_text_embedding_3_large_request import OpenAiVectorizerTextEmbedding3LargeRequest
-from .open_ai_vectorizer_text_embedding_3_small_request import OpenAiVectorizerTextEmbedding3SmallRequest
-from .open_ai_vectorizer_text_embedding_ada_002_request import OpenAiVectorizerTextEmbeddingAda002Request
+from ..core.datetime_utils import serialize_datetime
+from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
+from .instructor_vectorizer_config_request import InstructorVectorizerConfigRequest
+from .open_ai_vectorizer_config_request import OpenAiVectorizerConfigRequest
 
 
-class IndexingConfigVectorizerRequest_TextEmbedding3Small(OpenAiVectorizerTextEmbedding3SmallRequest):
+class IndexingConfigVectorizerRequest_TextEmbedding3Small(pydantic_v1.BaseModel):
+    config: OpenAiVectorizerConfigRequest
     model_name: typing.Literal["text-embedding-3-small"] = "text-embedding-3-small"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class IndexingConfigVectorizerRequest_TextEmbedding3Large(OpenAiVectorizerTextEmbedding3LargeRequest):
+class IndexingConfigVectorizerRequest_TextEmbedding3Large(pydantic_v1.BaseModel):
+    config: OpenAiVectorizerConfigRequest
     model_name: typing.Literal["text-embedding-3-large"] = "text-embedding-3-large"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class IndexingConfigVectorizerRequest_TextEmbeddingAda002(OpenAiVectorizerTextEmbeddingAda002Request):
+class IndexingConfigVectorizerRequest_TextEmbeddingAda002(pydantic_v1.BaseModel):
+    config: OpenAiVectorizerConfigRequest
     model_name: typing.Literal["text-embedding-ada-002"] = "text-embedding-ada-002"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class IndexingConfigVectorizerRequest_IntfloatMultilingualE5Large(BasicVectorizerIntfloatMultilingualE5LargeRequest):
+class IndexingConfigVectorizerRequest_IntfloatMultilingualE5Large(pydantic_v1.BaseModel):
+    config: typing.Optional[typing.Dict[str, typing.Any]] = None
     model_name: typing.Literal["intfloat/multilingual-e5-large"] = "intfloat/multilingual-e5-large"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class IndexingConfigVectorizerRequest_SentenceTransformersMultiQaMpnetBaseCosV1(
-    BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
-):
+class IndexingConfigVectorizerRequest_SentenceTransformersMultiQaMpnetBaseCosV1(pydantic_v1.BaseModel):
+    config: typing.Optional[typing.Dict[str, typing.Any]] = None
     model_name: typing.Literal[
         "sentence-transformers/multi-qa-mpnet-base-cos-v1"
     ] = "sentence-transformers/multi-qa-mpnet-base-cos-v1"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class IndexingConfigVectorizerRequest_SentenceTransformersMultiQaMpnetBaseDotV1(
-    BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
-):
+class IndexingConfigVectorizerRequest_SentenceTransformersMultiQaMpnetBaseDotV1(pydantic_v1.BaseModel):
+    config: typing.Optional[typing.Dict[str, typing.Any]] = None
     model_name: typing.Literal[
         "sentence-transformers/multi-qa-mpnet-base-dot-v1"
     ] = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
-class IndexingConfigVectorizerRequest_HkunlpInstructorXl(HkunlpInstructorXlVectorizerRequest):
+class IndexingConfigVectorizerRequest_HkunlpInstructorXl(pydantic_v1.BaseModel):
+    config: InstructorVectorizerConfigRequest
     model_name: typing.Literal["hkunlp/instructor-xl"] = "hkunlp/instructor-xl"
 
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
     class Config:
         frozen = True
         smart_union = True
-        allow_population_by_field_name = True
-        populate_by_name = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
 
 
 IndexingConfigVectorizerRequest = typing.Union[

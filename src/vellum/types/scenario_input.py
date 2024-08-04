@@ -34,6 +34,30 @@ class ScenarioInput_String(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
+class ScenarioInput_Json(pydantic_v1.BaseModel):
+    value: typing.Any
+    input_variable_id: str
+    type: typing.Literal["JSON"] = "JSON"
+
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
+    class Config:
+        frozen = True
+        smart_union = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
+
+
 class ScenarioInput_ChatHistory(pydantic_v1.BaseModel):
     value: typing.Optional[typing.List[ChatMessage]] = None
     input_variable_id: str
@@ -58,4 +82,4 @@ class ScenarioInput_ChatHistory(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
-ScenarioInput = typing.Union[ScenarioInput_String, ScenarioInput_ChatHistory]
+ScenarioInput = typing.Union[ScenarioInput_String, ScenarioInput_Json, ScenarioInput_ChatHistory]

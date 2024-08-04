@@ -244,7 +244,7 @@ class MlModelsClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this ml model.
+            Either the ML Model's ID or its unique name
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -293,7 +293,7 @@ class MlModelsClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this ml model.
+            Either the ML Model's ID or its unique name
 
         display_config : typing.Optional[MlModelDisplayConfigRequest]
             Configuration for how to display the ML Model.
@@ -355,7 +355,7 @@ class MlModelsClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this ml model.
+            Either the ML Model's ID or its unique name
 
         display_config : typing.Optional[MlModelDisplayConfigRequest]
             Configuration for how to display the ML Model.
@@ -642,7 +642,7 @@ class AsyncMlModelsClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this ml model.
+            Either the ML Model's ID or its unique name
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -699,7 +699,7 @@ class AsyncMlModelsClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this ml model.
+            Either the ML Model's ID or its unique name
 
         display_config : typing.Optional[MlModelDisplayConfigRequest]
             Configuration for how to display the ML Model.
@@ -769,7 +769,7 @@ class AsyncMlModelsClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this ml model.
+            Either the ML Model's ID or its unique name
 
         display_config : typing.Optional[MlModelDisplayConfigRequest]
             Configuration for how to display the ML Model.

@@ -3147,7 +3147,7 @@ client.ml_models.retrieve(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this ml model.
+**id:** `str` — Either the ML Model's ID or its unique name
     
 </dd>
 </dl>
@@ -3217,7 +3217,7 @@ client.ml_models.update(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this ml model.
+**id:** `str` — Either the ML Model's ID or its unique name
     
 </dd>
 </dl>
@@ -3310,7 +3310,7 @@ client.ml_models.partial_update(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this ml model.
+**id:** `str` — Either the ML Model's ID or its unique name
     
 </dd>
 </dl>

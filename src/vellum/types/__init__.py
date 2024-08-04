@@ -279,9 +279,11 @@ from .ml_model_tokenizer_config_request import (
 )
 from .ml_model_usage import MlModelUsage
 from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
+from .named_scenario_input_json_variable_value_request import NamedScenarioInputJsonVariableValueRequest
 from .named_scenario_input_request import (
     NamedScenarioInputRequest,
     NamedScenarioInputRequest_ChatHistory,
+    NamedScenarioInputRequest_Json,
     NamedScenarioInputRequest_String,
 )
 from .named_scenario_input_string_variable_value_request import NamedScenarioInputStringVariableValueRequest
@@ -454,8 +456,9 @@ from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
 from .release_tag_source import ReleaseTagSource
 from .replace_test_suite_test_case_request import ReplaceTestSuiteTestCaseRequest
 from .sandbox_scenario import SandboxScenario
-from .scenario_input import ScenarioInput, ScenarioInput_ChatHistory, ScenarioInput_String
+from .scenario_input import ScenarioInput, ScenarioInput_ChatHistory, ScenarioInput_Json, ScenarioInput_String
 from .scenario_input_chat_history_variable_value import ScenarioInputChatHistoryVariableValue
+from .scenario_input_json_variable_value import ScenarioInputJsonVariableValue
 from .scenario_input_string_variable_value import ScenarioInputStringVariableValue
 from .search_filters_request import SearchFiltersRequest
 from .search_node_result import SearchNodeResult
@@ -987,8 +990,10 @@ __all__ = [
     "MlModelTokenizerConfig_Tiktoken",
     "MlModelUsage",
     "NamedScenarioInputChatHistoryVariableValueRequest",
+    "NamedScenarioInputJsonVariableValueRequest",
     "NamedScenarioInputRequest",
     "NamedScenarioInputRequest_ChatHistory",
+    "NamedScenarioInputRequest_Json",
     "NamedScenarioInputRequest_String",
     "NamedScenarioInputStringVariableValueRequest",
     "NamedTestCaseArrayVariableValue",
@@ -1146,8 +1151,10 @@ __all__ = [
     "SandboxScenario",
     "ScenarioInput",
     "ScenarioInputChatHistoryVariableValue",
+    "ScenarioInputJsonVariableValue",
     "ScenarioInputStringVariableValue",
     "ScenarioInput_ChatHistory",
+    "ScenarioInput_Json",
     "ScenarioInput_String",
     "SearchFiltersRequest",
     "SearchNodeResult",

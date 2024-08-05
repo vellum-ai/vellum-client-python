@@ -16,7 +16,6 @@ class MlModelExecConfig(pydantic_v1.BaseModel):
     base_url: str
     metadata: typing.Dict[str, typing.Any]
     features: typing.List[MlModelFeature]
-    force_system_credentials: typing.Optional[bool] = None
     tokenizer_config: typing.Optional[MlModelTokenizerConfig] = None
     request_config: typing.Optional[MlModelRequestConfig] = None
     response_config: typing.Optional[MlModelResponseConfig] = None

@@ -85,9 +85,9 @@ class MlModelsClient:
         *,
         name: str,
         family: MlModelFamily,
+        hosted_by: HostedByEnum,
+        developed_by: MlModelDeveloper,
         exec_config: MlModelExecConfigRequest,
-        hosted_by: typing.Optional[HostedByEnum] = OMIT,
-        developed_by: typing.Optional[MlModelDeveloper] = OMIT,
         parameter_config: typing.Optional[MlModelParameterConfigRequest] = OMIT,
         display_config: typing.Optional[MlModelDisplayConfigRequest] = OMIT,
         visibility: typing.Optional[VisibilityEnum] = OMIT,
@@ -125,10 +125,7 @@ class MlModelsClient:
             * `YI` - Yi
             * `ZEPHYR` - Zephyr
 
-        exec_config : MlModelExecConfigRequest
-            Configuration for how to execute the ML Model.
-
-        hosted_by : typing.Optional[HostedByEnum]
+        hosted_by : HostedByEnum
             The organization hosting the ML Model.
 
             * `ANTHROPIC` - ANTHROPIC
@@ -149,7 +146,7 @@ class MlModelsClient:
             * `PYQ` - PYQ
             * `REPLICATE` - REPLICATE
 
-        developed_by : typing.Optional[MlModelDeveloper]
+        developed_by : MlModelDeveloper
             The organization that developed the ML Model.
 
             * `01_AI` - 01_AI
@@ -170,6 +167,9 @@ class MlModelsClient:
             * `OPENPIPE` - OPENPIPE
             * `TII` - TII
             * `WIZARDLM` - WIZARDLM
+
+        exec_config : MlModelExecConfigRequest
+            Configuration for how to execute the ML Model.
 
         parameter_config : typing.Optional[MlModelParameterConfigRequest]
             Configuration for the ML Model's parameters.
@@ -204,6 +204,8 @@ class MlModelsClient:
         client.ml_models.create(
             name="name",
             family="CAPYBARA",
+            hosted_by="ANTHROPIC",
+            developed_by="01_AI",
             exec_config=MlModelExecConfigRequest(
                 model_identifier="model_identifier",
                 base_url="base_url",
@@ -475,9 +477,9 @@ class AsyncMlModelsClient:
         *,
         name: str,
         family: MlModelFamily,
+        hosted_by: HostedByEnum,
+        developed_by: MlModelDeveloper,
         exec_config: MlModelExecConfigRequest,
-        hosted_by: typing.Optional[HostedByEnum] = OMIT,
-        developed_by: typing.Optional[MlModelDeveloper] = OMIT,
         parameter_config: typing.Optional[MlModelParameterConfigRequest] = OMIT,
         display_config: typing.Optional[MlModelDisplayConfigRequest] = OMIT,
         visibility: typing.Optional[VisibilityEnum] = OMIT,
@@ -515,10 +517,7 @@ class AsyncMlModelsClient:
             * `YI` - Yi
             * `ZEPHYR` - Zephyr
 
-        exec_config : MlModelExecConfigRequest
-            Configuration for how to execute the ML Model.
-
-        hosted_by : typing.Optional[HostedByEnum]
+        hosted_by : HostedByEnum
             The organization hosting the ML Model.
 
             * `ANTHROPIC` - ANTHROPIC
@@ -539,7 +538,7 @@ class AsyncMlModelsClient:
             * `PYQ` - PYQ
             * `REPLICATE` - REPLICATE
 
-        developed_by : typing.Optional[MlModelDeveloper]
+        developed_by : MlModelDeveloper
             The organization that developed the ML Model.
 
             * `01_AI` - 01_AI
@@ -560,6 +559,9 @@ class AsyncMlModelsClient:
             * `OPENPIPE` - OPENPIPE
             * `TII` - TII
             * `WIZARDLM` - WIZARDLM
+
+        exec_config : MlModelExecConfigRequest
+            Configuration for how to execute the ML Model.
 
         parameter_config : typing.Optional[MlModelParameterConfigRequest]
             Configuration for the ML Model's parameters.
@@ -599,6 +601,8 @@ class AsyncMlModelsClient:
             await client.ml_models.create(
                 name="name",
                 family="CAPYBARA",
+                hosted_by="ANTHROPIC",
+                developed_by="01_AI",
                 exec_config=MlModelExecConfigRequest(
                     model_identifier="model_identifier",
                     base_url="base_url",

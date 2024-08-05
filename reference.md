@@ -2928,6 +2928,8 @@ client = Vellum(
 client.ml_models.create(
     name="name",
     family="CAPYBARA",
+    hosted_by="ANTHROPIC",
+    developed_by="01_AI",
     exec_config=MlModelExecConfigRequest(
         model_identifier="model_identifier",
         base_url="base_url",
@@ -2989,15 +2991,7 @@ The family of the ML Model.
 <dl>
 <dd>
 
-**exec_config:** `MlModelExecConfigRequest` — Configuration for how to execute the ML Model.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**hosted_by:** `typing.Optional[HostedByEnum]` 
+**hosted_by:** `HostedByEnum` 
 
 The organization hosting the ML Model.
 
@@ -3025,7 +3019,7 @@ The organization hosting the ML Model.
 <dl>
 <dd>
 
-**developed_by:** `typing.Optional[MlModelDeveloper]` 
+**developed_by:** `MlModelDeveloper` 
 
 The organization that developed the ML Model.
 
@@ -3047,6 +3041,14 @@ The organization that developed the ML Model.
 * `OPENPIPE` - OPENPIPE
 * `TII` - TII
 * `WIZARDLM` - WIZARDLM
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**exec_config:** `MlModelExecConfigRequest` — Configuration for how to execute the ML Model.
     
 </dd>
 </dl>

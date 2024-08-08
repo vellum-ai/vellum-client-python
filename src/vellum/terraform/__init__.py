@@ -17,7 +17,9 @@ from ._jsii import *
 
 __all__ = [
     "data_vellum_document_index",
+    "data_vellum_ml_model",
     "document_index",
+    "ml_model",
     "provider",
 ]
 

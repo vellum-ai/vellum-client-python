@@ -1,7 +1,7 @@
 '''
 # `provider`
 
-Refer to the Terraform Registry for docs: [`vellum`](https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs).
+Refer to the Terraform Registry for docs: [`vellum`](https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs).
 '''
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
@@ -29,7 +29,7 @@ class VellumProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="vellum-ai_vellum.provider.VellumProvider",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs vellum}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs vellum}.'''
 
     def __init__(
         self,
@@ -40,13 +40,13 @@ class VellumProvider(
         api_key: typing.Optional[builtins.str] = None,
         base_url: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs vellum} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs vellum} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#alias VellumProvider#alias}
-        :param api_key: API Key to authenticate with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#api_key VellumProvider#api_key}
-        :param base_url: Base URL to use with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#base_url VellumProvider#base_url}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#alias VellumProvider#alias}
+        :param api_key: API Key to authenticate with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#api_key VellumProvider#api_key}
+        :param base_url: Base URL to use with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#base_url VellumProvider#base_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8f332a1b6664893e57a3554abbbfd334296d68a0c02222521351772fec263177)
@@ -69,7 +69,7 @@ class VellumProvider(
 
         :param scope: The scope in which to define this construct.
         :param import_to_id: The construct id used in the generated config for the VellumProvider to import.
-        :param import_from_id: The id of the existing VellumProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#import import section} in the documentation of this resource for the id to use
+        :param import_from_id: The id of the existing VellumProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#import import section} in the documentation of this resource for the id to use
         :param provider: ? Optional instance of the provider where the VellumProvider to import is found.
         '''
         if __debug__:
@@ -171,9 +171,9 @@ class VellumProviderConfig:
         base_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#alias VellumProvider#alias}
-        :param api_key: API Key to authenticate with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#api_key VellumProvider#api_key}
-        :param base_url: Base URL to use with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#base_url VellumProvider#base_url}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#alias VellumProvider#alias}
+        :param api_key: API Key to authenticate with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#api_key VellumProvider#api_key}
+        :param base_url: Base URL to use with the Vellum API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#base_url VellumProvider#base_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb8c32f1d43f1344224f7a690abc6e2489c4dff67cb93921483ed2cc4b5410e1)
@@ -192,7 +192,7 @@ class VellumProviderConfig:
     def alias(self) -> typing.Optional[builtins.str]:
         '''Alias name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#alias VellumProvider#alias}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#alias VellumProvider#alias}
         '''
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -201,7 +201,7 @@ class VellumProviderConfig:
     def api_key(self) -> typing.Optional[builtins.str]:
         '''API Key to authenticate with the Vellum API.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#api_key VellumProvider#api_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#api_key VellumProvider#api_key}
         '''
         result = self._values.get("api_key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -210,7 +210,7 @@ class VellumProviderConfig:
     def base_url(self) -> typing.Optional[builtins.str]:
         '''Base URL to use with the Vellum API.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.6/docs#base_url VellumProvider#base_url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/vellum-ai/vellum/0.0.7/docs#base_url VellumProvider#base_url}
         '''
         result = self._values.get("base_url")
         return typing.cast(typing.Optional[builtins.str], result)

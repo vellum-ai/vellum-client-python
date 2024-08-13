@@ -3227,6 +3227,22 @@ client.ml_models.update(
 <dl>
 <dd>
 
+**exec_config:** `typing.Optional[MlModelExecConfigRequest]` — Configuration for how to execute the ML Model.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**parameter_config:** `typing.Optional[MlModelParameterConfigRequest]` — Configuration for the ML Model's parameters.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **display_config:** `typing.Optional[MlModelDisplayConfigRequest]` — Configuration for how to display the ML Model.
     
 </dd>
@@ -3313,6 +3329,22 @@ client.ml_models.partial_update(
 <dd>
 
 **id:** `str` — Either the ML Model's ID or its unique name
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**exec_config:** `typing.Optional[MlModelExecConfigRequest]` — Configuration for how to execute the ML Model.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**parameter_config:** `typing.Optional[MlModelParameterConfigRequest]` — Configuration for the ML Model's parameters.
     
 </dd>
 </dl>

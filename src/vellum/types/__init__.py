@@ -399,6 +399,7 @@ from .open_api_property import (
     OpenApiProperty_Number,
     OpenApiProperty_Object,
     OpenApiProperty_OneOf,
+    OpenApiProperty_Ref,
     OpenApiProperty_String,
 )
 from .open_api_property_request import (
@@ -410,8 +411,11 @@ from .open_api_property_request import (
     OpenApiPropertyRequest_Number,
     OpenApiPropertyRequest_Object,
     OpenApiPropertyRequest_OneOf,
+    OpenApiPropertyRequest_Ref,
     OpenApiPropertyRequest_String,
 )
+from .open_api_ref_property import OpenApiRefProperty
+from .open_api_ref_property_request import OpenApiRefPropertyRequest
 from .open_api_string_property import OpenApiStringProperty
 from .open_api_string_property_request import OpenApiStringPropertyRequest
 from .paginated_document_index_read_list import PaginatedDocumentIndexReadList
@@ -1100,6 +1104,7 @@ __all__ = [
     "OpenApiPropertyRequest_Number",
     "OpenApiPropertyRequest_Object",
     "OpenApiPropertyRequest_OneOf",
+    "OpenApiPropertyRequest_Ref",
     "OpenApiPropertyRequest_String",
     "OpenApiProperty_Array",
     "OpenApiProperty_Boolean",
@@ -1108,7 +1113,10 @@ __all__ = [
     "OpenApiProperty_Number",
     "OpenApiProperty_Object",
     "OpenApiProperty_OneOf",
+    "OpenApiProperty_Ref",
     "OpenApiProperty_String",
+    "OpenApiRefProperty",
+    "OpenApiRefPropertyRequest",
     "OpenApiStringProperty",
     "OpenApiStringPropertyRequest",
     "PaginatedDocumentIndexReadList",

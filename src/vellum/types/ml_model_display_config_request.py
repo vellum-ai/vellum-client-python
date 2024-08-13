@@ -12,6 +12,10 @@ class MlModelDisplayConfigRequest(pydantic_v1.BaseModel):
     label: str
     description: str
     tags: typing.List[MlModelDisplayTag]
+    default_display_priority: typing.Optional[float] = pydantic_v1.Field(default=None)
+    """
+    Can only be set when using an internal service token.
+    """
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

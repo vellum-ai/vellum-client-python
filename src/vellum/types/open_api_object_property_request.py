@@ -11,7 +11,7 @@ from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 class OpenApiObjectPropertyRequest(pydantic_v1.BaseModel):
     """
-    An OpenAPI specification of a parameter with type 'object'
+    An OpenAPI specification of a property with type 'object'
     """
 
     properties: typing.Optional[typing.Dict[str, typing.Optional[OpenApiPropertyRequest]]] = None

@@ -11,7 +11,7 @@ from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 class OpenApiOneOfProperty(pydantic_v1.BaseModel):
     """
-    An OpenAPI specification of a parameter with type 'oneOf'
+    An OpenAPI specification of a property with type 'oneOf'
     """
 
     one_of: typing.List[OpenApiProperty] = pydantic_v1.Field(alias="oneOf")

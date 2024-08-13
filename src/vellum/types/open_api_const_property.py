@@ -9,7 +9,7 @@ from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 class OpenApiConstProperty(pydantic_v1.BaseModel):
     """
-    An OpenAPI specification of a parameter with type 'const'
+    An OpenAPI specification of a property with type 'const'
     """
 
     title: typing.Optional[str] = None

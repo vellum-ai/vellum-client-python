@@ -285,6 +285,8 @@ class MlModelsClient:
         self,
         id: str,
         *,
+        exec_config: typing.Optional[MlModelExecConfigRequest] = OMIT,
+        parameter_config: typing.Optional[MlModelParameterConfigRequest] = OMIT,
         display_config: typing.Optional[MlModelDisplayConfigRequest] = OMIT,
         visibility: typing.Optional[VisibilityEnum] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -296,6 +298,12 @@ class MlModelsClient:
         ----------
         id : str
             Either the ML Model's ID or its unique name
+
+        exec_config : typing.Optional[MlModelExecConfigRequest]
+            Configuration for how to execute the ML Model.
+
+        parameter_config : typing.Optional[MlModelParameterConfigRequest]
+            Configuration for the ML Model's parameters.
 
         display_config : typing.Optional[MlModelDisplayConfigRequest]
             Configuration for how to display the ML Model.
@@ -331,7 +339,12 @@ class MlModelsClient:
             f"v1/ml-models/{jsonable_encoder(id)}",
             base_url=self._client_wrapper.get_environment().default,
             method="PUT",
-            json={"display_config": display_config, "visibility": visibility},
+            json={
+                "exec_config": exec_config,
+                "parameter_config": parameter_config,
+                "display_config": display_config,
+                "visibility": visibility,
+            },
             request_options=request_options,
             omit=OMIT,
         )
@@ -347,6 +360,8 @@ class MlModelsClient:
         self,
         id: str,
         *,
+        exec_config: typing.Optional[MlModelExecConfigRequest] = OMIT,
+        parameter_config: typing.Optional[MlModelParameterConfigRequest] = OMIT,
         display_config: typing.Optional[MlModelDisplayConfigRequest] = OMIT,
         visibility: typing.Optional[VisibilityEnum] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -358,6 +373,12 @@ class MlModelsClient:
         ----------
         id : str
             Either the ML Model's ID or its unique name
+
+        exec_config : typing.Optional[MlModelExecConfigRequest]
+            Configuration for how to execute the ML Model.
+
+        parameter_config : typing.Optional[MlModelParameterConfigRequest]
+            Configuration for the ML Model's parameters.
 
         display_config : typing.Optional[MlModelDisplayConfigRequest]
             Configuration for how to display the ML Model.
@@ -393,7 +414,12 @@ class MlModelsClient:
             f"v1/ml-models/{jsonable_encoder(id)}",
             base_url=self._client_wrapper.get_environment().default,
             method="PATCH",
-            json={"display_config": display_config, "visibility": visibility},
+            json={
+                "exec_config": exec_config,
+                "parameter_config": parameter_config,
+                "display_config": display_config,
+                "visibility": visibility,
+            },
             request_options=request_options,
             omit=OMIT,
         )
@@ -693,6 +719,8 @@ class AsyncMlModelsClient:
         self,
         id: str,
         *,
+        exec_config: typing.Optional[MlModelExecConfigRequest] = OMIT,
+        parameter_config: typing.Optional[MlModelParameterConfigRequest] = OMIT,
         display_config: typing.Optional[MlModelDisplayConfigRequest] = OMIT,
         visibility: typing.Optional[VisibilityEnum] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -704,6 +732,12 @@ class AsyncMlModelsClient:
         ----------
         id : str
             Either the ML Model's ID or its unique name
+
+        exec_config : typing.Optional[MlModelExecConfigRequest]
+            Configuration for how to execute the ML Model.
+
+        parameter_config : typing.Optional[MlModelParameterConfigRequest]
+            Configuration for the ML Model's parameters.
 
         display_config : typing.Optional[MlModelDisplayConfigRequest]
             Configuration for how to display the ML Model.
@@ -747,7 +781,12 @@ class AsyncMlModelsClient:
             f"v1/ml-models/{jsonable_encoder(id)}",
             base_url=self._client_wrapper.get_environment().default,
             method="PUT",
-            json={"display_config": display_config, "visibility": visibility},
+            json={
+                "exec_config": exec_config,
+                "parameter_config": parameter_config,
+                "display_config": display_config,
+                "visibility": visibility,
+            },
             request_options=request_options,
             omit=OMIT,
         )
@@ -763,6 +802,8 @@ class AsyncMlModelsClient:
         self,
         id: str,
         *,
+        exec_config: typing.Optional[MlModelExecConfigRequest] = OMIT,
+        parameter_config: typing.Optional[MlModelParameterConfigRequest] = OMIT,
         display_config: typing.Optional[MlModelDisplayConfigRequest] = OMIT,
         visibility: typing.Optional[VisibilityEnum] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -774,6 +815,12 @@ class AsyncMlModelsClient:
         ----------
         id : str
             Either the ML Model's ID or its unique name
+
+        exec_config : typing.Optional[MlModelExecConfigRequest]
+            Configuration for how to execute the ML Model.
+
+        parameter_config : typing.Optional[MlModelParameterConfigRequest]
+            Configuration for the ML Model's parameters.
 
         display_config : typing.Optional[MlModelDisplayConfigRequest]
             Configuration for how to display the ML Model.
@@ -817,7 +864,12 @@ class AsyncMlModelsClient:
             f"v1/ml-models/{jsonable_encoder(id)}",
             base_url=self._client_wrapper.get_environment().default,
             method="PATCH",
-            json={"display_config": display_config, "visibility": visibility},
+            json={
+                "exec_config": exec_config,
+                "parameter_config": parameter_config,
+                "display_config": display_config,
+                "visibility": visibility,
+            },
             request_options=request_options,
             omit=OMIT,
         )

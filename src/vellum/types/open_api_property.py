@@ -239,6 +239,31 @@ class OpenApiProperty_Const(pydantic_v1.BaseModel):
         json_encoders = {dt.datetime: serialize_datetime}
 
 
+class OpenApiProperty_Ref(pydantic_v1.BaseModel):
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
+    ref: str
+    type: typing.Literal["ref"] = "ref"
+
+    def json(self, **kwargs: typing.Any) -> str:
+        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        return super().json(**kwargs_with_defaults)
+
+    def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
+        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+
+        return deep_union_pydantic_dicts(
+            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+        )
+
+    class Config:
+        frozen = True
+        smart_union = True
+        extra = pydantic_v1.Extra.allow
+        json_encoders = {dt.datetime: serialize_datetime}
+
+
 OpenApiProperty = typing.Union[
     OpenApiProperty_Array,
     OpenApiProperty_Object,
@@ -248,4 +273,5 @@ OpenApiProperty = typing.Union[
     OpenApiProperty_Boolean,
     OpenApiProperty_OneOf,
     OpenApiProperty_Const,
+    OpenApiProperty_Ref,
 ]

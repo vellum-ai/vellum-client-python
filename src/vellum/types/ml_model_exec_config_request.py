@@ -16,6 +16,11 @@ class MlModelExecConfigRequest(pydantic_v1.BaseModel):
     base_url: str
     metadata: typing.Dict[str, typing.Any]
     features: typing.List[MlModelFeature]
+    force_system_credentials: typing.Optional[bool] = pydantic_v1.Field(default=None)
+    """
+    Can only be set when using an internal service token.
+    """
+
     tokenizer_config: typing.Optional[MlModelTokenizerConfigRequest] = None
     request_config: typing.Optional[MlModelRequestConfigRequest] = None
     response_config: typing.Optional[MlModelResponseConfigRequest] = None

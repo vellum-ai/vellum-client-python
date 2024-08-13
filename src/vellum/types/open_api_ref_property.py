@@ -5,25 +5,16 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
-from .ml_model_feature import MlModelFeature
-from .ml_model_request_config import MlModelRequestConfig
-from .ml_model_response_config import MlModelResponseConfig
-from .ml_model_tokenizer_config import MlModelTokenizerConfig
 
 
-class MlModelExecConfig(pydantic_v1.BaseModel):
-    model_identifier: str
-    base_url: str
-    metadata: typing.Dict[str, typing.Any]
-    features: typing.List[MlModelFeature]
-    force_system_credentials: typing.Optional[bool] = pydantic_v1.Field(default=None)
+class OpenApiRefProperty(pydantic_v1.BaseModel):
     """
-    Can only be set when using an internal service token.
+    An OpenAPI specification of a property that is a URI-reference to another schema
     """
 
-    tokenizer_config: typing.Optional[MlModelTokenizerConfig] = None
-    request_config: typing.Optional[MlModelRequestConfig] = None
-    response_config: typing.Optional[MlModelResponseConfig] = None
+    title: typing.Optional[str] = None
+    description: typing.Optional[str] = None
+    ref: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

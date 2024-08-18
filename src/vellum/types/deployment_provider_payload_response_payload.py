@@ -2,4 +2,4 @@
 
 import typing
 
-DeploymentProviderPayloadResponsePayload = typing.Union[typing.Dict[str, typing.Any], str]
+DeploymentProviderPayloadResponsePayload = typing.Union[typing.Dict[str, typing.Optional[typing.Any]], str]

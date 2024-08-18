@@ -4,46 +4,12 @@ from .add_openai_api_key_enum import AddOpenaiApiKeyEnum
 from .api_node_result import ApiNodeResult
 from .api_node_result_data import ApiNodeResultData
 from .array_chat_message_content import ArrayChatMessageContent
-from .array_chat_message_content_item import (
-    ArrayChatMessageContentItem,
-    ArrayChatMessageContentItem_FunctionCall,
-    ArrayChatMessageContentItem_Image,
-    ArrayChatMessageContentItem_String,
-)
-from .array_chat_message_content_item_request import (
-    ArrayChatMessageContentItemRequest,
-    ArrayChatMessageContentItemRequest_FunctionCall,
-    ArrayChatMessageContentItemRequest_Image,
-    ArrayChatMessageContentItemRequest_String,
-)
+from .array_chat_message_content_item import ArrayChatMessageContentItem
+from .array_chat_message_content_item_request import ArrayChatMessageContentItemRequest
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
-from .array_variable_value_item import (
-    ArrayVariableValueItem,
-    ArrayVariableValueItem_Error,
-    ArrayVariableValueItem_FunctionCall,
-    ArrayVariableValueItem_Image,
-    ArrayVariableValueItem_Json,
-    ArrayVariableValueItem_Number,
-    ArrayVariableValueItem_String,
-)
-from .array_vellum_value_item import (
-    ArrayVellumValueItem,
-    ArrayVellumValueItem_Error,
-    ArrayVellumValueItem_FunctionCall,
-    ArrayVellumValueItem_Image,
-    ArrayVellumValueItem_Json,
-    ArrayVellumValueItem_Number,
-    ArrayVellumValueItem_String,
-)
-from .array_vellum_value_item_request import (
-    ArrayVellumValueItemRequest,
-    ArrayVellumValueItemRequest_Error,
-    ArrayVellumValueItemRequest_FunctionCall,
-    ArrayVellumValueItemRequest_Image,
-    ArrayVellumValueItemRequest_Json,
-    ArrayVellumValueItemRequest_Number,
-    ArrayVellumValueItemRequest_String,
-)
+from .array_variable_value_item import ArrayVariableValueItem
+from .array_vellum_value_item import ArrayVellumValueItem
+from .array_vellum_value_item_request import ArrayVellumValueItemRequest
 from .basic_vectorizer_intfloat_multilingual_e_5_large import BasicVectorizerIntfloatMultilingualE5Large
 from .basic_vectorizer_intfloat_multilingual_e_5_large_request import BasicVectorizerIntfloatMultilingualE5LargeRequest
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_cos_v_1 import (
@@ -60,20 +26,8 @@ from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request
 )
 from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_message import ChatMessage
-from .chat_message_content import (
-    ChatMessageContent,
-    ChatMessageContent_Array,
-    ChatMessageContent_FunctionCall,
-    ChatMessageContent_Image,
-    ChatMessageContent_String,
-)
-from .chat_message_content_request import (
-    ChatMessageContentRequest,
-    ChatMessageContentRequest_Array,
-    ChatMessageContentRequest_FunctionCall,
-    ChatMessageContentRequest_Image,
-    ChatMessageContentRequest_String,
-)
+from .chat_message_content import ChatMessageContent
+from .chat_message_content_request import ChatMessageContentRequest
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
 from .code_execution_node_array_result import CodeExecutionNodeArrayResult
@@ -84,21 +38,13 @@ from .code_execution_node_json_result import CodeExecutionNodeJsonResult
 from .code_execution_node_number_result import CodeExecutionNodeNumberResult
 from .code_execution_node_result import CodeExecutionNodeResult
 from .code_execution_node_result_data import CodeExecutionNodeResultData
-from .code_execution_node_result_output import (
-    CodeExecutionNodeResultOutput,
-    CodeExecutionNodeResultOutput_Array,
-    CodeExecutionNodeResultOutput_ChatHistory,
-    CodeExecutionNodeResultOutput_Error,
-    CodeExecutionNodeResultOutput_FunctionCall,
-    CodeExecutionNodeResultOutput_Json,
-    CodeExecutionNodeResultOutput_Number,
-    CodeExecutionNodeResultOutput_SearchResults,
-    CodeExecutionNodeResultOutput_String,
-)
+from .code_execution_node_result_output import CodeExecutionNodeResultOutput
 from .code_execution_node_search_results_result import CodeExecutionNodeSearchResultsResult
 from .code_execution_node_string_result import CodeExecutionNodeStringResult
 from .compile_prompt_deployment_expand_meta_request import CompilePromptDeploymentExpandMetaRequest
 from .compile_prompt_meta import CompilePromptMeta
+from .components_schemas_pdf_search_result_meta_source import ComponentsSchemasPdfSearchResultMetaSource
+from .components_schemas_pdf_search_result_meta_source_request import ComponentsSchemasPdfSearchResultMetaSourceRequest
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
@@ -108,18 +54,8 @@ from .deployment_read import DeploymentRead
 from .deployment_release_tag_deployment_history_item import DeploymentReleaseTagDeploymentHistoryItem
 from .deployment_release_tag_read import DeploymentReleaseTagRead
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
-from .document_index_chunking import (
-    DocumentIndexChunking,
-    DocumentIndexChunking_ReductoChunker,
-    DocumentIndexChunking_SentenceChunker,
-    DocumentIndexChunking_TokenOverlappingWindowChunker,
-)
-from .document_index_chunking_request import (
-    DocumentIndexChunkingRequest,
-    DocumentIndexChunkingRequest_ReductoChunker,
-    DocumentIndexChunkingRequest_SentenceChunker,
-    DocumentIndexChunkingRequest_TokenOverlappingWindowChunker,
-)
+from .document_index_chunking import DocumentIndexChunking
+from .document_index_chunking_request import DocumentIndexChunkingRequest
 from .document_index_indexing_config import DocumentIndexIndexingConfig
 from .document_index_indexing_config_request import DocumentIndexIndexingConfigRequest
 from .document_index_read import DocumentIndexRead
@@ -131,24 +67,10 @@ from .environment_enum import EnvironmentEnum
 from .error_variable_value import ErrorVariableValue
 from .error_vellum_value import ErrorVellumValue
 from .error_vellum_value_request import ErrorVellumValueRequest
-from .execute_prompt_event import (
-    ExecutePromptEvent,
-    ExecutePromptEvent_Fulfilled,
-    ExecutePromptEvent_Initiated,
-    ExecutePromptEvent_Rejected,
-    ExecutePromptEvent_Streaming,
-)
-from .execute_prompt_response import (
-    ExecutePromptResponse,
-    ExecutePromptResponse_Fulfilled,
-    ExecutePromptResponse_Rejected,
-)
+from .execute_prompt_event import ExecutePromptEvent
+from .execute_prompt_response import ExecutePromptResponse
 from .execute_workflow_response import ExecuteWorkflowResponse
-from .execute_workflow_workflow_result_event import (
-    ExecuteWorkflowWorkflowResultEvent,
-    ExecuteWorkflowWorkflowResultEvent_Fulfilled,
-    ExecuteWorkflowWorkflowResultEvent_Rejected,
-)
+from .execute_workflow_workflow_result_event import ExecuteWorkflowWorkflowResultEvent
 from .execution_array_vellum_value import ExecutionArrayVellumValue
 from .execution_chat_history_vellum_value import ExecutionChatHistoryVellumValue
 from .execution_error_vellum_value import ExecutionErrorVellumValue
@@ -157,17 +79,7 @@ from .execution_json_vellum_value import ExecutionJsonVellumValue
 from .execution_number_vellum_value import ExecutionNumberVellumValue
 from .execution_search_results_vellum_value import ExecutionSearchResultsVellumValue
 from .execution_string_vellum_value import ExecutionStringVellumValue
-from .execution_vellum_value import (
-    ExecutionVellumValue,
-    ExecutionVellumValue_Array,
-    ExecutionVellumValue_ChatHistory,
-    ExecutionVellumValue_Error,
-    ExecutionVellumValue_FunctionCall,
-    ExecutionVellumValue_Json,
-    ExecutionVellumValue_Number,
-    ExecutionVellumValue_SearchResults,
-    ExecutionVellumValue_String,
-)
+from .execution_vellum_value import ExecutionVellumValue
 from .external_test_case_execution import ExternalTestCaseExecution
 from .external_test_case_execution_request import ExternalTestCaseExecutionRequest
 from .finish_reason_enum import FinishReasonEnum
@@ -205,26 +117,8 @@ from .image_chat_message_content_request import ImageChatMessageContentRequest
 from .image_variable_value import ImageVariableValue
 from .image_vellum_value import ImageVellumValue
 from .image_vellum_value_request import ImageVellumValueRequest
-from .indexing_config_vectorizer import (
-    IndexingConfigVectorizer,
-    IndexingConfigVectorizer_HkunlpInstructorXl,
-    IndexingConfigVectorizer_IntfloatMultilingualE5Large,
-    IndexingConfigVectorizer_SentenceTransformersMultiQaMpnetBaseCosV1,
-    IndexingConfigVectorizer_SentenceTransformersMultiQaMpnetBaseDotV1,
-    IndexingConfigVectorizer_TextEmbedding3Large,
-    IndexingConfigVectorizer_TextEmbedding3Small,
-    IndexingConfigVectorizer_TextEmbeddingAda002,
-)
-from .indexing_config_vectorizer_request import (
-    IndexingConfigVectorizerRequest,
-    IndexingConfigVectorizerRequest_HkunlpInstructorXl,
-    IndexingConfigVectorizerRequest_IntfloatMultilingualE5Large,
-    IndexingConfigVectorizerRequest_SentenceTransformersMultiQaMpnetBaseCosV1,
-    IndexingConfigVectorizerRequest_SentenceTransformersMultiQaMpnetBaseDotV1,
-    IndexingConfigVectorizerRequest_TextEmbedding3Large,
-    IndexingConfigVectorizerRequest_TextEmbedding3Small,
-    IndexingConfigVectorizerRequest_TextEmbeddingAda002,
-)
+from .indexing_config_vectorizer import IndexingConfigVectorizer
+from .indexing_config_vectorizer_request import IndexingConfigVectorizerRequest
 from .indexing_state_enum import IndexingStateEnum
 from .initiated_execute_prompt_event import InitiatedExecutePromptEvent
 from .initiated_prompt_execution_meta import InitiatedPromptExecutionMeta
@@ -267,25 +161,12 @@ from .ml_model_request_config import MlModelRequestConfig
 from .ml_model_request_config_request import MlModelRequestConfigRequest
 from .ml_model_response_config import MlModelResponseConfig
 from .ml_model_response_config_request import MlModelResponseConfigRequest
-from .ml_model_tokenizer_config import (
-    MlModelTokenizerConfig,
-    MlModelTokenizerConfig_HuggingFace,
-    MlModelTokenizerConfig_Tiktoken,
-)
-from .ml_model_tokenizer_config_request import (
-    MlModelTokenizerConfigRequest,
-    MlModelTokenizerConfigRequest_HuggingFace,
-    MlModelTokenizerConfigRequest_Tiktoken,
-)
+from .ml_model_tokenizer_config import MlModelTokenizerConfig
+from .ml_model_tokenizer_config_request import MlModelTokenizerConfigRequest
 from .ml_model_usage import MlModelUsage
 from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
 from .named_scenario_input_json_variable_value_request import NamedScenarioInputJsonVariableValueRequest
-from .named_scenario_input_request import (
-    NamedScenarioInputRequest,
-    NamedScenarioInputRequest_ChatHistory,
-    NamedScenarioInputRequest_Json,
-    NamedScenarioInputRequest_String,
-)
+from .named_scenario_input_request import NamedScenarioInputRequest
 from .named_scenario_input_string_variable_value_request import NamedScenarioInputStringVariableValueRequest
 from .named_test_case_array_variable_value import NamedTestCaseArrayVariableValue
 from .named_test_case_array_variable_value_request import NamedTestCaseArrayVariableValueRequest
@@ -303,28 +184,8 @@ from .named_test_case_search_results_variable_value import NamedTestCaseSearchRe
 from .named_test_case_search_results_variable_value_request import NamedTestCaseSearchResultsVariableValueRequest
 from .named_test_case_string_variable_value import NamedTestCaseStringVariableValue
 from .named_test_case_string_variable_value_request import NamedTestCaseStringVariableValueRequest
-from .named_test_case_variable_value import (
-    NamedTestCaseVariableValue,
-    NamedTestCaseVariableValue_Array,
-    NamedTestCaseVariableValue_ChatHistory,
-    NamedTestCaseVariableValue_Error,
-    NamedTestCaseVariableValue_FunctionCall,
-    NamedTestCaseVariableValue_Json,
-    NamedTestCaseVariableValue_Number,
-    NamedTestCaseVariableValue_SearchResults,
-    NamedTestCaseVariableValue_String,
-)
-from .named_test_case_variable_value_request import (
-    NamedTestCaseVariableValueRequest,
-    NamedTestCaseVariableValueRequest_Array,
-    NamedTestCaseVariableValueRequest_ChatHistory,
-    NamedTestCaseVariableValueRequest_Error,
-    NamedTestCaseVariableValueRequest_FunctionCall,
-    NamedTestCaseVariableValueRequest_Json,
-    NamedTestCaseVariableValueRequest_Number,
-    NamedTestCaseVariableValueRequest_SearchResults,
-    NamedTestCaseVariableValueRequest_String,
-)
+from .named_test_case_variable_value import NamedTestCaseVariableValue
+from .named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
 from .node_input_compiled_array_value import NodeInputCompiledArrayValue
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
 from .node_input_compiled_error_value import NodeInputCompiledErrorValue
@@ -333,17 +194,7 @@ from .node_input_compiled_json_value import NodeInputCompiledJsonValue
 from .node_input_compiled_number_value import NodeInputCompiledNumberValue
 from .node_input_compiled_search_results_value import NodeInputCompiledSearchResultsValue
 from .node_input_compiled_string_value import NodeInputCompiledStringValue
-from .node_input_variable_compiled_value import (
-    NodeInputVariableCompiledValue,
-    NodeInputVariableCompiledValue_Array,
-    NodeInputVariableCompiledValue_ChatHistory,
-    NodeInputVariableCompiledValue_Error,
-    NodeInputVariableCompiledValue_FunctionCall,
-    NodeInputVariableCompiledValue_Json,
-    NodeInputVariableCompiledValue_Number,
-    NodeInputVariableCompiledValue_SearchResults,
-    NodeInputVariableCompiledValue_String,
-)
+from .node_input_variable_compiled_value import NodeInputVariableCompiledValue
 from .node_output_compiled_array_value import NodeOutputCompiledArrayValue
 from .node_output_compiled_chat_history_value import NodeOutputCompiledChatHistoryValue
 from .node_output_compiled_error_value import NodeOutputCompiledErrorValue
@@ -352,17 +203,7 @@ from .node_output_compiled_json_value import NodeOutputCompiledJsonValue
 from .node_output_compiled_number_value import NodeOutputCompiledNumberValue
 from .node_output_compiled_search_results_value import NodeOutputCompiledSearchResultsValue
 from .node_output_compiled_string_value import NodeOutputCompiledStringValue
-from .node_output_compiled_value import (
-    NodeOutputCompiledValue,
-    NodeOutputCompiledValue_Array,
-    NodeOutputCompiledValue_ChatHistory,
-    NodeOutputCompiledValue_Error,
-    NodeOutputCompiledValue_FunctionCall,
-    NodeOutputCompiledValue_Json,
-    NodeOutputCompiledValue_Number,
-    NodeOutputCompiledValue_SearchResults,
-    NodeOutputCompiledValue_String,
-)
+from .node_output_compiled_value import NodeOutputCompiledValue
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
 from .number_variable_value import NumberVariableValue
@@ -390,30 +231,8 @@ from .open_api_object_property import OpenApiObjectProperty
 from .open_api_object_property_request import OpenApiObjectPropertyRequest
 from .open_api_one_of_property import OpenApiOneOfProperty
 from .open_api_one_of_property_request import OpenApiOneOfPropertyRequest
-from .open_api_property import (
-    OpenApiProperty,
-    OpenApiProperty_Array,
-    OpenApiProperty_Boolean,
-    OpenApiProperty_Const,
-    OpenApiProperty_Integer,
-    OpenApiProperty_Number,
-    OpenApiProperty_Object,
-    OpenApiProperty_OneOf,
-    OpenApiProperty_Ref,
-    OpenApiProperty_String,
-)
-from .open_api_property_request import (
-    OpenApiPropertyRequest,
-    OpenApiPropertyRequest_Array,
-    OpenApiPropertyRequest_Boolean,
-    OpenApiPropertyRequest_Const,
-    OpenApiPropertyRequest_Integer,
-    OpenApiPropertyRequest_Number,
-    OpenApiPropertyRequest_Object,
-    OpenApiPropertyRequest_OneOf,
-    OpenApiPropertyRequest_Ref,
-    OpenApiPropertyRequest_String,
-)
+from .open_api_property import OpenApiProperty
+from .open_api_property_request import OpenApiPropertyRequest
 from .open_api_ref_property import OpenApiRefProperty
 from .open_api_ref_property_request import OpenApiRefPropertyRequest
 from .open_api_string_property import OpenApiStringProperty
@@ -430,23 +249,12 @@ from .pdf_search_result_meta_source_request import PdfSearchResultMetaSourceRequ
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
 from .prompt_deployment_expand_meta_request_request import PromptDeploymentExpandMetaRequestRequest
-from .prompt_deployment_input_request import (
-    PromptDeploymentInputRequest,
-    PromptDeploymentInputRequest_ChatHistory,
-    PromptDeploymentInputRequest_Json,
-    PromptDeploymentInputRequest_String,
-)
+from .prompt_deployment_input_request import PromptDeploymentInputRequest
 from .prompt_execution_meta import PromptExecutionMeta
 from .prompt_node_execution_meta import PromptNodeExecutionMeta
 from .prompt_node_result import PromptNodeResult
 from .prompt_node_result_data import PromptNodeResultData
-from .prompt_output import (
-    PromptOutput,
-    PromptOutput_Error,
-    PromptOutput_FunctionCall,
-    PromptOutput_Json,
-    PromptOutput_String,
-)
+from .prompt_output import PromptOutput
 from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .reducto_chunker_config import ReductoChunkerConfig
 from .reducto_chunker_config_request import ReductoChunkerConfigRequest
@@ -460,7 +268,7 @@ from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
 from .release_tag_source import ReleaseTagSource
 from .replace_test_suite_test_case_request import ReplaceTestSuiteTestCaseRequest
 from .sandbox_scenario import SandboxScenario
-from .scenario_input import ScenarioInput, ScenarioInput_ChatHistory, ScenarioInput_Json, ScenarioInput_String
+from .scenario_input import ScenarioInput
 from .scenario_input_chat_history_variable_value import ScenarioInputChatHistoryVariableValue
 from .scenario_input_json_variable_value import ScenarioInputJsonVariableValue
 from .scenario_input_string_variable_value import ScenarioInputStringVariableValue
@@ -475,8 +283,6 @@ from .search_result_document_request import SearchResultDocumentRequest
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_meta import SearchResultMeta
 from .search_result_meta_request import SearchResultMetaRequest
-from .search_result_meta_source import SearchResultMetaSource, SearchResultMetaSource_Pdf
-from .search_result_meta_source_request import SearchResultMetaSourceRequest, SearchResultMetaSourceRequest_Pdf
 from .search_result_request import SearchResultRequest
 from .search_weights_request import SearchWeightsRequest
 from .sentence_chunker_config import SentenceChunkerConfig
@@ -496,12 +302,7 @@ from .string_variable_value import StringVariableValue
 from .string_vellum_value import StringVellumValue
 from .string_vellum_value_request import StringVellumValueRequest
 from .submit_completion_actual_request import SubmitCompletionActualRequest
-from .submit_workflow_execution_actual_request import (
-    SubmitWorkflowExecutionActualRequest,
-    SubmitWorkflowExecutionActualRequest_ChatHistory,
-    SubmitWorkflowExecutionActualRequest_Json,
-    SubmitWorkflowExecutionActualRequest_String,
-)
+from .submit_workflow_execution_actual_request import SubmitWorkflowExecutionActualRequest
 from .subworkflow_node_result import SubworkflowNodeResult
 from .subworkflow_node_result_data import SubworkflowNodeResultData
 from .templating_node_array_result import TemplatingNodeArrayResult
@@ -512,17 +313,7 @@ from .templating_node_json_result import TemplatingNodeJsonResult
 from .templating_node_number_result import TemplatingNodeNumberResult
 from .templating_node_result import TemplatingNodeResult
 from .templating_node_result_data import TemplatingNodeResultData
-from .templating_node_result_output import (
-    TemplatingNodeResultOutput,
-    TemplatingNodeResultOutput_Array,
-    TemplatingNodeResultOutput_ChatHistory,
-    TemplatingNodeResultOutput_Error,
-    TemplatingNodeResultOutput_FunctionCall,
-    TemplatingNodeResultOutput_Json,
-    TemplatingNodeResultOutput_Number,
-    TemplatingNodeResultOutput_SearchResults,
-    TemplatingNodeResultOutput_String,
-)
+from .templating_node_result_output import TemplatingNodeResultOutput
 from .templating_node_search_results_result import TemplatingNodeSearchResultsResult
 from .templating_node_string_result import TemplatingNodeStringResult
 from .terminal_node_array_result import TerminalNodeArrayResult
@@ -533,17 +324,7 @@ from .terminal_node_json_result import TerminalNodeJsonResult
 from .terminal_node_number_result import TerminalNodeNumberResult
 from .terminal_node_result import TerminalNodeResult
 from .terminal_node_result_data import TerminalNodeResultData
-from .terminal_node_result_output import (
-    TerminalNodeResultOutput,
-    TerminalNodeResultOutput_Array,
-    TerminalNodeResultOutput_ChatHistory,
-    TerminalNodeResultOutput_Error,
-    TerminalNodeResultOutput_FunctionCall,
-    TerminalNodeResultOutput_Json,
-    TerminalNodeResultOutput_Number,
-    TerminalNodeResultOutput_SearchResults,
-    TerminalNodeResultOutput_String,
-)
+from .terminal_node_result_output import TerminalNodeResultOutput
 from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
 from .terminal_node_string_result import TerminalNodeStringResult
 from .test_case_array_variable_value import TestCaseArrayVariableValue
@@ -554,35 +335,15 @@ from .test_case_json_variable_value import TestCaseJsonVariableValue
 from .test_case_number_variable_value import TestCaseNumberVariableValue
 from .test_case_search_results_variable_value import TestCaseSearchResultsVariableValue
 from .test_case_string_variable_value import TestCaseStringVariableValue
-from .test_case_variable_value import (
-    TestCaseVariableValue,
-    TestCaseVariableValue_Array,
-    TestCaseVariableValue_ChatHistory,
-    TestCaseVariableValue_Error,
-    TestCaseVariableValue_FunctionCall,
-    TestCaseVariableValue_Json,
-    TestCaseVariableValue_Number,
-    TestCaseVariableValue_SearchResults,
-    TestCaseVariableValue_String,
-)
+from .test_case_variable_value import TestCaseVariableValue
 from .test_suite_run_deployment_release_tag_exec_config import TestSuiteRunDeploymentReleaseTagExecConfig
 from .test_suite_run_deployment_release_tag_exec_config_data import TestSuiteRunDeploymentReleaseTagExecConfigData
 from .test_suite_run_deployment_release_tag_exec_config_data_request import (
     TestSuiteRunDeploymentReleaseTagExecConfigDataRequest,
 )
 from .test_suite_run_deployment_release_tag_exec_config_request import TestSuiteRunDeploymentReleaseTagExecConfigRequest
-from .test_suite_run_exec_config import (
-    TestSuiteRunExecConfig,
-    TestSuiteRunExecConfig_DeploymentReleaseTag,
-    TestSuiteRunExecConfig_External,
-    TestSuiteRunExecConfig_WorkflowReleaseTag,
-)
-from .test_suite_run_exec_config_request import (
-    TestSuiteRunExecConfigRequest,
-    TestSuiteRunExecConfigRequest_DeploymentReleaseTag,
-    TestSuiteRunExecConfigRequest_External,
-    TestSuiteRunExecConfigRequest_WorkflowReleaseTag,
-)
+from .test_suite_run_exec_config import TestSuiteRunExecConfig
+from .test_suite_run_exec_config_request import TestSuiteRunExecConfigRequest
 from .test_suite_run_execution import TestSuiteRunExecution
 from .test_suite_run_execution_array_output import TestSuiteRunExecutionArrayOutput
 from .test_suite_run_execution_chat_history_output import TestSuiteRunExecutionChatHistoryOutput
@@ -592,17 +353,7 @@ from .test_suite_run_execution_json_output import TestSuiteRunExecutionJsonOutpu
 from .test_suite_run_execution_metric_definition import TestSuiteRunExecutionMetricDefinition
 from .test_suite_run_execution_metric_result import TestSuiteRunExecutionMetricResult
 from .test_suite_run_execution_number_output import TestSuiteRunExecutionNumberOutput
-from .test_suite_run_execution_output import (
-    TestSuiteRunExecutionOutput,
-    TestSuiteRunExecutionOutput_Array,
-    TestSuiteRunExecutionOutput_ChatHistory,
-    TestSuiteRunExecutionOutput_Error,
-    TestSuiteRunExecutionOutput_FunctionCall,
-    TestSuiteRunExecutionOutput_Json,
-    TestSuiteRunExecutionOutput_Number,
-    TestSuiteRunExecutionOutput_SearchResults,
-    TestSuiteRunExecutionOutput_String,
-)
+from .test_suite_run_execution_output import TestSuiteRunExecutionOutput
 from .test_suite_run_execution_search_results_output import TestSuiteRunExecutionSearchResultsOutput
 from .test_suite_run_execution_string_output import TestSuiteRunExecutionStringOutput
 from .test_suite_run_external_exec_config import TestSuiteRunExternalExecConfig
@@ -611,12 +362,7 @@ from .test_suite_run_external_exec_config_data_request import TestSuiteRunExtern
 from .test_suite_run_external_exec_config_request import TestSuiteRunExternalExecConfigRequest
 from .test_suite_run_metric_error_output import TestSuiteRunMetricErrorOutput
 from .test_suite_run_metric_number_output import TestSuiteRunMetricNumberOutput
-from .test_suite_run_metric_output import (
-    TestSuiteRunMetricOutput,
-    TestSuiteRunMetricOutput_Error,
-    TestSuiteRunMetricOutput_Number,
-    TestSuiteRunMetricOutput_String,
-)
+from .test_suite_run_metric_output import TestSuiteRunMetricOutput
 from .test_suite_run_metric_string_output import TestSuiteRunMetricStringOutput
 from .test_suite_run_read import TestSuiteRunRead
 from .test_suite_run_state import TestSuiteRunState
@@ -628,20 +374,8 @@ from .test_suite_run_workflow_release_tag_exec_config_data_request import (
 )
 from .test_suite_run_workflow_release_tag_exec_config_request import TestSuiteRunWorkflowReleaseTagExecConfigRequest
 from .test_suite_test_case import TestSuiteTestCase
-from .test_suite_test_case_bulk_operation_request import (
-    TestSuiteTestCaseBulkOperationRequest,
-    TestSuiteTestCaseBulkOperationRequest_Create,
-    TestSuiteTestCaseBulkOperationRequest_Delete,
-    TestSuiteTestCaseBulkOperationRequest_Replace,
-    TestSuiteTestCaseBulkOperationRequest_Upsert,
-)
-from .test_suite_test_case_bulk_result import (
-    TestSuiteTestCaseBulkResult,
-    TestSuiteTestCaseBulkResult_Created,
-    TestSuiteTestCaseBulkResult_Deleted,
-    TestSuiteTestCaseBulkResult_Rejected,
-    TestSuiteTestCaseBulkResult_Replaced,
-)
+from .test_suite_test_case_bulk_operation_request import TestSuiteTestCaseBulkOperationRequest
+from .test_suite_test_case_bulk_result import TestSuiteTestCaseBulkResult
 from .test_suite_test_case_create_bulk_operation_request import TestSuiteTestCaseCreateBulkOperationRequest
 from .test_suite_test_case_created_bulk_result import TestSuiteTestCaseCreatedBulkResult
 from .test_suite_test_case_created_bulk_result_data import TestSuiteTestCaseCreatedBulkResultData
@@ -680,40 +414,10 @@ from .workflow_execution_event_type import WorkflowExecutionEventType
 from .workflow_execution_node_result_event import WorkflowExecutionNodeResultEvent
 from .workflow_execution_workflow_result_event import WorkflowExecutionWorkflowResultEvent
 from .workflow_expand_meta_request import WorkflowExpandMetaRequest
-from .workflow_node_result_data import (
-    WorkflowNodeResultData,
-    WorkflowNodeResultData_Api,
-    WorkflowNodeResultData_CodeExecution,
-    WorkflowNodeResultData_Conditional,
-    WorkflowNodeResultData_Map,
-    WorkflowNodeResultData_Merge,
-    WorkflowNodeResultData_Metric,
-    WorkflowNodeResultData_Prompt,
-    WorkflowNodeResultData_Search,
-    WorkflowNodeResultData_Subworkflow,
-    WorkflowNodeResultData_Templating,
-    WorkflowNodeResultData_Terminal,
-)
-from .workflow_node_result_event import (
-    WorkflowNodeResultEvent,
-    WorkflowNodeResultEvent_Fulfilled,
-    WorkflowNodeResultEvent_Initiated,
-    WorkflowNodeResultEvent_Rejected,
-    WorkflowNodeResultEvent_Streaming,
-)
+from .workflow_node_result_data import WorkflowNodeResultData
+from .workflow_node_result_event import WorkflowNodeResultEvent
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
-from .workflow_output import (
-    WorkflowOutput,
-    WorkflowOutput_Array,
-    WorkflowOutput_ChatHistory,
-    WorkflowOutput_Error,
-    WorkflowOutput_FunctionCall,
-    WorkflowOutput_Image,
-    WorkflowOutput_Json,
-    WorkflowOutput_Number,
-    WorkflowOutput_SearchResults,
-    WorkflowOutput_String,
-)
+from .workflow_output import WorkflowOutput
 from .workflow_output_array import WorkflowOutputArray
 from .workflow_output_chat_history import WorkflowOutputChatHistory
 from .workflow_output_error import WorkflowOutputError
@@ -726,28 +430,12 @@ from .workflow_output_string import WorkflowOutputString
 from .workflow_release_tag_read import WorkflowReleaseTagRead
 from .workflow_release_tag_workflow_deployment_history_item import WorkflowReleaseTagWorkflowDeploymentHistoryItem
 from .workflow_request_chat_history_input_request import WorkflowRequestChatHistoryInputRequest
-from .workflow_request_input_request import (
-    WorkflowRequestInputRequest,
-    WorkflowRequestInputRequest_ChatHistory,
-    WorkflowRequestInputRequest_Json,
-    WorkflowRequestInputRequest_Number,
-    WorkflowRequestInputRequest_String,
-)
+from .workflow_request_input_request import WorkflowRequestInputRequest
 from .workflow_request_json_input_request import WorkflowRequestJsonInputRequest
 from .workflow_request_number_input_request import WorkflowRequestNumberInputRequest
 from .workflow_request_string_input_request import WorkflowRequestStringInputRequest
 from .workflow_result_event import WorkflowResultEvent
-from .workflow_result_event_output_data import (
-    WorkflowResultEventOutputData,
-    WorkflowResultEventOutputData_Array,
-    WorkflowResultEventOutputData_ChatHistory,
-    WorkflowResultEventOutputData_Error,
-    WorkflowResultEventOutputData_FunctionCall,
-    WorkflowResultEventOutputData_Json,
-    WorkflowResultEventOutputData_Number,
-    WorkflowResultEventOutputData_SearchResults,
-    WorkflowResultEventOutputData_String,
-)
+from .workflow_result_event_output_data import WorkflowResultEventOutputData
 from .workflow_result_event_output_data_array import WorkflowResultEventOutputDataArray
 from .workflow_result_event_output_data_chat_history import WorkflowResultEventOutputDataChatHistory
 from .workflow_result_event_output_data_error import WorkflowResultEventOutputDataError
@@ -756,7 +444,7 @@ from .workflow_result_event_output_data_json import WorkflowResultEventOutputDat
 from .workflow_result_event_output_data_number import WorkflowResultEventOutputDataNumber
 from .workflow_result_event_output_data_search_results import WorkflowResultEventOutputDataSearchResults
 from .workflow_result_event_output_data_string import WorkflowResultEventOutputDataString
-from .workflow_stream_event import WorkflowStreamEvent, WorkflowStreamEvent_Node, WorkflowStreamEvent_Workflow
+from .workflow_stream_event import WorkflowStreamEvent
 
 __all__ = [
     "AddOpenaiApiKeyEnum",
@@ -765,34 +453,10 @@ __all__ = [
     "ArrayChatMessageContent",
     "ArrayChatMessageContentItem",
     "ArrayChatMessageContentItemRequest",
-    "ArrayChatMessageContentItemRequest_FunctionCall",
-    "ArrayChatMessageContentItemRequest_Image",
-    "ArrayChatMessageContentItemRequest_String",
-    "ArrayChatMessageContentItem_FunctionCall",
-    "ArrayChatMessageContentItem_Image",
-    "ArrayChatMessageContentItem_String",
     "ArrayChatMessageContentRequest",
     "ArrayVariableValueItem",
-    "ArrayVariableValueItem_Error",
-    "ArrayVariableValueItem_FunctionCall",
-    "ArrayVariableValueItem_Image",
-    "ArrayVariableValueItem_Json",
-    "ArrayVariableValueItem_Number",
-    "ArrayVariableValueItem_String",
     "ArrayVellumValueItem",
     "ArrayVellumValueItemRequest",
-    "ArrayVellumValueItemRequest_Error",
-    "ArrayVellumValueItemRequest_FunctionCall",
-    "ArrayVellumValueItemRequest_Image",
-    "ArrayVellumValueItemRequest_Json",
-    "ArrayVellumValueItemRequest_Number",
-    "ArrayVellumValueItemRequest_String",
-    "ArrayVellumValueItem_Error",
-    "ArrayVellumValueItem_FunctionCall",
-    "ArrayVellumValueItem_Image",
-    "ArrayVellumValueItem_Json",
-    "ArrayVellumValueItem_Number",
-    "ArrayVellumValueItem_String",
     "BasicVectorizerIntfloatMultilingualE5Large",
     "BasicVectorizerIntfloatMultilingualE5LargeRequest",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1",
@@ -803,14 +467,6 @@ __all__ = [
     "ChatMessage",
     "ChatMessageContent",
     "ChatMessageContentRequest",
-    "ChatMessageContentRequest_Array",
-    "ChatMessageContentRequest_FunctionCall",
-    "ChatMessageContentRequest_Image",
-    "ChatMessageContentRequest_String",
-    "ChatMessageContent_Array",
-    "ChatMessageContent_FunctionCall",
-    "ChatMessageContent_Image",
-    "ChatMessageContent_String",
     "ChatMessageRequest",
     "ChatMessageRole",
     "CodeExecutionNodeArrayResult",
@@ -822,18 +478,12 @@ __all__ = [
     "CodeExecutionNodeResult",
     "CodeExecutionNodeResultData",
     "CodeExecutionNodeResultOutput",
-    "CodeExecutionNodeResultOutput_Array",
-    "CodeExecutionNodeResultOutput_ChatHistory",
-    "CodeExecutionNodeResultOutput_Error",
-    "CodeExecutionNodeResultOutput_FunctionCall",
-    "CodeExecutionNodeResultOutput_Json",
-    "CodeExecutionNodeResultOutput_Number",
-    "CodeExecutionNodeResultOutput_SearchResults",
-    "CodeExecutionNodeResultOutput_String",
     "CodeExecutionNodeSearchResultsResult",
     "CodeExecutionNodeStringResult",
     "CompilePromptDeploymentExpandMetaRequest",
     "CompilePromptMeta",
+    "ComponentsSchemasPdfSearchResultMetaSource",
+    "ComponentsSchemasPdfSearchResultMetaSourceRequest",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
     "CreateTestSuiteTestCaseRequest",
@@ -845,12 +495,6 @@ __all__ = [
     "DocumentDocumentToDocumentIndex",
     "DocumentIndexChunking",
     "DocumentIndexChunkingRequest",
-    "DocumentIndexChunkingRequest_ReductoChunker",
-    "DocumentIndexChunkingRequest_SentenceChunker",
-    "DocumentIndexChunkingRequest_TokenOverlappingWindowChunker",
-    "DocumentIndexChunking_ReductoChunker",
-    "DocumentIndexChunking_SentenceChunker",
-    "DocumentIndexChunking_TokenOverlappingWindowChunker",
     "DocumentIndexIndexingConfig",
     "DocumentIndexIndexingConfigRequest",
     "DocumentIndexRead",
@@ -863,17 +507,9 @@ __all__ = [
     "ErrorVellumValue",
     "ErrorVellumValueRequest",
     "ExecutePromptEvent",
-    "ExecutePromptEvent_Fulfilled",
-    "ExecutePromptEvent_Initiated",
-    "ExecutePromptEvent_Rejected",
-    "ExecutePromptEvent_Streaming",
     "ExecutePromptResponse",
-    "ExecutePromptResponse_Fulfilled",
-    "ExecutePromptResponse_Rejected",
     "ExecuteWorkflowResponse",
     "ExecuteWorkflowWorkflowResultEvent",
-    "ExecuteWorkflowWorkflowResultEvent_Fulfilled",
-    "ExecuteWorkflowWorkflowResultEvent_Rejected",
     "ExecutionArrayVellumValue",
     "ExecutionChatHistoryVellumValue",
     "ExecutionErrorVellumValue",
@@ -883,14 +519,6 @@ __all__ = [
     "ExecutionSearchResultsVellumValue",
     "ExecutionStringVellumValue",
     "ExecutionVellumValue",
-    "ExecutionVellumValue_Array",
-    "ExecutionVellumValue_ChatHistory",
-    "ExecutionVellumValue_Error",
-    "ExecutionVellumValue_FunctionCall",
-    "ExecutionVellumValue_Json",
-    "ExecutionVellumValue_Number",
-    "ExecutionVellumValue_SearchResults",
-    "ExecutionVellumValue_String",
     "ExternalTestCaseExecution",
     "ExternalTestCaseExecutionRequest",
     "FinishReasonEnum",
@@ -930,20 +558,6 @@ __all__ = [
     "ImageVellumValueRequest",
     "IndexingConfigVectorizer",
     "IndexingConfigVectorizerRequest",
-    "IndexingConfigVectorizerRequest_HkunlpInstructorXl",
-    "IndexingConfigVectorizerRequest_IntfloatMultilingualE5Large",
-    "IndexingConfigVectorizerRequest_SentenceTransformersMultiQaMpnetBaseCosV1",
-    "IndexingConfigVectorizerRequest_SentenceTransformersMultiQaMpnetBaseDotV1",
-    "IndexingConfigVectorizerRequest_TextEmbedding3Large",
-    "IndexingConfigVectorizerRequest_TextEmbedding3Small",
-    "IndexingConfigVectorizerRequest_TextEmbeddingAda002",
-    "IndexingConfigVectorizer_HkunlpInstructorXl",
-    "IndexingConfigVectorizer_IntfloatMultilingualE5Large",
-    "IndexingConfigVectorizer_SentenceTransformersMultiQaMpnetBaseCosV1",
-    "IndexingConfigVectorizer_SentenceTransformersMultiQaMpnetBaseDotV1",
-    "IndexingConfigVectorizer_TextEmbedding3Large",
-    "IndexingConfigVectorizer_TextEmbedding3Small",
-    "IndexingConfigVectorizer_TextEmbeddingAda002",
     "IndexingStateEnum",
     "InitiatedExecutePromptEvent",
     "InitiatedPromptExecutionMeta",
@@ -988,17 +602,10 @@ __all__ = [
     "MlModelResponseConfigRequest",
     "MlModelTokenizerConfig",
     "MlModelTokenizerConfigRequest",
-    "MlModelTokenizerConfigRequest_HuggingFace",
-    "MlModelTokenizerConfigRequest_Tiktoken",
-    "MlModelTokenizerConfig_HuggingFace",
-    "MlModelTokenizerConfig_Tiktoken",
     "MlModelUsage",
     "NamedScenarioInputChatHistoryVariableValueRequest",
     "NamedScenarioInputJsonVariableValueRequest",
     "NamedScenarioInputRequest",
-    "NamedScenarioInputRequest_ChatHistory",
-    "NamedScenarioInputRequest_Json",
-    "NamedScenarioInputRequest_String",
     "NamedScenarioInputStringVariableValueRequest",
     "NamedTestCaseArrayVariableValue",
     "NamedTestCaseArrayVariableValueRequest",
@@ -1018,22 +625,6 @@ __all__ = [
     "NamedTestCaseStringVariableValueRequest",
     "NamedTestCaseVariableValue",
     "NamedTestCaseVariableValueRequest",
-    "NamedTestCaseVariableValueRequest_Array",
-    "NamedTestCaseVariableValueRequest_ChatHistory",
-    "NamedTestCaseVariableValueRequest_Error",
-    "NamedTestCaseVariableValueRequest_FunctionCall",
-    "NamedTestCaseVariableValueRequest_Json",
-    "NamedTestCaseVariableValueRequest_Number",
-    "NamedTestCaseVariableValueRequest_SearchResults",
-    "NamedTestCaseVariableValueRequest_String",
-    "NamedTestCaseVariableValue_Array",
-    "NamedTestCaseVariableValue_ChatHistory",
-    "NamedTestCaseVariableValue_Error",
-    "NamedTestCaseVariableValue_FunctionCall",
-    "NamedTestCaseVariableValue_Json",
-    "NamedTestCaseVariableValue_Number",
-    "NamedTestCaseVariableValue_SearchResults",
-    "NamedTestCaseVariableValue_String",
     "NodeInputCompiledArrayValue",
     "NodeInputCompiledChatHistoryValue",
     "NodeInputCompiledErrorValue",
@@ -1043,14 +634,6 @@ __all__ = [
     "NodeInputCompiledSearchResultsValue",
     "NodeInputCompiledStringValue",
     "NodeInputVariableCompiledValue",
-    "NodeInputVariableCompiledValue_Array",
-    "NodeInputVariableCompiledValue_ChatHistory",
-    "NodeInputVariableCompiledValue_Error",
-    "NodeInputVariableCompiledValue_FunctionCall",
-    "NodeInputVariableCompiledValue_Json",
-    "NodeInputVariableCompiledValue_Number",
-    "NodeInputVariableCompiledValue_SearchResults",
-    "NodeInputVariableCompiledValue_String",
     "NodeOutputCompiledArrayValue",
     "NodeOutputCompiledChatHistoryValue",
     "NodeOutputCompiledErrorValue",
@@ -1060,14 +643,6 @@ __all__ = [
     "NodeOutputCompiledSearchResultsValue",
     "NodeOutputCompiledStringValue",
     "NodeOutputCompiledValue",
-    "NodeOutputCompiledValue_Array",
-    "NodeOutputCompiledValue_ChatHistory",
-    "NodeOutputCompiledValue_Error",
-    "NodeOutputCompiledValue_FunctionCall",
-    "NodeOutputCompiledValue_Json",
-    "NodeOutputCompiledValue_Number",
-    "NodeOutputCompiledValue_SearchResults",
-    "NodeOutputCompiledValue_String",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
     "NumberVariableValue",
@@ -1097,24 +672,6 @@ __all__ = [
     "OpenApiOneOfPropertyRequest",
     "OpenApiProperty",
     "OpenApiPropertyRequest",
-    "OpenApiPropertyRequest_Array",
-    "OpenApiPropertyRequest_Boolean",
-    "OpenApiPropertyRequest_Const",
-    "OpenApiPropertyRequest_Integer",
-    "OpenApiPropertyRequest_Number",
-    "OpenApiPropertyRequest_Object",
-    "OpenApiPropertyRequest_OneOf",
-    "OpenApiPropertyRequest_Ref",
-    "OpenApiPropertyRequest_String",
-    "OpenApiProperty_Array",
-    "OpenApiProperty_Boolean",
-    "OpenApiProperty_Const",
-    "OpenApiProperty_Integer",
-    "OpenApiProperty_Number",
-    "OpenApiProperty_Object",
-    "OpenApiProperty_OneOf",
-    "OpenApiProperty_Ref",
-    "OpenApiProperty_String",
     "OpenApiRefProperty",
     "OpenApiRefPropertyRequest",
     "OpenApiStringProperty",
@@ -1132,18 +689,11 @@ __all__ = [
     "ProcessingStateEnum",
     "PromptDeploymentExpandMetaRequestRequest",
     "PromptDeploymentInputRequest",
-    "PromptDeploymentInputRequest_ChatHistory",
-    "PromptDeploymentInputRequest_Json",
-    "PromptDeploymentInputRequest_String",
     "PromptExecutionMeta",
     "PromptNodeExecutionMeta",
     "PromptNodeResult",
     "PromptNodeResultData",
     "PromptOutput",
-    "PromptOutput_Error",
-    "PromptOutput_FunctionCall",
-    "PromptOutput_Json",
-    "PromptOutput_String",
     "RawPromptExecutionOverridesRequest",
     "ReductoChunkerConfig",
     "ReductoChunkerConfigRequest",
@@ -1161,9 +711,6 @@ __all__ = [
     "ScenarioInputChatHistoryVariableValue",
     "ScenarioInputJsonVariableValue",
     "ScenarioInputStringVariableValue",
-    "ScenarioInput_ChatHistory",
-    "ScenarioInput_Json",
-    "ScenarioInput_String",
     "SearchFiltersRequest",
     "SearchNodeResult",
     "SearchNodeResultData",
@@ -1175,10 +722,6 @@ __all__ = [
     "SearchResultMergingRequest",
     "SearchResultMeta",
     "SearchResultMetaRequest",
-    "SearchResultMetaSource",
-    "SearchResultMetaSourceRequest",
-    "SearchResultMetaSourceRequest_Pdf",
-    "SearchResultMetaSource_Pdf",
     "SearchResultRequest",
     "SearchWeightsRequest",
     "SentenceChunkerConfig",
@@ -1199,9 +742,6 @@ __all__ = [
     "StringVellumValueRequest",
     "SubmitCompletionActualRequest",
     "SubmitWorkflowExecutionActualRequest",
-    "SubmitWorkflowExecutionActualRequest_ChatHistory",
-    "SubmitWorkflowExecutionActualRequest_Json",
-    "SubmitWorkflowExecutionActualRequest_String",
     "SubworkflowNodeResult",
     "SubworkflowNodeResultData",
     "TemplatingNodeArrayResult",
@@ -1213,14 +753,6 @@ __all__ = [
     "TemplatingNodeResult",
     "TemplatingNodeResultData",
     "TemplatingNodeResultOutput",
-    "TemplatingNodeResultOutput_Array",
-    "TemplatingNodeResultOutput_ChatHistory",
-    "TemplatingNodeResultOutput_Error",
-    "TemplatingNodeResultOutput_FunctionCall",
-    "TemplatingNodeResultOutput_Json",
-    "TemplatingNodeResultOutput_Number",
-    "TemplatingNodeResultOutput_SearchResults",
-    "TemplatingNodeResultOutput_String",
     "TemplatingNodeSearchResultsResult",
     "TemplatingNodeStringResult",
     "TerminalNodeArrayResult",
@@ -1232,14 +764,6 @@ __all__ = [
     "TerminalNodeResult",
     "TerminalNodeResultData",
     "TerminalNodeResultOutput",
-    "TerminalNodeResultOutput_Array",
-    "TerminalNodeResultOutput_ChatHistory",
-    "TerminalNodeResultOutput_Error",
-    "TerminalNodeResultOutput_FunctionCall",
-    "TerminalNodeResultOutput_Json",
-    "TerminalNodeResultOutput_Number",
-    "TerminalNodeResultOutput_SearchResults",
-    "TerminalNodeResultOutput_String",
     "TerminalNodeSearchResultsResult",
     "TerminalNodeStringResult",
     "TestCaseArrayVariableValue",
@@ -1251,26 +775,12 @@ __all__ = [
     "TestCaseSearchResultsVariableValue",
     "TestCaseStringVariableValue",
     "TestCaseVariableValue",
-    "TestCaseVariableValue_Array",
-    "TestCaseVariableValue_ChatHistory",
-    "TestCaseVariableValue_Error",
-    "TestCaseVariableValue_FunctionCall",
-    "TestCaseVariableValue_Json",
-    "TestCaseVariableValue_Number",
-    "TestCaseVariableValue_SearchResults",
-    "TestCaseVariableValue_String",
     "TestSuiteRunDeploymentReleaseTagExecConfig",
     "TestSuiteRunDeploymentReleaseTagExecConfigData",
     "TestSuiteRunDeploymentReleaseTagExecConfigDataRequest",
     "TestSuiteRunDeploymentReleaseTagExecConfigRequest",
     "TestSuiteRunExecConfig",
     "TestSuiteRunExecConfigRequest",
-    "TestSuiteRunExecConfigRequest_DeploymentReleaseTag",
-    "TestSuiteRunExecConfigRequest_External",
-    "TestSuiteRunExecConfigRequest_WorkflowReleaseTag",
-    "TestSuiteRunExecConfig_DeploymentReleaseTag",
-    "TestSuiteRunExecConfig_External",
-    "TestSuiteRunExecConfig_WorkflowReleaseTag",
     "TestSuiteRunExecution",
     "TestSuiteRunExecutionArrayOutput",
     "TestSuiteRunExecutionChatHistoryOutput",
@@ -1281,14 +791,6 @@ __all__ = [
     "TestSuiteRunExecutionMetricResult",
     "TestSuiteRunExecutionNumberOutput",
     "TestSuiteRunExecutionOutput",
-    "TestSuiteRunExecutionOutput_Array",
-    "TestSuiteRunExecutionOutput_ChatHistory",
-    "TestSuiteRunExecutionOutput_Error",
-    "TestSuiteRunExecutionOutput_FunctionCall",
-    "TestSuiteRunExecutionOutput_Json",
-    "TestSuiteRunExecutionOutput_Number",
-    "TestSuiteRunExecutionOutput_SearchResults",
-    "TestSuiteRunExecutionOutput_String",
     "TestSuiteRunExecutionSearchResultsOutput",
     "TestSuiteRunExecutionStringOutput",
     "TestSuiteRunExternalExecConfig",
@@ -1298,9 +800,6 @@ __all__ = [
     "TestSuiteRunMetricErrorOutput",
     "TestSuiteRunMetricNumberOutput",
     "TestSuiteRunMetricOutput",
-    "TestSuiteRunMetricOutput_Error",
-    "TestSuiteRunMetricOutput_Number",
-    "TestSuiteRunMetricOutput_String",
     "TestSuiteRunMetricStringOutput",
     "TestSuiteRunRead",
     "TestSuiteRunState",
@@ -1311,15 +810,7 @@ __all__ = [
     "TestSuiteRunWorkflowReleaseTagExecConfigRequest",
     "TestSuiteTestCase",
     "TestSuiteTestCaseBulkOperationRequest",
-    "TestSuiteTestCaseBulkOperationRequest_Create",
-    "TestSuiteTestCaseBulkOperationRequest_Delete",
-    "TestSuiteTestCaseBulkOperationRequest_Replace",
-    "TestSuiteTestCaseBulkOperationRequest_Upsert",
     "TestSuiteTestCaseBulkResult",
-    "TestSuiteTestCaseBulkResult_Created",
-    "TestSuiteTestCaseBulkResult_Deleted",
-    "TestSuiteTestCaseBulkResult_Rejected",
-    "TestSuiteTestCaseBulkResult_Replaced",
     "TestSuiteTestCaseCreateBulkOperationRequest",
     "TestSuiteTestCaseCreatedBulkResult",
     "TestSuiteTestCaseCreatedBulkResultData",
@@ -1359,23 +850,8 @@ __all__ = [
     "WorkflowExecutionWorkflowResultEvent",
     "WorkflowExpandMetaRequest",
     "WorkflowNodeResultData",
-    "WorkflowNodeResultData_Api",
-    "WorkflowNodeResultData_CodeExecution",
-    "WorkflowNodeResultData_Conditional",
-    "WorkflowNodeResultData_Map",
-    "WorkflowNodeResultData_Merge",
-    "WorkflowNodeResultData_Metric",
-    "WorkflowNodeResultData_Prompt",
-    "WorkflowNodeResultData_Search",
-    "WorkflowNodeResultData_Subworkflow",
-    "WorkflowNodeResultData_Templating",
-    "WorkflowNodeResultData_Terminal",
     "WorkflowNodeResultEvent",
     "WorkflowNodeResultEventState",
-    "WorkflowNodeResultEvent_Fulfilled",
-    "WorkflowNodeResultEvent_Initiated",
-    "WorkflowNodeResultEvent_Rejected",
-    "WorkflowNodeResultEvent_Streaming",
     "WorkflowOutput",
     "WorkflowOutputArray",
     "WorkflowOutputChatHistory",
@@ -1386,23 +862,10 @@ __all__ = [
     "WorkflowOutputNumber",
     "WorkflowOutputSearchResults",
     "WorkflowOutputString",
-    "WorkflowOutput_Array",
-    "WorkflowOutput_ChatHistory",
-    "WorkflowOutput_Error",
-    "WorkflowOutput_FunctionCall",
-    "WorkflowOutput_Image",
-    "WorkflowOutput_Json",
-    "WorkflowOutput_Number",
-    "WorkflowOutput_SearchResults",
-    "WorkflowOutput_String",
     "WorkflowReleaseTagRead",
     "WorkflowReleaseTagWorkflowDeploymentHistoryItem",
     "WorkflowRequestChatHistoryInputRequest",
     "WorkflowRequestInputRequest",
-    "WorkflowRequestInputRequest_ChatHistory",
-    "WorkflowRequestInputRequest_Json",
-    "WorkflowRequestInputRequest_Number",
-    "WorkflowRequestInputRequest_String",
     "WorkflowRequestJsonInputRequest",
     "WorkflowRequestNumberInputRequest",
     "WorkflowRequestStringInputRequest",
@@ -1416,15 +879,5 @@ __all__ = [
     "WorkflowResultEventOutputDataNumber",
     "WorkflowResultEventOutputDataSearchResults",
     "WorkflowResultEventOutputDataString",
-    "WorkflowResultEventOutputData_Array",
-    "WorkflowResultEventOutputData_ChatHistory",
-    "WorkflowResultEventOutputData_Error",
-    "WorkflowResultEventOutputData_FunctionCall",
-    "WorkflowResultEventOutputData_Json",
-    "WorkflowResultEventOutputData_Number",
-    "WorkflowResultEventOutputData_SearchResults",
-    "WorkflowResultEventOutputData_String",
     "WorkflowStreamEvent",
-    "WorkflowStreamEvent_Node",
-    "WorkflowStreamEvent_Workflow",
 ]

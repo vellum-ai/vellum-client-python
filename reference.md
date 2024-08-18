@@ -26,42 +26,18 @@ Executes a deployed Prompt and returns the result.
 <dd>
 
 ```python
-from vellum import (
-    PromptDeploymentExpandMetaRequestRequest,
-    PromptDeploymentInputRequest_String,
-    RawPromptExecutionOverridesRequest,
-)
-from vellum.client import Vellum
+from vellum import StringInputRequest, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.execute_prompt(
     inputs=[
-        PromptDeploymentInputRequest_String(
-            name="string",
-            value="string",
+        StringInputRequest(
+            name="name",
+            value="value",
         )
     ],
-    prompt_deployment_id="string",
-    prompt_deployment_name="string",
-    release_tag="string",
-    external_id="string",
-    expand_meta=PromptDeploymentExpandMetaRequestRequest(
-        model_name=True,
-        usage=True,
-        finish_reason=True,
-        latency=True,
-        deployment_release_tag=True,
-        prompt_version_id=True,
-    ),
-    raw_overrides=RawPromptExecutionOverridesRequest(
-        body={"string": {"key": "value"}},
-        headers={"string": {"key": "value"}},
-        url="string",
-    ),
-    expand_raw=["string"],
-    metadata={"string": {"key": "value"}},
 )
 
 ```
@@ -142,7 +118,7 @@ client.execute_prompt(
 <dl>
 <dd>
 
-**metadata:** `typing.Optional[typing.Dict[str, typing.Any]]` — Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+**metadata:** `typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]` — Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
     
 </dd>
 </dl>
@@ -191,17 +167,17 @@ Executes a deployed Prompt and streams back the results.
 ```python
 from vellum import (
     PromptDeploymentExpandMetaRequestRequest,
-    PromptDeploymentInputRequest_String,
     RawPromptExecutionOverridesRequest,
+    StringInputRequest,
+    Vellum,
 )
-from vellum.client import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 response = client.execute_prompt_stream(
     inputs=[
-        PromptDeploymentInputRequest_String(
+        StringInputRequest(
             name="string",
             value="string",
         )
@@ -307,7 +283,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**metadata:** `typing.Optional[typing.Dict[str, typing.Any]]` — Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+**metadata:** `typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]` — Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
     
 </dd>
 </dl>
@@ -354,26 +330,18 @@ Executes a deployed Workflow and returns its outputs.
 <dd>
 
 ```python
-from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
-from vellum.client import Vellum
+from vellum import Vellum, WorkflowRequestStringInputRequest
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.execute_workflow(
     inputs=[
-        WorkflowRequestInputRequest_String(
-            name="string",
-            value="string",
+        WorkflowRequestStringInputRequest(
+            name="name",
+            value="value",
         )
     ],
-    expand_meta=WorkflowExpandMetaRequest(
-        usage=True,
-    ),
-    workflow_deployment_id="string",
-    workflow_deployment_name="string",
-    release_tag="string",
-    external_id="string",
 )
 
 ```
@@ -477,15 +445,18 @@ Executes a deployed Workflow and streams back its results.
 <dd>
 
 ```python
-from vellum import WorkflowExpandMetaRequest, WorkflowRequestInputRequest_String
-from vellum.client import Vellum
+from vellum import (
+    Vellum,
+    WorkflowExpandMetaRequest,
+    WorkflowRequestStringInputRequest,
+)
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 response = client.execute_workflow_stream(
     inputs=[
-        WorkflowRequestInputRequest_String(
+        WorkflowRequestStringInputRequest(
             name="string",
             value="string",
         )
@@ -614,8 +585,7 @@ Important: This endpoint is DEPRECATED and has been superseded by
 <dd>
 
 ```python
-from vellum import GenerateRequest
-from vellum.client import Vellum
+from vellum import GenerateRequest, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -717,12 +687,12 @@ Important: This endpoint is DEPRECATED and has been superseded by
 
 ```python
 from vellum import (
-    ChatMessageContentRequest_String,
     ChatMessageRequest,
     GenerateOptionsRequest,
     GenerateRequest,
+    StringChatMessageContentRequest,
+    Vellum,
 )
-from vellum.client import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -737,7 +707,7 @@ response = client.generate_stream(
                 ChatMessageRequest(
                     text="string",
                     role="SYSTEM",
-                    content=ChatMessageContentRequest_String(),
+                    content=StringChatMessageContentRequest(),
                     source="string",
                 )
             ],
@@ -836,7 +806,7 @@ Perform a search against a document index.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -930,8 +900,7 @@ Used to submit feedback regarding the quality of previously generated completion
 <dd>
 
 ```python
-from vellum import SubmitCompletionActualRequest
-from vellum.client import Vellum
+from vellum import SubmitCompletionActualRequest, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -1019,13 +988,13 @@ client.submit_completion_actuals(
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum, WorkflowExecutionActualStringRequest
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.submit_workflow_execution_actuals(
-    actuals=[],
+    actuals=[WorkflowExecutionActualStringRequest()],
 )
 
 ```
@@ -1106,7 +1075,7 @@ Used to list all Prompt Deployments.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -1198,7 +1167,7 @@ Used to retrieve a Prompt Deployment given its ID or name.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -1268,7 +1237,7 @@ Retrieve a Deployment Release Tag by tag name, associated with a specified Deplo
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -1347,7 +1316,7 @@ Updates an existing Release Tag associated with the specified Deployment.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -1443,13 +1412,18 @@ We encourage you to seek advise from Vellum Support before integrating with this
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import StringInputRequest, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.deployments.retrieve_provider_payload(
-    inputs=[],
+    inputs=[
+        StringInputRequest(
+            name="name",
+            value="value",
+        )
+    ],
 )
 
 ```
@@ -1546,7 +1520,7 @@ Used to retrieve a list of Document Indexes.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -1652,25 +1626,33 @@ Creates a new document index.
 
 ```python
 from vellum import (
-    DocumentIndexChunkingRequest_ReductoChunker,
     DocumentIndexIndexingConfigRequest,
-    IndexingConfigVectorizerRequest_TextEmbedding3Small,
+    OpenAiVectorizerConfigRequest,
+    OpenAiVectorizerTextEmbeddingAda002Request,
+    SentenceChunkerConfigRequest,
+    SentenceChunkingRequest,
+    Vellum,
 )
-from vellum.client import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.document_indexes.create(
-    label="string",
-    name="string",
-    status="ACTIVE",
-    environment="DEVELOPMENT",
+    label="My Document Index",
+    name="my-document-index",
     indexing_config=DocumentIndexIndexingConfigRequest(
-        vectorizer=IndexingConfigVectorizerRequest_TextEmbedding3Small(),
-        chunking=DocumentIndexChunkingRequest_ReductoChunker(),
+        vectorizer=OpenAiVectorizerTextEmbeddingAda002Request(
+            config=OpenAiVectorizerConfigRequest(
+                add_openai_api_key=True,
+            ),
+        ),
+        chunking=SentenceChunkingRequest(
+            chunker_config=SentenceChunkerConfigRequest(
+                character_limit=1000,
+                min_overlap_ratio=0.5,
+            ),
+        ),
     ),
-    copy_documents_from_index_id="string",
 )
 
 ```
@@ -1785,13 +1767,13 @@ Used to retrieve a Document Index given its ID or name.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.document_indexes.retrieve(
-    id="string",
+    id="id",
 )
 
 ```
@@ -1855,16 +1837,14 @@ Used to fully update a Document Index given its ID or name.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.document_indexes.update(
-    id="string",
-    label="string",
-    status="ACTIVE",
-    environment="DEVELOPMENT",
+    id="id",
+    label="label",
 )
 
 ```
@@ -1963,7 +1943,7 @@ Used to delete a Document Index given its ID or name.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2033,16 +2013,13 @@ Used to partial update a Document Index given its ID or name.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.document_indexes.partial_update(
-    id="string",
-    label="string",
-    status="ACTIVE",
-    environment="DEVELOPMENT",
+    id="id",
 )
 
 ```
@@ -2141,7 +2118,7 @@ Adds a previously uploaded Document to the specified Document Index.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2220,7 +2197,7 @@ Removes a Document from a Document Index without deleting the Document itself.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2300,7 +2277,7 @@ Used to list documents. Optionally filter on supported fields.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2392,7 +2369,7 @@ Retrieve a Document, keying off of either its Vellum-generated ID or its externa
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2462,7 +2439,7 @@ Delete a Document, keying off of either its Vellum-generated ID or its external 
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2532,7 +2509,7 @@ Update a Document, keying off of either its Vellum-generated ID or its external 
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2583,7 +2560,7 @@ The current status of the document
 <dl>
 <dd>
 
-**metadata:** `typing.Optional[typing.Dict[str, typing.Any]]` — A JSON object containing any metadata associated with the document that you'd like to filter upon later.
+**metadata:** `typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]` — A JSON object containing any metadata associated with the document that you'd like to filter upon later.
     
 </dd>
 </dl>
@@ -2640,7 +2617,7 @@ This is a multipart/form-data request. The `contents` field should be a file upl
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2755,7 +2732,7 @@ Adding an entity to a folder will remove it from any other folders it might have
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2835,7 +2812,7 @@ List all ML Models that your Workspace has access to.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -2919,8 +2896,7 @@ Creates a new ML Model.
 <dd>
 
 ```python
-from vellum import MlModelExecConfigRequest
-from vellum.client import Vellum
+from vellum import MlModelExecConfigRequest, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3126,7 +3102,7 @@ Retrieve an ML Model by its UUID.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3196,7 +3172,7 @@ Replace an ML Model with a new representation, keying off of its UUID.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3305,7 +3281,7 @@ Partially update an ML Model, keying off of its UUID.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3401,7 +3377,7 @@ The visibility of the ML Model.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3518,7 +3494,11 @@ or overwritten with default values.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import (
+    ChatMessageRequest,
+    NamedScenarioInputChatHistoryVariableValueRequest,
+    Vellum,
+)
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3526,7 +3506,21 @@ client = Vellum(
 client.sandboxes.upsert_sandbox_scenario(
     id="id",
     label="Scenario 2",
-    inputs=[],
+    inputs=[
+        NamedScenarioInputChatHistoryVariableValueRequest(
+            value=[
+                ChatMessageRequest(
+                    text="What's your favorite color?",
+                    role="USER",
+                ),
+                ChatMessageRequest(
+                    text="AI's don't have a favorite color.... Yet.",
+                    role="ASSISTANT",
+                ),
+            ],
+            name="chat_history",
+        )
+    ],
 )
 
 ```
@@ -3614,7 +3608,7 @@ Deletes an existing scenario from a sandbox, keying off of the provided scenario
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3696,21 +3690,19 @@ Trigger a Test Suite and create a new Test Suite Run
 ```python
 from vellum import (
     TestSuiteRunDeploymentReleaseTagExecConfigDataRequest,
-    TestSuiteRunExecConfigRequest_DeploymentReleaseTag,
+    TestSuiteRunDeploymentReleaseTagExecConfigRequest,
+    Vellum,
 )
-from vellum.client import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.test_suite_runs.create(
-    test_suite_id="string",
-    exec_config=TestSuiteRunExecConfigRequest_DeploymentReleaseTag(
+    test_suite_id="test_suite_id",
+    exec_config=TestSuiteRunDeploymentReleaseTagExecConfigRequest(
         data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(
-            deployment_id="string",
-            tag="string",
+            deployment_id="deployment_id",
         ),
-        test_case_ids=["string"],
     ),
 )
 
@@ -3783,7 +3775,7 @@ Retrieve a specific Test Suite Run by ID
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3839,7 +3831,7 @@ client.test_suite_runs.retrieve(
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3940,7 +3932,7 @@ List the Test Cases associated with a Test Suite
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -4032,15 +4024,23 @@ or overwritten with default values.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import NamedTestCaseStringVariableValueRequest, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.test_suites.upsert_test_suite_test_case(
     id_="id",
-    input_values=[],
-    evaluation_values=[],
+    input_values=[
+        NamedTestCaseStringVariableValueRequest(
+            name="name",
+        )
+    ],
+    evaluation_values=[
+        NamedTestCaseStringVariableValueRequest(
+            name="name",
+        )
+    ],
 )
 
 ```
@@ -4146,10 +4146,10 @@ Created, replace, and delete Test Cases within the specified Test Suite in bulk
 ```python
 from vellum import (
     CreateTestSuiteTestCaseRequest,
-    NamedTestCaseVariableValueRequest_String,
-    TestSuiteTestCaseBulkOperationRequest_Create,
+    NamedTestCaseStringVariableValueRequest,
+    TestSuiteTestCaseCreateBulkOperationRequest,
+    Vellum,
 )
-from vellum.client import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -4157,12 +4157,12 @@ client = Vellum(
 response = client.test_suites.test_suite_test_cases_bulk(
     id="string",
     request=[
-        TestSuiteTestCaseBulkOperationRequest_Create(
+        TestSuiteTestCaseCreateBulkOperationRequest(
             id="string",
             data=CreateTestSuiteTestCaseRequest(
                 label="string",
-                input_values=[NamedTestCaseVariableValueRequest_String()],
-                evaluation_values=[NamedTestCaseVariableValueRequest_String()],
+                input_values=[NamedTestCaseStringVariableValueRequest()],
+                evaluation_values=[NamedTestCaseStringVariableValueRequest()],
                 external_id="string",
             ),
         )
@@ -4240,7 +4240,7 @@ Deletes an existing test case for a test suite, keying off of the test case id.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -4320,7 +4320,7 @@ Used to list all Workflow Deployments.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -4412,7 +4412,7 @@ Used to retrieve a workflow deployment given its ID or name.
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -4482,7 +4482,7 @@ Retrieve a Workflow Release Tag by tag name, associated with a specified Workflo
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -4561,7 +4561,7 @@ Updates an existing Release Tag associated with the specified Workflow Deploymen
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -4635,7 +4635,7 @@ client.workflow_deployments.update_workflow_release_tag(
 <dd>
 
 ```python
-from vellum.client import Vellum
+from vellum import Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",

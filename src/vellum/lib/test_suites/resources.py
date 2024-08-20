@@ -5,7 +5,7 @@ import time
 from functools import cached_property
 from typing import Callable, Generator, List, cast, Iterable
 
-from vellum import TestSuiteRunRead, TestSuiteRunMetricOutput_Number
+from vellum import TestSuiteRunRead, TestSuiteRunMetricNumberOutput
 from vellum.client import Vellum
 from vellum.lib.test_suites.constants import (
     DEFAULT_MAX_POLLING_DURATION_MS,
@@ -18,7 +18,7 @@ from vellum.types import (
     ExternalTestCaseExecutionRequest,
     NamedTestCaseVariableValueRequest,
     TestCaseVariableValue,
-    TestSuiteRunExecConfigRequest_External,
+    TestSuiteRunExternalExecConfigRequest,
     TestSuiteRunExecution,
     TestSuiteRunExternalExecConfigDataRequest,
     TestSuiteRunMetricOutput,
@@ -177,7 +177,7 @@ class VellumTestSuiteRunResults:
     ) -> List[float | None]:
         """Returns the values of a numeric metric output that match the given criteria."""
 
-        metric_outputs: list[TestSuiteRunMetricOutput_Number] = []
+        metric_outputs: list[TestSuiteRunMetricNumberOutput] = []
 
         for output in self.get_metric_outputs(
             metric_identifier=metric_identifier, output_identifier=output_identifier
@@ -321,7 +321,7 @@ class VellumTestSuite:
 
         test_suite_run = self.client.test_suite_runs.create(
             test_suite_id=self._test_suite_id,
-            exec_config=TestSuiteRunExecConfigRequest_External(
+            exec_config=TestSuiteRunExternalExecConfigRequest(
                 type="EXTERNAL",
                 data=TestSuiteRunExternalExecConfigDataRequest(
                     executions=executions,

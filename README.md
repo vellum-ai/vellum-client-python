@@ -22,7 +22,7 @@ that Vellum supports, check out our [API Reference](https://docs.vellum.ai/api-r
 
 ```python
 from vellum import (
-    PromptDeploymentInputRequest_String,
+    StringInputRequest,
 )
 from vellum.client import Vellum
 
@@ -35,7 +35,7 @@ def execute() -> str:
         prompt_deployment_name="<example-deployment-name>>",
         release_tag="LATEST",
         inputs=[
-            PromptDeploymentInputRequest_String(
+            StringInputRequest(
                 name="input_a",
                 type="STRING",
                 value="Hello, world!",
@@ -74,7 +74,7 @@ async def execute() -> str:
         prompt_deployment_name="<example-deployment-name>>",
         release_tag="LATEST",
         inputs=[
-            vellum.PromptDeploymentInputRequest_String(
+            vellum.StringInputRequest(
                 name="input_a",
                 value="Hello, world!",
             )

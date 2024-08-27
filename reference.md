@@ -1047,6 +1047,169 @@ client.submit_workflow_execution_actuals(
 </dl>
 </details>
 
+## AdHoc
+<details><summary><code>client.ad_hoc.<a href="src/vellum/resources/ad_hoc/client.py">adhoc_execute_prompt_stream</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import (
+    AdHocExpandMetaRequestRequest,
+    EphemeralPromptCacheConfigRequest,
+    JinjaPromptBlockPropertiesRequest,
+    JinjaPromptBlockRequest,
+    PromptParametersRequest,
+    PromptRequestStringInputRequest,
+    Vellum,
+    VellumVariableRequest,
+)
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+response = client.ad_hoc.adhoc_execute_prompt_stream(
+    ml_model="string",
+    input_values=[
+        PromptRequestStringInputRequest(
+            key="string",
+            value="string",
+        )
+    ],
+    input_variables=[
+        VellumVariableRequest(
+            id="string",
+            key="string",
+            type="STRING",
+        )
+    ],
+    parameters=PromptParametersRequest(
+        stop=["string"],
+        temperature=1.1,
+        max_tokens=1,
+        top_p=1.1,
+        top_k=1,
+        frequency_penalty=1.1,
+        presence_penalty=1.1,
+        logit_bias={"string": {"key": "value"}},
+        custom_parameters={"string": {"key": "value"}},
+    ),
+    blocks=[
+        JinjaPromptBlockRequest(
+            properties=JinjaPromptBlockPropertiesRequest(
+                template="string",
+                template_type="STRING",
+            ),
+            id="string",
+            state="ENABLED",
+            cache_config=EphemeralPromptCacheConfigRequest(),
+        )
+    ],
+    expand_meta=AdHocExpandMetaRequestRequest(
+        cost=True,
+        model_name=True,
+        usage=True,
+        finish_reason=True,
+    ),
+)
+for chunk in response:
+    yield chunk
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ml_model:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**input_values:** `typing.Sequence[PromptRequestInputRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**input_variables:** `typing.Sequence[VellumVariableRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**parameters:** `PromptParametersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**blocks:** `typing.Sequence[PromptBlockRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expand_meta:** `typing.Optional[AdHocExpandMetaRequestRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Deployments
 <details><summary><code>client.deployments.<a href="src/vellum/resources/deployments/client.py">list</a>(...)</code></summary>
 <dl>

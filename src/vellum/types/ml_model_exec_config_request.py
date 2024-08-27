@@ -17,7 +17,7 @@ class MlModelExecConfigRequest(UniversalBaseModel):
     features: typing.List[MlModelFeature]
     force_system_credentials: typing.Optional[bool] = pydantic.Field(default=None)
     """
-    Can only be set when using an internal service token.
+    For internal use only.
     """
 
     tokenizer_config: typing.Optional[MlModelTokenizerConfigRequest] = None

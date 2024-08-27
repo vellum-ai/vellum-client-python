@@ -13,7 +13,7 @@ class MlModelDisplayConfigRequest(UniversalBaseModel):
     tags: typing.List[MlModelDisplayTag]
     default_display_priority: typing.Optional[float] = pydantic.Field(default=None)
     """
-    Can only be set when using an internal service token.
+    For internal use only.
     """
 
     if IS_PYDANTIC_V2:

@@ -13,6 +13,7 @@ MlModelFeature = typing.Union[
         "CHAT_MESSAGE_IMAGE",
         "FUNCTION_DEFINITION",
         "STREAMING_SUPPORT",
+        "PROMPT_CACHING_SUPPORT",
     ],
     typing.Any,
 ]

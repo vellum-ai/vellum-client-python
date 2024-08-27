@@ -8,6 +8,7 @@ from .open_api_string_property_request import OpenApiStringPropertyRequest
 from .open_api_boolean_property_request import OpenApiBooleanPropertyRequest
 from .open_api_const_property_request import OpenApiConstPropertyRequest
 from .open_api_ref_property_request import OpenApiRefPropertyRequest
+from .open_api_enum_property_request import OpenApiEnumPropertyRequest
 import typing
 
 if typing.TYPE_CHECKING:
@@ -24,4 +25,5 @@ OpenApiPropertyRequest = typing.Union[
     "OpenApiOneOfPropertyRequest",
     OpenApiConstPropertyRequest,
     OpenApiRefPropertyRequest,
+    OpenApiEnumPropertyRequest,
 ]

@@ -4,6 +4,7 @@ import typing
 from .environment import VellumEnvironment
 import httpx
 from .core.client_wrapper import SyncClientWrapper
+from .resources.ad_hoc.client import AdHocClient
 from .resources.deployments.client import DeploymentsClient
 from .resources.document_indexes.client import DocumentIndexesClient
 from .resources.documents.client import DocumentsClient
@@ -42,6 +43,7 @@ from .types.search_response import SearchResponse
 from .types.submit_completion_actual_request import SubmitCompletionActualRequest
 from .types.submit_workflow_execution_actual_request import SubmitWorkflowExecutionActualRequest
 from .core.client_wrapper import AsyncClientWrapper
+from .resources.ad_hoc.client import AsyncAdHocClient
 from .resources.deployments.client import AsyncDeploymentsClient
 from .resources.document_indexes.client import AsyncDocumentIndexesClient
 from .resources.documents.client import AsyncDocumentsClient
@@ -111,6 +113,7 @@ class Vellum:
             else httpx.Client(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
+        self.ad_hoc = AdHocClient(client_wrapper=self._client_wrapper)
         self.deployments = DeploymentsClient(client_wrapper=self._client_wrapper)
         self.document_indexes = DocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = DocumentsClient(client_wrapper=self._client_wrapper)
@@ -1278,6 +1281,7 @@ class AsyncVellum:
             else httpx.AsyncClient(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
+        self.ad_hoc = AsyncAdHocClient(client_wrapper=self._client_wrapper)
         self.deployments = AsyncDeploymentsClient(client_wrapper=self._client_wrapper)
         self.document_indexes = AsyncDocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = AsyncDocumentsClient(client_wrapper=self._client_wrapper)

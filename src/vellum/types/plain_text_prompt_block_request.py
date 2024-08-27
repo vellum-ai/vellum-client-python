@@ -2,19 +2,22 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-from .ml_model_display_tag_enum_value_label import MlModelDisplayTagEnumValueLabel
-import pydantic
+from .prompt_block_state import PromptBlockState
+from .ephemeral_prompt_cache_config_request import EphemeralPromptCacheConfigRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+import pydantic
 
 
-class MlModelDisplayConfigLabelled(UniversalBaseModel):
-    label: str
-    description: str
-    tags: typing.List[MlModelDisplayTagEnumValueLabel]
-    default_display_priority: typing.Optional[float] = pydantic.Field(default=None)
+class PlainTextPromptBlockRequest(UniversalBaseModel):
     """
-    For internal use only.
+    A block that holds a plain text string value.
     """
+
+    block_type: typing.Literal["PLAIN_TEXT"] = "PLAIN_TEXT"
+    text: str
+    id: str
+    state: typing.Optional[PromptBlockState] = None
+    cache_config: typing.Optional[EphemeralPromptCacheConfigRequest] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -4,6 +4,7 @@ import typing
 from .environment import VellumEnvironment
 import httpx
 from .core.client_wrapper import SyncClientWrapper
+from .resources.ad_hoc.client import AdHocClient
 from .resources.deployments.client import DeploymentsClient
 from .resources.document_indexes.client import DocumentIndexesClient
 from .resources.documents.client import DocumentsClient
@@ -15,7 +16,7 @@ from .resources.test_suites.client import TestSuitesClient
 from .resources.workflow_deployments.client import WorkflowDeploymentsClient
 from .resources.workflow_sandboxes.client import WorkflowSandboxesClient
 from .types.prompt_deployment_input_request import PromptDeploymentInputRequest
-from .types.prompt_deployment_expand_meta_request_request import PromptDeploymentExpandMetaRequestRequest
+from .types.prompt_deployment_expand_meta_request import PromptDeploymentExpandMetaRequest
 from .types.raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .core.request_options import RequestOptions
 from .types.execute_prompt_response import ExecutePromptResponse
@@ -42,6 +43,7 @@ from .types.search_response import SearchResponse
 from .types.submit_completion_actual_request import SubmitCompletionActualRequest
 from .types.submit_workflow_execution_actual_request import SubmitWorkflowExecutionActualRequest
 from .core.client_wrapper import AsyncClientWrapper
+from .resources.ad_hoc.client import AsyncAdHocClient
 from .resources.deployments.client import AsyncDeploymentsClient
 from .resources.document_indexes.client import AsyncDocumentIndexesClient
 from .resources.documents.client import AsyncDocumentsClient
@@ -111,6 +113,7 @@ class Vellum:
             else httpx.Client(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
+        self.ad_hoc = AdHocClient(client_wrapper=self._client_wrapper)
         self.deployments = DeploymentsClient(client_wrapper=self._client_wrapper)
         self.document_indexes = DocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = DocumentsClient(client_wrapper=self._client_wrapper)
@@ -130,7 +133,7 @@ class Vellum:
         prompt_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest] = OMIT,
+        expand_meta: typing.Optional[PromptDeploymentExpandMetaRequest] = OMIT,
         raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest] = OMIT,
         expand_raw: typing.Optional[typing.Sequence[str]] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
@@ -156,7 +159,7 @@ class Vellum:
         external_id : typing.Optional[str]
             Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequestRequest]
+        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequest]
             An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
         raw_overrides : typing.Optional[RawPromptExecutionOverridesRequest]
@@ -272,7 +275,7 @@ class Vellum:
         prompt_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest] = OMIT,
+        expand_meta: typing.Optional[PromptDeploymentExpandMetaRequest] = OMIT,
         raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest] = OMIT,
         expand_raw: typing.Optional[typing.Sequence[str]] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
@@ -298,7 +301,7 @@ class Vellum:
         external_id : typing.Optional[str]
             Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequestRequest]
+        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequest]
             An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
         raw_overrides : typing.Optional[RawPromptExecutionOverridesRequest]
@@ -321,7 +324,7 @@ class Vellum:
         Examples
         --------
         from vellum import (
-            PromptDeploymentExpandMetaRequestRequest,
+            PromptDeploymentExpandMetaRequest,
             RawPromptExecutionOverridesRequest,
             StringInputRequest,
             Vellum,
@@ -341,7 +344,7 @@ class Vellum:
             prompt_deployment_name="string",
             release_tag="string",
             external_id="string",
-            expand_meta=PromptDeploymentExpandMetaRequestRequest(
+            expand_meta=PromptDeploymentExpandMetaRequest(
                 model_name=True,
                 usage=True,
                 finish_reason=True,
@@ -1278,6 +1281,7 @@ class AsyncVellum:
             else httpx.AsyncClient(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
+        self.ad_hoc = AsyncAdHocClient(client_wrapper=self._client_wrapper)
         self.deployments = AsyncDeploymentsClient(client_wrapper=self._client_wrapper)
         self.document_indexes = AsyncDocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = AsyncDocumentsClient(client_wrapper=self._client_wrapper)
@@ -1297,7 +1301,7 @@ class AsyncVellum:
         prompt_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest] = OMIT,
+        expand_meta: typing.Optional[PromptDeploymentExpandMetaRequest] = OMIT,
         raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest] = OMIT,
         expand_raw: typing.Optional[typing.Sequence[str]] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
@@ -1323,7 +1327,7 @@ class AsyncVellum:
         external_id : typing.Optional[str]
             Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequestRequest]
+        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequest]
             An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
         raw_overrides : typing.Optional[RawPromptExecutionOverridesRequest]
@@ -1447,7 +1451,7 @@ class AsyncVellum:
         prompt_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
-        expand_meta: typing.Optional[PromptDeploymentExpandMetaRequestRequest] = OMIT,
+        expand_meta: typing.Optional[PromptDeploymentExpandMetaRequest] = OMIT,
         raw_overrides: typing.Optional[RawPromptExecutionOverridesRequest] = OMIT,
         expand_raw: typing.Optional[typing.Sequence[str]] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
@@ -1473,7 +1477,7 @@ class AsyncVellum:
         external_id : typing.Optional[str]
             Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 
-        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequestRequest]
+        expand_meta : typing.Optional[PromptDeploymentExpandMetaRequest]
             An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 
         raw_overrides : typing.Optional[RawPromptExecutionOverridesRequest]
@@ -1499,7 +1503,7 @@ class AsyncVellum:
 
         from vellum import (
             AsyncVellum,
-            PromptDeploymentExpandMetaRequestRequest,
+            PromptDeploymentExpandMetaRequest,
             RawPromptExecutionOverridesRequest,
             StringInputRequest,
         )
@@ -1521,7 +1525,7 @@ class AsyncVellum:
                 prompt_deployment_name="string",
                 release_tag="string",
                 external_id="string",
-                expand_meta=PromptDeploymentExpandMetaRequestRequest(
+                expand_meta=PromptDeploymentExpandMetaRequest(
                     model_name=True,
                     usage=True,
                     finish_reason=True,

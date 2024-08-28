@@ -2,18 +2,14 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
+from .vellum_variable_type import VellumVariableType
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
 
-class MlModelUsage(UniversalBaseModel):
-    output_token_count: typing.Optional[int] = None
-    input_token_count: typing.Optional[int] = None
-    input_char_count: typing.Optional[int] = None
-    output_char_count: typing.Optional[int] = None
-    compute_nanos: typing.Optional[int] = None
-    cache_creation_input_tokens: typing.Optional[int] = None
-    cache_read_input_tokens: typing.Optional[int] = None
+class JinjaPromptBlockPropertiesRequest(UniversalBaseModel):
+    template: typing.Optional[str] = None
+    template_type: typing.Optional[VellumVariableType] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

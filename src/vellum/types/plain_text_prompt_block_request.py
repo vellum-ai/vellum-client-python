@@ -2,18 +2,22 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
+from .prompt_block_state import PromptBlockState
+from .ephemeral_prompt_cache_config_request import EphemeralPromptCacheConfigRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
 
-class MlModelUsage(UniversalBaseModel):
-    output_token_count: typing.Optional[int] = None
-    input_token_count: typing.Optional[int] = None
-    input_char_count: typing.Optional[int] = None
-    output_char_count: typing.Optional[int] = None
-    compute_nanos: typing.Optional[int] = None
-    cache_creation_input_tokens: typing.Optional[int] = None
-    cache_read_input_tokens: typing.Optional[int] = None
+class PlainTextPromptBlockRequest(UniversalBaseModel):
+    """
+    A block that holds a plain text string value.
+    """
+
+    block_type: typing.Literal["PLAIN_TEXT"] = "PLAIN_TEXT"
+    text: str
+    id: str
+    state: typing.Optional[PromptBlockState] = None
+    cache_config: typing.Optional[EphemeralPromptCacheConfigRequest] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

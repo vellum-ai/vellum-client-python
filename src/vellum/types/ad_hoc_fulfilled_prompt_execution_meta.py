@@ -2,18 +2,20 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
+from .finish_reason_enum import FinishReasonEnum
+from .ml_model_usage import MlModelUsage
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
 
-class MlModelUsage(UniversalBaseModel):
-    output_token_count: typing.Optional[int] = None
-    input_token_count: typing.Optional[int] = None
-    input_char_count: typing.Optional[int] = None
-    output_char_count: typing.Optional[int] = None
-    compute_nanos: typing.Optional[int] = None
-    cache_creation_input_tokens: typing.Optional[int] = None
-    cache_read_input_tokens: typing.Optional[int] = None
+class AdHocFulfilledPromptExecutionMeta(UniversalBaseModel):
+    """
+    The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+    """
+
+    latency: typing.Optional[int] = None
+    finish_reason: typing.Optional[FinishReasonEnum] = None
+    usage: typing.Optional[MlModelUsage] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

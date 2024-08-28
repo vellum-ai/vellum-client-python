@@ -406,6 +406,14 @@ client.execute_workflow(
 <dl>
 <dd>
 
+**metadata:** `typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]` — Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -469,6 +477,7 @@ response = client.execute_workflow_stream(
     release_tag="string",
     external_id="string",
     event_types=["NODE"],
+    metadata={"string": {"key": "value"}},
 )
 for chunk in response:
     yield chunk
@@ -536,6 +545,14 @@ for chunk in response:
 <dd>
 
 **event_types:** `typing.Optional[typing.Sequence[WorkflowExecutionEventType]]` — Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metadata:** `typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]` — Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
     
 </dd>
 </dl>

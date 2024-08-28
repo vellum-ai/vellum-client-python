@@ -449,6 +449,7 @@ class Vellum:
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
+        metadata: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ExecuteWorkflowResponse:
         """
@@ -473,6 +474,9 @@ class Vellum:
 
         external_id : typing.Optional[str]
             Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
+
+        metadata : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+            Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -509,6 +513,7 @@ class Vellum:
                 "workflow_deployment_name": workflow_deployment_name,
                 "release_tag": release_tag,
                 "external_id": external_id,
+                "metadata": metadata,
             },
             request_options=request_options,
             omit=OMIT,
@@ -567,6 +572,7 @@ class Vellum:
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
         event_types: typing.Optional[typing.Sequence[WorkflowExecutionEventType]] = OMIT,
+        metadata: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[WorkflowStreamEvent]:
         """
@@ -594,6 +600,9 @@ class Vellum:
 
         event_types : typing.Optional[typing.Sequence[WorkflowExecutionEventType]]
             Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
+
+        metadata : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+            Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -629,6 +638,7 @@ class Vellum:
             release_tag="string",
             external_id="string",
             event_types=["NODE"],
+            metadata={"string": {"key": "value"}},
         )
         for chunk in response:
             yield chunk
@@ -645,6 +655,7 @@ class Vellum:
                 "release_tag": release_tag,
                 "external_id": external_id,
                 "event_types": event_types,
+                "metadata": metadata,
             },
             request_options=request_options,
             omit=OMIT,
@@ -1632,6 +1643,7 @@ class AsyncVellum:
         workflow_deployment_name: typing.Optional[str] = OMIT,
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
+        metadata: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ExecuteWorkflowResponse:
         """
@@ -1656,6 +1668,9 @@ class AsyncVellum:
 
         external_id : typing.Optional[str]
             Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
+
+        metadata : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+            Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1700,6 +1715,7 @@ class AsyncVellum:
                 "workflow_deployment_name": workflow_deployment_name,
                 "release_tag": release_tag,
                 "external_id": external_id,
+                "metadata": metadata,
             },
             request_options=request_options,
             omit=OMIT,
@@ -1758,6 +1774,7 @@ class AsyncVellum:
         release_tag: typing.Optional[str] = OMIT,
         external_id: typing.Optional[str] = OMIT,
         event_types: typing.Optional[typing.Sequence[WorkflowExecutionEventType]] = OMIT,
+        metadata: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[WorkflowStreamEvent]:
         """
@@ -1785,6 +1802,9 @@ class AsyncVellum:
 
         event_types : typing.Optional[typing.Sequence[WorkflowExecutionEventType]]
             Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
+
+        metadata : typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]]
+            Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1825,6 +1845,7 @@ class AsyncVellum:
                 release_tag="string",
                 external_id="string",
                 event_types=["NODE"],
+                metadata={"string": {"key": "value"}},
             )
             async for chunk in response:
                 yield chunk
@@ -1844,6 +1865,7 @@ class AsyncVellum:
                 "release_tag": release_tag,
                 "external_id": external_id,
                 "event_types": event_types,
+                "metadata": metadata,
             },
             request_options=request_options,
             omit=OMIT,

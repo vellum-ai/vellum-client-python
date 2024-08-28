@@ -94,7 +94,7 @@ client.execute_prompt(
 <dl>
 <dd>
 
-**expand_meta:** `typing.Optional[PromptDeploymentExpandMetaRequestRequest]` — An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+**expand_meta:** `typing.Optional[PromptDeploymentExpandMetaRequest]` — An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
     
 </dd>
 </dl>
@@ -166,7 +166,7 @@ Executes a deployed Prompt and streams back the results.
 
 ```python
 from vellum import (
-    PromptDeploymentExpandMetaRequestRequest,
+    PromptDeploymentExpandMetaRequest,
     RawPromptExecutionOverridesRequest,
     StringInputRequest,
     Vellum,
@@ -186,7 +186,7 @@ response = client.execute_prompt_stream(
     prompt_deployment_name="string",
     release_tag="string",
     external_id="string",
-    expand_meta=PromptDeploymentExpandMetaRequestRequest(
+    expand_meta=PromptDeploymentExpandMetaRequest(
         model_name=True,
         usage=True,
         finish_reason=True,
@@ -259,7 +259,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**expand_meta:** `typing.Optional[PromptDeploymentExpandMetaRequestRequest]` — An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+**expand_meta:** `typing.Optional[PromptDeploymentExpandMetaRequest]` — An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
     
 </dd>
 </dl>
@@ -1028,6 +1028,169 @@ client.submit_workflow_execution_actuals(
 <dd>
 
 **external_id:** `typing.Optional[str]` — The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## AdHoc
+<details><summary><code>client.ad_hoc.<a href="src/vellum/resources/ad_hoc/client.py">adhoc_execute_prompt_stream</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import (
+    AdHocExpandMetaRequest,
+    EphemeralPromptCacheConfigRequest,
+    JinjaPromptBlockPropertiesRequest,
+    JinjaPromptBlockRequest,
+    PromptParametersRequest,
+    PromptRequestStringInputRequest,
+    Vellum,
+    VellumVariableRequest,
+)
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+response = client.ad_hoc.adhoc_execute_prompt_stream(
+    ml_model="string",
+    input_values=[
+        PromptRequestStringInputRequest(
+            key="string",
+            value="string",
+        )
+    ],
+    input_variables=[
+        VellumVariableRequest(
+            id="string",
+            key="string",
+            type="STRING",
+        )
+    ],
+    parameters=PromptParametersRequest(
+        stop=["string"],
+        temperature=1.1,
+        max_tokens=1,
+        top_p=1.1,
+        top_k=1,
+        frequency_penalty=1.1,
+        presence_penalty=1.1,
+        logit_bias={"string": {"key": "value"}},
+        custom_parameters={"string": {"key": "value"}},
+    ),
+    blocks=[
+        JinjaPromptBlockRequest(
+            properties=JinjaPromptBlockPropertiesRequest(
+                template="string",
+                template_type="STRING",
+            ),
+            id="string",
+            state="ENABLED",
+            cache_config=EphemeralPromptCacheConfigRequest(),
+        )
+    ],
+    expand_meta=AdHocExpandMetaRequest(
+        cost=True,
+        model_name=True,
+        usage=True,
+        finish_reason=True,
+    ),
+)
+for chunk in response:
+    yield chunk
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ml_model:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**input_values:** `typing.Sequence[PromptRequestInputRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**input_variables:** `typing.Sequence[VellumVariableRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**parameters:** `PromptParametersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**blocks:** `typing.Sequence[PromptBlockRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expand_meta:** `typing.Optional[AdHocExpandMetaRequest]` 
     
 </dd>
 </dl>
@@ -2765,585 +2928,6 @@ client.folder_entities.add_entity_to_folder(
 <dd>
 
 **entity_id:** `str` — The ID of the entity you would like to move.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## MlModels
-<details><summary><code>client.ml_models.<a href="src/vellum/resources/ml_models/client.py">list</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all ML Models that your Workspace has access to.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from vellum import Vellum
-
-client = Vellum(
-    api_key="YOUR_API_KEY",
-)
-client.ml_models.list()
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**limit:** `typing.Optional[int]` — Number of results to return per page.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**offset:** `typing.Optional[int]` — The initial index from which to return the results.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**ordering:** `typing.Optional[str]` — Which field to use when ordering the results.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.ml_models.<a href="src/vellum/resources/ml_models/client.py">create</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Creates a new ML Model.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from vellum import MlModelExecConfigRequest, Vellum
-
-client = Vellum(
-    api_key="YOUR_API_KEY",
-)
-client.ml_models.create(
-    name="name",
-    family="CAPYBARA",
-    hosted_by="ANTHROPIC",
-    developed_by="01_AI",
-    exec_config=MlModelExecConfigRequest(
-        model_identifier="model_identifier",
-        base_url="base_url",
-        metadata={"key": "value"},
-        features=["TEXT"],
-    ),
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `str` — The unique name of the ML Model.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**family:** `MlModelFamily` 
-
-The family of the ML Model.
-
-* `CAPYBARA` - Capybara
-* `CHAT_GPT` - Chat GPT
-* `CLAUDE` - Claude
-* `COHERE` - Cohere
-* `FALCON` - Falcon
-* `GEMINI` - Gemini
-* `GRANITE` - Granite
-* `GPT3` - GPT-3
-* `FIREWORKS` - Fireworks
-* `LLAMA2` - Llama2
-* `LLAMA3` - Llama3
-* `MISTRAL` - Mistral
-* `MPT` - MPT
-* `OPENCHAT` - OpenChat
-* `PALM` - PaLM
-* `SOLAR` - Solar
-* `TITAN` - Titan
-* `WIZARD` - Wizard
-* `YI` - Yi
-* `ZEPHYR` - Zephyr
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**hosted_by:** `HostedByEnum` 
-
-The organization hosting the ML Model.
-
-* `ANTHROPIC` - ANTHROPIC
-* `AWS_BEDROCK` - AWS_BEDROCK
-* `AZURE_OPENAI` - AZURE_OPENAI
-* `COHERE` - COHERE
-* `CUSTOM` - CUSTOM
-* `FIREWORKS_AI` - FIREWORKS_AI
-* `GOOGLE` - GOOGLE
-* `GOOGLE_VERTEX_AI` - GOOGLE_VERTEX_AI
-* `GROQ` - GROQ
-* `HUGGINGFACE` - HUGGINGFACE
-* `IBM_WATSONX` - IBM_WATSONX
-* `MOSAICML` - MOSAICML
-* `MYSTIC` - MYSTIC
-* `OPENAI` - OPENAI
-* `OPENPIPE` - OPENPIPE
-* `PYQ` - PYQ
-* `REPLICATE` - REPLICATE
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**developed_by:** `MlModelDeveloper` 
-
-The organization that developed the ML Model.
-
-* `01_AI` - 01_AI
-* `AMAZON` - AMAZON
-* `ANTHROPIC` - ANTHROPIC
-* `COHERE` - COHERE
-* `ELUTHERAI` - ELUTHERAI
-* `FIREWORKS_AI` - FIREWORKS_AI
-* `GOOGLE` - GOOGLE
-* `HUGGINGFACE` - HUGGINGFACE
-* `IBM` - IBM
-* `META` - META
-* `MISTRAL_AI` - MISTRAL_AI
-* `MOSAICML` - MOSAICML
-* `NOUS_RESEARCH` - NOUS_RESEARCH
-* `OPENAI` - OPENAI
-* `OPENCHAT` - OPENCHAT
-* `OPENPIPE` - OPENPIPE
-* `TII` - TII
-* `WIZARDLM` - WIZARDLM
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**exec_config:** `MlModelExecConfigRequest` — Configuration for how to execute the ML Model.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**parameter_config:** `typing.Optional[MlModelParameterConfigRequest]` — Configuration for the ML Model's parameters.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**display_config:** `typing.Optional[MlModelDisplayConfigRequest]` — Configuration for how to display the ML Model.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**visibility:** `typing.Optional[VisibilityEnum]` 
-
-The visibility of the ML Model.
-
-* `DEFAULT` - DEFAULT
-* `PUBLIC` - PUBLIC
-* `PRIVATE` - PRIVATE
-* `DISABLED` - DISABLED
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.ml_models.<a href="src/vellum/resources/ml_models/client.py">retrieve</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve an ML Model by its UUID.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from vellum import Vellum
-
-client = Vellum(
-    api_key="YOUR_API_KEY",
-)
-client.ml_models.retrieve(
-    id="id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` — Either the ML Model's ID or its unique name
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.ml_models.<a href="src/vellum/resources/ml_models/client.py">update</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Replace an ML Model with a new representation, keying off of its UUID.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from vellum import Vellum
-
-client = Vellum(
-    api_key="YOUR_API_KEY",
-)
-client.ml_models.update(
-    id="id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` — Either the ML Model's ID or its unique name
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**exec_config:** `typing.Optional[MlModelExecConfigRequest]` — Configuration for how to execute the ML Model.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**parameter_config:** `typing.Optional[MlModelParameterConfigRequest]` — Configuration for the ML Model's parameters.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**display_config:** `typing.Optional[MlModelDisplayConfigRequest]` — Configuration for how to display the ML Model.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**visibility:** `typing.Optional[VisibilityEnum]` 
-
-The visibility of the ML Model.
-
-* `DEFAULT` - DEFAULT
-* `PUBLIC` - PUBLIC
-* `PRIVATE` - PRIVATE
-* `DISABLED` - DISABLED
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.ml_models.<a href="src/vellum/resources/ml_models/client.py">partial_update</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Partially update an ML Model, keying off of its UUID.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from vellum import Vellum
-
-client = Vellum(
-    api_key="YOUR_API_KEY",
-)
-client.ml_models.partial_update(
-    id="id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` — Either the ML Model's ID or its unique name
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**exec_config:** `typing.Optional[MlModelExecConfigRequest]` — Configuration for how to execute the ML Model.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**parameter_config:** `typing.Optional[MlModelParameterConfigRequest]` — Configuration for the ML Model's parameters.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**display_config:** `typing.Optional[MlModelDisplayConfigRequest]` — Configuration for how to display the ML Model.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**visibility:** `typing.Optional[VisibilityEnum]` 
-
-The visibility of the ML Model.
-
-* `DEFAULT` - DEFAULT
-* `PUBLIC` - PUBLIC
-* `PRIVATE` - PRIVATE
-* `DISABLED` - DISABLED
     
 </dd>
 </dl>

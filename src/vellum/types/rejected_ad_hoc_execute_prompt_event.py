@@ -2,18 +2,21 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
+from .vellum_error import VellumError
+from .ad_hoc_rejected_prompt_execution_meta import AdHocRejectedPromptExecutionMeta
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
 
-class MlModelUsage(UniversalBaseModel):
-    output_token_count: typing.Optional[int] = None
-    input_token_count: typing.Optional[int] = None
-    input_char_count: typing.Optional[int] = None
-    output_char_count: typing.Optional[int] = None
-    compute_nanos: typing.Optional[int] = None
-    cache_creation_input_tokens: typing.Optional[int] = None
-    cache_read_input_tokens: typing.Optional[int] = None
+class RejectedAdHocExecutePromptEvent(UniversalBaseModel):
+    """
+    The final data returned indicating an error occurred during the stream.
+    """
+
+    state: typing.Literal["REJECTED"] = "REJECTED"
+    error: VellumError
+    execution_id: str
+    meta: typing.Optional[AdHocRejectedPromptExecutionMeta] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

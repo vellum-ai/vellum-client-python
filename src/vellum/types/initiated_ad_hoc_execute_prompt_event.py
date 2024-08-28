@@ -2,18 +2,19 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
+from .ad_hoc_initiated_prompt_execution_meta import AdHocInitiatedPromptExecutionMeta
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
 
-class MlModelUsage(UniversalBaseModel):
-    output_token_count: typing.Optional[int] = None
-    input_token_count: typing.Optional[int] = None
-    input_char_count: typing.Optional[int] = None
-    output_char_count: typing.Optional[int] = None
-    compute_nanos: typing.Optional[int] = None
-    cache_creation_input_tokens: typing.Optional[int] = None
-    cache_read_input_tokens: typing.Optional[int] = None
+class InitiatedAdHocExecutePromptEvent(UniversalBaseModel):
+    """
+    The initial data returned indicating that the response from the model has returned and begun streaming.
+    """
+
+    state: typing.Literal["INITIATED"] = "INITIATED"
+    meta: typing.Optional[AdHocInitiatedPromptExecutionMeta] = None
+    execution_id: str
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

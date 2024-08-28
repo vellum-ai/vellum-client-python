@@ -2,19 +2,14 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-from .ml_model_display_tag_enum_value_label import MlModelDisplayTagEnumValueLabel
-import pydantic
+from .vellum_variable_type import VellumVariableType
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+import pydantic
 
 
-class MlModelDisplayConfigLabelled(UniversalBaseModel):
-    label: str
-    description: str
-    tags: typing.List[MlModelDisplayTagEnumValueLabel]
-    default_display_priority: typing.Optional[float] = pydantic.Field(default=None)
-    """
-    For internal use only.
-    """
+class JinjaPromptBlockPropertiesRequest(UniversalBaseModel):
+    template: typing.Optional[str] = None
+    template_type: typing.Optional[VellumVariableType] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

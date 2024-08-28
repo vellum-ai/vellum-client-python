@@ -8,6 +8,7 @@ from .open_api_string_property import OpenApiStringProperty
 from .open_api_boolean_property import OpenApiBooleanProperty
 from .open_api_const_property import OpenApiConstProperty
 from .open_api_ref_property import OpenApiRefProperty
+from .open_api_enum_property import OpenApiEnumProperty
 import typing
 
 if typing.TYPE_CHECKING:
@@ -24,4 +25,5 @@ OpenApiProperty = typing.Union[
     "OpenApiOneOfProperty",
     OpenApiConstProperty,
     OpenApiRefProperty,
+    OpenApiEnumProperty,
 ]

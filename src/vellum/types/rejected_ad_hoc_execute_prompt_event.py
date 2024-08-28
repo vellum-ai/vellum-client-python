@@ -2,19 +2,21 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-from .ml_model_display_tag_enum_value_label import MlModelDisplayTagEnumValueLabel
-import pydantic
+from .vellum_error import VellumError
+from .ad_hoc_rejected_prompt_execution_meta import AdHocRejectedPromptExecutionMeta
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+import pydantic
 
 
-class MlModelDisplayConfigLabelled(UniversalBaseModel):
-    label: str
-    description: str
-    tags: typing.List[MlModelDisplayTagEnumValueLabel]
-    default_display_priority: typing.Optional[float] = pydantic.Field(default=None)
+class RejectedAdHocExecutePromptEvent(UniversalBaseModel):
     """
-    For internal use only.
+    The final data returned indicating an error occurred during the stream.
     """
+
+    state: typing.Literal["REJECTED"] = "REJECTED"
+    error: VellumError
+    execution_id: str
+    meta: typing.Optional[AdHocRejectedPromptExecutionMeta] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

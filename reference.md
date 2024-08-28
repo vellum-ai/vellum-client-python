@@ -94,7 +94,7 @@ client.execute_prompt(
 <dl>
 <dd>
 
-**expand_meta:** `typing.Optional[PromptDeploymentExpandMetaRequestRequest]` — An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+**expand_meta:** `typing.Optional[PromptDeploymentExpandMetaRequest]` — An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
     
 </dd>
 </dl>
@@ -166,7 +166,7 @@ Executes a deployed Prompt and streams back the results.
 
 ```python
 from vellum import (
-    PromptDeploymentExpandMetaRequestRequest,
+    PromptDeploymentExpandMetaRequest,
     RawPromptExecutionOverridesRequest,
     StringInputRequest,
     Vellum,
@@ -186,7 +186,7 @@ response = client.execute_prompt_stream(
     prompt_deployment_name="string",
     release_tag="string",
     external_id="string",
-    expand_meta=PromptDeploymentExpandMetaRequestRequest(
+    expand_meta=PromptDeploymentExpandMetaRequest(
         model_name=True,
         usage=True,
         finish_reason=True,
@@ -259,7 +259,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**expand_meta:** `typing.Optional[PromptDeploymentExpandMetaRequestRequest]` — An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+**expand_meta:** `typing.Optional[PromptDeploymentExpandMetaRequest]` — An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
     
 </dd>
 </dl>
@@ -1028,6 +1028,169 @@ client.submit_workflow_execution_actuals(
 <dd>
 
 **external_id:** `typing.Optional[str]` — The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## AdHoc
+<details><summary><code>client.ad_hoc.<a href="src/vellum/resources/ad_hoc/client.py">adhoc_execute_prompt_stream</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import (
+    AdHocExpandMetaRequest,
+    EphemeralPromptCacheConfigRequest,
+    JinjaPromptBlockPropertiesRequest,
+    JinjaPromptBlockRequest,
+    PromptParametersRequest,
+    PromptRequestStringInputRequest,
+    Vellum,
+    VellumVariableRequest,
+)
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+response = client.ad_hoc.adhoc_execute_prompt_stream(
+    ml_model="string",
+    input_values=[
+        PromptRequestStringInputRequest(
+            key="string",
+            value="string",
+        )
+    ],
+    input_variables=[
+        VellumVariableRequest(
+            id="string",
+            key="string",
+            type="STRING",
+        )
+    ],
+    parameters=PromptParametersRequest(
+        stop=["string"],
+        temperature=1.1,
+        max_tokens=1,
+        top_p=1.1,
+        top_k=1,
+        frequency_penalty=1.1,
+        presence_penalty=1.1,
+        logit_bias={"string": {"key": "value"}},
+        custom_parameters={"string": {"key": "value"}},
+    ),
+    blocks=[
+        JinjaPromptBlockRequest(
+            properties=JinjaPromptBlockPropertiesRequest(
+                template="string",
+                template_type="STRING",
+            ),
+            id="string",
+            state="ENABLED",
+            cache_config=EphemeralPromptCacheConfigRequest(),
+        )
+    ],
+    expand_meta=AdHocExpandMetaRequest(
+        cost=True,
+        model_name=True,
+        usage=True,
+        finish_reason=True,
+    ),
+)
+for chunk in response:
+    yield chunk
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ml_model:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**input_values:** `typing.Sequence[PromptRequestInputRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**input_variables:** `typing.Sequence[VellumVariableRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**parameters:** `PromptParametersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**blocks:** `typing.Sequence[PromptBlockRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expand_meta:** `typing.Optional[AdHocExpandMetaRequest]` 
     
 </dd>
 </dl>

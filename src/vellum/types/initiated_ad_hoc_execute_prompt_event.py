@@ -2,19 +2,19 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-from .ml_model_display_tag_enum_value_label import MlModelDisplayTagEnumValueLabel
-import pydantic
+from .ad_hoc_initiated_prompt_execution_meta import AdHocInitiatedPromptExecutionMeta
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+import pydantic
 
 
-class MlModelDisplayConfigLabelled(UniversalBaseModel):
-    label: str
-    description: str
-    tags: typing.List[MlModelDisplayTagEnumValueLabel]
-    default_display_priority: typing.Optional[float] = pydantic.Field(default=None)
+class InitiatedAdHocExecutePromptEvent(UniversalBaseModel):
     """
-    For internal use only.
+    The initial data returned indicating that the response from the model has returned and begun streaming.
     """
+
+    state: typing.Literal["INITIATED"] = "INITIATED"
+    meta: typing.Optional[AdHocInitiatedPromptExecutionMeta] = None
+    execution_id: str
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

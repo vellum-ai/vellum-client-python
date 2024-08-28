@@ -6,7 +6,8 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
-class PromptDeploymentExpandMetaRequestRequest(UniversalBaseModel):
+class AdHocExpandMetaRequest(UniversalBaseModel):
+    cost: typing.Optional[bool] = None
     model_name: typing.Optional[bool] = pydantic.Field(default=None)
     """
     If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
@@ -20,21 +21,6 @@ class PromptDeploymentExpandMetaRequestRequest(UniversalBaseModel):
     finish_reason: typing.Optional[bool] = pydantic.Field(default=None)
     """
     If enabled, the response will include the reason provided by the model for why the execution finished.
-    """
-
-    latency: typing.Optional[bool] = pydantic.Field(default=None)
-    """
-    If enabled, the response will include the time in nanoseconds it took to execute the Prompt Deployment.
-    """
-
-    deployment_release_tag: typing.Optional[bool] = pydantic.Field(default=None)
-    """
-    If enabled, the response will include the release tag of the Prompt Deployment.
-    """
-
-    prompt_version_id: typing.Optional[bool] = pydantic.Field(default=None)
-    """
-    If enabled, the response will include the ID of the Prompt Version backing the deployment.
     """
 
     if IS_PYDANTIC_V2:

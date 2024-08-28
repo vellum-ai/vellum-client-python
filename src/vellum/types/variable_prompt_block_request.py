@@ -2,19 +2,22 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-from .ml_model_display_tag_enum_value_label import MlModelDisplayTagEnumValueLabel
-import pydantic
+from .prompt_block_state import PromptBlockState
+from .ephemeral_prompt_cache_config_request import EphemeralPromptCacheConfigRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+import pydantic
 
 
-class MlModelDisplayConfigLabelled(UniversalBaseModel):
-    label: str
-    description: str
-    tags: typing.List[MlModelDisplayTagEnumValueLabel]
-    default_display_priority: typing.Optional[float] = pydantic.Field(default=None)
+class VariablePromptBlockRequest(UniversalBaseModel):
     """
-    For internal use only.
+    A block that represents a variable in a prompt template.
     """
+
+    block_type: typing.Literal["VARIABLE"] = "VARIABLE"
+    id: str
+    state: typing.Optional[PromptBlockState] = None
+    cache_config: typing.Optional[EphemeralPromptCacheConfigRequest] = None
+    input_variable_id: str
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

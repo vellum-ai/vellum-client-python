@@ -17,6 +17,7 @@ class PromptDeploymentExpandMetaRequest(UniversalBaseModel):
     If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
     """
 
+    cost: typing.Optional[bool] = None
     finish_reason: typing.Optional[bool] = pydantic.Field(default=None)
     """
     If enabled, the response will include the reason provided by the model for why the execution finished.

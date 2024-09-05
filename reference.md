@@ -189,6 +189,7 @@ response = client.execute_prompt_stream(
     expand_meta=PromptDeploymentExpandMetaRequest(
         model_name=True,
         usage=True,
+        cost=True,
         finish_reason=True,
         latency=True,
         deployment_release_tag=True,

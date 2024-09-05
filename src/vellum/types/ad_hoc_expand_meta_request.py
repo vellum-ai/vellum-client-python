@@ -7,7 +7,11 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
 class AdHocExpandMetaRequest(UniversalBaseModel):
-    cost: typing.Optional[bool] = None
+    cost: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    If enabled, the response will include model host cost tracking. This may increase latency for some model hosts.
+    """
+
     model_name: typing.Optional[bool] = pydantic.Field(default=None)
     """
     If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.

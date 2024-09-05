@@ -344,6 +344,7 @@ class Vellum:
             expand_meta=PromptDeploymentExpandMetaRequest(
                 model_name=True,
                 usage=True,
+                cost=True,
                 finish_reason=True,
                 latency=True,
                 deployment_release_tag=True,
@@ -1535,6 +1536,7 @@ class AsyncVellum:
                 expand_meta=PromptDeploymentExpandMetaRequest(
                     model_name=True,
                     usage=True,
+                    cost=True,
                     finish_reason=True,
                     latency=True,
                     deployment_release_tag=True,

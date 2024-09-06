@@ -229,8 +229,18 @@ class TestSuitesClient:
                     id="string",
                     data=CreateTestSuiteTestCaseRequest(
                         label="string",
-                        input_values=[NamedTestCaseStringVariableValueRequest()],
-                        evaluation_values=[NamedTestCaseStringVariableValueRequest()],
+                        input_values=[
+                            NamedTestCaseStringVariableValueRequest(
+                                value="string",
+                                name="string",
+                            )
+                        ],
+                        evaluation_values=[
+                            NamedTestCaseStringVariableValueRequest(
+                                value="string",
+                                name="string",
+                            )
+                        ],
                         external_id="string",
                     ),
                 )
@@ -548,9 +558,17 @@ class AsyncTestSuitesClient:
                         id="string",
                         data=CreateTestSuiteTestCaseRequest(
                             label="string",
-                            input_values=[NamedTestCaseStringVariableValueRequest()],
+                            input_values=[
+                                NamedTestCaseStringVariableValueRequest(
+                                    value="string",
+                                    name="string",
+                                )
+                            ],
                             evaluation_values=[
-                                NamedTestCaseStringVariableValueRequest()
+                                NamedTestCaseStringVariableValueRequest(
+                                    value="string",
+                                    name="string",
+                                )
                             ],
                             external_id="string",
                         ),

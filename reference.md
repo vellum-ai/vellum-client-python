@@ -725,7 +725,9 @@ response = client.generate_stream(
                 ChatMessageRequest(
                     text="string",
                     role="SYSTEM",
-                    content=StringChatMessageContentRequest(),
+                    content=StringChatMessageContentRequest(
+                        value="string",
+                    ),
                     source="string",
                 )
             ],
@@ -1141,7 +1143,9 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
             ),
             id="string",
             state="ENABLED",
-            cache_config=EphemeralPromptCacheConfigRequest(),
+            cache_config=EphemeralPromptCacheConfigRequest(
+                type={"key": "value"},
+            ),
         )
     ],
     expand_meta=AdHocExpandMetaRequest(
@@ -3763,8 +3767,18 @@ response = client.test_suites.test_suite_test_cases_bulk(
             id="string",
             data=CreateTestSuiteTestCaseRequest(
                 label="string",
-                input_values=[NamedTestCaseStringVariableValueRequest()],
-                evaluation_values=[NamedTestCaseStringVariableValueRequest()],
+                input_values=[
+                    NamedTestCaseStringVariableValueRequest(
+                        value="string",
+                        name="string",
+                    )
+                ],
+                evaluation_values=[
+                    NamedTestCaseStringVariableValueRequest(
+                        value="string",
+                        name="string",
+                    )
+                ],
                 external_id="string",
             ),
         )

@@ -112,7 +112,9 @@ class AdHocClient:
                     ),
                     id="string",
                     state="ENABLED",
-                    cache_config=EphemeralPromptCacheConfigRequest(),
+                    cache_config=EphemeralPromptCacheConfigRequest(
+                        type={"key": "value"},
+                    ),
                 )
             ],
             expand_meta=AdHocExpandMetaRequest(
@@ -288,7 +290,9 @@ class AsyncAdHocClient:
                         ),
                         id="string",
                         state="ENABLED",
-                        cache_config=EphemeralPromptCacheConfigRequest(),
+                        cache_config=EphemeralPromptCacheConfigRequest(
+                            type={"key": "value"},
+                        ),
                     )
                 ],
                 expand_meta=AdHocExpandMetaRequest(

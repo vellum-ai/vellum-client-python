@@ -892,7 +892,9 @@ class Vellum:
                         ChatMessageRequest(
                             text="string",
                             role="SYSTEM",
-                            content=StringChatMessageContentRequest(),
+                            content=StringChatMessageContentRequest(
+                                value="string",
+                            ),
                             source="string",
                         )
                     ],
@@ -2116,7 +2118,9 @@ class AsyncVellum:
                             ChatMessageRequest(
                                 text="string",
                                 role="SYSTEM",
-                                content=StringChatMessageContentRequest(),
+                                content=StringChatMessageContentRequest(
+                                    value="string",
+                                ),
                                 source="string",
                             )
                         ],

@@ -6,6 +6,8 @@ from .test_suite_run_execution_output import TestSuiteRunExecutionOutput
 from .test_suite_run_execution_metric_result import TestSuiteRunExecutionMetricResult
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
+from .array_vellum_value import ArrayVellumValue
 
 
 class TestSuiteRunExecution(UniversalBaseModel):
@@ -22,3 +24,6 @@ class TestSuiteRunExecution(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVellumValue)

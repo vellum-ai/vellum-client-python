@@ -7,6 +7,9 @@ from .workflow_node_result_data import WorkflowNodeResultData
 from .node_output_compiled_value import NodeOutputCompiledValue
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
+from .array_variable_value import ArrayVariableValue
+from .array_vellum_value import ArrayVellumValue
 
 
 class FulfilledWorkflowNodeResultEvent(UniversalBaseModel):
@@ -32,3 +35,7 @@ class FulfilledWorkflowNodeResultEvent(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVariableValue)
+update_forward_refs(ArrayVellumValue)

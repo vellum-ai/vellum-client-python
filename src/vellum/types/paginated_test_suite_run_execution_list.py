@@ -5,6 +5,8 @@ import typing
 from .test_suite_run_execution import TestSuiteRunExecution
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
+from .array_vellum_value import ArrayVellumValue
 
 
 class PaginatedTestSuiteRunExecutionList(UniversalBaseModel):
@@ -21,3 +23,6 @@ class PaginatedTestSuiteRunExecutionList(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVellumValue)

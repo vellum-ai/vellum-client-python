@@ -5,6 +5,8 @@ import typing
 import pydantic
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import update_forward_refs
+from .metadata_filter_rule_request import MetadataFilterRuleRequest
 
 
 class SearchFiltersRequest(UniversalBaseModel):
@@ -26,3 +28,6 @@ class SearchFiltersRequest(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(MetadataFilterRuleRequest)

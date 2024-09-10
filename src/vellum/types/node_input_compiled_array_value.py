@@ -5,6 +5,8 @@ import typing
 from .array_variable_value_item import ArrayVariableValueItem
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
+from .array_variable_value import ArrayVariableValue
 
 
 class NodeInputCompiledArrayValue(UniversalBaseModel):
@@ -21,3 +23,6 @@ class NodeInputCompiledArrayValue(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVariableValue)

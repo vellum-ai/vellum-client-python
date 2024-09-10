@@ -5,6 +5,8 @@ from .test_suite_run_external_exec_config_data_request import TestSuiteRunExtern
 import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import update_forward_refs
+from .array_vellum_value_request import ArrayVellumValueRequest
 
 
 class TestSuiteRunExternalExecConfigRequest(UniversalBaseModel):
@@ -28,3 +30,6 @@ class TestSuiteRunExternalExecConfigRequest(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVellumValueRequest)

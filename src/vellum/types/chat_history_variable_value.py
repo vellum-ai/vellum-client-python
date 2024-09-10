@@ -2,17 +2,14 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-from .array_variable_value_item import ArrayVariableValueItem
+from .chat_message import ChatMessage
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
-from ..core.pydantic_utilities import update_forward_refs
-from .array_variable_value import ArrayVariableValue
 
 
-class TemplatingNodeArrayResult(UniversalBaseModel):
-    id: str
-    type: typing.Literal["ARRAY"] = "ARRAY"
-    value: typing.Optional[typing.List[ArrayVariableValueItem]] = None
+class ChatHistoryVariableValue(UniversalBaseModel):
+    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
+    value: typing.Optional[typing.List[ChatMessage]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -22,6 +19,3 @@ class TemplatingNodeArrayResult(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
-
-
-update_forward_refs(ArrayVariableValue)

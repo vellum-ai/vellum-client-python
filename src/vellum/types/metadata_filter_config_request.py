@@ -7,6 +7,7 @@ from .metadata_filter_rule_request import MetadataFilterRuleRequest
 from .logical_operator import LogicalOperator
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
 
 
 class MetadataFilterConfigRequest(UniversalBaseModel):
@@ -25,3 +26,6 @@ class MetadataFilterConfigRequest(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(MetadataFilterRuleRequest)

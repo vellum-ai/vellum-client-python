@@ -7,6 +7,8 @@ from .search_weights_request import SearchWeightsRequest
 from .search_result_merging_request import SearchResultMergingRequest
 from .search_filters_request import SearchFiltersRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import update_forward_refs
+from .metadata_filter_rule_request import MetadataFilterRuleRequest
 
 
 class SearchRequestOptionsRequest(UniversalBaseModel):
@@ -38,3 +40,6 @@ class SearchRequestOptionsRequest(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(MetadataFilterRuleRequest)

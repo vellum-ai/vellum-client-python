@@ -6,6 +6,8 @@ from .array_vellum_value_item import ArrayVellumValueItem
 from .workflow_node_result_event_state import WorkflowNodeResultEventState
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
+from .array_vellum_value import ArrayVellumValue
 
 
 class NodeOutputCompiledArrayValue(UniversalBaseModel):
@@ -26,3 +28,6 @@ class NodeOutputCompiledArrayValue(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVellumValue)

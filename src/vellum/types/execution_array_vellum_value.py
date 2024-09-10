@@ -5,6 +5,8 @@ import pydantic
 import typing
 from .array_vellum_value_item import ArrayVellumValueItem
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import update_forward_refs
+from .array_vellum_value import ArrayVellumValue
 
 
 class ExecutionArrayVellumValue(UniversalBaseModel):
@@ -29,3 +31,6 @@ class ExecutionArrayVellumValue(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVellumValue)

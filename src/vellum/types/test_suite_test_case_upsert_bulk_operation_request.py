@@ -5,6 +5,8 @@ import pydantic
 import typing
 from .upsert_test_suite_test_case_request import UpsertTestSuiteTestCaseRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import update_forward_refs
+from .array_vellum_value_request import ArrayVellumValueRequest
 
 
 class TestSuiteTestCaseUpsertBulkOperationRequest(UniversalBaseModel):
@@ -28,3 +30,6 @@ class TestSuiteTestCaseUpsertBulkOperationRequest(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVellumValueRequest)

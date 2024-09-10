@@ -8,6 +8,8 @@ import pydantic
 import typing
 from .test_suite_run_exec_config import TestSuiteRunExecConfig
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import update_forward_refs
+from .array_vellum_value import ArrayVellumValue
 
 
 class TestSuiteRunRead(UniversalBaseModel):
@@ -38,3 +40,6 @@ class TestSuiteRunRead(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVellumValue)

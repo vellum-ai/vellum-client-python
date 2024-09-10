@@ -7,6 +7,8 @@ from .workflow_node_result_data import WorkflowNodeResultData
 from .workflow_event_error import WorkflowEventError
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
+from .array_variable_value import ArrayVariableValue
 
 
 class RejectedWorkflowNodeResultEvent(UniversalBaseModel):
@@ -31,3 +33,6 @@ class RejectedWorkflowNodeResultEvent(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVariableValue)

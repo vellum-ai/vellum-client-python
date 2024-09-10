@@ -7,6 +7,7 @@ from .chat_message_role import ChatMessageRole
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 from ..core.pydantic_utilities import update_forward_refs
+from .chat_message_prompt_block_request import ChatMessagePromptBlockRequest
 
 
 class ChatMessagePromptBlockPropertiesRequest(UniversalBaseModel):
@@ -32,3 +33,4 @@ class ChatMessagePromptBlockPropertiesRequest(UniversalBaseModel):
 from .prompt_block_request import PromptBlockRequest  # noqa: E402
 
 update_forward_refs(ChatMessagePromptBlockPropertiesRequest)
+update_forward_refs(ChatMessagePromptBlockRequest)

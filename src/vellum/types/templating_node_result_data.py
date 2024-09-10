@@ -5,6 +5,8 @@ from .templating_node_result_output import TemplatingNodeResultOutput
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import typing
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
+from .array_variable_value import ArrayVariableValue
 
 
 class TemplatingNodeResultData(UniversalBaseModel):
@@ -18,3 +20,6 @@ class TemplatingNodeResultData(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVariableValue)

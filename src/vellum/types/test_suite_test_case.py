@@ -5,6 +5,8 @@ import typing
 from .test_case_variable_value import TestCaseVariableValue
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+from ..core.pydantic_utilities import update_forward_refs
+from .array_vellum_value import ArrayVellumValue
 
 
 class TestSuiteTestCase(UniversalBaseModel):
@@ -22,3 +24,6 @@ class TestSuiteTestCase(UniversalBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+
+update_forward_refs(ArrayVellumValue)

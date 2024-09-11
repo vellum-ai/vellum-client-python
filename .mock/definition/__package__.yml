@@ -748,6 +748,12 @@ types:
     source:
       openapi: openapi/openapi.yml
   ArrayEnum: literal<"ARRAY">
+  ArrayVariableValue:
+    properties:
+      type: literal<"ARRAY">
+      value: optional<list<ArrayVariableValueItem>>
+    source:
+      openapi: openapi/openapi.yml
   ArrayVariableValueItem:
     discriminated: false
     union:
@@ -757,6 +763,16 @@ types:
       - ErrorVariableValue
       - FunctionCallVariableValue
       - ImageVariableValue
+      - ChatHistoryVariableValue
+      - SearchResultsVariableValue
+      - ArrayVariableValue
+    source:
+      openapi: openapi/openapi.yml
+  ArrayVellumValue:
+    docs: A value representing an array of Vellum variable values.
+    properties:
+      type: literal<"ARRAY">
+      value: optional<list<ArrayVellumValueItem>>
     source:
       openapi: openapi/openapi.yml
   ArrayVellumValueItem:
@@ -768,6 +784,9 @@ types:
       - ImageVellumValue
       - FunctionCallVellumValue
       - ErrorVellumValue
+      - ChatHistoryVellumValue
+      - SearchResultsVellumValue
+      - ArrayVellumValue
     source:
       openapi: openapi/openapi.yml
   ArrayVellumValueItemRequest:
@@ -779,6 +798,16 @@ types:
       - ImageVellumValueRequest
       - FunctionCallVellumValueRequest
       - ErrorVellumValueRequest
+      - ChatHistoryVellumValueRequest
+      - SearchResultsVellumValueRequest
+      - ArrayVellumValueRequest
+    source:
+      openapi: openapi/openapi.yml
+  ArrayVellumValueRequest:
+    docs: A value representing an array of Vellum variable values.
+    properties:
+      type: literal<"ARRAY">
+      value: optional<list<ArrayVellumValueItemRequest>>
     source:
       openapi: openapi/openapi.yml
   BasicVectorizerIntfloatMultilingualE5Large:
@@ -834,6 +863,26 @@ types:
           minLength: 1
       type: literal<"CHAT_HISTORY">
       value: list<ChatMessageRequest>
+    source:
+      openapi: openapi/openapi.yml
+  ChatHistoryVariableValue:
+    properties:
+      type: literal<"CHAT_HISTORY">
+      value: optional<list<ChatMessage>>
+    source:
+      openapi: openapi/openapi.yml
+  ChatHistoryVellumValue:
+    docs: A value representing Chat History.
+    properties:
+      type: literal<"CHAT_HISTORY">
+      value: optional<list<ChatMessage>>
+    source:
+      openapi: openapi/openapi.yml
+  ChatHistoryVellumValueRequest:
+    docs: A value representing Chat History.
+    properties:
+      type: literal<"CHAT_HISTORY">
+      value: optional<list<ChatMessageRequest>>
     source:
       openapi: openapi/openapi.yml
   ChatMessage:
@@ -3453,6 +3502,26 @@ types:
     source:
       openapi: openapi/openapi.yml
   SearchResultsEnum: literal<"SEARCH_RESULTS">
+  SearchResultsVariableValue:
+    properties:
+      type: literal<"SEARCH_RESULTS">
+      value: optional<list<SearchResult>>
+    source:
+      openapi: openapi/openapi.yml
+  SearchResultsVellumValue:
+    docs: A value representing Search Results.
+    properties:
+      type: literal<"SEARCH_RESULTS">
+      value: optional<list<SearchResult>>
+    source:
+      openapi: openapi/openapi.yml
+  SearchResultsVellumValueRequest:
+    docs: A value representing Search Results.
+    properties:
+      type: literal<"SEARCH_RESULTS">
+      value: optional<list<SearchResultRequest>>
+    source:
+      openapi: openapi/openapi.yml
   SearchWeightsRequest:
     properties:
       semantic_similarity:

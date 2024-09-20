@@ -306,7 +306,7 @@ service:
         id:
           type: string
           docs: Either the Document Index's ID or its unique name
-      url: Default
+      url: Documents
       availability: pre-release
       examples:
         - path-parameters:
@@ -417,7 +417,7 @@ service:
             Either the Vellum-generated ID or the originally specified name that
             uniquely identifies the Document Index from which you'd like to
             remove a Document.
-      url: Default
+      url: Documents
       availability: pre-release
       examples:
         - path-parameters:

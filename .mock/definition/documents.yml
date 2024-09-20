@@ -103,7 +103,7 @@ service:
         id:
           type: string
           docs: A UUID string identifying this document.
-      url: Default
+      url: Documents
       availability: pre-release
       examples:
         - path-parameters:

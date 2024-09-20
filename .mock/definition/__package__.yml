@@ -1122,8 +1122,8 @@ types:
         docs: >-
           Deprecated. The Prompt execution endpoints return a
           `prompt_version_id` that could be used instead.
-        type: list<string>
         availability: deprecated
+        type: list<string>
       last_deployed_history_item_id:
         type: string
         docs: >-
@@ -2026,9 +2026,11 @@ types:
     enum:
       - INITIATED
       - FULFILLED
+      - REJECTED
     docs: |-
       * `INITIATED` - INITIATED
       * `FULFILLED` - FULFILLED
+      * `REJECTED` - REJECTED
     source:
       openapi: openapi/openapi.yml
   JsonInputRequest:

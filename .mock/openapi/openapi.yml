@@ -522,6 +522,9 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+      servers:
+      - url: https://documents.vellum.ai
+        x-name: Documents
   /v1/document-indexes/{id}/documents/{document_id}:
     post:
       operationId: add_document
@@ -582,6 +585,9 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+      servers:
+      - url: https://documents.vellum.ai
+        x-name: Documents
   /v1/documents:
     get:
       operationId: documents_list
@@ -712,6 +718,9 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+      servers:
+      - url: https://documents.vellum.ai
+        x-name: Documents
   /v1/execute-prompt:
     post:
       operationId: execute_prompt
@@ -4407,10 +4416,12 @@ components:
       enum:
       - INITIATED
       - FULFILLED
+      - REJECTED
       type: string
       description: |-
         * `INITIATED` - INITIATED
         * `FULFILLED` - FULFILLED
+        * `REJECTED` - REJECTED
     JSONInputRequest:
       type: object
       description: A user input representing a JSON object

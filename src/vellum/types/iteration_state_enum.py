@@ -2,4 +2,4 @@
 
 import typing
 
-IterationStateEnum = typing.Union[typing.Literal["INITIATED", "FULFILLED"], typing.Any]
+IterationStateEnum = typing.Union[typing.Literal["INITIATED", "FULFILLED", "REJECTED"], typing.Any]

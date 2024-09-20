@@ -171,7 +171,7 @@ class DocumentsClient:
         """
         _response = self._client_wrapper.httpx_client.request(
             f"v1/documents/{jsonable_encoder(id)}",
-            base_url=self._client_wrapper.get_environment().default,
+            base_url=self._client_wrapper.get_environment().documents,
             method="DELETE",
             request_options=request_options,
         )
@@ -555,7 +555,7 @@ class AsyncDocumentsClient:
         """
         _response = await self._client_wrapper.httpx_client.request(
             f"v1/documents/{jsonable_encoder(id)}",
-            base_url=self._client_wrapper.get_environment().default,
+            base_url=self._client_wrapper.get_environment().documents,
             method="DELETE",
             request_options=request_options,
         )

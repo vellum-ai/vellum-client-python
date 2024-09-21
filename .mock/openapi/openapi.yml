@@ -4432,9 +4432,7 @@ components:
           description: The variable's name, as defined in the deployment.
         type:
           type: string
-        value:
-          type: object
-          additionalProperties: {}
+        value: {}
       required:
       - name
       - type

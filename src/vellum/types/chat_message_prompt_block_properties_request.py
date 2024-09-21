@@ -29,6 +29,10 @@ class ChatMessagePromptBlockPropertiesRequest(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
+from .chat_message_prompt_block_request import ChatMessagePromptBlockRequest  # noqa: E402
 from .prompt_block_request import PromptBlockRequest  # noqa: E402
 
+update_forward_refs(
+    ChatMessagePromptBlockRequest, ChatMessagePromptBlockPropertiesRequest=ChatMessagePromptBlockPropertiesRequest
+)
 update_forward_refs(ChatMessagePromptBlockPropertiesRequest)

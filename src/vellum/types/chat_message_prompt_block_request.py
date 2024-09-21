@@ -33,4 +33,7 @@ class ChatMessagePromptBlockRequest(UniversalBaseModel):
 
 from .chat_message_prompt_block_properties_request import ChatMessagePromptBlockPropertiesRequest  # noqa: E402
 
+update_forward_refs(
+    ChatMessagePromptBlockPropertiesRequest, ChatMessagePromptBlockRequest=ChatMessagePromptBlockRequest
+)
 update_forward_refs(ChatMessagePromptBlockRequest)

@@ -2,15 +2,19 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-import pydantic
+import typing_extensions
+from ..core.serialization import FieldMetadata
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+import pydantic
 
 
 class ApiNodeResultData(UniversalBaseModel):
     text_output_id: str
     text: typing.Optional[str] = None
     json_output_id: str
-    json_: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = pydantic.Field(alias="json", default=None)
+    json_: typing_extensions.Annotated[
+        typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]], FieldMetadata(alias="json")
+    ] = None
     status_code_output_id: str
     status_code: int
 

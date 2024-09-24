@@ -10,6 +10,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.named_scenario_input_request import NamedScenarioInputRequest
 from ...types.sandbox_scenario import SandboxScenario
+from ...core.serialization import convert_and_respect_annotation_metadata
 from ...core.client_wrapper import AsyncClientWrapper
 
 # this is used as the default value for optional parameters
@@ -166,7 +167,9 @@ class SandboxesClient:
             method="POST",
             json={
                 "label": label,
-                "inputs": inputs,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[NamedScenarioInputRequest], direction="write"
+                ),
                 "scenario_id": scenario_id,
             },
             request_options=request_options,
@@ -400,7 +403,9 @@ class AsyncSandboxesClient:
             method="POST",
             json={
                 "label": label,
-                "inputs": inputs,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[NamedScenarioInputRequest], direction="write"
+                ),
                 "scenario_id": scenario_id,
             },
             request_options=request_options,

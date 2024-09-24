@@ -261,10 +261,10 @@ class DocumentsClient:
         *,
         label: str,
         contents: core.File,
-        add_to_index_names: typing.Optional[typing.List[str]] = None,
-        external_id: typing.Optional[str] = None,
-        keywords: typing.Optional[typing.List[str]] = None,
-        metadata: typing.Optional[str] = None,
+        add_to_index_names: typing.Optional[typing.List[str]] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        keywords: typing.Optional[typing.List[str]] = OMIT,
+        metadata: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UploadDocumentResponse:
         """
@@ -653,10 +653,10 @@ class AsyncDocumentsClient:
         *,
         label: str,
         contents: core.File,
-        add_to_index_names: typing.Optional[typing.List[str]] = None,
-        external_id: typing.Optional[str] = None,
-        keywords: typing.Optional[typing.List[str]] = None,
-        metadata: typing.Optional[str] = None,
+        add_to_index_names: typing.Optional[typing.List[str]] = OMIT,
+        external_id: typing.Optional[str] = OMIT,
+        keywords: typing.Optional[typing.List[str]] = OMIT,
+        metadata: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> UploadDocumentResponse:
         """

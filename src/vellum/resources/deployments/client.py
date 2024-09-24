@@ -14,6 +14,7 @@ from ...types.deployment_release_tag_read import DeploymentReleaseTagRead
 from ...types.prompt_deployment_input_request import PromptDeploymentInputRequest
 from ...types.compile_prompt_deployment_expand_meta_request import CompilePromptDeploymentExpandMetaRequest
 from ...types.deployment_provider_payload_response import DeploymentProviderPayloadResponse
+from ...core.serialization import convert_and_respect_annotation_metadata
 from ...errors.bad_request_error import BadRequestError
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.not_found_error import NotFoundError
@@ -334,9 +335,13 @@ class DeploymentsClient:
             json={
                 "deployment_id": deployment_id,
                 "deployment_name": deployment_name,
-                "inputs": inputs,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[PromptDeploymentInputRequest], direction="write"
+                ),
                 "release_tag": release_tag,
-                "expand_meta": expand_meta,
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=CompilePromptDeploymentExpandMetaRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -746,9 +751,13 @@ class AsyncDeploymentsClient:
             json={
                 "deployment_id": deployment_id,
                 "deployment_name": deployment_name,
-                "inputs": inputs,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[PromptDeploymentInputRequest], direction="write"
+                ),
                 "release_tag": release_tag,
-                "expand_meta": expand_meta,
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=CompilePromptDeploymentExpandMetaRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,

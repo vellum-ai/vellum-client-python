@@ -9,6 +9,7 @@ from ...types.prompt_block_request import PromptBlockRequest
 from ...types.ad_hoc_expand_meta_request import AdHocExpandMetaRequest
 from ...core.request_options import RequestOptions
 from ...types.ad_hoc_execute_prompt_event import AdHocExecutePromptEvent
+from ...core.serialization import convert_and_respect_annotation_metadata
 from ...core.pydantic_utilities import parse_obj_as
 import json
 from ...errors.bad_request_error import BadRequestError
@@ -133,11 +134,21 @@ class AdHocClient:
             method="POST",
             json={
                 "ml_model": ml_model,
-                "input_values": input_values,
-                "input_variables": input_variables,
-                "parameters": parameters,
-                "blocks": blocks,
-                "expand_meta": expand_meta,
+                "input_values": convert_and_respect_annotation_metadata(
+                    object_=input_values, annotation=typing.Sequence[PromptRequestInputRequest], direction="write"
+                ),
+                "input_variables": convert_and_respect_annotation_metadata(
+                    object_=input_variables, annotation=typing.Sequence[VellumVariableRequest], direction="write"
+                ),
+                "parameters": convert_and_respect_annotation_metadata(
+                    object_=parameters, annotation=PromptParametersRequest, direction="write"
+                ),
+                "blocks": convert_and_respect_annotation_metadata(
+                    object_=blocks, annotation=typing.Sequence[PromptBlockRequest], direction="write"
+                ),
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=AdHocExpandMetaRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -314,11 +325,21 @@ class AsyncAdHocClient:
             method="POST",
             json={
                 "ml_model": ml_model,
-                "input_values": input_values,
-                "input_variables": input_variables,
-                "parameters": parameters,
-                "blocks": blocks,
-                "expand_meta": expand_meta,
+                "input_values": convert_and_respect_annotation_metadata(
+                    object_=input_values, annotation=typing.Sequence[PromptRequestInputRequest], direction="write"
+                ),
+                "input_variables": convert_and_respect_annotation_metadata(
+                    object_=input_variables, annotation=typing.Sequence[VellumVariableRequest], direction="write"
+                ),
+                "parameters": convert_and_respect_annotation_metadata(
+                    object_=parameters, annotation=PromptParametersRequest, direction="write"
+                ),
+                "blocks": convert_and_respect_annotation_metadata(
+                    object_=blocks, annotation=typing.Sequence[PromptBlockRequest], direction="write"
+                ),
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=AdHocExpandMetaRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,

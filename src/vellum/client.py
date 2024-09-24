@@ -19,6 +19,7 @@ from .types.prompt_deployment_expand_meta_request import PromptDeploymentExpandM
 from .types.raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .core.request_options import RequestOptions
 from .types.execute_prompt_response import ExecutePromptResponse
+from .core.serialization import convert_and_respect_annotation_metadata
 from .core.pydantic_utilities import parse_obj_as
 from .errors.bad_request_error import BadRequestError
 from .errors.forbidden_error import ForbiddenError
@@ -197,13 +198,19 @@ class Vellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "inputs": inputs,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[PromptDeploymentInputRequest], direction="write"
+                ),
                 "prompt_deployment_id": prompt_deployment_id,
                 "prompt_deployment_name": prompt_deployment_name,
                 "release_tag": release_tag,
                 "external_id": external_id,
-                "expand_meta": expand_meta,
-                "raw_overrides": raw_overrides,
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=PromptDeploymentExpandMetaRequest, direction="write"
+                ),
+                "raw_overrides": convert_and_respect_annotation_metadata(
+                    object_=raw_overrides, annotation=RawPromptExecutionOverridesRequest, direction="write"
+                ),
                 "expand_raw": expand_raw,
                 "metadata": metadata,
             },
@@ -366,13 +373,19 @@ class Vellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "inputs": inputs,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[PromptDeploymentInputRequest], direction="write"
+                ),
                 "prompt_deployment_id": prompt_deployment_id,
                 "prompt_deployment_name": prompt_deployment_name,
                 "release_tag": release_tag,
                 "external_id": external_id,
-                "expand_meta": expand_meta,
-                "raw_overrides": raw_overrides,
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=PromptDeploymentExpandMetaRequest, direction="write"
+                ),
+                "raw_overrides": convert_and_respect_annotation_metadata(
+                    object_=raw_overrides, annotation=RawPromptExecutionOverridesRequest, direction="write"
+                ),
                 "expand_raw": expand_raw,
                 "metadata": metadata,
             },
@@ -508,8 +521,12 @@ class Vellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "inputs": inputs,
-                "expand_meta": expand_meta,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[WorkflowRequestInputRequest], direction="write"
+                ),
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=WorkflowExpandMetaRequest, direction="write"
+                ),
                 "workflow_deployment_id": workflow_deployment_id,
                 "workflow_deployment_name": workflow_deployment_name,
                 "release_tag": release_tag,
@@ -649,8 +666,12 @@ class Vellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "inputs": inputs,
-                "expand_meta": expand_meta,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[WorkflowRequestInputRequest], direction="write"
+                ),
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=WorkflowExpandMetaRequest, direction="write"
+                ),
                 "workflow_deployment_id": workflow_deployment_id,
                 "workflow_deployment_name": workflow_deployment_name,
                 "release_tag": release_tag,
@@ -772,8 +793,12 @@ class Vellum:
             json={
                 "deployment_id": deployment_id,
                 "deployment_name": deployment_name,
-                "requests": requests,
-                "options": options,
+                "requests": convert_and_respect_annotation_metadata(
+                    object_=requests, annotation=typing.Sequence[GenerateRequest], direction="write"
+                ),
+                "options": convert_and_respect_annotation_metadata(
+                    object_=options, annotation=GenerateOptionsRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -915,8 +940,12 @@ class Vellum:
             json={
                 "deployment_id": deployment_id,
                 "deployment_name": deployment_name,
-                "requests": requests,
-                "options": options,
+                "requests": convert_and_respect_annotation_metadata(
+                    object_=requests, annotation=typing.Sequence[GenerateRequest], direction="write"
+                ),
+                "options": convert_and_respect_annotation_metadata(
+                    object_=options, annotation=GenerateOptionsRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -1036,7 +1065,9 @@ class Vellum:
                 "index_id": index_id,
                 "index_name": index_name,
                 "query": query,
-                "options": options,
+                "options": convert_and_respect_annotation_metadata(
+                    object_=options, annotation=SearchRequestOptionsRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -1132,7 +1163,9 @@ class Vellum:
             json={
                 "deployment_id": deployment_id,
                 "deployment_name": deployment_name,
-                "actuals": actuals,
+                "actuals": convert_and_respect_annotation_metadata(
+                    object_=actuals, annotation=typing.Sequence[SubmitCompletionActualRequest], direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -1222,7 +1255,9 @@ class Vellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "actuals": actuals,
+                "actuals": convert_and_respect_annotation_metadata(
+                    object_=actuals, annotation=typing.Sequence[SubmitWorkflowExecutionActualRequest], direction="write"
+                ),
                 "execution_id": execution_id,
                 "external_id": external_id,
             },
@@ -1386,13 +1421,19 @@ class AsyncVellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "inputs": inputs,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[PromptDeploymentInputRequest], direction="write"
+                ),
                 "prompt_deployment_id": prompt_deployment_id,
                 "prompt_deployment_name": prompt_deployment_name,
                 "release_tag": release_tag,
                 "external_id": external_id,
-                "expand_meta": expand_meta,
-                "raw_overrides": raw_overrides,
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=PromptDeploymentExpandMetaRequest, direction="write"
+                ),
+                "raw_overrides": convert_and_respect_annotation_metadata(
+                    object_=raw_overrides, annotation=RawPromptExecutionOverridesRequest, direction="write"
+                ),
                 "expand_raw": expand_raw,
                 "metadata": metadata,
             },
@@ -1563,13 +1604,19 @@ class AsyncVellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "inputs": inputs,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[PromptDeploymentInputRequest], direction="write"
+                ),
                 "prompt_deployment_id": prompt_deployment_id,
                 "prompt_deployment_name": prompt_deployment_name,
                 "release_tag": release_tag,
                 "external_id": external_id,
-                "expand_meta": expand_meta,
-                "raw_overrides": raw_overrides,
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=PromptDeploymentExpandMetaRequest, direction="write"
+                ),
+                "raw_overrides": convert_and_respect_annotation_metadata(
+                    object_=raw_overrides, annotation=RawPromptExecutionOverridesRequest, direction="write"
+                ),
                 "expand_raw": expand_raw,
                 "metadata": metadata,
             },
@@ -1713,8 +1760,12 @@ class AsyncVellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "inputs": inputs,
-                "expand_meta": expand_meta,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[WorkflowRequestInputRequest], direction="write"
+                ),
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=WorkflowExpandMetaRequest, direction="write"
+                ),
                 "workflow_deployment_id": workflow_deployment_id,
                 "workflow_deployment_name": workflow_deployment_name,
                 "release_tag": release_tag,
@@ -1862,8 +1913,12 @@ class AsyncVellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "inputs": inputs,
-                "expand_meta": expand_meta,
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs, annotation=typing.Sequence[WorkflowRequestInputRequest], direction="write"
+                ),
+                "expand_meta": convert_and_respect_annotation_metadata(
+                    object_=expand_meta, annotation=WorkflowExpandMetaRequest, direction="write"
+                ),
                 "workflow_deployment_id": workflow_deployment_id,
                 "workflow_deployment_name": workflow_deployment_name,
                 "release_tag": release_tag,
@@ -1993,8 +2048,12 @@ class AsyncVellum:
             json={
                 "deployment_id": deployment_id,
                 "deployment_name": deployment_name,
-                "requests": requests,
-                "options": options,
+                "requests": convert_and_respect_annotation_metadata(
+                    object_=requests, annotation=typing.Sequence[GenerateRequest], direction="write"
+                ),
+                "options": convert_and_respect_annotation_metadata(
+                    object_=options, annotation=GenerateOptionsRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -2144,8 +2203,12 @@ class AsyncVellum:
             json={
                 "deployment_id": deployment_id,
                 "deployment_name": deployment_name,
-                "requests": requests,
-                "options": options,
+                "requests": convert_and_respect_annotation_metadata(
+                    object_=requests, annotation=typing.Sequence[GenerateRequest], direction="write"
+                ),
+                "options": convert_and_respect_annotation_metadata(
+                    object_=options, annotation=GenerateOptionsRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -2273,7 +2336,9 @@ class AsyncVellum:
                 "index_id": index_id,
                 "index_name": index_name,
                 "query": query,
-                "options": options,
+                "options": convert_and_respect_annotation_metadata(
+                    object_=options, annotation=SearchRequestOptionsRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -2377,7 +2442,9 @@ class AsyncVellum:
             json={
                 "deployment_id": deployment_id,
                 "deployment_name": deployment_name,
-                "actuals": actuals,
+                "actuals": convert_and_respect_annotation_metadata(
+                    object_=actuals, annotation=typing.Sequence[SubmitCompletionActualRequest], direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -2475,7 +2542,9 @@ class AsyncVellum:
             base_url=self._client_wrapper.get_environment().predict,
             method="POST",
             json={
-                "actuals": actuals,
+                "actuals": convert_and_respect_annotation_metadata(
+                    object_=actuals, annotation=typing.Sequence[SubmitWorkflowExecutionActualRequest], direction="write"
+                ),
                 "execution_id": execution_id,
                 "external_id": external_id,
             },

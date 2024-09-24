@@ -10,6 +10,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.named_test_case_variable_value_request import NamedTestCaseVariableValueRequest
 from ...types.test_suite_test_case import TestSuiteTestCase
+from ...core.serialization import convert_and_respect_annotation_metadata
 from ...types.test_suite_test_case_bulk_operation_request import TestSuiteTestCaseBulkOperationRequest
 from ...types.test_suite_test_case_bulk_result import TestSuiteTestCaseBulkResult
 import json
@@ -165,8 +166,16 @@ class TestSuitesClient:
                 "id": id,
                 "external_id": external_id,
                 "label": label,
-                "input_values": input_values,
-                "evaluation_values": evaluation_values,
+                "input_values": convert_and_respect_annotation_metadata(
+                    object_=input_values,
+                    annotation=typing.Sequence[NamedTestCaseVariableValueRequest],
+                    direction="write",
+                ),
+                "evaluation_values": convert_and_respect_annotation_metadata(
+                    object_=evaluation_values,
+                    annotation=typing.Sequence[NamedTestCaseVariableValueRequest],
+                    direction="write",
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -253,7 +262,9 @@ class TestSuitesClient:
             f"v1/test-suites/{jsonable_encoder(id)}/test-cases-bulk",
             base_url=self._client_wrapper.get_environment().default,
             method="POST",
-            json=request,
+            json=convert_and_respect_annotation_metadata(
+                object_=request, annotation=typing.Sequence[TestSuiteTestCaseBulkOperationRequest], direction="write"
+            ),
             request_options=request_options,
             omit=OMIT,
         ) as _response:
@@ -489,8 +500,16 @@ class AsyncTestSuitesClient:
                 "id": id,
                 "external_id": external_id,
                 "label": label,
-                "input_values": input_values,
-                "evaluation_values": evaluation_values,
+                "input_values": convert_and_respect_annotation_metadata(
+                    object_=input_values,
+                    annotation=typing.Sequence[NamedTestCaseVariableValueRequest],
+                    direction="write",
+                ),
+                "evaluation_values": convert_and_respect_annotation_metadata(
+                    object_=evaluation_values,
+                    annotation=typing.Sequence[NamedTestCaseVariableValueRequest],
+                    direction="write",
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -585,7 +604,9 @@ class AsyncTestSuitesClient:
             f"v1/test-suites/{jsonable_encoder(id)}/test-cases-bulk",
             base_url=self._client_wrapper.get_environment().default,
             method="POST",
-            json=request,
+            json=convert_and_respect_annotation_metadata(
+                object_=request, annotation=typing.Sequence[TestSuiteTestCaseBulkOperationRequest], direction="write"
+            ),
             request_options=request_options,
             omit=OMIT,
         ) as _response:

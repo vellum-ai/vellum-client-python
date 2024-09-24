@@ -5,6 +5,7 @@ from ...core.client_wrapper import SyncClientWrapper
 from ...types.test_suite_run_exec_config_request import TestSuiteRunExecConfigRequest
 from ...core.request_options import RequestOptions
 from ...types.test_suite_run_read import TestSuiteRunRead
+from ...core.serialization import convert_and_respect_annotation_metadata
 from ...core.pydantic_utilities import parse_obj_as
 from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
@@ -72,7 +73,9 @@ class TestSuiteRunsClient:
             method="POST",
             json={
                 "test_suite_id": test_suite_id,
-                "exec_config": exec_config,
+                "exec_config": convert_and_respect_annotation_metadata(
+                    object_=exec_config, annotation=TestSuiteRunExecConfigRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -276,7 +279,9 @@ class AsyncTestSuiteRunsClient:
             method="POST",
             json={
                 "test_suite_id": test_suite_id,
-                "exec_config": exec_config,
+                "exec_config": convert_and_respect_annotation_metadata(
+                    object_=exec_config, annotation=TestSuiteRunExecConfigRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,

@@ -12,6 +12,7 @@ from ...types.document_index_indexing_config_request import DocumentIndexIndexin
 from ...types.entity_status import EntityStatus
 from ...types.environment_enum import EnvironmentEnum
 from ...types.document_index_read import DocumentIndexRead
+from ...core.serialization import convert_and_respect_annotation_metadata
 from ...core.jsonable_encoder import jsonable_encoder
 from ...core.client_wrapper import AsyncClientWrapper
 
@@ -191,7 +192,9 @@ class DocumentIndexesClient:
                 "name": name,
                 "status": status,
                 "environment": environment,
-                "indexing_config": indexing_config,
+                "indexing_config": convert_and_respect_annotation_metadata(
+                    object_=indexing_config, annotation=DocumentIndexIndexingConfigRequest, direction="write"
+                ),
                 "copy_documents_from_index_id": copy_documents_from_index_id,
             },
             request_options=request_options,
@@ -740,7 +743,9 @@ class AsyncDocumentIndexesClient:
                 "name": name,
                 "status": status,
                 "environment": environment,
-                "indexing_config": indexing_config,
+                "indexing_config": convert_and_respect_annotation_metadata(
+                    object_=indexing_config, annotation=DocumentIndexIndexingConfigRequest, direction="write"
+                ),
                 "copy_documents_from_index_id": copy_documents_from_index_id,
             },
             request_options=request_options,

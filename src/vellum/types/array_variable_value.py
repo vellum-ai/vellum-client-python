@@ -2,21 +2,15 @@
 
 from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
-from .array_variable_value import ArrayVariableValue
 import typing
-from .templating_node_result_data import TemplatingNodeResultData
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 from ..core.pydantic_utilities import update_forward_refs
 
 
-class TemplatingNodeResult(UniversalBaseModel):
-    """
-    A Node Result Event emitted from a Templating Node.
-    """
-
-    type: typing.Literal["TEMPLATING"] = "TEMPLATING"
-    data: TemplatingNodeResultData
+class ArrayVariableValue(UniversalBaseModel):
+    type: typing.Literal["ARRAY"] = "ARRAY"
+    value: typing.Optional[typing.List["ArrayVariableValueItem"]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -28,4 +22,6 @@ class TemplatingNodeResult(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-update_forward_refs(ArrayVariableValue, TemplatingNodeResult=TemplatingNodeResult)
+from .array_variable_value_item import ArrayVariableValueItem  # noqa: E402
+
+update_forward_refs(ArrayVariableValue)

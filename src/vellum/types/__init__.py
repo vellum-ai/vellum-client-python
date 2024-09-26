@@ -13,9 +13,12 @@ from .array_chat_message_content import ArrayChatMessageContent
 from .array_chat_message_content_item import ArrayChatMessageContentItem
 from .array_chat_message_content_item_request import ArrayChatMessageContentItemRequest
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
+from .array_variable_value import ArrayVariableValue
 from .array_variable_value_item import ArrayVariableValueItem
+from .array_vellum_value import ArrayVellumValue
 from .array_vellum_value_item import ArrayVellumValueItem
 from .array_vellum_value_item_request import ArrayVellumValueItemRequest
+from .array_vellum_value_request import ArrayVellumValueRequest
 from .basic_vectorizer_intfloat_multilingual_e_5_large import BasicVectorizerIntfloatMultilingualE5Large
 from .basic_vectorizer_intfloat_multilingual_e_5_large_request import BasicVectorizerIntfloatMultilingualE5LargeRequest
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_cos_v_1 import (
@@ -31,6 +34,9 @@ from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
 )
 from .chat_history_input_request import ChatHistoryInputRequest
+from .chat_history_variable_value import ChatHistoryVariableValue
+from .chat_history_vellum_value import ChatHistoryVellumValue
+from .chat_history_vellum_value_request import ChatHistoryVellumValueRequest
 from .chat_message import ChatMessage
 from .chat_message_content import ChatMessageContent
 from .chat_message_content_request import ChatMessageContentRequest
@@ -265,6 +271,9 @@ from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_meta import SearchResultMeta
 from .search_result_meta_request import SearchResultMetaRequest
 from .search_result_request import SearchResultRequest
+from .search_results_variable_value import SearchResultsVariableValue
+from .search_results_vellum_value import SearchResultsVellumValue
+from .search_results_vellum_value_request import SearchResultsVellumValueRequest
 from .search_weights_request import SearchWeightsRequest
 from .sentence_chunker_config import SentenceChunkerConfig
 from .sentence_chunker_config_request import SentenceChunkerConfigRequest
@@ -443,9 +452,12 @@ __all__ = [
     "ArrayChatMessageContentItem",
     "ArrayChatMessageContentItemRequest",
     "ArrayChatMessageContentRequest",
+    "ArrayVariableValue",
     "ArrayVariableValueItem",
+    "ArrayVellumValue",
     "ArrayVellumValueItem",
     "ArrayVellumValueItemRequest",
+    "ArrayVellumValueRequest",
     "BasicVectorizerIntfloatMultilingualE5Large",
     "BasicVectorizerIntfloatMultilingualE5LargeRequest",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1",
@@ -453,6 +465,9 @@ __all__ = [
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request",
     "ChatHistoryInputRequest",
+    "ChatHistoryVariableValue",
+    "ChatHistoryVellumValue",
+    "ChatHistoryVellumValueRequest",
     "ChatMessage",
     "ChatMessageContent",
     "ChatMessageContentRequest",
@@ -687,6 +702,9 @@ __all__ = [
     "SearchResultMeta",
     "SearchResultMetaRequest",
     "SearchResultRequest",
+    "SearchResultsVariableValue",
+    "SearchResultsVellumValue",
+    "SearchResultsVellumValueRequest",
     "SearchWeightsRequest",
     "SentenceChunkerConfig",
     "SentenceChunkerConfigRequest",

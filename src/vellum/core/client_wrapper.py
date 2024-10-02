@@ -17,7 +17,7 @@ class BaseClientWrapper:
         headers: typing.Dict[str, str] = {
             "X-Fern-Language": "Python",
             "X-Fern-SDK-Name": "vellum-ai",
-            "X-Fern-SDK-Version": "0.8.15",
+            "X-Fern-SDK-Version": "0.8.16",
         }
         headers["X_API_KEY"] = self.api_key
         return headers
@@ -40,7 +40,7 @@ class SyncClientWrapper(BaseClientWrapper):
     ):
         super().__init__(api_key=api_key, environment=environment, timeout=timeout)
         self.httpx_client = HttpClient(
-            httpx_client=httpx_client, base_headers=self.get_headers(), base_timeout=self.get_timeout()
+            httpx_client=httpx_client, base_headers=self.get_headers, base_timeout=self.get_timeout
         )
 
 
@@ -55,5 +55,5 @@ class AsyncClientWrapper(BaseClientWrapper):
     ):
         super().__init__(api_key=api_key, environment=environment, timeout=timeout)
         self.httpx_client = AsyncHttpClient(
-            httpx_client=httpx_client, base_headers=self.get_headers(), base_timeout=self.get_timeout()
+            httpx_client=httpx_client, base_headers=self.get_headers, base_timeout=self.get_timeout
         )

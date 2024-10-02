@@ -2191,6 +2191,8 @@ types:
       - value: notBetween
         name: NOT_BETWEEN
         docs: Not between
+      - blank
+      - notBlank
     docs: |-
       * `=` - EQUALS
       * `!=` - DOES_NOT_EQUAL
@@ -2210,6 +2212,8 @@ types:
       * `notIn` - NOT_IN
       * `between` - BETWEEN
       * `notBetween` - NOT_BETWEEN
+      * `blank` - BLANK
+      * `notBlank` - NOT_BLANK
     source:
       openapi: openapi/openapi.yml
   LogprobsEnum:
@@ -3489,8 +3493,6 @@ types:
       text:
         type: string
         docs: The text of the chunk that matched the search query.
-        validation:
-          minLength: 1
       score:
         type: double
         docs: A score representing how well the chunk matches the search query.

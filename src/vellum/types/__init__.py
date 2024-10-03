@@ -59,6 +59,7 @@ from .compile_prompt_deployment_expand_meta_request import CompilePromptDeployme
 from .compile_prompt_meta import CompilePromptMeta
 from .components_schemas_pdf_search_result_meta_source import ComponentsSchemasPdfSearchResultMetaSource
 from .components_schemas_pdf_search_result_meta_source_request import ComponentsSchemasPdfSearchResultMetaSourceRequest
+from .condition_combinator import ConditionCombinator
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
@@ -149,6 +150,10 @@ from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
 from .json_vellum_value import JsonVellumValue
 from .json_vellum_value_request import JsonVellumValueRequest
+from .legacy_supporting_metadata_filters_request import LegacySupportingMetadataFiltersRequest
+from .logical_condition_group_request import LogicalConditionGroupRequest
+from .logical_condition_request import LogicalConditionRequest
+from .logical_expression_request import LogicalExpressionRequest
 from .logical_operator import LogicalOperator
 from .logprobs_enum import LogprobsEnum
 from .map_node_result import MapNodeResult
@@ -158,6 +163,8 @@ from .merge_node_result_data import MergeNodeResultData
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
+from .metadata_filters_request import MetadataFiltersRequest
+from .metadata_resolver_variable_request import MetadataResolverVariableRequest
 from .metric_node_result import MetricNodeResult
 from .ml_model_usage import MlModelUsage
 from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
@@ -393,6 +400,7 @@ from .vellum_error_code_enum import VellumErrorCodeEnum
 from .vellum_error_request import VellumErrorRequest
 from .vellum_image import VellumImage
 from .vellum_image_request import VellumImageRequest
+from .vellum_value_request import VellumValueRequest
 from .vellum_variable import VellumVariable
 from .vellum_variable_request import VellumVariableRequest
 from .vellum_variable_type import VellumVariableType
@@ -490,6 +498,7 @@ __all__ = [
     "CompilePromptMeta",
     "ComponentsSchemasPdfSearchResultMetaSource",
     "ComponentsSchemasPdfSearchResultMetaSourceRequest",
+    "ConditionCombinator",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
     "CreateTestSuiteTestCaseRequest",
@@ -580,6 +589,10 @@ __all__ = [
     "JsonVariableValue",
     "JsonVellumValue",
     "JsonVellumValueRequest",
+    "LegacySupportingMetadataFiltersRequest",
+    "LogicalConditionGroupRequest",
+    "LogicalConditionRequest",
+    "LogicalExpressionRequest",
     "LogicalOperator",
     "LogprobsEnum",
     "MapNodeResult",
@@ -589,6 +602,8 @@ __all__ = [
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
+    "MetadataFiltersRequest",
+    "MetadataResolverVariableRequest",
     "MetricNodeResult",
     "MlModelUsage",
     "NamedScenarioInputChatHistoryVariableValueRequest",
@@ -820,6 +835,7 @@ __all__ = [
     "VellumErrorRequest",
     "VellumImage",
     "VellumImageRequest",
+    "VellumValueRequest",
     "VellumVariable",
     "VellumVariableRequest",
     "VellumVariableType",

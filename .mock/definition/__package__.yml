@@ -1079,6 +1079,15 @@ types:
       prompt_version_id: optional<string>
     source:
       openapi: openapi/openapi.yml
+  ConditionCombinator:
+    enum:
+      - OR
+      - AND
+    docs: |-
+      * `OR` - OR
+      * `AND` - AND
+    source:
+      openapi: openapi/openapi.yml
   ConditionalNodeResult:
     docs: A Node Result Event emitted from a Conditional Node.
     properties:
@@ -2135,6 +2144,48 @@ types:
       value: unknown
     source:
       openapi: openapi/openapi.yml
+  LegacySupportingMetadataFiltersRequest:
+    discriminated: false
+    union:
+      - MetadataFilterConfigRequest
+      - MetadataFiltersRequest
+    source:
+      openapi: openapi/openapi.yml
+  LogicalConditionEnum: literal<"LOGICAL_CONDITION">
+  LogicalConditionGroupEnum: literal<"LOGICAL_CONDITION_GROUP">
+  LogicalConditionGroupRequest:
+    docs: >-
+      A higher-order condition that combines one or more basic conditions or
+      other higher-order conditions.
+    properties:
+      type: literal<"LOGICAL_CONDITION_GROUP">
+      conditions: list<LogicalExpressionRequest>
+      combinator: ConditionCombinator
+      negated: boolean
+    source:
+      openapi: openapi/openapi.yml
+  LogicalConditionRequest:
+    docs: A basic condition comparing a two variables.
+    properties:
+      type: literal<"LOGICAL_CONDITION">
+      lhs_variable_id:
+        type: string
+        validation:
+          format: uuid
+      operator: LogicalOperator
+      rhs_variable_id:
+        type: string
+        validation:
+          format: uuid
+    source:
+      openapi: openapi/openapi.yml
+  LogicalExpressionRequest:
+    discriminated: false
+    union:
+      - LogicalConditionRequest
+      - LogicalConditionGroupRequest
+    source:
+      openapi: openapi/openapi.yml
   LogicalOperator:
     enum:
       - value: '='
@@ -2191,6 +2242,8 @@ types:
       - value: notBetween
         name: NOT_BETWEEN
         docs: Not between
+      - blank
+      - notBlank
     docs: |-
       * `=` - EQUALS
       * `!=` - DOES_NOT_EQUAL
@@ -2210,6 +2263,8 @@ types:
       * `notIn` - NOT_IN
       * `between` - BETWEEN
       * `notBetween` - NOT_BETWEEN
+      * `blank` - BLANK
+      * `notBlank` - NOT_BLANK
     source:
       openapi: openapi/openapi.yml
   LogprobsEnum:
@@ -2260,6 +2315,9 @@ types:
     source:
       openapi: openapi/openapi.yml
   MetadataFilterConfigRequest:
+    docs: >-
+      A deprecated pattern for filtering on metadata. Please use MetadataFilters
+      instead.
     properties:
       combinator: optional<MetadataFilterRuleCombinator>
       negated: optional<boolean>
@@ -2298,6 +2356,22 @@ types:
         type: optional<string>
         validation:
           minLength: 1
+    source:
+      openapi: openapi/openapi.yml
+  MetadataFiltersRequest:
+    docs: A filter that follows Vellum's ResolvableLogicalExpression pattern.
+    properties:
+      expression: LogicalExpressionRequest
+      variables: list<MetadataResolverVariableRequest>
+    source:
+      openapi: openapi/openapi.yml
+  MetadataResolverVariableRequest:
+    properties:
+      value: VellumValueRequest
+      id:
+        type: string
+        validation:
+          format: uuid
     source:
       openapi: openapi/openapi.yml
   MetricEnum: literal<"METRIC">
@@ -3341,7 +3415,7 @@ types:
         type: optional<list<string>>
         docs: The document external IDs to filter by
       metadata:
-        type: optional<MetadataFilterConfigRequest>
+        type: optional<LegacySupportingMetadataFiltersRequest>
         docs: The metadata filters to apply to the search
     source:
       openapi: openapi/openapi.yml
@@ -3489,8 +3563,6 @@ types:
       text:
         type: string
         docs: The text of the chunk that matched the search query.
-        validation:
-          minLength: 1
       score:
         type: double
         docs: A score representing how well the chunk matches the search query.
@@ -4979,6 +5051,20 @@ types:
         validation:
           minLength: 1
       metadata: optional<map<string, unknown>>
+    source:
+      openapi: openapi/openapi.yml
+  VellumValueRequest:
+    discriminated: false
+    union:
+      - StringVellumValueRequest
+      - NumberVellumValueRequest
+      - JsonVellumValueRequest
+      - ImageVellumValueRequest
+      - FunctionCallVellumValueRequest
+      - ErrorVellumValueRequest
+      - ArrayVellumValueRequest
+      - ChatHistoryVellumValueRequest
+      - SearchResultsVellumValueRequest
     source:
       openapi: openapi/openapi.yml
   VellumVariable:

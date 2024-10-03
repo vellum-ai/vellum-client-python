@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
+from .array_vellum_value_request import ArrayVellumValueRequest
+from .logical_condition_group_request import LogicalConditionGroupRequest
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
 import typing
 import pydantic
@@ -43,4 +45,6 @@ class SearchRequestOptionsRequest(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
+update_forward_refs(ArrayVellumValueRequest, SearchRequestOptionsRequest=SearchRequestOptionsRequest)
+update_forward_refs(LogicalConditionGroupRequest, SearchRequestOptionsRequest=SearchRequestOptionsRequest)
 update_forward_refs(MetadataFilterRuleRequest, SearchRequestOptionsRequest=SearchRequestOptionsRequest)

@@ -3561,7 +3561,7 @@ client.test_suites.list_test_suite_test_cases(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3663,7 +3663,7 @@ client.test_suites.upsert_test_suite_test_case(
 <dl>
 <dd>
 
-**id_:** `str` — A UUID string identifying this test suite.
+**id_:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3801,7 +3801,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3880,7 +3880,7 @@ client.test_suites.delete_test_suite_test_case(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>

@@ -6,9 +6,9 @@ import typing
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
-class StringInputRequest(UniversalBaseModel):
+class NumberInputRequest(UniversalBaseModel):
     """
-    A user input representing a string value
+    A user input representing a number value
     """
 
     name: str = pydantic.Field()
@@ -16,8 +16,8 @@ class StringInputRequest(UniversalBaseModel):
     The variable's name
     """
 
-    type: typing.Literal["STRING"] = "STRING"
-    value: str
+    type: typing.Literal["NUMBER"] = "NUMBER"
+    value: float
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

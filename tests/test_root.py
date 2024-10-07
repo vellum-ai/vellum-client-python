@@ -3,12 +3,22 @@
 from vellum import Vellum
 from vellum import AsyncVellum
 import typing
-from vellum import StringInputRequest
 from .utilities import validate_response
+from vellum import StringInputRequest
 from vellum import WorkflowRequestStringInputRequest
 from vellum import GenerateRequest
 from vellum import SubmitCompletionActualRequest
 from vellum import WorkflowExecutionActualStringRequest
+
+
+async def test_execute_code(client: Vellum, async_client: AsyncVellum) -> None:
+    expected_response: typing.Any = {"key": "value"}
+    expected_types: typing.Any = None
+    response = client.execute_code(request={"key": "value"})
+    validate_response(response, expected_response, expected_types)
+
+    async_response = await async_client.execute_code(request={"key": "value"})
+    validate_response(async_response, expected_response, expected_types)
 
 
 async def test_execute_prompt(client: Vellum, async_client: AsyncVellum) -> None:

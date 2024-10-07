@@ -1,4 +1,120 @@
 # Reference
+<details><summary><code>client.<a href="src/vellum/client.py">execute_code</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import CodeExecutionPackageRequest, StringInputRequest, Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.execute_code(
+    code="code",
+    runtime="PYTHON_3_11_6",
+    input_values=[
+        StringInputRequest(
+            name="name",
+            value="value",
+        )
+    ],
+    packages=[
+        CodeExecutionPackageRequest(
+            version="version",
+            name="name",
+        )
+    ],
+    output_type="STRING",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**code:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**runtime:** `CodeExecutionRuntime` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**input_values:** `typing.Sequence[CodeExecutorInputRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**packages:** `typing.Sequence[CodeExecutionPackageRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**output_type:** `VellumVariableType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.<a href="src/vellum/client.py">execute_prompt</a>(...)</code></summary>
 <dl>
 <dd>
@@ -2969,6 +3085,99 @@ client.folder_entities.add_entity_to_folder(
 </dl>
 </details>
 
+## MetricDefinitions
+<details><summary><code>client.metric_definitions.<a href="src/vellum/resources/metric_definitions/client.py">execute_metric_definition</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import StringInputRequest, Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.metric_definitions.execute_metric_definition(
+    id="id",
+    inputs=[
+        StringInputRequest(
+            name="name",
+            value="value",
+        )
+    ],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — Either the Metric Definition's ID or its unique name
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**inputs:** `typing.Sequence[MetricDefinitionInputRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**release_tag:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Sandboxes
 <details><summary><code>client.sandboxes.<a href="src/vellum/resources/sandboxes/client.py">deploy_prompt</a>(...)</code></summary>
 <dl>
@@ -3561,7 +3770,7 @@ client.test_suites.list_test_suite_test_cases(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3663,7 +3872,7 @@ client.test_suites.upsert_test_suite_test_case(
 <dl>
 <dd>
 
-**id_:** `str` — A UUID string identifying this test suite.
+**id_:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3801,7 +4010,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3880,7 +4089,7 @@ client.test_suites.delete_test_suite_test_case(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>

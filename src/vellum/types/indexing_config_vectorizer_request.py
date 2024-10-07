@@ -12,6 +12,10 @@ from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
 )
 from .hkunlp_instructor_xl_vectorizer_request import HkunlpInstructorXlVectorizerRequest
+from .google_vertex_ai_vectorizer_text_embedding_004_request import GoogleVertexAiVectorizerTextEmbedding004Request
+from .google_vertex_ai_vectorizer_text_multilingual_embedding_002_request import (
+    GoogleVertexAiVectorizerTextMultilingualEmbedding002Request,
+)
 
 IndexingConfigVectorizerRequest = typing.Union[
     OpenAiVectorizerTextEmbedding3SmallRequest,
@@ -21,4 +25,6 @@ IndexingConfigVectorizerRequest = typing.Union[
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request,
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
     HkunlpInstructorXlVectorizerRequest,
+    GoogleVertexAiVectorizerTextEmbedding004Request,
+    GoogleVertexAiVectorizerTextMultilingualEmbedding002Request,
 ]

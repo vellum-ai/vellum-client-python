@@ -1,4 +1,74 @@
 # Reference
+<details><summary><code>client.<a href="src/vellum/client.py">execute_code</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.execute_code(
+    request={"key": "value"},
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `typing.Optional[typing.Any]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.<a href="src/vellum/client.py">execute_prompt</a>(...)</code></summary>
 <dl>
 <dd>
@@ -3561,7 +3631,7 @@ client.test_suites.list_test_suite_test_cases(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3663,7 +3733,7 @@ client.test_suites.upsert_test_suite_test_case(
 <dl>
 <dd>
 
-**id_:** `str` — A UUID string identifying this test suite.
+**id_:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3801,7 +3871,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>
@@ -3880,7 +3950,7 @@ client.test_suites.delete_test_suite_test_case(
 <dl>
 <dd>
 
-**id:** `str` — A UUID string identifying this test suite.
+**id:** `str` — Either the Test Suites' ID or its unique name
     
 </dd>
 </dl>

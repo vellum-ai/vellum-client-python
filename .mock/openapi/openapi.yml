@@ -721,6 +721,37 @@ paths:
       servers:
       - url: https://documents.vellum.ai
         x-name: Documents
+  /v1/execute-code:
+    post:
+      operationId: execute_code
+      description: An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      tags:
+      - execute-code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CodeExecutorRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeExecutorResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeExecutorErrorResponse'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/execute-prompt:
     post:
       operationId: execute_prompt
@@ -1418,8 +1449,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this test suite.
+        description: Either the Test Suites' ID or its unique name
         required: true
       - name: limit
         required: false
@@ -1462,8 +1492,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this test suite.
+        description: Either the Test Suites' ID or its unique name
         required: true
       tags:
       - test-suites
@@ -1495,8 +1524,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this test suite.
+        description: Either the Test Suites' ID or its unique name
         required: true
       tags:
       - test-suites
@@ -1543,8 +1571,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this test suite.
+        description: Either the Test Suites' ID or its unique name
         required: true
       - in: path
         name: test_case_id
@@ -4628,6 +4655,8 @@ components:
       - notIn
       - between
       - notBetween
+      - blank
+      - notBlank
       type: string
       description: |-
         * `=` - EQUALS
@@ -4648,6 +4677,8 @@ components:
         * `notIn` - NOT_IN
         * `between` - BETWEEN
         * `notBetween` - NOT_BETWEEN
+        * `blank` - BLANK
+        * `notBlank` - NOT_BLANK
       x-fern-enum:
         '=':
           name: EQUALS
@@ -6850,7 +6881,6 @@ components:
       properties:
         text:
           type: string
-          minLength: 1
           description: The text of the chunk that matched the search query.
         score:
           type: number

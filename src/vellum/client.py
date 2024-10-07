@@ -14,19 +14,19 @@ from .resources.test_suite_runs.client import TestSuiteRunsClient
 from .resources.test_suites.client import TestSuitesClient
 from .resources.workflow_deployments.client import WorkflowDeploymentsClient
 from .resources.workflow_sandboxes.client import WorkflowSandboxesClient
+from .core.request_options import RequestOptions
+from .core.pydantic_utilities import parse_obj_as
+from .errors.bad_request_error import BadRequestError
+from json.decoder import JSONDecodeError
+from .core.api_error import ApiError
 from .types.prompt_deployment_input_request import PromptDeploymentInputRequest
 from .types.prompt_deployment_expand_meta_request import PromptDeploymentExpandMetaRequest
 from .types.raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
-from .core.request_options import RequestOptions
 from .types.execute_prompt_response import ExecutePromptResponse
 from .core.serialization import convert_and_respect_annotation_metadata
-from .core.pydantic_utilities import parse_obj_as
-from .errors.bad_request_error import BadRequestError
 from .errors.forbidden_error import ForbiddenError
 from .errors.not_found_error import NotFoundError
 from .errors.internal_server_error import InternalServerError
-from json.decoder import JSONDecodeError
-from .core.api_error import ApiError
 from .types.execute_prompt_event import ExecutePromptEvent
 import json
 from .types.workflow_request_input_request import WorkflowRequestInputRequest
@@ -122,6 +122,67 @@ class Vellum:
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = WorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
         self.workflow_sandboxes = WorkflowSandboxesClient(client_wrapper=self._client_wrapper)
+
+    def execute_code(
+        self, *, request: typing.Optional[typing.Any] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Optional[typing.Any]:
+        """
+        An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+
+        Parameters
+        ----------
+        request : typing.Optional[typing.Any]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Optional[typing.Any]
+
+
+        Examples
+        --------
+        from vellum import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.execute_code(
+            request={"key": "value"},
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v1/execute-code",
+            base_url=self._client_wrapper.get_environment().default,
+            method="POST",
+            json=request,
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    typing.Optional[typing.Any],
+                    parse_obj_as(
+                        type_=typing.Optional[typing.Any],  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    typing.cast(
+                        typing.Optional[typing.Any],
+                        parse_obj_as(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    )
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def execute_prompt(
         self,
@@ -1337,6 +1398,75 @@ class AsyncVellum:
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = AsyncWorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
         self.workflow_sandboxes = AsyncWorkflowSandboxesClient(client_wrapper=self._client_wrapper)
+
+    async def execute_code(
+        self, *, request: typing.Optional[typing.Any] = None, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Optional[typing.Any]:
+        """
+        An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+
+        Parameters
+        ----------
+        request : typing.Optional[typing.Any]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Optional[typing.Any]
+
+
+        Examples
+        --------
+        import asyncio
+
+        from vellum import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.execute_code(
+                request={"key": "value"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v1/execute-code",
+            base_url=self._client_wrapper.get_environment().default,
+            method="POST",
+            json=request,
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    typing.Optional[typing.Any],
+                    parse_obj_as(
+                        type_=typing.Optional[typing.Any],  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    typing.cast(
+                        typing.Optional[typing.Any],
+                        parse_obj_as(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    )
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     async def execute_prompt(
         self,

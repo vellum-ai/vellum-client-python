@@ -38,7 +38,7 @@ class TestSuitesClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this test suite.
+            Either the Test Suites' ID or its unique name
 
         limit : typing.Optional[int]
             Number of results to return per page.
@@ -112,7 +112,7 @@ class TestSuitesClient:
         Parameters
         ----------
         id_ : str
-            A UUID string identifying this test suite.
+            Either the Test Suites' ID or its unique name
 
         input_values : typing.Sequence[NamedTestCaseVariableValueRequest]
             Values for each of the Test Case's input variables
@@ -207,7 +207,7 @@ class TestSuitesClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this test suite.
+            Either the Test Suites' ID or its unique name
 
         request : typing.Sequence[TestSuiteTestCaseBulkOperationRequest]
 
@@ -299,7 +299,7 @@ class TestSuitesClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this test suite.
+            Either the Test Suites' ID or its unique name
 
         test_case_id : str
             An id identifying the test case that you'd like to delete
@@ -356,7 +356,7 @@ class AsyncTestSuitesClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this test suite.
+            Either the Test Suites' ID or its unique name
 
         limit : typing.Optional[int]
             Number of results to return per page.
@@ -438,7 +438,7 @@ class AsyncTestSuitesClient:
         Parameters
         ----------
         id_ : str
-            A UUID string identifying this test suite.
+            Either the Test Suites' ID or its unique name
 
         input_values : typing.Sequence[NamedTestCaseVariableValueRequest]
             Values for each of the Test Case's input variables
@@ -541,7 +541,7 @@ class AsyncTestSuitesClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this test suite.
+            Either the Test Suites' ID or its unique name
 
         request : typing.Sequence[TestSuiteTestCaseBulkOperationRequest]
 
@@ -641,7 +641,7 @@ class AsyncTestSuitesClient:
         Parameters
         ----------
         id : str
-            A UUID string identifying this test suite.
+            Either the Test Suites' ID or its unique name
 
         test_case_id : str
             An id identifying the test case that you'd like to delete

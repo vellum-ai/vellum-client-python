@@ -1,0 +1,49 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    execute_metric_definition:
+      path: /v1/metric-definitions/{id}/execute
+      method: POST
+      auth: true
+      docs: >-
+        An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      path-parameters:
+        id:
+          type: string
+          docs: Either the Metric Definition's ID or its unique name
+      request:
+        name: ExecuteMetricDefinitionRequest
+        body:
+          properties:
+            inputs: list<root.MetricDefinitionInputRequest>
+            release_tag:
+              type: optional<string>
+              validation:
+                minLength: 1
+      response:
+        docs: ''
+        type: root.MetricDefinitionExecution
+      url: Default
+      availability: pre-release
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            inputs:
+              - name: name
+                type: STRING
+                value: value
+          response:
+            body:
+              outputs:
+                - value: value
+                  type: STRING
+                  name: name
+      audiences:
+        - internal
+  source:
+    openapi: openapi/openapi.yml

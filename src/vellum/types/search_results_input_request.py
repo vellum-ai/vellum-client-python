@@ -3,12 +3,13 @@
 from ..core.pydantic_utilities import UniversalBaseModel
 import pydantic
 import typing
+from .search_result_request import SearchResultRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
-class StringInputRequest(UniversalBaseModel):
+class SearchResultsInputRequest(UniversalBaseModel):
     """
-    A user input representing a string value
+    A user input representing a search results value
     """
 
     name: str = pydantic.Field()
@@ -16,8 +17,8 @@ class StringInputRequest(UniversalBaseModel):
     The variable's name
     """
 
-    type: typing.Literal["STRING"] = "STRING"
-    value: str
+    type: typing.Literal["SEARCH_RESULTS"] = "SEARCH_RESULTS"
+    value: typing.List[SearchResultRequest]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -12,6 +12,10 @@ from ..core.pydantic_utilities import update_forward_refs
 
 
 class MetadataFilterConfigRequest(UniversalBaseModel):
+    """
+    A deprecated pattern for filtering on metadata. Please use MetadataFilters instead.
+    """
+
     combinator: typing.Optional[MetadataFilterRuleCombinator] = None
     negated: typing.Optional[bool] = None
     rules: typing.Optional[typing.List[MetadataFilterRuleRequest]] = None

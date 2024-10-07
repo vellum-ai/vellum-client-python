@@ -13,6 +13,7 @@ from .array_chat_message_content import ArrayChatMessageContent
 from .array_chat_message_content_item import ArrayChatMessageContentItem
 from .array_chat_message_content_item_request import ArrayChatMessageContentItemRequest
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
+from .array_input_request import ArrayInputRequest
 from .array_variable_value import ArrayVariableValue
 from .array_variable_value_item import ArrayVariableValueItem
 from .array_vellum_value import ArrayVellumValue
@@ -55,10 +56,15 @@ from .code_execution_node_result_data import CodeExecutionNodeResultData
 from .code_execution_node_result_output import CodeExecutionNodeResultOutput
 from .code_execution_node_search_results_result import CodeExecutionNodeSearchResultsResult
 from .code_execution_node_string_result import CodeExecutionNodeStringResult
+from .code_execution_package_request import CodeExecutionPackageRequest
+from .code_execution_runtime import CodeExecutionRuntime
+from .code_executor_input_request import CodeExecutorInputRequest
+from .code_executor_response import CodeExecutorResponse
 from .compile_prompt_deployment_expand_meta_request import CompilePromptDeploymentExpandMetaRequest
 from .compile_prompt_meta import CompilePromptMeta
 from .components_schemas_pdf_search_result_meta_source import ComponentsSchemasPdfSearchResultMetaSource
 from .components_schemas_pdf_search_result_meta_source_request import ComponentsSchemasPdfSearchResultMetaSourceRequest
+from .condition_combinator import ConditionCombinator
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
@@ -80,6 +86,7 @@ from .entity_status import EntityStatus
 from .environment_enum import EnvironmentEnum
 from .ephemeral_prompt_cache_config_request import EphemeralPromptCacheConfigRequest
 from .ephemeral_prompt_cache_config_type_enum import EphemeralPromptCacheConfigTypeEnum
+from .error_input_request import ErrorInputRequest
 from .error_variable_value import ErrorVariableValue
 from .error_vellum_value import ErrorVellumValue
 from .error_vellum_value_request import ErrorVellumValueRequest
@@ -111,6 +118,7 @@ from .function_call_chat_message_content import FunctionCallChatMessageContent
 from .function_call_chat_message_content_request import FunctionCallChatMessageContentRequest
 from .function_call_chat_message_content_value import FunctionCallChatMessageContentValue
 from .function_call_chat_message_content_value_request import FunctionCallChatMessageContentValueRequest
+from .function_call_input_request import FunctionCallInputRequest
 from .function_call_request import FunctionCallRequest
 from .function_call_variable_value import FunctionCallVariableValue
 from .function_call_vellum_value import FunctionCallVellumValue
@@ -126,6 +134,16 @@ from .generate_result_error import GenerateResultError
 from .generate_stream_response import GenerateStreamResponse
 from .generate_stream_result import GenerateStreamResult
 from .generate_stream_result_data import GenerateStreamResultData
+from .google_vertex_ai_vectorizer_config import GoogleVertexAiVectorizerConfig
+from .google_vertex_ai_vectorizer_config_request import GoogleVertexAiVectorizerConfigRequest
+from .google_vertex_ai_vectorizer_text_embedding_004 import GoogleVertexAiVectorizerTextEmbedding004
+from .google_vertex_ai_vectorizer_text_embedding_004_request import GoogleVertexAiVectorizerTextEmbedding004Request
+from .google_vertex_ai_vectorizer_text_multilingual_embedding_002 import (
+    GoogleVertexAiVectorizerTextMultilingualEmbedding002,
+)
+from .google_vertex_ai_vectorizer_text_multilingual_embedding_002_request import (
+    GoogleVertexAiVectorizerTextMultilingualEmbedding002Request,
+)
 from .hkunlp_instructor_xl_vectorizer import HkunlpInstructorXlVectorizer
 from .hkunlp_instructor_xl_vectorizer_request import HkunlpInstructorXlVectorizerRequest
 from .image_chat_message_content import ImageChatMessageContent
@@ -158,6 +176,9 @@ from .merge_node_result_data import MergeNodeResultData
 from .metadata_filter_config_request import MetadataFilterConfigRequest
 from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
+from .metadata_filters_request import MetadataFiltersRequest
+from .metric_definition_execution import MetricDefinitionExecution
+from .metric_definition_input_request import MetricDefinitionInputRequest
 from .metric_node_result import MetricNodeResult
 from .ml_model_usage import MlModelUsage
 from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
@@ -202,6 +223,7 @@ from .node_output_compiled_string_value import NodeOutputCompiledStringValue
 from .node_output_compiled_value import NodeOutputCompiledValue
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
+from .number_input_request import NumberInputRequest
 from .number_variable_value import NumberVariableValue
 from .number_vellum_value import NumberVellumValue
 from .number_vellum_value_request import NumberVellumValueRequest
@@ -271,6 +293,7 @@ from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_meta import SearchResultMeta
 from .search_result_meta_request import SearchResultMetaRequest
 from .search_result_request import SearchResultRequest
+from .search_results_input_request import SearchResultsInputRequest
 from .search_results_variable_value import SearchResultsVariableValue
 from .search_results_vellum_value import SearchResultsVellumValue
 from .search_results_vellum_value_request import SearchResultsVellumValueRequest
@@ -393,6 +416,11 @@ from .vellum_error_code_enum import VellumErrorCodeEnum
 from .vellum_error_request import VellumErrorRequest
 from .vellum_image import VellumImage
 from .vellum_image_request import VellumImageRequest
+from .vellum_value import VellumValue
+from .vellum_value_logical_condition_group_request import VellumValueLogicalConditionGroupRequest
+from .vellum_value_logical_condition_request import VellumValueLogicalConditionRequest
+from .vellum_value_logical_expression_request import VellumValueLogicalExpressionRequest
+from .vellum_value_request import VellumValueRequest
 from .vellum_variable import VellumVariable
 from .vellum_variable_request import VellumVariableRequest
 from .vellum_variable_type import VellumVariableType
@@ -452,6 +480,7 @@ __all__ = [
     "ArrayChatMessageContentItem",
     "ArrayChatMessageContentItemRequest",
     "ArrayChatMessageContentRequest",
+    "ArrayInputRequest",
     "ArrayVariableValue",
     "ArrayVariableValueItem",
     "ArrayVellumValue",
@@ -486,10 +515,15 @@ __all__ = [
     "CodeExecutionNodeResultOutput",
     "CodeExecutionNodeSearchResultsResult",
     "CodeExecutionNodeStringResult",
+    "CodeExecutionPackageRequest",
+    "CodeExecutionRuntime",
+    "CodeExecutorInputRequest",
+    "CodeExecutorResponse",
     "CompilePromptDeploymentExpandMetaRequest",
     "CompilePromptMeta",
     "ComponentsSchemasPdfSearchResultMetaSource",
     "ComponentsSchemasPdfSearchResultMetaSourceRequest",
+    "ConditionCombinator",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
     "CreateTestSuiteTestCaseRequest",
@@ -511,6 +545,7 @@ __all__ = [
     "EnvironmentEnum",
     "EphemeralPromptCacheConfigRequest",
     "EphemeralPromptCacheConfigTypeEnum",
+    "ErrorInputRequest",
     "ErrorVariableValue",
     "ErrorVellumValue",
     "ErrorVellumValueRequest",
@@ -542,6 +577,7 @@ __all__ = [
     "FunctionCallChatMessageContentRequest",
     "FunctionCallChatMessageContentValue",
     "FunctionCallChatMessageContentValueRequest",
+    "FunctionCallInputRequest",
     "FunctionCallRequest",
     "FunctionCallVariableValue",
     "FunctionCallVellumValue",
@@ -557,6 +593,12 @@ __all__ = [
     "GenerateStreamResponse",
     "GenerateStreamResult",
     "GenerateStreamResultData",
+    "GoogleVertexAiVectorizerConfig",
+    "GoogleVertexAiVectorizerConfigRequest",
+    "GoogleVertexAiVectorizerTextEmbedding004",
+    "GoogleVertexAiVectorizerTextEmbedding004Request",
+    "GoogleVertexAiVectorizerTextMultilingualEmbedding002",
+    "GoogleVertexAiVectorizerTextMultilingualEmbedding002Request",
     "HkunlpInstructorXlVectorizer",
     "HkunlpInstructorXlVectorizerRequest",
     "ImageChatMessageContent",
@@ -589,6 +631,9 @@ __all__ = [
     "MetadataFilterConfigRequest",
     "MetadataFilterRuleCombinator",
     "MetadataFilterRuleRequest",
+    "MetadataFiltersRequest",
+    "MetricDefinitionExecution",
+    "MetricDefinitionInputRequest",
     "MetricNodeResult",
     "MlModelUsage",
     "NamedScenarioInputChatHistoryVariableValueRequest",
@@ -633,6 +678,7 @@ __all__ = [
     "NodeOutputCompiledValue",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
+    "NumberInputRequest",
     "NumberVariableValue",
     "NumberVellumValue",
     "NumberVellumValueRequest",
@@ -702,6 +748,7 @@ __all__ = [
     "SearchResultMeta",
     "SearchResultMetaRequest",
     "SearchResultRequest",
+    "SearchResultsInputRequest",
     "SearchResultsVariableValue",
     "SearchResultsVellumValue",
     "SearchResultsVellumValueRequest",
@@ -820,6 +867,11 @@ __all__ = [
     "VellumErrorRequest",
     "VellumImage",
     "VellumImageRequest",
+    "VellumValue",
+    "VellumValueLogicalConditionGroupRequest",
+    "VellumValueLogicalConditionRequest",
+    "VellumValueLogicalExpressionRequest",
+    "VellumValueRequest",
     "VellumVariable",
     "VellumVariableRequest",
     "VellumVariableType",

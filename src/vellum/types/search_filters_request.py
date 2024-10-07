@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
+from .array_vellum_value_request import ArrayVellumValueRequest
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
+from .vellum_value_logical_condition_group_request import VellumValueLogicalConditionGroupRequest
 import typing
 import pydantic
-from .metadata_filter_config_request import MetadataFilterConfigRequest
+from .metadata_filters_request import MetadataFiltersRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.pydantic_utilities import update_forward_refs
 
@@ -16,7 +18,7 @@ class SearchFiltersRequest(UniversalBaseModel):
     The document external IDs to filter by
     """
 
-    metadata: typing.Optional[MetadataFilterConfigRequest] = pydantic.Field(default=None)
+    metadata: typing.Optional[MetadataFiltersRequest] = pydantic.Field(default=None)
     """
     The metadata filters to apply to the search
     """
@@ -31,4 +33,6 @@ class SearchFiltersRequest(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
+update_forward_refs(ArrayVellumValueRequest, SearchFiltersRequest=SearchFiltersRequest)
 update_forward_refs(MetadataFilterRuleRequest, SearchFiltersRequest=SearchFiltersRequest)
+update_forward_refs(VellumValueLogicalConditionGroupRequest, SearchFiltersRequest=SearchFiltersRequest)

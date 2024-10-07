@@ -15,6 +15,52 @@ service:
   auth: false
   base-path: ''
   endpoints:
+    execute-code:
+      path: /v1/execute-code
+      method: POST
+      auth: true
+      docs: >-
+        An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      request:
+        name: CodeExecutorRequest
+        body:
+          properties:
+            code:
+              type: string
+              validation:
+                minLength: 1
+            runtime: CodeExecutionRuntime
+            input_values: list<CodeExecutorInputRequest>
+            packages: list<CodeExecutionPackageRequest>
+            output_type: VellumVariableType
+      response:
+        docs: ''
+        type: CodeExecutorResponse
+      url: Default
+      availability: pre-release
+      errors:
+        - BadRequestError
+      examples:
+        - request:
+            code: code
+            runtime: PYTHON_3_11_6
+            input_values:
+              - name: name
+                type: STRING
+                value: value
+            packages:
+              - version: version
+                name: name
+            output_type: STRING
+          response:
+            body:
+              log: log
+              output:
+                type: STRING
+                value: value
+      audiences:
+        - internal
     execute-prompt:
       path: /v1/execute-prompt
       method: POST
@@ -748,6 +794,18 @@ types:
     source:
       openapi: openapi/openapi.yml
   ArrayEnum: literal<"ARRAY">
+  ArrayInputRequest:
+    docs: A user input representing a Vellum Array value
+    properties:
+      name:
+        type: string
+        docs: The variable's name
+        validation:
+          minLength: 1
+      type: literal<"ARRAY">
+      value: list<ArrayVellumValueItemRequest>
+    source:
+      openapi: openapi/openapi.yml
   ArrayVariableValue:
     properties:
       type: literal<"ARRAY">
@@ -1050,6 +1108,52 @@ types:
       value: optional<string>
     source:
       openapi: openapi/openapi.yml
+  CodeExecutionPackageRequest:
+    properties:
+      version:
+        type: string
+        validation:
+          minLength: 1
+      name:
+        type: string
+        validation:
+          minLength: 1
+    source:
+      openapi: openapi/openapi.yml
+  CodeExecutionRuntime:
+    enum:
+      - PYTHON_3_11_6
+      - TYPESCRIPT_5_3_3
+    docs: |-
+      * `PYTHON_3_11_6` - PYTHON_3_11_6
+      * `TYPESCRIPT_5_3_3` - TYPESCRIPT_5_3_3
+    source:
+      openapi: openapi/openapi.yml
+  CodeExecutorErrorResponse:
+    properties:
+      message: string
+      log: string
+    source:
+      openapi: openapi/openapi.yml
+  CodeExecutorInputRequest:
+    discriminated: false
+    union:
+      - StringInputRequest
+      - JsonInputRequest
+      - ChatHistoryInputRequest
+      - NumberInputRequest
+      - SearchResultsInputRequest
+      - ErrorInputRequest
+      - ArrayInputRequest
+      - FunctionCallInputRequest
+    source:
+      openapi: openapi/openapi.yml
+  CodeExecutorResponse:
+    properties:
+      log: string
+      output: VellumValue
+    source:
+      openapi: openapi/openapi.yml
   CompilePromptDeploymentExpandMetaRequest:
     properties:
       model_name:
@@ -1077,6 +1181,15 @@ types:
       model_name: optional<string>
       deployment_release_tag: optional<string>
       prompt_version_id: optional<string>
+    source:
+      openapi: openapi/openapi.yml
+  ConditionCombinator:
+    enum:
+      - OR
+      - AND
+    docs: |-
+      * `OR` - OR
+      * `AND` - AND
     source:
       openapi: openapi/openapi.yml
   ConditionalNodeResult:
@@ -1417,6 +1530,18 @@ types:
     type: literal<"EPHEMERAL">
     docs: '* `EPHEMERAL` - EPHEMERAL'
   ErrorEnum: literal<"ERROR">
+  ErrorInputRequest:
+    docs: A user input representing a Vellum Error value
+    properties:
+      name:
+        type: string
+        docs: The variable's name
+        validation:
+          minLength: 1
+      type: literal<"ERROR">
+      value: VellumErrorRequest
+    source:
+      openapi: openapi/openapi.yml
   ErrorVariableValue:
     properties:
       type: literal<"ERROR">
@@ -1748,6 +1873,18 @@ types:
     source:
       openapi: openapi/openapi.yml
   FunctionCallEnum: literal<"FUNCTION_CALL">
+  FunctionCallInputRequest:
+    docs: A user input representing a Vellum Function Call value
+    properties:
+      name:
+        type: string
+        docs: The variable's name
+        validation:
+          minLength: 1
+      type: literal<"FUNCTION_CALL">
+      value: FunctionCallRequest
+    source:
+      openapi: openapi/openapi.yml
   FunctionCallRequest:
     docs: The final resolved function call value.
     properties:
@@ -1915,6 +2052,48 @@ types:
       completion: EnrichedNormalizedCompletion
     source:
       openapi: openapi/openapi.yml
+  GoogleVertexAiVectorizerConfig:
+    properties:
+      project_id: string
+      region: string
+    source:
+      openapi: openapi/openapi.yml
+  GoogleVertexAiVectorizerConfigRequest:
+    properties:
+      project_id:
+        type: string
+        validation:
+          minLength: 1
+      region:
+        type: string
+        validation:
+          minLength: 1
+    source:
+      openapi: openapi/openapi.yml
+  GoogleVertexAiVectorizerTextEmbedding004:
+    properties:
+      model_name: literal<"text-embedding-004">
+      config: GoogleVertexAiVectorizerConfig
+    source:
+      openapi: openapi/openapi.yml
+  GoogleVertexAiVectorizerTextEmbedding004Request:
+    properties:
+      model_name: literal<"text-embedding-004">
+      config: GoogleVertexAiVectorizerConfigRequest
+    source:
+      openapi: openapi/openapi.yml
+  GoogleVertexAiVectorizerTextMultilingualEmbedding002:
+    properties:
+      model_name: literal<"text-multilingual-embedding-002">
+      config: GoogleVertexAiVectorizerConfig
+    source:
+      openapi: openapi/openapi.yml
+  GoogleVertexAiVectorizerTextMultilingualEmbedding002Request:
+    properties:
+      model_name: literal<"text-multilingual-embedding-002">
+      config: GoogleVertexAiVectorizerConfigRequest
+    source:
+      openapi: openapi/openapi.yml
   HkunlpInstructorXlVectorizer:
     docs: Vectorizer for hkunlp/instructor-xl.
     properties:
@@ -1975,6 +2154,8 @@ types:
       - BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
       - BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
       - HkunlpInstructorXlVectorizer
+      - GoogleVertexAiVectorizerTextEmbedding004
+      - GoogleVertexAiVectorizerTextMultilingualEmbedding002
     source:
       openapi: openapi/openapi.yml
   IndexingConfigVectorizerRequest:
@@ -1987,6 +2168,8 @@ types:
       - BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
       - BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
       - HkunlpInstructorXlVectorizerRequest
+      - GoogleVertexAiVectorizerTextEmbedding004Request
+      - GoogleVertexAiVectorizerTextMultilingualEmbedding002Request
     source:
       openapi: openapi/openapi.yml
   IndexingStateEnum:
@@ -2087,7 +2270,7 @@ types:
     properties:
       name:
         type: string
-        docs: The variable's name, as defined in the deployment.
+        docs: The variable's name
         validation:
           minLength: 1
       type: literal<"JSON">
@@ -2135,6 +2318,8 @@ types:
       value: unknown
     source:
       openapi: openapi/openapi.yml
+  LogicalConditionEnum: literal<"LOGICAL_CONDITION">
+  LogicalConditionGroupEnum: literal<"LOGICAL_CONDITION_GROUP">
   LogicalOperator:
     enum:
       - value: '='
@@ -2191,6 +2376,8 @@ types:
       - value: notBetween
         name: NOT_BETWEEN
         docs: Not between
+      - blank
+      - notBlank
     docs: |-
       * `=` - EQUALS
       * `!=` - DOES_NOT_EQUAL
@@ -2210,6 +2397,8 @@ types:
       * `notIn` - NOT_IN
       * `between` - BETWEEN
       * `notBetween` - NOT_BETWEEN
+      * `blank` - BLANK
+      * `notBlank` - NOT_BLANK
     source:
       openapi: openapi/openapi.yml
   LogprobsEnum:
@@ -2260,6 +2449,9 @@ types:
     source:
       openapi: openapi/openapi.yml
   MetadataFilterConfigRequest:
+    docs: >-
+      A deprecated pattern for filtering on metadata. Please use MetadataFilters
+      instead.
     properties:
       combinator: optional<MetadataFilterRuleCombinator>
       negated: optional<boolean>
@@ -2298,6 +2490,27 @@ types:
         type: optional<string>
         validation:
           minLength: 1
+    source:
+      openapi: openapi/openapi.yml
+  MetadataFiltersRequest:
+    discriminated: false
+    union:
+      - MetadataFilterConfigRequest
+      - VellumValueLogicalExpressionRequest
+    source:
+      openapi: openapi/openapi.yml
+  MetricDefinitionExecution:
+    properties:
+      outputs: list<TestSuiteRunMetricOutput>
+    source:
+      openapi: openapi/openapi.yml
+  MetricDefinitionInputRequest:
+    discriminated: false
+    union:
+      - StringInputRequest
+      - JsonInputRequest
+      - ChatHistoryInputRequest
+      - NumberInputRequest
     source:
       openapi: openapi/openapi.yml
   MetricEnum: literal<"METRIC">
@@ -2703,6 +2916,18 @@ types:
     source:
       openapi: openapi/openapi.yml
   NumberEnum: literal<"NUMBER">
+  NumberInputRequest:
+    docs: A user input representing a number value
+    properties:
+      name:
+        type: string
+        docs: The variable's name
+        validation:
+          minLength: 1
+      type: literal<"NUMBER">
+      value: double
+    source:
+      openapi: openapi/openapi.yml
   NumberVariableValue:
     properties:
       type: literal<"NUMBER">
@@ -3341,7 +3566,7 @@ types:
         type: optional<list<string>>
         docs: The document external IDs to filter by
       metadata:
-        type: optional<MetadataFilterConfigRequest>
+        type: optional<MetadataFiltersRequest>
         docs: The metadata filters to apply to the search
     source:
       openapi: openapi/openapi.yml
@@ -3489,8 +3714,6 @@ types:
       text:
         type: string
         docs: The text of the chunk that matched the search query.
-        validation:
-          minLength: 1
       score:
         type: double
         docs: A score representing how well the chunk matches the search query.
@@ -3504,6 +3727,18 @@ types:
     source:
       openapi: openapi/openapi.yml
   SearchResultsEnum: literal<"SEARCH_RESULTS">
+  SearchResultsInputRequest:
+    docs: A user input representing a search results value
+    properties:
+      name:
+        type: string
+        docs: The variable's name
+        validation:
+          minLength: 1
+      type: literal<"SEARCH_RESULTS">
+      value: list<SearchResultRequest>
+    source:
+      openapi: openapi/openapi.yml
   SearchResultsVariableValue:
     properties:
       type: literal<"SEARCH_RESULTS">
@@ -3817,7 +4052,7 @@ types:
     properties:
       name:
         type: string
-        docs: The variable's name, as defined in the deployment.
+        docs: The variable's name
         validation:
           minLength: 1
       type: literal<"STRING">
@@ -4981,6 +5216,61 @@ types:
       metadata: optional<map<string, unknown>>
     source:
       openapi: openapi/openapi.yml
+  VellumValue:
+    discriminated: false
+    union:
+      - StringVellumValue
+      - NumberVellumValue
+      - JsonVellumValue
+      - ImageVellumValue
+      - FunctionCallVellumValue
+      - ErrorVellumValue
+      - ArrayVellumValue
+      - ChatHistoryVellumValue
+      - SearchResultsVellumValue
+    source:
+      openapi: openapi/openapi.yml
+  VellumValueLogicalConditionGroupRequest:
+    docs: >-
+      A higher-order condition that combines one or more basic conditions or
+      other higher-order conditions.
+    properties:
+      type: literal<"LOGICAL_CONDITION_GROUP">
+      conditions: list<VellumValueLogicalExpressionRequest>
+      combinator: ConditionCombinator
+      negated: boolean
+    source:
+      openapi: openapi/openapi.yml
+  VellumValueLogicalConditionRequest:
+    docs: A basic condition comparing two Vellum values.
+    properties:
+      type: literal<"LOGICAL_CONDITION">
+      lhs_variable: VellumValueRequest
+      operator: LogicalOperator
+      rhs_variable: VellumValueRequest
+    source:
+      openapi: openapi/openapi.yml
+  VellumValueLogicalExpressionRequest:
+    discriminated: false
+    union:
+      - VellumValueLogicalConditionRequest
+      - VellumValueLogicalConditionGroupRequest
+    source:
+      openapi: openapi/openapi.yml
+  VellumValueRequest:
+    discriminated: false
+    union:
+      - StringVellumValueRequest
+      - NumberVellumValueRequest
+      - JsonVellumValueRequest
+      - ImageVellumValueRequest
+      - FunctionCallVellumValueRequest
+      - ErrorVellumValueRequest
+      - ArrayVellumValueRequest
+      - ChatHistoryVellumValueRequest
+      - SearchResultsVellumValueRequest
+    source:
+      openapi: openapi/openapi.yml
   VellumVariable:
     properties:
       id: string
@@ -5722,7 +6012,9 @@ types:
   SentenceChunkerEnum: literal<"sentence-chunker">
   SentenceTransformersMultiQaMpnetBaseCosV1Enum: literal<"sentence-transformers/multi-qa-mpnet-base-cos-v1">
   SentenceTransformersMultiQaMpnetBaseDotV1Enum: literal<"sentence-transformers/multi-qa-mpnet-base-dot-v1">
+  TextEmbedding004Enum: literal<"text-embedding-004">
   TextEmbedding3LargeEnum: literal<"text-embedding-3-large">
   TextEmbedding3SmallEnum: literal<"text-embedding-3-small">
   TextEmbeddingAda002Enum: literal<"text-embedding-ada-002">
+  TextMultilingualEmbedding002Enum: literal<"text-multilingual-embedding-002">
   TokenOverlappingWindowChunkerEnum: literal<"token-overlapping-window-chunker">

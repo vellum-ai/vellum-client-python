@@ -9,24 +9,30 @@ from .resources.deployments.client import DeploymentsClient
 from .resources.document_indexes.client import DocumentIndexesClient
 from .resources.documents.client import DocumentsClient
 from .resources.folder_entities.client import FolderEntitiesClient
+from .resources.metric_definitions.client import MetricDefinitionsClient
 from .resources.sandboxes.client import SandboxesClient
 from .resources.test_suite_runs.client import TestSuiteRunsClient
 from .resources.test_suites.client import TestSuitesClient
 from .resources.workflow_deployments.client import WorkflowDeploymentsClient
 from .resources.workflow_sandboxes.client import WorkflowSandboxesClient
-from .types.prompt_deployment_input_request import PromptDeploymentInputRequest
-from .types.prompt_deployment_expand_meta_request import PromptDeploymentExpandMetaRequest
-from .types.raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
+from .types.code_execution_runtime import CodeExecutionRuntime
+from .types.code_executor_input_request import CodeExecutorInputRequest
+from .types.code_execution_package_request import CodeExecutionPackageRequest
+from .types.vellum_variable_type import VellumVariableType
 from .core.request_options import RequestOptions
-from .types.execute_prompt_response import ExecutePromptResponse
+from .types.code_executor_response import CodeExecutorResponse
 from .core.serialization import convert_and_respect_annotation_metadata
 from .core.pydantic_utilities import parse_obj_as
 from .errors.bad_request_error import BadRequestError
+from json.decoder import JSONDecodeError
+from .core.api_error import ApiError
+from .types.prompt_deployment_input_request import PromptDeploymentInputRequest
+from .types.prompt_deployment_expand_meta_request import PromptDeploymentExpandMetaRequest
+from .types.raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
+from .types.execute_prompt_response import ExecutePromptResponse
 from .errors.forbidden_error import ForbiddenError
 from .errors.not_found_error import NotFoundError
 from .errors.internal_server_error import InternalServerError
-from json.decoder import JSONDecodeError
-from .core.api_error import ApiError
 from .types.execute_prompt_event import ExecutePromptEvent
 import json
 from .types.workflow_request_input_request import WorkflowRequestInputRequest
@@ -48,6 +54,7 @@ from .resources.deployments.client import AsyncDeploymentsClient
 from .resources.document_indexes.client import AsyncDocumentIndexesClient
 from .resources.documents.client import AsyncDocumentsClient
 from .resources.folder_entities.client import AsyncFolderEntitiesClient
+from .resources.metric_definitions.client import AsyncMetricDefinitionsClient
 from .resources.sandboxes.client import AsyncSandboxesClient
 from .resources.test_suite_runs.client import AsyncTestSuiteRunsClient
 from .resources.test_suites.client import AsyncTestSuitesClient
@@ -117,11 +124,112 @@ class Vellum:
         self.document_indexes = DocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = DocumentsClient(client_wrapper=self._client_wrapper)
         self.folder_entities = FolderEntitiesClient(client_wrapper=self._client_wrapper)
+        self.metric_definitions = MetricDefinitionsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suite_runs = TestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = WorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
         self.workflow_sandboxes = WorkflowSandboxesClient(client_wrapper=self._client_wrapper)
+
+    def execute_code(
+        self,
+        *,
+        code: str,
+        runtime: CodeExecutionRuntime,
+        input_values: typing.Sequence[CodeExecutorInputRequest],
+        packages: typing.Sequence[CodeExecutionPackageRequest],
+        output_type: VellumVariableType,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> CodeExecutorResponse:
+        """
+        An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+
+        Parameters
+        ----------
+        code : str
+
+        runtime : CodeExecutionRuntime
+
+        input_values : typing.Sequence[CodeExecutorInputRequest]
+
+        packages : typing.Sequence[CodeExecutionPackageRequest]
+
+        output_type : VellumVariableType
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CodeExecutorResponse
+
+
+        Examples
+        --------
+        from vellum import CodeExecutionPackageRequest, StringInputRequest, Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.execute_code(
+            code="code",
+            runtime="PYTHON_3_11_6",
+            input_values=[
+                StringInputRequest(
+                    name="name",
+                    value="value",
+                )
+            ],
+            packages=[
+                CodeExecutionPackageRequest(
+                    version="version",
+                    name="name",
+                )
+            ],
+            output_type="STRING",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v1/execute-code",
+            base_url=self._client_wrapper.get_environment().default,
+            method="POST",
+            json={
+                "code": code,
+                "runtime": runtime,
+                "input_values": convert_and_respect_annotation_metadata(
+                    object_=input_values, annotation=typing.Sequence[CodeExecutorInputRequest], direction="write"
+                ),
+                "packages": convert_and_respect_annotation_metadata(
+                    object_=packages, annotation=typing.Sequence[CodeExecutionPackageRequest], direction="write"
+                ),
+                "output_type": output_type,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    CodeExecutorResponse,
+                    parse_obj_as(
+                        type_=CodeExecutorResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    typing.cast(
+                        typing.Optional[typing.Any],
+                        parse_obj_as(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    )
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def execute_prompt(
         self,
@@ -1332,11 +1440,120 @@ class AsyncVellum:
         self.document_indexes = AsyncDocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = AsyncDocumentsClient(client_wrapper=self._client_wrapper)
         self.folder_entities = AsyncFolderEntitiesClient(client_wrapper=self._client_wrapper)
+        self.metric_definitions = AsyncMetricDefinitionsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suite_runs = AsyncTestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = AsyncWorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
         self.workflow_sandboxes = AsyncWorkflowSandboxesClient(client_wrapper=self._client_wrapper)
+
+    async def execute_code(
+        self,
+        *,
+        code: str,
+        runtime: CodeExecutionRuntime,
+        input_values: typing.Sequence[CodeExecutorInputRequest],
+        packages: typing.Sequence[CodeExecutionPackageRequest],
+        output_type: VellumVariableType,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> CodeExecutorResponse:
+        """
+        An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+
+        Parameters
+        ----------
+        code : str
+
+        runtime : CodeExecutionRuntime
+
+        input_values : typing.Sequence[CodeExecutorInputRequest]
+
+        packages : typing.Sequence[CodeExecutionPackageRequest]
+
+        output_type : VellumVariableType
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CodeExecutorResponse
+
+
+        Examples
+        --------
+        import asyncio
+
+        from vellum import AsyncVellum, CodeExecutionPackageRequest, StringInputRequest
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.execute_code(
+                code="code",
+                runtime="PYTHON_3_11_6",
+                input_values=[
+                    StringInputRequest(
+                        name="name",
+                        value="value",
+                    )
+                ],
+                packages=[
+                    CodeExecutionPackageRequest(
+                        version="version",
+                        name="name",
+                    )
+                ],
+                output_type="STRING",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v1/execute-code",
+            base_url=self._client_wrapper.get_environment().default,
+            method="POST",
+            json={
+                "code": code,
+                "runtime": runtime,
+                "input_values": convert_and_respect_annotation_metadata(
+                    object_=input_values, annotation=typing.Sequence[CodeExecutorInputRequest], direction="write"
+                ),
+                "packages": convert_and_respect_annotation_metadata(
+                    object_=packages, annotation=typing.Sequence[CodeExecutionPackageRequest], direction="write"
+                ),
+                "output_type": output_type,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    CodeExecutorResponse,
+                    parse_obj_as(
+                        type_=CodeExecutorResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    typing.cast(
+                        typing.Optional[typing.Any],
+                        parse_obj_as(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    )
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     async def execute_prompt(
         self,

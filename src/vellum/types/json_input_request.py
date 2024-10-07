@@ -13,7 +13,7 @@ class JsonInputRequest(UniversalBaseModel):
 
     name: str = pydantic.Field()
     """
-    The variable's name, as defined in the deployment.
+    The variable's name
     """
 
     type: typing.Literal["JSON"] = "JSON"

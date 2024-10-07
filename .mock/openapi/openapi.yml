@@ -721,6 +721,37 @@ paths:
       servers:
       - url: https://documents.vellum.ai
         x-name: Documents
+  /v1/execute-code:
+    post:
+      operationId: execute_code
+      description: An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      tags:
+      - execute-code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CodeExecutorRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeExecutorResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeExecutorErrorResponse'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/execute-prompt:
     post:
       operationId: execute_prompt
@@ -1061,6 +1092,38 @@ paths:
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
+  /v1/metric-definitions/{id}/execute:
+    post:
+      operationId: execute_metric_definition
+      description: An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Metric Definition's ID or its unique name
+        required: true
+      tags:
+      - metric-definitions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteMetricDefinitionRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricDefinitionExecution'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/sandboxes/{id}/prompts/{prompt_variant_id}/deploy:
     post:
       operationId: deploy_prompt
@@ -1418,8 +1481,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this test suite.
+        description: Either the Test Suites' ID or its unique name
         required: true
       - name: limit
         required: false
@@ -1462,8 +1524,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this test suite.
+        description: Either the Test Suites' ID or its unique name
         required: true
       tags:
       - test-suites
@@ -1495,8 +1556,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this test suite.
+        description: Either the Test Suites' ID or its unique name
         required: true
       tags:
       - test-suites
@@ -1543,8 +1603,7 @@ paths:
         name: id
         schema:
           type: string
-          format: uuid
-        description: A UUID string identifying this test suite.
+        description: Either the Test Suites' ID or its unique name
         required: true
       - in: path
         name: test_case_id
@@ -2017,6 +2076,24 @@ components:
       type: string
       enum:
       - ARRAY
+    ArrayInputRequest:
+      type: object
+      description: A user input representing a Vellum Array value
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArrayVellumValueItemRequest'
+      required:
+      - name
+      - type
+      - value
     ArrayVariableValue:
       type: object
       properties:
@@ -2544,6 +2621,91 @@ components:
       - id
       - type
       - value
+    CodeExecutionPackageRequest:
+      type: object
+      properties:
+        version:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+      required:
+      - name
+      - version
+    CodeExecutionRuntime:
+      enum:
+      - PYTHON_3_11_6
+      - TYPESCRIPT_5_3_3
+      type: string
+      description: |-
+        * `PYTHON_3_11_6` - PYTHON_3_11_6
+        * `TYPESCRIPT_5_3_3` - TYPESCRIPT_5_3_3
+    CodeExecutorErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        log:
+          type: string
+      required:
+      - log
+      - message
+    CodeExecutorInputRequest:
+      oneOf:
+      - $ref: '#/components/schemas/StringInputRequest'
+      - $ref: '#/components/schemas/JSONInputRequest'
+      - $ref: '#/components/schemas/ChatHistoryInputRequest'
+      - $ref: '#/components/schemas/NumberInputRequest'
+      - $ref: '#/components/schemas/SearchResultsInputRequest'
+      - $ref: '#/components/schemas/ErrorInputRequest'
+      - $ref: '#/components/schemas/ArrayInputRequest'
+      - $ref: '#/components/schemas/FunctionCallInputRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringInputRequest'
+          JSON: '#/components/schemas/JSONInputRequest'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryInputRequest'
+          NUMBER: '#/components/schemas/NumberInputRequest'
+          SEARCH_RESULTS: '#/components/schemas/SearchResultsInputRequest'
+          ERROR: '#/components/schemas/ErrorInputRequest'
+          ARRAY: '#/components/schemas/ArrayInputRequest'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallInputRequest'
+    CodeExecutorRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+        runtime:
+          $ref: '#/components/schemas/CodeExecutionRuntime'
+        input_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodeExecutorInputRequest'
+        packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodeExecutionPackageRequest'
+        output_type:
+          $ref: '#/components/schemas/VellumVariableType'
+      required:
+      - code
+      - input_values
+      - output_type
+      - packages
+      - runtime
+    CodeExecutorResponse:
+      type: object
+      properties:
+        log:
+          type: string
+        output:
+          $ref: '#/components/schemas/VellumValue'
+      required:
+      - log
+      - output
     CompilePromptDeploymentExpandMetaRequest:
       type: object
       properties:
@@ -2576,6 +2738,14 @@ components:
         prompt_version_id:
           type: string
           nullable: true
+    ConditionCombinator:
+      enum:
+      - OR
+      - AND
+      type: string
+      description: |-
+        * `OR` - OR
+        * `AND` - AND
     ConditionalNodeResult:
       type: object
       description: A Node Result Event emitted from a Conditional Node.
@@ -3201,6 +3371,22 @@ components:
       type: string
       enum:
       - ERROR
+    ErrorInputRequest:
+      type: object
+      description: A user input representing a Vellum Error value
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name
+        type:
+          type: string
+        value:
+          $ref: '#/components/schemas/VellumErrorRequest'
+      required:
+      - name
+      - type
+      - value
     ErrorVariableValue:
       type: object
       properties:
@@ -3239,6 +3425,18 @@ components:
       required:
       - type
       - value
+    ExecuteMetricDefinitionRequest:
+      type: object
+      properties:
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricDefinitionInputRequest'
+        release_tag:
+          type: string
+          minLength: 1
+      required:
+      - inputs
     ExecutePromptApiErrorResponse:
       type: object
       properties:
@@ -3983,6 +4181,22 @@ components:
       type: string
       enum:
       - FUNCTION_CALL
+    FunctionCallInputRequest:
+      type: object
+      description: A user input representing a Vellum Function Call value
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name
+        type:
+          type: string
+        value:
+          $ref: '#/components/schemas/FunctionCallRequest'
+      required:
+      - name
+      - type
+      - value
     FunctionCallRequest:
       type: object
       description: The final resolved function call value.
@@ -4260,6 +4474,68 @@ components:
       required:
       - completion
       - completion_index
+    GoogleVertexAIVectorizerConfig:
+      type: object
+      properties:
+        project_id:
+          type: string
+        region:
+          type: string
+      required:
+      - project_id
+      - region
+    GoogleVertexAIVectorizerConfigRequest:
+      type: object
+      properties:
+        project_id:
+          type: string
+          minLength: 1
+        region:
+          type: string
+          minLength: 1
+      required:
+      - project_id
+      - region
+    GoogleVertexAIVectorizerTextEmbedding004:
+      type: object
+      properties:
+        model_name:
+          $ref: '#/components/schemas/text-embedding-004Enum'
+        config:
+          $ref: '#/components/schemas/GoogleVertexAIVectorizerConfig'
+      required:
+      - config
+      - model_name
+    GoogleVertexAIVectorizerTextEmbedding004Request:
+      type: object
+      properties:
+        model_name:
+          $ref: '#/components/schemas/text-embedding-004Enum'
+        config:
+          $ref: '#/components/schemas/GoogleVertexAIVectorizerConfigRequest'
+      required:
+      - config
+      - model_name
+    GoogleVertexAIVectorizerTextMultilingualEmbedding002:
+      type: object
+      properties:
+        model_name:
+          $ref: '#/components/schemas/text-multilingual-embedding-002Enum'
+        config:
+          $ref: '#/components/schemas/GoogleVertexAIVectorizerConfig'
+      required:
+      - config
+      - model_name
+    GoogleVertexAIVectorizerTextMultilingualEmbedding002Request:
+      type: object
+      properties:
+        model_name:
+          $ref: '#/components/schemas/text-multilingual-embedding-002Enum'
+        config:
+          $ref: '#/components/schemas/GoogleVertexAIVectorizerConfigRequest'
+      required:
+      - config
+      - model_name
     HkunlpInstructorXlVectorizer:
       type: object
       description: Vectorizer for hkunlp/instructor-xl.
@@ -4356,6 +4632,8 @@ components:
       - $ref: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1'
       - $ref: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1'
       - $ref: '#/components/schemas/HkunlpInstructorXlVectorizer'
+      - $ref: '#/components/schemas/GoogleVertexAIVectorizerTextEmbedding004'
+      - $ref: '#/components/schemas/GoogleVertexAIVectorizerTextMultilingualEmbedding002'
       discriminator:
         propertyName: model_name
         mapping:
@@ -4366,6 +4644,8 @@ components:
           sentence-transformers/multi-qa-mpnet-base-cos-v1: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1'
           sentence-transformers/multi-qa-mpnet-base-dot-v1: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1'
           hkunlp/instructor-xl: '#/components/schemas/HkunlpInstructorXlVectorizer'
+          text-embedding-004: '#/components/schemas/GoogleVertexAIVectorizerTextEmbedding004'
+          text-multilingual-embedding-002: '#/components/schemas/GoogleVertexAIVectorizerTextMultilingualEmbedding002'
     IndexingConfigVectorizerRequest:
       oneOf:
       - $ref: '#/components/schemas/OpenAIVectorizerTextEmbedding3SmallRequest'
@@ -4375,6 +4655,8 @@ components:
       - $ref: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request'
       - $ref: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request'
       - $ref: '#/components/schemas/HkunlpInstructorXlVectorizerRequest'
+      - $ref: '#/components/schemas/GoogleVertexAIVectorizerTextEmbedding004Request'
+      - $ref: '#/components/schemas/GoogleVertexAIVectorizerTextMultilingualEmbedding002Request'
       discriminator:
         propertyName: model_name
         mapping:
@@ -4385,6 +4667,8 @@ components:
           sentence-transformers/multi-qa-mpnet-base-cos-v1: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request'
           sentence-transformers/multi-qa-mpnet-base-dot-v1: '#/components/schemas/BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request'
           hkunlp/instructor-xl: '#/components/schemas/HkunlpInstructorXlVectorizerRequest'
+          text-embedding-004: '#/components/schemas/GoogleVertexAIVectorizerTextEmbedding004Request'
+          text-multilingual-embedding-002: '#/components/schemas/GoogleVertexAIVectorizerTextMultilingualEmbedding002Request'
     IndexingStateEnum:
       enum:
       - AWAITING_PROCESSING
@@ -4529,7 +4813,7 @@ components:
         name:
           type: string
           minLength: 1
-          description: The variable's name, as defined in the deployment.
+          description: The variable's name
         type:
           type: string
         value: {}
@@ -4608,6 +4892,14 @@ components:
       required:
       - type
       - value
+    LogicalConditionEnum:
+      type: string
+      enum:
+      - LOGICAL_CONDITION
+    LogicalConditionGroupEnum:
+      type: string
+      enum:
+      - LOGICAL_CONDITION_GROUP
     LogicalOperator:
       enum:
       - '='
@@ -4628,6 +4920,8 @@ components:
       - notIn
       - between
       - notBetween
+      - blank
+      - notBlank
       type: string
       description: |-
         * `=` - EQUALS
@@ -4648,6 +4942,8 @@ components:
         * `notIn` - NOT_IN
         * `between` - BETWEEN
         * `notBetween` - NOT_BETWEEN
+        * `blank` - BLANK
+        * `notBlank` - NOT_BLANK
       x-fern-enum:
         '=':
           name: EQUALS
@@ -4787,6 +5083,8 @@ components:
           nullable: true
     MetadataFilterConfigRequest:
       type: object
+      description: A deprecated pattern for filtering on metadata. Please use MetadataFilters
+        instead.
       properties:
         combinator:
           allOf:
@@ -4847,6 +5145,32 @@ components:
           type: string
           nullable: true
           minLength: 1
+    MetadataFiltersRequest:
+      oneOf:
+      - $ref: '#/components/schemas/MetadataFilterConfigRequest'
+      - $ref: '#/components/schemas/VellumValueLogicalExpressionRequest'
+    MetricDefinitionExecution:
+      type: object
+      properties:
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuiteRunMetricOutput'
+      required:
+      - outputs
+    MetricDefinitionInputRequest:
+      oneOf:
+      - $ref: '#/components/schemas/StringInputRequest'
+      - $ref: '#/components/schemas/JSONInputRequest'
+      - $ref: '#/components/schemas/ChatHistoryInputRequest'
+      - $ref: '#/components/schemas/NumberInputRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringInputRequest'
+          JSON: '#/components/schemas/JSONInputRequest'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryInputRequest'
+          NUMBER: '#/components/schemas/NumberInputRequest'
     MetricEnum:
       type: string
       enum:
@@ -5595,6 +5919,23 @@ components:
       type: string
       enum:
       - NUMBER
+    NumberInputRequest:
+      type: object
+      description: A user input representing a number value
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name
+        type:
+          type: string
+        value:
+          type: number
+          format: double
+      required:
+      - name
+      - type
+      - value
     NumberVariableValue:
       type: object
       properties:
@@ -6630,7 +6971,7 @@ components:
           description: The document external IDs to filter by
         metadata:
           allOf:
-          - $ref: '#/components/schemas/MetadataFilterConfigRequest'
+          - $ref: '#/components/schemas/MetadataFiltersRequest'
           nullable: true
           description: The metadata filters to apply to the search
     SearchNodeResult:
@@ -6850,7 +7191,6 @@ components:
       properties:
         text:
           type: string
-          minLength: 1
           description: The text of the chunk that matched the search query.
         score:
           type: number
@@ -6881,6 +7221,24 @@ components:
       type: string
       enum:
       - SEARCH_RESULTS
+    SearchResultsInputRequest:
+      type: object
+      description: A user input representing a search results value
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResultRequest'
+      required:
+      - name
+      - type
+      - value
     SearchResultsVariableValue:
       type: object
       properties:
@@ -7313,7 +7671,7 @@ components:
         name:
           type: string
           minLength: 1
-          description: The variable's name, as defined in the deployment.
+          description: The variable's name
         type:
           type: string
         value:
@@ -9139,6 +9497,98 @@ components:
           nullable: true
       required:
       - src
+    VellumValue:
+      oneOf:
+      - $ref: '#/components/schemas/StringVellumValue'
+      - $ref: '#/components/schemas/NumberVellumValue'
+      - $ref: '#/components/schemas/JsonVellumValue'
+      - $ref: '#/components/schemas/ImageVellumValue'
+      - $ref: '#/components/schemas/FunctionCallVellumValue'
+      - $ref: '#/components/schemas/ErrorVellumValue'
+      - $ref: '#/components/schemas/ArrayVellumValue'
+      - $ref: '#/components/schemas/ChatHistoryVellumValue'
+      - $ref: '#/components/schemas/SearchResultsVellumValue'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringVellumValue'
+          NUMBER: '#/components/schemas/NumberVellumValue'
+          JSON: '#/components/schemas/JsonVellumValue'
+          IMAGE: '#/components/schemas/ImageVellumValue'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValue'
+          ERROR: '#/components/schemas/ErrorVellumValue'
+          ARRAY: '#/components/schemas/ArrayVellumValue'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryVellumValue'
+          SEARCH_RESULTS: '#/components/schemas/SearchResultsVellumValue'
+    VellumValueLogicalConditionGroupRequest:
+      type: object
+      description: A higher-order condition that combines one or more basic conditions
+        or other higher-order conditions.
+      properties:
+        type:
+          $ref: '#/components/schemas/LogicalConditionGroupEnum'
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumValueLogicalExpressionRequest'
+        combinator:
+          $ref: '#/components/schemas/ConditionCombinator'
+        negated:
+          type: boolean
+      required:
+      - combinator
+      - conditions
+      - negated
+      - type
+    VellumValueLogicalConditionRequest:
+      type: object
+      description: A basic condition comparing two Vellum values.
+      properties:
+        type:
+          $ref: '#/components/schemas/LogicalConditionEnum'
+        lhs_variable:
+          $ref: '#/components/schemas/VellumValueRequest'
+        operator:
+          $ref: '#/components/schemas/LogicalOperator'
+        rhs_variable:
+          $ref: '#/components/schemas/VellumValueRequest'
+      required:
+      - lhs_variable
+      - operator
+      - rhs_variable
+      - type
+    VellumValueLogicalExpressionRequest:
+      oneOf:
+      - $ref: '#/components/schemas/VellumValueLogicalConditionRequest'
+      - $ref: '#/components/schemas/VellumValueLogicalConditionGroupRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          LOGICAL_CONDITION: '#/components/schemas/VellumValueLogicalConditionRequest'
+          LOGICAL_CONDITION_GROUP: '#/components/schemas/VellumValueLogicalConditionGroupRequest'
+    VellumValueRequest:
+      oneOf:
+      - $ref: '#/components/schemas/StringVellumValueRequest'
+      - $ref: '#/components/schemas/NumberVellumValueRequest'
+      - $ref: '#/components/schemas/JsonVellumValueRequest'
+      - $ref: '#/components/schemas/ImageVellumValueRequest'
+      - $ref: '#/components/schemas/FunctionCallVellumValueRequest'
+      - $ref: '#/components/schemas/ErrorVellumValueRequest'
+      - $ref: '#/components/schemas/ArrayVellumValueRequest'
+      - $ref: '#/components/schemas/ChatHistoryVellumValueRequest'
+      - $ref: '#/components/schemas/SearchResultsVellumValueRequest'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringVellumValueRequest'
+          NUMBER: '#/components/schemas/NumberVellumValueRequest'
+          JSON: '#/components/schemas/JsonVellumValueRequest'
+          IMAGE: '#/components/schemas/ImageVellumValueRequest'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValueRequest'
+          ERROR: '#/components/schemas/ErrorVellumValueRequest'
+          ARRAY: '#/components/schemas/ArrayVellumValueRequest'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryVellumValueRequest'
+          SEARCH_RESULTS: '#/components/schemas/SearchResultsVellumValueRequest'
     VellumVariable:
       type: object
       properties:
@@ -10214,6 +10664,10 @@ components:
       type: string
       enum:
       - sentence-transformers/multi-qa-mpnet-base-dot-v1
+    text-embedding-004Enum:
+      type: string
+      enum:
+      - text-embedding-004
     text-embedding-3-largeEnum:
       type: string
       enum:
@@ -10226,6 +10680,10 @@ components:
       type: string
       enum:
       - text-embedding-ada-002
+    text-multilingual-embedding-002Enum:
+      type: string
+      enum:
+      - text-multilingual-embedding-002
     token-overlapping-window-chunkerEnum:
       type: string
       enum:

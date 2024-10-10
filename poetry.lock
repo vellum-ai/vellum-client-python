@@ -121,19 +121,19 @@ files = [
 
 [[package]]
 name = "constructs"
-version = "10.3.0"
+version = "10.3.1"
 description = "A programming model for software-defined state"
 optional = false
-python-versions = "~=3.7"
+python-versions = "~=3.8"
 files = [
-    {file = "constructs-10.3.0-py3-none-any.whl", hash = "sha256:2972f514837565ff5b09171cfba50c0159dfa75ee86a42921ea8c86f2941b3d2"},
-    {file = "constructs-10.3.0.tar.gz", hash = "sha256:518551135ec236f9cc6b86500f4fbbe83b803ccdc6c2cb7684e0b7c4d234e7b1"},
+    {file = "constructs-10.3.1-py3-none-any.whl", hash = "sha256:fb2d0144c7a8f4004112e34389ac8426cca100567b950be645ed573a78aae4e1"},
+    {file = "constructs-10.3.1.tar.gz", hash = "sha256:9900205fc8eeb7a6fd7f58853a91b2cb44162871bbbbfd28a17928d1b30f2986"},
 ]
 
 [package.dependencies]
-jsii = ">=1.90.0,<2.0.0"
+jsii = ">=1.103.1,<2.0.0"
 publication = ">=0.0.3"
-typeguard = ">=2.13.3,<2.14.0"
+typeguard = ">=2.13.3,<5.0.0"
 
 [[package]]
 name = "exceptiongroup"

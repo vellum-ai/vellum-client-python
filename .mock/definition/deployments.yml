@@ -87,6 +87,9 @@ service:
                 - id: id
                   key: key
                   type: STRING
+                  required: true
+                  default:
+                    type: STRING
               description: description
               active_model_version_ids:
                 - active_model_version_ids

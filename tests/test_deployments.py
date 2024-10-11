@@ -63,7 +63,9 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
         "status": "ACTIVE",
         "environment": "DEVELOPMENT",
         "last_deployed_on": "2024-01-15T09:30:00Z",
-        "input_variables": [{"id": "id", "key": "key", "type": "STRING"}],
+        "input_variables": [
+            {"id": "id", "key": "key", "type": "STRING", "required": True, "default": {"type": "STRING"}}
+        ],
         "description": "description",
         "active_model_version_ids": ["active_model_version_ids"],
         "last_deployed_history_item_id": "last_deployed_history_item_id",
@@ -76,7 +78,10 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
         "status": None,
         "environment": None,
         "last_deployed_on": "datetime",
-        "input_variables": ("list", {0: {"id": None, "key": None, "type": None}}),
+        "input_variables": (
+            "list",
+            {0: {"id": None, "key": None, "type": None, "required": None, "default": {"type": None}}},
+        ),
         "description": None,
         "active_model_version_ids": ("list", {0: None}),
         "last_deployed_history_item_id": None,

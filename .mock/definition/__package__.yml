@@ -5276,6 +5276,24 @@ types:
       id: string
       key: string
       type: VellumVariableType
+      required: optional<boolean>
+      default: optional<VellumValue>
+      extensions: optional<VellumVariableExtensions>
+    source:
+      openapi: openapi/openapi.yml
+  VellumVariableExtensions:
+    docs: A set of fields with additional properties for use in Vellum Variables.
+    properties:
+      color: optional<string>
+    source:
+      openapi: openapi/openapi.yml
+  VellumVariableExtensionsRequest:
+    docs: A set of fields with additional properties for use in Vellum Variables.
+    properties:
+      color:
+        type: optional<string>
+        validation:
+          minLength: 1
     source:
       openapi: openapi/openapi.yml
   VellumVariableRequest:
@@ -5286,6 +5304,9 @@ types:
           minLength: 1
       key: string
       type: VellumVariableType
+      required: optional<boolean>
+      default: optional<VellumValueRequest>
+      extensions: optional<VellumVariableExtensionsRequest>
     source:
       openapi: openapi/openapi.yml
   VellumVariableType:

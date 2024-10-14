@@ -7,7 +7,7 @@ from typing import Callable, Generator, List, cast, Iterable
 from uuid import UUID
 
 from vellum import TestSuiteRunRead, TestSuiteRunMetricNumberOutput
-from vellum.client import Vellum
+from vellum.client import Vellum, OMIT
 from vellum.lib.test_suites.constants import (
     DEFAULT_MAX_POLLING_DURATION_MS,
     DEFAULT_POLLING_INTERVAL_MS,
@@ -337,14 +337,9 @@ class VellumTestSuite:
                 )
             )
 
-        identifier_kwargs = {}
-        if self._test_suite_id:
-            identifier_kwargs["test_suite_id"] = self._test_suite_id
-        if self._test_suite_name:
-            identifier_kwargs["test_suite_name"] = self._test_suite_name
-
         test_suite_run = self.client.test_suite_runs.create(
-            **identifier_kwargs,
+            test_suite_id=self._test_suite_id or OMIT,
+            test_suite_name=self._test_suite_name or OMIT,
             exec_config=TestSuiteRunExternalExecConfigRequest(
                 type="EXTERNAL",
                 data=TestSuiteRunExternalExecConfigDataRequest(

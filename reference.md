@@ -1218,7 +1218,9 @@ from vellum import (
     JinjaPromptBlockRequest,
     PromptParametersRequest,
     PromptRequestStringInputRequest,
+    StringVellumValueRequest,
     Vellum,
+    VellumVariableExtensionsRequest,
     VellumVariableRequest,
 )
 
@@ -1238,6 +1240,13 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
             id="string",
             key="string",
             type="STRING",
+            required=True,
+            default=StringVellumValueRequest(
+                value="string",
+            ),
+            extensions=VellumVariableExtensionsRequest(
+                color="string",
+            ),
         )
     ],
     parameters=PromptParametersRequest(

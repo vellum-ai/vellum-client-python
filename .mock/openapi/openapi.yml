@@ -9598,10 +9598,36 @@ components:
           type: string
         type:
           $ref: '#/components/schemas/VellumVariableType'
+        required:
+          type: boolean
+          nullable: true
+        default:
+          allOf:
+          - $ref: '#/components/schemas/VellumValue'
+          nullable: true
+        extensions:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableExtensions'
+          nullable: true
       required:
       - id
       - key
       - type
+    VellumVariableExtensions:
+      type: object
+      description: A set of fields with additional properties for use in Vellum Variables.
+      properties:
+        color:
+          type: string
+          nullable: true
+    VellumVariableExtensionsRequest:
+      type: object
+      description: A set of fields with additional properties for use in Vellum Variables.
+      properties:
+        color:
+          type: string
+          nullable: true
+          minLength: 1
     VellumVariableRequest:
       type: object
       properties:
@@ -9612,6 +9638,17 @@ components:
           type: string
         type:
           $ref: '#/components/schemas/VellumVariableType'
+        required:
+          type: boolean
+          nullable: true
+        default:
+          allOf:
+          - $ref: '#/components/schemas/VellumValueRequest'
+          nullable: true
+        extensions:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableExtensionsRequest'
+          nullable: true
       required:
       - id
       - key

@@ -336,9 +336,14 @@ class VellumTestSuite:
                 )
             )
 
+        identifier_kwargs = {}
+        if self._test_suite_id:
+            identifier_kwargs["test_suite_id"] = self._test_suite_id
+        if self._test_suite_name:
+            identifier_kwargs["test_suite_name"] = self._test_suite_name
+
         test_suite_run = self.client.test_suite_runs.create(
-            test_suite_id=self._test_suite_id,
-            test_suite_name=self._test_suite_name,
+            **identifier_kwargs,
             exec_config=TestSuiteRunExternalExecConfigRequest(
                 type="EXTERNAL",
                 data=TestSuiteRunExternalExecConfigDataRequest(

@@ -72,7 +72,9 @@ class AdHocClient:
             JinjaPromptBlockRequest,
             PromptParametersRequest,
             PromptRequestStringInputRequest,
+            StringVellumValueRequest,
             Vellum,
+            VellumVariableExtensionsRequest,
             VellumVariableRequest,
         )
 
@@ -92,6 +94,13 @@ class AdHocClient:
                     id="string",
                     key="string",
                     type="STRING",
+                    required=True,
+                    default=StringVellumValueRequest(
+                        value="string",
+                    ),
+                    extensions=VellumVariableExtensionsRequest(
+                        color="string",
+                    ),
                 )
             ],
             parameters=PromptParametersRequest(
@@ -258,6 +267,8 @@ class AsyncAdHocClient:
             JinjaPromptBlockRequest,
             PromptParametersRequest,
             PromptRequestStringInputRequest,
+            StringVellumValueRequest,
+            VellumVariableExtensionsRequest,
             VellumVariableRequest,
         )
 
@@ -280,6 +291,13 @@ class AsyncAdHocClient:
                         id="string",
                         key="string",
                         type="STRING",
+                        required=True,
+                        default=StringVellumValueRequest(
+                            value="string",
+                        ),
+                        extensions=VellumVariableExtensionsRequest(
+                            color="string",
+                        ),
                     )
                 ],
                 parameters=PromptParametersRequest(

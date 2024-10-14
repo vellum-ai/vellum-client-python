@@ -8403,7 +8403,6 @@ components:
           description: Configuration that defines how the Test Suite should be run
       required:
       - exec_config
-      - test_suite_id
     TestSuiteRunDeploymentReleaseTagExecConfig:
       type: object
       description: Execution configuration for running a Test Suite against a Prompt

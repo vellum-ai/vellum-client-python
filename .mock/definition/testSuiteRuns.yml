@@ -14,7 +14,7 @@ service:
         body:
           properties:
             test_suite_id:
-              type: string
+              type: optional<string>
               docs: >-
                 The ID of the Test Suite to run. Must provide either this or
                 test_suite_id.
@@ -37,7 +37,6 @@ service:
       availability: pre-release
       examples:
         - request:
-            test_suite_id: test_suite_id
             exec_config:
               type: DEPLOYMENT_RELEASE_TAG
               data:

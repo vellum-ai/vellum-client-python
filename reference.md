@@ -3522,7 +3522,6 @@ client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.test_suite_runs.create(
-    test_suite_id="test_suite_id",
     exec_config=TestSuiteRunDeploymentReleaseTagExecConfigRequest(
         data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(
             deployment_id="deployment_id",
@@ -3544,7 +3543,7 @@ client.test_suite_runs.create(
 <dl>
 <dd>
 
-**test_suite_id:** `str` — The ID of the Test Suite to run. Must provide either this or test_suite_id.
+**exec_config:** `TestSuiteRunExecConfigRequest` — Configuration that defines how the Test Suite should be run
     
 </dd>
 </dl>
@@ -3552,7 +3551,7 @@ client.test_suite_runs.create(
 <dl>
 <dd>
 
-**exec_config:** `TestSuiteRunExecConfigRequest` — Configuration that defines how the Test Suite should be run
+**test_suite_id:** `typing.Optional[str]` — The ID of the Test Suite to run. Must provide either this or test_suite_id.
     
 </dd>
 </dl>

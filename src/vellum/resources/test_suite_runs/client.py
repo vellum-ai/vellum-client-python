@@ -24,8 +24,8 @@ class TestSuiteRunsClient:
     def create(
         self,
         *,
-        test_suite_id: str,
         exec_config: TestSuiteRunExecConfigRequest,
+        test_suite_id: typing.Optional[str] = OMIT,
         test_suite_name: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> TestSuiteRunRead:
@@ -34,11 +34,11 @@ class TestSuiteRunsClient:
 
         Parameters
         ----------
-        test_suite_id : str
-            The ID of the Test Suite to run. Must provide either this or test_suite_id.
-
         exec_config : TestSuiteRunExecConfigRequest
             Configuration that defines how the Test Suite should be run
+
+        test_suite_id : typing.Optional[str]
+            The ID of the Test Suite to run. Must provide either this or test_suite_id.
 
         test_suite_name : typing.Optional[str]
             The name of the Test Suite to run. Must provide either this or test_suite_id.
@@ -63,7 +63,6 @@ class TestSuiteRunsClient:
             api_key="YOUR_API_KEY",
         )
         client.test_suite_runs.create(
-            test_suite_id="test_suite_id",
             exec_config=TestSuiteRunDeploymentReleaseTagExecConfigRequest(
                 data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(
                     deployment_id="deployment_id",
@@ -227,8 +226,8 @@ class AsyncTestSuiteRunsClient:
     async def create(
         self,
         *,
-        test_suite_id: str,
         exec_config: TestSuiteRunExecConfigRequest,
+        test_suite_id: typing.Optional[str] = OMIT,
         test_suite_name: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> TestSuiteRunRead:
@@ -237,11 +236,11 @@ class AsyncTestSuiteRunsClient:
 
         Parameters
         ----------
-        test_suite_id : str
-            The ID of the Test Suite to run. Must provide either this or test_suite_id.
-
         exec_config : TestSuiteRunExecConfigRequest
             Configuration that defines how the Test Suite should be run
+
+        test_suite_id : typing.Optional[str]
+            The ID of the Test Suite to run. Must provide either this or test_suite_id.
 
         test_suite_name : typing.Optional[str]
             The name of the Test Suite to run. Must provide either this or test_suite_id.
@@ -271,7 +270,6 @@ class AsyncTestSuiteRunsClient:
 
         async def main() -> None:
             await client.test_suite_runs.create(
-                test_suite_id="test_suite_id",
                 exec_config=TestSuiteRunDeploymentReleaseTagExecConfigRequest(
                     data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(
                         deployment_id="deployment_id",

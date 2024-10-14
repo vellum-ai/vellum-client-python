@@ -422,6 +422,8 @@ from .vellum_value_logical_condition_request import VellumValueLogicalConditionR
 from .vellum_value_logical_expression_request import VellumValueLogicalExpressionRequest
 from .vellum_value_request import VellumValueRequest
 from .vellum_variable import VellumVariable
+from .vellum_variable_extensions import VellumVariableExtensions
+from .vellum_variable_extensions_request import VellumVariableExtensionsRequest
 from .vellum_variable_request import VellumVariableRequest
 from .vellum_variable_type import VellumVariableType
 from .workflow_deployment_read import WorkflowDeploymentRead
@@ -873,6 +875,8 @@ __all__ = [
     "VellumValueLogicalExpressionRequest",
     "VellumValueRequest",
     "VellumVariable",
+    "VellumVariableExtensions",
+    "VellumVariableExtensionsRequest",
     "VellumVariableRequest",
     "VellumVariableType",
     "WorkflowDeploymentRead",

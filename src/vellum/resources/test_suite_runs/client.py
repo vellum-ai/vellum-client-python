@@ -26,6 +26,7 @@ class TestSuiteRunsClient:
         *,
         test_suite_id: str,
         exec_config: TestSuiteRunExecConfigRequest,
+        test_suite_name: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> TestSuiteRunRead:
         """
@@ -34,10 +35,13 @@ class TestSuiteRunsClient:
         Parameters
         ----------
         test_suite_id : str
-            The ID of the Test Suite to run
+            The ID of the Test Suite to run. Must provide either this or test_suite_id.
 
         exec_config : TestSuiteRunExecConfigRequest
             Configuration that defines how the Test Suite should be run
+
+        test_suite_name : typing.Optional[str]
+            The name of the Test Suite to run. Must provide either this or test_suite_id.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -73,6 +77,7 @@ class TestSuiteRunsClient:
             method="POST",
             json={
                 "test_suite_id": test_suite_id,
+                "test_suite_name": test_suite_name,
                 "exec_config": convert_and_respect_annotation_metadata(
                     object_=exec_config, annotation=TestSuiteRunExecConfigRequest, direction="write"
                 ),
@@ -224,6 +229,7 @@ class AsyncTestSuiteRunsClient:
         *,
         test_suite_id: str,
         exec_config: TestSuiteRunExecConfigRequest,
+        test_suite_name: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> TestSuiteRunRead:
         """
@@ -232,10 +238,13 @@ class AsyncTestSuiteRunsClient:
         Parameters
         ----------
         test_suite_id : str
-            The ID of the Test Suite to run
+            The ID of the Test Suite to run. Must provide either this or test_suite_id.
 
         exec_config : TestSuiteRunExecConfigRequest
             Configuration that defines how the Test Suite should be run
+
+        test_suite_name : typing.Optional[str]
+            The name of the Test Suite to run. Must provide either this or test_suite_id.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -279,6 +288,7 @@ class AsyncTestSuiteRunsClient:
             method="POST",
             json={
                 "test_suite_id": test_suite_id,
+                "test_suite_name": test_suite_name,
                 "exec_config": convert_and_respect_annotation_metadata(
                     object_=exec_config, annotation=TestSuiteRunExecConfigRequest, direction="write"
                 ),

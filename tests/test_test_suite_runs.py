@@ -32,18 +32,16 @@ async def test_create(client: Vellum, async_client: AsyncVellum) -> None:
         },
     }
     response = client.test_suite_runs.create(
-        test_suite_id="test_suite_id",
         exec_config=TestSuiteRunDeploymentReleaseTagExecConfigRequest(
             data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(deployment_id="deployment_id")
-        ),
+        )
     )
     validate_response(response, expected_response, expected_types)
 
     async_response = await async_client.test_suite_runs.create(
-        test_suite_id="test_suite_id",
         exec_config=TestSuiteRunDeploymentReleaseTagExecConfigRequest(
             data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(deployment_id="deployment_id")
-        ),
+        )
     )
     validate_response(async_response, expected_response, expected_types)
 

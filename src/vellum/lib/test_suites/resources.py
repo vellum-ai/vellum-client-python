@@ -15,6 +15,7 @@ from vellum.lib.test_suites.constants import (
 from vellum.lib.test_suites.exceptions import TestSuiteRunResultsException
 from vellum.lib.utils.env import get_api_key
 from vellum.lib.utils.paginator import PaginatedResults, get_all_results
+from vellum.lib.utils.typing import cast_not_optional
 from vellum.lib.utils.uuid import is_valid_uuid
 from vellum.types import (
     ExternalTestCaseExecutionRequest,
@@ -322,7 +323,7 @@ class VellumTestSuite:
         Returns a wrapper that polls the generated Test Suite Run until it's done running and returns its results.
         """
         test_cases = self.client.test_suites.list_test_suite_test_cases(
-            id=self._test_suite_id or self._test_suite_name
+            id=cast_not_optional(self._test_suite_id or self._test_suite_name)
         )
         executions: List[ExternalTestCaseExecutionRequest] = []
 

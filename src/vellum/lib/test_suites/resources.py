@@ -4,6 +4,7 @@ import logging
 import time
 from functools import cached_property
 from typing import Callable, Generator, List, cast, Iterable
+from uuid import UUID
 
 from vellum import TestSuiteRunRead, TestSuiteRunMetricNumberOutput
 from vellum.client import Vellum
@@ -14,6 +15,7 @@ from vellum.lib.test_suites.constants import (
 from vellum.lib.test_suites.exceptions import TestSuiteRunResultsException
 from vellum.lib.utils.env import get_api_key
 from vellum.lib.utils.paginator import PaginatedResults, get_all_results
+from vellum.lib.utils.uuid import is_valid_uuid
 from vellum.types import (
     ExternalTestCaseExecutionRequest,
     NamedTestCaseVariableValueRequest,
@@ -198,7 +200,9 @@ class VellumTestSuiteRunResults:
         output_values = self.get_numeric_metric_output_values(
             metric_identifier=metric_identifier, output_identifier=output_identifier
         )
-        return sum(cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values))) / len(output_values)
+        return sum(
+            cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values))
+        ) / len(output_values)
 
     def get_min_metric_output(
         self, metric_identifier: str | None = None, output_identifier: str | None = None
@@ -207,7 +211,9 @@ class VellumTestSuiteRunResults:
         output_values = self.get_numeric_metric_output_values(
             metric_identifier=metric_identifier, output_identifier=output_identifier
         )
-        return min(cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values)))
+        return min(
+            cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values))
+        )
 
     def get_max_metric_output(
         self, metric_identifier: str | None = None, output_identifier: str | None = None
@@ -216,7 +222,9 @@ class VellumTestSuiteRunResults:
         output_values = self.get_numeric_metric_output_values(
             metric_identifier=metric_identifier, output_identifier=output_identifier
         )
-        return max(cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values)))
+        return max(
+            cast(Iterable[float], filter(lambda o: isinstance(o, float), output_values))
+        )
 
     def wait_until_complete(self) -> None:
         """Wait until the Test Suite Run is no longer in a QUEUED or RUNNING state."""
@@ -282,16 +290,25 @@ class VellumTestSuiteRunResults:
 class VellumTestSuite:
     """A utility class that provides methods for running a Vellum Test Suite and interacting with its results."""
 
+    _test_suite_id: str | None
+    _test_suite_name: str | None
+
     def __init__(
         self,
-        test_suite_id: str,
+        test_suite_identifier: str | UUID,
         *,
         client: Vellum | None = None,
     ) -> None:
         self.client = client or Vellum(
             api_key=get_api_key(),
         )
-        self._test_suite_id = test_suite_id
+
+        if is_valid_uuid(test_suite_identifier):
+            self._test_suite_id = test_suite_identifier
+            self._test_suite_name = None
+        else:
+            self._test_suite_id = None
+            self._test_suite_name = test_suite_identifier
 
     def run_external(
         self,
@@ -305,7 +322,7 @@ class VellumTestSuite:
         Returns a wrapper that polls the generated Test Suite Run until it's done running and returns its results.
         """
         test_cases = self.client.test_suites.list_test_suite_test_cases(
-            id=self._test_suite_id
+            id=self._test_suite_id or self._test_suite_name
         )
         executions: List[ExternalTestCaseExecutionRequest] = []
 
@@ -321,6 +338,7 @@ class VellumTestSuite:
 
         test_suite_run = self.client.test_suite_runs.create(
             test_suite_id=self._test_suite_id,
+            test_suite_name=self._test_suite_name,
             exec_config=TestSuiteRunExternalExecConfigRequest(
                 type="EXTERNAL",
                 data=TestSuiteRunExternalExecConfigDataRequest(

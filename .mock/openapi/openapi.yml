@@ -8390,7 +8390,13 @@ components:
         test_suite_id:
           type: string
           format: uuid
-          description: The ID of the Test Suite to run
+          description: The ID of the Test Suite to run. Must provide either this or
+            test_suite_id.
+        test_suite_name:
+          type: string
+          minLength: 1
+          description: The name of the Test Suite to run. Must provide either this
+            or test_suite_id.
         exec_config:
           allOf:
           - $ref: '#/components/schemas/TestSuiteRunExecConfigRequest'
@@ -9598,10 +9604,36 @@ components:
           type: string
         type:
           $ref: '#/components/schemas/VellumVariableType'
+        required:
+          type: boolean
+          nullable: true
+        default:
+          allOf:
+          - $ref: '#/components/schemas/VellumValue'
+          nullable: true
+        extensions:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableExtensions'
+          nullable: true
       required:
       - id
       - key
       - type
+    VellumVariableExtensions:
+      type: object
+      description: A set of fields with additional properties for use in Vellum Variables.
+      properties:
+        color:
+          type: string
+          nullable: true
+    VellumVariableExtensionsRequest:
+      type: object
+      description: A set of fields with additional properties for use in Vellum Variables.
+      properties:
+        color:
+          type: string
+          nullable: true
+          minLength: 1
     VellumVariableRequest:
       type: object
       properties:
@@ -9612,6 +9644,17 @@ components:
           type: string
         type:
           $ref: '#/components/schemas/VellumVariableType'
+        required:
+          type: boolean
+          nullable: true
+        default:
+          allOf:
+          - $ref: '#/components/schemas/VellumValueRequest'
+          nullable: true
+        extensions:
+          allOf:
+          - $ref: '#/components/schemas/VellumVariableExtensionsRequest'
+          nullable: true
       required:
       - id
       - key

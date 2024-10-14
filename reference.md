@@ -1218,7 +1218,9 @@ from vellum import (
     JinjaPromptBlockRequest,
     PromptParametersRequest,
     PromptRequestStringInputRequest,
+    StringVellumValueRequest,
     Vellum,
+    VellumVariableExtensionsRequest,
     VellumVariableRequest,
 )
 
@@ -1238,6 +1240,13 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
             id="string",
             key="string",
             type="STRING",
+            required=True,
+            default=StringVellumValueRequest(
+                value="string",
+            ),
+            extensions=VellumVariableExtensionsRequest(
+                color="string",
+            ),
         )
     ],
     parameters=PromptParametersRequest(
@@ -3535,7 +3544,7 @@ client.test_suite_runs.create(
 <dl>
 <dd>
 
-**test_suite_id:** `str` — The ID of the Test Suite to run
+**test_suite_id:** `str` — The ID of the Test Suite to run. Must provide either this or test_suite_id.
     
 </dd>
 </dl>
@@ -3544,6 +3553,14 @@ client.test_suite_runs.create(
 <dd>
 
 **exec_config:** `TestSuiteRunExecConfigRequest` — Configuration that defines how the Test Suite should be run
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**test_suite_name:** `typing.Optional[str]` — The name of the Test Suite to run. Must provide either this or test_suite_id.
     
 </dd>
 </dl>

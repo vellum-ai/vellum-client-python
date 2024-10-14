@@ -65,8 +65,12 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
         "created": "2024-01-15T09:30:00Z",
         "last_deployed_on": "2024-01-15T09:30:00Z",
         "last_deployed_history_item_id": "last_deployed_history_item_id",
-        "input_variables": [{"id": "id", "key": "key", "type": "STRING"}],
-        "output_variables": [{"id": "id", "key": "key", "type": "STRING"}],
+        "input_variables": [
+            {"id": "id", "key": "key", "type": "STRING", "required": True, "default": {"type": "STRING"}}
+        ],
+        "output_variables": [
+            {"id": "id", "key": "key", "type": "STRING", "required": True, "default": {"type": "STRING"}}
+        ],
         "description": "description",
     }
     expected_types: typing.Any = {
@@ -78,8 +82,14 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
         "created": "datetime",
         "last_deployed_on": "datetime",
         "last_deployed_history_item_id": None,
-        "input_variables": ("list", {0: {"id": None, "key": None, "type": None}}),
-        "output_variables": ("list", {0: {"id": None, "key": None, "type": None}}),
+        "input_variables": (
+            "list",
+            {0: {"id": None, "key": None, "type": None, "required": None, "default": {"type": None}}},
+        ),
+        "output_variables": (
+            "list",
+            {0: {"id": None, "key": None, "type": None, "required": None, "default": {"type": None}}},
+        ),
         "description": None,
     }
     response = client.workflow_deployments.retrieve(id="id")

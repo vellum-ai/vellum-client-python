@@ -74,10 +74,16 @@ service:
                 - id: id
                   key: key
                   type: STRING
+                  required: true
+                  default:
+                    type: STRING
               output_variables:
                 - id: id
                   key: key
                   type: STRING
+                  required: true
+                  default:
+                    type: STRING
               description: description
       audiences:
         - customers

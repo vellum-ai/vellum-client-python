@@ -15,9 +15,18 @@ service:
           properties:
             test_suite_id:
               type: string
-              docs: The ID of the Test Suite to run
+              docs: >-
+                The ID of the Test Suite to run. Must provide either this or
+                test_suite_id.
               validation:
                 format: uuid
+            test_suite_name:
+              type: optional<string>
+              docs: >-
+                The name of the Test Suite to run. Must provide either this or
+                test_suite_id.
+              validation:
+                minLength: 1
             exec_config:
               type: root.TestSuiteRunExecConfigRequest
               docs: Configuration that defines how the Test Suite should be run

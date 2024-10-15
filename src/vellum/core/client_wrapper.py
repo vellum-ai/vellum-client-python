@@ -8,7 +8,13 @@ from .http_client import AsyncHttpClient
 
 
 class BaseClientWrapper:
-    def __init__(self, *, api_key: str, environment: VellumEnvironment, timeout: typing.Optional[float] = None):
+    def __init__(
+        self,
+        *,
+        api_key: str,
+        environment: VellumEnvironment,
+        timeout: typing.Optional[float] = None,
+    ):
         self.api_key = api_key
         self._environment = environment
         self._timeout = timeout
@@ -40,7 +46,9 @@ class SyncClientWrapper(BaseClientWrapper):
     ):
         super().__init__(api_key=api_key, environment=environment, timeout=timeout)
         self.httpx_client = HttpClient(
-            httpx_client=httpx_client, base_headers=self.get_headers, base_timeout=self.get_timeout
+            httpx_client=httpx_client,
+            base_headers=self.get_headers,
+            base_timeout=self.get_timeout,
         )
 
 
@@ -55,5 +63,7 @@ class AsyncClientWrapper(BaseClientWrapper):
     ):
         super().__init__(api_key=api_key, environment=environment, timeout=timeout)
         self.httpx_client = AsyncHttpClient(
-            httpx_client=httpx_client, base_headers=self.get_headers, base_timeout=self.get_timeout
+            httpx_client=httpx_client,
+            base_headers=self.get_headers,
+            base_timeout=self.get_timeout,
         )

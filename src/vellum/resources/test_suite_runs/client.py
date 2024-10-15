@@ -10,7 +10,9 @@ from ...core.pydantic_utilities import parse_obj_as
 from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.jsonable_encoder import jsonable_encoder
-from ...types.paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
+from ...types.paginated_test_suite_run_execution_list import (
+    PaginatedTestSuiteRunExecutionList,
+)
 from ...core.client_wrapper import AsyncClientWrapper
 
 # this is used as the default value for optional parameters
@@ -78,7 +80,9 @@ class TestSuiteRunsClient:
                 "test_suite_id": test_suite_id,
                 "test_suite_name": test_suite_name,
                 "exec_config": convert_and_respect_annotation_metadata(
-                    object_=exec_config, annotation=TestSuiteRunExecConfigRequest, direction="write"
+                    object_=exec_config,
+                    annotation=TestSuiteRunExecConfigRequest,
+                    direction="write",
                 ),
             },
             request_options=request_options,
@@ -98,7 +102,9 @@ class TestSuiteRunsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> TestSuiteRunRead:
+    def retrieve(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> TestSuiteRunRead:
         """
         Retrieve a specific Test Suite Run by ID
 
@@ -288,7 +294,9 @@ class AsyncTestSuiteRunsClient:
                 "test_suite_id": test_suite_id,
                 "test_suite_name": test_suite_name,
                 "exec_config": convert_and_respect_annotation_metadata(
-                    object_=exec_config, annotation=TestSuiteRunExecConfigRequest, direction="write"
+                    object_=exec_config,
+                    annotation=TestSuiteRunExecConfigRequest,
+                    direction="write",
                 ),
             },
             request_options=request_options,
@@ -308,7 +316,9 @@ class AsyncTestSuiteRunsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> TestSuiteRunRead:
+    async def retrieve(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> TestSuiteRunRead:
         """
         Retrieve a specific Test Suite Run by ID
 

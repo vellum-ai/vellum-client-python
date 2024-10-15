@@ -305,11 +305,11 @@ class VellumTestSuite:
         )
 
         if is_valid_uuid(test_suite_identifier):
-            self._test_suite_id = test_suite_identifier
+            self._test_suite_id = str(test_suite_identifier)
             self._test_suite_name = None
         else:
             self._test_suite_id = None
-            self._test_suite_name = test_suite_identifier
+            self._test_suite_name = str(test_suite_identifier)
 
     def run_external(
         self,

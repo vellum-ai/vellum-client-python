@@ -949,6 +949,67 @@ paths:
       servers:
       - url: https://predict.vellum.ai
         x-name: Predict
+  /v1/folder-entities:
+    get:
+      operationId: folder_entities_list
+      description: List all folder entities within a specified folder.
+      parameters:
+      - in: query
+        name: entity_status
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - ARCHIVED
+        description: |-
+          Filter down to only those objects whose entities have a status matching the status specified.
+
+          * `ACTIVE` - Active
+          * `ARCHIVED` - Archived
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: parent_folder_id
+        schema:
+          type: string
+        description: |-
+          Filter down to only those entities whose parent folder has the specified ID.
+
+          To filter by an entity's parent folder, provide the ID of the parent folder. To filter by the root directory, provide
+          a string representing the entity type of the root directory. Supported root directories include:
+          - PROMPT_SANDBOX
+          - WORKFLOW_SANDBOX
+          - DOCUMENT_INDEX
+          - TEST_SUITE
+        required: true
+      tags:
+      - folder-entities
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFolderEntityList'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/folders/{folder_id}/add-entity:
     post:
       operationId: add_entity_to_folder
@@ -961,8 +1022,13 @@ paths:
         name: folder_id
         schema:
           type: string
-        description: The ID of the folder to which the entity should be added. This
-          can be a UUID of a folder, or the name of a root directory (e.g. "PROMPT_SANDBOX").
+        description: |-
+          The ID of the folder to which the entity should be added. This can be a UUID of a folder, or the name of a root
+          directory. Supported root directories include:
+          - PROMPT_SANDBOX
+          - WORKFLOW_SANDBOX
+          - DOCUMENT_INDEX
+          - TEST_SUITE
         required: true
       tags:
       - folder-entities
@@ -3966,6 +4032,218 @@ components:
         * `LENGTH` - LENGTH
         * `STOP` - STOP
         * `UNKNOWN` - UNKNOWN
+    FolderEntity:
+      oneOf:
+      - $ref: '#/components/schemas/FolderEntityFolder'
+      - $ref: '#/components/schemas/FolderEntityPromptSandbox'
+      - $ref: '#/components/schemas/FolderEntityWorkflowSandbox'
+      - $ref: '#/components/schemas/FolderEntityDocumentIndex'
+      - $ref: '#/components/schemas/FolderEntityTestSuite'
+      discriminator:
+        propertyName: type
+        mapping:
+          FOLDER: '#/components/schemas/FolderEntityFolder'
+          PROMPT_SANDBOX: '#/components/schemas/FolderEntityPromptSandbox'
+          WORKFLOW_SANDBOX: '#/components/schemas/FolderEntityWorkflowSandbox'
+          DOCUMENT_INDEX: '#/components/schemas/FolderEntityDocumentIndex'
+          TEST_SUITE: '#/components/schemas/FolderEntityTestSuite'
+    FolderEntityDocumentIndex:
+      type: object
+      description: A slim representation of a Document Index, as it exists within
+        a Folder.
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        data:
+          $ref: '#/components/schemas/FolderEntityDocumentIndexData'
+      required:
+      - data
+      - id
+      - type
+    FolderEntityDocumentIndexData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        label:
+          type: string
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+      required:
+      - created
+      - id
+      - label
+      - modified
+      - status
+    FolderEntityFolder:
+      type: object
+      description: A slim representation of a Folder, as it exists within another
+        Folder.
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        data:
+          $ref: '#/components/schemas/FolderEntityFolderData'
+      required:
+      - data
+      - id
+      - type
+    FolderEntityFolderData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        label:
+          type: string
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        has_contents:
+          type: boolean
+      required:
+      - created
+      - has_contents
+      - id
+      - label
+      - modified
+    FolderEntityPromptSandbox:
+      type: object
+      description: A slim representation of a Prompt Sandbox, as it exists within
+        a Folder.
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        data:
+          $ref: '#/components/schemas/FolderEntityPromptSandboxData'
+      required:
+      - data
+      - id
+      - type
+    FolderEntityPromptSandboxData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        label:
+          type: string
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        last_deployed_on:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - created
+      - id
+      - label
+      - modified
+      - status
+    FolderEntityTestSuite:
+      type: object
+      description: A slim representation of a Test Suite, as it exists within a Folder.
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        data:
+          $ref: '#/components/schemas/FolderEntityTestSuiteData'
+      required:
+      - data
+      - id
+      - type
+    FolderEntityTestSuiteData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        label:
+          type: string
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+      required:
+      - created
+      - id
+      - label
+      - modified
+      - status
+    FolderEntityWorkflowSandbox:
+      type: object
+      description: A slim representation of a Workflow Sandbox, as it exists within
+        a Folder.
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        data:
+          $ref: '#/components/schemas/FolderEntityWorkflowSandboxData'
+      required:
+      - data
+      - id
+      - type
+    FolderEntityWorkflowSandboxData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        label:
+          type: string
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        last_deployed_on:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - created
+      - id
+      - label
+      - modified
+      - status
     FulfilledAdHocExecutePromptEvent:
       type: object
       description: The final data event returned indicating that the stream has ended
@@ -6076,6 +6354,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DocumentIndexRead'
+    PaginatedFolderEntityList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FolderEntity'
     PaginatedSlimDeploymentReadList:
       type: object
       properties:

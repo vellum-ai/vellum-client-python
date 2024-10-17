@@ -106,6 +106,17 @@ from .execution_vellum_value import ExecutionVellumValue
 from .external_test_case_execution import ExternalTestCaseExecution
 from .external_test_case_execution_request import ExternalTestCaseExecutionRequest
 from .finish_reason_enum import FinishReasonEnum
+from .folder_entity import FolderEntity
+from .folder_entity_document_index import FolderEntityDocumentIndex
+from .folder_entity_document_index_data import FolderEntityDocumentIndexData
+from .folder_entity_folder import FolderEntityFolder
+from .folder_entity_folder_data import FolderEntityFolderData
+from .folder_entity_prompt_sandbox import FolderEntityPromptSandbox
+from .folder_entity_prompt_sandbox_data import FolderEntityPromptSandboxData
+from .folder_entity_test_suite import FolderEntityTestSuite
+from .folder_entity_test_suite_data import FolderEntityTestSuiteData
+from .folder_entity_workflow_sandbox import FolderEntityWorkflowSandbox
+from .folder_entity_workflow_sandbox_data import FolderEntityWorkflowSandboxData
 from .fulfilled_ad_hoc_execute_prompt_event import FulfilledAdHocExecutePromptEvent
 from .fulfilled_enum import FulfilledEnum
 from .fulfilled_execute_prompt_event import FulfilledExecutePromptEvent
@@ -236,6 +247,7 @@ from .open_ai_vectorizer_text_embedding_3_small_request import OpenAiVectorizerT
 from .open_ai_vectorizer_text_embedding_ada_002 import OpenAiVectorizerTextEmbeddingAda002
 from .open_ai_vectorizer_text_embedding_ada_002_request import OpenAiVectorizerTextEmbeddingAda002Request
 from .paginated_document_index_read_list import PaginatedDocumentIndexReadList
+from .paginated_folder_entity_list import PaginatedFolderEntityList
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
 from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
@@ -567,6 +579,17 @@ __all__ = [
     "ExternalTestCaseExecution",
     "ExternalTestCaseExecutionRequest",
     "FinishReasonEnum",
+    "FolderEntity",
+    "FolderEntityDocumentIndex",
+    "FolderEntityDocumentIndexData",
+    "FolderEntityFolder",
+    "FolderEntityFolderData",
+    "FolderEntityPromptSandbox",
+    "FolderEntityPromptSandboxData",
+    "FolderEntityTestSuite",
+    "FolderEntityTestSuiteData",
+    "FolderEntityWorkflowSandbox",
+    "FolderEntityWorkflowSandboxData",
     "FulfilledAdHocExecutePromptEvent",
     "FulfilledEnum",
     "FulfilledExecutePromptEvent",
@@ -693,6 +716,7 @@ __all__ = [
     "OpenAiVectorizerTextEmbeddingAda002",
     "OpenAiVectorizerTextEmbeddingAda002Request",
     "PaginatedDocumentIndexReadList",
+    "PaginatedFolderEntityList",
     "PaginatedSlimDeploymentReadList",
     "PaginatedSlimDocumentList",
     "PaginatedSlimWorkflowDeploymentList",

@@ -3013,6 +3013,118 @@ core.File` — See core.File for more documentation
 </details>
 
 ## FolderEntities
+<details><summary><code>client.folder_entities.<a href="src/vellum/resources/folder_entities/client.py">list</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all folder entities within a specified folder.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.folder_entities.list(
+    parent_folder_id="parent_folder_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**parent_folder_id:** `str` 
+
+Filter down to only those entities whose parent folder has the specified ID.
+
+To filter by an entity's parent folder, provide the ID of the parent folder. To filter by the root directory, provide
+a string representing the entity type of the root directory (e.g. "PROMPT_SANDBOX" or "TEST_SUITE").
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**entity_status:** `typing.Optional[FolderEntitiesListRequestEntityStatus]` 
+
+Filter down to only those objects whose entities have a status matching the status specified.
+
+- `ACTIVE` - Active
+- `ARCHIVED` - Archived
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[int]` — Number of results to return per page.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `typing.Optional[int]` — The initial index from which to return the results.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**ordering:** `typing.Optional[str]` — Which field to use when ordering the results.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.folder_entities.<a href="src/vellum/resources/folder_entities/client.py">add_entity_to_folder</a>(...)</code></summary>
 <dl>
 <dd>

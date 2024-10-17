@@ -12,11 +12,7 @@ async def test_create(client: Vellum, async_client: AsyncVellum) -> None:
     expected_response: typing.Any = {
         "id": "id",
         "created": "2024-01-15T09:30:00Z",
-        "test_suite": {
-            "id": "id",
-            "history_item_id": "history_item_id",
-            "label": "label",
-        },
+        "test_suite": {"id": "id", "history_item_id": "history_item_id", "label": "label"},
         "state": "QUEUED",
         "exec_config": {
             "type": "DEPLOYMENT_RELEASE_TAG",
@@ -37,18 +33,14 @@ async def test_create(client: Vellum, async_client: AsyncVellum) -> None:
     }
     response = client.test_suite_runs.create(
         exec_config=TestSuiteRunDeploymentReleaseTagExecConfigRequest(
-            data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(
-                deployment_id="deployment_id"
-            )
+            data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(deployment_id="deployment_id")
         )
     )
     validate_response(response, expected_response, expected_types)
 
     async_response = await async_client.test_suite_runs.create(
         exec_config=TestSuiteRunDeploymentReleaseTagExecConfigRequest(
-            data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(
-                deployment_id="deployment_id"
-            )
+            data=TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(deployment_id="deployment_id")
         )
     )
     validate_response(async_response, expected_response, expected_types)
@@ -58,11 +50,7 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
     expected_response: typing.Any = {
         "id": "id",
         "created": "2024-01-15T09:30:00Z",
-        "test_suite": {
-            "id": "id",
-            "history_item_id": "history_item_id",
-            "label": "label",
-        },
+        "test_suite": {"id": "id", "history_item_id": "history_item_id", "label": "label"},
         "state": "QUEUED",
         "exec_config": {
             "type": "DEPLOYMENT_RELEASE_TAG",
@@ -97,19 +85,8 @@ async def test_list_executions(client: Vellum, async_client: AsyncVellum) -> Non
             {
                 "id": "id",
                 "test_case_id": "test_case_id",
-                "outputs": [
-                    {
-                        "name": "name",
-                        "type": "STRING",
-                        "output_variable_id": "output_variable_id",
-                    }
-                ],
-                "metric_results": [
-                    {
-                        "metric_id": "metric_id",
-                        "outputs": [{"type": "STRING", "name": "name"}],
-                    }
-                ],
+                "outputs": [{"name": "name", "type": "STRING", "output_variable_id": "output_variable_id"}],
+                "metric_results": [{"metric_id": "metric_id", "outputs": [{"type": "STRING", "name": "name"}]}],
             }
         ],
     }
@@ -123,18 +100,10 @@ async def test_list_executions(client: Vellum, async_client: AsyncVellum) -> Non
                 0: {
                     "id": None,
                     "test_case_id": None,
-                    "outputs": (
-                        "list",
-                        {0: {"name": None, "type": None, "output_variable_id": None}},
-                    ),
+                    "outputs": ("list", {0: {"name": None, "type": None, "output_variable_id": None}}),
                     "metric_results": (
                         "list",
-                        {
-                            0: {
-                                "metric_id": None,
-                                "outputs": ("list", {0: {"type": None, "name": None}}),
-                            }
-                        },
+                        {0: {"metric_id": None, "outputs": ("list", {0: {"type": None, "name": None}})}},
                     ),
                 }
             },

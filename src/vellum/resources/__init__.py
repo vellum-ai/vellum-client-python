@@ -15,11 +15,13 @@ from . import (
 )
 from .deployments import DeploymentsListRequestStatus
 from .document_indexes import DocumentIndexesListRequestStatus
+from .folder_entities import FolderEntitiesListRequestEntityStatus
 from .workflow_deployments import WorkflowDeploymentsListRequestStatus
 
 __all__ = [
     "DeploymentsListRequestStatus",
     "DocumentIndexesListRequestStatus",
+    "FolderEntitiesListRequestEntityStatus",
     "WorkflowDeploymentsListRequestStatus",
     "ad_hoc",
     "deployments",

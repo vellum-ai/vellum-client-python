@@ -1751,6 +1751,133 @@ types:
       * `UNKNOWN` - UNKNOWN
     source:
       openapi: openapi/openapi.yml
+  FolderEntity:
+    discriminated: false
+    union:
+      - FolderEntityFolder
+      - FolderEntityPromptSandbox
+      - FolderEntityWorkflowSandbox
+      - FolderEntityDocumentIndex
+      - FolderEntityTestSuite
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityDocumentIndex:
+    docs: A slim representation of a Document Index, as it exists within a Folder.
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      type: literal<"DOCUMENT_INDEX">
+      data: FolderEntityDocumentIndexData
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityDocumentIndexData:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      label: string
+      created: datetime
+      modified: datetime
+      status: EntityStatus
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityFolder:
+    docs: A slim representation of a Folder, as it exists within another Folder.
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      type: literal<"FOLDER">
+      data: FolderEntityFolderData
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityFolderData:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      label: string
+      created: datetime
+      modified: datetime
+      has_contents: boolean
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityPromptSandbox:
+    docs: A slim representation of a Prompt Sandbox, as it exists within a Folder.
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      type: literal<"PROMPT_SANDBOX">
+      data: FolderEntityPromptSandboxData
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityPromptSandboxData:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      label: string
+      created: datetime
+      modified: datetime
+      status: EntityStatus
+      last_deployed_on: optional<datetime>
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityTestSuite:
+    docs: A slim representation of a Test Suite, as it exists within a Folder.
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      type: literal<"TEST_SUITE">
+      data: FolderEntityTestSuiteData
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityTestSuiteData:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      label: string
+      created: datetime
+      modified: datetime
+      status: EntityStatus
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityWorkflowSandbox:
+    docs: A slim representation of a Workflow Sandbox, as it exists within a Folder.
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      type: literal<"WORKFLOW_SANDBOX">
+      data: FolderEntityWorkflowSandboxData
+    source:
+      openapi: openapi/openapi.yml
+  FolderEntityWorkflowSandboxData:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      label: string
+      created: datetime
+      modified: datetime
+      status: EntityStatus
+      last_deployed_on: optional<datetime>
+    source:
+      openapi: openapi/openapi.yml
   FulfilledAdHocExecutePromptEvent:
     docs: >-
       The final data event returned indicating that the stream has ended and all
@@ -3014,6 +3141,20 @@ types:
         validation:
           format: uri
       results: optional<list<DocumentIndexRead>>
+    source:
+      openapi: openapi/openapi.yml
+  PaginatedFolderEntityList:
+    properties:
+      count: optional<integer>
+      next:
+        type: optional<string>
+        validation:
+          format: uri
+      previous:
+        type: optional<string>
+        validation:
+          format: uri
+      results: optional<list<FolderEntity>>
     source:
       openapi: openapi/openapi.yml
   PaginatedSlimDeploymentReadList:

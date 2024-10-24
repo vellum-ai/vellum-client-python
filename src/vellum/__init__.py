@@ -262,6 +262,7 @@ from .types import (
     PromptRequestInputRequest,
     PromptRequestJsonInputRequest,
     PromptRequestStringInputRequest,
+    PromptSettingsRequest,
     RawPromptExecutionOverridesRequest,
     ReductoChunkerConfig,
     ReductoChunkerConfigRequest,
@@ -446,6 +447,8 @@ from .types import (
     WorkflowOutputNumber,
     WorkflowOutputSearchResults,
     WorkflowOutputString,
+    WorkflowPushExecConfig,
+    WorkflowPushResponse,
     WorkflowReleaseTagRead,
     WorkflowReleaseTagWorkflowDeploymentHistoryItem,
     WorkflowRequestChatHistoryInputRequest,
@@ -482,6 +485,7 @@ from .resources import (
     test_suites,
     workflow_deployments,
     workflow_sandboxes,
+    workflows,
 )
 from .client import AsyncVellum, Vellum
 from .environment import VellumEnvironment
@@ -757,6 +761,7 @@ __all__ = [
     "PromptRequestInputRequest",
     "PromptRequestJsonInputRequest",
     "PromptRequestStringInputRequest",
+    "PromptSettingsRequest",
     "RawPromptExecutionOverridesRequest",
     "ReductoChunkerConfig",
     "ReductoChunkerConfigRequest",
@@ -944,6 +949,8 @@ __all__ = [
     "WorkflowOutputNumber",
     "WorkflowOutputSearchResults",
     "WorkflowOutputString",
+    "WorkflowPushExecConfig",
+    "WorkflowPushResponse",
     "WorkflowReleaseTagRead",
     "WorkflowReleaseTagWorkflowDeploymentHistoryItem",
     "WorkflowRequestChatHistoryInputRequest",
@@ -974,4 +981,5 @@ __all__ = [
     "test_suites",
     "workflow_deployments",
     "workflow_sandboxes",
+    "workflows",
 ]

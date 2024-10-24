@@ -755,10 +755,10 @@ types:
       openapi: openapi/openapi.yml
   ApiNodeResultData:
     properties:
+      json: optional<map<string, unknown>>
       text_output_id: string
       text: optional<string>
       json_output_id: string
-      json: optional<map<string, unknown>>
       status_code_output_id: string
       status_code: integer
     source:
@@ -3470,6 +3470,11 @@ types:
       value: string
     source:
       openapi: openapi/openapi.yml
+  PromptSettingsRequest:
+    properties:
+      timeout: optional<double>
+    source:
+      openapi: openapi/openapi.yml
   RawPromptExecutionOverridesRequest:
     properties:
       body: optional<map<string, unknown>>
@@ -5324,11 +5329,13 @@ types:
     enum:
       - INVALID_REQUEST
       - PROVIDER_ERROR
+      - REQUEST_TIMEOUT
       - INTERNAL_SERVER_ERROR
       - USER_DEFINED_ERROR
     docs: |-
       * `INVALID_REQUEST` - INVALID_REQUEST
       * `PROVIDER_ERROR` - PROVIDER_ERROR
+      * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
       * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
       * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
     source:

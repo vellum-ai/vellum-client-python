@@ -273,6 +273,7 @@ from .prompt_request_chat_history_input_request import PromptRequestChatHistoryI
 from .prompt_request_input_request import PromptRequestInputRequest
 from .prompt_request_json_input_request import PromptRequestJsonInputRequest
 from .prompt_request_string_input_request import PromptRequestStringInputRequest
+from .prompt_settings_request import PromptSettingsRequest
 from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .reducto_chunker_config import ReductoChunkerConfig
 from .reducto_chunker_config_request import ReductoChunkerConfigRequest
@@ -742,6 +743,7 @@ __all__ = [
     "PromptRequestInputRequest",
     "PromptRequestJsonInputRequest",
     "PromptRequestStringInputRequest",
+    "PromptSettingsRequest",
     "RawPromptExecutionOverridesRequest",
     "ReductoChunkerConfig",
     "ReductoChunkerConfigRequest",

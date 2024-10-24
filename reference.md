@@ -1218,6 +1218,7 @@ from vellum import (
     JinjaPromptBlockRequest,
     PromptParametersRequest,
     PromptRequestStringInputRequest,
+    PromptSettingsRequest,
     StringVellumValueRequest,
     Vellum,
     VellumVariableExtensionsRequest,
@@ -1259,6 +1260,9 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
         presence_penalty=1.1,
         logit_bias={"string": {"key": "value"}},
         custom_parameters={"string": {"key": "value"}},
+    ),
+    settings=PromptSettingsRequest(
+        timeout=1.1,
     ),
     blocks=[
         JinjaPromptBlockRequest(
@@ -1330,6 +1334,14 @@ for chunk in response:
 <dd>
 
 **blocks:** `typing.Sequence[PromptBlockRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**settings:** `typing.Optional[PromptSettingsRequest]` 
     
 </dd>
 </dl>

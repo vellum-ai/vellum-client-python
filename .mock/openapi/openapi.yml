@@ -1958,6 +1958,10 @@ components:
             $ref: '#/components/schemas/VellumVariableRequest'
         parameters:
           $ref: '#/components/schemas/PromptParametersRequest'
+        settings:
+          allOf:
+          - $ref: '#/components/schemas/PromptSettingsRequest'
+          nullable: true
         blocks:
           type: array
           items:
@@ -2070,6 +2074,10 @@ components:
     ApiNodeResultData:
       type: object
       properties:
+        json:
+          type: object
+          additionalProperties: {}
+          nullable: true
         text_output_id:
           type: string
         text:
@@ -2077,10 +2085,6 @@ components:
           nullable: true
         json_output_id:
           type: string
-        json:
-          type: object
-          additionalProperties: {}
-          nullable: true
         status_code_output_id:
           type: string
         status_code:
@@ -6901,6 +6905,13 @@ components:
       - key
       - type
       - value
+    PromptSettingsRequest:
+      type: object
+      properties:
+        timeout:
+          type: number
+          format: double
+          nullable: true
     RawPromptExecutionOverridesRequest:
       type: object
       properties:
@@ -9758,12 +9769,14 @@ components:
       enum:
       - INVALID_REQUEST
       - PROVIDER_ERROR
+      - REQUEST_TIMEOUT
       - INTERNAL_SERVER_ERROR
       - USER_DEFINED_ERROR
       type: string
       description: |-
         * `INVALID_REQUEST` - INVALID_REQUEST
         * `PROVIDER_ERROR` - PROVIDER_ERROR
+        * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
         * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
         * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
     VellumErrorRequest:

@@ -1927,6 +1927,28 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+  /v1/workspace-secrets/{id}:
+    get:
+      operationId: workspace_secrets_retrieve
+      description: Used to retrieve a Workspace Secret given its ID or name.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Workspace Secret's ID or its unique name
+        required: true
+      tags:
+      - workspace-secrets
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceSecretRead'
+          description: ''
+      x-fern-audiences:
+      - internal
 components:
   schemas:
     AdHocExecutePromptEvent:
@@ -1958,6 +1980,10 @@ components:
             $ref: '#/components/schemas/VellumVariableRequest'
         parameters:
           $ref: '#/components/schemas/PromptParametersRequest'
+        settings:
+          allOf:
+          - $ref: '#/components/schemas/PromptSettingsRequest'
+          nullable: true
         blocks:
           type: array
           items:
@@ -2070,6 +2096,10 @@ components:
     ApiNodeResultData:
       type: object
       properties:
+        json:
+          type: object
+          additionalProperties: {}
+          nullable: true
         text_output_id:
           type: string
         text:
@@ -2077,10 +2107,6 @@ components:
           nullable: true
         json_output_id:
           type: string
-        json:
-          type: object
-          additionalProperties: {}
-          nullable: true
         status_code_output_id:
           type: string
         status_code:
@@ -6901,6 +6927,13 @@ components:
       - key
       - type
       - value
+    PromptSettingsRequest:
+      type: object
+      properties:
+        timeout:
+          type: number
+          format: double
+          nullable: true
     RawPromptExecutionOverridesRequest:
       type: object
       properties:
@@ -7595,6 +7628,16 @@ components:
           minimum: 0.0
           default: 0.2
           description: The relative weight to give to keywords
+    SecretTypeEnum:
+      enum:
+      - USER_DEFINED
+      - HMAC
+      - INTERNAL_API_KEY
+      type: string
+      description: |-
+        * `USER_DEFINED` - User Defined
+        * `HMAC` - Hmac
+        * `INTERNAL_API_KEY` - Internal Api Key
     SentenceChunkerConfig:
       type: object
       description: Configuration for sentence chunking
@@ -9758,12 +9801,14 @@ components:
       enum:
       - INVALID_REQUEST
       - PROVIDER_ERROR
+      - REQUEST_TIMEOUT
       - INTERNAL_SERVER_ERROR
       - USER_DEFINED_ERROR
       type: string
       description: |-
         * `INVALID_REQUEST` - INVALID_REQUEST
         * `PROVIDER_ERROR` - PROVIDER_ERROR
+        * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
         * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
         * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
     VellumErrorRequest:
@@ -10980,6 +11025,33 @@ components:
         mapping:
           WORKFLOW: '#/components/schemas/WorkflowExecutionWorkflowResultEvent'
           NODE: '#/components/schemas/WorkflowExecutionNodeResultEvent'
+    WorkspaceSecretRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 250
+        label:
+          type: string
+        secret_type:
+          $ref: '#/components/schemas/SecretTypeEnum'
+        variable_type:
+          $ref: '#/components/schemas/VellumVariableType'
+      required:
+      - id
+      - label
+      - modified
+      - name
+      - secret_type
+      - variable_type
     hkunlp-instructor-xlEnum:
       type: string
       enum:

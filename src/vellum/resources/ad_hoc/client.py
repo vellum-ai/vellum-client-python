@@ -6,6 +6,7 @@ from ...types.prompt_request_input_request import PromptRequestInputRequest
 from ...types.vellum_variable_request import VellumVariableRequest
 from ...types.prompt_parameters_request import PromptParametersRequest
 from ...types.prompt_block_request import PromptBlockRequest
+from ...types.prompt_settings_request import PromptSettingsRequest
 from ...types.ad_hoc_expand_meta_request import AdHocExpandMetaRequest
 from ...core.request_options import RequestOptions
 from ...types.ad_hoc_execute_prompt_event import AdHocExecutePromptEvent
@@ -35,6 +36,7 @@ class AdHocClient:
         input_variables: typing.Sequence[VellumVariableRequest],
         parameters: PromptParametersRequest,
         blocks: typing.Sequence[PromptBlockRequest],
+        settings: typing.Optional[PromptSettingsRequest] = OMIT,
         expand_meta: typing.Optional[AdHocExpandMetaRequest] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[AdHocExecutePromptEvent]:
@@ -52,6 +54,8 @@ class AdHocClient:
         parameters : PromptParametersRequest
 
         blocks : typing.Sequence[PromptBlockRequest]
+
+        settings : typing.Optional[PromptSettingsRequest]
 
         expand_meta : typing.Optional[AdHocExpandMetaRequest]
 
@@ -72,6 +76,7 @@ class AdHocClient:
             JinjaPromptBlockRequest,
             PromptParametersRequest,
             PromptRequestStringInputRequest,
+            PromptSettingsRequest,
             StringVellumValueRequest,
             Vellum,
             VellumVariableExtensionsRequest,
@@ -114,6 +119,9 @@ class AdHocClient:
                 logit_bias={"string": {"key": "value"}},
                 custom_parameters={"string": {"key": "value"}},
             ),
+            settings=PromptSettingsRequest(
+                timeout=1.1,
+            ),
             blocks=[
                 JinjaPromptBlockRequest(
                     properties=JinjaPromptBlockPropertiesRequest(
@@ -151,6 +159,9 @@ class AdHocClient:
                 ),
                 "parameters": convert_and_respect_annotation_metadata(
                     object_=parameters, annotation=PromptParametersRequest, direction="write"
+                ),
+                "settings": convert_and_respect_annotation_metadata(
+                    object_=settings, annotation=PromptSettingsRequest, direction="write"
                 ),
                 "blocks": convert_and_respect_annotation_metadata(
                     object_=blocks, annotation=typing.Sequence[PromptBlockRequest], direction="write"
@@ -227,6 +238,7 @@ class AsyncAdHocClient:
         input_variables: typing.Sequence[VellumVariableRequest],
         parameters: PromptParametersRequest,
         blocks: typing.Sequence[PromptBlockRequest],
+        settings: typing.Optional[PromptSettingsRequest] = OMIT,
         expand_meta: typing.Optional[AdHocExpandMetaRequest] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[AdHocExecutePromptEvent]:
@@ -244,6 +256,8 @@ class AsyncAdHocClient:
         parameters : PromptParametersRequest
 
         blocks : typing.Sequence[PromptBlockRequest]
+
+        settings : typing.Optional[PromptSettingsRequest]
 
         expand_meta : typing.Optional[AdHocExpandMetaRequest]
 
@@ -267,6 +281,7 @@ class AsyncAdHocClient:
             JinjaPromptBlockRequest,
             PromptParametersRequest,
             PromptRequestStringInputRequest,
+            PromptSettingsRequest,
             StringVellumValueRequest,
             VellumVariableExtensionsRequest,
             VellumVariableRequest,
@@ -311,6 +326,9 @@ class AsyncAdHocClient:
                     logit_bias={"string": {"key": "value"}},
                     custom_parameters={"string": {"key": "value"}},
                 ),
+                settings=PromptSettingsRequest(
+                    timeout=1.1,
+                ),
                 blocks=[
                     JinjaPromptBlockRequest(
                         properties=JinjaPromptBlockPropertiesRequest(
@@ -351,6 +369,9 @@ class AsyncAdHocClient:
                 ),
                 "parameters": convert_and_respect_annotation_metadata(
                     object_=parameters, annotation=PromptParametersRequest, direction="write"
+                ),
+                "settings": convert_and_respect_annotation_metadata(
+                    object_=settings, annotation=PromptSettingsRequest, direction="write"
                 ),
                 "blocks": convert_and_respect_annotation_metadata(
                     object_=blocks, annotation=typing.Sequence[PromptBlockRequest], direction="write"

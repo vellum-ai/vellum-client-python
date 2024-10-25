@@ -1927,6 +1927,31 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+  /v1/workflows/push:
+    post:
+      operationId: push
+      description: An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      tags:
+      - workflows
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowPushRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowPushResponse'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/workspace-secrets/{id}:
     get:
       operationId: workspace_secrets_retrieve
@@ -10582,6 +10607,28 @@ components:
       - name
       - type
       - value
+    WorkflowPushExecConfig:
+      type: object
+      additionalProperties: {}
+    WorkflowPushRequest:
+      type: object
+      properties:
+        exec_config:
+          $ref: '#/components/schemas/WorkflowPushExecConfig'
+        label:
+          type: string
+          minLength: 1
+      required:
+      - exec_config
+      - label
+    WorkflowPushResponse:
+      type: object
+      properties:
+        workflow_sandbox_id:
+          type: string
+          format: uuid
+      required:
+      - workflow_sandbox_id
     WorkflowReleaseTagRead:
       type: object
       properties:

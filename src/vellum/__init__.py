@@ -448,6 +448,8 @@ from .types import (
     WorkflowOutputNumber,
     WorkflowOutputSearchResults,
     WorkflowOutputString,
+    WorkflowPushExecConfig,
+    WorkflowPushResponse,
     WorkflowReleaseTagRead,
     WorkflowReleaseTagWorkflowDeploymentHistoryItem,
     WorkflowRequestChatHistoryInputRequest,
@@ -485,6 +487,7 @@ from .resources import (
     test_suites,
     workflow_deployments,
     workflow_sandboxes,
+    workflows,
     workspace_secrets,
 )
 from .client import AsyncVellum, Vellum
@@ -950,6 +953,8 @@ __all__ = [
     "WorkflowOutputNumber",
     "WorkflowOutputSearchResults",
     "WorkflowOutputString",
+    "WorkflowPushExecConfig",
+    "WorkflowPushResponse",
     "WorkflowReleaseTagRead",
     "WorkflowReleaseTagWorkflowDeploymentHistoryItem",
     "WorkflowRequestChatHistoryInputRequest",
@@ -981,5 +986,6 @@ __all__ = [
     "test_suites",
     "workflow_deployments",
     "workflow_sandboxes",
+    "workflows",
     "workspace_secrets",
 ]

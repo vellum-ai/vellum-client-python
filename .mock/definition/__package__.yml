@@ -755,10 +755,10 @@ types:
       openapi: openapi/openapi.yml
   ApiNodeResultData:
     properties:
+      json: optional<map<string, unknown>>
       text_output_id: string
       text: optional<string>
       json_output_id: string
-      json: optional<map<string, unknown>>
       status_code_output_id: string
       status_code: integer
     source:
@@ -3470,6 +3470,11 @@ types:
       value: string
     source:
       openapi: openapi/openapi.yml
+  PromptSettingsRequest:
+    properties:
+      timeout: optional<double>
+    source:
+      openapi: openapi/openapi.yml
   RawPromptExecutionOverridesRequest:
     properties:
       body: optional<map<string, unknown>>
@@ -3916,6 +3921,17 @@ types:
         validation:
           min: 0
           max: 1
+    source:
+      openapi: openapi/openapi.yml
+  SecretTypeEnum:
+    enum:
+      - USER_DEFINED
+      - HMAC
+      - INTERNAL_API_KEY
+    docs: |-
+      * `USER_DEFINED` - User Defined
+      * `HMAC` - Hmac
+      * `INTERNAL_API_KEY` - Internal Api Key
     source:
       openapi: openapi/openapi.yml
   SentenceChunkerConfig:
@@ -5324,11 +5340,13 @@ types:
     enum:
       - INVALID_REQUEST
       - PROVIDER_ERROR
+      - REQUEST_TIMEOUT
       - INTERNAL_SERVER_ERROR
       - USER_DEFINED_ERROR
     docs: |-
       * `INVALID_REQUEST` - INVALID_REQUEST
       * `PROVIDER_ERROR` - PROVIDER_ERROR
+      * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
       * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
       * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
     source:
@@ -6166,6 +6184,21 @@ types:
     union:
       - WorkflowExecutionWorkflowResultEvent
       - WorkflowExecutionNodeResultEvent
+    source:
+      openapi: openapi/openapi.yml
+  WorkspaceSecretRead:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      modified: datetime
+      name:
+        type: string
+        validation:
+          maxLength: 250
+      label: string
+      secret_type: SecretTypeEnum
     source:
       openapi: openapi/openapi.yml
   HkunlpInstructorXlEnum: literal<"hkunlp/instructor-xl">

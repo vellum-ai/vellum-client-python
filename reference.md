@@ -1218,6 +1218,7 @@ from vellum import (
     JinjaPromptBlockRequest,
     PromptParametersRequest,
     PromptRequestStringInputRequest,
+    PromptSettingsRequest,
     StringVellumValueRequest,
     Vellum,
     VellumVariableExtensionsRequest,
@@ -1259,6 +1260,9 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
         presence_penalty=1.1,
         logit_bias={"string": {"key": "value"}},
         custom_parameters={"string": {"key": "value"}},
+    ),
+    settings=PromptSettingsRequest(
+        timeout=1.1,
     ),
     blocks=[
         JinjaPromptBlockRequest(
@@ -1330,6 +1334,14 @@ for chunk in response:
 <dd>
 
 **blocks:** `typing.Sequence[PromptBlockRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**settings:** `typing.Optional[PromptSettingsRequest]` 
     
 </dd>
 </dl>
@@ -4666,6 +4678,77 @@ client.workflow_sandboxes.deploy_workflow(
 <dd>
 
 **release_tags:** `typing.Optional[typing.Sequence[str]]` — Optionally provide the release tags that you'd like to be associated with the latest release of the created/updated Prompt Deployment.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## WorkspaceSecrets
+<details><summary><code>client.workspace_secrets.<a href="src/vellum/resources/workspace_secrets/client.py">retrieve</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Used to retrieve a Workspace Secret given its ID or name.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.workspace_secrets.retrieve(
+    id="id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — Either the Workspace Secret's ID or its unique name
     
 </dd>
 </dl>

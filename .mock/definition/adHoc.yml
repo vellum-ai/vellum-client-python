@@ -22,6 +22,7 @@ service:
             input_values: list<root.PromptRequestInputRequest>
             input_variables: list<root.VellumVariableRequest>
             parameters: root.PromptParametersRequest
+            settings: optional<root.PromptSettingsRequest>
             blocks: list<root.PromptBlockRequest>
             expand_meta: optional<root.AdHocExpandMetaRequest>
       response-stream:

@@ -15,6 +15,7 @@ from .resources.test_suite_runs.client import TestSuiteRunsClient
 from .resources.test_suites.client import TestSuitesClient
 from .resources.workflow_deployments.client import WorkflowDeploymentsClient
 from .resources.workflow_sandboxes.client import WorkflowSandboxesClient
+from .resources.workspace_secrets.client import WorkspaceSecretsClient
 from .types.code_execution_runtime import CodeExecutionRuntime
 from .types.code_executor_input_request import CodeExecutorInputRequest
 from .types.code_execution_package_request import CodeExecutionPackageRequest
@@ -60,6 +61,7 @@ from .resources.test_suite_runs.client import AsyncTestSuiteRunsClient
 from .resources.test_suites.client import AsyncTestSuitesClient
 from .resources.workflow_deployments.client import AsyncWorkflowDeploymentsClient
 from .resources.workflow_sandboxes.client import AsyncWorkflowSandboxesClient
+from .resources.workspace_secrets.client import AsyncWorkspaceSecretsClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -130,6 +132,7 @@ class Vellum:
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = WorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
         self.workflow_sandboxes = WorkflowSandboxesClient(client_wrapper=self._client_wrapper)
+        self.workspace_secrets = WorkspaceSecretsClient(client_wrapper=self._client_wrapper)
 
     def execute_code(
         self,
@@ -1446,6 +1449,7 @@ class AsyncVellum:
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)
         self.workflow_deployments = AsyncWorkflowDeploymentsClient(client_wrapper=self._client_wrapper)
         self.workflow_sandboxes = AsyncWorkflowSandboxesClient(client_wrapper=self._client_wrapper)
+        self.workspace_secrets = AsyncWorkspaceSecretsClient(client_wrapper=self._client_wrapper)
 
     async def execute_code(
         self,

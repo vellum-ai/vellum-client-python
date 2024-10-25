@@ -4697,6 +4697,86 @@ client.workflow_sandboxes.deploy_workflow(
 </dl>
 </details>
 
+## Workflows
+<details><summary><code>client.workflows.<a href="src/vellum/resources/workflows/client.py">push</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.workflows.push(
+    exec_config={"key": "value"},
+    label="label",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**exec_config:** `WorkflowPushExecConfig` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**label:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## WorkspaceSecrets
 <details><summary><code>client.workspace_secrets.<a href="src/vellum/resources/workspace_secrets/client.py">retrieve</a>(...)</code></summary>
 <dl>

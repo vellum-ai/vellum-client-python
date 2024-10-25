@@ -12,6 +12,7 @@ from . import (
     test_suites,
     workflow_deployments,
     workflow_sandboxes,
+    workflows,
     workspace_secrets,
 )
 from .deployments import DeploymentsListRequestStatus
@@ -35,5 +36,6 @@ __all__ = [
     "test_suites",
     "workflow_deployments",
     "workflow_sandboxes",
+    "workflows",
     "workspace_secrets",
 ]

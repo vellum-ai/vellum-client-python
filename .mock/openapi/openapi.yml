@@ -1965,6 +1965,8 @@ paths:
         required: true
       tags:
       - workspace-secrets
+      security:
+      - apiKeyAuth: []
       responses:
         '200':
           content:
@@ -1975,6 +1977,32 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - internal
+    patch:
+      operationId: workspace_secrets_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this workspace secret.
+        required: true
+      tags:
+      - workspace-secrets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkspaceSecretUpdateRequest'
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceSecretRead'
+          description: ''
 components:
   schemas:
     AdHocExecutePromptEvent:
@@ -6597,6 +6625,16 @@ components:
           type: string
           format: uuid
           description: The ID of the Workflow Deployment History Item to tag
+    PatchedWorkspaceSecretUpdateRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          minLength: 1
+        value:
+          type: string
+          writeOnly: true
+          minLength: 1
     PdfEnum:
       type: string
       enum:
@@ -11155,3 +11193,4 @@ servers:
 - url: https://api.vellum.ai
   description: Default Server
   x-name: Default
+

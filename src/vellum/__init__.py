@@ -262,6 +262,7 @@ from .types import (
     PromptRequestInputRequest,
     PromptRequestJsonInputRequest,
     PromptRequestStringInputRequest,
+    PromptSettingsRequest,
     RawPromptExecutionOverridesRequest,
     ReductoChunkerConfig,
     ReductoChunkerConfigRequest,
@@ -299,6 +300,7 @@ from .types import (
     SearchResultsVellumValue,
     SearchResultsVellumValueRequest,
     SearchWeightsRequest,
+    SecretTypeEnum,
     SentenceChunkerConfig,
     SentenceChunkerConfigRequest,
     SentenceChunking,
@@ -464,6 +466,7 @@ from .types import (
     WorkflowResultEventOutputDataSearchResults,
     WorkflowResultEventOutputDataString,
     WorkflowStreamEvent,
+    WorkspaceSecretRead,
 )
 from .errors import BadRequestError, ForbiddenError, InternalServerError, NotFoundError
 from .resources import (
@@ -482,6 +485,7 @@ from .resources import (
     test_suites,
     workflow_deployments,
     workflow_sandboxes,
+    workspace_secrets,
 )
 from .client import AsyncVellum, Vellum
 from .environment import VellumEnvironment
@@ -757,6 +761,7 @@ __all__ = [
     "PromptRequestInputRequest",
     "PromptRequestJsonInputRequest",
     "PromptRequestStringInputRequest",
+    "PromptSettingsRequest",
     "RawPromptExecutionOverridesRequest",
     "ReductoChunkerConfig",
     "ReductoChunkerConfigRequest",
@@ -794,6 +799,7 @@ __all__ = [
     "SearchResultsVellumValue",
     "SearchResultsVellumValueRequest",
     "SearchWeightsRequest",
+    "SecretTypeEnum",
     "SentenceChunkerConfig",
     "SentenceChunkerConfigRequest",
     "SentenceChunking",
@@ -962,6 +968,7 @@ __all__ = [
     "WorkflowResultEventOutputDataSearchResults",
     "WorkflowResultEventOutputDataString",
     "WorkflowStreamEvent",
+    "WorkspaceSecretRead",
     "__version__",
     "ad_hoc",
     "deployments",
@@ -974,4 +981,5 @@ __all__ = [
     "test_suites",
     "workflow_deployments",
     "workflow_sandboxes",
+    "workspace_secrets",
 ]

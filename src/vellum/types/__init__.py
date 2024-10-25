@@ -273,6 +273,7 @@ from .prompt_request_chat_history_input_request import PromptRequestChatHistoryI
 from .prompt_request_input_request import PromptRequestInputRequest
 from .prompt_request_json_input_request import PromptRequestJsonInputRequest
 from .prompt_request_string_input_request import PromptRequestStringInputRequest
+from .prompt_settings_request import PromptSettingsRequest
 from .raw_prompt_execution_overrides_request import RawPromptExecutionOverridesRequest
 from .reducto_chunker_config import ReductoChunkerConfig
 from .reducto_chunker_config_request import ReductoChunkerConfigRequest
@@ -310,6 +311,7 @@ from .search_results_variable_value import SearchResultsVariableValue
 from .search_results_vellum_value import SearchResultsVellumValue
 from .search_results_vellum_value_request import SearchResultsVellumValueRequest
 from .search_weights_request import SearchWeightsRequest
+from .secret_type_enum import SecretTypeEnum
 from .sentence_chunker_config import SentenceChunkerConfig
 from .sentence_chunker_config_request import SentenceChunkerConfigRequest
 from .sentence_chunking import SentenceChunking
@@ -479,6 +481,7 @@ from .workflow_result_event_output_data_number import WorkflowResultEventOutputD
 from .workflow_result_event_output_data_search_results import WorkflowResultEventOutputDataSearchResults
 from .workflow_result_event_output_data_string import WorkflowResultEventOutputDataString
 from .workflow_stream_event import WorkflowStreamEvent
+from .workspace_secret_read import WorkspaceSecretRead
 
 __all__ = [
     "AdHocExecutePromptEvent",
@@ -742,6 +745,7 @@ __all__ = [
     "PromptRequestInputRequest",
     "PromptRequestJsonInputRequest",
     "PromptRequestStringInputRequest",
+    "PromptSettingsRequest",
     "RawPromptExecutionOverridesRequest",
     "ReductoChunkerConfig",
     "ReductoChunkerConfigRequest",
@@ -779,6 +783,7 @@ __all__ = [
     "SearchResultsVellumValue",
     "SearchResultsVellumValueRequest",
     "SearchWeightsRequest",
+    "SecretTypeEnum",
     "SentenceChunkerConfig",
     "SentenceChunkerConfigRequest",
     "SentenceChunking",
@@ -944,4 +949,5 @@ __all__ = [
     "WorkflowResultEventOutputDataSearchResults",
     "WorkflowResultEventOutputDataString",
     "WorkflowStreamEvent",
+    "WorkspaceSecretRead",
 ]

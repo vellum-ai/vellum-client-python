@@ -7,7 +7,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
 
-class NodeInputCompiledFunctionCall(UniversalBaseModel):
+class NodeInputCompiledFunctionCallValue(UniversalBaseModel):
     node_input_id: str
     key: str
     type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"

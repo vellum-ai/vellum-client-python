@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
-from .array_variable_value import ArrayVariableValue
+from .array_vellum_value import ArrayVellumValue
 import typing
 from .terminal_node_result_data import TerminalNodeResultData
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
@@ -28,4 +28,4 @@ class TerminalNodeResult(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-update_forward_refs(ArrayVariableValue, TerminalNodeResult=TerminalNodeResult)
+update_forward_refs(ArrayVellumValue, TerminalNodeResult=TerminalNodeResult)

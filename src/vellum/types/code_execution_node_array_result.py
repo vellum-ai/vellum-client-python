@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
-from .array_variable_value import ArrayVariableValue
+from .array_vellum_value import ArrayVellumValue
 import typing
-from .array_variable_value_item import ArrayVariableValueItem
+from .array_vellum_value_item import ArrayVellumValueItem
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 from ..core.pydantic_utilities import update_forward_refs
@@ -13,7 +13,7 @@ from ..core.pydantic_utilities import update_forward_refs
 class CodeExecutionNodeArrayResult(UniversalBaseModel):
     id: str
     type: typing.Literal["ARRAY"] = "ARRAY"
-    value: typing.Optional[typing.List[ArrayVariableValueItem]] = None
+    value: typing.Optional[typing.List[ArrayVellumValueItem]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -25,4 +25,4 @@ class CodeExecutionNodeArrayResult(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-update_forward_refs(ArrayVariableValue, CodeExecutionNodeArrayResult=CodeExecutionNodeArrayResult)
+update_forward_refs(ArrayVellumValue, CodeExecutionNodeArrayResult=CodeExecutionNodeArrayResult)

@@ -6,9 +6,9 @@ from .terminal_node_number_result import TerminalNodeNumberResult
 from .terminal_node_json_result import TerminalNodeJsonResult
 from .terminal_node_chat_history_result import TerminalNodeChatHistoryResult
 from .terminal_node_search_results_result import TerminalNodeSearchResultsResult
+from .terminal_node_error_result import TerminalNodeErrorResult
 from .terminal_node_array_result import TerminalNodeArrayResult
 from .terminal_node_function_call_result import TerminalNodeFunctionCallResult
-from .terminal_node_error_result import TerminalNodeErrorResult
 
 TerminalNodeResultOutput = typing.Union[
     TerminalNodeStringResult,
@@ -16,7 +16,7 @@ TerminalNodeResultOutput = typing.Union[
     TerminalNodeJsonResult,
     TerminalNodeChatHistoryResult,
     TerminalNodeSearchResultsResult,
+    TerminalNodeErrorResult,
     TerminalNodeArrayResult,
     TerminalNodeFunctionCallResult,
-    TerminalNodeErrorResult,
 ]

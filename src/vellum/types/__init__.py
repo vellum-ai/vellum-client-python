@@ -217,7 +217,7 @@ from .named_test_case_variable_value_request import NamedTestCaseVariableValueRe
 from .node_input_compiled_array_value import NodeInputCompiledArrayValue
 from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistoryValue
 from .node_input_compiled_error_value import NodeInputCompiledErrorValue
-from .node_input_compiled_function_call import NodeInputCompiledFunctionCall
+from .node_input_compiled_function_call_value import NodeInputCompiledFunctionCallValue
 from .node_input_compiled_json_value import NodeInputCompiledJsonValue
 from .node_input_compiled_number_value import NodeInputCompiledNumberValue
 from .node_input_compiled_search_results_value import NodeInputCompiledSearchResultsValue
@@ -691,7 +691,7 @@ __all__ = [
     "NodeInputCompiledArrayValue",
     "NodeInputCompiledChatHistoryValue",
     "NodeInputCompiledErrorValue",
-    "NodeInputCompiledFunctionCall",
+    "NodeInputCompiledFunctionCallValue",
     "NodeInputCompiledJsonValue",
     "NodeInputCompiledNumberValue",
     "NodeInputCompiledSearchResultsValue",

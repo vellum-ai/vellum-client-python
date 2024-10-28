@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
-from .array_variable_value import ArrayVariableValue
+from .array_vellum_value import ArrayVellumValue
 import typing
 from .code_execution_node_result_data import CodeExecutionNodeResultData
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
@@ -28,4 +28,4 @@ class CodeExecutionNodeResult(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-update_forward_refs(ArrayVariableValue, CodeExecutionNodeResult=CodeExecutionNodeResult)
+update_forward_refs(ArrayVellumValue, CodeExecutionNodeResult=CodeExecutionNodeResult)

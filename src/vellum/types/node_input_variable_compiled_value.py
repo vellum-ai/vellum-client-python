@@ -8,7 +8,7 @@ from .node_input_compiled_chat_history_value import NodeInputCompiledChatHistory
 from .node_input_compiled_search_results_value import NodeInputCompiledSearchResultsValue
 from .node_input_compiled_error_value import NodeInputCompiledErrorValue
 from .node_input_compiled_array_value import NodeInputCompiledArrayValue
-from .node_input_compiled_function_call import NodeInputCompiledFunctionCall
+from .node_input_compiled_function_call_value import NodeInputCompiledFunctionCallValue
 
 NodeInputVariableCompiledValue = typing.Union[
     NodeInputCompiledStringValue,
@@ -18,5 +18,5 @@ NodeInputVariableCompiledValue = typing.Union[
     NodeInputCompiledSearchResultsValue,
     NodeInputCompiledErrorValue,
     NodeInputCompiledArrayValue,
-    NodeInputCompiledFunctionCall,
+    NodeInputCompiledFunctionCallValue,
 ]

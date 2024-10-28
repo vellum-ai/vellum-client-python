@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
-from .array_variable_value import ArrayVariableValue
+from .array_vellum_value import ArrayVellumValue
 import typing
-from .array_variable_value_item import ArrayVariableValueItem
+from .array_vellum_value_item import ArrayVellumValueItem
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 from ..core.pydantic_utilities import update_forward_refs
@@ -14,7 +14,7 @@ class NodeInputCompiledArrayValue(UniversalBaseModel):
     node_input_id: str
     key: str
     type: typing.Literal["ARRAY"] = "ARRAY"
-    value: typing.Optional[typing.List[ArrayVariableValueItem]] = None
+    value: typing.Optional[typing.List[ArrayVellumValueItem]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -26,4 +26,4 @@ class NodeInputCompiledArrayValue(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-update_forward_refs(ArrayVariableValue, NodeInputCompiledArrayValue=NodeInputCompiledArrayValue)
+update_forward_refs(ArrayVellumValue, NodeInputCompiledArrayValue=NodeInputCompiledArrayValue)

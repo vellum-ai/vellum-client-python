@@ -1030,7 +1030,7 @@ types:
     properties:
       id: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVariableValueItem>>
+      value: optional<list<ArrayVellumValueItem>>
     source:
       openapi: openapi/openapi.yml
   CodeExecutionNodeChatHistoryResult:
@@ -2871,7 +2871,7 @@ types:
       node_input_id: string
       key: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVariableValueItem>>
+      value: optional<list<ArrayVellumValueItem>>
     source:
       openapi: openapi/openapi.yml
   NodeInputCompiledChatHistoryValue:
@@ -2890,7 +2890,7 @@ types:
       value: optional<VellumError>
     source:
       openapi: openapi/openapi.yml
-  NodeInputCompiledFunctionCall:
+  NodeInputCompiledFunctionCallValue:
     properties:
       node_input_id: string
       key: string
@@ -2940,7 +2940,7 @@ types:
       - NodeInputCompiledSearchResultsValue
       - NodeInputCompiledErrorValue
       - NodeInputCompiledArrayValue
-      - NodeInputCompiledFunctionCall
+      - NodeInputCompiledFunctionCallValue
     source:
       openapi: openapi/openapi.yml
   NodeOutputCompiledArrayValue:
@@ -4307,7 +4307,7 @@ types:
     properties:
       id: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVariableValueItem>>
+      value: optional<list<ArrayVellumValueItem>>
     source:
       openapi: openapi/openapi.yml
   TemplatingNodeChatHistoryResult:
@@ -4394,7 +4394,7 @@ types:
         type: string
         docs: The unique name given to the terminal node that produced this output.
       type: literal<"ARRAY">
-      value: optional<list<ArrayVariableValueItem>>
+      value: optional<list<ArrayVellumValueItem>>
     source:
       openapi: openapi/openapi.yml
   TerminalNodeChatHistoryResult:
@@ -4482,9 +4482,9 @@ types:
       - TerminalNodeJsonResult
       - TerminalNodeChatHistoryResult
       - TerminalNodeSearchResultsResult
+      - TerminalNodeErrorResult
       - TerminalNodeArrayResult
       - TerminalNodeFunctionCallResult
-      - TerminalNodeErrorResult
     source:
       openapi: openapi/openapi.yml
   TerminalNodeSearchResultsResult:

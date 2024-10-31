@@ -60,6 +60,7 @@ from .code_execution_package_request import CodeExecutionPackageRequest
 from .code_execution_runtime import CodeExecutionRuntime
 from .code_executor_input_request import CodeExecutorInputRequest
 from .code_executor_response import CodeExecutorResponse
+from .code_executor_secret_input_request import CodeExecutorSecretInputRequest
 from .compile_prompt_deployment_expand_meta_request import CompilePromptDeploymentExpandMetaRequest
 from .compile_prompt_meta import CompilePromptMeta
 from .components_schemas_pdf_search_result_meta_source import ComponentsSchemasPdfSearchResultMetaSource
@@ -538,6 +539,7 @@ __all__ = [
     "CodeExecutionRuntime",
     "CodeExecutorInputRequest",
     "CodeExecutorResponse",
+    "CodeExecutorSecretInputRequest",
     "CompilePromptDeploymentExpandMetaRequest",
     "CompilePromptMeta",
     "ComponentsSchemasPdfSearchResultMetaSource",

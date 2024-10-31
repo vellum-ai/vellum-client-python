@@ -1146,12 +1146,28 @@ types:
       - ErrorInputRequest
       - ArrayInputRequest
       - FunctionCallInputRequest
+      - CodeExecutorSecretInputRequest
     source:
       openapi: openapi/openapi.yml
   CodeExecutorResponse:
     properties:
       log: string
       output: VellumValue
+    source:
+      openapi: openapi/openapi.yml
+  CodeExecutorSecretInputRequest:
+    docs: A user input representing a Vellum Workspace Secret value
+    properties:
+      name:
+        type: string
+        docs: The variable's name
+        validation:
+          minLength: 1
+      type: literal<"SECRET">
+      value:
+        type: string
+        validation:
+          minLength: 1
     source:
       openapi: openapi/openapi.yml
   CompilePromptDeploymentExpandMetaRequest:
@@ -3923,6 +3939,7 @@ types:
           max: 1
     source:
       openapi: openapi/openapi.yml
+  SecretEnum: literal<"SECRET">
   SecretTypeEnum:
     enum:
       - USER_DEFINED

@@ -9,6 +9,7 @@ from .search_results_input_request import SearchResultsInputRequest
 from .error_input_request import ErrorInputRequest
 from .array_input_request import ArrayInputRequest
 from .function_call_input_request import FunctionCallInputRequest
+from .code_executor_secret_input_request import CodeExecutorSecretInputRequest
 
 CodeExecutorInputRequest = typing.Union[
     StringInputRequest,
@@ -19,4 +20,5 @@ CodeExecutorInputRequest = typing.Union[
     ErrorInputRequest,
     ArrayInputRequest,
     FunctionCallInputRequest,
+    CodeExecutorSecretInputRequest,
 ]

@@ -20,3 +20,19 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
 
     async_response = await async_client.workspace_secrets.retrieve(id="id")
     validate_response(async_response, expected_response, expected_types)
+
+
+async def test_partial_update(client: Vellum, async_client: AsyncVellum) -> None:
+    expected_response: typing.Any = {
+        "id": "id",
+        "modified": "2024-01-15T09:30:00Z",
+        "name": "name",
+        "label": "label",
+        "secret_type": "USER_DEFINED",
+    }
+    expected_types: typing.Any = {"id": None, "modified": "datetime", "name": None, "label": None, "secret_type": None}
+    response = client.workspace_secrets.partial_update(id="id")
+    validate_response(response, expected_response, expected_types)
+
+    async_response = await async_client.workspace_secrets.partial_update(id="id")
+    validate_response(async_response, expected_response, expected_types)

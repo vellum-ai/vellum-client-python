@@ -14,7 +14,7 @@ class ArrayVellumValueRequest(UniversalBaseModel):
     """
 
     type: typing.Literal["ARRAY"] = "ARRAY"
-    value: typing.Optional[typing.List["ArrayVellumValueItemRequest"]] = None
+    value: typing.Optional[typing.List["VellumValueRequest"]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -26,6 +26,6 @@ class ArrayVellumValueRequest(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .array_vellum_value_item_request import ArrayVellumValueItemRequest  # noqa: E402
+from .vellum_value_request import VellumValueRequest  # noqa: E402
 
 update_forward_refs(ArrayVellumValueRequest)

@@ -5,7 +5,7 @@ from ..core.pydantic_utilities import UniversalBaseModel
 from .array_vellum_value_request import ArrayVellumValueRequest
 import pydantic
 import typing
-from .array_vellum_value_item_request import ArrayVellumValueItemRequest
+from .vellum_value_request import VellumValueRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.pydantic_utilities import update_forward_refs
 
@@ -21,7 +21,7 @@ class ArrayInputRequest(UniversalBaseModel):
     """
 
     type: typing.Literal["ARRAY"] = "ARRAY"
-    value: typing.List[ArrayVellumValueItemRequest]
+    value: typing.List[VellumValueRequest]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

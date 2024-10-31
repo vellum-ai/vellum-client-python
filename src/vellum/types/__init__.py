@@ -17,8 +17,6 @@ from .array_input_request import ArrayInputRequest
 from .array_variable_value import ArrayVariableValue
 from .array_variable_value_item import ArrayVariableValueItem
 from .array_vellum_value import ArrayVellumValue
-from .array_vellum_value_item import ArrayVellumValueItem
-from .array_vellum_value_item_request import ArrayVellumValueItemRequest
 from .array_vellum_value_request import ArrayVellumValueRequest
 from .basic_vectorizer_intfloat_multilingual_e_5_large import BasicVectorizerIntfloatMultilingualE5Large
 from .basic_vectorizer_intfloat_multilingual_e_5_large_request import BasicVectorizerIntfloatMultilingualE5LargeRequest
@@ -504,8 +502,6 @@ __all__ = [
     "ArrayVariableValue",
     "ArrayVariableValueItem",
     "ArrayVellumValue",
-    "ArrayVellumValueItem",
-    "ArrayVellumValueItemRequest",
     "ArrayVellumValueRequest",
     "BasicVectorizerIntfloatMultilingualE5Large",
     "BasicVectorizerIntfloatMultilingualE5LargeRequest",

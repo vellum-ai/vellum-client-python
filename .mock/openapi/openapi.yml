@@ -1976,7 +1976,7 @@ paths:
           description: ''
       x-fern-availability: beta
       x-fern-audiences:
-      - internal
+      - customers
     patch:
       operationId: workspace_secrets_partial_update
       description: Used to update a Workspace Secret given its ID or name.

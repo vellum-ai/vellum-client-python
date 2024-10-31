@@ -803,7 +803,7 @@ types:
         validation:
           minLength: 1
       type: literal<"ARRAY">
-      value: list<ArrayVellumValueItemRequest>
+      value: list<VellumValueRequest>
     source:
       openapi: openapi/openapi.yml
   ArrayVariableValue:
@@ -830,42 +830,14 @@ types:
     docs: A value representing an array of Vellum variable values.
     properties:
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
-    source:
-      openapi: openapi/openapi.yml
-  ArrayVellumValueItem:
-    discriminated: false
-    union:
-      - StringVellumValue
-      - NumberVellumValue
-      - JsonVellumValue
-      - ImageVellumValue
-      - FunctionCallVellumValue
-      - ErrorVellumValue
-      - ChatHistoryVellumValue
-      - SearchResultsVellumValue
-      - ArrayVellumValue
-    source:
-      openapi: openapi/openapi.yml
-  ArrayVellumValueItemRequest:
-    discriminated: false
-    union:
-      - StringVellumValueRequest
-      - NumberVellumValueRequest
-      - JsonVellumValueRequest
-      - ImageVellumValueRequest
-      - FunctionCallVellumValueRequest
-      - ErrorVellumValueRequest
-      - ChatHistoryVellumValueRequest
-      - SearchResultsVellumValueRequest
-      - ArrayVellumValueRequest
+      value: optional<list<VellumValue>>
     source:
       openapi: openapi/openapi.yml
   ArrayVellumValueRequest:
     docs: A value representing an array of Vellum variable values.
     properties:
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItemRequest>>
+      value: optional<list<VellumValueRequest>>
     source:
       openapi: openapi/openapi.yml
   BasicVectorizerIntfloatMultilingualE5Large:
@@ -1030,7 +1002,7 @@ types:
     properties:
       id: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
     source:
       openapi: openapi/openapi.yml
   CodeExecutionNodeChatHistoryResult:
@@ -1640,7 +1612,7 @@ types:
         docs: The variable's uniquely identifying internal id.
       name: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
     source:
       openapi: openapi/openapi.yml
   ExecutionChatHistoryVellumValue:
@@ -2708,7 +2680,7 @@ types:
     docs: Named Test Case value that is of type ARRAY
     properties:
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
       name: string
     source:
       openapi: openapi/openapi.yml
@@ -2716,7 +2688,7 @@ types:
     docs: Named Test Case value that is of type ARRAY
     properties:
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItemRequest>>
+      value: optional<list<VellumValueRequest>>
       name:
         type: string
         validation:
@@ -2887,7 +2859,7 @@ types:
       node_input_id: string
       key: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
     source:
       openapi: openapi/openapi.yml
   NodeInputCompiledChatHistoryValue:
@@ -2963,7 +2935,7 @@ types:
     docs: An output returned by a node that is of type ARRAY.
     properties:
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
       node_output_id: string
       state: optional<WorkflowNodeResultEventState>
     source:
@@ -4324,7 +4296,7 @@ types:
     properties:
       id: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
     source:
       openapi: openapi/openapi.yml
   TemplatingNodeChatHistoryResult:
@@ -4411,7 +4383,7 @@ types:
         type: string
         docs: The unique name given to the terminal node that produced this output.
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
     source:
       openapi: openapi/openapi.yml
   TerminalNodeChatHistoryResult:
@@ -4536,7 +4508,7 @@ types:
       variable_id: string
       name: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
     source:
       openapi: openapi/openapi.yml
   TestCaseChatHistoryVariableValue:
@@ -4714,7 +4686,7 @@ types:
     properties:
       name: string
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
       output_variable_id:
         type: string
         validation:
@@ -5496,6 +5468,7 @@ types:
       - ARRAY
       - FUNCTION_CALL
       - IMAGE
+      - AUDIO
       - 'NULL'
     docs: |-
       * `STRING` - STRING
@@ -5507,6 +5480,7 @@ types:
       * `ARRAY` - ARRAY
       * `FUNCTION_CALL` - FUNCTION_CALL
       * `IMAGE` - IMAGE
+      * `AUDIO` - AUDIO
       * `NULL` - NULL
     source:
       openapi: openapi/openapi.yml
@@ -5813,7 +5787,7 @@ types:
         type: string
         docs: The output's name, as defined in the workflow
       type: literal<"ARRAY">
-      value: optional<list<ArrayVellumValueItem>>
+      value: optional<list<VellumValue>>
     source:
       openapi: openapi/openapi.yml
   WorkflowOutputChatHistory:

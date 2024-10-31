@@ -4,7 +4,17 @@ import typing
 
 VellumVariableType = typing.Union[
     typing.Literal[
-        "STRING", "NUMBER", "JSON", "CHAT_HISTORY", "SEARCH_RESULTS", "ERROR", "ARRAY", "FUNCTION_CALL", "IMAGE", "NULL"
+        "STRING",
+        "NUMBER",
+        "JSON",
+        "CHAT_HISTORY",
+        "SEARCH_RESULTS",
+        "ERROR",
+        "ARRAY",
+        "FUNCTION_CALL",
+        "IMAGE",
+        "AUDIO",
+        "NULL",
     ],
     typing.Any,
 ]

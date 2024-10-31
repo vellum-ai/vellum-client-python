@@ -4,7 +4,7 @@ from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
 from .array_vellum_value_request import ArrayVellumValueRequest
 import typing
-from .array_vellum_value_item_request import ArrayVellumValueItemRequest
+from .vellum_value_request import VellumValueRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 from ..core.pydantic_utilities import update_forward_refs
@@ -16,7 +16,7 @@ class NamedTestCaseArrayVariableValueRequest(UniversalBaseModel):
     """
 
     type: typing.Literal["ARRAY"] = "ARRAY"
-    value: typing.Optional[typing.List[ArrayVellumValueItemRequest]] = None
+    value: typing.Optional[typing.List[VellumValueRequest]] = None
     name: str
 
     if IS_PYDANTIC_V2:

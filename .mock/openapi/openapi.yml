@@ -81,6 +81,95 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - internal
+  /v1/container-images:
+    get:
+      operationId: container_images_list
+      description: Retrieve a list of container images for the organization.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - container-images
+      - container-image-tags
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContainerImageReadList'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
+  /v1/container-images/{id}:
+    get:
+      operationId: container_images_retrieve
+      description: Retrieve a Container Image by its ID or name.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Container Image's ID or its unique name
+        required: true
+      tags:
+      - container-images
+      - container-image-tags
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerImageRead'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
+  /v1/container-images/push:
+    post:
+      operationId: push_container_image
+      description: An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      tags:
+      - container-images
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushContainerImageRequest'
+        required: true
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerImageRead'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/deployments:
     get:
       operationId: deployments_list
@@ -2885,6 +2974,44 @@ components:
         source_handle_id:
           type: string
           nullable: true
+    ContainerImageRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 4096
+        visibility:
+          $ref: '#/components/schemas/EntityVisibility'
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        repository:
+          type: string
+          maxLength: 4096
+        sha:
+          type: string
+          maxLength: 256
+        tags:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - created
+      - id
+      - modified
+      - name
+      - repository
+      - sha
+      - tags
+      - visibility
     CreateEnum:
       type: string
       enum:
@@ -3469,6 +3596,18 @@ components:
       description: |-
         * `ACTIVE` - Active
         * `ARCHIVED` - Archived
+    EntityVisibility:
+      enum:
+      - DEFAULT
+      - PUBLIC
+      - PRIVATE
+      - DISABLED
+      type: string
+      description: |-
+        * `DEFAULT` - Default
+        * `PUBLIC` - Public
+        * `PRIVATE` - Private
+        * `DISABLED` - Disabled
     EnvironmentEnum:
       enum:
       - DEVELOPMENT
@@ -6390,6 +6529,26 @@ components:
       required:
       - config
       - model_name
+    PaginatedContainerImageReadList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContainerImageRead'
     PaginatedDocumentIndexReadList:
       type: object
       properties:
@@ -6974,6 +7133,24 @@ components:
           type: number
           format: double
           nullable: true
+    PushContainerImageRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        sha:
+          type: string
+          minLength: 1
+        tags:
+          type: array
+          items:
+            type: string
+            minLength: 1
+      required:
+      - name
+      - sha
+      - tags
     RawPromptExecutionOverridesRequest:
       type: object
       properties:

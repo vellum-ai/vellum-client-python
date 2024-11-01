@@ -2,6 +2,7 @@
 
 from . import (
     ad_hoc,
+    container_images,
     deployments,
     document_indexes,
     documents,
@@ -26,6 +27,7 @@ __all__ = [
     "FolderEntitiesListRequestEntityStatus",
     "WorkflowDeploymentsListRequestStatus",
     "ad_hoc",
+    "container_images",
     "deployments",
     "document_indexes",
     "documents",

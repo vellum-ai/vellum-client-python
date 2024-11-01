@@ -5,6 +5,7 @@ from .environment import VellumEnvironment
 import httpx
 from .core.client_wrapper import SyncClientWrapper
 from .resources.ad_hoc.client import AdHocClient
+from .resources.container_images.client import ContainerImagesClient
 from .resources.deployments.client import DeploymentsClient
 from .resources.document_indexes.client import DocumentIndexesClient
 from .resources.documents.client import DocumentsClient
@@ -52,6 +53,7 @@ from .types.submit_completion_actual_request import SubmitCompletionActualReques
 from .types.submit_workflow_execution_actual_request import SubmitWorkflowExecutionActualRequest
 from .core.client_wrapper import AsyncClientWrapper
 from .resources.ad_hoc.client import AsyncAdHocClient
+from .resources.container_images.client import AsyncContainerImagesClient
 from .resources.deployments.client import AsyncDeploymentsClient
 from .resources.document_indexes.client import AsyncDocumentIndexesClient
 from .resources.documents.client import AsyncDocumentsClient
@@ -124,6 +126,7 @@ class Vellum:
             timeout=_defaulted_timeout,
         )
         self.ad_hoc = AdHocClient(client_wrapper=self._client_wrapper)
+        self.container_images = ContainerImagesClient(client_wrapper=self._client_wrapper)
         self.deployments = DeploymentsClient(client_wrapper=self._client_wrapper)
         self.document_indexes = DocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = DocumentsClient(client_wrapper=self._client_wrapper)
@@ -1442,6 +1445,7 @@ class AsyncVellum:
             timeout=_defaulted_timeout,
         )
         self.ad_hoc = AsyncAdHocClient(client_wrapper=self._client_wrapper)
+        self.container_images = AsyncContainerImagesClient(client_wrapper=self._client_wrapper)
         self.deployments = AsyncDeploymentsClient(client_wrapper=self._client_wrapper)
         self.document_indexes = AsyncDocumentIndexesClient(client_wrapper=self._client_wrapper)
         self.documents = AsyncDocumentsClient(client_wrapper=self._client_wrapper)

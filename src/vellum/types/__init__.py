@@ -66,6 +66,7 @@ from .components_schemas_pdf_search_result_meta_source_request import Components
 from .condition_combinator import ConditionCombinator
 from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
+from .container_image_read import ContainerImageRead
 from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from .deployment_provider_payload_response_payload import DeploymentProviderPayloadResponsePayload
@@ -82,6 +83,7 @@ from .document_read import DocumentRead
 from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .entity_status import EntityStatus
+from .entity_visibility import EntityVisibility
 from .environment_enum import EnvironmentEnum
 from .ephemeral_prompt_cache_config_request import EphemeralPromptCacheConfigRequest
 from .ephemeral_prompt_cache_config_type_enum import EphemeralPromptCacheConfigTypeEnum
@@ -245,6 +247,7 @@ from .open_ai_vectorizer_text_embedding_3_small import OpenAiVectorizerTextEmbed
 from .open_ai_vectorizer_text_embedding_3_small_request import OpenAiVectorizerTextEmbedding3SmallRequest
 from .open_ai_vectorizer_text_embedding_ada_002 import OpenAiVectorizerTextEmbeddingAda002
 from .open_ai_vectorizer_text_embedding_ada_002_request import OpenAiVectorizerTextEmbeddingAda002Request
+from .paginated_container_image_read_list import PaginatedContainerImageReadList
 from .paginated_document_index_read_list import PaginatedDocumentIndexReadList
 from .paginated_folder_entity_list import PaginatedFolderEntityList
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
@@ -543,6 +546,7 @@ __all__ = [
     "ConditionCombinator",
     "ConditionalNodeResult",
     "ConditionalNodeResultData",
+    "ContainerImageRead",
     "CreateTestSuiteTestCaseRequest",
     "DeploymentProviderPayloadResponse",
     "DeploymentProviderPayloadResponsePayload",
@@ -559,6 +563,7 @@ __all__ = [
     "DocumentStatus",
     "EnrichedNormalizedCompletion",
     "EntityStatus",
+    "EntityVisibility",
     "EnvironmentEnum",
     "EphemeralPromptCacheConfigRequest",
     "EphemeralPromptCacheConfigTypeEnum",
@@ -718,6 +723,7 @@ __all__ = [
     "OpenAiVectorizerTextEmbedding3SmallRequest",
     "OpenAiVectorizerTextEmbeddingAda002",
     "OpenAiVectorizerTextEmbeddingAda002Request",
+    "PaginatedContainerImageReadList",
     "PaginatedDocumentIndexReadList",
     "PaginatedFolderEntityList",
     "PaginatedSlimDeploymentReadList",

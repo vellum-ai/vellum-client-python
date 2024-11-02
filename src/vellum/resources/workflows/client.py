@@ -23,6 +23,7 @@ class WorkflowsClient:
         *,
         exec_config: WorkflowPushExecConfig,
         label: str,
+        workflow_sandbox_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowPushResponse:
         """
@@ -33,6 +34,8 @@ class WorkflowsClient:
         exec_config : WorkflowPushExecConfig
 
         label : str
+
+        workflow_sandbox_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -61,6 +64,7 @@ class WorkflowsClient:
             json={
                 "exec_config": exec_config,
                 "label": label,
+                "workflow_sandbox_id": workflow_sandbox_id,
             },
             request_options=request_options,
             omit=OMIT,
@@ -89,6 +93,7 @@ class AsyncWorkflowsClient:
         *,
         exec_config: WorkflowPushExecConfig,
         label: str,
+        workflow_sandbox_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowPushResponse:
         """
@@ -99,6 +104,8 @@ class AsyncWorkflowsClient:
         exec_config : WorkflowPushExecConfig
 
         label : str
+
+        workflow_sandbox_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -135,6 +142,7 @@ class AsyncWorkflowsClient:
             json={
                 "exec_config": exec_config,
                 "label": label,
+                "workflow_sandbox_id": workflow_sandbox_id,
             },
             request_options=request_options,
             omit=OMIT,

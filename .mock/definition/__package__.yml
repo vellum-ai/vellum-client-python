@@ -776,6 +776,7 @@ types:
       - StringChatMessageContent
       - FunctionCallChatMessageContent
       - ImageChatMessageContent
+      - AudioChatMessageContent
     source:
       openapi: openapi/openapi.yml
   ArrayChatMessageContentItemRequest:
@@ -784,6 +785,7 @@ types:
       - StringChatMessageContentRequest
       - FunctionCallChatMessageContentRequest
       - ImageChatMessageContentRequest
+      - AudioChatMessageContentRequest
     source:
       openapi: openapi/openapi.yml
   ArrayChatMessageContentRequest:
@@ -840,6 +842,21 @@ types:
       value: optional<list<VellumValueRequest>>
     source:
       openapi: openapi/openapi.yml
+  AudioChatMessageContent:
+    docs: An audio value that is used in a chat message.
+    properties:
+      type: literal<"AUDIO">
+      value: VellumAudio
+    source:
+      openapi: openapi/openapi.yml
+  AudioChatMessageContentRequest:
+    docs: An audio value that is used in a chat message.
+    properties:
+      type: literal<"AUDIO">
+      value: VellumAudioRequest
+    source:
+      openapi: openapi/openapi.yml
+  AudioEnum: literal<"AUDIO">
   BasicVectorizerIntfloatMultilingualE5Large:
     docs: Basic vectorizer for intfloat/multilingual-e5-large.
     properties:
@@ -934,6 +951,7 @@ types:
       - FunctionCallChatMessageContent
       - ArrayChatMessageContent
       - ImageChatMessageContent
+      - AudioChatMessageContent
     source:
       openapi: openapi/openapi.yml
   ChatMessageContentRequest:
@@ -943,6 +961,7 @@ types:
       - FunctionCallChatMessageContentRequest
       - ArrayChatMessageContentRequest
       - ImageChatMessageContentRequest
+      - AudioChatMessageContentRequest
     source:
       openapi: openapi/openapi.yml
   ChatMessageEnum: literal<"CHAT_MESSAGE">
@@ -5368,6 +5387,21 @@ types:
         type: string
         validation:
           format: uuid
+    source:
+      openapi: openapi/openapi.yml
+  VellumAudio:
+    properties:
+      src: string
+      metadata: optional<map<string, unknown>>
+    source:
+      openapi: openapi/openapi.yml
+  VellumAudioRequest:
+    properties:
+      src:
+        type: string
+        validation:
+          minLength: 1
+      metadata: optional<map<string, unknown>>
     source:
       openapi: openapi/openapi.yml
   VellumError:

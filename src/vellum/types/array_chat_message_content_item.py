@@ -4,7 +4,8 @@ import typing
 from .string_chat_message_content import StringChatMessageContent
 from .function_call_chat_message_content import FunctionCallChatMessageContent
 from .image_chat_message_content import ImageChatMessageContent
+from .audio_chat_message_content import AudioChatMessageContent
 
 ArrayChatMessageContentItem = typing.Union[
-    StringChatMessageContent, FunctionCallChatMessageContent, ImageChatMessageContent
+    StringChatMessageContent, FunctionCallChatMessageContent, ImageChatMessageContent, AudioChatMessageContent
 ]

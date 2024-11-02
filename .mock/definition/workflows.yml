@@ -20,6 +20,10 @@ service:
               type: string
               validation:
                 minLength: 1
+            workflow_sandbox_id:
+              type: optional<string>
+              validation:
+                format: uuid
       response:
         docs: ''
         type: root.WorkflowPushResponse

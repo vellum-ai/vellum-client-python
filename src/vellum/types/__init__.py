@@ -18,6 +18,8 @@ from .array_variable_value import ArrayVariableValue
 from .array_variable_value_item import ArrayVariableValueItem
 from .array_vellum_value import ArrayVellumValue
 from .array_vellum_value_request import ArrayVellumValueRequest
+from .audio_chat_message_content import AudioChatMessageContent
+from .audio_chat_message_content_request import AudioChatMessageContentRequest
 from .basic_vectorizer_intfloat_multilingual_e_5_large import BasicVectorizerIntfloatMultilingualE5Large
 from .basic_vectorizer_intfloat_multilingual_e_5_large_request import BasicVectorizerIntfloatMultilingualE5LargeRequest
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_cos_v_1 import (
@@ -427,6 +429,8 @@ from .unit_enum import UnitEnum
 from .upload_document_response import UploadDocumentResponse
 from .upsert_test_suite_test_case_request import UpsertTestSuiteTestCaseRequest
 from .variable_prompt_block_request import VariablePromptBlockRequest
+from .vellum_audio import VellumAudio
+from .vellum_audio_request import VellumAudioRequest
 from .vellum_error import VellumError
 from .vellum_error_code_enum import VellumErrorCodeEnum
 from .vellum_error_request import VellumErrorRequest
@@ -506,6 +510,8 @@ __all__ = [
     "ArrayVariableValueItem",
     "ArrayVellumValue",
     "ArrayVellumValueRequest",
+    "AudioChatMessageContent",
+    "AudioChatMessageContentRequest",
     "BasicVectorizerIntfloatMultilingualE5Large",
     "BasicVectorizerIntfloatMultilingualE5LargeRequest",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1",
@@ -899,6 +905,8 @@ __all__ = [
     "UploadDocumentResponse",
     "UpsertTestSuiteTestCaseRequest",
     "VariablePromptBlockRequest",
+    "VellumAudio",
+    "VellumAudioRequest",
     "VellumError",
     "VellumErrorCodeEnum",
     "VellumErrorRequest",

@@ -2280,23 +2280,27 @@ components:
       - $ref: '#/components/schemas/StringChatMessageContent'
       - $ref: '#/components/schemas/FunctionCallChatMessageContent'
       - $ref: '#/components/schemas/ImageChatMessageContent'
+      - $ref: '#/components/schemas/AudioChatMessageContent'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/StringChatMessageContent'
           FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContent'
           IMAGE: '#/components/schemas/ImageChatMessageContent'
+          AUDIO: '#/components/schemas/AudioChatMessageContent'
     ArrayChatMessageContentItemRequest:
       oneOf:
       - $ref: '#/components/schemas/StringChatMessageContentRequest'
       - $ref: '#/components/schemas/FunctionCallChatMessageContentRequest'
       - $ref: '#/components/schemas/ImageChatMessageContentRequest'
+      - $ref: '#/components/schemas/AudioChatMessageContentRequest'
       discriminator:
         propertyName: type
         mapping:
           STRING: '#/components/schemas/StringChatMessageContentRequest'
           FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
           IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
+          AUDIO: '#/components/schemas/AudioChatMessageContentRequest'
     ArrayChatMessageContentRequest:
       type: object
       description: A list of chat message content items.
@@ -2396,6 +2400,32 @@ components:
       required:
       - type
       - value
+    AudioChatMessageContent:
+      type: object
+      description: An audio value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/AudioEnum'
+        value:
+          $ref: '#/components/schemas/VellumAudio'
+      required:
+      - type
+      - value
+    AudioChatMessageContentRequest:
+      type: object
+      description: An audio value that is used in a chat message.
+      properties:
+        type:
+          $ref: '#/components/schemas/AudioEnum'
+        value:
+          $ref: '#/components/schemas/VellumAudioRequest'
+      required:
+      - type
+      - value
+    AudioEnum:
+      type: string
+      enum:
+      - AUDIO
     BasicVectorizerIntfloatMultilingualE5Large:
       type: object
       description: Basic vectorizer for intfloat/multilingual-e5-large.
@@ -2555,6 +2585,7 @@ components:
       - $ref: '#/components/schemas/FunctionCallChatMessageContent'
       - $ref: '#/components/schemas/ArrayChatMessageContent'
       - $ref: '#/components/schemas/ImageChatMessageContent'
+      - $ref: '#/components/schemas/AudioChatMessageContent'
       discriminator:
         propertyName: type
         mapping:
@@ -2562,12 +2593,14 @@ components:
           FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContent'
           ARRAY: '#/components/schemas/ArrayChatMessageContent'
           IMAGE: '#/components/schemas/ImageChatMessageContent'
+          AUDIO: '#/components/schemas/AudioChatMessageContent'
     ChatMessageContentRequest:
       oneOf:
       - $ref: '#/components/schemas/StringChatMessageContentRequest'
       - $ref: '#/components/schemas/FunctionCallChatMessageContentRequest'
       - $ref: '#/components/schemas/ArrayChatMessageContentRequest'
       - $ref: '#/components/schemas/ImageChatMessageContentRequest'
+      - $ref: '#/components/schemas/AudioChatMessageContentRequest'
       discriminator:
         propertyName: type
         mapping:
@@ -2575,6 +2608,7 @@ components:
           FUNCTION_CALL: '#/components/schemas/FunctionCallChatMessageContentRequest'
           ARRAY: '#/components/schemas/ArrayChatMessageContentRequest'
           IMAGE: '#/components/schemas/ImageChatMessageContentRequest'
+          AUDIO: '#/components/schemas/AudioChatMessageContentRequest'
     ChatMessageEnum:
       type: string
       enum:
@@ -10008,6 +10042,29 @@ components:
       - block_type
       - id
       - input_variable_id
+    VellumAudio:
+      type: object
+      properties:
+        src:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - src
+    VellumAudioRequest:
+      type: object
+      properties:
+        src:
+          type: string
+          minLength: 1
+        metadata:
+          type: object
+          additionalProperties: {}
+          nullable: true
+      required:
+      - src
     VellumError:
       type: object
       properties:
@@ -10815,6 +10872,10 @@ components:
         label:
           type: string
           minLength: 1
+        workflow_sandbox_id:
+          type: string
+          format: uuid
+          nullable: true
       required:
       - exec_config
       - label

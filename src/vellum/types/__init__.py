@@ -75,6 +75,7 @@ from .deployment_provider_payload_response_payload import DeploymentProviderPayl
 from .deployment_read import DeploymentRead
 from .deployment_release_tag_deployment_history_item import DeploymentReleaseTagDeploymentHistoryItem
 from .deployment_release_tag_read import DeploymentReleaseTagRead
+from .docker_service_token import DockerServiceToken
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from .document_index_chunking import DocumentIndexChunking
 from .document_index_chunking_request import DocumentIndexChunkingRequest
@@ -559,6 +560,7 @@ __all__ = [
     "DeploymentRead",
     "DeploymentReleaseTagDeploymentHistoryItem",
     "DeploymentReleaseTagRead",
+    "DockerServiceToken",
     "DocumentDocumentToDocumentIndex",
     "DocumentIndexChunking",
     "DocumentIndexChunkingRequest",

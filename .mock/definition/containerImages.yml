@@ -74,6 +74,26 @@ service:
                 - tags
       audiences:
         - internal
+    docker-service-token:
+      path: /v1/container-images/docker-service-token
+      method: GET
+      auth: true
+      docs: >-
+        An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      response:
+        docs: ''
+        type: root.DockerServiceToken
+      url: Default
+      availability: pre-release
+      examples:
+        - response:
+            body:
+              access_token: access_token
+              organization_id: organization_id
+              repository: repository
+      audiences:
+        - internal
     push_container_image:
       path: /v1/container-images/push
       method: POST

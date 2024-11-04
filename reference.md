@@ -4941,7 +4941,7 @@ client.workflow_sandboxes.deploy_workflow(
 </details>
 
 ## Workflows
-<details><summary><code>client.workflows.<a href="src/vellum/resources/workflows/client.py">push</a>(...)</code></summary>
+<details><summary><code>client.workflows.<a href="src/vellum/resources/workflows/client.py">pull_workflow</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -4973,7 +4973,77 @@ from vellum import Vellum
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
-client.workflows.push(
+client.workflows.pull_workflow(
+    id="string",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — The ID of the Workflow to pull from
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.workflows.<a href="src/vellum/resources/workflows/client.py">push_workflows</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.workflows.push_workflows(
     exec_config={"key": "value"},
     label="label",
 )

@@ -6,11 +6,11 @@ import typing
 from .utilities import validate_response
 
 
-async def test_push(client: Vellum, async_client: AsyncVellum) -> None:
+async def test_push_workflows(client: Vellum, async_client: AsyncVellum) -> None:
     expected_response: typing.Any = {"workflow_sandbox_id": "workflow_sandbox_id"}
     expected_types: typing.Any = {"workflow_sandbox_id": None}
-    response = client.workflows.push(exec_config={"key": "value"}, label="label")
+    response = client.workflows.push_workflows(exec_config={"key": "value"}, label="label")
     validate_response(response, expected_response, expected_types)
 
-    async_response = await async_client.workflows.push(exec_config={"key": "value"}, label="label")
+    async_response = await async_client.workflows.push_workflows(exec_config={"key": "value"}, label="label")
     validate_response(async_response, expected_response, expected_types)

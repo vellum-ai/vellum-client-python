@@ -79,6 +79,20 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
     validate_response(async_response, expected_response, expected_types)
 
 
+async def test_docker_service_token(client: Vellum, async_client: AsyncVellum) -> None:
+    expected_response: typing.Any = {
+        "access_token": "access_token",
+        "organization_id": "organization_id",
+        "repository": "repository",
+    }
+    expected_types: typing.Any = {"access_token": None, "organization_id": None, "repository": None}
+    response = client.container_images.docker_service_token()
+    validate_response(response, expected_response, expected_types)
+
+    async_response = await async_client.container_images.docker_service_token()
+    validate_response(async_response, expected_response, expected_types)
+
+
 async def test_push_container_image(client: Vellum, async_client: AsyncVellum) -> None:
     expected_response: typing.Any = {
         "id": "id",

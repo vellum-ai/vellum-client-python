@@ -9,6 +9,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.container_image_read import ContainerImageRead
 from ...core.jsonable_encoder import jsonable_encoder
+from ...types.docker_service_token import DockerServiceToken
 from ...core.client_wrapper import AsyncClientWrapper
 
 # this is used as the default value for optional parameters
@@ -123,6 +124,49 @@ class ContainerImagesClient:
                     ContainerImageRead,
                     parse_obj_as(
                         type_=ContainerImageRead,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def docker_service_token(self, *, request_options: typing.Optional[RequestOptions] = None) -> DockerServiceToken:
+        """
+        An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+
+        Parameters
+        ----------
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DockerServiceToken
+
+
+        Examples
+        --------
+        from vellum import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.container_images.docker_service_token()
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v1/container-images/docker-service-token",
+            base_url=self._client_wrapper.get_environment().default,
+            method="GET",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    DockerServiceToken,
+                    parse_obj_as(
+                        type_=DockerServiceToken,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -322,6 +366,59 @@ class AsyncContainerImagesClient:
                     ContainerImageRead,
                     parse_obj_as(
                         type_=ContainerImageRead,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def docker_service_token(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> DockerServiceToken:
+        """
+        An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+
+        Parameters
+        ----------
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DockerServiceToken
+
+
+        Examples
+        --------
+        import asyncio
+
+        from vellum import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.container_images.docker_service_token()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v1/container-images/docker-service-token",
+            base_url=self._client_wrapper.get_environment().default,
+            method="GET",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    DockerServiceToken,
+                    parse_obj_as(
+                        type_=DockerServiceToken,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

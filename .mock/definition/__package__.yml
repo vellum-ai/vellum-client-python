@@ -475,7 +475,6 @@ service:
                     completions:
                       - id: id
                         text: text
-                        model_version_id: model_version_id
                         prompt_version_id: prompt_version_id
                         deployment_release_tag: deployment_release_tag
                         model_name: model_name
@@ -1352,6 +1351,13 @@ types:
         docs: The Deployment History Item that this Release Tag is associated with
     source:
       openapi: openapi/openapi.yml
+  DockerServiceToken:
+    properties:
+      access_token: string
+      organization_id: string
+      repository: string
+    source:
+      openapi: openapi/openapi.yml
   DocumentDocumentToDocumentIndex:
     properties:
       id:
@@ -1524,7 +1530,7 @@ types:
           The logprobs of the completion. Only present if specified in the
           original request options.
       model_version_id:
-        type: string
+        type: optional<string>
         docs: The ID of the model version used to generate this completion.
       prompt_version_id: string
       type: optional<VellumVariableType>

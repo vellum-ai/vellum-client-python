@@ -39,7 +39,7 @@ class EnrichedNormalizedCompletion(UniversalBaseModel):
     The logprobs of the completion. Only present if specified in the original request options.
     """
 
-    model_version_id: str = pydantic.Field()
+    model_version_id: typing.Optional[str] = pydantic.Field(default=None)
     """
     The ID of the model version used to generate this completion.
     """

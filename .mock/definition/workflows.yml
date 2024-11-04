@@ -1,9 +1,25 @@
-imports:
-  root: __package__.yml
 service:
   auth: false
   base-path: ''
   endpoints:
+    pull:
+      path: /v1/workflows/{id}/pull
+      method: GET
+      auth: true
+      docs: >-
+        An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the Workflow to pull from
+      response:
+        docs: ''
+        type: file
+      url: Default
+      availability: pre-release
+      audiences:
+        - internal
     push:
       path: /v1/workflows/push
       method: POST
@@ -41,3 +57,5 @@ service:
         - internal
   source:
     openapi: openapi/openapi.yml
+imports:
+  root: __package__.yml

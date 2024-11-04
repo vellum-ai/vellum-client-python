@@ -129,7 +129,6 @@ async def test_generate(client: Vellum, async_client: AsyncVellum) -> None:
                         {
                             "id": "id",
                             "text": "text",
-                            "model_version_id": "model_version_id",
                             "prompt_version_id": "prompt_version_id",
                             "deployment_release_tag": "deployment_release_tag",
                             "model_name": "model_name",
@@ -152,7 +151,6 @@ async def test_generate(client: Vellum, async_client: AsyncVellum) -> None:
                                 0: {
                                     "id": None,
                                     "text": None,
-                                    "model_version_id": None,
                                     "prompt_version_id": None,
                                     "deployment_release_tag": None,
                                     "model_name": None,

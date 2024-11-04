@@ -2016,9 +2016,36 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+  /v1/workflows/{id}/pull:
+    get:
+      operationId: workflows_pull
+      description: An internal-only endpoint that's subject to breaking changes without
+        notice. Not intended for public use.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: The ID of the Workflow to pull from
+        required: true
+      tags:
+      - workflows
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/workflows/push:
     post:
-      operationId: push
+      operationId: workflows_push
       description: An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
       tags:
@@ -3605,6 +3632,7 @@ components:
             the original request options.
         model_version_id:
           type: string
+          nullable: true
           description: The ID of the model version used to generate this completion.
         prompt_version_id:
           type: string

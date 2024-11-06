@@ -8,6 +8,7 @@ from .json_variable_value import JsonVariableValue
 from .error_variable_value import ErrorVariableValue
 from .function_call_variable_value import FunctionCallVariableValue
 from .image_variable_value import ImageVariableValue
+from .audio_variable_value import AudioVariableValue
 from .chat_history_variable_value import ChatHistoryVariableValue
 from .search_results_variable_value import SearchResultsVariableValue
 import typing
@@ -21,6 +22,7 @@ ArrayVariableValueItem = typing.Union[
     ErrorVariableValue,
     FunctionCallVariableValue,
     ImageVariableValue,
+    AudioVariableValue,
     ChatHistoryVariableValue,
     SearchResultsVariableValue,
     "ArrayVariableValue",

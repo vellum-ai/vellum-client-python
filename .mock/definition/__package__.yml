@@ -822,6 +822,7 @@ types:
       - ErrorVariableValue
       - FunctionCallVariableValue
       - ImageVariableValue
+      - AudioVariableValue
       - ChatHistoryVariableValue
       - SearchResultsVariableValue
       - ArrayVariableValue
@@ -856,6 +857,27 @@ types:
     source:
       openapi: openapi/openapi.yml
   AudioEnum: literal<"AUDIO">
+  AudioVariableValue:
+    docs: A base Vellum primitive value representing audio.
+    properties:
+      type: literal<"AUDIO">
+      value: optional<VellumAudio>
+    source:
+      openapi: openapi/openapi.yml
+  AudioVellumValue:
+    docs: A base Vellum primitive value representing audio.
+    properties:
+      type: literal<"AUDIO">
+      value: optional<VellumAudio>
+    source:
+      openapi: openapi/openapi.yml
+  AudioVellumValueRequest:
+    docs: A base Vellum primitive value representing audio.
+    properties:
+      type: literal<"AUDIO">
+      value: optional<VellumAudioRequest>
+    source:
+      openapi: openapi/openapi.yml
   BasicVectorizerIntfloatMultilingualE5Large:
     docs: Basic vectorizer for intfloat/multilingual-e5-large.
     properties:
@@ -5462,6 +5484,7 @@ types:
       - NumberVellumValue
       - JsonVellumValue
       - ImageVellumValue
+      - AudioVellumValue
       - FunctionCallVellumValue
       - ErrorVellumValue
       - ArrayVellumValue
@@ -5503,6 +5526,7 @@ types:
       - NumberVellumValueRequest
       - JsonVellumValueRequest
       - ImageVellumValueRequest
+      - AudioVellumValueRequest
       - FunctionCallVellumValueRequest
       - ErrorVellumValueRequest
       - ArrayVellumValueRequest
@@ -5865,6 +5889,7 @@ types:
       - WorkflowOutputError
       - WorkflowOutputFunctionCall
       - WorkflowOutputImage
+      - WorkflowOutputAudio
     source:
       openapi: openapi/openapi.yml
   WorkflowOutputArray:
@@ -5879,6 +5904,20 @@ types:
         docs: The output's name, as defined in the workflow
       type: literal<"ARRAY">
       value: optional<list<VellumValue>>
+    source:
+      openapi: openapi/openapi.yml
+  WorkflowOutputAudio:
+    docs: An audio output from a Workflow execution.
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      name:
+        type: string
+        docs: The output's name, as defined in the workflow
+      type: literal<"AUDIO">
+      value: optional<VellumAudio>
     source:
       openapi: openapi/openapi.yml
   WorkflowOutputChatHistory:

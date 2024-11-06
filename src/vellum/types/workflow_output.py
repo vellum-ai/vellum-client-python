@@ -10,6 +10,7 @@ from .workflow_output_array import WorkflowOutputArray
 from .workflow_output_error import WorkflowOutputError
 from .workflow_output_function_call import WorkflowOutputFunctionCall
 from .workflow_output_image import WorkflowOutputImage
+from .workflow_output_audio import WorkflowOutputAudio
 
 WorkflowOutput = typing.Union[
     WorkflowOutputString,
@@ -21,4 +22,5 @@ WorkflowOutput = typing.Union[
     WorkflowOutputError,
     WorkflowOutputFunctionCall,
     WorkflowOutputImage,
+    WorkflowOutputAudio,
 ]

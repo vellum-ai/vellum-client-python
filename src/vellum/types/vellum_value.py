@@ -6,6 +6,7 @@ from .string_vellum_value import StringVellumValue
 from .number_vellum_value import NumberVellumValue
 from .json_vellum_value import JsonVellumValue
 from .image_vellum_value import ImageVellumValue
+from .audio_vellum_value import AudioVellumValue
 from .function_call_vellum_value import FunctionCallVellumValue
 from .error_vellum_value import ErrorVellumValue
 from .chat_history_vellum_value import ChatHistoryVellumValue
@@ -19,6 +20,7 @@ VellumValue = typing.Union[
     NumberVellumValue,
     JsonVellumValue,
     ImageVellumValue,
+    AudioVellumValue,
     FunctionCallVellumValue,
     ErrorVellumValue,
     "ArrayVellumValue",

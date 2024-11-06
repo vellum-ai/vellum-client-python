@@ -2403,6 +2403,7 @@ components:
       - $ref: '#/components/schemas/ErrorVariableValue'
       - $ref: '#/components/schemas/FunctionCallVariableValue'
       - $ref: '#/components/schemas/ImageVariableValue'
+      - $ref: '#/components/schemas/AudioVariableValue'
       - $ref: '#/components/schemas/ChatHistoryVariableValue'
       - $ref: '#/components/schemas/SearchResultsVariableValue'
       - $ref: '#/components/schemas/ArrayVariableValue'
@@ -2415,6 +2416,7 @@ components:
           ERROR: '#/components/schemas/ErrorVariableValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVariableValue'
           IMAGE: '#/components/schemas/ImageVariableValue'
+          AUDIO: '#/components/schemas/AudioVariableValue'
           CHAT_HISTORY: '#/components/schemas/ChatHistoryVariableValue'
           SEARCH_RESULTS: '#/components/schemas/SearchResultsVariableValue'
           ARRAY: '#/components/schemas/ArrayVariableValue'
@@ -2472,6 +2474,45 @@ components:
       type: string
       enum:
       - AUDIO
+    AudioVariableValue:
+      type: object
+      description: A base Vellum primitive value representing audio.
+      properties:
+        type:
+          $ref: '#/components/schemas/AudioEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumAudio'
+          nullable: true
+      required:
+      - type
+      - value
+    AudioVellumValue:
+      type: object
+      description: A base Vellum primitive value representing audio.
+      properties:
+        type:
+          $ref: '#/components/schemas/AudioEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumAudio'
+          nullable: true
+      required:
+      - type
+      - value
+    AudioVellumValueRequest:
+      type: object
+      description: A base Vellum primitive value representing audio.
+      properties:
+        type:
+          $ref: '#/components/schemas/AudioEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumAudioRequest'
+          nullable: true
+      required:
+      - type
+      - value
     BasicVectorizerIntfloatMultilingualE5Large:
       type: object
       description: Basic vectorizer for intfloat/multilingual-e5-large.
@@ -10189,6 +10230,7 @@ components:
       - $ref: '#/components/schemas/NumberVellumValue'
       - $ref: '#/components/schemas/JsonVellumValue'
       - $ref: '#/components/schemas/ImageVellumValue'
+      - $ref: '#/components/schemas/AudioVellumValue'
       - $ref: '#/components/schemas/FunctionCallVellumValue'
       - $ref: '#/components/schemas/ErrorVellumValue'
       - $ref: '#/components/schemas/ArrayVellumValue'
@@ -10201,6 +10243,7 @@ components:
           NUMBER: '#/components/schemas/NumberVellumValue'
           JSON: '#/components/schemas/JsonVellumValue'
           IMAGE: '#/components/schemas/ImageVellumValue'
+          AUDIO: '#/components/schemas/AudioVellumValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValue'
           ERROR: '#/components/schemas/ErrorVellumValue'
           ARRAY: '#/components/schemas/ArrayVellumValue'
@@ -10258,6 +10301,7 @@ components:
       - $ref: '#/components/schemas/NumberVellumValueRequest'
       - $ref: '#/components/schemas/JsonVellumValueRequest'
       - $ref: '#/components/schemas/ImageVellumValueRequest'
+      - $ref: '#/components/schemas/AudioVellumValueRequest'
       - $ref: '#/components/schemas/FunctionCallVellumValueRequest'
       - $ref: '#/components/schemas/ErrorVellumValueRequest'
       - $ref: '#/components/schemas/ArrayVellumValueRequest'
@@ -10270,6 +10314,7 @@ components:
           NUMBER: '#/components/schemas/NumberVellumValueRequest'
           JSON: '#/components/schemas/JsonVellumValueRequest'
           IMAGE: '#/components/schemas/ImageVellumValueRequest'
+          AUDIO: '#/components/schemas/AudioVellumValueRequest'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValueRequest'
           ERROR: '#/components/schemas/ErrorVellumValueRequest'
           ARRAY: '#/components/schemas/ArrayVellumValueRequest'
@@ -10720,6 +10765,7 @@ components:
       - $ref: '#/components/schemas/WorkflowOutputError'
       - $ref: '#/components/schemas/WorkflowOutputFunctionCall'
       - $ref: '#/components/schemas/WorkflowOutputImage'
+      - $ref: '#/components/schemas/WorkflowOutputAudio'
       discriminator:
         propertyName: type
         mapping:
@@ -10732,6 +10778,7 @@ components:
           ERROR: '#/components/schemas/WorkflowOutputError'
           FUNCTION_CALL: '#/components/schemas/WorkflowOutputFunctionCall'
           IMAGE: '#/components/schemas/WorkflowOutputImage'
+          AUDIO: '#/components/schemas/WorkflowOutputAudio'
     WorkflowOutputArray:
       type: object
       description: An array output from a Workflow execution.
@@ -10748,6 +10795,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VellumValue'
+          nullable: true
+      required:
+      - id
+      - name
+      - type
+      - value
+    WorkflowOutputAudio:
+      type: object
+      description: An audio output from a Workflow execution.
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: The output's name, as defined in the workflow
+        type:
+          $ref: '#/components/schemas/AudioEnum'
+        value:
+          allOf:
+          - $ref: '#/components/schemas/VellumAudio'
           nullable: true
       required:
       - id

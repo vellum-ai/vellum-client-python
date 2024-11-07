@@ -40,6 +40,7 @@ service:
               type: optional<string>
               validation:
                 format: uuid
+            deployment_config: optional<root.WorkflowPushDeploymentConfigRequest>
       response:
         docs: ''
         type: root.WorkflowPushResponse
@@ -53,6 +54,7 @@ service:
           response:
             body:
               workflow_sandbox_id: workflow_sandbox_id
+              workflow_deployment_id: workflow_deployment_id
       audiences:
         - internal
   source:

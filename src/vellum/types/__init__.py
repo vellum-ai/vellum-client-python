@@ -20,6 +20,9 @@ from .array_vellum_value import ArrayVellumValue
 from .array_vellum_value_request import ArrayVellumValueRequest
 from .audio_chat_message_content import AudioChatMessageContent
 from .audio_chat_message_content_request import AudioChatMessageContentRequest
+from .audio_variable_value import AudioVariableValue
+from .audio_vellum_value import AudioVellumValue
+from .audio_vellum_value_request import AudioVellumValueRequest
 from .basic_vectorizer_intfloat_multilingual_e_5_large import BasicVectorizerIntfloatMultilingualE5Large
 from .basic_vectorizer_intfloat_multilingual_e_5_large_request import BasicVectorizerIntfloatMultilingualE5LargeRequest
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_cos_v_1 import (
@@ -470,6 +473,7 @@ from .workflow_output_json import WorkflowOutputJson
 from .workflow_output_number import WorkflowOutputNumber
 from .workflow_output_search_results import WorkflowOutputSearchResults
 from .workflow_output_string import WorkflowOutputString
+from .workflow_push_deployment_config_request import WorkflowPushDeploymentConfigRequest
 from .workflow_push_exec_config import WorkflowPushExecConfig
 from .workflow_push_response import WorkflowPushResponse
 from .workflow_release_tag_read import WorkflowReleaseTagRead
@@ -513,6 +517,9 @@ __all__ = [
     "ArrayVellumValueRequest",
     "AudioChatMessageContent",
     "AudioChatMessageContentRequest",
+    "AudioVariableValue",
+    "AudioVellumValue",
+    "AudioVellumValueRequest",
     "BasicVectorizerIntfloatMultilingualE5Large",
     "BasicVectorizerIntfloatMultilingualE5LargeRequest",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1",
@@ -947,6 +954,7 @@ __all__ = [
     "WorkflowOutputNumber",
     "WorkflowOutputSearchResults",
     "WorkflowOutputString",
+    "WorkflowPushDeploymentConfigRequest",
     "WorkflowPushExecConfig",
     "WorkflowPushResponse",
     "WorkflowReleaseTagRead",

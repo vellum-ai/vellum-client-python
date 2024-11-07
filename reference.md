@@ -5146,6 +5146,14 @@ client.workflows.push(
 <dl>
 <dd>
 
+**deployment_config:** `typing.Optional[WorkflowPushDeploymentConfigRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>

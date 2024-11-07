@@ -7,7 +7,9 @@ from ...core.jsonable_encoder import jsonable_encoder
 from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.workflow_push_exec_config import WorkflowPushExecConfig
+from ...types.workflow_push_deployment_config_request import WorkflowPushDeploymentConfigRequest
 from ...types.workflow_push_response import WorkflowPushResponse
+from ...core.serialization import convert_and_respect_annotation_metadata
 from ...core.pydantic_utilities import parse_obj_as
 from ...core.client_wrapper import AsyncClientWrapper
 
@@ -70,6 +72,7 @@ class WorkflowsClient:
         exec_config: WorkflowPushExecConfig,
         label: str,
         workflow_sandbox_id: typing.Optional[str] = OMIT,
+        deployment_config: typing.Optional[WorkflowPushDeploymentConfigRequest] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowPushResponse:
         """
@@ -82,6 +85,8 @@ class WorkflowsClient:
         label : str
 
         workflow_sandbox_id : typing.Optional[str]
+
+        deployment_config : typing.Optional[WorkflowPushDeploymentConfigRequest]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -111,6 +116,9 @@ class WorkflowsClient:
                 "exec_config": exec_config,
                 "label": label,
                 "workflow_sandbox_id": workflow_sandbox_id,
+                "deployment_config": convert_and_respect_annotation_metadata(
+                    object_=deployment_config, annotation=WorkflowPushDeploymentConfigRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,
@@ -195,6 +203,7 @@ class AsyncWorkflowsClient:
         exec_config: WorkflowPushExecConfig,
         label: str,
         workflow_sandbox_id: typing.Optional[str] = OMIT,
+        deployment_config: typing.Optional[WorkflowPushDeploymentConfigRequest] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowPushResponse:
         """
@@ -207,6 +216,8 @@ class AsyncWorkflowsClient:
         label : str
 
         workflow_sandbox_id : typing.Optional[str]
+
+        deployment_config : typing.Optional[WorkflowPushDeploymentConfigRequest]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -244,6 +255,9 @@ class AsyncWorkflowsClient:
                 "exec_config": exec_config,
                 "label": label,
                 "workflow_sandbox_id": workflow_sandbox_id,
+                "deployment_config": convert_and_respect_annotation_metadata(
+                    object_=deployment_config, annotation=WorkflowPushDeploymentConfigRequest, direction="write"
+                ),
             },
             request_options=request_options,
             omit=OMIT,

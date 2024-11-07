@@ -7,8 +7,11 @@ from .utilities import validate_response
 
 
 async def test_push(client: Vellum, async_client: AsyncVellum) -> None:
-    expected_response: typing.Any = {"workflow_sandbox_id": "workflow_sandbox_id"}
-    expected_types: typing.Any = {"workflow_sandbox_id": None}
+    expected_response: typing.Any = {
+        "workflow_sandbox_id": "workflow_sandbox_id",
+        "workflow_deployment_id": "workflow_deployment_id",
+    }
+    expected_types: typing.Any = {"workflow_sandbox_id": None, "workflow_deployment_id": None}
     response = client.workflows.push(exec_config={"key": "value"}, label="label")
     validate_response(response, expected_response, expected_types)
 

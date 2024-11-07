@@ -822,6 +822,7 @@ types:
       - ErrorVariableValue
       - FunctionCallVariableValue
       - ImageVariableValue
+      - AudioVariableValue
       - ChatHistoryVariableValue
       - SearchResultsVariableValue
       - ArrayVariableValue
@@ -856,6 +857,27 @@ types:
     source:
       openapi: openapi/openapi.yml
   AudioEnum: literal<"AUDIO">
+  AudioVariableValue:
+    docs: A base Vellum primitive value representing audio.
+    properties:
+      type: literal<"AUDIO">
+      value: optional<VellumAudio>
+    source:
+      openapi: openapi/openapi.yml
+  AudioVellumValue:
+    docs: A base Vellum primitive value representing audio.
+    properties:
+      type: literal<"AUDIO">
+      value: optional<VellumAudio>
+    source:
+      openapi: openapi/openapi.yml
+  AudioVellumValueRequest:
+    docs: A base Vellum primitive value representing audio.
+    properties:
+      type: literal<"AUDIO">
+      value: optional<VellumAudioRequest>
+    source:
+      openapi: openapi/openapi.yml
   BasicVectorizerIntfloatMultilingualE5Large:
     docs: Basic vectorizer for intfloat/multilingual-e5-large.
     properties:
@@ -5397,7 +5419,9 @@ types:
       openapi: openapi/openapi.yml
   VellumAudio:
     properties:
-      src: string
+      src:
+        type: string
+        docs: A valid data URL containing the audio data.
       metadata: optional<map<string, unknown>>
     source:
       openapi: openapi/openapi.yml
@@ -5405,6 +5429,7 @@ types:
     properties:
       src:
         type: string
+        docs: A valid data URL containing the audio data.
         validation:
           minLength: 1
       metadata: optional<map<string, unknown>>
@@ -5462,6 +5487,7 @@ types:
       - NumberVellumValue
       - JsonVellumValue
       - ImageVellumValue
+      - AudioVellumValue
       - FunctionCallVellumValue
       - ErrorVellumValue
       - ArrayVellumValue
@@ -5503,6 +5529,7 @@ types:
       - NumberVellumValueRequest
       - JsonVellumValueRequest
       - ImageVellumValueRequest
+      - AudioVellumValueRequest
       - FunctionCallVellumValueRequest
       - ErrorVellumValueRequest
       - ArrayVellumValueRequest
@@ -5993,11 +6020,32 @@ types:
       value: optional<string>
     source:
       openapi: openapi/openapi.yml
+  WorkflowPushDeploymentConfigRequest:
+    properties:
+      label:
+        type: optional<string>
+        validation:
+          minLength: 1
+      name:
+        type: optional<string>
+        validation:
+          minLength: 1
+      description:
+        type: optional<string>
+        validation:
+          minLength: 1
+      release_tags: optional<list<string>>
+    source:
+      openapi: openapi/openapi.yml
   WorkflowPushExecConfig: map<string, unknown>
   WorkflowPushResponse:
     properties:
       workflow_sandbox_id:
         type: string
+        validation:
+          format: uuid
+      workflow_deployment_id:
+        type: optional<string>
         validation:
           format: uuid
     source:

@@ -3215,6 +3215,20 @@ types:
       results: optional<list<ContainerImageRead>>
     source:
       openapi: openapi/openapi.yml
+  PaginatedDeploymentReleaseTagReadList:
+    properties:
+      count: optional<integer>
+      next:
+        type: optional<string>
+        validation:
+          format: uri
+      previous:
+        type: optional<string>
+        validation:
+          format: uri
+      results: optional<list<DeploymentReleaseTagRead>>
+    source:
+      openapi: openapi/openapi.yml
   PaginatedDocumentIndexReadList:
     properties:
       count: optional<integer>
@@ -3311,6 +3325,20 @@ types:
         validation:
           format: uri
       results: list<TestSuiteTestCase>
+    source:
+      openapi: openapi/openapi.yml
+  PaginatedWorkflowReleaseTagReadList:
+    properties:
+      count: optional<integer>
+      next:
+        type: optional<string>
+        validation:
+          format: uri
+      previous:
+        type: optional<string>
+        validation:
+          format: uri
+      results: optional<list<WorkflowReleaseTagRead>>
     source:
       openapi: openapi/openapi.yml
   PdfEnum: literal<"PDF">

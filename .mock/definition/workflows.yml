@@ -1,3 +1,12 @@
+types:
+  WorkflowsPullRequestFormat:
+    enum:
+      - json
+      - zip
+    source:
+      openapi: openapi/openapi.yml
+imports:
+  root: __package__.yml
 service:
   auth: false
   base-path: ''
@@ -13,11 +22,17 @@ service:
         id:
           type: string
           docs: The ID of the Workflow to pull from
+      request:
+        name: WorkflowsPullRequest
+        query-parameters:
+          format: optional<WorkflowsPullRequestFormat>
       response:
         docs: ''
         type: file
       url: Default
       availability: pre-release
+      errors:
+        - root.BadRequestError
       audiences:
         - internal
     push:
@@ -59,5 +74,3 @@ service:
         - internal
   source:
     openapi: openapi/openapi.yml
-imports:
-  root: __package__.yml

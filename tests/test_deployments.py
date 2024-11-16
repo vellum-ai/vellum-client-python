@@ -93,6 +93,28 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
     validate_response(async_response, expected_response, expected_types)
 
 
+async def test_list_deployment_release_tags(client: Vellum, async_client: AsyncVellum) -> None:
+    expected_response: typing.Any = {
+        "count": 123,
+        "next": "http://api.example.org/accounts/?offset=400&limit=100",
+        "previous": "http://api.example.org/accounts/?offset=200&limit=100",
+        "results": [
+            {"name": "name", "source": "SYSTEM", "history_item": {"id": "id", "timestamp": "2024-01-15T09:30:00Z"}}
+        ],
+    }
+    expected_types: typing.Any = {
+        "count": "integer",
+        "next": None,
+        "previous": None,
+        "results": ("list", {0: {"name": None, "source": None, "history_item": {"id": None, "timestamp": "datetime"}}}),
+    }
+    response = client.deployments.list_deployment_release_tags(id="id")
+    validate_response(response, expected_response, expected_types)
+
+    async_response = await async_client.deployments.list_deployment_release_tags(id="id")
+    validate_response(async_response, expected_response, expected_types)
+
+
 async def test_retrieve_deployment_release_tag(client: Vellum, async_client: AsyncVellum) -> None:
     expected_response: typing.Any = {
         "name": "name",

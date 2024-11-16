@@ -1835,6 +1835,108 @@ client.deployments.retrieve(
 </dl>
 </details>
 
+<details><summary><code>client.deployments.<a href="src/vellum/resources/deployments/client.py">list_deployment_release_tags</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List Release Tags associated with the specified Prompt Deployment
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.deployments.list_deployment_release_tags(
+    id="id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — Either the Prompt Deployment's ID or its unique name
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[int]` — Number of results to return per page.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `typing.Optional[int]` — The initial index from which to return the results.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**ordering:** `typing.Optional[str]` — Which field to use when ordering the results.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source:** `typing.Optional[ListDeploymentReleaseTagsRequestSource]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.deployments.<a href="src/vellum/resources/deployments/client.py">retrieve_deployment_release_tag</a>(...)</code></summary>
 <dl>
 <dd>
@@ -1926,7 +2028,7 @@ client.deployments.retrieve_deployment_release_tag(
 <dl>
 <dd>
 
-Updates an existing Release Tag associated with the specified Deployment.
+Updates an existing Release Tag associated with the specified Prompt Deployment.
 </dd>
 </dl>
 </dd>
@@ -4736,6 +4838,108 @@ client.workflow_deployments.retrieve(
 </dl>
 </details>
 
+<details><summary><code>client.workflow_deployments.<a href="src/vellum/resources/workflow_deployments/client.py">list_workflow_release_tags</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List Release Tags associated with the specified Workflow Deployment
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.workflow_deployments.list_workflow_release_tags(
+    id="id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — Either the Workflow Deployment's ID or its unique name
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[int]` — Number of results to return per page.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**offset:** `typing.Optional[int]` — The initial index from which to return the results.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**ordering:** `typing.Optional[str]` — Which field to use when ordering the results.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source:** `typing.Optional[ListWorkflowReleaseTagsRequestSource]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.workflow_deployments.<a href="src/vellum/resources/workflow_deployments/client.py">retrieve_workflow_release_tag</a>(...)</code></summary>
 <dl>
 <dd>
@@ -5035,6 +5239,7 @@ client = Vellum(
 )
 client.workflows.pull(
     id="string",
+    format="json",
 )
 
 ```
@@ -5052,6 +5257,14 @@ client.workflows.pull(
 <dd>
 
 **id:** `str` — The ID of the Workflow to pull from
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**format:** `typing.Optional[WorkflowsPullRequestFormat]` 
     
 </dd>
 </dl>

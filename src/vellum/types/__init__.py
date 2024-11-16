@@ -254,6 +254,7 @@ from .open_ai_vectorizer_text_embedding_3_small_request import OpenAiVectorizerT
 from .open_ai_vectorizer_text_embedding_ada_002 import OpenAiVectorizerTextEmbeddingAda002
 from .open_ai_vectorizer_text_embedding_ada_002_request import OpenAiVectorizerTextEmbeddingAda002Request
 from .paginated_container_image_read_list import PaginatedContainerImageReadList
+from .paginated_deployment_release_tag_read_list import PaginatedDeploymentReleaseTagReadList
 from .paginated_document_index_read_list import PaginatedDocumentIndexReadList
 from .paginated_folder_entity_list import PaginatedFolderEntityList
 from .paginated_slim_deployment_read_list import PaginatedSlimDeploymentReadList
@@ -261,6 +262,7 @@ from .paginated_slim_document_list import PaginatedSlimDocumentList
 from .paginated_slim_workflow_deployment_list import PaginatedSlimWorkflowDeploymentList
 from .paginated_test_suite_run_execution_list import PaginatedTestSuiteRunExecutionList
 from .paginated_test_suite_test_case_list import PaginatedTestSuiteTestCaseList
+from .paginated_workflow_release_tag_read_list import PaginatedWorkflowReleaseTagReadList
 from .pdf_search_result_meta_source import PdfSearchResultMetaSource
 from .pdf_search_result_meta_source_request import PdfSearchResultMetaSourceRequest
 from .plain_text_prompt_block_request import PlainTextPromptBlockRequest
@@ -739,6 +741,7 @@ __all__ = [
     "OpenAiVectorizerTextEmbeddingAda002",
     "OpenAiVectorizerTextEmbeddingAda002Request",
     "PaginatedContainerImageReadList",
+    "PaginatedDeploymentReleaseTagReadList",
     "PaginatedDocumentIndexReadList",
     "PaginatedFolderEntityList",
     "PaginatedSlimDeploymentReadList",
@@ -746,6 +749,7 @@ __all__ = [
     "PaginatedSlimWorkflowDeploymentList",
     "PaginatedTestSuiteRunExecutionList",
     "PaginatedTestSuiteTestCaseList",
+    "PaginatedWorkflowReleaseTagReadList",
     "PdfSearchResultMetaSource",
     "PdfSearchResultMetaSourceRequest",
     "PlainTextPromptBlockRequest",

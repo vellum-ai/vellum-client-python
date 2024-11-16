@@ -260,6 +260,56 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+  /v1/deployments/{id}/release-tags:
+    get:
+      operationId: list_deployment_release_tags
+      description: List Release Tags associated with the specified Prompt Deployment
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Prompt Deployment's ID or its unique name
+        required: true
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: source
+        schema:
+          type: string
+          enum:
+          - SYSTEM
+          - USER
+      tags:
+      - deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeploymentReleaseTagReadList'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/deployments/{id}/release-tags/{name}:
     get:
       operationId: retrieve_deployment_release_tag
@@ -296,7 +346,8 @@ paths:
       - customers
     patch:
       operationId: update_deployment_release_tag
-      description: Updates an existing Release Tag associated with the specified Deployment.
+      description: Updates an existing Release Tag associated with the specified Prompt
+        Deployment.
       parameters:
       - in: path
         name: id
@@ -1924,6 +1975,56 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+  /v1/workflow-deployments/{id}/release-tags:
+    get:
+      operationId: list_workflow_release_tags
+      description: List Release Tags associated with the specified Workflow Deployment
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the Workflow Deployment's ID or its unique name
+        required: true
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: source
+        schema:
+          type: string
+          enum:
+          - SYSTEM
+          - USER
+      tags:
+      - workflow-deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWorkflowReleaseTagReadList'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/workflow-deployments/{id}/release-tags/{name}:
     get:
       operationId: retrieve_workflow_release_tag
@@ -2041,6 +2142,13 @@ paths:
       description: An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
       parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - zip
       - in: path
         name: id
         schema:
@@ -2058,6 +2166,13 @@ paths:
               schema:
                 type: string
                 format: binary
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
           description: ''
       x-fern-availability: beta
       x-fern-audiences:
@@ -6684,6 +6799,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContainerImageRead'
+    PaginatedDeploymentReleaseTagReadList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeploymentReleaseTagRead'
     PaginatedDocumentIndexReadList:
       type: object
       properties:
@@ -6834,6 +6969,26 @@ components:
       - next
       - previous
       - results
+    PaginatedWorkflowReleaseTagReadList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowReleaseTagRead'
     PatchedDeploymentReleaseTagUpdateRequest:
       type: object
       properties:

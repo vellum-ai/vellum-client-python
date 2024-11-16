@@ -2,15 +2,17 @@
 
 import typing
 from ...core.client_wrapper import SyncClientWrapper
+from .types.workflows_pull_request_format import WorkflowsPullRequestFormat
 from ...core.request_options import RequestOptions
 from ...core.jsonable_encoder import jsonable_encoder
+from ...errors.bad_request_error import BadRequestError
+from ...core.pydantic_utilities import parse_obj_as
 from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.workflow_push_exec_config import WorkflowPushExecConfig
 from ...types.workflow_push_deployment_config_request import WorkflowPushDeploymentConfigRequest
 from ...types.workflow_push_response import WorkflowPushResponse
 from ...core.serialization import convert_and_respect_annotation_metadata
-from ...core.pydantic_utilities import parse_obj_as
 from ...core.client_wrapper import AsyncClientWrapper
 
 # this is used as the default value for optional parameters
@@ -21,7 +23,13 @@ class WorkflowsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def pull(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> typing.Iterator[bytes]:
+    def pull(
+        self,
+        id: str,
+        *,
+        format: typing.Optional[WorkflowsPullRequestFormat] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Iterator[bytes]:
         """
         An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 
@@ -29,6 +37,8 @@ class WorkflowsClient:
         ----------
         id : str
             The ID of the Workflow to pull from
+
+        format : typing.Optional[WorkflowsPullRequestFormat]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -47,12 +57,16 @@ class WorkflowsClient:
         )
         client.workflows.pull(
             id="string",
+            format="json",
         )
         """
         with self._client_wrapper.httpx_client.stream(
             f"v1/workflows/{jsonable_encoder(id)}/pull",
             base_url=self._client_wrapper.get_environment().default,
             method="GET",
+            params={
+                "format": format,
+            },
             request_options=request_options,
         ) as _response:
             try:
@@ -61,6 +75,16 @@ class WorkflowsClient:
                         yield _chunk
                     return
                 _response.read()
+                if _response.status_code == 400:
+                    raise BadRequestError(
+                        typing.cast(
+                            typing.Optional[typing.Any],
+                            parse_obj_as(
+                                type_=typing.Optional[typing.Any],  # type: ignore
+                                object_=_response.json(),
+                            ),
+                        )
+                    )
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -143,7 +167,11 @@ class AsyncWorkflowsClient:
         self._client_wrapper = client_wrapper
 
     async def pull(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        format: typing.Optional[WorkflowsPullRequestFormat] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[bytes]:
         """
         An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
@@ -152,6 +180,8 @@ class AsyncWorkflowsClient:
         ----------
         id : str
             The ID of the Workflow to pull from
+
+        format : typing.Optional[WorkflowsPullRequestFormat]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -175,6 +205,7 @@ class AsyncWorkflowsClient:
         async def main() -> None:
             await client.workflows.pull(
                 id="string",
+                format="json",
             )
 
 
@@ -184,6 +215,9 @@ class AsyncWorkflowsClient:
             f"v1/workflows/{jsonable_encoder(id)}/pull",
             base_url=self._client_wrapper.get_environment().default,
             method="GET",
+            params={
+                "format": format,
+            },
             request_options=request_options,
         ) as _response:
             try:
@@ -192,6 +226,16 @@ class AsyncWorkflowsClient:
                         yield _chunk
                     return
                 await _response.aread()
+                if _response.status_code == 400:
+                    raise BadRequestError(
+                        typing.cast(
+                            typing.Optional[typing.Any],
+                            parse_obj_as(
+                                type_=typing.Optional[typing.Any],  # type: ignore
+                                object_=_response.json(),
+                            ),
+                        )
+                    )
                 _response_json = _response.json()
             except JSONDecodeError:
                 raise ApiError(status_code=_response.status_code, body=_response.text)

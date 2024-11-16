@@ -10,6 +10,8 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.workflow_deployment_read import WorkflowDeploymentRead
 from ...core.jsonable_encoder import jsonable_encoder
+from .types.list_workflow_release_tags_request_source import ListWorkflowReleaseTagsRequestSource
+from ...types.paginated_workflow_release_tag_read_list import PaginatedWorkflowReleaseTagReadList
 from ...types.workflow_release_tag_read import WorkflowReleaseTagRead
 from ...core.client_wrapper import AsyncClientWrapper
 
@@ -130,6 +132,80 @@ class WorkflowDeploymentsClient:
                     WorkflowDeploymentRead,
                     parse_obj_as(
                         type_=WorkflowDeploymentRead,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def list_workflow_release_tags(
+        self,
+        id: str,
+        *,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        ordering: typing.Optional[str] = None,
+        source: typing.Optional[ListWorkflowReleaseTagsRequestSource] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PaginatedWorkflowReleaseTagReadList:
+        """
+        List Release Tags associated with the specified Workflow Deployment
+
+        Parameters
+        ----------
+        id : str
+            Either the Workflow Deployment's ID or its unique name
+
+        limit : typing.Optional[int]
+            Number of results to return per page.
+
+        offset : typing.Optional[int]
+            The initial index from which to return the results.
+
+        ordering : typing.Optional[str]
+            Which field to use when ordering the results.
+
+        source : typing.Optional[ListWorkflowReleaseTagsRequestSource]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PaginatedWorkflowReleaseTagReadList
+
+
+        Examples
+        --------
+        from vellum import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.workflow_deployments.list_workflow_release_tags(
+            id="id",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/workflow-deployments/{jsonable_encoder(id)}/release-tags",
+            base_url=self._client_wrapper.get_environment().default,
+            method="GET",
+            params={
+                "limit": limit,
+                "offset": offset,
+                "ordering": ordering,
+                "source": source,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    PaginatedWorkflowReleaseTagReadList,
+                    parse_obj_as(
+                        type_=PaginatedWorkflowReleaseTagReadList,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -390,6 +466,88 @@ class AsyncWorkflowDeploymentsClient:
                     WorkflowDeploymentRead,
                     parse_obj_as(
                         type_=WorkflowDeploymentRead,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def list_workflow_release_tags(
+        self,
+        id: str,
+        *,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        ordering: typing.Optional[str] = None,
+        source: typing.Optional[ListWorkflowReleaseTagsRequestSource] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PaginatedWorkflowReleaseTagReadList:
+        """
+        List Release Tags associated with the specified Workflow Deployment
+
+        Parameters
+        ----------
+        id : str
+            Either the Workflow Deployment's ID or its unique name
+
+        limit : typing.Optional[int]
+            Number of results to return per page.
+
+        offset : typing.Optional[int]
+            The initial index from which to return the results.
+
+        ordering : typing.Optional[str]
+            Which field to use when ordering the results.
+
+        source : typing.Optional[ListWorkflowReleaseTagsRequestSource]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PaginatedWorkflowReleaseTagReadList
+
+
+        Examples
+        --------
+        import asyncio
+
+        from vellum import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_deployments.list_workflow_release_tags(
+                id="id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/workflow-deployments/{jsonable_encoder(id)}/release-tags",
+            base_url=self._client_wrapper.get_environment().default,
+            method="GET",
+            params={
+                "limit": limit,
+                "offset": offset,
+                "ordering": ordering,
+                "source": source,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    PaginatedWorkflowReleaseTagReadList,
+                    parse_obj_as(
+                        type_=PaginatedWorkflowReleaseTagReadList,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

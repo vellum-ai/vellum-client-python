@@ -10,6 +10,8 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.deployment_read import DeploymentRead
 from ...core.jsonable_encoder import jsonable_encoder
+from .types.list_deployment_release_tags_request_source import ListDeploymentReleaseTagsRequestSource
+from ...types.paginated_deployment_release_tag_read_list import PaginatedDeploymentReleaseTagReadList
 from ...types.deployment_release_tag_read import DeploymentReleaseTagRead
 from ...types.prompt_deployment_input_request import PromptDeploymentInputRequest
 from ...types.compile_prompt_deployment_expand_meta_request import CompilePromptDeploymentExpandMetaRequest
@@ -146,6 +148,80 @@ class DeploymentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def list_deployment_release_tags(
+        self,
+        id: str,
+        *,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        ordering: typing.Optional[str] = None,
+        source: typing.Optional[ListDeploymentReleaseTagsRequestSource] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PaginatedDeploymentReleaseTagReadList:
+        """
+        List Release Tags associated with the specified Prompt Deployment
+
+        Parameters
+        ----------
+        id : str
+            Either the Prompt Deployment's ID or its unique name
+
+        limit : typing.Optional[int]
+            Number of results to return per page.
+
+        offset : typing.Optional[int]
+            The initial index from which to return the results.
+
+        ordering : typing.Optional[str]
+            Which field to use when ordering the results.
+
+        source : typing.Optional[ListDeploymentReleaseTagsRequestSource]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PaginatedDeploymentReleaseTagReadList
+
+
+        Examples
+        --------
+        from vellum import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.deployments.list_deployment_release_tags(
+            id="id",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/deployments/{jsonable_encoder(id)}/release-tags",
+            base_url=self._client_wrapper.get_environment().default,
+            method="GET",
+            params={
+                "limit": limit,
+                "offset": offset,
+                "ordering": ordering,
+                "source": source,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    PaginatedDeploymentReleaseTagReadList,
+                    parse_obj_as(
+                        type_=PaginatedDeploymentReleaseTagReadList,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
     def retrieve_deployment_release_tag(
         self, id: str, name: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> DeploymentReleaseTagRead:
@@ -209,7 +285,7 @@ class DeploymentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeploymentReleaseTagRead:
         """
-        Updates an existing Release Tag associated with the specified Deployment.
+        Updates an existing Release Tag associated with the specified Prompt Deployment.
 
         Parameters
         ----------
@@ -538,6 +614,88 @@ class AsyncDeploymentsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    async def list_deployment_release_tags(
+        self,
+        id: str,
+        *,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+        ordering: typing.Optional[str] = None,
+        source: typing.Optional[ListDeploymentReleaseTagsRequestSource] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PaginatedDeploymentReleaseTagReadList:
+        """
+        List Release Tags associated with the specified Prompt Deployment
+
+        Parameters
+        ----------
+        id : str
+            Either the Prompt Deployment's ID or its unique name
+
+        limit : typing.Optional[int]
+            Number of results to return per page.
+
+        offset : typing.Optional[int]
+            The initial index from which to return the results.
+
+        ordering : typing.Optional[str]
+            Which field to use when ordering the results.
+
+        source : typing.Optional[ListDeploymentReleaseTagsRequestSource]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PaginatedDeploymentReleaseTagReadList
+
+
+        Examples
+        --------
+        import asyncio
+
+        from vellum import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.deployments.list_deployment_release_tags(
+                id="id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/deployments/{jsonable_encoder(id)}/release-tags",
+            base_url=self._client_wrapper.get_environment().default,
+            method="GET",
+            params={
+                "limit": limit,
+                "offset": offset,
+                "ordering": ordering,
+                "source": source,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    PaginatedDeploymentReleaseTagReadList,
+                    parse_obj_as(
+                        type_=PaginatedDeploymentReleaseTagReadList,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
     async def retrieve_deployment_release_tag(
         self, id: str, name: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> DeploymentReleaseTagRead:
@@ -609,7 +767,7 @@ class AsyncDeploymentsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DeploymentReleaseTagRead:
         """
-        Updates an existing Release Tag associated with the specified Deployment.
+        Updates an existing Release Tag associated with the specified Prompt Deployment.
 
         Parameters
         ----------

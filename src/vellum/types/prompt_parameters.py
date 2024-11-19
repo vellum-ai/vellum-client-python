@@ -6,7 +6,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
 
-class PromptParametersRequest(UniversalBaseModel):
+class PromptParameters(UniversalBaseModel):
     stop: typing.Optional[typing.List[str]] = None
     temperature: typing.Optional[float] = None
     max_tokens: typing.Optional[int] = None

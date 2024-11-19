@@ -2,12 +2,11 @@
 
 import typing
 from ...core.client_wrapper import SyncClientWrapper
-from ...types.prompt_request_input_request import PromptRequestInputRequest
-from ...types.vellum_variable_request import VellumVariableRequest
-from ...types.prompt_parameters_request import PromptParametersRequest
-from ...types.prompt_block_request import PromptBlockRequest
-from ...types.prompt_settings_request import PromptSettingsRequest
-from ...types.ad_hoc_expand_meta_request import AdHocExpandMetaRequest
+from ...types.prompt_request_input import PromptRequestInput
+from ...types.vellum_variable import VellumVariable
+from ...types.prompt_parameters import PromptParameters
+from ...types.prompt_settings import PromptSettings
+from ...types.ad_hoc_expand_meta import AdHocExpandMeta
 from ...core.request_options import RequestOptions
 from ...types.ad_hoc_execute_prompt_event import AdHocExecutePromptEvent
 from ...core.serialization import convert_and_respect_annotation_metadata
@@ -32,12 +31,12 @@ class AdHocClient:
         self,
         *,
         ml_model: str,
-        input_values: typing.Sequence[PromptRequestInputRequest],
-        input_variables: typing.Sequence[VellumVariableRequest],
-        parameters: PromptParametersRequest,
-        blocks: typing.Sequence[PromptBlockRequest],
-        settings: typing.Optional[PromptSettingsRequest] = OMIT,
-        expand_meta: typing.Optional[AdHocExpandMetaRequest] = OMIT,
+        input_values: typing.Sequence[PromptRequestInput],
+        input_variables: typing.Sequence[VellumVariable],
+        parameters: PromptParameters,
+        blocks: typing.Sequence[typing.Optional[typing.Any]],
+        settings: typing.Optional[PromptSettings] = OMIT,
+        expand_meta: typing.Optional[AdHocExpandMeta] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[AdHocExecutePromptEvent]:
         """
@@ -47,17 +46,17 @@ class AdHocClient:
         ----------
         ml_model : str
 
-        input_values : typing.Sequence[PromptRequestInputRequest]
+        input_values : typing.Sequence[PromptRequestInput]
 
-        input_variables : typing.Sequence[VellumVariableRequest]
+        input_variables : typing.Sequence[VellumVariable]
 
-        parameters : PromptParametersRequest
+        parameters : PromptParameters
 
-        blocks : typing.Sequence[PromptBlockRequest]
+        blocks : typing.Sequence[typing.Optional[typing.Any]]
 
-        settings : typing.Optional[PromptSettingsRequest]
+        settings : typing.Optional[PromptSettings]
 
-        expand_meta : typing.Optional[AdHocExpandMetaRequest]
+        expand_meta : typing.Optional[AdHocExpandMeta]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -70,17 +69,14 @@ class AdHocClient:
         Examples
         --------
         from vellum import (
-            AdHocExpandMetaRequest,
-            EphemeralPromptCacheConfigRequest,
-            JinjaPromptBlockPropertiesRequest,
-            JinjaPromptBlockRequest,
-            PromptParametersRequest,
-            PromptRequestStringInputRequest,
-            PromptSettingsRequest,
-            StringVellumValueRequest,
+            AdHocExpandMeta,
+            PromptParameters,
+            PromptRequestStringInput,
+            PromptSettings,
+            StringVellumValue,
             Vellum,
-            VellumVariableExtensionsRequest,
-            VellumVariableRequest,
+            VellumVariable,
+            VellumVariableExtensions,
         )
 
         client = Vellum(
@@ -89,26 +85,26 @@ class AdHocClient:
         response = client.ad_hoc.adhoc_execute_prompt_stream(
             ml_model="string",
             input_values=[
-                PromptRequestStringInputRequest(
+                PromptRequestStringInput(
                     key="string",
                     value="string",
                 )
             ],
             input_variables=[
-                VellumVariableRequest(
+                VellumVariable(
                     id="string",
                     key="string",
                     type="STRING",
                     required=True,
-                    default=StringVellumValueRequest(
-                        value="string",
+                    default=StringVellumValue(
+                        value={"key": "value"},
                     ),
-                    extensions=VellumVariableExtensionsRequest(
-                        color="string",
+                    extensions=VellumVariableExtensions(
+                        color={"key": "value"},
                     ),
                 )
             ],
-            parameters=PromptParametersRequest(
+            parameters=PromptParameters(
                 stop=["string"],
                 temperature=1.1,
                 max_tokens=1,
@@ -119,22 +115,11 @@ class AdHocClient:
                 logit_bias={"string": {"key": "value"}},
                 custom_parameters={"string": {"key": "value"}},
             ),
-            settings=PromptSettingsRequest(
+            settings=PromptSettings(
                 timeout=1.1,
             ),
-            blocks=[
-                JinjaPromptBlockRequest(
-                    state="ENABLED",
-                    cache_config=EphemeralPromptCacheConfigRequest(
-                        type={"key": "value"},
-                    ),
-                    properties=JinjaPromptBlockPropertiesRequest(
-                        template="string",
-                        template_type="STRING",
-                    ),
-                )
-            ],
-            expand_meta=AdHocExpandMetaRequest(
+            blocks=[{"key": "value"}],
+            expand_meta=AdHocExpandMeta(
                 cost=True,
                 model_name=True,
                 usage=True,
@@ -151,22 +136,20 @@ class AdHocClient:
             json={
                 "ml_model": ml_model,
                 "input_values": convert_and_respect_annotation_metadata(
-                    object_=input_values, annotation=typing.Sequence[PromptRequestInputRequest], direction="write"
+                    object_=input_values, annotation=typing.Sequence[PromptRequestInput], direction="write"
                 ),
                 "input_variables": convert_and_respect_annotation_metadata(
-                    object_=input_variables, annotation=typing.Sequence[VellumVariableRequest], direction="write"
+                    object_=input_variables, annotation=typing.Sequence[VellumVariable], direction="write"
                 ),
                 "parameters": convert_and_respect_annotation_metadata(
-                    object_=parameters, annotation=PromptParametersRequest, direction="write"
+                    object_=parameters, annotation=PromptParameters, direction="write"
                 ),
                 "settings": convert_and_respect_annotation_metadata(
-                    object_=settings, annotation=PromptSettingsRequest, direction="write"
+                    object_=settings, annotation=PromptSettings, direction="write"
                 ),
-                "blocks": convert_and_respect_annotation_metadata(
-                    object_=blocks, annotation=typing.Sequence[PromptBlockRequest], direction="write"
-                ),
+                "blocks": blocks,
                 "expand_meta": convert_and_respect_annotation_metadata(
-                    object_=expand_meta, annotation=AdHocExpandMetaRequest, direction="write"
+                    object_=expand_meta, annotation=AdHocExpandMeta, direction="write"
                 ),
             },
             request_options=request_options,
@@ -233,12 +216,12 @@ class AsyncAdHocClient:
         self,
         *,
         ml_model: str,
-        input_values: typing.Sequence[PromptRequestInputRequest],
-        input_variables: typing.Sequence[VellumVariableRequest],
-        parameters: PromptParametersRequest,
-        blocks: typing.Sequence[PromptBlockRequest],
-        settings: typing.Optional[PromptSettingsRequest] = OMIT,
-        expand_meta: typing.Optional[AdHocExpandMetaRequest] = OMIT,
+        input_values: typing.Sequence[PromptRequestInput],
+        input_variables: typing.Sequence[VellumVariable],
+        parameters: PromptParameters,
+        blocks: typing.Sequence[typing.Optional[typing.Any]],
+        settings: typing.Optional[PromptSettings] = OMIT,
+        expand_meta: typing.Optional[AdHocExpandMeta] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[AdHocExecutePromptEvent]:
         """
@@ -248,17 +231,17 @@ class AsyncAdHocClient:
         ----------
         ml_model : str
 
-        input_values : typing.Sequence[PromptRequestInputRequest]
+        input_values : typing.Sequence[PromptRequestInput]
 
-        input_variables : typing.Sequence[VellumVariableRequest]
+        input_variables : typing.Sequence[VellumVariable]
 
-        parameters : PromptParametersRequest
+        parameters : PromptParameters
 
-        blocks : typing.Sequence[PromptBlockRequest]
+        blocks : typing.Sequence[typing.Optional[typing.Any]]
 
-        settings : typing.Optional[PromptSettingsRequest]
+        settings : typing.Optional[PromptSettings]
 
-        expand_meta : typing.Optional[AdHocExpandMetaRequest]
+        expand_meta : typing.Optional[AdHocExpandMeta]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -273,17 +256,14 @@ class AsyncAdHocClient:
         import asyncio
 
         from vellum import (
-            AdHocExpandMetaRequest,
+            AdHocExpandMeta,
             AsyncVellum,
-            EphemeralPromptCacheConfigRequest,
-            JinjaPromptBlockPropertiesRequest,
-            JinjaPromptBlockRequest,
-            PromptParametersRequest,
-            PromptRequestStringInputRequest,
-            PromptSettingsRequest,
-            StringVellumValueRequest,
-            VellumVariableExtensionsRequest,
-            VellumVariableRequest,
+            PromptParameters,
+            PromptRequestStringInput,
+            PromptSettings,
+            StringVellumValue,
+            VellumVariable,
+            VellumVariableExtensions,
         )
 
         client = AsyncVellum(
@@ -295,26 +275,26 @@ class AsyncAdHocClient:
             response = await client.ad_hoc.adhoc_execute_prompt_stream(
                 ml_model="string",
                 input_values=[
-                    PromptRequestStringInputRequest(
+                    PromptRequestStringInput(
                         key="string",
                         value="string",
                     )
                 ],
                 input_variables=[
-                    VellumVariableRequest(
+                    VellumVariable(
                         id="string",
                         key="string",
                         type="STRING",
                         required=True,
-                        default=StringVellumValueRequest(
-                            value="string",
+                        default=StringVellumValue(
+                            value={"key": "value"},
                         ),
-                        extensions=VellumVariableExtensionsRequest(
-                            color="string",
+                        extensions=VellumVariableExtensions(
+                            color={"key": "value"},
                         ),
                     )
                 ],
-                parameters=PromptParametersRequest(
+                parameters=PromptParameters(
                     stop=["string"],
                     temperature=1.1,
                     max_tokens=1,
@@ -325,22 +305,11 @@ class AsyncAdHocClient:
                     logit_bias={"string": {"key": "value"}},
                     custom_parameters={"string": {"key": "value"}},
                 ),
-                settings=PromptSettingsRequest(
+                settings=PromptSettings(
                     timeout=1.1,
                 ),
-                blocks=[
-                    JinjaPromptBlockRequest(
-                        state="ENABLED",
-                        cache_config=EphemeralPromptCacheConfigRequest(
-                            type={"key": "value"},
-                        ),
-                        properties=JinjaPromptBlockPropertiesRequest(
-                            template="string",
-                            template_type="STRING",
-                        ),
-                    )
-                ],
-                expand_meta=AdHocExpandMetaRequest(
+                blocks=[{"key": "value"}],
+                expand_meta=AdHocExpandMeta(
                     cost=True,
                     model_name=True,
                     usage=True,
@@ -360,22 +329,20 @@ class AsyncAdHocClient:
             json={
                 "ml_model": ml_model,
                 "input_values": convert_and_respect_annotation_metadata(
-                    object_=input_values, annotation=typing.Sequence[PromptRequestInputRequest], direction="write"
+                    object_=input_values, annotation=typing.Sequence[PromptRequestInput], direction="write"
                 ),
                 "input_variables": convert_and_respect_annotation_metadata(
-                    object_=input_variables, annotation=typing.Sequence[VellumVariableRequest], direction="write"
+                    object_=input_variables, annotation=typing.Sequence[VellumVariable], direction="write"
                 ),
                 "parameters": convert_and_respect_annotation_metadata(
-                    object_=parameters, annotation=PromptParametersRequest, direction="write"
+                    object_=parameters, annotation=PromptParameters, direction="write"
                 ),
                 "settings": convert_and_respect_annotation_metadata(
-                    object_=settings, annotation=PromptSettingsRequest, direction="write"
+                    object_=settings, annotation=PromptSettings, direction="write"
                 ),
-                "blocks": convert_and_respect_annotation_metadata(
-                    object_=blocks, annotation=typing.Sequence[PromptBlockRequest], direction="write"
-                ),
+                "blocks": blocks,
                 "expand_meta": convert_and_respect_annotation_metadata(
-                    object_=expand_meta, annotation=AdHocExpandMetaRequest, direction="write"
+                    object_=expand_meta, annotation=AdHocExpandMeta, direction="write"
                 ),
             },
             request_options=request_options,

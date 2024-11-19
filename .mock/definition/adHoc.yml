@@ -12,19 +12,19 @@ service:
         An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
       request:
-        name: AdHocExecutePromptStreamRequest
+        name: AdHocExecutePromptStream
         body:
           properties:
             ml_model:
               type: string
               validation:
                 minLength: 1
-            input_values: list<root.PromptRequestInputRequest>
-            input_variables: list<root.VellumVariableRequest>
-            parameters: root.PromptParametersRequest
-            settings: optional<root.PromptSettingsRequest>
-            blocks: list<root.PromptBlockRequest>
-            expand_meta: optional<root.AdHocExpandMetaRequest>
+            input_values: list<root.PromptRequestInput>
+            input_variables: list<root.VellumVariable>
+            parameters: root.PromptParameters
+            settings: optional<root.PromptSettings>
+            blocks: list<unknown>
+            expand_meta: optional<root.AdHocExpandMeta>
       response-stream:
         docs: ''
         type: root.AdHocExecutePromptEvent

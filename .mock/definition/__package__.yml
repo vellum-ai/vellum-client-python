@@ -682,7 +682,7 @@ types:
       - RejectedAdHocExecutePromptEvent
     source:
       openapi: openapi/openapi.yml
-  AdHocExpandMetaRequest:
+  AdHocExpandMeta:
     properties:
       cost:
         type: optional<boolean>
@@ -986,10 +986,19 @@ types:
     source:
       openapi: openapi/openapi.yml
   ChatMessageEnum: literal<"CHAT_MESSAGE">
-  ChatMessagePromptBlockPropertiesRequest:
+  ChatMessagePromptBlock:
+    docs: A block that represents a chat message in a prompt template.
+    properties:
+      state: optional<PromptBlockState>
+      cache_config: optional<EphemeralPromptCacheConfig>
+      block_type: literal<"CHAT_MESSAGE">
+      properties: ChatMessagePromptBlockProperties
+    source:
+      openapi: openapi/openapi.yml
+  ChatMessagePromptBlockProperties:
     docs: The properties of a ChatMessagePromptTemplateBlock
     properties:
-      blocks: list<PromptBlockRequest>
+      blocks: list<unknown>
       chat_role: optional<ChatMessageRole>
       chat_source:
         type: optional<string>
@@ -998,15 +1007,6 @@ types:
       chat_message_unterminated:
         type: optional<boolean>
         default: false
-    source:
-      openapi: openapi/openapi.yml
-  ChatMessagePromptBlockRequest:
-    docs: A block that represents a chat message in a prompt template.
-    properties:
-      state: optional<PromptBlockState>
-      cache_config: optional<EphemeralPromptCacheConfigRequest>
-      block_type: literal<"CHAT_MESSAGE">
-      properties: ChatMessagePromptBlockPropertiesRequest
     source:
       openapi: openapi/openapi.yml
   ChatMessageRequest:
@@ -1589,7 +1589,7 @@ types:
       * `PRODUCTION` - Production
     source:
       openapi: openapi/openapi.yml
-  EphemeralPromptCacheConfigRequest:
+  EphemeralPromptCacheConfig:
     properties:
       type: optional<EphemeralPromptCacheConfigTypeEnum>
     source:
@@ -2026,8 +2026,14 @@ types:
     docs: The final resolved function call value.
     properties:
       arguments: map<string, unknown>
-      id: optional<string>
-      name: string
+      id:
+        type: optional<string>
+        validation:
+          minLength: 1
+      name:
+        type: string
+        validation:
+          minLength: 1
       state: optional<FulfilledEnum>
     source:
       openapi: openapi/openapi.yml
@@ -2048,9 +2054,15 @@ types:
   FunctionCallChatMessageContentValue:
     docs: The final resolved function call value.
     properties:
-      name: string
+      name:
+        type: string
+        validation:
+          minLength: 1
       arguments: map<string, unknown>
-      id: optional<string>
+      id:
+        type: optional<string>
+        validation:
+          minLength: 1
     source:
       openapi: openapi/openapi.yml
   FunctionCallChatMessageContentValueRequest:
@@ -2116,7 +2128,16 @@ types:
     source:
       openapi: openapi/openapi.yml
   FunctionDefinitionEnum: literal<"FUNCTION_DEFINITION">
-  FunctionDefinitionPromptBlockPropertiesRequest:
+  FunctionDefinitionPromptBlock:
+    docs: A block that represents a function definition in a prompt template.
+    properties:
+      state: optional<PromptBlockState>
+      cache_config: optional<EphemeralPromptCacheConfig>
+      block_type: literal<"FUNCTION_DEFINITION">
+      properties: FunctionDefinitionPromptBlockProperties
+    source:
+      openapi: openapi/openapi.yml
+  FunctionDefinitionPromptBlockProperties:
     properties:
       function_name:
         type: optional<string>
@@ -2139,15 +2160,6 @@ types:
       function_strict:
         type: optional<boolean>
         docs: Set this option to use strict schema decoding when available.
-    source:
-      openapi: openapi/openapi.yml
-  FunctionDefinitionPromptBlockRequest:
-    docs: A block that represents a function definition in a prompt template.
-    properties:
-      state: optional<PromptBlockState>
-      cache_config: optional<EphemeralPromptCacheConfigRequest>
-      block_type: literal<"FUNCTION_DEFINITION">
-      properties: FunctionDefinitionPromptBlockPropertiesRequest
     source:
       openapi: openapi/openapi.yml
   GenerateErrorResponse:
@@ -2469,19 +2481,19 @@ types:
     source:
       openapi: openapi/openapi.yml
   JinjaEnum: literal<"JINJA">
-  JinjaPromptBlockPropertiesRequest:
-    properties:
-      template: optional<string>
-      template_type: optional<VellumVariableType>
-    source:
-      openapi: openapi/openapi.yml
-  JinjaPromptBlockRequest:
+  JinjaPromptBlock:
     docs: A block of Jinja template code that is used to generate a prompt
     properties:
       state: optional<PromptBlockState>
-      cache_config: optional<EphemeralPromptCacheConfigRequest>
+      cache_config: optional<EphemeralPromptCacheConfig>
       block_type: literal<"JINJA">
-      properties: JinjaPromptBlockPropertiesRequest
+      properties: JinjaPromptBlockProperties
+    source:
+      openapi: openapi/openapi.yml
+  JinjaPromptBlockProperties:
+    properties:
+      template: optional<string>
+      template_type: optional<VellumVariableType>
     source:
       openapi: openapi/openapi.yml
   JsonEnum: literal<"JSON">
@@ -3363,11 +3375,11 @@ types:
     source:
       openapi: openapi/openapi.yml
   PlainTextEnum: literal<"PLAIN_TEXT">
-  PlainTextPromptBlockRequest:
+  PlainTextPromptBlock:
     docs: A block that holds a plain text string value.
     properties:
       state: optional<PromptBlockState>
-      cache_config: optional<EphemeralPromptCacheConfigRequest>
+      cache_config: optional<EphemeralPromptCacheConfig>
       block_type: literal<"PLAIN_TEXT">
       text: string
     source:
@@ -3403,11 +3415,11 @@ types:
   PromptBlockRequest:
     discriminated: false
     union:
-      - JinjaPromptBlockRequest
-      - ChatMessagePromptBlockRequest
-      - FunctionDefinitionPromptBlockRequest
-      - VariablePromptBlockRequest
-      - RichTextPromptBlockRequest
+      - JinjaPromptBlock
+      - ChatMessagePromptBlock
+      - FunctionDefinitionPromptBlock
+      - VariablePromptBlock
+      - RichTextPromptBlock
     source:
       openapi: openapi/openapi.yml
   PromptBlockState:
@@ -3514,7 +3526,7 @@ types:
       - FunctionCallVellumValue
     source:
       openapi: openapi/openapi.yml
-  PromptParametersRequest:
+  PromptParameters:
     properties:
       stop: optional<list<string>>
       temperature: optional<double>
@@ -3527,7 +3539,7 @@ types:
       custom_parameters: optional<map<string, unknown>>
     source:
       openapi: openapi/openapi.yml
-  PromptRequestChatHistoryInputRequest:
+  PromptRequestChatHistoryInput:
     properties:
       key:
         type: string
@@ -3535,18 +3547,18 @@ types:
         validation:
           minLength: 1
       type: literal<"CHAT_HISTORY">
-      value: list<ChatMessageRequest>
+      value: list<ChatMessage>
     source:
       openapi: openapi/openapi.yml
-  PromptRequestInputRequest:
+  PromptRequestInput:
     discriminated: false
     union:
-      - PromptRequestStringInputRequest
-      - PromptRequestJsonInputRequest
-      - PromptRequestChatHistoryInputRequest
+      - PromptRequestStringInput
+      - PromptRequestJsonInput
+      - PromptRequestChatHistoryInput
     source:
       openapi: openapi/openapi.yml
-  PromptRequestJsonInputRequest:
+  PromptRequestJsonInput:
     properties:
       key:
         type: string
@@ -3557,7 +3569,7 @@ types:
       value: map<string, unknown>
     source:
       openapi: openapi/openapi.yml
-  PromptRequestStringInputRequest:
+  PromptRequestStringInput:
     properties:
       key:
         type: string
@@ -3568,7 +3580,7 @@ types:
       value: string
     source:
       openapi: openapi/openapi.yml
-  PromptSettingsRequest:
+  PromptSettings:
     properties:
       timeout: optional<double>
     source:
@@ -3730,25 +3742,21 @@ types:
     source:
       openapi: openapi/openapi.yml
   ReplacedEnum: literal<"REPLACED">
-  RichTextChildBlockRequest:
+  RichTextChildBlock:
     discriminated: false
     union:
-      - VariablePromptBlockRequest
-      - PlainTextPromptBlockRequest
+      - VariablePromptBlock
+      - PlainTextPromptBlock
     source:
       openapi: openapi/openapi.yml
   RichTextEnum: literal<"RICH_TEXT">
-  RichTextPromptBlockRequest:
+  RichTextPromptBlock:
     docs: A block that includes a combination of plain text and variable blocks.
     properties:
-      block_type: literal<"RICH_TEXT">
-      blocks: list<RichTextChildBlockRequest>
-      id:
-        type: string
-        validation:
-          minLength: 1
       state: optional<PromptBlockState>
-      cache_config: optional<EphemeralPromptCacheConfigRequest>
+      cache_config: optional<EphemeralPromptCacheConfig>
+      block_type: literal<"RICH_TEXT">
+      blocks: list<RichTextChildBlock>
     source:
       openapi: openapi/openapi.yml
   SandboxScenario:
@@ -3890,6 +3898,7 @@ types:
         type: string
         docs: The human-readable name for the document.
         validation:
+          minLength: 1
           maxLength: 1000
       external_id:
         type: optional<string>
@@ -3897,6 +3906,7 @@ types:
           The unique ID of the document as represented in an external system and
           specified when it was originally uploaded.
         validation:
+          minLength: 1
           maxLength: 1000
       metadata:
         type: optional<map<string, unknown>>
@@ -5413,11 +5423,11 @@ types:
     source:
       openapi: openapi/openapi.yml
   VariableEnum: literal<"VARIABLE">
-  VariablePromptBlockRequest:
+  VariablePromptBlock:
     docs: A block that represents a variable in a prompt template.
     properties:
       state: optional<PromptBlockState>
-      cache_config: optional<EphemeralPromptCacheConfigRequest>
+      cache_config: optional<EphemeralPromptCacheConfig>
       block_type: literal<"VARIABLE">
       input_variable_id:
         type: string
@@ -5430,6 +5440,8 @@ types:
       src:
         type: string
         docs: A valid data URL containing the audio data.
+        validation:
+          minLength: 1
       metadata: optional<map<string, unknown>>
     source:
       openapi: openapi/openapi.yml
@@ -5445,7 +5457,10 @@ types:
       openapi: openapi/openapi.yml
   VellumError:
     properties:
-      message: string
+      message:
+        type: string
+        validation:
+          minLength: 1
       code: VellumErrorCodeEnum
     source:
       openapi: openapi/openapi.yml
@@ -5475,7 +5490,10 @@ types:
       openapi: openapi/openapi.yml
   VellumImage:
     properties:
-      src: string
+      src:
+        type: string
+        validation:
+          minLength: 1
       metadata: optional<map<string, unknown>>
     source:
       openapi: openapi/openapi.yml
@@ -5547,7 +5565,10 @@ types:
       openapi: openapi/openapi.yml
   VellumVariable:
     properties:
-      id: string
+      id:
+        type: string
+        validation:
+          minLength: 1
       key: string
       type: VellumVariableType
       required: optional<boolean>
@@ -5558,29 +5579,10 @@ types:
   VellumVariableExtensions:
     docs: A set of fields with additional properties for use in Vellum Variables.
     properties:
-      color: optional<string>
-    source:
-      openapi: openapi/openapi.yml
-  VellumVariableExtensionsRequest:
-    docs: A set of fields with additional properties for use in Vellum Variables.
-    properties:
       color:
         type: optional<string>
         validation:
           minLength: 1
-    source:
-      openapi: openapi/openapi.yml
-  VellumVariableRequest:
-    properties:
-      id:
-        type: string
-        validation:
-          minLength: 1
-      key: string
-      type: VellumVariableType
-      required: optional<boolean>
-      default: optional<VellumValueRequest>
-      extensions: optional<VellumVariableExtensionsRequest>
     source:
       openapi: openapi/openapi.yml
   VellumVariableType:

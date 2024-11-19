@@ -13,11 +13,10 @@ class PlainTextPromptBlockRequest(UniversalBaseModel):
     A block that holds a plain text string value.
     """
 
-    block_type: typing.Literal["PLAIN_TEXT"] = "PLAIN_TEXT"
-    text: str
-    id: str
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfigRequest] = None
+    block_type: typing.Literal["PLAIN_TEXT"] = "PLAIN_TEXT"
+    text: str
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

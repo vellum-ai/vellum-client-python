@@ -1003,14 +1003,10 @@ types:
   ChatMessagePromptBlockRequest:
     docs: A block that represents a chat message in a prompt template.
     properties:
-      block_type: literal<"CHAT_MESSAGE">
-      properties: ChatMessagePromptBlockPropertiesRequest
-      id:
-        type: string
-        validation:
-          minLength: 1
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfigRequest>
+      block_type: literal<"CHAT_MESSAGE">
+      properties: ChatMessagePromptBlockPropertiesRequest
     source:
       openapi: openapi/openapi.yml
   ChatMessageRequest:
@@ -2148,14 +2144,10 @@ types:
   FunctionDefinitionPromptBlockRequest:
     docs: A block that represents a function definition in a prompt template.
     properties:
-      block_type: literal<"FUNCTION_DEFINITION">
-      properties: FunctionDefinitionPromptBlockPropertiesRequest
-      id:
-        type: string
-        validation:
-          minLength: 1
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfigRequest>
+      block_type: literal<"FUNCTION_DEFINITION">
+      properties: FunctionDefinitionPromptBlockPropertiesRequest
     source:
       openapi: openapi/openapi.yml
   GenerateErrorResponse:
@@ -2486,14 +2478,10 @@ types:
   JinjaPromptBlockRequest:
     docs: A block of Jinja template code that is used to generate a prompt
     properties:
-      block_type: literal<"JINJA">
-      properties: JinjaPromptBlockPropertiesRequest
-      id:
-        type: string
-        validation:
-          minLength: 1
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfigRequest>
+      block_type: literal<"JINJA">
+      properties: JinjaPromptBlockPropertiesRequest
     source:
       openapi: openapi/openapi.yml
   JsonEnum: literal<"JSON">
@@ -3378,14 +3366,10 @@ types:
   PlainTextPromptBlockRequest:
     docs: A block that holds a plain text string value.
     properties:
-      block_type: literal<"PLAIN_TEXT">
-      text: string
-      id:
-        type: string
-        validation:
-          minLength: 1
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfigRequest>
+      block_type: literal<"PLAIN_TEXT">
+      text: string
     source:
       openapi: openapi/openapi.yml
   Price:
@@ -5432,13 +5416,9 @@ types:
   VariablePromptBlockRequest:
     docs: A block that represents a variable in a prompt template.
     properties:
-      block_type: literal<"VARIABLE">
-      id:
-        type: string
-        validation:
-          minLength: 1
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfigRequest>
+      block_type: literal<"VARIABLE">
       input_variable_id:
         type: string
         validation:

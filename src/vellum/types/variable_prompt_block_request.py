@@ -13,10 +13,9 @@ class VariablePromptBlockRequest(UniversalBaseModel):
     A block that represents a variable in a prompt template.
     """
 
-    block_type: typing.Literal["VARIABLE"] = "VARIABLE"
-    id: str
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfigRequest] = None
+    block_type: typing.Literal["VARIABLE"] = "VARIABLE"
     input_variable_id: str
 
     if IS_PYDANTIC_V2:

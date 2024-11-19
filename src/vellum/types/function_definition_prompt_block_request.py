@@ -2,9 +2,9 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-from .function_definition_prompt_block_properties_request import FunctionDefinitionPromptBlockPropertiesRequest
 from .prompt_block_state import PromptBlockState
 from .ephemeral_prompt_cache_config_request import EphemeralPromptCacheConfigRequest
+from .function_definition_prompt_block_properties_request import FunctionDefinitionPromptBlockPropertiesRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
@@ -14,11 +14,10 @@ class FunctionDefinitionPromptBlockRequest(UniversalBaseModel):
     A block that represents a function definition in a prompt template.
     """
 
-    block_type: typing.Literal["FUNCTION_DEFINITION"] = "FUNCTION_DEFINITION"
-    properties: FunctionDefinitionPromptBlockPropertiesRequest
-    id: str
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfigRequest] = None
+    block_type: typing.Literal["FUNCTION_DEFINITION"] = "FUNCTION_DEFINITION"
+    properties: FunctionDefinitionPromptBlockPropertiesRequest
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

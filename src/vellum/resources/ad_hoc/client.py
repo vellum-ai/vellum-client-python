@@ -124,14 +124,13 @@ class AdHocClient:
             ),
             blocks=[
                 JinjaPromptBlockRequest(
-                    properties=JinjaPromptBlockPropertiesRequest(
-                        template="string",
-                        template_type="STRING",
-                    ),
-                    id="string",
                     state="ENABLED",
                     cache_config=EphemeralPromptCacheConfigRequest(
                         type={"key": "value"},
+                    ),
+                    properties=JinjaPromptBlockPropertiesRequest(
+                        template="string",
+                        template_type="STRING",
                     ),
                 )
             ],
@@ -331,14 +330,13 @@ class AsyncAdHocClient:
                 ),
                 blocks=[
                     JinjaPromptBlockRequest(
-                        properties=JinjaPromptBlockPropertiesRequest(
-                            template="string",
-                            template_type="STRING",
-                        ),
-                        id="string",
                         state="ENABLED",
                         cache_config=EphemeralPromptCacheConfigRequest(
                             type={"key": "value"},
+                        ),
+                        properties=JinjaPromptBlockPropertiesRequest(
+                            template="string",
+                            template_type="STRING",
                         ),
                     )
                 ],

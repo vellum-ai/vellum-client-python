@@ -15,11 +15,10 @@ class ChatMessagePromptBlockRequest(UniversalBaseModel):
     A block that represents a chat message in a prompt template.
     """
 
-    block_type: typing.Literal["CHAT_MESSAGE"] = "CHAT_MESSAGE"
-    properties: "ChatMessagePromptBlockPropertiesRequest"
-    id: str
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfigRequest] = None
+    block_type: typing.Literal["CHAT_MESSAGE"] = "CHAT_MESSAGE"
+    properties: "ChatMessagePromptBlockPropertiesRequest"
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -2,9 +2,9 @@
 
 from ..core.pydantic_utilities import UniversalBaseModel
 import typing
-from .jinja_prompt_block_properties_request import JinjaPromptBlockPropertiesRequest
 from .prompt_block_state import PromptBlockState
 from .ephemeral_prompt_cache_config_request import EphemeralPromptCacheConfigRequest
+from .jinja_prompt_block_properties_request import JinjaPromptBlockPropertiesRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
@@ -14,11 +14,10 @@ class JinjaPromptBlockRequest(UniversalBaseModel):
     A block of Jinja template code that is used to generate a prompt
     """
 
-    block_type: typing.Literal["JINJA"] = "JINJA"
-    properties: JinjaPromptBlockPropertiesRequest
-    id: str
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfigRequest] = None
+    block_type: typing.Literal["JINJA"] = "JINJA"
+    properties: JinjaPromptBlockPropertiesRequest
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

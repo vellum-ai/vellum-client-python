@@ -2840,22 +2840,18 @@ components:
       type: object
       description: A block that represents a chat message in a prompt template.
       properties:
-        block_type:
-          $ref: '#/components/schemas/ChatMessageEnum'
-        properties:
-          $ref: '#/components/schemas/ChatMessagePromptBlockPropertiesRequest'
-        id:
-          type: string
-          minLength: 1
         state:
           $ref: '#/components/schemas/PromptBlockState'
         cache_config:
           allOf:
           - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
           nullable: true
+        block_type:
+          $ref: '#/components/schemas/ChatMessageEnum'
+        properties:
+          $ref: '#/components/schemas/ChatMessagePromptBlockPropertiesRequest'
       required:
       - block_type
-      - id
       - properties
     ChatMessageRequest:
       type: object
@@ -5012,22 +5008,18 @@ components:
       type: object
       description: A block that represents a function definition in a prompt template.
       properties:
-        block_type:
-          $ref: '#/components/schemas/FunctionDefinitionEnum'
-        properties:
-          $ref: '#/components/schemas/FunctionDefinitionPromptBlockPropertiesRequest'
-        id:
-          type: string
-          minLength: 1
         state:
           $ref: '#/components/schemas/PromptBlockState'
         cache_config:
           allOf:
           - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
           nullable: true
+        block_type:
+          $ref: '#/components/schemas/FunctionDefinitionEnum'
+        properties:
+          $ref: '#/components/schemas/FunctionDefinitionPromptBlockPropertiesRequest'
       required:
       - block_type
-      - id
       - properties
     GenerateBodyRequest:
       type: object
@@ -5562,22 +5554,18 @@ components:
       type: object
       description: A block of Jinja template code that is used to generate a prompt
       properties:
-        block_type:
-          $ref: '#/components/schemas/JinjaEnum'
-        properties:
-          $ref: '#/components/schemas/JinjaPromptBlockPropertiesRequest'
-        id:
-          type: string
-          minLength: 1
         state:
           $ref: '#/components/schemas/PromptBlockState'
         cache_config:
           allOf:
           - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
           nullable: true
+        block_type:
+          $ref: '#/components/schemas/JinjaEnum'
+        properties:
+          $ref: '#/components/schemas/JinjaPromptBlockPropertiesRequest'
       required:
       - block_type
-      - id
       - properties
     JsonEnum:
       type: string
@@ -7112,22 +7100,18 @@ components:
       type: object
       description: A block that holds a plain text string value.
       properties:
-        block_type:
-          $ref: '#/components/schemas/PlainTextEnum'
-        text:
-          type: string
-        id:
-          type: string
-          minLength: 1
         state:
           $ref: '#/components/schemas/PromptBlockState'
         cache_config:
           allOf:
           - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
           nullable: true
+        block_type:
+          $ref: '#/components/schemas/PlainTextEnum'
+        text:
+          type: string
       required:
       - block_type
-      - id
       - text
     Price:
       type: object
@@ -10280,23 +10264,19 @@ components:
       type: object
       description: A block that represents a variable in a prompt template.
       properties:
-        block_type:
-          $ref: '#/components/schemas/VariableEnum'
-        id:
-          type: string
-          minLength: 1
         state:
           $ref: '#/components/schemas/PromptBlockState'
         cache_config:
           allOf:
           - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
           nullable: true
+        block_type:
+          $ref: '#/components/schemas/VariableEnum'
         input_variable_id:
           type: string
           format: uuid
       required:
       - block_type
-      - id
       - input_variable_id
     VellumAudio:
       type: object

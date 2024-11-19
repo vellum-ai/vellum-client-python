@@ -5,6 +5,7 @@ from ...core.client_wrapper import SyncClientWrapper
 from ...types.prompt_request_input import PromptRequestInput
 from ...types.vellum_variable import VellumVariable
 from ...types.prompt_parameters import PromptParameters
+from ...types.prompt_block import PromptBlock
 from ...types.prompt_settings import PromptSettings
 from ...types.ad_hoc_expand_meta import AdHocExpandMeta
 from ...core.request_options import RequestOptions
@@ -34,7 +35,7 @@ class AdHocClient:
         input_values: typing.Sequence[PromptRequestInput],
         input_variables: typing.Sequence[VellumVariable],
         parameters: PromptParameters,
-        blocks: typing.Sequence[typing.Optional[typing.Any]],
+        blocks: typing.Sequence[PromptBlock],
         settings: typing.Optional[PromptSettings] = OMIT,
         expand_meta: typing.Optional[AdHocExpandMeta] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -52,7 +53,7 @@ class AdHocClient:
 
         parameters : PromptParameters
 
-        blocks : typing.Sequence[typing.Optional[typing.Any]]
+        blocks : typing.Sequence[PromptBlock]
 
         settings : typing.Optional[PromptSettings]
 
@@ -70,6 +71,9 @@ class AdHocClient:
         --------
         from vellum import (
             AdHocExpandMeta,
+            EphemeralPromptCacheConfig,
+            JinjaPromptBlock,
+            JinjaPromptBlockProperties,
             PromptParameters,
             PromptRequestStringInput,
             PromptSettings,
@@ -118,7 +122,16 @@ class AdHocClient:
             settings=PromptSettings(
                 timeout=1.1,
             ),
-            blocks=[{"key": "value"}],
+            blocks=[
+                JinjaPromptBlock(
+                    state="ENABLED",
+                    cache_config=EphemeralPromptCacheConfig(),
+                    properties=JinjaPromptBlockProperties(
+                        template="string",
+                        template_type="STRING",
+                    ),
+                )
+            ],
             expand_meta=AdHocExpandMeta(
                 cost=True,
                 model_name=True,
@@ -147,7 +160,9 @@ class AdHocClient:
                 "settings": convert_and_respect_annotation_metadata(
                     object_=settings, annotation=PromptSettings, direction="write"
                 ),
-                "blocks": blocks,
+                "blocks": convert_and_respect_annotation_metadata(
+                    object_=blocks, annotation=typing.Sequence[PromptBlock], direction="write"
+                ),
                 "expand_meta": convert_and_respect_annotation_metadata(
                     object_=expand_meta, annotation=AdHocExpandMeta, direction="write"
                 ),
@@ -219,7 +234,7 @@ class AsyncAdHocClient:
         input_values: typing.Sequence[PromptRequestInput],
         input_variables: typing.Sequence[VellumVariable],
         parameters: PromptParameters,
-        blocks: typing.Sequence[typing.Optional[typing.Any]],
+        blocks: typing.Sequence[PromptBlock],
         settings: typing.Optional[PromptSettings] = OMIT,
         expand_meta: typing.Optional[AdHocExpandMeta] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -237,7 +252,7 @@ class AsyncAdHocClient:
 
         parameters : PromptParameters
 
-        blocks : typing.Sequence[typing.Optional[typing.Any]]
+        blocks : typing.Sequence[PromptBlock]
 
         settings : typing.Optional[PromptSettings]
 
@@ -258,6 +273,9 @@ class AsyncAdHocClient:
         from vellum import (
             AdHocExpandMeta,
             AsyncVellum,
+            EphemeralPromptCacheConfig,
+            JinjaPromptBlock,
+            JinjaPromptBlockProperties,
             PromptParameters,
             PromptRequestStringInput,
             PromptSettings,
@@ -308,7 +326,16 @@ class AsyncAdHocClient:
                 settings=PromptSettings(
                     timeout=1.1,
                 ),
-                blocks=[{"key": "value"}],
+                blocks=[
+                    JinjaPromptBlock(
+                        state="ENABLED",
+                        cache_config=EphemeralPromptCacheConfig(),
+                        properties=JinjaPromptBlockProperties(
+                            template="string",
+                            template_type="STRING",
+                        ),
+                    )
+                ],
                 expand_meta=AdHocExpandMeta(
                     cost=True,
                     model_name=True,
@@ -340,7 +367,9 @@ class AsyncAdHocClient:
                 "settings": convert_and_respect_annotation_metadata(
                     object_=settings, annotation=PromptSettings, direction="write"
                 ),
-                "blocks": blocks,
+                "blocks": convert_and_respect_annotation_metadata(
+                    object_=blocks, annotation=typing.Sequence[PromptBlock], direction="write"
+                ),
                 "expand_meta": convert_and_respect_annotation_metadata(
                     object_=expand_meta, annotation=AdHocExpandMeta, direction="write"
                 ),

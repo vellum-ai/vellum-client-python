@@ -1213,6 +1213,9 @@ An internal-only endpoint that's subject to breaking changes without notice. Not
 ```python
 from vellum import (
     AdHocExpandMeta,
+    EphemeralPromptCacheConfig,
+    JinjaPromptBlock,
+    JinjaPromptBlockProperties,
     PromptParameters,
     PromptRequestStringInput,
     PromptSettings,
@@ -1261,7 +1264,16 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
     settings=PromptSettings(
         timeout=1.1,
     ),
-    blocks=[{"key": "value"}],
+    blocks=[
+        JinjaPromptBlock(
+            state="ENABLED",
+            cache_config=EphemeralPromptCacheConfig(),
+            properties=JinjaPromptBlockProperties(
+                template="string",
+                template_type="STRING",
+            ),
+        )
+    ],
     expand_meta=AdHocExpandMeta(
         cost=True,
         model_name=True,
@@ -1318,7 +1330,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**blocks:** `typing.Sequence[typing.Optional[typing.Any]]` 
+**blocks:** `typing.Sequence[PromptBlock]` 
     
 </dd>
 </dl>

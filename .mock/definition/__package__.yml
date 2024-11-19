@@ -998,7 +998,7 @@ types:
   ChatMessagePromptBlockProperties:
     docs: The properties of a ChatMessagePromptTemplateBlock
     properties:
-      blocks: list<unknown>
+      blocks: list<PromptBlock>
       chat_role: optional<ChatMessageRole>
       chat_source:
         type: optional<string>
@@ -3412,7 +3412,7 @@ types:
       * `FAILED` - Failed
     source:
       openapi: openapi/openapi.yml
-  PromptBlockRequest:
+  PromptBlock:
     discriminated: false
     union:
       - JinjaPromptBlock

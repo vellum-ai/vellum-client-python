@@ -7148,7 +7148,7 @@ components:
         * `PROCESSING` - Processing
         * `PROCESSED` - Processed
         * `FAILED` - Failed
-    PromptBlockRequest:
+    PromptBlock:
       oneOf:
       - $ref: '#/components/schemas/JinjaPromptBlock'
       - $ref: '#/components/schemas/ChatMessagePromptBlock'

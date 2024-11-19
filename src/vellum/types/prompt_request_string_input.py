@@ -3,18 +3,17 @@
 from ..core.pydantic_utilities import UniversalBaseModel
 import pydantic
 import typing
-from .chat_message_request import ChatMessageRequest
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
-class PromptRequestChatHistoryInputRequest(UniversalBaseModel):
+class PromptRequestStringInput(UniversalBaseModel):
     key: str = pydantic.Field()
     """
     The variable's name, as defined in the Prompt.
     """
 
-    type: typing.Literal["CHAT_HISTORY"] = "CHAT_HISTORY"
-    value: typing.List[ChatMessageRequest]
+    type: typing.Literal["STRING"] = "STRING"
+    value: str
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

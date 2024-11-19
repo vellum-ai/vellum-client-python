@@ -48,7 +48,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AdHocExecutePromptStreamRequest'
+              $ref: '#/components/schemas/AdHocExecutePromptStream'
         required: true
       security:
       - apiKeyAuth: []
@@ -2271,7 +2271,7 @@ components:
           STREAMING: '#/components/schemas/StreamingAdHocExecutePromptEvent'
           FULFILLED: '#/components/schemas/FulfilledAdHocExecutePromptEvent'
           REJECTED: '#/components/schemas/RejectedAdHocExecutePromptEvent'
-    AdHocExecutePromptStreamRequest:
+    AdHocExecutePromptStream:
       type: object
       properties:
         ml_model:
@@ -2280,24 +2280,24 @@ components:
         input_values:
           type: array
           items:
-            $ref: '#/components/schemas/PromptRequestInputRequest'
+            $ref: '#/components/schemas/PromptRequestInput'
         input_variables:
           type: array
           items:
-            $ref: '#/components/schemas/VellumVariableRequest'
+            $ref: '#/components/schemas/VellumVariable'
         parameters:
-          $ref: '#/components/schemas/PromptParametersRequest'
+          $ref: '#/components/schemas/PromptParameters'
         settings:
           allOf:
-          - $ref: '#/components/schemas/PromptSettingsRequest'
+          - $ref: '#/components/schemas/PromptSettings'
           nullable: true
         blocks:
           type: array
           items:
-            $ref: '#/components/schemas/PromptBlockRequest'
+            $ref: '#/components/schemas/PromptBlock'
         expand_meta:
           allOf:
-          - $ref: '#/components/schemas/AdHocExpandMetaRequest'
+          - $ref: '#/components/schemas/AdHocExpandMeta'
           nullable: true
       required:
       - blocks
@@ -2305,7 +2305,7 @@ components:
       - input_variables
       - ml_model
       - parameters
-    AdHocExpandMetaRequest:
+    AdHocExpandMeta:
       type: object
       properties:
         cost:
@@ -2815,14 +2815,31 @@ components:
       type: string
       enum:
       - CHAT_MESSAGE
-    ChatMessagePromptBlockPropertiesRequest:
+    ChatMessagePromptBlock:
+      type: object
+      description: A block that represents a chat message in a prompt template.
+      properties:
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfig'
+          nullable: true
+        block_type:
+          $ref: '#/components/schemas/ChatMessageEnum'
+        properties:
+          $ref: '#/components/schemas/ChatMessagePromptBlockProperties'
+      required:
+      - block_type
+      - properties
+    ChatMessagePromptBlockProperties:
       type: object
       description: The properties of a ChatMessagePromptTemplateBlock
       properties:
         blocks:
           type: array
           items:
-            $ref: '#/components/schemas/PromptBlockRequest'
+            $ref: '#/components/schemas/PromptBlock'
         chat_role:
           allOf:
           - $ref: '#/components/schemas/ChatMessageRole'
@@ -2836,23 +2853,6 @@ components:
           default: false
       required:
       - blocks
-    ChatMessagePromptBlockRequest:
-      type: object
-      description: A block that represents a chat message in a prompt template.
-      properties:
-        state:
-          $ref: '#/components/schemas/PromptBlockState'
-        cache_config:
-          allOf:
-          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
-          nullable: true
-        block_type:
-          $ref: '#/components/schemas/ChatMessageEnum'
-        properties:
-          $ref: '#/components/schemas/ChatMessagePromptBlockPropertiesRequest'
-      required:
-      - block_type
-      - properties
     ChatMessageRequest:
       type: object
       properties:
@@ -3864,7 +3864,7 @@ components:
         * `DEVELOPMENT` - Development
         * `STAGING` - Staging
         * `PRODUCTION` - Production
-    EphemeralPromptCacheConfigRequest:
+    EphemeralPromptCacheConfig:
       type: object
       properties:
         type:
@@ -4835,8 +4835,10 @@ components:
         id:
           type: string
           nullable: true
+          minLength: 1
         name:
           type: string
+          minLength: 1
         state:
           $ref: '#/components/schemas/FulfilledEnum'
       required:
@@ -4870,12 +4872,14 @@ components:
       properties:
         name:
           type: string
+          minLength: 1
         arguments:
           type: object
           additionalProperties: {}
         id:
           type: string
           nullable: true
+          minLength: 1
       required:
       - arguments
       - name
@@ -4977,7 +4981,24 @@ components:
       type: string
       enum:
       - FUNCTION_DEFINITION
-    FunctionDefinitionPromptBlockPropertiesRequest:
+    FunctionDefinitionPromptBlock:
+      type: object
+      description: A block that represents a function definition in a prompt template.
+      properties:
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfig'
+          nullable: true
+        block_type:
+          $ref: '#/components/schemas/FunctionDefinitionEnum'
+        properties:
+          $ref: '#/components/schemas/FunctionDefinitionPromptBlockProperties'
+      required:
+      - block_type
+      - properties
+    FunctionDefinitionPromptBlockProperties:
       type: object
       properties:
         function_name:
@@ -5004,23 +5025,6 @@ components:
           type: boolean
           nullable: true
           description: Set this option to use strict schema decoding when available.
-    FunctionDefinitionPromptBlockRequest:
-      type: object
-      description: A block that represents a function definition in a prompt template.
-      properties:
-        state:
-          $ref: '#/components/schemas/PromptBlockState'
-        cache_config:
-          allOf:
-          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
-          nullable: true
-        block_type:
-          $ref: '#/components/schemas/FunctionDefinitionEnum'
-        properties:
-          $ref: '#/components/schemas/FunctionDefinitionPromptBlockPropertiesRequest'
-      required:
-      - block_type
-      - properties
     GenerateBodyRequest:
       type: object
       properties:
@@ -5540,7 +5544,24 @@ components:
       type: string
       enum:
       - JINJA
-    JinjaPromptBlockPropertiesRequest:
+    JinjaPromptBlock:
+      type: object
+      description: A block of Jinja template code that is used to generate a prompt
+      properties:
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfig'
+          nullable: true
+        block_type:
+          $ref: '#/components/schemas/JinjaEnum'
+        properties:
+          $ref: '#/components/schemas/JinjaPromptBlockProperties'
+      required:
+      - block_type
+      - properties
+    JinjaPromptBlockProperties:
       type: object
       properties:
         template:
@@ -5550,23 +5571,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/VellumVariableType'
           nullable: true
-    JinjaPromptBlockRequest:
-      type: object
-      description: A block of Jinja template code that is used to generate a prompt
-      properties:
-        state:
-          $ref: '#/components/schemas/PromptBlockState'
-        cache_config:
-          allOf:
-          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
-          nullable: true
-        block_type:
-          $ref: '#/components/schemas/JinjaEnum'
-        properties:
-          $ref: '#/components/schemas/JinjaPromptBlockPropertiesRequest'
-      required:
-      - block_type
-      - properties
     JsonEnum:
       type: string
       enum:
@@ -7096,7 +7100,7 @@ components:
       type: string
       enum:
       - PLAIN_TEXT
-    PlainTextPromptBlockRequest:
+    PlainTextPromptBlock:
       type: object
       description: A block that holds a plain text string value.
       properties:
@@ -7104,7 +7108,7 @@ components:
           $ref: '#/components/schemas/PromptBlockState'
         cache_config:
           allOf:
-          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfig'
           nullable: true
         block_type:
           $ref: '#/components/schemas/PlainTextEnum'
@@ -7146,19 +7150,19 @@ components:
         * `FAILED` - Failed
     PromptBlockRequest:
       oneOf:
-      - $ref: '#/components/schemas/JinjaPromptBlockRequest'
-      - $ref: '#/components/schemas/ChatMessagePromptBlockRequest'
-      - $ref: '#/components/schemas/FunctionDefinitionPromptBlockRequest'
-      - $ref: '#/components/schemas/VariablePromptBlockRequest'
-      - $ref: '#/components/schemas/RichTextPromptBlockRequest'
+      - $ref: '#/components/schemas/JinjaPromptBlock'
+      - $ref: '#/components/schemas/ChatMessagePromptBlock'
+      - $ref: '#/components/schemas/FunctionDefinitionPromptBlock'
+      - $ref: '#/components/schemas/VariablePromptBlock'
+      - $ref: '#/components/schemas/RichTextPromptBlock'
       discriminator:
         propertyName: block_type
         mapping:
-          JINJA: '#/components/schemas/JinjaPromptBlockRequest'
-          CHAT_MESSAGE: '#/components/schemas/ChatMessagePromptBlockRequest'
-          FUNCTION_DEFINITION: '#/components/schemas/FunctionDefinitionPromptBlockRequest'
-          VARIABLE: '#/components/schemas/VariablePromptBlockRequest'
-          RICH_TEXT: '#/components/schemas/RichTextPromptBlockRequest'
+          JINJA: '#/components/schemas/JinjaPromptBlock'
+          CHAT_MESSAGE: '#/components/schemas/ChatMessagePromptBlock'
+          FUNCTION_DEFINITION: '#/components/schemas/FunctionDefinitionPromptBlock'
+          VARIABLE: '#/components/schemas/VariablePromptBlock'
+          RICH_TEXT: '#/components/schemas/RichTextPromptBlock'
     PromptBlockState:
       enum:
       - ENABLED
@@ -7301,7 +7305,7 @@ components:
           JSON: '#/components/schemas/JsonVellumValue'
           ERROR: '#/components/schemas/ErrorVellumValue'
           FUNCTION_CALL: '#/components/schemas/FunctionCallVellumValue'
-    PromptParametersRequest:
+    PromptParameters:
       type: object
       properties:
         stop:
@@ -7341,7 +7345,7 @@ components:
           type: object
           additionalProperties: {}
           nullable: true
-    PromptRequestChatHistoryInputRequest:
+    PromptRequestChatHistoryInput:
       type: object
       properties:
         key:
@@ -7353,23 +7357,23 @@ components:
         value:
           type: array
           items:
-            $ref: '#/components/schemas/ChatMessageRequest'
+            $ref: '#/components/schemas/ChatMessage'
       required:
       - key
       - type
       - value
-    PromptRequestInputRequest:
+    PromptRequestInput:
       oneOf:
-      - $ref: '#/components/schemas/PromptRequestStringInputRequest'
-      - $ref: '#/components/schemas/PromptRequestJSONInputRequest'
-      - $ref: '#/components/schemas/PromptRequestChatHistoryInputRequest'
+      - $ref: '#/components/schemas/PromptRequestStringInput'
+      - $ref: '#/components/schemas/PromptRequestJSONInput'
+      - $ref: '#/components/schemas/PromptRequestChatHistoryInput'
       discriminator:
         propertyName: type
         mapping:
-          STRING: '#/components/schemas/PromptRequestStringInputRequest'
-          JSON: '#/components/schemas/PromptRequestJSONInputRequest'
-          CHAT_HISTORY: '#/components/schemas/PromptRequestChatHistoryInputRequest'
-    PromptRequestJSONInputRequest:
+          STRING: '#/components/schemas/PromptRequestStringInput'
+          JSON: '#/components/schemas/PromptRequestJSONInput'
+          CHAT_HISTORY: '#/components/schemas/PromptRequestChatHistoryInput'
+    PromptRequestJSONInput:
       type: object
       properties:
         key:
@@ -7385,7 +7389,7 @@ components:
       - key
       - type
       - value
-    PromptRequestStringInputRequest:
+    PromptRequestStringInput:
       type: object
       properties:
         key:
@@ -7400,7 +7404,7 @@ components:
       - key
       - type
       - value
-    PromptSettingsRequest:
+    PromptSettings:
       type: object
       properties:
         timeout:
@@ -7661,43 +7665,39 @@ components:
       type: string
       enum:
       - REPLACED
-    RichTextChildBlockRequest:
+    RichTextChildBlock:
       oneOf:
-      - $ref: '#/components/schemas/VariablePromptBlockRequest'
-      - $ref: '#/components/schemas/PlainTextPromptBlockRequest'
+      - $ref: '#/components/schemas/VariablePromptBlock'
+      - $ref: '#/components/schemas/PlainTextPromptBlock'
       discriminator:
         propertyName: block_type
         mapping:
-          VARIABLE: '#/components/schemas/VariablePromptBlockRequest'
-          PLAIN_TEXT: '#/components/schemas/PlainTextPromptBlockRequest'
+          VARIABLE: '#/components/schemas/VariablePromptBlock'
+          PLAIN_TEXT: '#/components/schemas/PlainTextPromptBlock'
     RichTextEnum:
       type: string
       enum:
       - RICH_TEXT
-    RichTextPromptBlockRequest:
+    RichTextPromptBlock:
       type: object
       description: A block that includes a combination of plain text and variable
         blocks.
       properties:
+        state:
+          $ref: '#/components/schemas/PromptBlockState'
+        cache_config:
+          allOf:
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfig'
+          nullable: true
         block_type:
           $ref: '#/components/schemas/RichTextEnum'
         blocks:
           type: array
           items:
-            $ref: '#/components/schemas/RichTextChildBlockRequest'
-        id:
-          type: string
-          minLength: 1
-        state:
-          $ref: '#/components/schemas/PromptBlockState'
-        cache_config:
-          allOf:
-          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
-          nullable: true
+            $ref: '#/components/schemas/RichTextChildBlock'
       required:
       - block_type
       - blocks
-      - id
     SandboxScenario:
       type: object
       description: Sandbox Scenario
@@ -7904,6 +7904,7 @@ components:
           type: array
           items:
             type: string
+            minLength: 1
         document:
           allOf:
           - $ref: '#/components/schemas/SearchResultDocument'
@@ -7929,11 +7930,13 @@ components:
           description: The ID of the document.
         label:
           type: string
+          minLength: 1
           description: The human-readable name for the document.
           maxLength: 1000
         external_id:
           type: string
           nullable: true
+          minLength: 1
           description: The unique ID of the document as represented in an external
             system and specified when it was originally uploaded.
           maxLength: 1000
@@ -10260,7 +10263,7 @@ components:
       type: string
       enum:
       - VARIABLE
-    VariablePromptBlockRequest:
+    VariablePromptBlock:
       type: object
       description: A block that represents a variable in a prompt template.
       properties:
@@ -10268,7 +10271,7 @@ components:
           $ref: '#/components/schemas/PromptBlockState'
         cache_config:
           allOf:
-          - $ref: '#/components/schemas/EphemeralPromptCacheConfigRequest'
+          - $ref: '#/components/schemas/EphemeralPromptCacheConfig'
           nullable: true
         block_type:
           $ref: '#/components/schemas/VariableEnum'
@@ -10283,6 +10286,7 @@ components:
       properties:
         src:
           type: string
+          minLength: 1
           description: A valid data URL containing the audio data.
         metadata:
           type: object
@@ -10308,6 +10312,7 @@ components:
       properties:
         message:
           type: string
+          minLength: 1
         code:
           $ref: '#/components/schemas/VellumErrorCodeEnum'
       required:
@@ -10343,6 +10348,7 @@ components:
       properties:
         src:
           type: string
+          minLength: 1
         metadata:
           type: object
           additionalProperties: {}
@@ -10462,6 +10468,7 @@ components:
       properties:
         id:
           type: string
+          minLength: 1
         key:
           type: string
         type:
@@ -10488,39 +10495,7 @@ components:
         color:
           type: string
           nullable: true
-    VellumVariableExtensionsRequest:
-      type: object
-      description: A set of fields with additional properties for use in Vellum Variables.
-      properties:
-        color:
-          type: string
-          nullable: true
           minLength: 1
-    VellumVariableRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          minLength: 1
-        key:
-          type: string
-        type:
-          $ref: '#/components/schemas/VellumVariableType'
-        required:
-          type: boolean
-          nullable: true
-        default:
-          allOf:
-          - $ref: '#/components/schemas/VellumValueRequest'
-          nullable: true
-        extensions:
-          allOf:
-          - $ref: '#/components/schemas/VellumVariableExtensionsRequest'
-          nullable: true
-      required:
-      - id
-      - key
-      - type
     VellumVariableType:
       enum:
       - STRING

@@ -1212,17 +1212,14 @@ An internal-only endpoint that's subject to breaking changes without notice. Not
 
 ```python
 from vellum import (
-    AdHocExpandMetaRequest,
-    EphemeralPromptCacheConfigRequest,
-    JinjaPromptBlockPropertiesRequest,
-    JinjaPromptBlockRequest,
-    PromptParametersRequest,
-    PromptRequestStringInputRequest,
-    PromptSettingsRequest,
-    StringVellumValueRequest,
+    AdHocExpandMeta,
+    PromptParameters,
+    PromptRequestStringInput,
+    PromptSettings,
+    StringVellumValue,
     Vellum,
-    VellumVariableExtensionsRequest,
-    VellumVariableRequest,
+    VellumVariable,
+    VellumVariableExtensions,
 )
 
 client = Vellum(
@@ -1231,26 +1228,26 @@ client = Vellum(
 response = client.ad_hoc.adhoc_execute_prompt_stream(
     ml_model="string",
     input_values=[
-        PromptRequestStringInputRequest(
+        PromptRequestStringInput(
             key="string",
             value="string",
         )
     ],
     input_variables=[
-        VellumVariableRequest(
+        VellumVariable(
             id="string",
             key="string",
             type="STRING",
             required=True,
-            default=StringVellumValueRequest(
-                value="string",
+            default=StringVellumValue(
+                value={"key": "value"},
             ),
-            extensions=VellumVariableExtensionsRequest(
-                color="string",
+            extensions=VellumVariableExtensions(
+                color={"key": "value"},
             ),
         )
     ],
-    parameters=PromptParametersRequest(
+    parameters=PromptParameters(
         stop=["string"],
         temperature=1.1,
         max_tokens=1,
@@ -1261,22 +1258,11 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
         logit_bias={"string": {"key": "value"}},
         custom_parameters={"string": {"key": "value"}},
     ),
-    settings=PromptSettingsRequest(
+    settings=PromptSettings(
         timeout=1.1,
     ),
-    blocks=[
-        JinjaPromptBlockRequest(
-            state="ENABLED",
-            cache_config=EphemeralPromptCacheConfigRequest(
-                type={"key": "value"},
-            ),
-            properties=JinjaPromptBlockPropertiesRequest(
-                template="string",
-                template_type="STRING",
-            ),
-        )
-    ],
-    expand_meta=AdHocExpandMetaRequest(
+    blocks=[{"key": "value"}],
+    expand_meta=AdHocExpandMeta(
         cost=True,
         model_name=True,
         usage=True,
@@ -1308,7 +1294,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**input_values:** `typing.Sequence[PromptRequestInputRequest]` 
+**input_values:** `typing.Sequence[PromptRequestInput]` 
     
 </dd>
 </dl>
@@ -1316,7 +1302,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**input_variables:** `typing.Sequence[VellumVariableRequest]` 
+**input_variables:** `typing.Sequence[VellumVariable]` 
     
 </dd>
 </dl>
@@ -1324,7 +1310,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**parameters:** `PromptParametersRequest` 
+**parameters:** `PromptParameters` 
     
 </dd>
 </dl>
@@ -1332,7 +1318,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**blocks:** `typing.Sequence[PromptBlockRequest]` 
+**blocks:** `typing.Sequence[typing.Optional[typing.Any]]` 
     
 </dd>
 </dl>
@@ -1340,7 +1326,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**settings:** `typing.Optional[PromptSettingsRequest]` 
+**settings:** `typing.Optional[PromptSettings]` 
     
 </dd>
 </dl>
@@ -1348,7 +1334,7 @@ for chunk in response:
 <dl>
 <dd>
 
-**expand_meta:** `typing.Optional[AdHocExpandMetaRequest]` 
+**expand_meta:** `typing.Optional[AdHocExpandMeta]` 
     
 </dd>
 </dl>

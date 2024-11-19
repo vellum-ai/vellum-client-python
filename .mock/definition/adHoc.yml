@@ -23,7 +23,7 @@ service:
             input_variables: list<root.VellumVariable>
             parameters: root.PromptParameters
             settings: optional<root.PromptSettings>
-            blocks: list<unknown>
+            blocks: list<root.PromptBlock>
             expand_meta: optional<root.AdHocExpandMeta>
       response-stream:
         docs: ''

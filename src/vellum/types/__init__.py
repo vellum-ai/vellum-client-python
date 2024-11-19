@@ -44,6 +44,8 @@ from .chat_history_vellum_value_request import ChatHistoryVellumValueRequest
 from .chat_message import ChatMessage
 from .chat_message_content import ChatMessageContent
 from .chat_message_content_request import ChatMessageContentRequest
+from .chat_message_prompt_block import ChatMessagePromptBlock
+from .chat_message_prompt_block_properties import ChatMessagePromptBlockProperties
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
 from .code_execution_node_array_result import CodeExecutionNodeArrayResult
@@ -89,6 +91,8 @@ from .enriched_normalized_completion import EnrichedNormalizedCompletion
 from .entity_status import EntityStatus
 from .entity_visibility import EntityVisibility
 from .environment_enum import EnvironmentEnum
+from .ephemeral_prompt_cache_config import EphemeralPromptCacheConfig
+from .ephemeral_prompt_cache_config_type_enum import EphemeralPromptCacheConfigTypeEnum
 from .error_input_request import ErrorInputRequest
 from .error_variable_value import ErrorVariableValue
 from .error_vellum_value import ErrorVellumValue
@@ -137,6 +141,8 @@ from .function_call_request import FunctionCallRequest
 from .function_call_variable_value import FunctionCallVariableValue
 from .function_call_vellum_value import FunctionCallVellumValue
 from .function_call_vellum_value_request import FunctionCallVellumValueRequest
+from .function_definition_prompt_block import FunctionDefinitionPromptBlock
+from .function_definition_prompt_block_properties import FunctionDefinitionPromptBlockProperties
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
 from .generate_response import GenerateResponse
@@ -173,6 +179,8 @@ from .initiated_workflow_node_result_event import InitiatedWorkflowNodeResultEve
 from .instructor_vectorizer_config import InstructorVectorizerConfig
 from .instructor_vectorizer_config_request import InstructorVectorizerConfigRequest
 from .iteration_state_enum import IterationStateEnum
+from .jinja_prompt_block import JinjaPromptBlock
+from .jinja_prompt_block_properties import JinjaPromptBlockProperties
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
 from .json_vellum_value import JsonVellumValue
@@ -257,9 +265,12 @@ from .paginated_test_suite_test_case_list import PaginatedTestSuiteTestCaseList
 from .paginated_workflow_release_tag_read_list import PaginatedWorkflowReleaseTagReadList
 from .pdf_search_result_meta_source import PdfSearchResultMetaSource
 from .pdf_search_result_meta_source_request import PdfSearchResultMetaSourceRequest
+from .plain_text_prompt_block import PlainTextPromptBlock
 from .price import Price
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .processing_state_enum import ProcessingStateEnum
+from .prompt_block import PromptBlock
+from .prompt_block_state import PromptBlockState
 from .prompt_deployment_expand_meta_request import PromptDeploymentExpandMetaRequest
 from .prompt_deployment_input_request import PromptDeploymentInputRequest
 from .prompt_execution_meta import PromptExecutionMeta
@@ -286,6 +297,8 @@ from .rejected_prompt_execution_meta import RejectedPromptExecutionMeta
 from .rejected_workflow_node_result_event import RejectedWorkflowNodeResultEvent
 from .release_tag_source import ReleaseTagSource
 from .replace_test_suite_test_case_request import ReplaceTestSuiteTestCaseRequest
+from .rich_text_child_block import RichTextChildBlock
+from .rich_text_prompt_block import RichTextPromptBlock
 from .sandbox_scenario import SandboxScenario
 from .scenario_input import ScenarioInput
 from .scenario_input_chat_history_variable_value import ScenarioInputChatHistoryVariableValue
@@ -421,6 +434,7 @@ from .token_overlapping_window_chunking_request import TokenOverlappingWindowChu
 from .unit_enum import UnitEnum
 from .upload_document_response import UploadDocumentResponse
 from .upsert_test_suite_test_case_request import UpsertTestSuiteTestCaseRequest
+from .variable_prompt_block import VariablePromptBlock
 from .vellum_audio import VellumAudio
 from .vellum_audio_request import VellumAudioRequest
 from .vellum_error import VellumError
@@ -519,6 +533,8 @@ __all__ = [
     "ChatMessage",
     "ChatMessageContent",
     "ChatMessageContentRequest",
+    "ChatMessagePromptBlock",
+    "ChatMessagePromptBlockProperties",
     "ChatMessageRequest",
     "ChatMessageRole",
     "CodeExecutionNodeArrayResult",
@@ -564,6 +580,8 @@ __all__ = [
     "EntityStatus",
     "EntityVisibility",
     "EnvironmentEnum",
+    "EphemeralPromptCacheConfig",
+    "EphemeralPromptCacheConfigTypeEnum",
     "ErrorInputRequest",
     "ErrorVariableValue",
     "ErrorVellumValue",
@@ -612,6 +630,8 @@ __all__ = [
     "FunctionCallVariableValue",
     "FunctionCallVellumValue",
     "FunctionCallVellumValueRequest",
+    "FunctionDefinitionPromptBlock",
+    "FunctionDefinitionPromptBlockProperties",
     "GenerateOptionsRequest",
     "GenerateRequest",
     "GenerateResponse",
@@ -644,6 +664,8 @@ __all__ = [
     "InstructorVectorizerConfig",
     "InstructorVectorizerConfigRequest",
     "IterationStateEnum",
+    "JinjaPromptBlock",
+    "JinjaPromptBlockProperties",
     "JsonInputRequest",
     "JsonVariableValue",
     "JsonVellumValue",
@@ -728,9 +750,12 @@ __all__ = [
     "PaginatedWorkflowReleaseTagReadList",
     "PdfSearchResultMetaSource",
     "PdfSearchResultMetaSourceRequest",
+    "PlainTextPromptBlock",
     "Price",
     "ProcessingFailureReasonEnum",
     "ProcessingStateEnum",
+    "PromptBlock",
+    "PromptBlockState",
     "PromptDeploymentExpandMetaRequest",
     "PromptDeploymentInputRequest",
     "PromptExecutionMeta",
@@ -757,6 +782,8 @@ __all__ = [
     "RejectedWorkflowNodeResultEvent",
     "ReleaseTagSource",
     "ReplaceTestSuiteTestCaseRequest",
+    "RichTextChildBlock",
+    "RichTextPromptBlock",
     "SandboxScenario",
     "ScenarioInput",
     "ScenarioInputChatHistoryVariableValue",
@@ -888,6 +915,7 @@ __all__ = [
     "UnitEnum",
     "UploadDocumentResponse",
     "UpsertTestSuiteTestCaseRequest",
+    "VariablePromptBlock",
     "VellumAudio",
     "VellumAudioRequest",
     "VellumError",

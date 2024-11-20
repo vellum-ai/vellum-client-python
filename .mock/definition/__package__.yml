@@ -2134,6 +2134,8 @@ types:
           minLength: 1
       function_description: optional<string>
       function_parameters: optional<map<string, unknown>>
+      function_forced: optional<boolean>
+      function_strict: optional<boolean>
     source:
       openapi: openapi/openapi.yml
   GenerateErrorResponse:

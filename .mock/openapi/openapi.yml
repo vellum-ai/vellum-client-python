@@ -4995,6 +4995,12 @@ components:
           type: object
           additionalProperties: {}
           nullable: true
+        function_forced:
+          type: boolean
+          nullable: true
+        function_strict:
+          type: boolean
+          nullable: true
       required:
       - block_type
     GenerateBodyRequest:

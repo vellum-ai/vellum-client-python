@@ -13,7 +13,7 @@ from .array_chat_message_content import ArrayChatMessageContent
 from .array_chat_message_content_item import ArrayChatMessageContentItem
 from .array_chat_message_content_item_request import ArrayChatMessageContentItemRequest
 from .array_chat_message_content_request import ArrayChatMessageContentRequest
-from .array_input_request import ArrayInputRequest
+from .array_input import ArrayInput
 from .array_variable_value import ArrayVariableValue
 from .array_variable_value_item import ArrayVariableValueItem
 from .array_vellum_value import ArrayVellumValue
@@ -37,6 +37,7 @@ from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1 import 
 from .basic_vectorizer_sentence_transformers_multi_qa_mpnet_base_dot_v_1_request import (
     BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request,
 )
+from .chat_history_input import ChatHistoryInput
 from .chat_history_input_request import ChatHistoryInputRequest
 from .chat_history_variable_value import ChatHistoryVariableValue
 from .chat_history_vellum_value import ChatHistoryVellumValue
@@ -58,11 +59,11 @@ from .code_execution_node_result_data import CodeExecutionNodeResultData
 from .code_execution_node_result_output import CodeExecutionNodeResultOutput
 from .code_execution_node_search_results_result import CodeExecutionNodeSearchResultsResult
 from .code_execution_node_string_result import CodeExecutionNodeStringResult
-from .code_execution_package_request import CodeExecutionPackageRequest
+from .code_execution_package import CodeExecutionPackage
 from .code_execution_runtime import CodeExecutionRuntime
-from .code_executor_input_request import CodeExecutorInputRequest
+from .code_executor_input import CodeExecutorInput
 from .code_executor_response import CodeExecutorResponse
-from .code_executor_secret_input_request import CodeExecutorSecretInputRequest
+from .code_executor_secret_input import CodeExecutorSecretInput
 from .compile_prompt_deployment_expand_meta_request import CompilePromptDeploymentExpandMetaRequest
 from .compile_prompt_meta import CompilePromptMeta
 from .components_schemas_pdf_search_result_meta_source import ComponentsSchemasPdfSearchResultMetaSource
@@ -84,6 +85,7 @@ from .document_index_chunking_request import DocumentIndexChunkingRequest
 from .document_index_indexing_config import DocumentIndexIndexingConfig
 from .document_index_indexing_config_request import DocumentIndexIndexingConfigRequest
 from .document_index_read import DocumentIndexRead
+from .document_processing_state import DocumentProcessingState
 from .document_read import DocumentRead
 from .document_status import DocumentStatus
 from .enriched_normalized_completion import EnrichedNormalizedCompletion
@@ -92,7 +94,7 @@ from .entity_visibility import EntityVisibility
 from .environment_enum import EnvironmentEnum
 from .ephemeral_prompt_cache_config import EphemeralPromptCacheConfig
 from .ephemeral_prompt_cache_config_type_enum import EphemeralPromptCacheConfigTypeEnum
-from .error_input_request import ErrorInputRequest
+from .error_input import ErrorInput
 from .error_variable_value import ErrorVariableValue
 from .error_vellum_value import ErrorVellumValue
 from .error_vellum_value_request import ErrorVellumValueRequest
@@ -135,7 +137,7 @@ from .function_call_chat_message_content import FunctionCallChatMessageContent
 from .function_call_chat_message_content_request import FunctionCallChatMessageContentRequest
 from .function_call_chat_message_content_value import FunctionCallChatMessageContentValue
 from .function_call_chat_message_content_value_request import FunctionCallChatMessageContentValueRequest
-from .function_call_input_request import FunctionCallInputRequest
+from .function_call_input import FunctionCallInput
 from .function_call_request import FunctionCallRequest
 from .function_call_variable_value import FunctionCallVariableValue
 from .function_call_vellum_value import FunctionCallVellumValue
@@ -178,6 +180,7 @@ from .instructor_vectorizer_config import InstructorVectorizerConfig
 from .instructor_vectorizer_config_request import InstructorVectorizerConfigRequest
 from .iteration_state_enum import IterationStateEnum
 from .jinja_prompt_block import JinjaPromptBlock
+from .json_input import JsonInput
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
 from .json_vellum_value import JsonVellumValue
@@ -193,7 +196,7 @@ from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
 from .metadata_filters_request import MetadataFiltersRequest
 from .metric_definition_execution import MetricDefinitionExecution
-from .metric_definition_input_request import MetricDefinitionInputRequest
+from .metric_definition_input import MetricDefinitionInput
 from .metric_node_result import MetricNodeResult
 from .ml_model_usage import MlModelUsage
 from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
@@ -238,7 +241,7 @@ from .node_output_compiled_string_value import NodeOutputCompiledStringValue
 from .node_output_compiled_value import NodeOutputCompiledValue
 from .normalized_log_probs import NormalizedLogProbs
 from .normalized_token_log_probs import NormalizedTokenLogProbs
-from .number_input_request import NumberInputRequest
+from .number_input import NumberInput
 from .number_variable_value import NumberVariableValue
 from .number_vellum_value import NumberVellumValue
 from .number_vellum_value_request import NumberVellumValueRequest
@@ -265,7 +268,6 @@ from .pdf_search_result_meta_source_request import PdfSearchResultMetaSourceRequ
 from .plain_text_prompt_block import PlainTextPromptBlock
 from .price import Price
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
-from .processing_state_enum import ProcessingStateEnum
 from .prompt_block import PromptBlock
 from .prompt_block_state import PromptBlockState
 from .prompt_deployment_expand_meta_request import PromptDeploymentExpandMetaRequest
@@ -313,7 +315,7 @@ from .search_result_merging_request import SearchResultMergingRequest
 from .search_result_meta import SearchResultMeta
 from .search_result_meta_request import SearchResultMetaRequest
 from .search_result_request import SearchResultRequest
-from .search_results_input_request import SearchResultsInputRequest
+from .search_results_input import SearchResultsInput
 from .search_results_variable_value import SearchResultsVariableValue
 from .search_results_vellum_value import SearchResultsVellumValue
 from .search_results_vellum_value_request import SearchResultsVellumValueRequest
@@ -332,6 +334,7 @@ from .streaming_prompt_execution_meta import StreamingPromptExecutionMeta
 from .streaming_workflow_node_result_event import StreamingWorkflowNodeResultEvent
 from .string_chat_message_content import StringChatMessageContent
 from .string_chat_message_content_request import StringChatMessageContentRequest
+from .string_input import StringInput
 from .string_input_request import StringInputRequest
 from .string_variable_value import StringVariableValue
 from .string_vellum_value import StringVellumValue
@@ -507,7 +510,7 @@ __all__ = [
     "ArrayChatMessageContentItem",
     "ArrayChatMessageContentItemRequest",
     "ArrayChatMessageContentRequest",
-    "ArrayInputRequest",
+    "ArrayInput",
     "ArrayVariableValue",
     "ArrayVariableValueItem",
     "ArrayVellumValue",
@@ -523,6 +526,7 @@ __all__ = [
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1",
     "BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request",
+    "ChatHistoryInput",
     "ChatHistoryInputRequest",
     "ChatHistoryVariableValue",
     "ChatHistoryVellumValue",
@@ -544,11 +548,11 @@ __all__ = [
     "CodeExecutionNodeResultOutput",
     "CodeExecutionNodeSearchResultsResult",
     "CodeExecutionNodeStringResult",
-    "CodeExecutionPackageRequest",
+    "CodeExecutionPackage",
     "CodeExecutionRuntime",
-    "CodeExecutorInputRequest",
+    "CodeExecutorInput",
     "CodeExecutorResponse",
-    "CodeExecutorSecretInputRequest",
+    "CodeExecutorSecretInput",
     "CompilePromptDeploymentExpandMetaRequest",
     "CompilePromptMeta",
     "ComponentsSchemasPdfSearchResultMetaSource",
@@ -570,6 +574,7 @@ __all__ = [
     "DocumentIndexIndexingConfig",
     "DocumentIndexIndexingConfigRequest",
     "DocumentIndexRead",
+    "DocumentProcessingState",
     "DocumentRead",
     "DocumentStatus",
     "EnrichedNormalizedCompletion",
@@ -578,7 +583,7 @@ __all__ = [
     "EnvironmentEnum",
     "EphemeralPromptCacheConfig",
     "EphemeralPromptCacheConfigTypeEnum",
-    "ErrorInputRequest",
+    "ErrorInput",
     "ErrorVariableValue",
     "ErrorVellumValue",
     "ErrorVellumValueRequest",
@@ -621,7 +626,7 @@ __all__ = [
     "FunctionCallChatMessageContentRequest",
     "FunctionCallChatMessageContentValue",
     "FunctionCallChatMessageContentValueRequest",
-    "FunctionCallInputRequest",
+    "FunctionCallInput",
     "FunctionCallRequest",
     "FunctionCallVariableValue",
     "FunctionCallVellumValue",
@@ -660,6 +665,7 @@ __all__ = [
     "InstructorVectorizerConfigRequest",
     "IterationStateEnum",
     "JinjaPromptBlock",
+    "JsonInput",
     "JsonInputRequest",
     "JsonVariableValue",
     "JsonVellumValue",
@@ -675,7 +681,7 @@ __all__ = [
     "MetadataFilterRuleRequest",
     "MetadataFiltersRequest",
     "MetricDefinitionExecution",
-    "MetricDefinitionInputRequest",
+    "MetricDefinitionInput",
     "MetricNodeResult",
     "MlModelUsage",
     "NamedScenarioInputChatHistoryVariableValueRequest",
@@ -720,7 +726,7 @@ __all__ = [
     "NodeOutputCompiledValue",
     "NormalizedLogProbs",
     "NormalizedTokenLogProbs",
-    "NumberInputRequest",
+    "NumberInput",
     "NumberVariableValue",
     "NumberVellumValue",
     "NumberVellumValueRequest",
@@ -747,7 +753,6 @@ __all__ = [
     "PlainTextPromptBlock",
     "Price",
     "ProcessingFailureReasonEnum",
-    "ProcessingStateEnum",
     "PromptBlock",
     "PromptBlockState",
     "PromptDeploymentExpandMetaRequest",
@@ -795,7 +800,7 @@ __all__ = [
     "SearchResultMeta",
     "SearchResultMetaRequest",
     "SearchResultRequest",
-    "SearchResultsInputRequest",
+    "SearchResultsInput",
     "SearchResultsVariableValue",
     "SearchResultsVellumValue",
     "SearchResultsVellumValueRequest",
@@ -814,6 +819,7 @@ __all__ = [
     "StreamingWorkflowNodeResultEvent",
     "StringChatMessageContent",
     "StringChatMessageContentRequest",
+    "StringInput",
     "StringInputRequest",
     "StringVariableValue",
     "StringVellumValue",

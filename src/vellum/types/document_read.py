@@ -4,7 +4,7 @@ from ..core.pydantic_utilities import UniversalBaseModel
 import typing
 import pydantic
 import datetime as dt
-from .processing_state_enum import ProcessingStateEnum
+from .document_processing_state import DocumentProcessingState
 from .document_status import DocumentStatus
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
@@ -23,16 +23,7 @@ class DocumentRead(UniversalBaseModel):
     A human-readable label for the document. Defaults to the originally uploaded file's file name.
     """
 
-    processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(default=None)
-    """
-    The current processing state of the document
-    
-    - `QUEUED` - Queued
-    - `PROCESSING` - Processing
-    - `PROCESSED` - Processed
-    - `FAILED` - Failed
-    """
-
+    processing_state: DocumentProcessingState
     status: typing.Optional[DocumentStatus] = pydantic.Field(default=None)
     """
     The current status of the document

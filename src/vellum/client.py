@@ -19,8 +19,8 @@ from .resources.workflow_sandboxes.client import WorkflowSandboxesClient
 from .resources.workflows.client import WorkflowsClient
 from .resources.workspace_secrets.client import WorkspaceSecretsClient
 from .types.code_execution_runtime import CodeExecutionRuntime
-from .types.code_executor_input_request import CodeExecutorInputRequest
-from .types.code_execution_package_request import CodeExecutionPackageRequest
+from .types.code_executor_input import CodeExecutorInput
+from .types.code_execution_package import CodeExecutionPackage
 from .types.vellum_variable_type import VellumVariableType
 from .core.request_options import RequestOptions
 from .types.code_executor_response import CodeExecutorResponse
@@ -145,8 +145,8 @@ class Vellum:
         *,
         code: str,
         runtime: CodeExecutionRuntime,
-        input_values: typing.Sequence[CodeExecutorInputRequest],
-        packages: typing.Sequence[CodeExecutionPackageRequest],
+        input_values: typing.Sequence[CodeExecutorInput],
+        packages: typing.Sequence[CodeExecutionPackage],
         output_type: VellumVariableType,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CodeExecutorResponse:
@@ -159,9 +159,9 @@ class Vellum:
 
         runtime : CodeExecutionRuntime
 
-        input_values : typing.Sequence[CodeExecutorInputRequest]
+        input_values : typing.Sequence[CodeExecutorInput]
 
-        packages : typing.Sequence[CodeExecutionPackageRequest]
+        packages : typing.Sequence[CodeExecutionPackage]
 
         output_type : VellumVariableType
 
@@ -175,7 +175,7 @@ class Vellum:
 
         Examples
         --------
-        from vellum import CodeExecutionPackageRequest, StringInputRequest, Vellum
+        from vellum import CodeExecutionPackage, StringInput, Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
@@ -184,13 +184,13 @@ class Vellum:
             code="code",
             runtime="PYTHON_3_11_6",
             input_values=[
-                StringInputRequest(
+                StringInput(
                     name="name",
                     value="value",
                 )
             ],
             packages=[
-                CodeExecutionPackageRequest(
+                CodeExecutionPackage(
                     version="version",
                     name="name",
                 )
@@ -206,10 +206,10 @@ class Vellum:
                 "code": code,
                 "runtime": runtime,
                 "input_values": convert_and_respect_annotation_metadata(
-                    object_=input_values, annotation=typing.Sequence[CodeExecutorInputRequest], direction="write"
+                    object_=input_values, annotation=typing.Sequence[CodeExecutorInput], direction="write"
                 ),
                 "packages": convert_and_respect_annotation_metadata(
-                    object_=packages, annotation=typing.Sequence[CodeExecutionPackageRequest], direction="write"
+                    object_=packages, annotation=typing.Sequence[CodeExecutionPackage], direction="write"
                 ),
                 "output_type": output_type,
             },
@@ -1464,8 +1464,8 @@ class AsyncVellum:
         *,
         code: str,
         runtime: CodeExecutionRuntime,
-        input_values: typing.Sequence[CodeExecutorInputRequest],
-        packages: typing.Sequence[CodeExecutionPackageRequest],
+        input_values: typing.Sequence[CodeExecutorInput],
+        packages: typing.Sequence[CodeExecutionPackage],
         output_type: VellumVariableType,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CodeExecutorResponse:
@@ -1478,9 +1478,9 @@ class AsyncVellum:
 
         runtime : CodeExecutionRuntime
 
-        input_values : typing.Sequence[CodeExecutorInputRequest]
+        input_values : typing.Sequence[CodeExecutorInput]
 
-        packages : typing.Sequence[CodeExecutionPackageRequest]
+        packages : typing.Sequence[CodeExecutionPackage]
 
         output_type : VellumVariableType
 
@@ -1496,7 +1496,7 @@ class AsyncVellum:
         --------
         import asyncio
 
-        from vellum import AsyncVellum, CodeExecutionPackageRequest, StringInputRequest
+        from vellum import AsyncVellum, CodeExecutionPackage, StringInput
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
@@ -1508,13 +1508,13 @@ class AsyncVellum:
                 code="code",
                 runtime="PYTHON_3_11_6",
                 input_values=[
-                    StringInputRequest(
+                    StringInput(
                         name="name",
                         value="value",
                     )
                 ],
                 packages=[
-                    CodeExecutionPackageRequest(
+                    CodeExecutionPackage(
                         version="version",
                         name="name",
                     )
@@ -1533,10 +1533,10 @@ class AsyncVellum:
                 "code": code,
                 "runtime": runtime,
                 "input_values": convert_and_respect_annotation_metadata(
-                    object_=input_values, annotation=typing.Sequence[CodeExecutorInputRequest], direction="write"
+                    object_=input_values, annotation=typing.Sequence[CodeExecutorInput], direction="write"
                 ),
                 "packages": convert_and_respect_annotation_metadata(
-                    object_=packages, annotation=typing.Sequence[CodeExecutionPackageRequest], direction="write"
+                    object_=packages, annotation=typing.Sequence[CodeExecutionPackage], direction="write"
                 ),
                 "output_type": output_type,
             },

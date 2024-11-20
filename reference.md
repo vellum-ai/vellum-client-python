@@ -26,7 +26,7 @@ An internal-only endpoint that's subject to breaking changes without notice. Not
 <dd>
 
 ```python
-from vellum import CodeExecutionPackageRequest, StringInputRequest, Vellum
+from vellum import CodeExecutionPackage, StringInput, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -35,13 +35,13 @@ client.execute_code(
     code="code",
     runtime="PYTHON_3_11_6",
     input_values=[
-        StringInputRequest(
+        StringInput(
             name="name",
             value="value",
         )
     ],
     packages=[
-        CodeExecutionPackageRequest(
+        CodeExecutionPackage(
             version="version",
             name="name",
         )
@@ -79,7 +79,7 @@ client.execute_code(
 <dl>
 <dd>
 
-**input_values:** `typing.Sequence[CodeExecutorInputRequest]` 
+**input_values:** `typing.Sequence[CodeExecutorInput]` 
     
 </dd>
 </dl>
@@ -87,7 +87,7 @@ client.execute_code(
 <dl>
 <dd>
 
-**packages:** `typing.Sequence[CodeExecutionPackageRequest]` 
+**packages:** `typing.Sequence[CodeExecutionPackage]` 
     
 </dd>
 </dl>
@@ -1242,7 +1242,7 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
             type="STRING",
             required=True,
             default=StringVellumValue(
-                value={"key": "value"},
+                value="string",
             ),
             extensions=VellumVariableExtensions(
                 color={"key": "value"},
@@ -3657,7 +3657,7 @@ An internal-only endpoint that's subject to breaking changes without notice. Not
 <dd>
 
 ```python
-from vellum import StringInputRequest, Vellum
+from vellum import StringInput, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -3665,7 +3665,7 @@ client = Vellum(
 client.metric_definitions.execute_metric_definition(
     id="id",
     inputs=[
-        StringInputRequest(
+        StringInput(
             name="name",
             value="value",
         )
@@ -3694,7 +3694,7 @@ client.metric_definitions.execute_metric_definition(
 <dl>
 <dd>
 
-**inputs:** `typing.Sequence[MetricDefinitionInputRequest]` 
+**inputs:** `typing.Sequence[MetricDefinitionInput]` 
     
 </dd>
 </dl>

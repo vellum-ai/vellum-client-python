@@ -100,7 +100,7 @@ class AdHocClient:
                     type="STRING",
                     required=True,
                     default=StringVellumValue(
-                        value={"key": "value"},
+                        value="string",
                     ),
                     extensions=VellumVariableExtensions(
                         color={"key": "value"},
@@ -300,7 +300,7 @@ class AsyncAdHocClient:
                         type="STRING",
                         required=True,
                         default=StringVellumValue(
-                            value={"key": "value"},
+                            value="string",
                         ),
                         extensions=VellumVariableExtensions(
                             color={"key": "value"},

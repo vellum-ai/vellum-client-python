@@ -6,7 +6,7 @@ import typing
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
-class CodeExecutorSecretInputRequest(UniversalBaseModel):
+class CodeExecutorSecretInput(UniversalBaseModel):
     """
     A user input representing a Vellum Workspace Secret value
     """

@@ -3,12 +3,13 @@
 from ..core.pydantic_utilities import UniversalBaseModel
 import pydantic
 import typing
+from .function_call import FunctionCall
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
-class NumberInputRequest(UniversalBaseModel):
+class FunctionCallInput(UniversalBaseModel):
     """
-    A user input representing a number value
+    A user input representing a Vellum Function Call value
     """
 
     name: str = pydantic.Field()
@@ -16,8 +17,8 @@ class NumberInputRequest(UniversalBaseModel):
     The variable's name
     """
 
-    type: typing.Literal["NUMBER"] = "NUMBER"
-    value: float
+    type: typing.Literal["FUNCTION_CALL"] = "FUNCTION_CALL"
+    value: FunctionCall
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

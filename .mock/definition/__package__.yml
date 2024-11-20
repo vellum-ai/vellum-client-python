@@ -992,14 +992,7 @@ types:
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfig>
       block_type: literal<"CHAT_MESSAGE">
-      properties: ChatMessagePromptBlockProperties
-    source:
-      openapi: openapi/openapi.yml
-  ChatMessagePromptBlockProperties:
-    docs: The properties of a ChatMessagePromptTemplateBlock
-    properties:
-      blocks: list<PromptBlock>
-      chat_role: optional<ChatMessageRole>
+      chat_role: ChatMessageRole
       chat_source:
         type: optional<string>
         validation:
@@ -1007,6 +1000,7 @@ types:
       chat_message_unterminated:
         type: optional<boolean>
         default: false
+      blocks: list<PromptBlock>
     source:
       openapi: openapi/openapi.yml
   ChatMessageRequest:
@@ -2134,32 +2128,12 @@ types:
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfig>
       block_type: literal<"FUNCTION_DEFINITION">
-      properties: FunctionDefinitionPromptBlockProperties
-    source:
-      openapi: openapi/openapi.yml
-  FunctionDefinitionPromptBlockProperties:
-    properties:
       function_name:
         type: optional<string>
-        docs: The name identifying the function.
         validation:
           minLength: 1
-      function_description:
-        type: optional<string>
-        docs: A description to help guide the model when to invoke this function.
-      function_parameters:
-        type: optional<map<string, unknown>>
-        docs: >-
-          An OpenAPI specification of parameters that are supported by this
-          function.
-      function_forced:
-        type: optional<boolean>
-        docs: >-
-          Set this option to true to force the model to return a function call
-          of this function.
-      function_strict:
-        type: optional<boolean>
-        docs: Set this option to use strict schema decoding when available.
+      function_description: optional<string>
+      function_parameters: optional<map<string, unknown>>
     source:
       openapi: openapi/openapi.yml
   GenerateErrorResponse:
@@ -2487,13 +2461,11 @@ types:
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfig>
       block_type: literal<"JINJA">
-      properties: JinjaPromptBlockProperties
-    source:
-      openapi: openapi/openapi.yml
-  JinjaPromptBlockProperties:
-    properties:
-      template: optional<string>
-      template_type: optional<VellumVariableType>
+      template:
+        type: string
+        validation:
+          minLength: 1
+      template_type: VellumVariableType
     source:
       openapi: openapi/openapi.yml
   JsonEnum: literal<"JSON">

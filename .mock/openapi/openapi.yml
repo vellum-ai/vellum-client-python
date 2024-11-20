@@ -2827,23 +2827,8 @@ components:
           nullable: true
         block_type:
           $ref: '#/components/schemas/ChatMessageEnum'
-        properties:
-          $ref: '#/components/schemas/ChatMessagePromptBlockProperties'
-      required:
-      - block_type
-      - properties
-    ChatMessagePromptBlockProperties:
-      type: object
-      description: The properties of a ChatMessagePromptTemplateBlock
-      properties:
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/PromptBlock'
         chat_role:
-          allOf:
-          - $ref: '#/components/schemas/ChatMessageRole'
-          nullable: true
+          $ref: '#/components/schemas/ChatMessageRole'
         chat_source:
           type: string
           nullable: true
@@ -2851,8 +2836,14 @@ components:
         chat_message_unterminated:
           type: boolean
           default: false
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptBlock'
       required:
+      - block_type
       - blocks
+      - chat_role
     ChatMessageRequest:
       type: object
       properties:
@@ -4993,38 +4984,19 @@ components:
           nullable: true
         block_type:
           $ref: '#/components/schemas/FunctionDefinitionEnum'
-        properties:
-          $ref: '#/components/schemas/FunctionDefinitionPromptBlockProperties'
-      required:
-      - block_type
-      - properties
-    FunctionDefinitionPromptBlockProperties:
-      type: object
-      properties:
         function_name:
           type: string
           nullable: true
           minLength: 1
-          description: The name identifying the function.
         function_description:
           type: string
           nullable: true
-          description: A description to help guide the model when to invoke this function.
         function_parameters:
           type: object
           additionalProperties: {}
           nullable: true
-          description: An OpenAPI specification of parameters that are supported by
-            this function.
-        function_forced:
-          type: boolean
-          nullable: true
-          description: Set this option to true to force the model to return a function
-            call of this function.
-        function_strict:
-          type: boolean
-          nullable: true
-          description: Set this option to use strict schema decoding when available.
+      required:
+      - block_type
     GenerateBodyRequest:
       type: object
       properties:
@@ -5556,21 +5528,15 @@ components:
           nullable: true
         block_type:
           $ref: '#/components/schemas/JinjaEnum'
-        properties:
-          $ref: '#/components/schemas/JinjaPromptBlockProperties'
-      required:
-      - block_type
-      - properties
-    JinjaPromptBlockProperties:
-      type: object
-      properties:
         template:
           type: string
-          nullable: true
+          minLength: 1
         template_type:
-          allOf:
-          - $ref: '#/components/schemas/VellumVariableType'
-          nullable: true
+          $ref: '#/components/schemas/VellumVariableType'
+      required:
+      - block_type
+      - template
+      - template_type
     JsonEnum:
       type: string
       enum:

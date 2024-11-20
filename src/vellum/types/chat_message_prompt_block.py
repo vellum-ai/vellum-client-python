@@ -5,6 +5,7 @@ from ..core.pydantic_utilities import UniversalBaseModel
 import typing
 from .prompt_block_state import PromptBlockState
 from .ephemeral_prompt_cache_config import EphemeralPromptCacheConfig
+from .chat_message_role import ChatMessageRole
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 from ..core.pydantic_utilities import update_forward_refs
@@ -18,7 +19,10 @@ class ChatMessagePromptBlock(UniversalBaseModel):
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfig] = None
     block_type: typing.Literal["CHAT_MESSAGE"] = "CHAT_MESSAGE"
-    properties: "ChatMessagePromptBlockProperties"
+    chat_role: ChatMessageRole
+    chat_source: typing.Optional[str] = None
+    chat_message_unterminated: typing.Optional[bool] = None
+    blocks: typing.List["PromptBlock"]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -30,7 +34,6 @@ class ChatMessagePromptBlock(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .chat_message_prompt_block_properties import ChatMessagePromptBlockProperties  # noqa: E402
+from .prompt_block import PromptBlock  # noqa: E402
 
-update_forward_refs(ChatMessagePromptBlockProperties, ChatMessagePromptBlock=ChatMessagePromptBlock)
 update_forward_refs(ChatMessagePromptBlock)

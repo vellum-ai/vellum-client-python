@@ -45,7 +45,6 @@ from .chat_message import ChatMessage
 from .chat_message_content import ChatMessageContent
 from .chat_message_content_request import ChatMessageContentRequest
 from .chat_message_prompt_block import ChatMessagePromptBlock
-from .chat_message_prompt_block_properties import ChatMessagePromptBlockProperties
 from .chat_message_request import ChatMessageRequest
 from .chat_message_role import ChatMessageRole
 from .code_execution_node_array_result import CodeExecutionNodeArrayResult
@@ -142,7 +141,6 @@ from .function_call_variable_value import FunctionCallVariableValue
 from .function_call_vellum_value import FunctionCallVellumValue
 from .function_call_vellum_value_request import FunctionCallVellumValueRequest
 from .function_definition_prompt_block import FunctionDefinitionPromptBlock
-from .function_definition_prompt_block_properties import FunctionDefinitionPromptBlockProperties
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
 from .generate_response import GenerateResponse
@@ -180,7 +178,6 @@ from .instructor_vectorizer_config import InstructorVectorizerConfig
 from .instructor_vectorizer_config_request import InstructorVectorizerConfigRequest
 from .iteration_state_enum import IterationStateEnum
 from .jinja_prompt_block import JinjaPromptBlock
-from .jinja_prompt_block_properties import JinjaPromptBlockProperties
 from .json_input_request import JsonInputRequest
 from .json_variable_value import JsonVariableValue
 from .json_vellum_value import JsonVellumValue
@@ -534,7 +531,6 @@ __all__ = [
     "ChatMessageContent",
     "ChatMessageContentRequest",
     "ChatMessagePromptBlock",
-    "ChatMessagePromptBlockProperties",
     "ChatMessageRequest",
     "ChatMessageRole",
     "CodeExecutionNodeArrayResult",
@@ -631,7 +627,6 @@ __all__ = [
     "FunctionCallVellumValue",
     "FunctionCallVellumValueRequest",
     "FunctionDefinitionPromptBlock",
-    "FunctionDefinitionPromptBlockProperties",
     "GenerateOptionsRequest",
     "GenerateRequest",
     "GenerateResponse",
@@ -665,7 +660,6 @@ __all__ = [
     "InstructorVectorizerConfigRequest",
     "IterationStateEnum",
     "JinjaPromptBlock",
-    "JinjaPromptBlockProperties",
     "JsonInputRequest",
     "JsonVariableValue",
     "JsonVellumValue",

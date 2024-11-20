@@ -4,7 +4,6 @@ from ..core.pydantic_utilities import UniversalBaseModel
 import typing
 from .prompt_block_state import PromptBlockState
 from .ephemeral_prompt_cache_config import EphemeralPromptCacheConfig
-from .function_definition_prompt_block_properties import FunctionDefinitionPromptBlockProperties
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
@@ -17,7 +16,9 @@ class FunctionDefinitionPromptBlock(UniversalBaseModel):
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfig] = None
     block_type: typing.Literal["FUNCTION_DEFINITION"] = "FUNCTION_DEFINITION"
-    properties: FunctionDefinitionPromptBlockProperties
+    function_name: typing.Optional[str] = None
+    function_description: typing.Optional[str] = None
+    function_parameters: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

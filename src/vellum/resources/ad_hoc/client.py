@@ -73,7 +73,6 @@ class AdHocClient:
             AdHocExpandMeta,
             EphemeralPromptCacheConfig,
             JinjaPromptBlock,
-            JinjaPromptBlockProperties,
             PromptParameters,
             PromptRequestStringInput,
             PromptSettings,
@@ -126,10 +125,8 @@ class AdHocClient:
                 JinjaPromptBlock(
                     state="ENABLED",
                     cache_config=EphemeralPromptCacheConfig(),
-                    properties=JinjaPromptBlockProperties(
-                        template="string",
-                        template_type="STRING",
-                    ),
+                    template="string",
+                    template_type="STRING",
                 )
             ],
             expand_meta=AdHocExpandMeta(
@@ -275,7 +272,6 @@ class AsyncAdHocClient:
             AsyncVellum,
             EphemeralPromptCacheConfig,
             JinjaPromptBlock,
-            JinjaPromptBlockProperties,
             PromptParameters,
             PromptRequestStringInput,
             PromptSettings,
@@ -330,10 +326,8 @@ class AsyncAdHocClient:
                     JinjaPromptBlock(
                         state="ENABLED",
                         cache_config=EphemeralPromptCacheConfig(),
-                        properties=JinjaPromptBlockProperties(
-                            template="string",
-                            template_type="STRING",
-                        ),
+                        template="string",
+                        template_type="STRING",
                     )
                 ],
                 expand_meta=AdHocExpandMeta(

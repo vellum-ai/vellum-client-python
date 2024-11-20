@@ -1215,7 +1215,6 @@ from vellum import (
     AdHocExpandMeta,
     EphemeralPromptCacheConfig,
     JinjaPromptBlock,
-    JinjaPromptBlockProperties,
     PromptParameters,
     PromptRequestStringInput,
     PromptSettings,
@@ -1268,10 +1267,8 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
         JinjaPromptBlock(
             state="ENABLED",
             cache_config=EphemeralPromptCacheConfig(),
-            properties=JinjaPromptBlockProperties(
-                template="string",
-                template_type="STRING",
-            ),
+            template="string",
+            template_type="STRING",
         )
     ],
     expand_meta=AdHocExpandMeta(

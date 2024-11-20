@@ -4,7 +4,7 @@ from ..core.pydantic_utilities import UniversalBaseModel
 import typing
 from .prompt_block_state import PromptBlockState
 from .ephemeral_prompt_cache_config import EphemeralPromptCacheConfig
-from .jinja_prompt_block_properties import JinjaPromptBlockProperties
+from .vellum_variable_type import VellumVariableType
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
@@ -17,7 +17,8 @@ class JinjaPromptBlock(UniversalBaseModel):
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfig] = None
     block_type: typing.Literal["JINJA"] = "JINJA"
-    properties: JinjaPromptBlockProperties
+    template: str
+    template_type: VellumVariableType
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

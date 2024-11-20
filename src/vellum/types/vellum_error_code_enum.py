@@ -4,7 +4,12 @@ import typing
 
 VellumErrorCodeEnum = typing.Union[
     typing.Literal[
-        "INVALID_REQUEST", "PROVIDER_ERROR", "REQUEST_TIMEOUT", "INTERNAL_SERVER_ERROR", "USER_DEFINED_ERROR"
+        "INVALID_REQUEST",
+        "INVALID_INPUTS",
+        "PROVIDER_ERROR",
+        "REQUEST_TIMEOUT",
+        "INTERNAL_SERVER_ERROR",
+        "USER_DEFINED_ERROR",
     ],
     typing.Any,
 ]

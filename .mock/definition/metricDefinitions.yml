@@ -16,10 +16,10 @@ service:
           type: string
           docs: Either the Metric Definition's ID or its unique name
       request:
-        name: ExecuteMetricDefinitionRequest
+        name: ExecuteMetricDefinition
         body:
           properties:
-            inputs: list<root.MetricDefinitionInputRequest>
+            inputs: list<root.MetricDefinitionInput>
             release_tag:
               type: optional<string>
               validation:

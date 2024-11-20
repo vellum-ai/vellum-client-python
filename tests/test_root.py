@@ -3,9 +3,10 @@
 from vellum import Vellum
 from vellum import AsyncVellum
 import typing
-from vellum import StringInputRequest
-from vellum import CodeExecutionPackageRequest
+from vellum import StringInput
+from vellum import CodeExecutionPackage
 from .utilities import validate_response
+from vellum import StringInputRequest
 from vellum import WorkflowRequestStringInputRequest
 from vellum import GenerateRequest
 from vellum import SubmitCompletionActualRequest
@@ -18,8 +19,8 @@ async def test_execute_code(client: Vellum, async_client: AsyncVellum) -> None:
     response = client.execute_code(
         code="code",
         runtime="PYTHON_3_11_6",
-        input_values=[StringInputRequest(name="name", value="value")],
-        packages=[CodeExecutionPackageRequest(version="version", name="name")],
+        input_values=[StringInput(name="name", value="value")],
+        packages=[CodeExecutionPackage(version="version", name="name")],
         output_type="STRING",
     )
     validate_response(response, expected_response, expected_types)
@@ -27,8 +28,8 @@ async def test_execute_code(client: Vellum, async_client: AsyncVellum) -> None:
     async_response = await async_client.execute_code(
         code="code",
         runtime="PYTHON_3_11_6",
-        input_values=[StringInputRequest(name="name", value="value")],
-        packages=[CodeExecutionPackageRequest(version="version", name="name")],
+        input_values=[StringInput(name="name", value="value")],
+        packages=[CodeExecutionPackage(version="version", name="name")],
         output_type="STRING",
     )
     validate_response(async_response, expected_response, expected_types)

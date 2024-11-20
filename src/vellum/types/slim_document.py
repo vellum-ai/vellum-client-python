@@ -4,7 +4,7 @@ from ..core.pydantic_utilities import UniversalBaseModel
 import pydantic
 import typing
 import datetime as dt
-from .processing_state_enum import ProcessingStateEnum
+from .document_processing_state import DocumentProcessingState
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .document_status import DocumentStatus
 from .document_document_to_document_index import DocumentDocumentToDocumentIndex
@@ -32,16 +32,7 @@ class SlimDocument(UniversalBaseModel):
     Human-friendly name for this document.
     """
 
-    processing_state: typing.Optional[ProcessingStateEnum] = pydantic.Field(default=None)
-    """
-    An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.
-    
-    - `QUEUED` - Queued
-    - `PROCESSING` - Processing
-    - `PROCESSED` - Processed
-    - `FAILED` - Failed
-    """
-
+    processing_state: DocumentProcessingState
     processing_failure_reason: typing.Optional[ProcessingFailureReasonEnum] = pydantic.Field(default=None)
     """
     An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.

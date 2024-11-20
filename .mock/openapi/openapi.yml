@@ -891,7 +891,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CodeExecutorRequest'
+              $ref: '#/components/schemas/CodeExecutor'
         required: true
       security:
       - apiKeyAuth: []
@@ -1335,7 +1335,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExecuteMetricDefinitionRequest'
+              $ref: '#/components/schemas/ExecuteMetricDefinition'
         required: true
       security:
       - apiKeyAuth: []
@@ -2479,7 +2479,7 @@ components:
       type: string
       enum:
       - ARRAY
-    ArrayInputRequest:
+    ArrayInput:
       type: object
       description: A user input representing a Vellum Array value
       properties:
@@ -2492,7 +2492,7 @@ components:
         value:
           type: array
           items:
-            $ref: '#/components/schemas/VellumValueRequest'
+            $ref: '#/components/schemas/VellumValue'
       required:
       - name
       - type
@@ -2704,6 +2704,24 @@ components:
       type: string
       enum:
       - CHAT_HISTORY
+    ChatHistoryInput:
+      type: object
+      description: A user input representing a list of chat messages
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name, as defined in the deployment.
+        type:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+      required:
+      - name
+      - type
+      - value
     ChatHistoryInputRequest:
       type: object
       description: A user input representing a list of chat messages
@@ -3036,7 +3054,7 @@ components:
       - id
       - type
       - value
-    CodeExecutionPackageRequest:
+    CodeExecutionPackage:
       type: object
       properties:
         version:
@@ -3056,40 +3074,7 @@ components:
       description: |-
         * `PYTHON_3_11_6` - PYTHON_3_11_6
         * `TYPESCRIPT_5_3_3` - TYPESCRIPT_5_3_3
-    CodeExecutorErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-        log:
-          type: string
-      required:
-      - log
-      - message
-    CodeExecutorInputRequest:
-      oneOf:
-      - $ref: '#/components/schemas/StringInputRequest'
-      - $ref: '#/components/schemas/JSONInputRequest'
-      - $ref: '#/components/schemas/ChatHistoryInputRequest'
-      - $ref: '#/components/schemas/NumberInputRequest'
-      - $ref: '#/components/schemas/SearchResultsInputRequest'
-      - $ref: '#/components/schemas/ErrorInputRequest'
-      - $ref: '#/components/schemas/ArrayInputRequest'
-      - $ref: '#/components/schemas/FunctionCallInputRequest'
-      - $ref: '#/components/schemas/CodeExecutorSecretInputRequest'
-      discriminator:
-        propertyName: type
-        mapping:
-          STRING: '#/components/schemas/StringInputRequest'
-          JSON: '#/components/schemas/JSONInputRequest'
-          CHAT_HISTORY: '#/components/schemas/ChatHistoryInputRequest'
-          NUMBER: '#/components/schemas/NumberInputRequest'
-          SEARCH_RESULTS: '#/components/schemas/SearchResultsInputRequest'
-          ERROR: '#/components/schemas/ErrorInputRequest'
-          ARRAY: '#/components/schemas/ArrayInputRequest'
-          FUNCTION_CALL: '#/components/schemas/FunctionCallInputRequest'
-          SECRET: '#/components/schemas/CodeExecutorSecretInputRequest'
-    CodeExecutorRequest:
+    CodeExecutor:
       type: object
       properties:
         code:
@@ -3100,11 +3085,11 @@ components:
         input_values:
           type: array
           items:
-            $ref: '#/components/schemas/CodeExecutorInputRequest'
+            $ref: '#/components/schemas/CodeExecutorInput'
         packages:
           type: array
           items:
-            $ref: '#/components/schemas/CodeExecutionPackageRequest'
+            $ref: '#/components/schemas/CodeExecutionPackage'
         output_type:
           $ref: '#/components/schemas/VellumVariableType'
       required:
@@ -3113,6 +3098,39 @@ components:
       - output_type
       - packages
       - runtime
+    CodeExecutorErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        log:
+          type: string
+      required:
+      - log
+      - message
+    CodeExecutorInput:
+      oneOf:
+      - $ref: '#/components/schemas/StringInput'
+      - $ref: '#/components/schemas/JSONInput'
+      - $ref: '#/components/schemas/ChatHistoryInput'
+      - $ref: '#/components/schemas/NumberInput'
+      - $ref: '#/components/schemas/SearchResultsInput'
+      - $ref: '#/components/schemas/ErrorInput'
+      - $ref: '#/components/schemas/ArrayInput'
+      - $ref: '#/components/schemas/FunctionCallInput'
+      - $ref: '#/components/schemas/CodeExecutorSecretInput'
+      discriminator:
+        propertyName: type
+        mapping:
+          STRING: '#/components/schemas/StringInput'
+          JSON: '#/components/schemas/JSONInput'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryInput'
+          NUMBER: '#/components/schemas/NumberInput'
+          SEARCH_RESULTS: '#/components/schemas/SearchResultsInput'
+          ERROR: '#/components/schemas/ErrorInput'
+          ARRAY: '#/components/schemas/ArrayInput'
+          FUNCTION_CALL: '#/components/schemas/FunctionCallInput'
+          SECRET: '#/components/schemas/CodeExecutorSecretInput'
     CodeExecutorResponse:
       type: object
       properties:
@@ -3123,7 +3141,7 @@ components:
       required:
       - log
       - output
-    CodeExecutorSecretInputRequest:
+    CodeExecutorSecretInput:
       type: object
       description: A user input representing a Vellum Workspace Secret value
       properties:
@@ -3706,6 +3724,20 @@ components:
             * `PRODUCTION` - Production
       required:
       - label
+    DocumentProcessingState:
+      enum:
+      - QUEUED
+      - PROCESSING
+      - PROCESSED
+      - FAILED
+      - UNKNOWN
+      type: string
+      description: |-
+        * `QUEUED` - Queued
+        * `PROCESSING` - Processing
+        * `PROCESSED` - Processed
+        * `FAILED` - Failed
+        * `UNKNOWN` - Unknown
     DocumentRead:
       type: object
       properties:
@@ -3727,15 +3759,7 @@ components:
             uploaded file's file name.
           maxLength: 1000
         processing_state:
-          allOf:
-          - $ref: '#/components/schemas/ProcessingStateEnum'
-          description: |-
-            The current processing state of the document
-
-            * `QUEUED` - Queued
-            * `PROCESSING` - Processing
-            * `PROCESSED` - Processed
-            * `FAILED` - Failed
+          $ref: '#/components/schemas/DocumentProcessingState'
         status:
           allOf:
           - $ref: '#/components/schemas/DocumentStatus'
@@ -3768,6 +3792,7 @@ components:
       - last_uploaded_at
       - original_file_url
       - processed_file_url
+      - processing_state
     DocumentStatus:
       enum:
       - ACTIVE
@@ -3869,7 +3894,7 @@ components:
       type: string
       enum:
       - ERROR
-    ErrorInputRequest:
+    ErrorInput:
       type: object
       description: A user input representing a Vellum Error value
       properties:
@@ -3880,7 +3905,7 @@ components:
         type:
           type: string
         value:
-          $ref: '#/components/schemas/VellumErrorRequest'
+          $ref: '#/components/schemas/VellumError'
       required:
       - name
       - type
@@ -3923,13 +3948,13 @@ components:
       required:
       - type
       - value
-    ExecuteMetricDefinitionRequest:
+    ExecuteMetricDefinition:
       type: object
       properties:
         inputs:
           type: array
           items:
-            $ref: '#/components/schemas/MetricDefinitionInputRequest'
+            $ref: '#/components/schemas/MetricDefinitionInput'
         release_tag:
           type: string
           minLength: 1
@@ -4895,7 +4920,7 @@ components:
       type: string
       enum:
       - FUNCTION_CALL
-    FunctionCallInputRequest:
+    FunctionCallInput:
       type: object
       description: A user input representing a Vellum Function Call value
       properties:
@@ -4906,7 +4931,7 @@ components:
         type:
           type: string
         value:
-          $ref: '#/components/schemas/FunctionCallRequest'
+          $ref: '#/components/schemas/FunctionCall'
       required:
       - name
       - type
@@ -5503,6 +5528,21 @@ components:
         * `INITIATED` - INITIATED
         * `FULFILLED` - FULFILLED
         * `REJECTED` - REJECTED
+    JSONInput:
+      type: object
+      description: A user input representing a JSON object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name
+        type:
+          type: string
+        value: {}
+      required:
+      - name
+      - type
+      - value
     JSONInputRequest:
       type: object
       description: A user input representing a JSON object
@@ -5842,19 +5882,19 @@ components:
             $ref: '#/components/schemas/TestSuiteRunMetricOutput'
       required:
       - outputs
-    MetricDefinitionInputRequest:
+    MetricDefinitionInput:
       oneOf:
-      - $ref: '#/components/schemas/StringInputRequest'
-      - $ref: '#/components/schemas/JSONInputRequest'
-      - $ref: '#/components/schemas/ChatHistoryInputRequest'
-      - $ref: '#/components/schemas/NumberInputRequest'
+      - $ref: '#/components/schemas/StringInput'
+      - $ref: '#/components/schemas/JSONInput'
+      - $ref: '#/components/schemas/ChatHistoryInput'
+      - $ref: '#/components/schemas/NumberInput'
       discriminator:
         propertyName: type
         mapping:
-          STRING: '#/components/schemas/StringInputRequest'
-          JSON: '#/components/schemas/JSONInputRequest'
-          CHAT_HISTORY: '#/components/schemas/ChatHistoryInputRequest'
-          NUMBER: '#/components/schemas/NumberInputRequest'
+          STRING: '#/components/schemas/StringInput'
+          JSON: '#/components/schemas/JSONInput'
+          CHAT_HISTORY: '#/components/schemas/ChatHistoryInput'
+          NUMBER: '#/components/schemas/NumberInput'
     MetricEnum:
       type: string
       enum:
@@ -6603,7 +6643,7 @@ components:
       type: string
       enum:
       - NUMBER
-    NumberInputRequest:
+    NumberInput:
       type: object
       description: A user input representing a number value
       properties:
@@ -7105,18 +7145,6 @@ components:
       description: |-
         * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
         * `INVALID_FILE` - Invalid File
-    ProcessingStateEnum:
-      enum:
-      - QUEUED
-      - PROCESSING
-      - PROCESSED
-      - FAILED
-      type: string
-      description: |-
-        * `QUEUED` - Queued
-        * `PROCESSING` - Processing
-        * `PROCESSED` - Processed
-        * `FAILED` - Failed
     PromptBlock:
       oneOf:
       - $ref: '#/components/schemas/JinjaPromptBlock'
@@ -8015,7 +8043,7 @@ components:
       type: string
       enum:
       - SEARCH_RESULTS
-    SearchResultsInputRequest:
+    SearchResultsInput:
       type: object
       description: A user input representing a search results value
       properties:
@@ -8028,7 +8056,7 @@ components:
         value:
           type: array
           items:
-            $ref: '#/components/schemas/SearchResultRequest'
+            $ref: '#/components/schemas/SearchResult'
       required:
       - name
       - type
@@ -8240,15 +8268,7 @@ components:
           description: Human-friendly name for this document.
           maxLength: 1000
         processing_state:
-          allOf:
-          - $ref: '#/components/schemas/ProcessingStateEnum'
-          description: |-
-            An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.
-
-            * `QUEUED` - Queued
-            * `PROCESSING` - Processing
-            * `PROCESSED` - Processed
-            * `FAILED` - Failed
+          $ref: '#/components/schemas/DocumentProcessingState'
         processing_failure_reason:
           allOf:
           - $ref: '#/components/schemas/ProcessingFailureReasonEnum'
@@ -8286,6 +8306,7 @@ components:
       - id
       - label
       - last_uploaded_at
+      - processing_state
     SlimWorkflowDeployment:
       type: object
       properties:
@@ -8472,6 +8493,22 @@ components:
       type: string
       enum:
       - STRING
+    StringInput:
+      type: object
+      description: A user input representing a string value
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The variable's name
+        type:
+          type: string
+        value:
+          type: string
+      required:
+      - name
+      - type
+      - value
     StringInputRequest:
       type: object
       description: A user input representing a string value
@@ -10290,6 +10327,7 @@ components:
     VellumErrorCodeEnum:
       enum:
       - INVALID_REQUEST
+      - INVALID_INPUTS
       - PROVIDER_ERROR
       - REQUEST_TIMEOUT
       - INTERNAL_SERVER_ERROR
@@ -10297,6 +10335,7 @@ components:
       type: string
       description: |-
         * `INVALID_REQUEST` - INVALID_REQUEST
+        * `INVALID_INPUTS` - INVALID_INPUTS
         * `PROVIDER_ERROR` - PROVIDER_ERROR
         * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
         * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR

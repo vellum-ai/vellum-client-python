@@ -3,7 +3,7 @@
 from vellum import Vellum
 from vellum import AsyncVellum
 import typing
-from vellum import StringInputRequest
+from vellum import StringInput
 from .utilities import validate_response
 
 
@@ -11,11 +11,11 @@ async def test_execute_metric_definition(client: Vellum, async_client: AsyncVell
     expected_response: typing.Any = {"outputs": [{"value": "value", "type": "STRING", "name": "name"}]}
     expected_types: typing.Any = {"outputs": ("list", {0: {"value": None, "type": None, "name": None}})}
     response = client.metric_definitions.execute_metric_definition(
-        id="id", inputs=[StringInputRequest(name="name", value="value")]
+        id="id", inputs=[StringInput(name="name", value="value")]
     )
     validate_response(response, expected_response, expected_types)
 
     async_response = await async_client.metric_definitions.execute_metric_definition(
-        id="id", inputs=[StringInputRequest(name="name", value="value")]
+        id="id", inputs=[StringInput(name="name", value="value")]
     )
     validate_response(async_response, expected_response, expected_types)

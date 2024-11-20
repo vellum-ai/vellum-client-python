@@ -23,7 +23,7 @@ service:
         An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
       request:
-        name: CodeExecutorRequest
+        name: CodeExecutor
         body:
           properties:
             code:
@@ -31,8 +31,8 @@ service:
               validation:
                 minLength: 1
             runtime: CodeExecutionRuntime
-            input_values: list<CodeExecutorInputRequest>
-            packages: list<CodeExecutionPackageRequest>
+            input_values: list<CodeExecutorInput>
+            packages: list<CodeExecutionPackage>
             output_type: VellumVariableType
       response:
         docs: ''
@@ -795,7 +795,7 @@ types:
     source:
       openapi: openapi/openapi.yml
   ArrayEnum: literal<"ARRAY">
-  ArrayInputRequest:
+  ArrayInput:
     docs: A user input representing a Vellum Array value
     properties:
       name:
@@ -804,7 +804,7 @@ types:
         validation:
           minLength: 1
       type: literal<"ARRAY">
-      value: list<VellumValueRequest>
+      value: list<VellumValue>
     source:
       openapi: openapi/openapi.yml
   ArrayVariableValue:
@@ -921,6 +921,18 @@ types:
     source:
       openapi: openapi/openapi.yml
   ChatHistoryEnum: literal<"CHAT_HISTORY">
+  ChatHistoryInput:
+    docs: A user input representing a list of chat messages
+    properties:
+      name:
+        type: string
+        docs: The variable's name, as defined in the deployment.
+        validation:
+          minLength: 1
+      type: literal<"CHAT_HISTORY">
+      value: list<ChatMessage>
+    source:
+      openapi: openapi/openapi.yml
   ChatHistoryInputRequest:
     docs: A user input representing a list of chat messages
     properties:
@@ -1110,7 +1122,7 @@ types:
       value: optional<string>
     source:
       openapi: openapi/openapi.yml
-  CodeExecutionPackageRequest:
+  CodeExecutionPackage:
     properties:
       version:
         type: string
@@ -1137,18 +1149,18 @@ types:
       log: string
     source:
       openapi: openapi/openapi.yml
-  CodeExecutorInputRequest:
+  CodeExecutorInput:
     discriminated: false
     union:
-      - StringInputRequest
-      - JsonInputRequest
-      - ChatHistoryInputRequest
-      - NumberInputRequest
-      - SearchResultsInputRequest
-      - ErrorInputRequest
-      - ArrayInputRequest
-      - FunctionCallInputRequest
-      - CodeExecutorSecretInputRequest
+      - StringInput
+      - JsonInput
+      - ChatHistoryInput
+      - NumberInput
+      - SearchResultsInput
+      - ErrorInput
+      - ArrayInput
+      - FunctionCallInput
+      - CodeExecutorSecretInput
     source:
       openapi: openapi/openapi.yml
   CodeExecutorResponse:
@@ -1157,7 +1169,7 @@ types:
       output: VellumValue
     source:
       openapi: openapi/openapi.yml
-  CodeExecutorSecretInputRequest:
+  CodeExecutorSecretInput:
     docs: A user input representing a Vellum Workspace Secret value
     properties:
       name:
@@ -1465,6 +1477,21 @@ types:
       indexing_config: DocumentIndexIndexingConfig
     source:
       openapi: openapi/openapi.yml
+  DocumentProcessingState:
+    enum:
+      - QUEUED
+      - PROCESSING
+      - PROCESSED
+      - FAILED
+      - UNKNOWN
+    docs: |-
+      * `QUEUED` - Queued
+      * `PROCESSING` - Processing
+      * `PROCESSED` - Processed
+      * `FAILED` - Failed
+      * `UNKNOWN` - Unknown
+    source:
+      openapi: openapi/openapi.yml
   DocumentRead:
     properties:
       id:
@@ -1484,15 +1511,7 @@ types:
           uploaded file's file name.
         validation:
           maxLength: 1000
-      processing_state:
-        type: optional<ProcessingStateEnum>
-        docs: |-
-          The current processing state of the document
-
-          * `QUEUED` - Queued
-          * `PROCESSING` - Processing
-          * `PROCESSED` - Processed
-          * `FAILED` - Failed
+      processing_state: DocumentProcessingState
       status:
         type: optional<DocumentStatus>
         docs: |-
@@ -1592,7 +1611,7 @@ types:
     type: literal<"EPHEMERAL">
     docs: '* `EPHEMERAL` - EPHEMERAL'
   ErrorEnum: literal<"ERROR">
-  ErrorInputRequest:
+  ErrorInput:
     docs: A user input representing a Vellum Error value
     properties:
       name:
@@ -1601,7 +1620,7 @@ types:
         validation:
           minLength: 1
       type: literal<"ERROR">
-      value: VellumErrorRequest
+      value: VellumError
     source:
       openapi: openapi/openapi.yml
   ErrorVariableValue:
@@ -2074,7 +2093,7 @@ types:
     source:
       openapi: openapi/openapi.yml
   FunctionCallEnum: literal<"FUNCTION_CALL">
-  FunctionCallInputRequest:
+  FunctionCallInput:
     docs: A user input representing a Vellum Function Call value
     properties:
       name:
@@ -2083,7 +2102,7 @@ types:
         validation:
           minLength: 1
       type: literal<"FUNCTION_CALL">
-      value: FunctionCallRequest
+      value: FunctionCall
     source:
       openapi: openapi/openapi.yml
   FunctionCallRequest:
@@ -2444,6 +2463,18 @@ types:
       * `REJECTED` - REJECTED
     source:
       openapi: openapi/openapi.yml
+  JsonInput:
+    docs: A user input representing a JSON object
+    properties:
+      name:
+        type: string
+        docs: The variable's name
+        validation:
+          minLength: 1
+      type: literal<"JSON">
+      value: unknown
+    source:
+      openapi: openapi/openapi.yml
   JsonInputRequest:
     docs: A user input representing a JSON object
     properties:
@@ -2676,13 +2707,13 @@ types:
       outputs: list<TestSuiteRunMetricOutput>
     source:
       openapi: openapi/openapi.yml
-  MetricDefinitionInputRequest:
+  MetricDefinitionInput:
     discriminated: false
     union:
-      - StringInputRequest
-      - JsonInputRequest
-      - ChatHistoryInputRequest
-      - NumberInputRequest
+      - StringInput
+      - JsonInput
+      - ChatHistoryInput
+      - NumberInput
     source:
       openapi: openapi/openapi.yml
   MetricEnum: literal<"METRIC">
@@ -3088,7 +3119,7 @@ types:
     source:
       openapi: openapi/openapi.yml
   NumberEnum: literal<"NUMBER">
-  NumberInputRequest:
+  NumberInput:
     docs: A user input representing a number value
     properties:
       name:
@@ -3370,19 +3401,6 @@ types:
     docs: |-
       * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
       * `INVALID_FILE` - Invalid File
-    source:
-      openapi: openapi/openapi.yml
-  ProcessingStateEnum:
-    enum:
-      - QUEUED
-      - PROCESSING
-      - PROCESSED
-      - FAILED
-    docs: |-
-      * `QUEUED` - Queued
-      * `PROCESSING` - Processing
-      * `PROCESSED` - Processed
-      * `FAILED` - Failed
     source:
       openapi: openapi/openapi.yml
   PromptBlock:
@@ -3954,7 +3972,7 @@ types:
     source:
       openapi: openapi/openapi.yml
   SearchResultsEnum: literal<"SEARCH_RESULTS">
-  SearchResultsInputRequest:
+  SearchResultsInput:
     docs: A user input representing a search results value
     properties:
       name:
@@ -3963,7 +3981,7 @@ types:
         validation:
           minLength: 1
       type: literal<"SEARCH_RESULTS">
-      value: list<SearchResultRequest>
+      value: list<SearchResult>
     source:
       openapi: openapi/openapi.yml
   SearchResultsVariableValue:
@@ -4125,20 +4143,7 @@ types:
         docs: Human-friendly name for this document.
         validation:
           maxLength: 1000
-      processing_state:
-        type: optional<ProcessingStateEnum>
-        docs: >-
-          An enum value representing where this document is along its processing
-          lifecycle. Note that this is different than its indexing lifecycle.
-
-
-          * `QUEUED` - Queued
-
-          * `PROCESSING` - Processing
-
-          * `PROCESSED` - Processed
-
-          * `FAILED` - Failed
+      processing_state: DocumentProcessingState
       processing_failure_reason:
         type: optional<ProcessingFailureReasonEnum>
         docs: >-
@@ -4286,6 +4291,18 @@ types:
     source:
       openapi: openapi/openapi.yml
   StringEnum: literal<"STRING">
+  StringInput:
+    docs: A user input representing a string value
+    properties:
+      name:
+        type: string
+        docs: The variable's name
+        validation:
+          minLength: 1
+      type: literal<"STRING">
+      value: string
+    source:
+      openapi: openapi/openapi.yml
   StringInputRequest:
     docs: A user input representing a string value
     properties:
@@ -5440,12 +5457,14 @@ types:
   VellumErrorCodeEnum:
     enum:
       - INVALID_REQUEST
+      - INVALID_INPUTS
       - PROVIDER_ERROR
       - REQUEST_TIMEOUT
       - INTERNAL_SERVER_ERROR
       - USER_DEFINED_ERROR
     docs: |-
       * `INVALID_REQUEST` - INVALID_REQUEST
+      * `INVALID_INPUTS` - INVALID_INPUTS
       * `PROVIDER_ERROR` - PROVIDER_ERROR
       * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
       * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR

@@ -2,7 +2,7 @@
 
 import typing
 from ...core.client_wrapper import SyncClientWrapper
-from ...types.metric_definition_input_request import MetricDefinitionInputRequest
+from ...types.metric_definition_input import MetricDefinitionInput
 from ...core.request_options import RequestOptions
 from ...types.metric_definition_execution import MetricDefinitionExecution
 from ...core.jsonable_encoder import jsonable_encoder
@@ -24,7 +24,7 @@ class MetricDefinitionsClient:
         self,
         id: str,
         *,
-        inputs: typing.Sequence[MetricDefinitionInputRequest],
+        inputs: typing.Sequence[MetricDefinitionInput],
         release_tag: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> MetricDefinitionExecution:
@@ -36,7 +36,7 @@ class MetricDefinitionsClient:
         id : str
             Either the Metric Definition's ID or its unique name
 
-        inputs : typing.Sequence[MetricDefinitionInputRequest]
+        inputs : typing.Sequence[MetricDefinitionInput]
 
         release_tag : typing.Optional[str]
 
@@ -50,7 +50,7 @@ class MetricDefinitionsClient:
 
         Examples
         --------
-        from vellum import StringInputRequest, Vellum
+        from vellum import StringInput, Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
@@ -58,7 +58,7 @@ class MetricDefinitionsClient:
         client.metric_definitions.execute_metric_definition(
             id="id",
             inputs=[
-                StringInputRequest(
+                StringInput(
                     name="name",
                     value="value",
                 )
@@ -71,7 +71,7 @@ class MetricDefinitionsClient:
             method="POST",
             json={
                 "inputs": convert_and_respect_annotation_metadata(
-                    object_=inputs, annotation=typing.Sequence[MetricDefinitionInputRequest], direction="write"
+                    object_=inputs, annotation=typing.Sequence[MetricDefinitionInput], direction="write"
                 ),
                 "release_tag": release_tag,
             },
@@ -101,7 +101,7 @@ class AsyncMetricDefinitionsClient:
         self,
         id: str,
         *,
-        inputs: typing.Sequence[MetricDefinitionInputRequest],
+        inputs: typing.Sequence[MetricDefinitionInput],
         release_tag: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> MetricDefinitionExecution:
@@ -113,7 +113,7 @@ class AsyncMetricDefinitionsClient:
         id : str
             Either the Metric Definition's ID or its unique name
 
-        inputs : typing.Sequence[MetricDefinitionInputRequest]
+        inputs : typing.Sequence[MetricDefinitionInput]
 
         release_tag : typing.Optional[str]
 
@@ -129,7 +129,7 @@ class AsyncMetricDefinitionsClient:
         --------
         import asyncio
 
-        from vellum import AsyncVellum, StringInputRequest
+        from vellum import AsyncVellum, StringInput
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
@@ -140,7 +140,7 @@ class AsyncMetricDefinitionsClient:
             await client.metric_definitions.execute_metric_definition(
                 id="id",
                 inputs=[
-                    StringInputRequest(
+                    StringInput(
                         name="name",
                         value="value",
                     )
@@ -156,7 +156,7 @@ class AsyncMetricDefinitionsClient:
             method="POST",
             json={
                 "inputs": convert_and_respect_annotation_metadata(
-                    object_=inputs, annotation=typing.Sequence[MetricDefinitionInputRequest], direction="write"
+                    object_=inputs, annotation=typing.Sequence[MetricDefinitionInput], direction="write"
                 ),
                 "release_tag": release_tag,
             },

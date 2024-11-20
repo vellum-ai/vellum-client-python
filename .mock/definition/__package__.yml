@@ -2467,7 +2467,6 @@ types:
         type: string
         validation:
           minLength: 1
-      template_type: VellumVariableType
     source:
       openapi: openapi/openapi.yml
   JsonEnum: literal<"JSON">
@@ -5403,10 +5402,10 @@ types:
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfig>
       block_type: literal<"VARIABLE">
-      input_variable_id:
+      input_variable:
         type: string
         validation:
-          format: uuid
+          minLength: 1
     source:
       openapi: openapi/openapi.yml
   VellumAudio:

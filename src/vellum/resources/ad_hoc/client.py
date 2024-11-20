@@ -126,7 +126,6 @@ class AdHocClient:
                     state="ENABLED",
                     cache_config=EphemeralPromptCacheConfig(),
                     template="string",
-                    template_type="STRING",
                 )
             ],
             expand_meta=AdHocExpandMeta(
@@ -327,7 +326,6 @@ class AsyncAdHocClient:
                         state="ENABLED",
                         cache_config=EphemeralPromptCacheConfig(),
                         template="string",
-                        template_type="STRING",
                     )
                 ],
                 expand_meta=AdHocExpandMeta(

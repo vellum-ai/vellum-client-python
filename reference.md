@@ -1268,7 +1268,6 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
             state="ENABLED",
             cache_config=EphemeralPromptCacheConfig(),
             template="string",
-            template_type="STRING",
         )
     ],
     expand_meta=AdHocExpandMeta(

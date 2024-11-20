@@ -5537,12 +5537,9 @@ components:
         template:
           type: string
           minLength: 1
-        template_type:
-          $ref: '#/components/schemas/VellumVariableType'
       required:
       - block_type
       - template
-      - template_type
     JsonEnum:
       type: string
       enum:
@@ -10247,12 +10244,12 @@ components:
           nullable: true
         block_type:
           $ref: '#/components/schemas/VariableEnum'
-        input_variable_id:
+        input_variable:
           type: string
-          format: uuid
+          minLength: 1
       required:
       - block_type
-      - input_variable_id
+      - input_variable
     VellumAudio:
       type: object
       properties:

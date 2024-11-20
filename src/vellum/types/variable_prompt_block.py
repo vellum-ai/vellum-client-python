@@ -16,7 +16,7 @@ class VariablePromptBlock(UniversalBaseModel):
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfig] = None
     block_type: typing.Literal["VARIABLE"] = "VARIABLE"
-    input_variable_id: str
+    input_variable: str
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

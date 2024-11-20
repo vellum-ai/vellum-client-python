@@ -19,6 +19,8 @@ class FunctionDefinitionPromptBlock(UniversalBaseModel):
     function_name: typing.Optional[str] = None
     function_description: typing.Optional[str] = None
     function_parameters: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
+    function_forced: typing.Optional[bool] = None
+    function_strict: typing.Optional[bool] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -2140,21 +2140,19 @@ types:
       value: optional<FunctionCallRequest>
     source:
       openapi: openapi/openapi.yml
-  FunctionDefinitionEnum: literal<"FUNCTION_DEFINITION">
-  FunctionDefinitionPromptBlock:
+  FunctionDefinition:
     docs: A block that represents a function definition in a prompt template.
     properties:
       state: optional<PromptBlockState>
       cache_config: optional<EphemeralPromptCacheConfig>
-      block_type: literal<"FUNCTION_DEFINITION">
-      function_name:
+      name:
         type: optional<string>
         validation:
           minLength: 1
-      function_description: optional<string>
-      function_parameters: optional<map<string, unknown>>
-      function_forced: optional<boolean>
-      function_strict: optional<boolean>
+      description: optional<string>
+      parameters: optional<map<string, unknown>>
+      forced: optional<boolean>
+      strict: optional<boolean>
     source:
       openapi: openapi/openapi.yml
   GenerateErrorResponse:
@@ -3408,7 +3406,6 @@ types:
     union:
       - JinjaPromptBlock
       - ChatMessagePromptBlock
-      - FunctionDefinitionPromptBlock
       - VariablePromptBlock
       - RichTextPromptBlock
     source:

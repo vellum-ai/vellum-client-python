@@ -142,7 +142,7 @@ from .function_call_request import FunctionCallRequest
 from .function_call_variable_value import FunctionCallVariableValue
 from .function_call_vellum_value import FunctionCallVellumValue
 from .function_call_vellum_value_request import FunctionCallVellumValueRequest
-from .function_definition_prompt_block import FunctionDefinitionPromptBlock
+from .function_definition import FunctionDefinition
 from .generate_options_request import GenerateOptionsRequest
 from .generate_request import GenerateRequest
 from .generate_response import GenerateResponse
@@ -631,7 +631,7 @@ __all__ = [
     "FunctionCallVariableValue",
     "FunctionCallVellumValue",
     "FunctionCallVellumValueRequest",
-    "FunctionDefinitionPromptBlock",
+    "FunctionDefinition",
     "GenerateOptionsRequest",
     "GenerateRequest",
     "GenerateResponse",

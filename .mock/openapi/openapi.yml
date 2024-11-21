@@ -2295,6 +2295,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PromptBlock'
+        functions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FunctionDefinitionPromptBlock'
         expand_meta:
           allOf:
           - $ref: '#/components/schemas/AdHocExpandMeta'
@@ -5009,21 +5013,21 @@ components:
           nullable: true
         block_type:
           $ref: '#/components/schemas/FunctionDefinitionEnum'
-        function_name:
+        name:
           type: string
           nullable: true
           minLength: 1
-        function_description:
+        description:
           type: string
           nullable: true
-        function_parameters:
+        parameters:
           type: object
           additionalProperties: {}
           nullable: true
-        function_forced:
+        forced:
           type: boolean
           nullable: true
-        function_strict:
+        strict:
           type: boolean
           nullable: true
       required:

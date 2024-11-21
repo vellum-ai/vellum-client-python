@@ -1214,6 +1214,7 @@ An internal-only endpoint that's subject to breaking changes without notice. Not
 from vellum import (
     AdHocExpandMeta,
     EphemeralPromptCacheConfig,
+    FunctionDefinitionPromptBlock,
     JinjaPromptBlock,
     PromptParameters,
     PromptRequestStringInput,
@@ -1268,6 +1269,17 @@ response = client.ad_hoc.adhoc_execute_prompt_stream(
             state="ENABLED",
             cache_config=EphemeralPromptCacheConfig(),
             template="string",
+        )
+    ],
+    functions=[
+        FunctionDefinitionPromptBlock(
+            state={"key": "value"},
+            cache_config={"key": "value"},
+            name={"key": "value"},
+            description={"key": "value"},
+            parameters={"key": "value"},
+            forced={"key": "value"},
+            strict={"key": "value"},
         )
     ],
     expand_meta=AdHocExpandMeta(
@@ -1335,6 +1347,14 @@ for chunk in response:
 <dd>
 
 **settings:** `typing.Optional[PromptSettings]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**functions:** `typing.Optional[typing.Sequence[FunctionDefinitionPromptBlock]]` 
     
 </dd>
 </dl>

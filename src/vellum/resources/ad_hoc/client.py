@@ -7,6 +7,7 @@ from ...types.vellum_variable import VellumVariable
 from ...types.prompt_parameters import PromptParameters
 from ...types.prompt_block import PromptBlock
 from ...types.prompt_settings import PromptSettings
+from ...types.function_definition_prompt_block import FunctionDefinitionPromptBlock
 from ...types.ad_hoc_expand_meta import AdHocExpandMeta
 from ...core.request_options import RequestOptions
 from ...types.ad_hoc_execute_prompt_event import AdHocExecutePromptEvent
@@ -37,6 +38,7 @@ class AdHocClient:
         parameters: PromptParameters,
         blocks: typing.Sequence[PromptBlock],
         settings: typing.Optional[PromptSettings] = OMIT,
+        functions: typing.Optional[typing.Sequence[FunctionDefinitionPromptBlock]] = OMIT,
         expand_meta: typing.Optional[AdHocExpandMeta] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Iterator[AdHocExecutePromptEvent]:
@@ -57,6 +59,8 @@ class AdHocClient:
 
         settings : typing.Optional[PromptSettings]
 
+        functions : typing.Optional[typing.Sequence[FunctionDefinitionPromptBlock]]
+
         expand_meta : typing.Optional[AdHocExpandMeta]
 
         request_options : typing.Optional[RequestOptions]
@@ -72,6 +76,7 @@ class AdHocClient:
         from vellum import (
             AdHocExpandMeta,
             EphemeralPromptCacheConfig,
+            FunctionDefinitionPromptBlock,
             JinjaPromptBlock,
             PromptParameters,
             PromptRequestStringInput,
@@ -128,6 +133,17 @@ class AdHocClient:
                     template="string",
                 )
             ],
+            functions=[
+                FunctionDefinitionPromptBlock(
+                    state={"key": "value"},
+                    cache_config={"key": "value"},
+                    name={"key": "value"},
+                    description={"key": "value"},
+                    parameters={"key": "value"},
+                    forced={"key": "value"},
+                    strict={"key": "value"},
+                )
+            ],
             expand_meta=AdHocExpandMeta(
                 cost=True,
                 model_name=True,
@@ -158,6 +174,9 @@ class AdHocClient:
                 ),
                 "blocks": convert_and_respect_annotation_metadata(
                     object_=blocks, annotation=typing.Sequence[PromptBlock], direction="write"
+                ),
+                "functions": convert_and_respect_annotation_metadata(
+                    object_=functions, annotation=typing.Sequence[FunctionDefinitionPromptBlock], direction="write"
                 ),
                 "expand_meta": convert_and_respect_annotation_metadata(
                     object_=expand_meta, annotation=AdHocExpandMeta, direction="write"
@@ -232,6 +251,7 @@ class AsyncAdHocClient:
         parameters: PromptParameters,
         blocks: typing.Sequence[PromptBlock],
         settings: typing.Optional[PromptSettings] = OMIT,
+        functions: typing.Optional[typing.Sequence[FunctionDefinitionPromptBlock]] = OMIT,
         expand_meta: typing.Optional[AdHocExpandMeta] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.AsyncIterator[AdHocExecutePromptEvent]:
@@ -252,6 +272,8 @@ class AsyncAdHocClient:
 
         settings : typing.Optional[PromptSettings]
 
+        functions : typing.Optional[typing.Sequence[FunctionDefinitionPromptBlock]]
+
         expand_meta : typing.Optional[AdHocExpandMeta]
 
         request_options : typing.Optional[RequestOptions]
@@ -270,6 +292,7 @@ class AsyncAdHocClient:
             AdHocExpandMeta,
             AsyncVellum,
             EphemeralPromptCacheConfig,
+            FunctionDefinitionPromptBlock,
             JinjaPromptBlock,
             PromptParameters,
             PromptRequestStringInput,
@@ -328,6 +351,17 @@ class AsyncAdHocClient:
                         template="string",
                     )
                 ],
+                functions=[
+                    FunctionDefinitionPromptBlock(
+                        state={"key": "value"},
+                        cache_config={"key": "value"},
+                        name={"key": "value"},
+                        description={"key": "value"},
+                        parameters={"key": "value"},
+                        forced={"key": "value"},
+                        strict={"key": "value"},
+                    )
+                ],
                 expand_meta=AdHocExpandMeta(
                     cost=True,
                     model_name=True,
@@ -361,6 +395,9 @@ class AsyncAdHocClient:
                 ),
                 "blocks": convert_and_respect_annotation_metadata(
                     object_=blocks, annotation=typing.Sequence[PromptBlock], direction="write"
+                ),
+                "functions": convert_and_respect_annotation_metadata(
+                    object_=functions, annotation=typing.Sequence[FunctionDefinitionPromptBlock], direction="write"
                 ),
                 "expand_meta": convert_and_respect_annotation_metadata(
                     object_=expand_meta, annotation=AdHocExpandMeta, direction="write"

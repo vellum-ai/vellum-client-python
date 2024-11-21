@@ -24,6 +24,7 @@ service:
             parameters: root.PromptParameters
             settings: optional<root.PromptSettings>
             blocks: list<root.PromptBlock>
+            functions: optional<list<root.FunctionDefinitionPromptBlock>>
             expand_meta: optional<root.AdHocExpandMeta>
       response-stream:
         docs: ''

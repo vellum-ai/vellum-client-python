@@ -8,19 +8,18 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
 
 
-class FunctionDefinitionPromptBlock(UniversalBaseModel):
+class FunctionDefinition(UniversalBaseModel):
     """
     A block that represents a function definition in a prompt template.
     """
 
     state: typing.Optional[PromptBlockState] = None
     cache_config: typing.Optional[EphemeralPromptCacheConfig] = None
-    block_type: typing.Literal["FUNCTION_DEFINITION"] = "FUNCTION_DEFINITION"
-    function_name: typing.Optional[str] = None
-    function_description: typing.Optional[str] = None
-    function_parameters: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
-    function_forced: typing.Optional[bool] = None
-    function_strict: typing.Optional[bool] = None
+    name: typing.Optional[str] = None
+    description: typing.Optional[str] = None
+    parameters: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = None
+    forced: typing.Optional[bool] = None
+    strict: typing.Optional[bool] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

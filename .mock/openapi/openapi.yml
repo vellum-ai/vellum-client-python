@@ -2295,6 +2295,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PromptBlock'
+        functions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FunctionDefinition'
+          nullable: true
         expand_meta:
           allOf:
           - $ref: '#/components/schemas/AdHocExpandMeta'
@@ -4993,11 +4998,7 @@ components:
       required:
       - type
       - value
-    FunctionDefinitionEnum:
-      type: string
-      enum:
-      - FUNCTION_DEFINITION
-    FunctionDefinitionPromptBlock:
+    FunctionDefinition:
       type: object
       description: A block that represents a function definition in a prompt template.
       properties:
@@ -5007,27 +5008,23 @@ components:
           allOf:
           - $ref: '#/components/schemas/EphemeralPromptCacheConfig'
           nullable: true
-        block_type:
-          $ref: '#/components/schemas/FunctionDefinitionEnum'
-        function_name:
+        name:
           type: string
           nullable: true
           minLength: 1
-        function_description:
+        description:
           type: string
           nullable: true
-        function_parameters:
+        parameters:
           type: object
           additionalProperties: {}
           nullable: true
-        function_forced:
+        forced:
           type: boolean
           nullable: true
-        function_strict:
+        strict:
           type: boolean
           nullable: true
-      required:
-      - block_type
     GenerateBodyRequest:
       type: object
       properties:
@@ -7149,7 +7146,6 @@ components:
       oneOf:
       - $ref: '#/components/schemas/JinjaPromptBlock'
       - $ref: '#/components/schemas/ChatMessagePromptBlock'
-      - $ref: '#/components/schemas/FunctionDefinitionPromptBlock'
       - $ref: '#/components/schemas/VariablePromptBlock'
       - $ref: '#/components/schemas/RichTextPromptBlock'
       discriminator:
@@ -7157,7 +7153,6 @@ components:
         mapping:
           JINJA: '#/components/schemas/JinjaPromptBlock'
           CHAT_MESSAGE: '#/components/schemas/ChatMessagePromptBlock'
-          FUNCTION_DEFINITION: '#/components/schemas/FunctionDefinitionPromptBlock'
           VARIABLE: '#/components/schemas/VariablePromptBlock'
           RICH_TEXT: '#/components/schemas/RichTextPromptBlock'
     PromptBlockState:

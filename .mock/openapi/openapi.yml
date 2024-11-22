@@ -2186,6 +2186,9 @@ paths:
       - workflows
       requestBody:
         content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WorkflowPushRequest'
           application/json:
             schema:
               $ref: '#/components/schemas/WorkflowPushRequest'
@@ -11103,13 +11106,15 @@ components:
             minLength: 1
           nullable: true
     WorkflowPushExecConfig:
-      type: object
-      additionalProperties: {}
+      type: string
+      minLength: 1
     WorkflowPushRequest:
       type: object
       properties:
         exec_config:
-          $ref: '#/components/schemas/WorkflowPushExecConfig'
+          allOf:
+          - $ref: '#/components/schemas/WorkflowPushExecConfig'
+          description: The execution configuration of the workflow.
         label:
           type: string
           minLength: 1
@@ -11121,6 +11126,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/WorkflowPushDeploymentConfigRequest'
           nullable: true
+        artifact:
+          type: string
+          format: binary
+          description: The contents of the artifact tar.gz file.
       required:
       - exec_config
       - label

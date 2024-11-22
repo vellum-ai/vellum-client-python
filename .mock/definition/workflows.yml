@@ -46,7 +46,9 @@ service:
         name: WorkflowPushRequest
         body:
           properties:
-            exec_config: root.WorkflowPushExecConfig
+            exec_config:
+              type: root.WorkflowPushExecConfig
+              docs: The execution configuration of the workflow.
             label:
               type: string
               validation:
@@ -56,6 +58,8 @@ service:
               validation:
                 format: uuid
             deployment_config: optional<root.WorkflowPushDeploymentConfigRequest>
+            artifact: optional<file>
+        content-type: multipart/form-data
       response:
         docs: ''
         type: root.WorkflowPushResponse
@@ -63,8 +67,7 @@ service:
       availability: pre-release
       examples:
         - request:
-            exec_config:
-              key: value
+            exec_config: exec_config
             label: label
           response:
             body:

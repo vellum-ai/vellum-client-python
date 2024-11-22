@@ -11,8 +11,8 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.workflow_push_exec_config import WorkflowPushExecConfig
 from ...types.workflow_push_deployment_config_request import WorkflowPushDeploymentConfigRequest
+from ... import core
 from ...types.workflow_push_response import WorkflowPushResponse
-from ...core.serialization import convert_and_respect_annotation_metadata
 from ...core.client_wrapper import AsyncClientWrapper
 
 # this is used as the default value for optional parameters
@@ -97,6 +97,7 @@ class WorkflowsClient:
         label: str,
         workflow_sandbox_id: typing.Optional[str] = OMIT,
         deployment_config: typing.Optional[WorkflowPushDeploymentConfigRequest] = OMIT,
+        artifact: typing.Optional[core.File] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowPushResponse:
         """
@@ -105,12 +106,16 @@ class WorkflowsClient:
         Parameters
         ----------
         exec_config : WorkflowPushExecConfig
+            The execution configuration of the workflow.
 
         label : str
 
         workflow_sandbox_id : typing.Optional[str]
 
         deployment_config : typing.Optional[WorkflowPushDeploymentConfigRequest]
+
+        artifact : typing.Optional[core.File]
+            See core.File for more documentation
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -128,7 +133,7 @@ class WorkflowsClient:
             api_key="YOUR_API_KEY",
         )
         client.workflows.push(
-            exec_config={"key": "value"},
+            exec_config="exec_config",
             label="label",
         )
         """
@@ -136,13 +141,14 @@ class WorkflowsClient:
             "v1/workflows/push",
             base_url=self._client_wrapper.get_environment().default,
             method="POST",
-            json={
+            data={
                 "exec_config": exec_config,
                 "label": label,
                 "workflow_sandbox_id": workflow_sandbox_id,
-                "deployment_config": convert_and_respect_annotation_metadata(
-                    object_=deployment_config, annotation=WorkflowPushDeploymentConfigRequest, direction="write"
-                ),
+                "deployment_config": deployment_config,
+            },
+            files={
+                "artifact": artifact,
             },
             request_options=request_options,
             omit=OMIT,
@@ -248,6 +254,7 @@ class AsyncWorkflowsClient:
         label: str,
         workflow_sandbox_id: typing.Optional[str] = OMIT,
         deployment_config: typing.Optional[WorkflowPushDeploymentConfigRequest] = OMIT,
+        artifact: typing.Optional[core.File] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowPushResponse:
         """
@@ -256,12 +263,16 @@ class AsyncWorkflowsClient:
         Parameters
         ----------
         exec_config : WorkflowPushExecConfig
+            The execution configuration of the workflow.
 
         label : str
 
         workflow_sandbox_id : typing.Optional[str]
 
         deployment_config : typing.Optional[WorkflowPushDeploymentConfigRequest]
+
+        artifact : typing.Optional[core.File]
+            See core.File for more documentation
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -284,7 +295,7 @@ class AsyncWorkflowsClient:
 
         async def main() -> None:
             await client.workflows.push(
-                exec_config={"key": "value"},
+                exec_config="exec_config",
                 label="label",
             )
 
@@ -295,13 +306,14 @@ class AsyncWorkflowsClient:
             "v1/workflows/push",
             base_url=self._client_wrapper.get_environment().default,
             method="POST",
-            json={
+            data={
                 "exec_config": exec_config,
                 "label": label,
                 "workflow_sandbox_id": workflow_sandbox_id,
-                "deployment_config": convert_and_respect_annotation_metadata(
-                    object_=deployment_config, annotation=WorkflowPushDeploymentConfigRequest, direction="write"
-                ),
+                "deployment_config": deployment_config,
+            },
+            files={
+                "artifact": artifact,
             },
             request_options=request_options,
             omit=OMIT,

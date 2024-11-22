@@ -6036,7 +6036,10 @@ types:
       release_tags: optional<list<string>>
     source:
       openapi: openapi/openapi.yml
-  WorkflowPushExecConfig: map<string, unknown>
+  WorkflowPushExecConfig:
+    type: string
+    validation:
+      minLength: 1
   WorkflowPushResponse:
     properties:
       workflow_sandbox_id:

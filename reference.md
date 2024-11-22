@@ -5330,7 +5330,7 @@ client = Vellum(
     api_key="YOUR_API_KEY",
 )
 client.workflows.push(
-    exec_config={"key": "value"},
+    exec_config="exec_config",
     label="label",
 )
 
@@ -5348,7 +5348,7 @@ client.workflows.push(
 <dl>
 <dd>
 
-**exec_config:** `WorkflowPushExecConfig` 
+**exec_config:** `WorkflowPushExecConfig` — The execution configuration of the workflow.
     
 </dd>
 </dl>
@@ -5373,6 +5373,16 @@ client.workflows.push(
 <dd>
 
 **deployment_config:** `typing.Optional[WorkflowPushDeploymentConfigRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**artifact:** `from __future__ import annotations
+
+typing.Optional[core.File]` — See core.File for more documentation
     
 </dd>
 </dl>

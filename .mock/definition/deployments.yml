@@ -102,6 +102,46 @@ service:
               last_deployed_history_item_id: last_deployed_history_item_id
       audiences:
         - customers
+    deployment_history_item_retrieve:
+      path: /v1/deployments/{id}/history/{history_id_or_release_tag}
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve a specific Deployment History Item by either its UUID or the
+        name of a Release Tag that points to it.
+      path-parameters:
+        history_id_or_release_tag:
+          type: string
+          docs: >-
+            Either the UUID of Deployment History Item you'd like to retrieve,
+            or the name of a Release Tag that's pointing to the Deployment
+            History Item you'd like to retrieve.
+        id:
+          type: string
+          docs: A UUID string identifying this deployment.
+      response:
+        docs: ''
+        type: root.DeploymentHistoryItem
+      url: Default
+      examples:
+        - path-parameters:
+            history_id_or_release_tag: history_id_or_release_tag
+            id: id
+          response:
+            body:
+              id: id
+              deployment_id: deployment_id
+              timestamp: '2024-01-15T09:30:00Z'
+              label: label
+              name: name
+              input_variables:
+                - id: id
+                  key: key
+                  type: STRING
+                  required: true
+                  default:
+                    type: STRING
+              description: description
     list_deployment_release_tags:
       path: /v1/deployments/{id}/release-tags
       method: GET

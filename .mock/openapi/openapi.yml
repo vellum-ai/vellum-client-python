@@ -260,6 +260,39 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+  /v1/deployments/{id}/history/{history_id_or_release_tag}:
+    get:
+      operationId: deployment_history_item_retrieve
+      description: Retrieve a specific Deployment History Item by either its UUID
+        or the name of a Release Tag that points to it.
+      parameters:
+      - in: path
+        name: history_id_or_release_tag
+        schema:
+          type: string
+          format: uuid
+        description: Either the UUID of Deployment History Item you'd like to retrieve,
+          or the name of a Release Tag that's pointing to the Deployment History Item
+          you'd like to retrieve.
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this deployment.
+        required: true
+      tags:
+      - deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentHistoryItem'
+          description: ''
   /v1/deployments/{id}/release-tags:
     get:
       operationId: list_deployment_release_tags
@@ -1975,6 +2008,39 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - customers
+  /v1/workflow-deployments/{id}/history/{history_id_or_release_tag}:
+    get:
+      operationId: workflow_deployment_history_item_retrieve
+      description: Retrieve a specific Workflow Deployment History Item by either
+        its UUID or the name of a Release Tag that points to it.
+      parameters:
+      - in: path
+        name: history_id_or_release_tag
+        schema:
+          type: string
+          format: uuid
+        description: Either the UUID of Workflow Deployment History Item you'd like
+          to retrieve, or the name of a Release Tag that's pointing to the Workflow
+          Deployment History Item you'd like to retrieve.
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this workflow deployment.
+        required: true
+      tags:
+      - workflow-deployments
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDeploymentHistoryItem'
+          description: ''
   /v1/workflow-deployments/{id}/release-tags:
     get:
       operationId: list_workflow_release_tags
@@ -3373,6 +3439,42 @@ components:
           nullable: true
           description: Optionally provide the release tags that you'd like to be associated
             with the latest release of the created/updated Prompt Deployment.
+    DeploymentHistoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        deployment_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        label:
+          type: string
+          description: A human-readable label for the deployment
+          maxLength: 150
+        name:
+          type: string
+          description: A name that uniquely identifies this deployment within its
+            workspace
+          maxLength: 150
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+        description:
+          type: string
+          nullable: true
+          description: A human-readable description of the deployment
+      required:
+      - deployment_id
+      - id
+      - input_variables
+      - label
+      - name
+      - timestamp
     DeploymentProviderPayloadRequest:
       type: object
       properties:
@@ -10528,6 +10630,47 @@ components:
         * `IMAGE` - IMAGE
         * `AUDIO` - AUDIO
         * `NULL` - NULL
+    WorkflowDeploymentHistoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        workflow_deployment_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        label:
+          type: string
+          description: A human-readable label for the workflow deployment
+          maxLength: 150
+        name:
+          type: string
+          description: A name that uniquely identifies this workflow deployment within
+            its workspace
+          maxLength: 150
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+        output_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+        description:
+          type: string
+          nullable: true
+          description: A human-readable description of the workflow deployment
+      required:
+      - id
+      - input_variables
+      - label
+      - name
+      - output_variables
+      - timestamp
+      - workflow_deployment_id
     WorkflowDeploymentRead:
       type: object
       properties:

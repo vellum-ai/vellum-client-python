@@ -1284,6 +1284,33 @@ types:
   CreatedEnum: literal<"CREATED">
   DeleteEnum: literal<"DELETE">
   DeletedEnum: literal<"DELETED">
+  DeploymentHistoryItem:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      deployment_id:
+        type: string
+        validation:
+          format: uuid
+      timestamp: datetime
+      label:
+        type: string
+        docs: A human-readable label for the deployment
+        validation:
+          maxLength: 150
+      name:
+        type: string
+        docs: A name that uniquely identifies this deployment within its workspace
+        validation:
+          maxLength: 150
+      input_variables: list<VellumVariable>
+      description:
+        type: optional<string>
+        docs: A human-readable description of the deployment
+    source:
+      openapi: openapi/openapi.yml
   DeploymentProviderPayloadResponsePayload:
     discriminated: false
     union:
@@ -5599,6 +5626,36 @@ types:
       * `IMAGE` - IMAGE
       * `AUDIO` - AUDIO
       * `NULL` - NULL
+    source:
+      openapi: openapi/openapi.yml
+  WorkflowDeploymentHistoryItem:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      workflow_deployment_id:
+        type: string
+        validation:
+          format: uuid
+      timestamp: datetime
+      label:
+        type: string
+        docs: A human-readable label for the workflow deployment
+        validation:
+          maxLength: 150
+      name:
+        type: string
+        docs: >-
+          A name that uniquely identifies this workflow deployment within its
+          workspace
+        validation:
+          maxLength: 150
+      input_variables: list<VellumVariable>
+      output_variables: list<VellumVariable>
+      description:
+        type: optional<string>
+        docs: A human-readable description of the workflow deployment
     source:
       openapi: openapi/openapi.yml
   WorkflowDeploymentRead:

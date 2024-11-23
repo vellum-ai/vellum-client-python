@@ -111,6 +111,53 @@ service:
               description: description
       audiences:
         - customers
+    workflow_deployment_history_item_retrieve:
+      path: /v1/workflow-deployments/{id}/history/{history_id_or_release_tag}
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve a specific Workflow Deployment History Item by either its UUID
+        or the name of a Release Tag that points to it.
+      path-parameters:
+        history_id_or_release_tag:
+          type: string
+          docs: >-
+            Either the UUID of Workflow Deployment History Item you'd like to
+            retrieve, or the name of a Release Tag that's pointing to the
+            Workflow Deployment History Item you'd like to retrieve.
+        id:
+          type: string
+          docs: A UUID string identifying this workflow deployment.
+      response:
+        docs: ''
+        type: root.WorkflowDeploymentHistoryItem
+      url: Default
+      examples:
+        - path-parameters:
+            history_id_or_release_tag: history_id_or_release_tag
+            id: id
+          response:
+            body:
+              id: id
+              workflow_deployment_id: workflow_deployment_id
+              timestamp: '2024-01-15T09:30:00Z'
+              label: label
+              name: name
+              input_variables:
+                - id: id
+                  key: key
+                  type: STRING
+                  required: true
+                  default:
+                    type: STRING
+              output_variables:
+                - id: id
+                  key: key
+                  type: STRING
+                  required: true
+                  default:
+                    type: STRING
+              description: description
     list_workflow_release_tags:
       path: /v1/workflow-deployments/{id}/release-tags
       method: GET

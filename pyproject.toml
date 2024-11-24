@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vellum-ai"
-version = "0.9.17"
+version = "0.10.0"
 description = ""
 readme = "README.md"
 authors = []
@@ -25,7 +25,9 @@ classifiers = [
     "License :: OSI Approved :: MIT License"
 ]
 packages = [
-    { include = "vellum", from = "src"}
+    { include = "vellum", from = "src" },
+    { include = "vellum_cli", from = "ee" },
+    { include = "vellum_ee", from = "ee" },
 ]
 
 [project.urls]
@@ -51,7 +53,7 @@ tomli = "2.0.2"
 typing_extensions = ">= 4.0.0"
 
 [tool.poetry.dev-dependencies]
-mypy = "1.0.1"
+mypy = "1.11.1"
 pytest = "^7.4.0"
 pytest-asyncio = "^0.23.5"
 python-dateutil = "^2.9.0"
@@ -71,8 +73,17 @@ testpaths = [ "tests" ]
 asyncio_mode = "auto"
 
 [tool.mypy]
-plugins = ["pydantic.mypy"]
-
+plugins = [
+    "pydantic.mypy",
+    "vellum.plugins.vellum_mypy",
+]
+check_untyped_defs = true
+exclude = "venv"
+overrides = [
+    { module = "deepdiff.*", ignore_missing_imports = true },
+    { module = "docker.*", ignore_missing_imports = true },
+    { module = "setuptools.*", ignore_missing_imports = true },
+]
 [tool.ruff]
 line-length = 120
 
@@ -80,3 +91,6 @@ line-length = 120
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+vellum = "vellum_cli:main"

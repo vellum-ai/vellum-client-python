@@ -3,3 +3,5 @@ dist/
 __pycache__/
 poetry.toml
 .ruff_cache/
+
+examples/.ipynb_checkpoints/

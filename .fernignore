@@ -1,12 +1,2 @@
 # Specify files that shouldn't be modified by Fern
-
-README.md
-LICENSE
-mypy.ini
-examples
-.gitignore
-
-# added computed properties
-src/vellum/types/generate_response.py
-src/vellum/terraform
 src/vellum/lib

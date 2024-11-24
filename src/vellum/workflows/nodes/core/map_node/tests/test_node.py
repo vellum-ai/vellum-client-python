@@ -1,0 +1,65 @@
+import time
+
+from vellum.workflows.inputs.base import BaseInputs
+from vellum.workflows.nodes.bases import BaseNode
+from vellum.workflows.nodes.core.map_node.node import MapNode
+from vellum.workflows.outputs.base import BaseOutputs
+from vellum.workflows.state.base import BaseState, StateMeta
+
+
+def test_map_node__use_parent_inputs_and_state():
+    # GIVEN a parent workflow Inputs and State
+    class Inputs(BaseInputs):
+        foo: str
+
+    class State(BaseState):
+        bar: str
+
+    # AND a map node that is configured to use the parent's inputs and state
+    @MapNode.wrap(items=[1, 2, 3])
+    class TestNode(BaseNode):
+        item = MapNode.SubworkflowInputs.item
+        foo = Inputs.foo
+        bar = State.bar
+
+        class Outputs(BaseOutputs):
+            value: str
+
+        def run(self) -> Outputs:
+            return self.Outputs(value=f"{self.foo} {self.bar} {self.item}")
+
+    # WHEN the node is run
+    node = TestNode(
+        state=State(
+            bar="bar",
+            meta=StateMeta(workflow_inputs=Inputs(foo="foo")),
+        )
+    )
+    outputs = node.run()
+
+    # THEN the data is used successfully
+    assert outputs.value == ["foo bar 1", "foo bar 2", "foo bar 3"]
+
+
+def test_map_node__use_parallelism():
+    # GIVEN a map node that is configured to use the parent's inputs and state
+    @MapNode.wrap(items=list(range(10)))
+    class TestNode(BaseNode):
+        item = MapNode.SubworkflowInputs.item
+
+        class Outputs(BaseOutputs):
+            value: int
+
+        def run(self) -> Outputs:
+            time.sleep(0.03)
+            return self.Outputs(value=self.item + 1)
+
+    # WHEN the node is run
+    node = TestNode(state=BaseState())
+    start_ts = time.time_ns()
+    node.run()
+    end_ts = time.time_ns()
+
+    # THEN the node should have ran in parallel
+    run_time = (end_ts - start_ts) / 10**9
+    assert run_time < 0.1

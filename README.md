@@ -1,108 +1,80 @@
-# Vellum Python Library
+<p align="center">
+  <h1 align="center">
+  Vellum
+  </h1>
+  <p align="center">
+    <a href="https://vellum.ai">Learn more</a>
+    ·
+    <a href="https://www.vellum.ai/landing-pages/request-demo">Talk to us</a>
+  </p>
+</p>
 
-[![pypi](https://img.shields.io/pypi/v/vellum-ai.svg)](https://pypi.python.org/pypi/vellum-ai)
-![license badge](https://img.shields.io/github/license/vellum-ai/vellum-client-python)
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-SDK%20generated%20by%20Fern-brightgreen)](https://buildwithfern.com/?utm_source=vellum-ai/vellum-client-python/readme)
+<p align="center">
+  <a href="https://pepy.tech/project/vellum-ai">
+    <img src="https://img.shields.io/pypi/dm/vellum-ai" alt="Vellum AI PyPI - Downloads" >
+  </a>
+  <a href="https://pypi.org/project/vellum-ai" target="_blank">
+    <img src="https://img.shields.io/pypi/v/vellum-ai?color=%2334D058&label=pypi%20package" alt="Package version">
+  </a>
+  <a href="https://www.ycombinator.com/companies/vellum">
+    <img src="https://img.shields.io/badge/Y%20Combinator-W23-orange?style=flat-square" alt="Y Combinator S24">
+  </a>
+</p>
 
-The Vellum Python SDK provides access to the Vellum API from python.
+# Introduction
 
 
-## API Docs
-You can find Vellum's complete API docs at [docs.vellum.ai](https://docs.vellum.ai/api-reference/introduction/getting-started).
+[Vellum](https://www.vellum.ai/) is the end-to-end development platform for building production-grade AI applications
 
-## Installation
+### Core Features
 
-```sh
-pip install --upgrade vellum-ai
-```
+- **Orchestration:** A powerful SDK and IDE for defining and debugging the control flow of your AI applications
+- **Prompting:** A best-in-class prompt playground for iterating on and refining prompts between models from any provider
+- **Evaluations**: An evaluations framework that makes it easy to measure the quality of your AI systems at scale.
+- **Retrieval:** A ready-to-go service for turning unstructured content into intelligent, context-aware solutions
+  optimized for AI systems
+- **Deployment:** Decouple updates to your AI systems from your application code with an easy integration +
+  one-click deploy
+- **Observability:** Monitor and debug your AI systems in real-time with detailed logs, metrics, and end-user feedback
 
-## Usage
-Below is how you would invoke a deployed Prompt from the Vellum API. For a complete list of all APIs
-that Vellum supports, check out our [API Reference](https://docs.vellum.ai/api-reference/introduction/getting-started).
+## Table of Contents
 
-```python
-from vellum import (
-    StringInputRequest,
-)
-from vellum.client import Vellum
+- [Get Started](#get-started)
+- [Client SDK](#client-sdk)
+- [Workflows SDK](#workflows-sdk)
+- [Contributing](#contributing)
+- [Open-source vs paid](#open-source-vs-paid)
 
-client = Vellum(
-    api_key="YOUR_API_KEY",
-)
 
-def execute() -> str:
-    result = client.execute_prompt(
-        prompt_deployment_name="<example-deployment-name>>",
-        release_tag="LATEST",
-        inputs=[
-            StringInputRequest(
-                name="input_a",
-                type="STRING",
-                value="Hello, world!",
-            )
-        ],
-    )
-    
-    if result.state == "REJECTED":
-        raise Exception(result.error.message)
+## Get Started
+Most functionality within the SDKs here requires a Vellum account and API key. To sign up, [talk to us](https://www.vellum.ai/landing-pages/request-demo)
+or visit our [pricing page](https://www.vellum.ai/pricing).
 
-    return result.outputs[0].value
-
-if __name__ == "__main__":
-    print(execute())
-```
-
-> [!TIP]
-> You can set a system environment variable `VELLUM_API_KEY` to avoid writing your api key within your code. To do so, add `export VELLUM_API_KEY=<your-api-token>`
-> to your ~/.zshrc or ~/.bashrc, open a new terminal, and then any code calling `vellum.Vellum()` will read this key.
-
-## Async Client
-This SDK has an async version. Here's how to use it:
+Even without a Vellum account, you can use the Workflows SDK to define the control flow of your AI systems. [Learn
+more below](#workflows-sdk).
 
 
 
-```python
-import asyncio
+## Client SDK
+The Vellum Client SDK, found within `src/client` is a low-level client used to interact directly with the Vellum API.
+Learn more and get started by visiting the [Vellum Client SDK README](/src/client/README.md).
 
-import vellum
-from vellum.client import AsyncVellum
 
-client = AsyncVellum(api_key="YOUR_API_KEY")
+## Workflows SDK
+The Vellum Workflows SDK is a high-level framework for defining and debugging the control flow of AI systems. At
+it's core, it's a powerful workflow engine with syntactic sugar for intuitively defining graphs, the nodes within,
+and the relationships between them.
 
-async def execute() -> str:
-    result = await client.execute_prompt(
-        prompt_deployment_name="<example-deployment-name>>",
-        release_tag="LATEST",
-        inputs=[
-            vellum.StringInputRequest(
-                name="input_a",
-                value="Hello, world!",
-            )
-        ],
-    )
+The Workflows SDK can be used with or without a Vellum account, but a Vellum account is required to use certain
+out-of-box nodes and features, including the ability to push and pull your Workflow definition to Vellum for editing
+and debugging via a UI.
 
-    if result.state == "REJECTED":
-        raise Exception(result.error.message)
-    
-    return result.outputs[0].value
+To learn more and get started, visit the [Vellum Workflows SDK README](/src/workflows/README.md).
 
-if __name__ == "__main__":
-    print(asyncio.run(execute()))
-```
 
-## Contributing
+## Open-Source vs. Paid
 
-While we value open-source contributions to this SDK, most of this library is generated programmatically.
+This repo is available under the [MIT expat license](https://github.com/vellum-ai/vellum-python-sdks/blob/main/LICENSE), except
+for the `ee` directory (which has its [license here](https://github.com/vellum-ai/vellum-python-sdks/blob/main/ee/LICENSE)) if applicable.
 
-Please feel free to make contributions to any of the directories or files below:
-```plaintext
-examples/*
-src/vellum/lib/*
-tests/*
-README.md
-```
-
-Any additions made to files beyond those directories and files above would have to be moved over to our generation code
-(found in the separate [vellum-client-generator](https://github.com/vellum-ai/vellum-client-generator) repo),
-otherwise they would be overwritten upon the next generated release. Feel free to open a PR as a proof of concept,
-but know that we will not be able to merge it as-is. We suggest opening an issue first to discuss with us!
+To learn more, [book a demo](https://www.vellum.ai/landing-pages/request-demo) or see our [pricing page](https://www.vellum.ai/pricing).

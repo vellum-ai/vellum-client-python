@@ -89,6 +89,7 @@ import {
   PromptNodeDeployment,
   PromptVersionData,
   LegacyPromptNodeData,
+  GenericNode,
 } from "src/types/vellum";
 
 const CacheConfigSerializer = objectSchema({
@@ -1655,6 +1656,29 @@ export declare namespace ErrorNodeSerializer {
   }
 }
 
+export const GenericNodeSerializer: ObjectSchema<
+  GenericNodeSerializer.Raw,
+  GenericNode
+> = objectSchema({
+  type: stringLiteralSchema("GENERIC"),
+  id: stringSchema(),
+  data: objectSchema({
+    label: stringSchema(),
+  }),
+  inputs: listSchema(NodeInputSerializer),
+  displayData: propertySchema("display_data", anySchema()),
+  definition: WorkflowNodeDefinitionSerializer.optional(),
+});
+
+export declare namespace GenericNodeSerializer {
+  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+    type: "GENERIC";
+    data: {
+      label: string;
+    };
+  }
+}
+
 export const WorkflowNodeSerializer: Schema<
   WorkflowNodeSerializer.Raw,
   WorkflowNode
@@ -1673,6 +1697,7 @@ export const WorkflowNodeSerializer: Schema<
   ApiNodeSerializer,
   NoteNodeSerializer,
   ErrorNodeSerializer,
+  GenericNodeSerializer,
 ]);
 
 export declare namespace WorkflowNodeSerializer {
@@ -1690,7 +1715,8 @@ export declare namespace WorkflowNodeSerializer {
     | ConditionalNodeSerializer.Raw
     | ApiNodeSerializer.Raw
     | NoteNodeSerializer.Raw
-    | ErrorNodeSerializer.Raw;
+    | ErrorNodeSerializer.Raw
+    | GenericNodeSerializer.Raw;
 }
 
 const workflowEdgeSerializer: ObjectSchema<

@@ -18,6 +18,7 @@ import {
   ConditionalNode,
   ApiNode,
   MergeNode,
+  GenericNode,
 } from "src/types/vellum";
 
 export function entrypointNodeDataFactory(): EntrypointNode {
@@ -499,7 +500,7 @@ export function inlinePromptNodeDataLegacyVariantFactory({
   return nodeData;
 }
 
-export function inlineTemplatingNodeDataFactory({
+export function templatingNodeFactory({
   errorOutputId,
 }: {
   errorOutputId?: string;
@@ -617,7 +618,7 @@ export function conditionalNodeFactory(): ConditionalNode {
   return nodeData;
 }
 
-export function ApiNodeFactory({
+export function apiNodeFactory({
   errorOutputId,
 }: {
   errorOutputId?: string;
@@ -869,6 +870,18 @@ export function ApiNodeFactory({
         y: 234.65663468515768,
       },
     },
+  };
+  return nodeData;
+}
+
+export function genericNodeFactory(): GenericNode {
+  const nodeData: GenericNode = {
+    id: "7e09927b-6d6f-4829-92c9-54e66bdcaf80",
+    type: WorkflowNodeType.GENERIC,
+    data: {
+      label: "Generic Node",
+    },
+    inputs: [],
   };
   return nodeData;
 }

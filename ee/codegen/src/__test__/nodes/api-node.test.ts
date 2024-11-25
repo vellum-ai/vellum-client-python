@@ -3,7 +3,7 @@ import { beforeEach } from "vitest";
 
 import { workflowContextFactory } from "src/__test__/helpers";
 import { inputVariableContextFactory } from "src/__test__/helpers/input-variable-context-factory";
-import { ApiNodeFactory } from "src/__test__/helpers/node-data-factories";
+import { apiNodeFactory } from "src/__test__/helpers/node-data-factories";
 import { createNodeContext, WorkflowContext } from "src/context";
 import { ApiNodeContext } from "src/context/node-context/api-node";
 import { ApiNode } from "src/generators/nodes/api-node";
@@ -41,7 +41,7 @@ describe("ApiNode", () => {
 
   describe("basic", () => {
     beforeEach(() => {
-      const nodeData = ApiNodeFactory();
+      const nodeData = apiNodeFactory();
 
       const nodeContext = createNodeContext({
         workflowContext,
@@ -68,7 +68,7 @@ describe("ApiNode", () => {
 
   describe("reject on error enabled", () => {
     beforeEach(() => {
-      const nodeData = ApiNodeFactory({
+      const nodeData = apiNodeFactory({
         errorOutputId: "af589f73-effe-4a80-b48f-fb912ac6ce67",
       });
 

@@ -1,6 +1,10 @@
+import { SDK_MODULE_PATHS } from "src/context/workflow-context/types";
+
 export function generateSdkModulePaths(
   workflowsSdkModulePath: Readonly<string[]>
-) {
+): SDK_MODULE_PATHS {
+  const nodesModulePath = [...workflowsSdkModulePath, "nodes"] as const;
+
   return {
     WORKFLOWS_MODULE_PATH: workflowsSdkModulePath,
     WORKFLOWS_DISPLAY_MODULE_PATH: [
@@ -10,11 +14,8 @@ export function generateSdkModulePaths(
       "workflows",
       "vellum_workflow_display",
     ] as const,
-    NODE_MODULE_PATH: [
-      ...workflowsSdkModulePath,
-      "nodes",
-      "displayable",
-    ] as const,
+    CORE_NODES_MODULE_PATH: [...nodesModulePath, "core"] as const,
+    DISPLAYABLE_NODES_MODULE_PATH: [...nodesModulePath, "displayable"] as const,
     INPUTS_MODULE_PATH: [...workflowsSdkModulePath, "inputs"] as const,
     STATE_MODULE_PATH: [...workflowsSdkModulePath, "state"] as const,
     NODE_DISPLAY_MODULE_PATH: [

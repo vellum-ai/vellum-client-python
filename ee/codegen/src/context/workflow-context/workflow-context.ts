@@ -3,6 +3,7 @@ import { InputVariableContext } from "src/context/input-variable-context";
 import { BaseNodeContext } from "src/context/node-context/base";
 import { PortContext } from "src/context/port-context";
 import { generateSdkModulePaths } from "src/context/workflow-context/sdk-module-paths";
+import { SDK_MODULE_PATHS } from "src/context/workflow-context/types";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
 import { BaseNode } from "src/generators/nodes/bases";
 import { EntrypointNode, WorkflowDataNode } from "src/types/vellum";
@@ -54,17 +55,7 @@ export class WorkflowContext {
   // The entrypoint node for this workflow
   private entrypointNode: EntrypointNode | undefined;
 
-  public readonly sdkModulePathNames: {
-    WORKFLOWS_MODULE_PATH: readonly string[];
-    WORKFLOWS_DISPLAY_MODULE_PATH: readonly string[];
-    NODE_MODULE_PATH: readonly string[];
-    INPUTS_MODULE_PATH: readonly string[];
-    STATE_MODULE_PATH: readonly string[];
-    NODE_DISPLAY_MODULE_PATH: readonly string[];
-    NODE_DISPLAY_TYPES_MODULE_PATH: readonly string[];
-    VELLUM_TYPES_MODULE_PATH: readonly string[];
-    PORTS_MODULE_PATH: readonly string[];
-  };
+  public readonly sdkModulePathNames: SDK_MODULE_PATHS;
 
   public readonly portContextById: PortContextById;
 

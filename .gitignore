@@ -5,6 +5,8 @@ poetry.toml
 .ruff_cache/
 
 .env
+.npmrc
 ee/codegen/lib/
-ee/codegen/node_modules/
 examples/.ipynb_checkpoints/
+node_modules/
+tsconfig.tsbuildinfo

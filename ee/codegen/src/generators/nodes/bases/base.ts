@@ -69,7 +69,8 @@ export abstract class BaseNode<
 
     return python.reference({
       name: this.baseNodeClassName,
-      modulePath: this.workflowContext.sdkModulePathNames.NODE_MODULE_PATH,
+      modulePath:
+        this.workflowContext.sdkModulePathNames.DISPLAYABLE_NODES_MODULE_PATH,
       genericTypes: baseNodeGenericTypes,
       alias: baseNodeClassNameAlias,
     });
@@ -216,7 +217,8 @@ export abstract class BaseNode<
                   name: "TryNode",
                   attribute: ["wrap"],
                   modulePath:
-                    this.workflowContext.sdkModulePathNames.NODE_MODULE_PATH,
+                    this.workflowContext.sdkModulePathNames
+                      .CORE_NODES_MODULE_PATH,
                 }),
                 arguments_: [],
               }),

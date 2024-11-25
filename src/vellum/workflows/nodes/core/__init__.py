@@ -5,6 +5,7 @@ from .inline_subworkflow_node import InlineSubworkflowNode
 from .map_node import MapNode
 from .retry_node import RetryNode
 from .templating_node import TemplatingNode
+from .try_node import TryNode
 
 __all__ = [
     "BaseAPINode",
@@ -13,4 +14,5 @@ __all__ = [
     "MapNode",
     "RetryNode",
     "TemplatingNode",
+    "TryNode",
 ]

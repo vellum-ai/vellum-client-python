@@ -230,7 +230,8 @@ class PromptNodeDisplay(BaseInlinePromptNodeDisplay[PromptNode]):
 `;
 
 exports[`InlinePromptNode > CHAT_MESSAGE block type > reject on error enabled > getNodeFile for CHAT_MESSAGE block type 1`] = `
-"from vellum.workflows.nodes.displayable import InlinePromptNode, TryNode
+"from vellum.workflows.nodes.displayable import InlinePromptNode
+from vellum.workflows.nodes.core import TryNode
 from vellum import (
     PlainTextPromptBlock,
     VariablePromptBlock,
@@ -468,7 +469,8 @@ class PromptNodeDisplay(BaseInlinePromptNodeDisplay[PromptNode]):
 `;
 
 exports[`InlinePromptNode > FUNCTION_DEFINITION block type > reject on error enabled > getNodeFile for FUNCTION_DEFINITION block type 1`] = `
-"from vellum.workflows.nodes.displayable import InlinePromptNode, TryNode
+"from vellum.workflows.nodes.displayable import InlinePromptNode
+from vellum.workflows.nodes.core import TryNode
 from vellum import FunctionDefinitionPromptBlock, PromptParameters
 from ..inputs import Inputs
 
@@ -681,7 +683,8 @@ class PromptNodeDisplay(BaseInlinePromptNodeDisplay[PromptNode]):
 `;
 
 exports[`InlinePromptNode > JINJA block type > reject on error enabled > getNodeFile for JINJA block type 1`] = `
-"from vellum.workflows.nodes.displayable import InlinePromptNode, TryNode
+"from vellum.workflows.nodes.displayable import InlinePromptNode
+from vellum.workflows.nodes.core import TryNode
 from vellum import JinjaPromptBlock, PromptParameters
 from ..inputs import Inputs
 
@@ -901,7 +904,8 @@ class PromptNodeDisplay(BaseInlinePromptNodeDisplay[PromptNode]):
 `;
 
 exports[`InlinePromptNode > RICH_TEXT block type > reject on error enabled > getNodeFile for RICH_TEXT block type 1`] = `
-"from vellum.workflows.nodes.displayable import InlinePromptNode, TryNode
+"from vellum.workflows.nodes.displayable import InlinePromptNode
+from vellum.workflows.nodes.core import TryNode
 from vellum import PlainTextPromptBlock, RichTextPromptBlock, PromptParameters
 from ..inputs import Inputs
 
@@ -1109,7 +1113,8 @@ class PromptNodeDisplay(BaseInlinePromptNodeDisplay[PromptNode]):
 `;
 
 exports[`InlinePromptNode > VARIABLE block type > reject on error enabled > getNodeFile for VARIABLE block type 1`] = `
-"from vellum.workflows.nodes.displayable import InlinePromptNode, TryNode
+"from vellum.workflows.nodes.displayable import InlinePromptNode
+from vellum.workflows.nodes.core import TryNode
 from vellum import VariablePromptBlock, PromptParameters
 from ..inputs import Inputs
 

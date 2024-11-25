@@ -69,11 +69,9 @@ class TemplatingNodeDisplay(BaseTemplatingNodeDisplay[TemplatingNode]):
 `;
 
 exports[`TemplatingNode > reject on error enabled > getNodeFile 1`] = `
-"from vellum.workflows.nodes.displayable import (
-    TemplatingNode as BaseTemplatingNode,
-    TryNode,
-)
+"from vellum.workflows.nodes.displayable import TemplatingNode as BaseTemplatingNode
 from vellum.workflows.state import BaseState
+from vellum.workflows.nodes.core import TryNode
 
 
 @TryNode.wrap()

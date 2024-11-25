@@ -123,6 +123,7 @@ service:
         docs: ''
         type: root.DeploymentHistoryItem
       url: Default
+      availability: pre-release
       examples:
         - path-parameters:
             history_id_or_release_tag: history_id_or_release_tag
@@ -142,6 +143,8 @@ service:
                   default:
                     type: STRING
               description: description
+      audiences:
+        - customers
     list_deployment_release_tags:
       path: /v1/deployments/{id}/release-tags
       method: GET

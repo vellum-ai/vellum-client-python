@@ -1848,6 +1848,85 @@ client.deployments.retrieve(
 </dl>
 </details>
 
+<details><summary><code>client.deployments.<a href="src/vellum/resources/deployments/client.py">deployment_history_item_retrieve</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a specific Deployment History Item by either its UUID or the name of a Release Tag that points to it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.deployments.deployment_history_item_retrieve(
+    history_id_or_release_tag="history_id_or_release_tag",
+    id="id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**history_id_or_release_tag:** `str` — Either the UUID of Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Deployment History Item you'd like to retrieve.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `str` — A UUID string identifying this deployment.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.deployments.<a href="src/vellum/resources/deployments/client.py">list_deployment_release_tags</a>(...)</code></summary>
 <dl>
 <dd>
@@ -4832,6 +4911,85 @@ client.workflow_deployments.retrieve(
 <dd>
 
 **id:** `str` — Either the Workflow Deployment's ID or its unique name
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.workflow_deployments.<a href="src/vellum/resources/workflow_deployments/client.py">workflow_deployment_history_item_retrieve</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a specific Workflow Deployment History Item by either its UUID or the name of a Release Tag that points to it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.workflow_deployments.workflow_deployment_history_item_retrieve(
+    history_id_or_release_tag="history_id_or_release_tag",
+    id="id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**history_id_or_release_tag:** `str` — Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `str` — A UUID string identifying this workflow deployment.
     
 </dd>
 </dl>

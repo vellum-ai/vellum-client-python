@@ -1,0 +1,254 @@
+{
+  "workflow_raw_data": {
+    "nodes": [
+      {
+        "id": "6dbd327c-3b96-4da4-9063-5b36dab7f6d0",
+        "type": "ENTRYPOINT",
+        "data": {
+          "label": "Entrypoint Node",
+          "source_handle_id": "498eed8e-38d5-48b8-bbc4-f45411100502"
+        },
+        "inputs": [],
+        "display_data": {
+          "width": 124,
+          "height": 48,
+          "position": {
+            "x": 1545,
+            "y": 330
+          }
+        }
+      },
+      {
+        "id": "b81a4453-7b80-41ea-bd55-c62df8878fd3",
+        "type": "CONDITIONAL",
+        "data": {
+          "label": "Conditional Node",
+          "target_handle_id": "842b9dda-7977-47ad-a322-eb15b4c7069d",
+          "conditions": [
+            {
+              "id": "9ade47fe-306e-4815-835f-7815a3f5d488",
+              "type": "IF",
+              "source_handle_id": "8e2b2af3-db06-4025-9395-a6d08a8b9256",
+              "data": {
+                "id": "4011aadf-85fa-41d5-b137-f4c53dd60e84",
+                "rules": [
+                  {
+                    "id": "6a73037b-bd3e-4f09-8bdb-adc6c5834a65",
+                    "rules": null,
+                    "combinator": null,
+                    "negated": null,
+                    "field_node_input_id": "4e5d07ad-0c7d-4149-8cf6-c46a9adf82a5",
+                    "operator": "=",
+                    "value_node_input_id": "627bf471-2ddf-48f9-9f49-9eb0a2a242b9"
+                  }
+                ],
+                "combinator": "AND",
+                "negated": null,
+                "field_node_input_id": null,
+                "operator": null,
+                "value_node_input_id": null
+              }
+            },
+            {
+              "id": "f1572ff3-df6e-4d87-9149-2323efe2e840",
+              "type": "ELIF",
+              "source_handle_id": "babf673e-0bec-421e-aede-3ea323853bd8",
+              "data": {
+                "id": "b695d023-629a-48e1-8ca3-ee6bb9ba40ff",
+                "rules": [
+                  {
+                    "id": "8cb78e86-89d2-4ec6-9537-1fb89dc948d2",
+                    "rules": null,
+                    "combinator": null,
+                    "negated": null,
+                    "field_node_input_id": "1de0d3fd-2a4c-42eb-918b-f5fbfb1e27b4",
+                    "operator": "=",
+                    "value_node_input_id": "b608c4fc-2c4e-4bbb-94d7-12cfa105bbdf"
+                  }
+                ],
+                "combinator": "AND",
+                "negated": null,
+                "field_node_input_id": null,
+                "operator": null,
+                "value_node_input_id": null
+              }
+            },
+            {
+              "id": "27339e00-c535-436e-95f4-3c70d8bf5762",
+              "type": "ELSE",
+              "source_handle_id": "25d955d1-5c7e-4e37-8afe-1015b496e59d",
+              "data": null
+            }
+          ],
+          "version": "2"
+        },
+        "inputs": [
+          {
+            "id": "4e5d07ad-0c7d-4149-8cf6-c46a9adf82a5",
+            "key": "6a73037b-bd3e-4f09-8bdb-adc6c5834a65.field",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "5f64210f-ec43-48ce-ae40-40a9ba4c4c11"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "627bf471-2ddf-48f9-9f49-9eb0a2a242b9",
+            "key": "6a73037b-bd3e-4f09-8bdb-adc6c5834a65.value",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": "Hello World!"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "1de0d3fd-2a4c-42eb-918b-f5fbfb1e27b4",
+            "key": "8cb78e86-89d2-4ec6-9537-1fb89dc948d2.field",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "b81c5c88-9528-47d0-8106-14a75520ed47"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "b608c4fc-2c4e-4bbb-94d7-12cfa105bbdf",
+            "key": "8cb78e86-89d2-4ec6-9537-1fb89dc948d2.value",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": "testing"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          }
+        ],
+        "display_data": {
+          "width": 480,
+          "height": 234,
+          "position": {
+            "x": 1943.4147273142412,
+            "y": 292.2355134030261
+          }
+        }
+      },
+      {
+        "id": "b0d2bd58-fa00-4eea-98fb-bc09ee1427dd",
+        "type": "TERMINAL",
+        "data": {
+          "label": "Final Output",
+          "name": "final-output",
+          "target_handle_id": "ddb7fe0e-0500-4862-8d0d-b05645283c28",
+          "output_id": "d8381526-1225-4843-8c22-eec7747445e4",
+          "output_type": "STRING",
+          "node_input_id": "8a2dbefa-0722-4989-8cb7-f2eb526b3247"
+        },
+        "inputs": [
+          {
+            "id": "8a2dbefa-0722-4989-8cb7-f2eb526b3247",
+            "key": "node_input",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "5f64210f-ec43-48ce-ae40-40a9ba4c4c11"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          }
+        ],
+        "display_data": {
+          "width": 464,
+          "height": 234,
+          "position": {
+            "x": 2750,
+            "y": 210
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "549da4b2-e72a-468f-b233-34efbbae75ae",
+        "source_node_id": "6dbd327c-3b96-4da4-9063-5b36dab7f6d0",
+        "source_handle_id": "498eed8e-38d5-48b8-bbc4-f45411100502",
+        "target_node_id": "b81a4453-7b80-41ea-bd55-c62df8878fd3",
+        "target_handle_id": "842b9dda-7977-47ad-a322-eb15b4c7069d",
+        "type": "DEFAULT"
+      },
+      {
+        "id": "97779960-7685-4a9d-ba40-f748131fb4f2",
+        "source_node_id": "b81a4453-7b80-41ea-bd55-c62df8878fd3",
+        "source_handle_id": "8e2b2af3-db06-4025-9395-a6d08a8b9256",
+        "target_node_id": "b0d2bd58-fa00-4eea-98fb-bc09ee1427dd",
+        "target_handle_id": "ddb7fe0e-0500-4862-8d0d-b05645283c28",
+        "type": "DEFAULT"
+      }
+    ],
+    "display_data": {
+      "viewport": {
+        "x": -1285.5267112922663,
+        "y": 12.259663658494276,
+        "zoom": 0.7063356365705541
+      }
+    },
+    "definition": {
+      "name": "Workflow",
+      "module": [
+        "vellum",
+        "workflows",
+        "codegen",
+        "tests",
+        "fixtures",
+        "simple_conditional_node",
+        "code",
+        "workflow"
+      ]
+    }
+  },
+  "input_variables": [
+    {
+      "id": "5f64210f-ec43-48ce-ae40-40a9ba4c4c11",
+      "key": "foobar",
+      "type": "STRING",
+      "required": null,
+      "default": null,
+      "extensions": null
+    },
+    {
+      "id": "b81c5c88-9528-47d0-8106-14a75520ed47",
+      "key": "bazbaz",
+      "type": "STRING",
+      "required": null,
+      "default": null,
+      "extensions": null
+    }
+  ],
+  "output_variables": []
+}

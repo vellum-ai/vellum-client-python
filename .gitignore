@@ -4,4 +4,7 @@ __pycache__/
 poetry.toml
 .ruff_cache/
 
+.env
+ee/codegen/lib/
+ee/codegen/node_modules/
 examples/.ipynb_checkpoints/

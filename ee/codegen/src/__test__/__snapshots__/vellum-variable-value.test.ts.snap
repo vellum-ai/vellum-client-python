@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`VellumValue > CHAT_HISTORY > should write a CHAT_HISTORY value with a string content 1`] = `"[ChatMessageRequest(role="USER", content=StringChatMessageContentRequest(value="Hello, AI!"))]"`;
+
+exports[`VellumValue > CHAT_HISTORY > should write a CHAT_HISTORY value with just text 1`] = `"[ChatMessageRequest(role="USER", text="Hello, AI!")]"`;
+
+exports[`VellumValue > JSON > should write a JSON value correctly 1`] = `
+"{"key": "value", "nested": {"array": [1, 2, 3]}}
+"
+`;
+
+exports[`VellumValue > NUMBER > should write a NUMBER value correctly 1`] = `
+"42
+"
+`;
+
+exports[`VellumValue > STRING > should write a STRING value correctly 1`] = `
+""Hello, World!"
+"
+`;

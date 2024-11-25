@@ -1,0 +1,50 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Workflow > write > graph > should be correct for a basic single node case 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .inputs import Inputs
+from vellum.workflows.state import BaseState
+from .nodes.search_node import SearchNode
+from .nodes.final_output import FinalOutput
+
+
+class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
+    graph = SearchNode
+
+    class Outputs(BaseWorkflow.Outputs):
+        query = FinalOutput.Outputs.value
+"
+`;
+
+exports[`Workflow > write > should generate correct code when there are input variables 1`] = `
+"from vellum.workflows import BaseWorkflow
+
+
+class TestWorkflow(BaseWorkflow):
+    class Outputs(BaseWorkflow.Outputs):
+        pass
+"
+`;
+
+exports[`Workflow > write > should generate correct code when there are no input variables 1`] = `
+"from vellum.workflows import BaseWorkflow
+
+
+class TestWorkflow(BaseWorkflow):
+    class Outputs(BaseWorkflow.Outputs):
+        pass
+"
+`;
+
+exports[`Workflow > write > should generate correct code with Search Results as an output variable 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .inputs import Inputs
+from vellum.workflows.state import BaseState
+from .nodes.final_output import FinalOutput
+
+
+class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
+    class Outputs(BaseWorkflow.Outputs):
+        query = FinalOutput.Outputs.value
+"
+`;

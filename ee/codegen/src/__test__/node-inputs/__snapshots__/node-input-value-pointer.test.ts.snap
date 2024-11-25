@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NodeInputValuePointer > should handle a single constant value rule 1`] = `
+""test_value"
+"
+`;
+
+exports[`NodeInputValuePointer > should handle three node output pointer rules 1`] = `
+"TestNode.Outputs.my_output.coalesce(TestNode.Outputs.my_output).coalesce(
+    TestNode.Outputs.my_output
+)
+"
+`;
+
+exports[`NodeInputValuePointer > should handle two node output pointers and one constant value 1`] = `
+"TestNode.Outputs.my_output.coalesce(TestNode.Outputs.my_output).coalesce(
+    "constant_value"
+)
+"
+`;
+
+exports[`NodeInputValuePointer > should handle two node output pointers with a constant value in between 1`] = `
+"TestNode.Outputs.my_output.coalesce("constant_value")
+"
+`;

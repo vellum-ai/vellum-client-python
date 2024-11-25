@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Inputs > write > should generate correct code for complex input variables 1`] = `
+"from vellum.workflows.inputs import BaseInputs
+from typing import List
+from vellum import ChatMessage, SearchResult
+
+
+class Inputs(BaseInputs):
+    query: str
+    max_runtime: float
+    previous_chat_history: List[ChatMessage]
+    prior_results: List[SearchResult]
+"
+`;
+
+exports[`Inputs > write > should generate correct code when Inputs has a custom name 1`] = `
+"from vellum.workflows.inputs import BaseInputs
+
+
+class CustomInputs(BaseInputs):
+    input1: str
+"
+`;
+
+exports[`Inputs > write > should generate correct code when Inputs has no variables 1`] = `""`;
+
+exports[`Inputs > write > should generate correct code when Inputs has variables 1`] = `
+"from vellum.workflows.inputs import BaseInputs
+
+
+class Inputs(BaseInputs):
+    input1: str
+    input2: float
+"
+`;

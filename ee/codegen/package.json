@@ -1,0 +1,61 @@
+{
+  "name": "@vellum-ai/vellum-codegen",
+  "version": "0.10.0",
+  "main": "lib/src/index.js",
+  "typings": "lib/src/index.d.ts",
+  "files": [
+    "README.md",
+    "lib"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://us-central1-npm.pkg.dev/vocify-prod/vellum-private-npm"
+  },
+  "scripts": {
+    "gar-login": "npx google-artifactregistry-auth",
+    "clean": "rm -rf lib && rm -f tsconfig.tsbuildinfo",
+    "build": "tsc && tsc-alias",
+    "format": "prettier --write .",
+    "format:check": "prettier --check . '!integration/**' '!lib/**'",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest --run",
+    "prepublishOnly": "npm run build && npm run gar-login",
+    "test:update": "vitest --run -u",
+    "types": "tsc --noEmit",
+    "start": "node --loader ts-node/esm --experimental-specifier-resolution=node src/index.ts",
+    "version:codegen": "node scripts/version.js"
+  },
+  "dependencies": {
+    "@fern-api/python-ast": "^0.0.11",
+    "@fern-fern/generator-cli-sdk": "file:./stubs/generator-cli-sdk",
+    "@fern-fern/generator-exec-sdk": "file:./stubs/generator-exec-sdk",
+    "lodash": "^4.17.21",
+    "vellum-ai": "0.9.12"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^22.7.5",
+    "@typescript-eslint/eslint-plugin": "^8.9.0",
+    "@typescript-eslint/parser": "^8.9.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-no-relative-import-paths": "^1.5.2",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "google-artifactregistry-auth": "3.2.0",
+    "prettier": "^2.8.6",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "1.8.10",
+    "tsconfig-paths": "4.2.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.3"
+  },
+  "overrides": {
+    "@fern-api/logger": "^0.4.24-rc1"
+  }
+}

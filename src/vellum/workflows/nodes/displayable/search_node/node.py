@@ -6,18 +6,25 @@ from vellum.workflows.types.generics import StateType
 
 class SearchNode(BaseSearchNode[StateType]):
     """
-    A SearchNode that outputs the text of the search results concatenated as a single string.
+    Used to perform a hybrid search against a Document Index in Vellum.
 
-    document_index: Union[UUID, str] - Either the Document Index's UUID or its name.
-    query: str - The query to search for.
-    options: Optional[SearchRequestOptionsRequest] = None - The request options to use for the search
+    document_index: Union[UUID, str] - Either the UUID or name of the Vellum Document Index that you'd like to search
+        against
+    query: str - The query to search for
+    options: Optional[SearchRequestOptionsRequest] = None - Runtime configuration for the search
     request_options: Optional[RequestOptions] = None - The request options to use for the search
-    chunk_separator: str = "\n\n#####\n\n" - Used to separate the text of each search result.
+    chunk_separator: str = "\n\n#####\n\n" - The separator to use when joining the text of each search result
     """
 
     chunk_separator: ClassVar[str] = "\n\n#####\n\n"
 
     class Outputs(BaseSearchNode.Outputs):
+        """
+        The outputs of the SearchNode.
+
+        results: List[SearchResult] - The raw search results
+        text: str - The text of the search results joined by the chunk_separator
+        """
         text: str
 
     def run(self) -> Outputs:

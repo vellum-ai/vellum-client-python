@@ -49,4 +49,6 @@ jobs:
 
       - name: Test
         run: npm test
+        env:
+          ISORT_CMD: "poetry run isort"
         working-directory: ee/codegen

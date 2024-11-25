@@ -174,10 +174,11 @@ ${errors.slice(0, 3).map((err) => {
     ]);
 
     const setupCfgPath = this.resolvePythonConfigFilePath();
+    const isortCmd = process.env.ISORT_CMD ?? "isort";
 
     await new Promise((resolve, reject) => {
       exec(
-        `python -m isort --sp ${setupCfgPath} ${this.workflowContext.absolutePathToOutputDirectory}`,
+        `${isortCmd} --sp ${setupCfgPath} ${this.workflowContext.absolutePathToOutputDirectory}`,
         (error: Error | null) => {
           if (error) {
             reject(error);

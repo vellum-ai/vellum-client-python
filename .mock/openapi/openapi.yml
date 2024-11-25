@@ -29,7 +29,7 @@ info:
     ### Official API Clients:
     Vellum maintains official API clients for Python and Node/Typescript. We recommend using these clients to interact
     with all stable endpoints. You can find them here:
-    - [Python](https://github.com/vellum-ai/vellum-client-python)
+    - [Python](https://github.com/vellum-ai/vellum-python-sdks)
     - [Node/Typescript](https://github.com/vellum-ai/vellum-client-node)
   contact:
     name: devops@vellum.ai

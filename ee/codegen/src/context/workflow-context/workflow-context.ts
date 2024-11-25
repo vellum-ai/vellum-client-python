@@ -1,7 +1,6 @@
-import { InputVariableContext } from "./input-variable-context";
-import { BaseNodeContext } from "./node-context/base";
-
 import { GENERATED_WORKFLOW_MODULE_NAME } from "src/constants";
+import { InputVariableContext } from "src/context/input-variable-context";
+import { BaseNodeContext } from "src/context/node-context/base";
 import { PortContext } from "src/context/port-context";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
 import { BaseNode } from "src/generators/nodes/bases";

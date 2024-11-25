@@ -4,7 +4,9 @@ on:
   push:
     paths:
       - ".github/workflows/ci-codegen.yaml"
+      - "pyproject.toml"
       - "ee/codegen/**"
+      - "ee/codegen_integration/**"
 
 jobs:
   test:

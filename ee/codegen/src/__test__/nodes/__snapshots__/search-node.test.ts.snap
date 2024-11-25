@@ -117,7 +117,8 @@ class SearchNodeDisplay(BaseSearchNodeDisplay[SearchNode]):
 `;
 
 exports[`TextSearchNode > reject on error enabled > getNodeFile 1`] = `
-"from vellum.workflows.nodes.displayable import SearchNode as BaseSearchNode, TryNode
+"from vellum.workflows.nodes.displayable import SearchNode as BaseSearchNode
+from vellum.workflows.nodes.core import TryNode
 from ..inputs import Inputs
 from vellum import (
     SearchRequestOptionsRequest,

@@ -82,10 +82,8 @@ class GuardrailNodeDisplay(BaseGuardrailNodeDisplay[GuardrailNode]):
 `;
 
 exports[`GuardrailNode > reject on error enabled > getNodeFile 1`] = `
-"from vellum.workflows.nodes.displayable import (
-    GuardrailNode as BaseGuardrailNode,
-    TryNode,
-)
+"from vellum.workflows.nodes.displayable import GuardrailNode as BaseGuardrailNode
+from vellum.workflows.nodes.core import TryNode
 from ..inputs import Inputs
 
 

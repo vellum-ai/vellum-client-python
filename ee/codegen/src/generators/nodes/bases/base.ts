@@ -218,7 +218,7 @@ export abstract class BaseNode<
                   attribute: ["wrap"],
                   modulePath:
                     this.workflowContext.sdkModulePathNames
-                      .DISPLAYABLE_NODES_MODULE_PATH,
+                      .CORE_NODES_MODULE_PATH,
                 }),
                 arguments_: [],
               }),

@@ -177,7 +177,7 @@ ${errors.slice(0, 3).map((err) => {
 
     await new Promise((resolve, reject) => {
       exec(
-        `isort --sp ${setupCfgPath} ${this.workflowContext.absolutePathToOutputDirectory}`,
+        `python -m isort --sp ${setupCfgPath} ${this.workflowContext.absolutePathToOutputDirectory}`,
         (error: Error | null) => {
           if (error) {
             reject(error);

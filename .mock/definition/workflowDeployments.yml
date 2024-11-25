@@ -132,6 +132,7 @@ service:
         docs: ''
         type: root.WorkflowDeploymentHistoryItem
       url: Default
+      availability: pre-release
       examples:
         - path-parameters:
             history_id_or_release_tag: history_id_or_release_tag
@@ -158,6 +159,8 @@ service:
                   default:
                     type: STRING
               description: description
+      audiences:
+        - customers
     list_workflow_release_tags:
       path: /v1/workflow-deployments/{id}/release-tags
       method: GET

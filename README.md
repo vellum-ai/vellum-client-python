@@ -69,7 +69,7 @@ The Workflows SDK can be used with or without a Vellum account, but a Vellum acc
 out-of-box nodes and features, including the ability to push and pull your Workflow definition to Vellum for editing
 and debugging via a UI.
 
-To learn more and get started, visit the [Vellum Workflows SDK README](/src/workflows/README.md).
+To learn more and get started, visit the [Vellum Workflows SDK README](/src/vellum/workflows/README.md).
 
 
 ## Open-Source vs. Paid

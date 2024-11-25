@@ -7,7 +7,6 @@ const fixtureDir = join(
   "..",
   "..",
   "..",
-  "tests",
   "codegen_integration",
   "fixtures"
 );

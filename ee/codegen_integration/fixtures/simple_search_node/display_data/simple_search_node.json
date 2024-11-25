@@ -197,7 +197,6 @@
             }
           ],
           "module": [
-            "vellum_ee_tests",
             "codegen_integration",
             "fixtures",
             "simple_search_node",
@@ -260,7 +259,6 @@
             }
           ],
           "module": [
-            "vellum_ee_tests",
             "codegen_integration",
             "fixtures",
             "simple_search_node",
@@ -300,7 +298,6 @@
     "definition": {
       "name": "Workflow",
       "module": [
-        "vellum_ee_tests",
         "codegen_integration",
         "fixtures",
         "simple_search_node",

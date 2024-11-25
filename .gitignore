@@ -4,4 +4,9 @@ __pycache__/
 poetry.toml
 .ruff_cache/
 
+.env
+.npmrc
+ee/codegen/lib/
 examples/.ipynb_checkpoints/
+node_modules/
+tsconfig.tsbuildinfo

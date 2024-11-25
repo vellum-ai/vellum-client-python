@@ -1,0 +1,6 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ConstantValuePointer > should generate correct AST for STRING constant value 1`] = `
+""Hello, World!"
+"
+`;

@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NodeInputValuePointerRule > should generate correct AST for CONSTANT_VALUE pointer 1`] = `
+""Hello, World!"
+"
+`;
+
+exports[`NodeInputValuePointerRule > should generate correct AST for INPUT_VARIABLE pointer 1`] = `
+"Inputs.test_variable
+"
+`;
+
+exports[`NodeInputValuePointerRule > should generate correct AST for NODE_OUTPUT pointer 1`] = `
+"TestNode.Outputs.my_output
+"
+`;

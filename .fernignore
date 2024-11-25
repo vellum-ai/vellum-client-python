@@ -1,4 +1,5 @@
 # Specify files that shouldn't be modified by Fern
+.github/workflows/ci-codegen.yaml
 ee
 examples
 src/vellum/evaluations

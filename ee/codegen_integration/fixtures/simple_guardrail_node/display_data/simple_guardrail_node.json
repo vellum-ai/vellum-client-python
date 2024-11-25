@@ -1,0 +1,162 @@
+{
+  "workflow_raw_data": {
+    "nodes": [
+      {
+        "id": "872c757c-9544-4ad6-ada5-5ee574f1fe5e",
+        "type": "ENTRYPOINT",
+        "data": {
+          "label": "Entrypoint Node",
+          "source_handle_id": "5751330f-60a8-4d6a-88aa-a35b968db364"
+        },
+        "inputs": [],
+        "display_data": {
+          "width": 124,
+          "height": 48,
+          "position": {
+            "x": 1545.0,
+            "y": 330.0
+          }
+        }
+      },
+      {
+        "id": "c207b440-6aac-4047-a37c-e25fcb5b9cfb",
+        "type": "METRIC",
+        "data": {
+          "label": "Guardrail Node",
+          "source_handle_id": "92aafe31-101b-47d3-86f2-e261c7747c16",
+          "target_handle_id": "1817fbab-db21-4219-8b34-0e150ce78887",
+          "error_output_id": null,
+          "metric_definition_id": "589df5bd-8c0d-4797-9a84-9598ecd043de",
+          "release_tag": "LATEST"
+        },
+        "inputs": [
+          {
+            "id": "3f917af8-03a4-4ca4-8d40-fa662417fe9c",
+            "key": "expected",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "a6ef8809-346e-469c-beed-2e5c4e9844c5"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "bed55ada-923e-46ef-8340-1a5b0b563dc1",
+            "key": "actual",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "1472503c-1662-4da9-beb9-73026be90c68"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          }
+        ],
+        "display_data": {
+          "width": 464,
+          "height": 224,
+          "position": {
+            "x": 1985.9562846580402,
+            "y": 180.75743992606283
+          }
+        }
+      },
+      {
+        "id": "a9455dc7-85f5-43a9-8be7-f131bc5f08e2",
+        "type": "TERMINAL",
+        "data": {
+          "label": "Final Output",
+          "name": "final-output",
+          "target_handle_id": "0ef13a41-8905-45ad-9aee-09c201368981",
+          "output_id": "493cfa4b-5235-4b71-99ef-270955f35fcb",
+          "output_type": "NUMBER",
+          "node_input_id": "ff856e07-ed9a-47fa-8cec-76ebd8795cdb"
+        },
+        "inputs": [
+          {
+            "id": "ff856e07-ed9a-47fa-8cec-76ebd8795cdb",
+            "key": "node_input",
+            "value": {
+              "rules": [],
+              "combinator": "OR"
+            }
+          }
+        ],
+        "display_data": {
+          "width": 458,
+          "height": 234,
+          "position": {
+            "x": 2750.0,
+            "y": 210.0
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "26e54d68-9d79-4551-87a4-b4e0a3dd000e",
+        "source_node_id": "872c757c-9544-4ad6-ada5-5ee574f1fe5e",
+        "source_handle_id": "5751330f-60a8-4d6a-88aa-a35b968db364",
+        "target_node_id": "c207b440-6aac-4047-a37c-e25fcb5b9cfb",
+        "target_handle_id": "1817fbab-db21-4219-8b34-0e150ce78887",
+        "type": "DEFAULT"
+      },
+      {
+        "id": "cfda52fa-313b-4aa4-b673-28b74ed5f290",
+        "source_node_id": "c207b440-6aac-4047-a37c-e25fcb5b9cfb",
+        "source_handle_id": "92aafe31-101b-47d3-86f2-e261c7747c16",
+        "target_node_id": "a9455dc7-85f5-43a9-8be7-f131bc5f08e2",
+        "target_handle_id": "0ef13a41-8905-45ad-9aee-09c201368981",
+        "type": "DEFAULT"
+      }
+    ],
+    "display_data": {
+      "viewport": {
+        "x": -864.6595419012735,
+        "y": 161.5850325261029,
+        "zoom": 0.59148308095993
+      }
+    },
+    "definition": {
+      "name": "Workflow",
+      "module": [
+        "vellum",
+        "workflows",
+        "codegen",
+        "tests",
+        "fixtures",
+        "simple_guardrail_node",
+        "code",
+        "workflow"
+      ]
+    }
+  },
+  "input_variables": [
+    {
+      "id": "a6ef8809-346e-469c-beed-2e5c4e9844c5",
+      "key": "expected",
+      "type": "STRING"
+    },
+    {
+      "id": "1472503c-1662-4da9-beb9-73026be90c68",
+      "key": "actual",
+      "type": "STRING"
+    }
+  ],
+  "output_variables": [
+    {
+      "id": "493cfa4b-5235-4b71-99ef-270955f35fcb",
+      "key": "final-output",
+      "type": "NUMBER"
+    }
+  ]
+}

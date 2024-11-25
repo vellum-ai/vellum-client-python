@@ -1,0 +1,54 @@
+name: ci-codegen
+
+on:
+  push:
+    paths:
+      - ".github/workflows/ci-codegen.yaml"
+      - "pyproject.toml"
+      - "ee/codegen/**"
+      - "ee/codegen_integration/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ee/codegen
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Bootstrap poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python - -y --version 1.5.1
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Format
+        run: npm run format:check
+        working-directory: ee/codegen
+
+      - name: Lint
+        run: npm run lint
+        working-directory: ee/codegen
+
+      - name: Type check
+        run: npm run types
+        working-directory: ee/codegen
+
+      - name: Test
+        run: npm test
+        env:
+          ISORT_CMD: "poetry run isort"
+        working-directory: ee/codegen

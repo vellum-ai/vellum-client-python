@@ -1,0 +1,32 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MergeNode > basic > getNodeDisplayFile 1`] = `
+"from vellum_ee.workflows.display.nodes import BaseMergeNodeDisplay
+from ...nodes.merge_node import MergeNode
+from uuid import UUID
+from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
+from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
+
+
+class MergeNodeDisplay(BaseMergeNodeDisplay[MergeNode]):
+    target_handle_ids = [UUID("target-handle-id-1"), UUID("target-handle-id-2")]
+    node_input_ids_by_name = {}
+    port_displays = {
+        MergeNode.Ports.default: PortDisplayOverrides(id=UUID("source-handle-id"))
+    }
+    display_data = NodeDisplayData(
+        position=NodeDisplayPosition(x=0, y=0), width=None, height=None
+    )
+"
+`;
+
+exports[`MergeNode > basic > getNodeFile 1`] = `
+"from vellum.workflows.nodes.displayable import MergeNode as BaseMergeNode
+from vellum.types import MergeBehavior
+
+
+class MergeNode(BaseMergeNode):
+    class Trigger(BaseMergeNode.Trigger):
+        merge_behavior = MergeBehavior.AWAIT_ALL
+"
+`;

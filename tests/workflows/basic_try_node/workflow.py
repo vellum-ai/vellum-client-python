@@ -3,6 +3,7 @@ import random
 from vellum.workflows import BaseWorkflow
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.nodes.core.try_node.node import TryNode
+from vellum.workflows.nodes.displayable.final_output_node import FinalOutputNode
 
 
 class StartNode(BaseNode):
@@ -27,9 +28,13 @@ class TryableNode(TryNode):
     subworkflow = Subworkflow
 
 
+class CoalesceNode(FinalOutputNode):
+    class Outputs(FinalOutputNode.Outputs):
+        value = TryableNode.Outputs.value.coalesce(TryableNode.Outputs.error)
+
+
 class SimpleTryExample(BaseWorkflow):
-    graph = TryableNode
+    graph = TryableNode >> FinalOutputNode
 
     class Outputs(BaseWorkflow.Outputs):
-        final_value = TryableNode.Outputs.value
-        error = TryableNode.Outputs.error
+        final_value = CoalesceNode.Outputs.value

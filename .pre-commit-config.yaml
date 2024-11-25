@@ -1,0 +1,80 @@
+default_stages: [commit]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        # Exclude python files, which might have a valid use for trailing whitespaces (e.g. in triple-quoted strings)
+        exclude: '(\.py$)|(.*\.ts\.snap$)'
+      - id: end-of-file-fixer
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [-d=relaxed]
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.16.0
+    hooks:
+      - id: pyupgrade
+        args: [--keep-runtime-typing]
+
+  - repo: local
+    hooks:
+        - id: forbid-future-annotations
+          name: Forbid `from __future__ import annotations`
+          entry: |
+            bash -c "
+            if grep -r 'from __future__ import annotations' workflows/ examples/ codegen/; then
+            echo 'Error: from __future__ import annotations is not allowed in workflows/, examples/, or codegen/ directories.';
+            exit 1;
+            else
+            exit 0;
+            fi"
+          language: system
+          types: [ python ]
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: poetry run mypy .
+        language: system
+        exclude: ".*"
+        always_run: true
+        stages: [push]
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: make test
+        language: system
+        exclude: ".*"
+        always_run: true
+        stages: [push]
+
+  - repo: local
+    hooks:
+      - id: tsc
+        name: tsc
+        entry: bash -c 'cd ee/codegen && npm run types'
+        language: system
+        pass_filenames: false
+        stages: [push]
+
+  - repo: local
+    hooks:
+      - id: vitest
+        name: vitest
+        entry: bash -c 'cd ee/codegen && npm run test'
+        language: system
+        pass_filenames: false
+        stages: [push]

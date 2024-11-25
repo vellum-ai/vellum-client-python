@@ -31,9 +31,10 @@ class BaseSearchNode(BaseNode[StateType], Generic[StateType]):
     """
     Used to perform a hybrid search against a Document Index in Vellum.
 
-    document_index: Union[UUID, str] - Either the Document Index's UUID or its name.
-    query: str - The query to search for.
-    options: Optional[SearchRequestOptionsRequest] = None - The request options to use for the search
+    document_index: Union[UUID, str] - Either the UUID or name of the Vellum Document Index that you'd like to search
+        against
+    query: str - The query to search for
+    options: Optional[SearchRequestOptionsRequest] = None - Runtime configuration for the search
     request_options: Optional[RequestOptions] = None - The request options to use for the search
     """
 
@@ -64,6 +65,12 @@ class BaseSearchNode(BaseNode[StateType], Generic[StateType]):
     request_options: Optional[RequestOptions] = None
 
     class Outputs(BaseOutputs):
+        """
+        The outputs of the SearchNode.
+
+        results: List[SearchResult] - The raw search results
+        """
+
         results: List[SearchResult]
 
     def _perform_search(self) -> SearchResponse:

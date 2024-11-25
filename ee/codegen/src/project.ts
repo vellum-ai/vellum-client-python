@@ -577,6 +577,16 @@ from .workflow import *\
       return parentDirPyProjectTomlPath;
     }
 
+    const rootDirPyProjectTomlPath = join(
+      process.cwd(),
+      "..",
+      "..",
+      "pyproject.toml"
+    );
+    if (fs.existsSync(rootDirPyProjectTomlPath)) {
+      return rootDirPyProjectTomlPath;
+    }
+
     const cwdSetupCfgPath = join(process.cwd(), "setup.cfg");
     if (fs.existsSync(cwdSetupCfgPath)) {
       return cwdSetupCfgPath;
@@ -587,6 +597,11 @@ from .workflow import *\
       return parentDirSetupCfgPath;
     }
 
-    throw new Error("No setup.cfg file found");
+    const rootDirSetupCfgPath = join(process.cwd(), "..", "..", "setup.cfg");
+    if (fs.existsSync(rootDirSetupCfgPath)) {
+      return rootDirSetupCfgPath;
+    }
+
+    throw new Error("No isort Config file found");
   }
 }

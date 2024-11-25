@@ -16,7 +16,6 @@ export enum WorkflowNodeType {
   CODE_EXECUTION = "CODE_EXECUTION",
   METRIC = "METRIC",
   SEARCH = "SEARCH",
-  WEBHOOK = "WEBHOOK",
   MERGE = "MERGE",
   CONDITIONAL = "CONDITIONAL",
   API = "API",
@@ -25,6 +24,7 @@ export enum WorkflowNodeType {
   SUBWORKFLOW = "SUBWORKFLOW",
   MAP = "MAP",
   ERROR = "ERROR",
+  GENERIC = "GENERIC",
 }
 
 export enum ConditionalCombinator {
@@ -486,6 +486,15 @@ export interface ErrorNode extends BaseWorkflowNode {
   data: ErrorNodeData;
 }
 
+export interface GenericNodeData {
+  label: string;
+}
+
+export interface GenericNode extends BaseWorkflowNode {
+  type: "GENERIC";
+  data: GenericNodeData;
+}
+
 export type WorkflowDataNode =
   | PromptNode
   | SearchNode
@@ -499,7 +508,8 @@ export type WorkflowDataNode =
   | ConditionalNode
   | ApiNode
   | NoteNode
-  | ErrorNode;
+  | ErrorNode
+  | GenericNode;
 
 export type WorkflowNode = WorkflowDataNode | EntrypointNode | FinalOutputNode;
 

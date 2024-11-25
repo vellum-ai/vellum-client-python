@@ -21,7 +21,7 @@ export class GenericNode extends BaseSingleFileNode<
     return statements;
   }
 
-  getGenericOutputId(): string | undefined {
+  protected getErrorOutputId(): string | undefined {
     return undefined;
   }
 }

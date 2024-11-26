@@ -144,7 +144,6 @@ def test_serialize_workflow():
     }
 
     conditional_node = workflow_raw_data["nodes"][1]
-    print(conditional_node)
     assert not DeepDiff(
         {
             "id": "9b619e4d-b0a7-4121-9060-100d457868cb",
@@ -324,11 +323,11 @@ def test_serialize_workflow():
                 "target_handle_id": "dd89e228-a23e-422b-80b2-34362c1c050e",
                 "conditions": [
                     {
-                        "id": "9b619e4d-b0a7-4121-9060-100d457868cb|conditions|0",
+                        "id": "de7b0b4e-7803-4d36-a275-2e7e3f60342b",
                         "type": "IF",
                         "source_handle_id": "561b4e3a-8db3-448a-8933-1115937082ff",
                         "data": {
-                            "id": "3fa67b27-95b4-4148-865e-0fe1cf78a8f5",
+                            "id": "2ccd0730-26d1-4fb4-baa9-1a2a182dd9a0",
                             "rules": [
                                 {
                                     "id": "708bb538-4c77-4ae9-8e87-0706346e2947",
@@ -348,11 +347,11 @@ def test_serialize_workflow():
                         },
                     },
                     {
-                        "id": "9b619e4d-b0a7-4121-9060-100d457868cb|conditions|1",
+                        "id": "5e783d17-6808-441a-ac6c-33a4e184f4e0",
                         "type": "ELIF",
                         "source_handle_id": "0644f22e-2680-441a-9554-eedf1d3d22a9",
                         "data": {
-                            "id": "ee3ebaff-aeab-4013-8dd1-1d7ab334c10f",
+                            "id": "cc3f0d92-b603-42cc-b2e9-83e3b23b3bcb",
                             "rules": [
                                 {
                                     "id": "ddee5d1d-46e9-4ae8-b0a8-311747ebadd4",
@@ -372,11 +371,11 @@ def test_serialize_workflow():
                         },
                     },
                     {
-                        "id": "9b619e4d-b0a7-4121-9060-100d457868cb|conditions|2",
+                        "id": "6bd2f643-9cf5-4e7f-9113-f90e5c8057be",
                         "type": "ELIF",
                         "source_handle_id": "2a48d274-ecfc-4f40-95ac-bc697663f10c",
                         "data": {
-                            "id": "f5c01b32-20d3-4caf-99e3-95298a6874fe",
+                            "id": "a5a0f391-7052-452f-9fe1-a5781a491591",
                             "rules": [
                                 {
                                     "id": "73157578-205a-4816-8985-cf726063647c",
@@ -396,11 +395,11 @@ def test_serialize_workflow():
                         },
                     },
                     {
-                        "id": "9b619e4d-b0a7-4121-9060-100d457868cb|conditions|3",
+                        "id": "0a058485-18a4-4e20-8a30-6da8196ac46f",
                         "type": "ELIF",
                         "source_handle_id": "90fc9dc8-0a74-4a98-b6ac-55ffce4a2881",
                         "data": {
-                            "id": "89c20b1e-efff-42b4-b75c-03f475cb4dab",
+                            "id": "efe7a851-2a67-4189-99ec-bc193242b270",
                             "rules": [
                                 {
                                     "id": "e805add5-7f7f-443d-b9bc-11ad15eeb49c",

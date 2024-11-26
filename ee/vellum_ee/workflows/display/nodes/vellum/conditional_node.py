@@ -134,7 +134,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
             if port._condition is None or port._condition_type is None:
                 continue
 
-            condition_id = str(condition_ids.get(idx) or (f"{node_id}|conditions|{idx}"))
+            condition_id = str(condition_ids.get(idx) or uuid4_from_hash(f"{node_id}|conditions|{idx}"))
             source_handle_id = str(source_handle_ids.get(idx) or uuid4_from_hash(f"{node_id}|handles|{idx}"))
 
             rule_ids = self._get_rule_ids()

@@ -150,3 +150,21 @@ def test_pull__remove_missing_files__ignore_pattern(vellum_client, mock_module):
 
     # AND the tests/test_workflow.py file is untouched
     assert os.path.exists(test_file_path)
+
+
+def test_pull__include_json(vellum_client, mock_module):
+    # GIVEN a module on the user's filesystem
+    _, module = mock_module
+
+    # AND the workflow pull API call returns a zip file
+    vellum_client.workflows.pull.return_value = iter(
+        [zip_file_map({"workflow.py": "print('hello')", "workflow.json": "{}"})]
+    )
+
+    # WHEN the user runs the pull command
+    pull_command(module, include_json=True)
+
+    # THEN the pull api is called with include_json=True
+    vellum_client.workflows.pull.assert_called_once()
+    call_args = vellum_client.workflows.pull.call_args.kwargs
+    assert call_args["request_options"]["additional_query_parameters"] == {"include_json": True}

@@ -78,7 +78,10 @@ export class Workflow {
     nodes: WorkflowDataNode[];
     edges: WorkflowEdge[];
   }) {
-    const nodeIds = new Set<string>(nodes.map((node) => getNodeId(node)));
+    const nodeIds = new Set<string>([
+      ...nodes.map((node) => getNodeId(node)),
+      this.workflowContext.getEntrypointNode().id,
+    ]);
     const edgesByPortId = new Map<string, WorkflowEdge[]>();
     let entrypointPortContexts: PortContext[] = [];
     const entrypointNodeEdges: WorkflowEdge[] = [];

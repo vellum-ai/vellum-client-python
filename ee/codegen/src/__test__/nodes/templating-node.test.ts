@@ -3,7 +3,7 @@ import { beforeEach } from "vitest";
 
 import { workflowContextFactory } from "src/__test__/helpers";
 import { inputVariableContextFactory } from "src/__test__/helpers/input-variable-context-factory";
-import { inlineTemplatingNodeDataFactory } from "src/__test__/helpers/node-data-factories";
+import { templatingNodeFactory } from "src/__test__/helpers/node-data-factories";
 import { createNodeContext, WorkflowContext } from "src/context";
 import { TemplatingNodeContext } from "src/context/node-context/templating-node";
 import { TemplatingNode } from "src/generators/nodes/templating-node";
@@ -31,7 +31,7 @@ describe("TemplatingNode", () => {
 
   describe("basic", () => {
     beforeEach(() => {
-      const nodeData = inlineTemplatingNodeDataFactory();
+      const nodeData = templatingNodeFactory();
 
       const nodeContext = createNodeContext({
         workflowContext,
@@ -58,7 +58,7 @@ describe("TemplatingNode", () => {
 
   describe("reject on error enabled", () => {
     beforeEach(() => {
-      const nodeData = inlineTemplatingNodeDataFactory({
+      const nodeData = templatingNodeFactory({
         errorOutputId: "e7a1fbea-f5a7-4b31-a9ff-0d26c3de021f",
       });
 

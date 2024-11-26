@@ -89,6 +89,7 @@ import {
   PromptNodeDeployment,
   PromptVersionData,
   LegacyPromptNodeData,
+  GenericNode,
 } from "src/types/vellum";
 
 const CacheConfigSerializer = objectSchema({
@@ -677,22 +678,19 @@ export declare namespace PromptVersionExecConfigSerializer {
   }
 }
 
-export const BaseWorkflowNodeSerializer = objectSchema({
-  id: stringSchema(),
-  type: stringSchema(),
-  inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
-  definition: WorkflowNodeDefinitionSerializer.optional(),
-});
-
 export declare namespace BaseWorkflowNodeSerializer {
   interface Raw {
-    id: string;
     type: string;
-    inputs: NodeInputSerializer.Raw[];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     display_data?: any;
     definition?: WorkflowNodeDefinitionSerializer.Raw | null;
+  }
+}
+
+export declare namespace BaseDisplayableWorkflowNodeSerializer {
+  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+    id: string;
+    inputs: NodeInputSerializer.Raw[];
   }
 }
 
@@ -712,7 +710,7 @@ export const EntrypointNodeSerializer: ObjectSchema<
 });
 
 export declare namespace EntrypointNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "ENTRYPOINT";
     data: {
       label: string;
@@ -809,7 +807,7 @@ export const SubworkflowNodeSerializer: ObjectSchema<
 });
 
 export declare namespace SubworkflowNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "SUBWORKFLOW";
     data: SubworkflowNodeDataSerializer.Raw;
   }
@@ -1010,7 +1008,7 @@ export const PromptNodeSerializer: ObjectSchema<
 });
 
 export declare namespace PromptNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "PROMPT";
     data: PromptNodeDataSerializer.Raw;
   }
@@ -1121,7 +1119,7 @@ export const MapNodeSerializer: ObjectSchema<MapNodeSerializer.Raw, MapNode> =
   });
 
 export declare namespace MapNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "MAP";
     data: MapNodeDataSerializer.Raw;
   }
@@ -1147,7 +1145,7 @@ export const GuardrailNodeSerializer: ObjectSchema<
 });
 
 export declare namespace GuardrailNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "METRIC";
     data: {
       label: string;
@@ -1222,7 +1220,7 @@ export const CodeExecutionNodeSerializer: ObjectSchema<
 });
 
 export declare namespace CodeExecutionNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "CODE_EXECUTION";
     data: CodeExecutionNodeDataSerializer.Raw;
   }
@@ -1295,7 +1293,7 @@ export const SearchNodeSerializer: ObjectSchema<
 });
 
 export declare namespace SearchNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "SEARCH";
     data: SearchNodeDataSerializer.Raw;
   }
@@ -1383,7 +1381,7 @@ export const ConditionalNodeSerializer: ObjectSchema<
 });
 
 export declare namespace ConditionalNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "CONDITIONAL";
     data: ConditionalNodeDataSerializer.Raw;
   }
@@ -1413,7 +1411,7 @@ export const TemplatingNodeSerializer: ObjectSchema<
 });
 
 export declare namespace TemplatingNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "TEMPLATING";
     data: {
       label: string;
@@ -1447,7 +1445,7 @@ export const FinalOutputNodeSerializer: ObjectSchema<
 });
 
 export declare namespace FinalOutputNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "TERMINAL";
     data: {
       label: string;
@@ -1500,7 +1498,7 @@ export const MergeNodeSerializer: ObjectSchema<
 });
 
 export declare namespace MergeNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "MERGE";
     data: {
       label: string;
@@ -1574,7 +1572,7 @@ export const ApiNodeSerializer: ObjectSchema<ApiNodeSerializer.Raw, ApiNode> =
   });
 
 export declare namespace ApiNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "API";
     data: {
       label: string;
@@ -1613,7 +1611,7 @@ export const NoteNodeSerializer: ObjectSchema<
 });
 
 export declare namespace NoteNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "NOTE";
     data: {
       label: string;
@@ -1643,7 +1641,7 @@ export const ErrorNodeSerializer: ObjectSchema<
 });
 
 export declare namespace ErrorNodeSerializer {
-  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+  interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
     type: "ERROR";
     data: {
       label: string;
@@ -1652,6 +1650,21 @@ export declare namespace ErrorNodeSerializer {
       error_source_input_id: string;
       error_output_id: string;
     };
+  }
+}
+
+export const GenericNodeSerializer: ObjectSchema<
+  GenericNodeSerializer.Raw,
+  GenericNode
+> = objectSchema({
+  type: stringLiteralSchema("GENERIC"),
+  displayData: propertySchema("display_data", anySchema()),
+  definition: WorkflowNodeDefinitionSerializer.optional(),
+});
+
+export declare namespace GenericNodeSerializer {
+  interface Raw extends BaseWorkflowNodeSerializer.Raw {
+    type: "GENERIC";
   }
 }
 
@@ -1673,6 +1686,7 @@ export const WorkflowNodeSerializer: Schema<
   ApiNodeSerializer,
   NoteNodeSerializer,
   ErrorNodeSerializer,
+  GenericNodeSerializer,
 ]);
 
 export declare namespace WorkflowNodeSerializer {
@@ -1690,7 +1704,8 @@ export declare namespace WorkflowNodeSerializer {
     | ConditionalNodeSerializer.Raw
     | ApiNodeSerializer.Raw
     | NoteNodeSerializer.Raw
-    | ErrorNodeSerializer.Raw;
+    | ErrorNodeSerializer.Raw
+    | GenericNodeSerializer.Raw;
 }
 
 const workflowEdgeSerializer: ObjectSchema<

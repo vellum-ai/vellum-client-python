@@ -8,6 +8,7 @@ import { CodeExecutionContext } from "src/context/node-context/code-execution-no
 import { ConditionalNodeContext } from "src/context/node-context/conditional-node";
 import { ErrorNodeContext } from "src/context/node-context/error-node";
 import { FinalOutputNodeContext } from "src/context/node-context/final-output-node";
+import { GenericNodeContext } from "src/context/node-context/generic-node";
 import { InlinePromptNodeContext } from "src/context/node-context/inline-prompt-node";
 import { MapNodeContext } from "src/context/node-context/map-node";
 import { MergeNodeContext } from "src/context/node-context/merge-node";
@@ -174,6 +175,13 @@ export function createNodeContext(
       return new NoteNodeContext({
         ...args,
         nodeData: noteNodeData,
+      });
+    }
+    case WorkflowNodeType.GENERIC: {
+      const genericNodeData = nodeData;
+      return new GenericNodeContext({
+        ...args,
+        nodeData: genericNodeData,
       });
     }
     default:

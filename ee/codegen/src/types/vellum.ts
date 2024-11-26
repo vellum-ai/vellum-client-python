@@ -16,7 +16,6 @@ export enum WorkflowNodeType {
   CODE_EXECUTION = "CODE_EXECUTION",
   METRIC = "METRIC",
   SEARCH = "SEARCH",
-  WEBHOOK = "WEBHOOK",
   MERGE = "MERGE",
   CONDITIONAL = "CONDITIONAL",
   API = "API",
@@ -25,6 +24,7 @@ export enum WorkflowNodeType {
   SUBWORKFLOW = "SUBWORKFLOW",
   MAP = "MAP",
   ERROR = "ERROR",
+  GENERIC = "GENERIC",
 }
 
 export enum ConditionalCombinator {
@@ -138,6 +138,12 @@ export interface WorkflowNodeDefinition {
 }
 
 export interface BaseWorkflowNode {
+  type: string;
+  displayData?: NodeDisplayData;
+  definition?: WorkflowNodeDefinition;
+}
+
+export interface BaseDisplayableWorkflowNode extends BaseWorkflowNode {
   id: string;
   inputs: NodeInput[];
   type: string;
@@ -150,7 +156,7 @@ export interface EntrypointNodeData {
   sourceHandleId: string;
 }
 
-export interface EntrypointNode extends BaseWorkflowNode {
+export interface EntrypointNode extends BaseDisplayableWorkflowNode {
   type: "ENTRYPOINT";
   data: EntrypointNodeData;
 }
@@ -225,7 +231,7 @@ export type PromptNodeData =
   | DeploymentPromptNodeData
   | LegacyPromptNodeData;
 
-export interface PromptNode extends BaseWorkflowNode {
+export interface PromptNode extends BaseDisplayableWorkflowNode {
   type: "PROMPT";
   data: PromptNodeData;
 }
@@ -247,7 +253,7 @@ export interface SearchNodeData {
   metadataFiltersNodeInputId: string;
 }
 
-export interface SearchNode extends BaseWorkflowNode {
+export interface SearchNode extends BaseDisplayableWorkflowNode {
   type: "SEARCH";
   data: SearchNodeData;
 }
@@ -278,7 +284,7 @@ export type SubworkflowNodeData =
   | ({
       variant: "INLINE";
     } & InlineSubworkflowNodeData);
-export interface SubworkflowNode extends BaseWorkflowNode {
+export interface SubworkflowNode extends BaseDisplayableWorkflowNode {
   type: "SUBWORKFLOW";
   data: SubworkflowNodeData;
 }
@@ -318,7 +324,7 @@ export type MapNodeData =
       variant: "INLINE";
     } & InlineMapNodeData);
 
-export interface MapNode extends BaseWorkflowNode {
+export interface MapNode extends BaseDisplayableWorkflowNode {
   type: "MAP";
   data: MapNodeData;
 }
@@ -331,7 +337,7 @@ export interface GuardrailNodeData {
   metricDefinitionId: string;
   releaseTag: string;
 }
-export interface GuardrailNode extends BaseWorkflowNode {
+export interface GuardrailNode extends BaseDisplayableWorkflowNode {
   type: "METRIC";
   data: GuardrailNodeData;
 }
@@ -354,7 +360,7 @@ export interface CodeExecutionNodeData {
   packages?: CodeExecutionPackage[];
   filepath?: string | null;
 }
-export interface CodeExecutionNode extends BaseWorkflowNode {
+export interface CodeExecutionNode extends BaseDisplayableWorkflowNode {
   type: "CODE_EXECUTION";
   data: CodeExecutionNodeData;
 }
@@ -369,7 +375,7 @@ export interface TemplatingNodeData {
   outputType: VellumVariableType;
 }
 
-export interface TemplatingNode extends BaseWorkflowNode {
+export interface TemplatingNode extends BaseDisplayableWorkflowNode {
   type: "TEMPLATING";
   data: TemplatingNodeData;
 }
@@ -398,7 +404,7 @@ export interface ConditionalNodeData {
   version: string;
 }
 
-export interface ConditionalNode extends BaseWorkflowNode {
+export interface ConditionalNode extends BaseDisplayableWorkflowNode {
   type: "CONDITIONAL";
   data: ConditionalNodeData;
 }
@@ -412,7 +418,7 @@ export interface FinalOutputNodeData {
   nodeInputId: string;
 }
 
-export interface FinalOutputNode extends BaseWorkflowNode {
+export interface FinalOutputNode extends BaseDisplayableWorkflowNode {
   type: "TERMINAL";
   data: FinalOutputNodeData;
 }
@@ -428,7 +434,7 @@ export interface MergeNodeData {
   sourceHandleId: string;
 }
 
-export interface MergeNode extends BaseWorkflowNode {
+export interface MergeNode extends BaseDisplayableWorkflowNode {
   type: "MERGE";
   data: MergeNodeData;
 }
@@ -456,7 +462,7 @@ export interface ApiNodeData {
   sourceHandleId: string;
 }
 
-export interface ApiNode extends BaseWorkflowNode {
+export interface ApiNode extends BaseDisplayableWorkflowNode {
   type: "API";
   data: ApiNodeData;
 }
@@ -468,7 +474,7 @@ export interface NoteNodeData {
   style?: Record<string, any>;
 }
 
-export interface NoteNode extends BaseWorkflowNode {
+export interface NoteNode extends BaseDisplayableWorkflowNode {
   type: "NOTE";
   data: NoteNodeData;
 }
@@ -481,9 +487,13 @@ export interface ErrorNodeData {
   errorOutputId: string;
 }
 
-export interface ErrorNode extends BaseWorkflowNode {
+export interface ErrorNode extends BaseDisplayableWorkflowNode {
   type: "ERROR";
   data: ErrorNodeData;
+}
+
+export interface GenericNode extends BaseWorkflowNode {
+  type: "GENERIC";
 }
 
 export type WorkflowDataNode =
@@ -499,7 +509,8 @@ export type WorkflowDataNode =
   | ConditionalNode
   | ApiNode
   | NoteNode
-  | ErrorNode;
+  | ErrorNode
+  | GenericNode;
 
 export type WorkflowNode = WorkflowDataNode | EntrypointNode | FinalOutputNode;
 

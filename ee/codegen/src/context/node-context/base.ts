@@ -2,6 +2,7 @@ import { WorkflowContext } from "src/context";
 import { PortContext } from "src/context/port-context";
 import { WorkflowDataNode } from "src/types/vellum";
 import { toPascalCase, toSnakeCase } from "src/utils/casing";
+import { getNodeId, getNodeLabel } from "src/utils/nodes";
 import {
   getGeneratedNodeDisplayModulePath,
   getGeneratedNodeModulePath,
@@ -33,7 +34,9 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
   constructor(args: BaseNodeContext.Args<T>) {
     this.workflowContext = args.workflowContext;
 
-    const nodeLabel = args.nodeData.data.label;
+    this.nodeData = args.nodeData;
+
+    const nodeLabel = this.getNodeLabel();
 
     this.nodeModuleName =
       args.nodeData.definition?.module?.[
@@ -55,7 +58,6 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
       this.nodeDisplayModuleName
     );
 
-    this.nodeData = args.nodeData;
     this.nodeOutputNamesById = this.getNodeOutputNamesById();
 
     const portContexts = this.createPortContexts();
@@ -76,7 +78,11 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
   protected abstract createPortContexts(): PortContext[];
 
   public getNodeId(): string {
-    return this.nodeData.id;
+    return getNodeId(this.nodeData);
+  }
+
+  public getNodeLabel(): string {
+    return getNodeLabel(this.nodeData);
   }
 
   public getNodeOutputNameById(outputId: string): string {

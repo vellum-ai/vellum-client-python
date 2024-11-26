@@ -29,6 +29,7 @@ import { CodeExecutionContext } from "src/context/node-context/code-execution-no
 import { ConditionalNodeContext } from "src/context/node-context/conditional-node";
 import { ErrorNodeContext } from "src/context/node-context/error-node";
 import { FinalOutputNodeContext } from "src/context/node-context/final-output-node";
+import { GenericNodeContext } from "src/context/node-context/generic-node";
 import { GuardrailNodeContext } from "src/context/node-context/guardrail-node";
 import { InlinePromptNodeContext } from "src/context/node-context/inline-prompt-node";
 import { InlineSubworkflowNodeContext } from "src/context/node-context/inline-subworkflow-node";
@@ -45,6 +46,7 @@ import { CodeExecutionNode } from "src/generators/nodes/code-execution-node";
 import { ConditionalNode } from "src/generators/nodes/conditional-node";
 import { ErrorNode } from "src/generators/nodes/error-node";
 import { FinalOutputNode } from "src/generators/nodes/final-output-node";
+import { GenericNode } from "src/generators/nodes/generic-node";
 import { InlinePromptNode } from "src/generators/nodes/inline-prompt-node";
 import { MapNode } from "src/generators/nodes/map-node";
 import { MergeNode } from "src/generators/nodes/merge-node";
@@ -57,6 +59,7 @@ import {
   WorkflowVersionExecConfig,
 } from "src/types/vellum";
 import { toSnakeCase } from "src/utils/casing";
+import { getNodeId } from "src/utils/nodes";
 import { assertUnreachable } from "src/utils/typing";
 
 export class ProjectSerializationError extends Error {
@@ -294,7 +297,7 @@ from .workflow import *\
       workflowContext: this.workflowContext,
     });
 
-    const nodeIds = nodesToGenerate.map((nodeData) => nodeData.id);
+    const nodeIds = nodesToGenerate.map((nodeData) => getNodeId(nodeData));
     const nodes = this.generateNodes(nodeIds);
 
     const workflow = codegen.workflow({
@@ -448,6 +451,12 @@ from .workflow import *\
           node = new ApiNode({
             workflowContext: this.workflowContext,
             nodeContext: nodeContext as ApiNodeContext,
+          });
+          break;
+        case WorkflowNodeTypeEnum.GENERIC:
+          node = new GenericNode({
+            workflowContext: this.workflowContext,
+            nodeContext: nodeContext as GenericNodeContext,
           });
           break;
         default: {

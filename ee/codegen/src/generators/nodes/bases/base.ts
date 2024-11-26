@@ -135,6 +135,10 @@ export abstract class BaseNode<
   private generateNodeInputs(): Map<string, NodeInput> {
     const generatedNodeInputs = new Map<string, NodeInput>();
 
+    if (!("inputs" in this.nodeData)) {
+      return generatedNodeInputs;
+    }
+
     this.nodeData.inputs.forEach((nodeInputData) => {
       const nodeInput = codegen.nodeInput({
         workflowContext: this.workflowContext,
@@ -148,7 +152,10 @@ export abstract class BaseNode<
   }
 
   private getPortDisplay(): python.Field | undefined {
-    if (!("sourceHandleId" in this.nodeData.data)) {
+    if (
+      !("data" in this.nodeData) ||
+      !("sourceHandleId" in this.nodeData.data)
+    ) {
       return;
     }
 

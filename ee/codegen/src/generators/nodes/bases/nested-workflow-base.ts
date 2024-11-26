@@ -54,7 +54,7 @@ export abstract class BaseNestedWorkflowNode<
   }
 
   protected generateNestedWorkflowContexts(): Map<string, WorkflowContext> {
-    const nestedWorkflowLabel = `${this.nodeData.data.label} Workflow`;
+    const nestedWorkflowLabel = `${this.nodeContext.getNodeLabel()} Workflow`;
     const nestedWorkflowContext = new WorkflowContext({
       absolutePathToOutputDirectory:
         this.workflowContext.absolutePathToOutputDirectory,

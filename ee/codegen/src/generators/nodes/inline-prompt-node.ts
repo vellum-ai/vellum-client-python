@@ -114,9 +114,6 @@ export class InlinePromptNode extends BaseSingleFileNode<
   }
 
   protected getOutputDisplay(): python.Field {
-    // TODO: Handle error_output_id with try node
-    // https://app.shortcut.com/vellum/story/5386/
-
     return python.field({
       name: "output_display",
       initializer: python.TypeInstantiation.dict([

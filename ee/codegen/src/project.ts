@@ -53,6 +53,7 @@ import { MapNode } from "src/generators/nodes/map-node";
 import { MergeNode } from "src/generators/nodes/merge-node";
 import { NoteNode } from "src/generators/nodes/note-node";
 import { PromptDeploymentNode } from "src/generators/nodes/prompt-deployment-node";
+import { SubworkflowDeploymentNode } from "src/generators/nodes/subworkflow-deployment-node";
 import { WorkflowVersionExecConfigSerializer } from "src/serializers/vellum";
 import {
   EntrypointNode,
@@ -347,8 +348,11 @@ from .workflow import *\
               });
               break;
             case "DEPLOYMENT":
-              // TODO: https://app.shortcut.com/vellum/story/5269
-              throw new Error(`DEPLOYMENT variant not yet supported`);
+              node = new SubworkflowDeploymentNode({
+                workflowContext: this.workflowContext,
+                nodeContext: nodeContext as InlineSubworkflowNodeContext,
+              });
+              break;
             default: {
               assertUnreachable(variant);
             }

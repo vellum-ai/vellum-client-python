@@ -10,6 +10,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...types.workflow_deployment_read import WorkflowDeploymentRead
 from ...core.jsonable_encoder import jsonable_encoder
+from ...types.workflow_deployment_history_item import WorkflowDeploymentHistoryItem
 from .types.list_workflow_release_tags_request_source import ListWorkflowReleaseTagsRequestSource
 from ...types.paginated_workflow_release_tag_read_list import PaginatedWorkflowReleaseTagReadList
 from ...types.workflow_release_tag_read import WorkflowReleaseTagRead
@@ -132,6 +133,60 @@ class WorkflowDeploymentsClient:
                     WorkflowDeploymentRead,
                     parse_obj_as(
                         type_=WorkflowDeploymentRead,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def workflow_deployment_history_item_retrieve(
+        self, history_id_or_release_tag: str, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowDeploymentHistoryItem:
+        """
+        Retrieve a specific Workflow Deployment History Item by either its UUID or the name of a Release Tag that points to it.
+
+        Parameters
+        ----------
+        history_id_or_release_tag : str
+            Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
+
+        id : str
+            A UUID string identifying this workflow deployment.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WorkflowDeploymentHistoryItem
+
+
+        Examples
+        --------
+        from vellum import Vellum
+
+        client = Vellum(
+            api_key="YOUR_API_KEY",
+        )
+        client.workflow_deployments.workflow_deployment_history_item_retrieve(
+            history_id_or_release_tag="history_id_or_release_tag",
+            id="id",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/workflow-deployments/{jsonable_encoder(id)}/history/{jsonable_encoder(history_id_or_release_tag)}",
+            base_url=self._client_wrapper.get_environment().default,
+            method="GET",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    WorkflowDeploymentHistoryItem,
+                    parse_obj_as(
+                        type_=WorkflowDeploymentHistoryItem,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -466,6 +521,68 @@ class AsyncWorkflowDeploymentsClient:
                     WorkflowDeploymentRead,
                     parse_obj_as(
                         type_=WorkflowDeploymentRead,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def workflow_deployment_history_item_retrieve(
+        self, history_id_or_release_tag: str, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowDeploymentHistoryItem:
+        """
+        Retrieve a specific Workflow Deployment History Item by either its UUID or the name of a Release Tag that points to it.
+
+        Parameters
+        ----------
+        history_id_or_release_tag : str
+            Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
+
+        id : str
+            A UUID string identifying this workflow deployment.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WorkflowDeploymentHistoryItem
+
+
+        Examples
+        --------
+        import asyncio
+
+        from vellum import AsyncVellum
+
+        client = AsyncVellum(
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.workflow_deployments.workflow_deployment_history_item_retrieve(
+                history_id_or_release_tag="history_id_or_release_tag",
+                id="id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/workflow-deployments/{jsonable_encoder(id)}/history/{jsonable_encoder(history_id_or_release_tag)}",
+            base_url=self._client_wrapper.get_environment().default,
+            method="GET",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return typing.cast(
+                    WorkflowDeploymentHistoryItem,
+                    parse_obj_as(
+                        type_=WorkflowDeploymentHistoryItem,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

@@ -93,6 +93,41 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
     validate_response(async_response, expected_response, expected_types)
 
 
+async def test_deployment_history_item_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
+    expected_response: typing.Any = {
+        "id": "id",
+        "deployment_id": "deployment_id",
+        "timestamp": "2024-01-15T09:30:00Z",
+        "label": "label",
+        "name": "name",
+        "input_variables": [
+            {"id": "id", "key": "key", "type": "STRING", "required": True, "default": {"type": "STRING"}}
+        ],
+        "description": "description",
+    }
+    expected_types: typing.Any = {
+        "id": None,
+        "deployment_id": None,
+        "timestamp": "datetime",
+        "label": None,
+        "name": None,
+        "input_variables": (
+            "list",
+            {0: {"id": None, "key": None, "type": None, "required": None, "default": {"type": None}}},
+        ),
+        "description": None,
+    }
+    response = client.deployments.deployment_history_item_retrieve(
+        history_id_or_release_tag="history_id_or_release_tag", id="id"
+    )
+    validate_response(response, expected_response, expected_types)
+
+    async_response = await async_client.deployments.deployment_history_item_retrieve(
+        history_id_or_release_tag="history_id_or_release_tag", id="id"
+    )
+    validate_response(async_response, expected_response, expected_types)
+
+
 async def test_list_deployment_release_tags(client: Vellum, async_client: AsyncVellum) -> None:
     expected_response: typing.Any = {
         "count": 123,

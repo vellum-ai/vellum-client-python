@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vellum-ai"
-version = "0.10.0"
+version = "0.10.1"
 description = ""
 readme = "README.md"
 authors = []
@@ -31,7 +31,7 @@ packages = [
 ]
 
 [project.urls]
-Repository = 'https://github.com/vellum-ai/vellum-client-python'
+Repository = 'https://github.com/vellum-ai/vellum-python-sdks'
 
 [tool.poetry.dependencies]
 python = "^3.9"

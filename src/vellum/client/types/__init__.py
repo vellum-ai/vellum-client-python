@@ -73,6 +73,7 @@ from .conditional_node_result import ConditionalNodeResult
 from .conditional_node_result_data import ConditionalNodeResultData
 from .container_image_read import ContainerImageRead
 from .create_test_suite_test_case_request import CreateTestSuiteTestCaseRequest
+from .deployment_history_item import DeploymentHistoryItem
 from .deployment_provider_payload_response import DeploymentProviderPayloadResponse
 from .deployment_provider_payload_response_payload import DeploymentProviderPayloadResponsePayload
 from .deployment_read import DeploymentRead
@@ -198,6 +199,7 @@ from .metadata_filters_request import MetadataFiltersRequest
 from .metric_definition_execution import MetricDefinitionExecution
 from .metric_definition_input import MetricDefinitionInput
 from .metric_node_result import MetricNodeResult
+from .ml_model_read import MlModelRead
 from .ml_model_usage import MlModelUsage
 from .named_scenario_input_chat_history_variable_value_request import NamedScenarioInputChatHistoryVariableValueRequest
 from .named_scenario_input_json_variable_value_request import NamedScenarioInputJsonVariableValueRequest
@@ -450,6 +452,7 @@ from .vellum_value_request import VellumValueRequest
 from .vellum_variable import VellumVariable
 from .vellum_variable_extensions import VellumVariableExtensions
 from .vellum_variable_type import VellumVariableType
+from .workflow_deployment_history_item import WorkflowDeploymentHistoryItem
 from .workflow_deployment_read import WorkflowDeploymentRead
 from .workflow_event_error import WorkflowEventError
 from .workflow_execution_actual_chat_history_request import WorkflowExecutionActualChatHistoryRequest
@@ -562,6 +565,7 @@ __all__ = [
     "ConditionalNodeResultData",
     "ContainerImageRead",
     "CreateTestSuiteTestCaseRequest",
+    "DeploymentHistoryItem",
     "DeploymentProviderPayloadResponse",
     "DeploymentProviderPayloadResponsePayload",
     "DeploymentRead",
@@ -683,6 +687,7 @@ __all__ = [
     "MetricDefinitionExecution",
     "MetricDefinitionInput",
     "MetricNodeResult",
+    "MlModelRead",
     "MlModelUsage",
     "NamedScenarioInputChatHistoryVariableValueRequest",
     "NamedScenarioInputJsonVariableValueRequest",
@@ -931,6 +936,7 @@ __all__ = [
     "VellumVariable",
     "VellumVariableExtensions",
     "VellumVariableType",
+    "WorkflowDeploymentHistoryItem",
     "WorkflowDeploymentRead",
     "WorkflowEventError",
     "WorkflowExecutionActualChatHistoryRequest",

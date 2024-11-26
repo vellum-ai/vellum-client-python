@@ -11,6 +11,7 @@ from .resources.document_indexes.client import DocumentIndexesClient
 from .resources.documents.client import DocumentsClient
 from .resources.folder_entities.client import FolderEntitiesClient
 from .resources.metric_definitions.client import MetricDefinitionsClient
+from .resources.ml_models.client import MlModelsClient
 from .resources.sandboxes.client import SandboxesClient
 from .resources.test_suite_runs.client import TestSuiteRunsClient
 from .resources.test_suites.client import TestSuitesClient
@@ -59,6 +60,7 @@ from .resources.document_indexes.client import AsyncDocumentIndexesClient
 from .resources.documents.client import AsyncDocumentsClient
 from .resources.folder_entities.client import AsyncFolderEntitiesClient
 from .resources.metric_definitions.client import AsyncMetricDefinitionsClient
+from .resources.ml_models.client import AsyncMlModelsClient
 from .resources.sandboxes.client import AsyncSandboxesClient
 from .resources.test_suite_runs.client import AsyncTestSuiteRunsClient
 from .resources.test_suites.client import AsyncTestSuitesClient
@@ -132,6 +134,7 @@ class Vellum:
         self.documents = DocumentsClient(client_wrapper=self._client_wrapper)
         self.folder_entities = FolderEntitiesClient(client_wrapper=self._client_wrapper)
         self.metric_definitions = MetricDefinitionsClient(client_wrapper=self._client_wrapper)
+        self.ml_models = MlModelsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = SandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suite_runs = TestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = TestSuitesClient(client_wrapper=self._client_wrapper)
@@ -1451,6 +1454,7 @@ class AsyncVellum:
         self.documents = AsyncDocumentsClient(client_wrapper=self._client_wrapper)
         self.folder_entities = AsyncFolderEntitiesClient(client_wrapper=self._client_wrapper)
         self.metric_definitions = AsyncMetricDefinitionsClient(client_wrapper=self._client_wrapper)
+        self.ml_models = AsyncMlModelsClient(client_wrapper=self._client_wrapper)
         self.sandboxes = AsyncSandboxesClient(client_wrapper=self._client_wrapper)
         self.test_suite_runs = AsyncTestSuiteRunsClient(client_wrapper=self._client_wrapper)
         self.test_suites = AsyncTestSuitesClient(client_wrapper=self._client_wrapper)

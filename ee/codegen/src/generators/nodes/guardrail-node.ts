@@ -82,9 +82,6 @@ export class GuardrailNode extends BaseSingleFileNode<
       })
     );
 
-    // TODO: Handle error_output_id with try node
-    // https://app.shortcut.com/vellum/story/5386/
-
     statements.push(
       python.field({
         name: "metric_input_ids_by_name",

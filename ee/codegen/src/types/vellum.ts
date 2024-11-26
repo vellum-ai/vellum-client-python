@@ -204,7 +204,7 @@ export interface InlinePromptNodeData extends BasePromptNodeData {
 
 export interface DeploymentPromptNodeData extends BasePromptNodeData {
   variant: "DEPLOYMENT";
-  deploymentId: string;
+  promptDeploymentId: string;
   releaseTag: string;
 }
 

@@ -1,0 +1,58 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PromptDeploymentNode > basic > getNodeDisplayFile 1`] = `
+"from vellum_ee.workflows.display.nodes import BasePromptDeploymentNodeDisplay
+from ...nodes.prompt_deployment_node import PromptDeploymentNode
+from uuid import UUID
+from vellum_ee.workflows.display.nodes.types import (
+    NodeOutputDisplay,
+    PortDisplayOverrides,
+)
+from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
+
+
+class PromptDeploymentNodeDisplay(
+    BasePromptDeploymentNodeDisplay[PromptDeploymentNode]
+):
+    label = "Prompt Deployment Node"
+    node_id = UUID("947cc337-9a53-4c12-9a38-4f65c04c6317")
+    output_id = UUID("fa015382-7e5b-404e-b073-1c5f01832169")
+    array_output_id = UUID("4d257095-e908-4fc3-8159-a6ac0018e1f1")
+    target_handle_id = UUID("e1f8a351-ab12-4167-93ee-d2dd72c8d15c")
+    prompt_input_ids_by_name = {
+        "my_var_1": UUID("3911bd2e-eaaf-4805-9ffc-e5d6a71c91a7")
+    }
+    node_input_ids_by_name = {"my_var_1": UUID("3911bd2e-eaaf-4805-9ffc-e5d6a71c91a7")}
+    output_display = {
+        PromptDeploymentNode.Outputs.text: NodeOutputDisplay(
+            id=UUID("fa015382-7e5b-404e-b073-1c5f01832169"), name="text"
+        ),
+        PromptDeploymentNode.Outputs.results: NodeOutputDisplay(
+            id=UUID("4d257095-e908-4fc3-8159-a6ac0018e1f1"), name="results"
+        ),
+    }
+    port_displays = {
+        PromptDeploymentNode.Ports.default: PortDisplayOverrides(
+            id=UUID("1539a6ed-6bf9-43a5-9e4a-f82ec5615ee3")
+        )
+    }
+    display_data = NodeDisplayData(
+        position=NodeDisplayPosition(x=2470.8372576177285, y=219.71887984764544),
+        width=480,
+        height=170,
+    )
+"
+`;
+
+exports[`PromptDeploymentNode > basic > getNodeFile 1`] = `
+"from vellum.workflows.nodes.displayable import (
+    PromptDeploymentNode as BasePromptDeploymentNode,
+)
+
+
+class PromptDeploymentNode(BasePromptDeploymentNode):
+    deployment = "afd05488-7a25-4ff2-b87b-878e9552474e"
+    release_tag = "LATEST"
+    prompt_inputs = {"my_var_1": None}
+"
+`;

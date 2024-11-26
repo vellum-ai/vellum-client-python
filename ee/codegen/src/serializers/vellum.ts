@@ -870,7 +870,7 @@ export const DeploymentPromptNodeDataSerializer: ObjectSchema<
 > = objectSchema({
   label: stringSchema(),
   variant: stringLiteralSchema("DEPLOYMENT"),
-  deploymentId: propertySchema("deployment_id", stringSchema()),
+  promptDeploymentId: propertySchema("prompt_deployment_id", stringSchema()),
   releaseTag: propertySchema("release_tag", stringSchema()),
   outputId: propertySchema("output_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
@@ -882,7 +882,7 @@ export const DeploymentPromptNodeDataSerializer: ObjectSchema<
 export declare namespace DeploymentPromptNodeDataSerializer {
   interface Raw {
     variant: "DEPLOYMENT";
-    deployment_id: string;
+    prompt_deployment_id: string;
     release_tag: string;
     label: string;
     output_id: string;

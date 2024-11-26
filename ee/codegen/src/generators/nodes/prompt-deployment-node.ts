@@ -2,57 +2,39 @@ import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { OUTPUTS_CLASS_NAME } from "src/constants";
-import { InlinePromptNodeContext } from "src/context/node-context/inline-prompt-node";
+import { PromptDeploymentNodeContext } from "src/context/node-context/prompt-deployment-node";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
-import { PromptBlock } from "src/generators/prompt-block";
-import { PromptParameters } from "src/generators/prompt-parameters-request";
-import { InlinePromptNodeData, PromptNode } from "src/types/vellum";
+import { DeploymentPromptNodeData, PromptNode } from "src/types/vellum";
 
-export class InlinePromptNode extends BaseSingleFileNode<
+export class PromptDeploymentNode extends BaseSingleFileNode<
   PromptNode,
-  InlinePromptNodeContext
+  PromptDeploymentNodeContext
 > {
-  baseNodeClassName = "InlinePromptNode";
-  baseNodeDisplayClassName = "BaseInlinePromptNodeDisplay";
+  baseNodeClassName = "PromptDeploymentNode";
+  baseNodeDisplayClassName = "BasePromptDeploymentNodeDisplay";
 
   protected getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 
-    if (this.nodeData.data.variant !== "INLINE") {
+    if (this.nodeData.data.variant !== "DEPLOYMENT") {
       throw new Error(
-        `InlinePromptNode only supports INLINE variant. Received ${this.nodeData.data.variant}`
+        `PromptDeploymentNode only supports DEPLOYMENT variant. Received ${this.nodeData.data.variant}`
       );
     }
 
-    const nodeData: InlinePromptNodeData = this.nodeData.data;
+    const nodeData: DeploymentPromptNodeData = this.nodeData.data;
 
     statements.push(
       python.field({
-        name: "ml_model",
-        initializer: python.TypeInstantiation.str(nodeData.mlModelName),
-      })
-    );
-    statements.push(
-      python.field({
-        name: "blocks",
-        initializer: python.TypeInstantiation.list(
-          this.nodeData.data.execConfig.promptTemplateBlockData.blocks.map(
-            (block) => {
-              return new PromptBlock({
-                promptBlock: block,
-              });
-            }
-          )
-        ),
+        name: "deployment",
+        initializer: python.TypeInstantiation.str(nodeData.promptDeploymentId),
       })
     );
 
     statements.push(
       python.field({
-        name: "parameters",
-        initializer: new PromptParameters({
-          promptParametersRequest: this.nodeData.data.execConfig.parameters,
-        }),
+        name: "release_tag",
+        initializer: python.TypeInstantiation.str(nodeData.releaseTag),
       })
     );
 

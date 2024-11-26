@@ -36,6 +36,7 @@ import { InlineSubworkflowNodeContext } from "src/context/node-context/inline-su
 import { MapNodeContext } from "src/context/node-context/map-node";
 import { MergeNodeContext } from "src/context/node-context/merge-node";
 import { NoteNodeContext } from "src/context/node-context/note-node";
+import { PromptDeploymentNodeContext } from "src/context/node-context/prompt-deployment-node";
 import { TemplatingNodeContext } from "src/context/node-context/templating-node";
 import { TextSearchNodeContext } from "src/context/node-context/text-search-node";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
@@ -51,6 +52,7 @@ import { InlinePromptNode } from "src/generators/nodes/inline-prompt-node";
 import { MapNode } from "src/generators/nodes/map-node";
 import { MergeNode } from "src/generators/nodes/merge-node";
 import { NoteNode } from "src/generators/nodes/note-node";
+import { PromptDeploymentNode } from "src/generators/nodes/prompt-deployment-node";
 import { WorkflowVersionExecConfigSerializer } from "src/serializers/vellum";
 import {
   EntrypointNode,
@@ -395,10 +397,15 @@ from .workflow import *\
               });
               break;
             case "DEPLOYMENT":
-              // TODO: https://app.shortcut.com/vellum/story/5261
-              throw new Error(`DEPLOYMENT variant not yet supported`);
+              node = new PromptDeploymentNode({
+                workflowContext: this.workflowContext,
+                nodeContext: nodeContext as PromptDeploymentNodeContext,
+              });
+              break;
             case "LEGACY":
-              throw new Error(`LEGACY variant not yet supported`);
+              throw new Error(
+                `LEGACY variant should have been converted to INLINE variant by this point.`
+              );
             default: {
               assertUnreachable(promptNodeVariant);
             }

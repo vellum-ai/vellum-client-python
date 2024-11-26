@@ -14,12 +14,10 @@ export class InputVariablePointerRule extends BaseNodeInputValuePointerRule<Inpu
         inputVariablePointerRuleData.inputVariableId
       );
 
-    const inputRef = python.reference({
+    return python.reference({
       name: "Inputs",
       modulePath: inputVariableContext.modulePath,
       attribute: [toSnakeCase(inputVariableContext.getInputVariableName())],
     });
-    this.addReference(inputRef);
-    return inputRef;
   }
 }

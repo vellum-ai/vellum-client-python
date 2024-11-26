@@ -1,0 +1,6 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ExecutionCounterPointer > should generate correct Python code 1`] = `
+"SearchNode.Execution.counter
+"
+`;

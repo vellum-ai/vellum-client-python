@@ -90,6 +90,7 @@ import {
   PromptVersionData,
   LegacyPromptNodeData,
   GenericNode,
+  ExecutionCounterPointer,
 } from "src/types/vellum";
 
 const CacheConfigSerializer = objectSchema({
@@ -497,6 +498,25 @@ export declare namespace WorkspaceSecretPointerSerializer {
   }
 }
 
+export const ExecutionCounterPointerSerializer: ObjectSchema<
+  ExecutionCounterPointerSerializer.Raw,
+  ExecutionCounterPointer
+> = objectSchema({
+  type: stringLiteralSchema("EXECUTION_COUNTER"),
+  data: objectSchema({
+    nodeId: propertySchema("node_id", stringSchema()),
+  }),
+});
+
+export declare namespace ExecutionCounterPointerSerializer {
+  interface Raw {
+    type: "EXECUTION_COUNTER";
+    data: {
+      node_id: string;
+    };
+  }
+}
+
 export const NodeInputValuePointerRuleSerializer: Schema<
   NodeInputValuePointerRuleSerializer.Raw,
   NodeInputValuePointerRule
@@ -505,6 +525,7 @@ export const NodeInputValuePointerRuleSerializer: Schema<
   InputVariablePointerSerializer,
   ConstantValuePointerSerializer,
   WorkspaceSecretPointerSerializer,
+  ExecutionCounterPointerSerializer,
 ]);
 
 export declare namespace NodeInputValuePointerRuleSerializer {
@@ -512,7 +533,8 @@ export declare namespace NodeInputValuePointerRuleSerializer {
     | NodeOutputPointerSerializer.Raw
     | InputVariablePointerSerializer.Raw
     | ConstantValuePointerSerializer.Raw
-    | WorkspaceSecretPointerSerializer.Raw;
+    | WorkspaceSecretPointerSerializer.Raw
+    | ExecutionCounterPointerSerializer.Raw;
 }
 
 export const NodeInputSerializer: ObjectSchema<

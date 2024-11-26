@@ -7,6 +7,8 @@ import { InputVariablePointerRule } from "./input-variable-pointer";
 import { NodeOutputPointerRule } from "./node-output-pointer";
 
 import { WorkflowContext } from "src/context";
+import { ExecutionCounterPointerRule } from "src/generators/node-inputs/node-input-value-pointer-rules/execution-counter-pointer";
+import { WorkspaceSecretPointerRule } from "src/generators/node-inputs/node-input-value-pointer-rules/workspace-secret-pointer";
 import { NodeInputValuePointerRule as NodeInputValuePointerRuleType } from "src/types/vellum";
 import { assertUnreachable } from "src/utils/typing";
 
@@ -53,9 +55,15 @@ export class NodeInputValuePointerRule extends AstNode {
           nodeInputValuePointerRule: nodeInputValuePointerRuleData,
         });
       case "WORKSPACE_SECRET":
-        throw new Error(
-          "Workspace secret node input value pointer rule not yet supported"
-        );
+        return new WorkspaceSecretPointerRule({
+          workflowContext: this.workflowContext,
+          nodeInputValuePointerRule: nodeInputValuePointerRuleData,
+        });
+      case "EXECUTION_COUNTER":
+        return new ExecutionCounterPointerRule({
+          workflowContext: this.workflowContext,
+          nodeInputValuePointerRule: nodeInputValuePointerRuleData,
+        });
       default: {
         assertUnreachable(ruleType);
       }

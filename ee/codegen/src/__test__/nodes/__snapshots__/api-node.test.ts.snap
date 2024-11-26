@@ -2,13 +2,13 @@
 
 exports[`ApiNode > basic > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseAPINodeDisplay
-from ...nodes.api_node import ApiNode
+from ...nodes.api_node import APINode
 from uuid import UUID
 from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
 
-class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
+class APINodeDisplay(BaseAPINodeDisplay[APINode]):
     url_input_id = UUID("480a4c12-22d6-4223-a38a-85db5eda118c")
     method_input_id = UUID("9bf086d4-feed-47ff-9736-a5a6aa3a11cc")
     body_input_id = UUID("74865eb7-cdaf-4d40-a499-0a6505e72680")
@@ -45,7 +45,7 @@ class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
         "additional_header_value_3": UUID("408c2b3d-7c30-4e01-a2e3-276753beadbc"),
     }
     port_displays = {
-        ApiNode.Ports.default: PortDisplayOverrides(
+        APINode.Ports.default: PortDisplayOverrides(
             id=UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e")
         )
     }
@@ -58,10 +58,10 @@ class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
 `;
 
 exports[`ApiNode > basic > getNodeFile 1`] = `
-"from vellum.workflows.nodes.displayable import ApiNode as BaseApiNode
+"from vellum.workflows.nodes.displayable import ApiNode
 
 
-class ApiNode(BaseApiNode):
+class APINode(ApiNode):
     pass
 "
 `;
@@ -69,7 +69,7 @@ class ApiNode(BaseApiNode):
 exports[`ApiNode > reject on error enabled > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseTryNodeDisplay, BaseAPINodeDisplay
 from uuid import UUID
-from ...nodes.api_node import ApiNode
+from ...nodes.api_node import APINode
 from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
@@ -78,7 +78,7 @@ class TryNodeDisplay(BaseTryNodeDisplay):
     error_output_id = UUID("af589f73-effe-4a80-b48f-fb912ac6ce67")
 
 
-class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
+class APINodeDisplay(BaseAPINodeDisplay[APINode]):
     url_input_id = UUID("480a4c12-22d6-4223-a38a-85db5eda118c")
     method_input_id = UUID("9bf086d4-feed-47ff-9736-a5a6aa3a11cc")
     body_input_id = UUID("74865eb7-cdaf-4d40-a499-0a6505e72680")
@@ -115,7 +115,7 @@ class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
         "additional_header_value_3": UUID("408c2b3d-7c30-4e01-a2e3-276753beadbc"),
     }
     port_displays = {
-        ApiNode.Ports.default: PortDisplayOverrides(
+        APINode.Ports.default: PortDisplayOverrides(
             id=UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e")
         )
     }
@@ -128,12 +128,12 @@ class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
 `;
 
 exports[`ApiNode > reject on error enabled > getNodeFile 1`] = `
-"from vellum.workflows.nodes.displayable import ApiNode as BaseApiNode
+"from vellum.workflows.nodes.displayable import ApiNode
 from vellum.workflows.nodes.core import TryNode
 
 
 @TryNode.wrap()
-class ApiNode(BaseApiNode):
+class APINode(ApiNode):
     pass
 "
 `;

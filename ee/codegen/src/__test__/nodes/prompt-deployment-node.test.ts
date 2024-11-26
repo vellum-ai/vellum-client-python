@@ -2,7 +2,6 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import { beforeEach } from "vitest";
 
 import { workflowContextFactory } from "src/__test__/helpers";
-import { inputVariableContextFactory } from "src/__test__/helpers/input-variable-context-factory";
 import { promptDeploymentNodeDataFactory } from "src/__test__/helpers/node-data-factories";
 import { createNodeContext, WorkflowContext } from "src/context";
 import { PromptDeploymentNodeContext } from "src/context/node-context/prompt-deployment-node";
@@ -10,25 +9,13 @@ import { PromptDeploymentNode } from "src/generators/nodes/prompt-deployment-nod
 
 describe("PromptDeploymentNode", () => {
   let workflowContext: WorkflowContext;
+  let node: PromptDeploymentNode;
   let writer: Writer;
 
   beforeEach(() => {
     workflowContext = workflowContextFactory();
     writer = new Writer();
-
-    workflowContext.addInputVariableContext(
-      inputVariableContextFactory({
-        inputVariableData: {
-          id: "90c6afd3-06cc-430d-aed1-35937c062531",
-          key: "text",
-          type: "STRING",
-        },
-        workflowContext,
-      })
-    );
   });
-
-  let node: PromptDeploymentNode;
 
   describe("basic", () => {
     beforeEach(() => {

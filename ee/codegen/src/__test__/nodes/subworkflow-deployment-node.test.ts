@@ -9,8 +9,8 @@ import { SubworkflowDeploymentNode } from "src/generators/nodes/subworkflow-depl
 
 describe("SubworkflowDeploymentNode", () => {
   let workflowContext: WorkflowContext;
-  let writer: Writer;
   let node: SubworkflowDeploymentNode;
+  let writer: Writer;
 
   beforeEach(() => {
     workflowContext = workflowContextFactory();

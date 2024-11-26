@@ -23,6 +23,7 @@ import {
   WorkflowDisplayData,
   WorkflowEdge,
 } from "src/types/vellum";
+import { getNodeId } from "src/utils/nodes";
 import { isDefined } from "src/utils/typing";
 
 export declare namespace Workflow {
@@ -64,18 +65,33 @@ export class Workflow {
     this.displayData = displayData;
 
     const { edgesByPortId, entrypointPortContexts, entrypointNodeEdges } =
-      this.getEdgesAndEntrypointNodeContexts(edges);
+      this.getEdgesAndEntrypointNodeContexts({ nodes, edges });
     this.edgesByPortId = edgesByPortId;
     this.entrypointPortContexts = entrypointPortContexts;
     this.entrypointNodeEdges = entrypointNodeEdges;
   }
 
-  private getEdgesAndEntrypointNodeContexts(edges: WorkflowEdge[]) {
+  private getEdgesAndEntrypointNodeContexts({
+    nodes,
+    edges,
+  }: {
+    nodes: WorkflowDataNode[];
+    edges: WorkflowEdge[];
+  }) {
+    const nodeIds = new Set<string>([
+      ...nodes.map((node) => getNodeId(node)),
+      this.workflowContext.getEntrypointNode().id,
+    ]);
     const edgesByPortId = new Map<string, WorkflowEdge[]>();
     let entrypointPortContexts: PortContext[] = [];
     const entrypointNodeEdges: WorkflowEdge[] = [];
 
     edges.forEach((edge) => {
+      // Handle edge case where there are zombie edges that point to nodes that don't exist
+      if (!nodeIds.has(edge.sourceNodeId) || !nodeIds.has(edge.targetNodeId)) {
+        return;
+      }
+
       if (edge.sourceNodeId === this.workflowContext.getEntrypointNode().id) {
         const targetNodeContext = this.workflowContext.getNodeContext(
           edge.targetNodeId

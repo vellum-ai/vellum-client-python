@@ -892,3 +892,45 @@ export function genericNodeFactory(
   };
   return nodeData;
 }
+
+export function finalOutputNodeFactory(): FinalOutputNode {
+  const nodeData: FinalOutputNode = {
+    id: "48e0d88b-a544-4a14-b49f-38aca82e0e13",
+    type: "TERMINAL",
+    data: {
+      label: "Final Output Node",
+      outputType: "STRING",
+      name: "final-output",
+      targetHandleId: "<target-handle-id>",
+      nodeInputId: "9bf086d4-feed-47ff-9736-a5a6aa3a11cc",
+      outputId: "<output-id>",
+    },
+    inputs: [
+      {
+        id: "9bf086d4-feed-47ff-9736-a5a6aa3a11cc",
+        key: "node_input",
+        value: {
+          rules: [
+            {
+              type: "CONSTANT_VALUE",
+              data: {
+                type: "STRING",
+                value: "<my-output>",
+              },
+            },
+          ],
+          combinator: "OR",
+        },
+      },
+    ],
+    displayData: {
+      width: 462,
+      height: 288,
+      position: {
+        x: 2075.7067885117494,
+        y: 234.65663468515768,
+      },
+    },
+  };
+  return nodeData;
+}

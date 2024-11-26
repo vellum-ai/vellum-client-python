@@ -106,7 +106,54 @@ export class ConditionalNode extends BaseSingleFileNode<
       })
     );
 
+    const conditionIdRef = python.reference({
+      name: "ConditionId",
+      modulePath: [
+        ...this.workflowContext.sdkModulePathNames.NODE_DISPLAY_MODULE_PATH,
+        "vellum",
+        "conditional_node",
+      ],
+    });
+
+    this.getNodeDisplayBaseClass().inheritReferences(conditionIdRef);
+
+    statements.push(
+      python.field({
+        name: "condition_ids",
+        initializer: python.TypeInstantiation.list(
+          this.createConditionIdList(this.nodeData.data, conditionIdRef)
+        ),
+      })
+    );
+
     return statements;
+  }
+
+  private createConditionIdList(
+    nodeData: ConditionalNodeData,
+    conditionIdRef: Reference
+  ): AstNode[] {
+    const conditionIdsList: AstNode[] = [];
+    nodeData.conditions.forEach((condition) => {
+      if (condition.data) {
+        conditionIdsList.push(
+          python.instantiateClass({
+            classReference: conditionIdRef,
+            arguments_: [
+              python.methodArgument({
+                name: "id",
+                value: python.TypeInstantiation.uuid(condition.id),
+              }),
+              python.methodArgument({
+                name: "rule_group_id",
+                value: python.TypeInstantiation.uuid(condition.data.id),
+              }),
+            ],
+          })
+        );
+      }
+    });
+    return conditionIdsList;
   }
 
   private createRuleIdMapList(

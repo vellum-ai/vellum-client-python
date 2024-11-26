@@ -4,10 +4,16 @@ from unittest import mock
 from deepdiff import DeepDiff
 
 from tests.workflows.basic_conditional_node.workflow import CategoryWorkflow
-from tests.workflows.basic_conditional_node.workflow_with_only_one_conditional_node import create_simple_workflow
-from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
+from tests.workflows.basic_conditional_node.workflow_with_only_one_conditional_node import (
+    create_simple_workflow,
+)
+from vellum_ee.workflows.display.nodes.base_node_vellum_display import (
+    BaseNodeVellumDisplay,
+)
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
-from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
+from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import (
+    get_workflow_display,
+)
 from vellum.workflows.expressions.begins_with import BeginsWithExpression
 from vellum.workflows.expressions.between import BetweenExpression
 from vellum.workflows.expressions.contains import ContainsExpression
@@ -18,12 +24,16 @@ from vellum.workflows.expressions.does_not_equal import DoesNotEqualExpression
 from vellum.workflows.expressions.ends_with import EndsWithExpression
 from vellum.workflows.expressions.equals import EqualsExpression
 from vellum.workflows.expressions.greater_than import GreaterThanExpression
-from vellum.workflows.expressions.greater_than_or_equal_to import GreaterThanOrEqualToExpression
+from vellum.workflows.expressions.greater_than_or_equal_to import (
+    GreaterThanOrEqualToExpression,
+)
 from vellum.workflows.expressions.in_ import InExpression
 from vellum.workflows.expressions.is_not_null import IsNotNullExpression
 from vellum.workflows.expressions.is_null import IsNullExpression
 from vellum.workflows.expressions.less_than import LessThanExpression
-from vellum.workflows.expressions.less_than_or_equal_to import LessThanOrEqualToExpression
+from vellum.workflows.expressions.less_than_or_equal_to import (
+    LessThanOrEqualToExpression,
+)
 from vellum.workflows.expressions.not_between import NotBetweenExpression
 from vellum.workflows.expressions.not_in import NotInExpression
 
@@ -31,7 +41,9 @@ from vellum.workflows.expressions.not_in import NotInExpression
 def test_serialize_workflow():
     # GIVEN a Workflow that uses a ConditionalNode
     # WHEN we serialize it
-    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=CategoryWorkflow)
+    workflow_display = get_workflow_display(
+        base_display_class=VellumWorkflowDisplay, workflow_class=CategoryWorkflow
+    )
 
     # TODO: Support serialization of BaseNode
     # https://app.shortcut.com/vellum/story/4871/support-serialization-of-base-node
@@ -69,11 +81,31 @@ def test_serialize_workflow():
     assert len(output_variables) == 5
     assert not DeepDiff(
         [
-            {"id": "c05f7d96-59a0-4d58-93d7-d451afd3f630", "key": "question", "type": "STRING"},
-            {"id": "93f2cb75-6fa2-4e46-9488-c0bcd29153c0", "key": "compliment", "type": "STRING"},
-            {"id": "f936ae31-ba15-4864-8961-86231022a4d7", "key": "complaint", "type": "STRING"},
-            {"id": "cdbe2adf-9951-409a-b9a8-b8b349037f4f", "key": "statement", "type": "STRING"},
-            {"id": "62ad462f-f819-4940-99ab-b3f145507f57", "key": "fallthrough", "type": "STRING"},
+            {
+                "id": "c05f7d96-59a0-4d58-93d7-d451afd3f630",
+                "key": "question",
+                "type": "STRING",
+            },
+            {
+                "id": "93f2cb75-6fa2-4e46-9488-c0bcd29153c0",
+                "key": "compliment",
+                "type": "STRING",
+            },
+            {
+                "id": "f936ae31-ba15-4864-8961-86231022a4d7",
+                "key": "complaint",
+                "type": "STRING",
+            },
+            {
+                "id": "cdbe2adf-9951-409a-b9a8-b8b349037f4f",
+                "key": "statement",
+                "type": "STRING",
+            },
+            {
+                "id": "62ad462f-f819-4940-99ab-b3f145507f57",
+                "key": "fallthrough",
+                "type": "STRING",
+            },
         ],
         output_variables,
         ignore_order=True,
@@ -124,7 +156,9 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
+                                "data": {
+                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
+                                },
                             }
                         ],
                         "combinator": "OR",
@@ -134,7 +168,12 @@ def test_serialize_workflow():
                     "id": "1fb4cf46-f8b3-418f-be30-f7ec57f92285",
                     "key": "708bb538-4c77-4ae9-8e87-0706346e2947.value",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "question"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "question"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -145,7 +184,9 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
+                                "data": {
+                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
+                                },
                             }
                         ],
                         "combinator": "OR",
@@ -155,7 +196,12 @@ def test_serialize_workflow():
                     "id": "40957176-de6e-4131-bfa7-55c633312af0",
                     "key": "ddee5d1d-46e9-4ae8-b0a8-311747ebadd4.value",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "complaint"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "complaint"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -166,7 +212,9 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
+                                "data": {
+                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
+                                },
                             }
                         ],
                         "combinator": "OR",
@@ -176,7 +224,12 @@ def test_serialize_workflow():
                     "id": "93f06582-aff7-4ce5-8c60-f923090ffebc",
                     "key": "73157578-205a-4816-8985-cf726063647c.value",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "compliment"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "compliment"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -187,7 +240,9 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
+                                "data": {
+                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
+                                },
                             }
                         ],
                         "combinator": "OR",
@@ -197,7 +252,12 @@ def test_serialize_workflow():
                     "id": "e759091b-3609-4581-9014-5f46f438a4c9",
                     "key": "e805add5-7f7f-443d-b9bc-11ad15eeb49c.value",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "statement"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "statement"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -208,7 +268,9 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
+                                "data": {
+                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
+                                },
                             }
                         ],
                         "combinator": "OR",
@@ -218,7 +280,12 @@ def test_serialize_workflow():
                     "id": "e915cd85-ae55-48be-b31c-f2285db9db10",
                     "key": "f47d72ff-665f-4143-ada3-6fa66f5bda42.value",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "statement"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "statement"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -229,7 +296,9 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
+                                "data": {
+                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
+                                },
                             }
                         ],
                         "combinator": "OR",
@@ -239,7 +308,12 @@ def test_serialize_workflow():
                     "id": "e5d75ae4-cd46-437e-9695-9df2d79578b4",
                     "key": "d3359d60-9bb4-4c6e-8009-b7ea46ab28a7.value",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "statement"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "statement"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -377,8 +451,11 @@ def test_serialize_workflow():
             },
             "display_data": {"position": {"x": 0.0, "y": 0.0}},
             "definition": {
+                "name": "CategoryConditionalNode",
+                "module": ["tests", "workflows", "basic_conditional_node", "workflow"],
                 "bases": [
                     {
+                        "name": "ConditionalNode",
                         "module": [
                             "vellum",
                             "workflows",
@@ -387,16 +464,8 @@ def test_serialize_workflow():
                             "conditional_node",
                             "node",
                         ],
-                        "name": "ConditionalNode",
                     }
                 ],
-                "module": [
-                    "tests",
-                    "workflows",
-                    "basic_conditional_node",
-                    "workflow",
-                ],
-                "name": "CategoryConditionalNode",
             },
         },
         conditional_node,
@@ -860,11 +929,15 @@ def descriptors_with_value_and_start_and_end():
 
 
 @pytest.mark.parametrize("descriptor, operator", descriptors_with_lhs_and_rhs())
-def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(descriptor, operator):
+def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(
+    descriptor, operator
+):
     # GIVEN a simple workflow with one conditional node
     workflow_cls = create_simple_workflow(descriptor)
 
-    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls)
+    workflow_display = get_workflow_display(
+        base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls
+    )
 
     # TODO: Support serialization of BaseNode
     # https://app.shortcut.com/vellum/story/4871/support-serialization-of-base-node
@@ -894,7 +967,12 @@ def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(descriptor, o
                     "id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
                     "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.field",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "123"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "123"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -902,7 +980,12 @@ def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(descriptor, o
                     "id": "aadade8a-c253-483a-8620-31fe8171c0fd",
                     "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.value",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "123"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "123"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -972,7 +1055,9 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
     # GIVEN a simple workflow with one conditional node
     workflow_cls = create_simple_workflow(descriptor)
 
-    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls)
+    workflow_display = get_workflow_display(
+        base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls
+    )
 
     # TODO: Support serialization of BaseNode
     # https://app.shortcut.com/vellum/story/4871/support-serialization-of-base-node
@@ -1002,7 +1087,12 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
                     "id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
                     "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.field",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "123"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "123"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 }
@@ -1067,12 +1157,18 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
     )
 
 
-@pytest.mark.parametrize("descriptor, operator", descriptors_with_value_and_start_and_end())
-def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(descriptor, operator):
+@pytest.mark.parametrize(
+    "descriptor, operator", descriptors_with_value_and_start_and_end()
+)
+def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(
+    descriptor, operator
+):
     # GIVEN a simple workflow with one conditional node
     workflow_cls = create_simple_workflow(descriptor)
 
-    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls)
+    workflow_display = get_workflow_display(
+        base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls
+    )
 
     # TODO: Support serialization of BaseNode
     # https://app.shortcut.com/vellum/story/4871/support-serialization-of-base-node
@@ -1102,7 +1198,12 @@ def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(d
                     "id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
                     "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.field",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "123"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "123"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },
@@ -1110,7 +1211,12 @@ def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(d
                     "id": "aadade8a-c253-483a-8620-31fe8171c0fd",
                     "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.value",
                     "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "123,123"}}],
+                        "rules": [
+                            {
+                                "type": "CONSTANT_VALUE",
+                                "data": {"type": "STRING", "value": "123,123"},
+                            }
+                        ],
                         "combinator": "OR",
                     },
                 },

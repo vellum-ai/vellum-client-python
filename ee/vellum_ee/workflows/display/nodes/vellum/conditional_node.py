@@ -40,10 +40,16 @@ class RuleIdMap:
     lhs: Optional["RuleIdMap"]
     rhs: Optional["RuleIdMap"]
 
+@dataclass
+class ConditionId:
+    id: UUID
+    rule_group_id: UUID
+
 
 class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Generic[_ConditionalNodeType]):
     source_handle_ids: ClassVar[Dict[int, UUID]]
     rule_ids: ClassVar[List[RuleIdMap]]
+    condition_ids: ClassVar[list[ConditionId]]
 
     def serialize(self, display_context: WorkflowDisplayContext, **kwargs: Any) -> JsonObject:
         node = self._node
@@ -51,6 +57,13 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
         node_inputs: List[NodeInput] = []
         source_handle_ids = self._get_source_handle_ids() or {}
+        condition_ids = self._get_condition_ids()
+
+        ports_size = sum(1 for _ in node.Ports)
+
+        if len(condition_ids) > ports_size:
+            raise ValueError(
+                f"Too many defined condition ids. Ports are size {ports_size} but the defined conditions have length {len(condition_ids)}")
 
         def serialize_rule(
             descriptor: BaseDescriptor, path: List[int], rule_id_map: Optional[RuleIdMap]
@@ -132,7 +145,9 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
             if port._condition is None or port._condition_type is None:
                 continue
 
-            condition_id = str(uuid4_from_hash(f"{node_id}|conditions|{idx}"))
+
+            condition_id = str(condition_ids[idx].id if condition_ids else uuid4_from_hash(f"{node_id}|conditions|{idx}"))
+            rule_group_id = str(condition_ids[idx].rule_group_id if condition_ids else uuid4_from_hash(f"{condition_id}|rule_group"))
             source_handle_id = str(source_handle_ids.get(idx) or uuid4_from_hash(f"{node_id}|handles|{idx}"))
 
             rule_ids = self._get_rule_ids()
@@ -145,7 +160,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                     "type": port._condition_type.value,
                     "source_handle_id": source_handle_id,
                     "data": {
-                        "id": str(uuid4_from_hash(f"{condition_id}|rule_group")),
+                        "id": rule_group_id,
                         "rules": rules,
                         "combinator": "AND",
                         "negated": False,
@@ -215,3 +230,6 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
     def _get_rule_ids(self) -> List[RuleIdMap]:
         return self._get_explicit_node_display_attr("rule_ids", List[RuleIdMap]) or []
+
+    def _get_condition_ids(self)-> List[ConditionId]:
+        return self._get_explicit_node_display_attr("condition_ids", List[ConditionId]) or []

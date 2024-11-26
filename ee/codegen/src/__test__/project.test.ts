@@ -54,6 +54,7 @@ describe("WorkflowProjectGenerator", () => {
           workflowLabel: "Workflow",
           workflowVersionExecConfigData: displayData,
           moduleName: "code",
+          vellumApiKey: "<TEST_API_KEY>",
         });
 
         await project.generateCode();

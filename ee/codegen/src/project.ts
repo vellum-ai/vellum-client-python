@@ -74,6 +74,7 @@ export declare namespace WorkflowProjectGenerator {
     workflowLabel?: string;
     moduleName?: string;
     workflowClassName?: string;
+    vellumApiKey?: string;
   }
 
   interface BaseProject extends BaseArgs {
@@ -103,8 +104,16 @@ export class WorkflowProjectGenerator {
     workflowLabel = "Workflow",
     moduleName,
     workflowClassName,
+    vellumApiKey: workspaceApiKeyArg,
     ...rest
   }: WorkflowProjectGenerator.Args) {
+    const vellumApiKey = workspaceApiKeyArg ?? process.env.VELLUM_API_KEY;
+    if (!vellumApiKey) {
+      throw new ProjectSerializationError(
+        "No workspace API key provided or found in environment variables."
+      );
+    }
+
     if ("workflowContext" in rest) {
       this.workflowContext = rest.workflowContext;
       this.workflowVersionExecConfig = rest.workflowVersionExecConfig;
@@ -142,6 +151,7 @@ ${errors.slice(0, 3).map((err) => {
         moduleName: moduleName || toSnakeCase(workflowLabel),
         workflowLabel,
         workflowClassName,
+        vellumApiKey,
       });
     }
 

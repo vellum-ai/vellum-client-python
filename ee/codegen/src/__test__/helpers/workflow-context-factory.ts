@@ -12,5 +12,6 @@ export function workflowContextFactory({
     moduleName: moduleName || "code",
     workflowClassName: workflowLabel || "Workflow",
     workflowLabel: workflowClassName || "Workflow",
+    vellumApiKey: "<TEST_API_KEY>",
   });
 }

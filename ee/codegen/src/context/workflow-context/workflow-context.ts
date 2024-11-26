@@ -27,6 +27,7 @@ export declare namespace WorkflowContext {
     parentNode?: BaseNode<WorkflowDataNode, BaseNodeContext<WorkflowDataNode>>;
     workflowsSdkModulePath?: readonly string[];
     portContextByName?: PortContextById;
+    vellumApiKey: string;
   };
 }
 
@@ -59,6 +60,9 @@ export class WorkflowContext {
 
   public readonly portContextById: PortContextById;
 
+  // Used to make API requests to Vellum
+  public readonly vellumApiKey: string;
+
   constructor({
     absolutePathToOutputDirectory,
     moduleName,
@@ -69,6 +73,7 @@ export class WorkflowContext {
     parentNode,
     workflowsSdkModulePath = ["vellum", "workflows"] as const,
     portContextByName,
+    vellumApiKey,
   }: WorkflowContext.Args) {
     this.absolutePathToOutputDirectory = absolutePathToOutputDirectory;
     this.moduleName = moduleName;
@@ -81,6 +86,7 @@ export class WorkflowContext {
     this.label = workflowLabel || "Workflow";
     this.workflowClassName =
       workflowClassName || createPythonClassName(this.label);
+    this.vellumApiKey = vellumApiKey;
 
     this.inputVariableContextsById = inputVariableContextsById ?? new Map();
     this.nodeContextsByNodeId = nodeContextsByNodeId ?? new Map();

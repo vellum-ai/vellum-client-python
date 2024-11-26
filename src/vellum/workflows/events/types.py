@@ -2,12 +2,11 @@ from datetime import datetime
 from enum import Enum
 import json
 from uuid import UUID, uuid4
-from typing import Any, Dict, Literal
+from typing import Any, Dict, Literal, Optional, Union
 
 from pydantic import Field
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
-
 from vellum.workflows.state.encoder import DefaultStateEncoder
 from vellum.workflows.types.utils import datetime_now
 
@@ -44,9 +43,41 @@ def default_serializer(obj: Any) -> Any:
     )
 
 
+class BaseParentContext(UniversalBaseModel):
+    span_id: UUID
+    parent: 'Optional[ParentContext]' = None
+
+
+class WorkflowParentContext(BaseParentContext):
+    class_name: str
+
+
+class DeploymentParentContext(BaseParentContext):
+    deployment_id: UUID
+    deployment_name: str
+    deployment_history_item_id: UUID
+    workflow_version_id: UUID
+    release_tag_id: UUID
+    release_tag_name: str
+    external_id: Optional[str]
+
+
+class NodeParentContext(BaseParentContext):
+    node_id: UUID
+    class_name: str
+
+
+ParentContext = Union[
+    WorkflowParentContext,
+    NodeParentContext,
+    DeploymentParentContext,
+]
+
+
 class BaseEvent(UniversalBaseModel):
     id: UUID = Field(default_factory=uuid4)
     timestamp: datetime = Field(default_factory=default_datetime_factory)
     api_version: Literal["2024-10-25"] = "2024-10-25"
     trace_id: UUID
     span_id: UUID
+    parent: ParentContext | None = None

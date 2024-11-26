@@ -22,6 +22,10 @@ class ConditionalNodeDisplay(BaseConditionalNodeDisplay[ConditionalNode]):
             rhs=None,
         )
     ]
+    condition_ids = {
+        0: UUID("8d0d8b56-6c17-4684-9f16-45dd6ce23060"),
+        1: UUID("ea63ccd5-3fe3-4371-ba3c-6d3ec7ca2b60"),
+    }
     node_input_ids_by_name = {
         "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc.field": UUID(
             "2cb6582e-c329-4952-8598-097830b766c7"

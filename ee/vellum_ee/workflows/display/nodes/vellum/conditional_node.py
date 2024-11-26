@@ -44,6 +44,7 @@ class RuleIdMap:
 class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Generic[_ConditionalNodeType]):
     source_handle_ids: ClassVar[Dict[int, UUID]]
     rule_ids: ClassVar[List[RuleIdMap]]
+    condition_ids: ClassVar[Dict[int, UUID]]
 
     def serialize(self, display_context: WorkflowDisplayContext, **kwargs: Any) -> JsonObject:
         node = self._node
@@ -51,6 +52,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
         node_inputs: List[NodeInput] = []
         source_handle_ids = self._get_source_handle_ids() or {}
+        condition_ids = self._get_condition_ids() or {}
 
         def serialize_rule(
             descriptor: BaseDescriptor, path: List[int], rule_id_map: Optional[RuleIdMap]
@@ -132,7 +134,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
             if port._condition is None or port._condition_type is None:
                 continue
 
-            condition_id = str(uuid4_from_hash(f"{node_id}|conditions|{idx}"))
+            condition_id = str(condition_ids.get(idx) or (f"{node_id}|conditions|{idx}"))
             source_handle_id = str(source_handle_ids.get(idx) or uuid4_from_hash(f"{node_id}|handles|{idx}"))
 
             rule_ids = self._get_rule_ids()
@@ -215,3 +217,6 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
     def _get_rule_ids(self) -> List[RuleIdMap]:
         return self._get_explicit_node_display_attr("rule_ids", List[RuleIdMap]) or []
+
+    def _get_condition_ids(self)-> Dict[int, UUID]:
+        return self._get_explicit_node_display_attr("condition_ids", Dict[int, UUID]) or {}

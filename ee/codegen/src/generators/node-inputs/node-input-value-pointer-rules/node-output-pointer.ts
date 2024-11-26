@@ -24,12 +24,10 @@ export class NodeOutputPointerRule extends BaseNodeInputValuePointerRule<NodeOut
       );
     }
 
-    const outputRef = python.reference({
+    return python.reference({
       name: nodeContext.nodeClassName,
       modulePath: nodeContext.nodeModulePath,
       attribute: [OUTPUTS_CLASS_NAME, toSnakeCase(nodeOutputName)],
     });
-    this.addReference(outputRef);
-    return outputRef;
   }
 }

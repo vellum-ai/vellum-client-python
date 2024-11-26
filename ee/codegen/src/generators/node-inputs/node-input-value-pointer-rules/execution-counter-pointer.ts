@@ -12,12 +12,10 @@ export class ExecutionCounterPointerRule extends BaseNodeInputValuePointerRule<E
       executionCounterData.nodeId
     );
 
-    const inputRef = python.reference({
+    return python.reference({
       name: nodeContext.nodeClassName,
       modulePath: nodeContext.nodeModulePath,
       attribute: ["Execution", "counter"],
     });
-    this.addReference(inputRef);
-    return inputRef;
   }
 }

@@ -14,6 +14,7 @@ import { MapNodeContext } from "src/context/node-context/map-node";
 import { MergeNodeContext } from "src/context/node-context/merge-node";
 import { NoteNodeContext } from "src/context/node-context/note-node";
 import { PromptDeploymentNodeContext } from "src/context/node-context/prompt-deployment-node";
+import { SubworkflowDeploymentNodeContext } from "src/context/node-context/subworkflow-deployment-node";
 import { TemplatingNodeContext } from "src/context/node-context/templating-node";
 import {
   InlinePromptNodeData,
@@ -47,8 +48,10 @@ export function createNodeContext(
           });
         }
         case "DEPLOYMENT": {
-          // TODO: https://app.shortcut.com/vellum/story/5269
-          throw new Error(`DEPLOYMENT variant not yet supported`);
+          return new SubworkflowDeploymentNodeContext({
+            ...args,
+            nodeData: subworkflowNodeData,
+          });
         }
         default: {
           assertUnreachable(subworkflowVariant);

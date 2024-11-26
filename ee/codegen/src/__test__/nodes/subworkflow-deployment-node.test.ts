@@ -2,14 +2,14 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import { beforeEach } from "vitest";
 
 import { workflowContextFactory } from "src/__test__/helpers";
-import { promptDeploymentNodeDataFactory } from "src/__test__/helpers/node-data-factories";
+import { subworkflowDeploymentNodeDataFactory } from "src/__test__/helpers/node-data-factories";
 import { createNodeContext, WorkflowContext } from "src/context";
-import { PromptDeploymentNodeContext } from "src/context/node-context/prompt-deployment-node";
-import { PromptDeploymentNode } from "src/generators/nodes/prompt-deployment-node";
+import { SubworkflowDeploymentNodeContext } from "src/context/node-context/subworkflow-deployment-node";
+import { SubworkflowDeploymentNode } from "src/generators/nodes/subworkflow-deployment-node";
 
-describe("PromptDeploymentNode", () => {
+describe("SubworkflowDeploymentNode", () => {
   let workflowContext: WorkflowContext;
-  let node: PromptDeploymentNode;
+  let node: SubworkflowDeploymentNode;
   let writer: Writer;
 
   beforeEach(() => {
@@ -19,15 +19,15 @@ describe("PromptDeploymentNode", () => {
 
   describe("basic", () => {
     beforeEach(() => {
-      const nodeData = promptDeploymentNodeDataFactory();
+      const nodeData = subworkflowDeploymentNodeDataFactory();
 
       const nodeContext = createNodeContext({
         workflowContext,
         nodeData,
-      }) as PromptDeploymentNodeContext;
+      }) as SubworkflowDeploymentNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
-      node = new PromptDeploymentNode({
+      node = new SubworkflowDeploymentNode({
         workflowContext,
         nodeContext,
       });

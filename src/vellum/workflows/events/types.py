@@ -80,4 +80,4 @@ class BaseEvent(UniversalBaseModel):
     api_version: Literal["2024-10-25"] = "2024-10-25"
     trace_id: UUID
     span_id: UUID
-    parent: ParentContext | None = None
+    parent: Optional[ParentContext] = None

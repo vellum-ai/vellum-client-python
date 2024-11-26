@@ -2638,6 +2638,18 @@ types:
       * `NONE` - NONE
     source:
       openapi: openapi/openapi.yml
+  MlModelRead:
+    docs: An ML Model that your Workspace has access to.
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      name:
+        type: string
+        docs: The unique name of the ML Model.
+    source:
+      openapi: openapi/openapi.yml
   MlModelUsage:
     properties:
       output_token_count: optional<integer>

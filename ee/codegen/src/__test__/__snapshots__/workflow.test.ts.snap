@@ -48,3 +48,15 @@ class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
         query = FinalOutput.Outputs.value
 "
 `;
+
+exports[`Workflow > write > should handle edges pointing to non-existent nodes 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .inputs import Inputs
+from vellum.workflows.state import BaseState
+
+
+class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
+    class Outputs(BaseWorkflow.Outputs):
+        pass
+"
+`;

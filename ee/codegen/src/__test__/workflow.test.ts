@@ -93,6 +93,56 @@ describe("Workflow", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
 
+    it("should handle edges pointing to non-existent nodes", async () => {
+      workflowContext.addInputVariableContext(
+        inputVariableContextFactory({
+          inputVariableData: {
+            id: "input-variable-id",
+            key: "query",
+            type: "STRING",
+          },
+          workflowContext,
+        })
+      );
+
+      const inputs = codegen.inputs({ workflowContext });
+
+      const searchNodeData = searchNodeDataFactory();
+      const searchNodeContext = createNodeContext({
+        workflowContext: workflowContext,
+        nodeData: searchNodeData,
+      });
+      workflowContext.addNodeContext(searchNodeContext);
+
+      const workflow = codegen.workflow({
+        moduleName,
+        workflowContext,
+        inputs,
+        nodes: [searchNodeData],
+        edges: [
+          {
+            id: "edge-1",
+            type: "DEFAULT",
+            sourceNodeId: entrypointNode.id,
+            sourceHandleId: entrypointNode.data.sourceHandleId,
+            targetNodeId: searchNodeData.id,
+            targetHandleId: searchNodeData.data.sourceHandleId,
+          },
+          {
+            id: "edge-2",
+            type: "DEFAULT",
+            sourceNodeId: searchNodeData.id,
+            sourceHandleId: "some-handle",
+            targetNodeId: "non-existent-node-id",
+            targetHandleId: "some-target-handle",
+          },
+        ],
+      });
+
+      workflow.getWorkflowFile().write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+
     describe("graph", () => {
       it("should be correct for a basic single node case", async () => {
         workflowContext.addInputVariableContext(

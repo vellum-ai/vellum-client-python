@@ -19,6 +19,7 @@ import {
   ApiNode,
   MergeNode,
   GenericNode,
+  SubworkflowNode,
 } from "src/types/vellum";
 
 export function entrypointNodeDataFactory(): EntrypointNode {
@@ -574,6 +575,39 @@ export function templatingNodeFactory({
     ],
   };
   return nodeData;
+}
+
+export function subworkflowDeploymentNodeDataFactory(): SubworkflowNode {
+  return {
+    id: "c8f2964c-09b8-44e0-a06d-606319fe5e2a",
+    type: "SUBWORKFLOW",
+    data: {
+      label: "Subworkflow Node",
+      sourceHandleId: "600efd51-8677-4ba3-a582-b298bebb2868",
+      targetHandleId: "f5e6bd33-527a-4ba6-8906-cd5e96a4321c",
+      errorOutputId: undefined,
+      variant: "DEPLOYMENT",
+      workflowDeploymentId: "58171df8-cdf9-4d10-a9ed-22eaf545b22a",
+      releaseTag: "LATEST",
+    },
+    inputs: [
+      {
+        id: "f62b7511-dd69-4dff-a4fc-718a9db3ceba",
+        key: "input",
+        value: {
+          rules: [],
+          combinator: "OR",
+        },
+      },
+    ],
+    displayData: {
+      position: {
+        x: 2239.986322714681,
+        y: 484.74458968144046,
+      },
+    },
+    definition: undefined,
+  };
 }
 
 export function conditionalNodeFactory(): ConditionalNode {

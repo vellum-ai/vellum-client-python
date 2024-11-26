@@ -24,9 +24,9 @@ import {
 } from "src/types/vellum";
 import { assertUnreachable } from "src/utils/typing";
 
-export function createNodeContext(
+export async function createNodeContext(
   args: BaseNodeContext.Args<WorkflowDataNode>
-): BaseNodeContext<WorkflowDataNode> {
+): Promise<BaseNodeContext<WorkflowDataNode>> {
   const nodeData = args.nodeData;
   switch (nodeData.type) {
     case WorkflowNodeType.SEARCH: {
@@ -108,12 +108,15 @@ export function createNodeContext(
             throw new Error(`Prompt version data not found`);
           }
 
+          // Dynamically fetch the ML Model's name via API
+          const mlModelName = await args.workflowContext.getMLModelNameById(
+            promptVersionData.mlModelToWorkspaceId
+          );
+
           const inlinePromptNodeData: InlinePromptNodeData = {
             ...legacyNodeData,
             variant: "INLINE",
-            // TODO: Make sure we can operate on mlModelName vs mlModelToWorkspaceId interchangeably
-            // https://app.shortcut.com/vellum/story/5591
-            mlModelName: promptVersionData.mlModelToWorkspaceId,
+            mlModelName,
             execConfig: promptVersionData.execConfig,
           };
 

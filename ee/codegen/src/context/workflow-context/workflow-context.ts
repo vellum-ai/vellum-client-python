@@ -7,7 +7,7 @@ import { SDK_MODULE_PATHS } from "src/context/workflow-context/types";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
 import { BaseNode } from "src/generators/nodes/bases";
 import { EntrypointNode, WorkflowDataNode } from "src/types/vellum";
-import { toPascalCase } from "src/utils/casing";
+import { createPythonClassName } from "src/utils/casing";
 
 type InputVariableContextsById = Map<string, InputVariableContext>;
 
@@ -79,7 +79,8 @@ export class WorkflowContext {
         ]
       : [this.moduleName, GENERATED_WORKFLOW_MODULE_NAME];
     this.label = workflowLabel || "Workflow";
-    this.workflowClassName = workflowClassName || toPascalCase(this.label);
+    this.workflowClassName =
+      workflowClassName || createPythonClassName(this.label);
 
     this.inputVariableContextsById = inputVariableContextsById ?? new Map();
     this.nodeContextsByNodeId = nodeContextsByNodeId ?? new Map();

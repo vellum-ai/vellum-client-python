@@ -16,7 +16,7 @@ describe("NodeOutputPointer", () => {
     vi.restoreAllMocks();
   });
 
-  it("should generate correct Python code", () => {
+  it("should generate correct Python code", async () => {
     const workflowContext = workflowContextFactory();
     vi.spyOn(workflowContext, "getNodeContext").mockReturnValue({
       nodeClassName: "TestNode",
@@ -37,6 +37,6 @@ describe("NodeOutputPointer", () => {
 
     nodeOutputPointer.write(writer);
 
-    expect(writer.toString()).toMatchSnapshot();
+    expect(await writer.toStringFormatted()).toMatchSnapshot();
   });
 });

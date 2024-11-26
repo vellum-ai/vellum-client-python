@@ -15,7 +15,7 @@ describe("InputVariablePointer", () => {
     vi.restoreAllMocks();
   });
 
-  it("should generate correct Python code", () => {
+  it("should generate correct Python code", async () => {
     const workflowContext = workflowContextFactory();
     const mockInputVariable = {
       getInputVariableName: vi.fn().mockReturnValue("test-variable"),
@@ -37,6 +37,6 @@ describe("InputVariablePointer", () => {
 
     inputVariablePointer.write(writer);
 
-    expect(writer.toString()).toMatchSnapshot();
+    expect(await writer.toStringFormatted()).toMatchSnapshot();
   });
 });

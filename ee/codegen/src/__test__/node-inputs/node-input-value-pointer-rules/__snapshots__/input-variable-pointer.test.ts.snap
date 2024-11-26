@@ -1,3 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`InputVariablePointer > should generate correct Python code 1`] = `"Inputs.test_variable"`;
+exports[`InputVariablePointer > should generate correct Python code 1`] = `
+"Inputs.test_variable
+"
+`;

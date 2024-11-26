@@ -1,7 +1,7 @@
 import { WorkflowContext } from "src/context";
 import { PortContext } from "src/context/port-context";
 import { WorkflowDataNode } from "src/types/vellum";
-import { toPascalCase, toSnakeCase } from "src/utils/casing";
+import { createPythonClassName, toSnakeCase } from "src/utils/casing";
 import { getNodeId, getNodeLabel } from "src/utils/nodes";
 import {
   getGeneratedNodeDisplayModulePath,
@@ -44,7 +44,7 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
       ] ?? toSnakeCase(nodeLabel);
     this.nodeFileName = `${this.nodeModuleName}.py`;
     this.nodeClassName =
-      args.nodeData.definition?.name ?? toPascalCase(nodeLabel);
+      args.nodeData.definition?.name ?? createPythonClassName(nodeLabel);
     this.nodeModulePath = getGeneratedNodeModulePath(
       args.workflowContext,
       this.nodeModuleName

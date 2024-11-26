@@ -876,12 +876,7 @@ export function apiNodeFactory({
 
 export function genericNodeFactory(): GenericNode {
   const nodeData: GenericNode = {
-    id: "7e09927b-6d6f-4829-92c9-54e66bdcaf80",
     type: WorkflowNodeType.GENERIC,
-    data: {
-      label: "Generic Node",
-    },
-    inputs: [],
   };
   return nodeData;
 }

@@ -59,6 +59,7 @@ import {
   WorkflowVersionExecConfig,
 } from "src/types/vellum";
 import { toSnakeCase } from "src/utils/casing";
+import { getNodeId } from "src/utils/nodes";
 import { assertUnreachable } from "src/utils/typing";
 
 export class ProjectSerializationError extends Error {
@@ -296,7 +297,7 @@ from .workflow import *\
       workflowContext: this.workflowContext,
     });
 
-    const nodeIds = nodesToGenerate.map((nodeData) => nodeData.id);
+    const nodeIds = nodesToGenerate.map((nodeData) => getNodeId(nodeData));
     const nodes = this.generateNodes(nodeIds);
 
     const workflow = codegen.workflow({

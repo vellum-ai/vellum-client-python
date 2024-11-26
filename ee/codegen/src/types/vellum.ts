@@ -130,7 +130,7 @@ export interface NodeDisplayComment {
 }
 
 export interface NodeDisplayData {
-  position: NodeDisplayPosition;
+  position?: NodeDisplayPosition;
   width?: number;
   height?: number;
   comment?: NodeDisplayComment;
@@ -149,7 +149,6 @@ export interface WorkflowNodeDefinition {
 
 export interface BaseWorkflowNode {
   type: string;
-  displayData?: NodeDisplayData;
   definition?: WorkflowNodeDefinition;
 }
 
@@ -502,8 +501,13 @@ export interface ErrorNode extends BaseDisplayableWorkflowNode {
   data: ErrorNodeData;
 }
 
+export interface GenericNodeDisplayData {
+  position?: { x: number; y: number };
+}
+
 export interface GenericNode extends BaseWorkflowNode {
   type: "GENERIC";
+  displayData?: GenericNodeDisplayData;
 }
 
 export type WorkflowDataNode =

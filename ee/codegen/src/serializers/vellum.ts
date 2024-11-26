@@ -91,6 +91,7 @@ import {
   LegacyPromptNodeData,
   GenericNode,
   ExecutionCounterPointer,
+  GenericNodeDisplayData,
 } from "src/types/vellum";
 
 const CacheConfigSerializer = objectSchema({
@@ -700,11 +701,58 @@ export declare namespace PromptVersionExecConfigSerializer {
   }
 }
 
+export const NodeDisplayCommentSerializer: ObjectSchema<
+  NodeDisplayCommentSerializer.Raw,
+  NodeDisplayComment
+> = objectSchema({
+  value: stringSchema().optional(),
+  expanded: booleanSchema().optional(),
+});
+
+export declare namespace NodeDisplayCommentSerializer {
+  interface Raw {
+    value?: string | null;
+    expanded?: boolean | null;
+  }
+}
+
+export const NodeDisplayPositionSerializer: ObjectSchema<
+  NodeDisplayPositionSerializer.Raw,
+  NodeDisplayPosition
+> = objectSchema({
+  x: numberSchema(),
+  y: numberSchema(),
+});
+
+export declare namespace NodeDisplayPositionSerializer {
+  interface Raw {
+    x: number;
+    y: number;
+  }
+}
+
+export const NodeDisplayDataSerializer: ObjectSchema<
+  NodeDisplayDataSerializer.Raw,
+  NodeDisplayData
+> = objectSchema({
+  position: NodeDisplayPositionSerializer.optional(),
+  width: numberSchema().optional(),
+  height: numberSchema().optional(),
+  comment: NodeDisplayCommentSerializer.optional(),
+});
+
+export declare namespace NodeDisplayDataSerializer {
+  interface Raw {
+    position?: NodeDisplayPositionSerializer.Raw | null;
+    width?: number | null;
+    height?: number | null;
+    comment?: NodeDisplayCommentSerializer.Raw | null;
+  }
+}
+
 export declare namespace BaseWorkflowNodeSerializer {
   interface Raw {
     type: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    display_data?: any;
     definition?: WorkflowNodeDefinitionSerializer.Raw | null;
   }
 }
@@ -712,6 +760,7 @@ export declare namespace BaseWorkflowNodeSerializer {
 export declare namespace BaseDisplayableWorkflowNodeSerializer {
   interface Raw extends BaseWorkflowNodeSerializer.Raw {
     id: string;
+    display_data?: NodeDisplayDataSerializer.Raw | null;
     inputs: NodeInputSerializer.Raw[];
   }
 }
@@ -727,7 +776,10 @@ export const EntrypointNodeSerializer: ObjectSchema<
     sourceHandleId: propertySchema("source_handle_id", stringSchema()),
   }),
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema().optional()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -824,7 +876,10 @@ export const SubworkflowNodeSerializer: ObjectSchema<
   type: stringLiteralSchema("SUBWORKFLOW"),
   data: SubworkflowNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1025,7 +1080,10 @@ export const PromptNodeSerializer: ObjectSchema<
   type: stringLiteralSchema("PROMPT"),
   data: PromptNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema().optional()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1136,7 +1194,10 @@ export const MapNodeSerializer: ObjectSchema<MapNodeSerializer.Raw, MapNode> =
     type: stringLiteralSchema("MAP"),
     data: MapNodeDataSerializer,
     inputs: listSchema(NodeInputSerializer),
-    displayData: propertySchema("display_data", anySchema().optional()),
+    displayData: propertySchema(
+      "display_data",
+      NodeDisplayDataSerializer.optional()
+    ),
     definition: WorkflowNodeDefinitionSerializer.optional(),
   });
 
@@ -1162,7 +1223,10 @@ export const GuardrailNodeSerializer: ObjectSchema<
     releaseTag: propertySchema("release_tag", stringSchema()),
   }),
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1310,7 +1374,10 @@ export const SearchNodeSerializer: ObjectSchema<
   type: stringLiteralSchema("SEARCH"),
   data: SearchNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1398,7 +1465,10 @@ export const ConditionalNodeSerializer: ObjectSchema<
   type: stringLiteralSchema("CONDITIONAL"),
   data: ConditionalNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1428,7 +1498,10 @@ export const TemplatingNodeSerializer: ObjectSchema<
     outputType: propertySchema("output_type", VellumVariableTypeSerializer),
   }),
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1462,7 +1535,10 @@ export const FinalOutputNodeSerializer: ObjectSchema<
     nodeInputId: propertySchema("node_input_id", stringSchema()),
   }),
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1515,7 +1591,10 @@ export const MergeNodeSerializer: ObjectSchema<
     sourceHandleId: propertySchema("source_handle_id", stringSchema()),
   }),
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1589,7 +1668,10 @@ export const ApiNodeSerializer: ObjectSchema<ApiNodeSerializer.Raw, ApiNode> =
       sourceHandleId: propertySchema("source_handle_id", stringSchema()),
     }),
     inputs: listSchema(NodeInputSerializer),
-    displayData: propertySchema("display_data", anySchema()),
+    displayData: propertySchema(
+      "display_data",
+      NodeDisplayDataSerializer.optional()
+    ),
     definition: WorkflowNodeDefinitionSerializer.optional(),
   });
 
@@ -1628,7 +1710,10 @@ export const NoteNodeSerializer: ObjectSchema<
     style: anySchema().optional(),
   }),
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1658,7 +1743,10 @@ export const ErrorNodeSerializer: ObjectSchema<
     errorOutputId: propertySchema("error_output_id", stringSchema()),
   }),
   inputs: listSchema(NodeInputSerializer),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
@@ -1675,18 +1763,40 @@ export declare namespace ErrorNodeSerializer {
   }
 }
 
+export const GenericNodeDisplayDataSerializer: ObjectSchema<
+  GenericNodeDisplayDataSerializer.Raw,
+  GenericNodeDisplayData
+> = objectSchema({
+  position: NodeDisplayPositionSerializer.optional(),
+});
+
+export declare namespace GenericNodeDisplayDataSerializer {
+  interface Raw {
+    position?: NodeDisplayPositionSerializer.Raw | null;
+  }
+}
+
 export const GenericNodeSerializer: ObjectSchema<
   GenericNodeSerializer.Raw,
   GenericNode
 > = objectSchema({
   type: stringLiteralSchema("GENERIC"),
-  displayData: propertySchema("display_data", anySchema()),
+  displayData: propertySchema(
+    "display_data",
+    GenericNodeDisplayDataSerializer.optional()
+  ),
   definition: WorkflowNodeDefinitionSerializer.optional(),
 });
 
 export declare namespace GenericNodeSerializer {
   interface Raw extends BaseWorkflowNodeSerializer.Raw {
     type: "GENERIC";
+    display_data?: {
+      position?: {
+        x: number;
+        y: number;
+      } | null;
+    } | null;
   }
 }
 
@@ -1862,54 +1972,5 @@ export const WorkflowDisplayDataSerializer: ObjectSchema<
 export declare namespace WorkflowDisplayDataSerializer {
   interface Raw {
     viewport: WorkflowDisplayDataViewportSerializer.Raw;
-  }
-}
-
-export const NodeDisplayCommentSerializer: ObjectSchema<
-  NodeDisplayCommentSerializer.Raw,
-  NodeDisplayComment
-> = objectSchema({
-  value: stringSchema().optional(),
-  expanded: booleanSchema().optional(),
-});
-
-export declare namespace NodeDisplayCommentSerializer {
-  interface Raw {
-    value?: string | null;
-    expanded?: boolean | null;
-  }
-}
-
-export const NodeDisplayPositionSerializer: ObjectSchema<
-  NodeDisplayPositionSerializer.Raw,
-  NodeDisplayPosition
-> = objectSchema({
-  x: numberSchema(),
-  y: numberSchema(),
-});
-
-export declare namespace NodeDisplayPositionSerializer {
-  interface Raw {
-    x: number;
-    y: number;
-  }
-}
-
-export const NodeDisplayDataSerializer: ObjectSchema<
-  NodeDisplayDataSerializer.Raw,
-  NodeDisplayData
-> = objectSchema({
-  position: NodeDisplayPositionSerializer,
-  width: numberSchema().optional(),
-  height: numberSchema().optional(),
-  comment: NodeDisplayCommentSerializer.optional(),
-});
-
-export declare namespace NodeDisplayDataSerializer {
-  interface Raw {
-    position: NodeDisplayPositionSerializer.Raw;
-    width?: number | null;
-    height?: number | null;
-    comment?: NodeDisplayCommentSerializer.Raw | null;
   }
 }

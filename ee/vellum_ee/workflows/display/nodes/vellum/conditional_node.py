@@ -40,11 +40,16 @@ class RuleIdMap:
     lhs: Optional["RuleIdMap"]
     rhs: Optional["RuleIdMap"]
 
+@dataclass
+class ConditionId:
+    id: UUID
+    rule_group_id: UUID
+
 
 class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Generic[_ConditionalNodeType]):
     source_handle_ids: ClassVar[Dict[int, UUID]]
     rule_ids: ClassVar[List[RuleIdMap]]
-    condition_ids: ClassVar[list[UUID]]
+    condition_ids: ClassVar[list[ConditionId]]
 
     def serialize(self, display_context: WorkflowDisplayContext, **kwargs: Any) -> JsonObject:
         node = self._node
@@ -141,7 +146,8 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                 continue
 
 
-            condition_id = str(condition_ids[idx] if condition_ids else uuid4_from_hash(f"{node_id}|conditions|{idx}"))
+            condition_id = str(condition_ids[idx].id if condition_ids else uuid4_from_hash(f"{node_id}|conditions|{idx}"))
+            rule_group_id = str(condition_ids[idx].rule_group_id if condition_ids else uuid4_from_hash(f"{condition_id}|rule_group"))
             source_handle_id = str(source_handle_ids.get(idx) or uuid4_from_hash(f"{node_id}|handles|{idx}"))
 
             rule_ids = self._get_rule_ids()
@@ -154,7 +160,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                     "type": port._condition_type.value,
                     "source_handle_id": source_handle_id,
                     "data": {
-                        "id": str(uuid4_from_hash(f"{condition_id}|rule_group")),
+                        "id": rule_group_id,
                         "rules": rules,
                         "combinator": "AND",
                         "negated": False,
@@ -225,5 +231,5 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
     def _get_rule_ids(self) -> List[RuleIdMap]:
         return self._get_explicit_node_display_attr("rule_ids", List[RuleIdMap]) or []
 
-    def _get_condition_ids(self)-> Dict[int, UUID]:
-        return self._get_explicit_node_display_attr("condition_ids", Dict[int, UUID]) or {}
+    def _get_condition_ids(self)-> List[ConditionId]:
+        return self._get_explicit_node_display_attr("condition_ids", List[ConditionId]) or {}

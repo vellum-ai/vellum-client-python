@@ -4,7 +4,10 @@ exports[`ConditionalNode > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseConditionalNodeDisplay
 from ...nodes.conditional_node import ConditionalNode
 from uuid import UUID
-from vellum_ee.workflows.display.nodes.vellum.conditional_node import RuleIdMap
+from vellum_ee.workflows.display.nodes.vellum.conditional_node import (
+    RuleIdMap,
+    ConditionId,
+)
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
 
@@ -23,8 +26,10 @@ class ConditionalNodeDisplay(BaseConditionalNodeDisplay[ConditionalNode]):
         )
     ]
     condition_ids = [
-        UUID("8d0d8b56-6c17-4684-9f16-45dd6ce23060"),
-        UUID("ea63ccd5-3fe3-4371-ba3c-6d3ec7ca2b60"),
+        ConditionId(
+            id=UUID("8d0d8b56-6c17-4684-9f16-45dd6ce23060"),
+            rule_group_id=UUID("fa50fb0c-8d62-40e3-bd88-080b52efd4b2"),
+        )
     ]
     node_input_ids_by_name = {
         "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc.field": UUID(

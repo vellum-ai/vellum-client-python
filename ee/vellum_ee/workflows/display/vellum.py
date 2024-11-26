@@ -7,7 +7,6 @@ from pydantic import Field
 
 from vellum import ChatMessage, PromptParameters, SearchResult, SearchResultRequest, VellumVariable, VellumVariableType
 from vellum.core import UniversalBaseModel
-
 from vellum_ee.workflows.display.base import (
     EdgeDisplay,
     EdgeDisplayOverrides,
@@ -211,11 +210,21 @@ class WorkspaceSecretPointer(UniversalBaseModel):
     data: WorkspaceSecretData
 
 
+class ExecutionCounterData(UniversalBaseModel):
+    node_id: str
+
+
+class ExecutionCounterPointer(UniversalBaseModel):
+    type: Literal["EXECUTION_COUNTER"] = "EXECUTION_COUNTER"
+    data: ExecutionCounterData
+
+
 NodeInputValuePointerRule = Union[
     NodeOutputPointer,
     InputVariablePointer,
     ConstantValuePointer,
     WorkspaceSecretPointer,
+    ExecutionCounterPointer,
 ]
 
 

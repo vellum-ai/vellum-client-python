@@ -39,6 +39,7 @@ describe("WorkflowProjectGenerator", () => {
           "simple_map_node",
           "simple_code_execution_node",
           "simple_conditional_node",
+          "simple_templating_node",
         ],
       })
     )(

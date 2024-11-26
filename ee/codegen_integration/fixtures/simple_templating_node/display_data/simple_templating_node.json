@@ -1,0 +1,202 @@
+{
+  "workflow_raw_data": {
+    "nodes": [
+      {
+        "id": "6b52893a-e649-434d-aedd-e8ad73d78dce",
+        "type": "ENTRYPOINT",
+        "data": {
+          "label": "Entrypoint Node",
+          "source_handle_id": "b4f25dad-17c6-464d-b347-9945065f17e4"
+        },
+        "inputs": [],
+        "display_data": {
+          "width": 124,
+          "height": 48,
+          "position": {
+            "x": 1545.0,
+            "y": 330.0
+          }
+        },
+        "definition": {
+          "name": "BaseNode",
+          "module": [
+            "vellum",
+            "workflows",
+            "nodes",
+            "bases",
+            "base"
+          ],
+          "bases": []
+        }
+      },
+      {
+        "id": "7dffcbb1-0a5c-4149-a6e9-f83095b0a871",
+        "type": "TEMPLATING",
+        "data": {
+          "label": "Templating Node",
+          "output_id": "4d39036a-fd6d-4a51-b410-7c0623375ebd",
+          "error_output_id": null,
+          "source_handle_id": "9bce9d0a-3b0e-478e-8a97-f0510715a5a0",
+          "target_handle_id": "3522e32d-6735-499b-8d45-c0c6488ae92f",
+          "template_node_input_id": "5d2f0f48-4504-4979-8e24-92a8c08c23a4",
+          "output_type": "STRING"
+        },
+        "inputs": [
+          {
+            "id": "5d2f0f48-4504-4979-8e24-92a8c08c23a4",
+            "key": "template",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": "Hello, world!"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          }
+        ],
+        "display_data": {
+          "width": 480,
+          "height": 224,
+          "position": {
+            "x": 2001.775709833795,
+            "y": 296.65438885041556
+          }
+        },
+        "definition": {
+          "bases": [
+            {
+              "module": [
+                "vellum",
+                "workflows",
+                "nodes",
+                "core",
+                "templating_node",
+                "node"
+              ],
+              "name": "TemplatingNode"
+            }
+          ],
+          "module": [
+            "codegen_integration",
+            "fixtures",
+            "simple_templating_node",
+            "code",
+            "nodes",
+            "templating_node"
+          ],
+          "name": "TemplatingNode"
+        }
+      },
+      {
+        "id": "f0347fdc-1611-446c-b1da-408511d4181b",
+        "type": "TERMINAL",
+        "data": {
+          "label": "Final Output",
+          "name": "final-output",
+          "target_handle_id": "f3ad283c-d092-4973-91e0-996e5859002a",
+          "output_id": "b0961a8d-f702-4922-b410-2aecf7d34b68",
+          "output_type": "NUMBER",
+          "node_input_id": "bb465fa1-defb-493c-8284-7156cd680fb3"
+        },
+        "inputs": [
+          {
+            "id": "bb465fa1-defb-493c-8284-7156cd680fb3",
+            "key": "node_input",
+            "value": {
+              "rules": [
+                {
+                  "type": "EXECUTION_COUNTER",
+                  "data": {
+                    "node_id": "7dffcbb1-0a5c-4149-a6e9-f83095b0a871"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          }
+        ],
+        "display_data": {
+          "width": 478,
+          "height": 234,
+          "position": {
+            "x": 2752.5214681440443,
+            "y": 210.0
+          }
+        },
+        "definition": {
+          "bases": [
+            {
+              "module": [
+                "vellum",
+                "workflows",
+                "nodes",
+                "displayable",
+                "final_output_node",
+                "node"
+              ],
+              "name": "FinalOutputNode"
+            }
+          ],
+          "module": [
+            "codegen_integration",
+            "fixtures",
+            "simple_templating_node",
+            "code",
+            "nodes",
+            "final_output"
+          ],
+          "name": "FinalOutput"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "662141c0-23b1-4513-9b8a-e382e56c4021",
+        "source_node_id": "6b52893a-e649-434d-aedd-e8ad73d78dce",
+        "source_handle_id": "b4f25dad-17c6-464d-b347-9945065f17e4",
+        "target_node_id": "7dffcbb1-0a5c-4149-a6e9-f83095b0a871",
+        "target_handle_id": "3522e32d-6735-499b-8d45-c0c6488ae92f",
+        "type": "DEFAULT"
+      },
+      {
+        "id": "6deb7d8b-b4cc-488f-aa30-e3e5f0957882",
+        "source_node_id": "7dffcbb1-0a5c-4149-a6e9-f83095b0a871",
+        "source_handle_id": "9bce9d0a-3b0e-478e-8a97-f0510715a5a0",
+        "target_node_id": "f0347fdc-1611-446c-b1da-408511d4181b",
+        "target_handle_id": "f3ad283c-d092-4973-91e0-996e5859002a",
+        "type": "DEFAULT"
+      }
+    ],
+    "display_data": {
+      "viewport": {
+        "x": -992.7774269608426,
+        "y": -82.38774859214823,
+        "zoom": 0.6534253694599966
+      }
+    },
+    "definition": {
+      "name": "Workflow",
+      "module": [
+        "codegen_integration",
+        "fixtures",
+        "simple_templating_node",
+        "code",
+        "workflow"
+      ]
+    }
+  },
+  "input_variables": [
+  ],
+  "output_variables": [
+    {
+      "id": "b0961a8d-f702-4922-b410-2aecf7d34b68",
+      "key": "final-output",
+      "type": "NUMBER"
+    }
+  ]
+}

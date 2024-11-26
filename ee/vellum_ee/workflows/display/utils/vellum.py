@@ -4,11 +4,20 @@ import typing
 from typing import Any, List, Union, cast
 
 from vellum import ChatMessage, SearchResult, SearchResultRequest, VellumVariableType
-
+from vellum.workflows.descriptors.base import BaseDescriptor
+from vellum.workflows.references import OutputReference, WorkflowInputReference
+from vellum.workflows.references.execution_count import ExecutionCountReference
+from vellum.workflows.references.node import NodeReference
+from vellum.workflows.references.vellum_secret import VellumSecretReference
+from vellum.workflows.types.core import VellumValuePrimitive
+from vellum.workflows.utils.vellum_variables import primitive_type_to_vellum_variable_type
+from vellum.workflows.vellum_client import create_vellum_client
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
 from vellum_ee.workflows.display.vellum import (
     ChatHistoryVellumValue,
     ConstantValuePointer,
+    ExecutionCounterData,
+    ExecutionCounterPointer,
     InputVariableData,
     InputVariablePointer,
     JsonVellumValue,
@@ -22,13 +31,6 @@ from vellum_ee.workflows.display.vellum import (
     WorkspaceSecretData,
     WorkspaceSecretPointer,
 )
-from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.references import OutputReference, WorkflowInputReference
-from vellum.workflows.references.node import NodeReference
-from vellum.workflows.references.vellum_secret import VellumSecretReference
-from vellum.workflows.types.core import VellumValuePrimitive
-from vellum.workflows.utils.vellum_variables import primitive_type_to_vellum_variable_type
-from vellum.workflows.vellum_client import create_vellum_client
 
 _T = typing.TypeVar("_T")
 
@@ -61,13 +63,12 @@ def create_node_input_value_pointer_rule(
         upstream_node, output_display = display_context.node_output_displays[value]
         upstream_node_display = display_context.node_displays[upstream_node]
         return NodeOutputPointer(
-            type="NODE_OUTPUT",
             data=NodeOutputData(node_id=str(upstream_node_display.node_id), output_id=str(output_display.id)),
         )
     if isinstance(value, WorkflowInputReference):
         workflow_input_display = display_context.workflow_input_displays[value]
         return InputVariablePointer(
-            type="INPUT_VARIABLE", data=InputVariableData(input_variable_id=str(workflow_input_display.id))
+            data=InputVariableData(input_variable_id=str(workflow_input_display.id))
         )
     if isinstance(value, VellumSecretReference):
         # TODO: Pass through the name instead of retrieving the ID
@@ -77,11 +78,15 @@ def create_node_input_value_pointer_rule(
             id=value.name,
         )
         return WorkspaceSecretPointer(
-            type="WORKSPACE_SECRET",
             data=WorkspaceSecretData(
                 type="STRING",
                 workspace_secret_id=str(workspace_secret.id),
             ),
+        )
+    if isinstance(value, ExecutionCountReference):
+        node_class_display = display_context.node_displays[value.node_class]
+        return ExecutionCounterPointer(
+            data=ExecutionCounterData(node_id=str(node_class_display.node_id)),
         )
 
     if not isinstance(value, BaseDescriptor):

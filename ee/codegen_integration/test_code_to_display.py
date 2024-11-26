@@ -1,10 +1,10 @@
 import json
 
 from deepdiff import DeepDiff
-from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
-from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 
 from vellum.workflows.workflows.base import BaseWorkflow
+from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
+from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 
 
 def test_code_to_display_data(code_to_display_fixture_paths):
@@ -29,8 +29,8 @@ def test_code_to_display_data(code_to_display_fixture_paths):
         return False
 
     assert not DeepDiff(
-        actual_serialized_workflow,
         expected_serialized_workflow,
+        actual_serialized_workflow,
         exclude_obj_callback=exclude_obj_callback,
         significant_digits=6,
     )

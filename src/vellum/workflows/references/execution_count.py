@@ -18,3 +18,7 @@ class ExecutionCountReference(BaseDescriptor[int]):
 
     def resolve(self, state: "BaseState") -> int:
         return state.meta.node_execution_cache.get_execution_count(self._node_class)
+
+    @property
+    def node_class(self) -> Type["BaseNode"]:
+        return self._node_class

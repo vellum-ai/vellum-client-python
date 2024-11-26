@@ -37,6 +37,7 @@ def _get_fixture_paths(root: str) -> Tuple[str, str]:
             "simple_code_execution_node",
             # TODO: Remove once graph is fleshed out. Current the workflow is not pointing to any port branch
             "simple_conditional_node",
+            "simple_templating_node",
         }
     )
 )

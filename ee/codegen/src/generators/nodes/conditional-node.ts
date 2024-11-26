@@ -109,11 +109,10 @@ export class ConditionalNode extends BaseSingleFileNode<
     statements.push(
       python.field({
         name: "condition_ids",
-        initializer: python.TypeInstantiation.dict(
-          this.nodeData.data.conditions.map((condition, idx) => ({
-            key: python.TypeInstantiation.int(idx),
-            value: python.TypeInstantiation.uuid(condition.id),
-          }))
+        initializer: python.TypeInstantiation.list(
+          this.nodeData.data.conditions.map((condition) =>
+            python.TypeInstantiation.uuid(condition.id)
+          )
         ),
       })
     );

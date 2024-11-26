@@ -874,11 +874,13 @@ export function apiNodeFactory({
   return nodeData;
 }
 
-export function genericNodeFactory(): GenericNode {
+export function genericNodeFactory(
+  { name }: { name: string } = { name: "MyCustomNode" }
+): GenericNode {
   const nodeData: GenericNode = {
     type: WorkflowNodeType.GENERIC,
     definition: {
-      name: "MyCustomNode",
+      name,
       module: ["my_nodes", "my_custom_node"],
       bases: [
         {

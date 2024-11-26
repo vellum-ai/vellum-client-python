@@ -15,7 +15,7 @@ export class ExecutionCounterPointerRule extends BaseNodeInputValuePointerRule<E
     return python.reference({
       name: nodeContext.nodeClassName,
       modulePath: nodeContext.nodeModulePath,
-      attribute: ["Execution", "counter"],
+      attribute: ["Execution", "count"],
     });
   }
 }

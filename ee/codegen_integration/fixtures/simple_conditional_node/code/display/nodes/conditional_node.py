@@ -8,6 +8,9 @@ from ...nodes.conditional_node import ConditionalNode
 
 
 class ConditionalNodeDisplay(BaseConditionalNodeDisplay[ConditionalNode]):
+    label = "Conditional Node"
+    node_id = UUID("b81a4453-7b80-41ea-bd55-c62df8878fd3")
+    target_handle_id = UUID("842b9dda-7977-47ad-a322-eb15b4c7069d")
     source_handle_ids = {
         0: UUID("8e2b2af3-db06-4025-9395-a6d08a8b9256"),
         1: UUID("babf673e-0bec-421e-aede-3ea323853bd8"),

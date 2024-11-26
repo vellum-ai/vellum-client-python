@@ -76,6 +76,23 @@ export class ConditionalNode extends BaseSingleFileNode<
 
     statements.push(
       python.field({
+        name: "label",
+        initializer: python.TypeInstantiation.str(this.nodeData.data.label),
+      }),
+      python.field({
+        name: "node_id",
+        initializer: python.TypeInstantiation.uuid(this.nodeData.id),
+      }),
+      python.field({
+        name: "target_handle_id",
+        initializer: python.TypeInstantiation.uuid(
+          this.nodeData.data.targetHandleId
+        ),
+      })
+    );
+
+    statements.push(
+      python.field({
         name: "source_handle_ids",
         initializer: python.TypeInstantiation.dict(
           this.nodeData.data.conditions.map((condition, idx) => ({

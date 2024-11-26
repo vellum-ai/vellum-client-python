@@ -3,6 +3,8 @@ import json
 from deepdiff import DeepDiff
 
 from vellum.workflows.workflows.base import BaseWorkflow
+
+from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 
@@ -34,3 +36,41 @@ def test_code_to_display_data(code_to_display_fixture_paths):
         exclude_obj_callback=exclude_obj_callback,
         significant_digits=6,
     )
+
+# Use a hash similar to our serializer for the json library
+def _process_conditions_hook(key, value, current_json_obj):
+    if key == 'type' and value == 'CONDITIONAL':
+        node_id = current_json_obj.get('id')
+        conditions = current_json_obj.get('data').get('conditions')
+        for idx, condition in enumerate(conditions):
+            condition_id = str(uuid4_from_hash(f"{node_id}|conditions|{idx}"))
+            condition['id'] = condition_id
+
+def _process_position_hook(key, value):
+    """
+    Private hook to ensure 'position' keys 'x' and 'y' are floats instead of ints.
+    x and y in json is int so json library parses to int even though we have it as float in our serializers
+    """
+    if key == 'position' and isinstance(value, dict):
+        if 'x' in value and isinstance(value['x'], int):
+            value['x'] = float(value['x'])
+        if 'y' in value and isinstance(value['y'], int):
+            value['y'] = float(value['y'])
+
+def _process_negated_hook(key, value, current_json_obj):
+    """
+    Private hook to replace the 'negated' key's None value with False.
+    negated can be sent as null in the raw payload, but we expect serialization to produce boolean values
+    """
+    if key == 'negated' and value is None:
+        current_json_obj[key] = False
+
+def _custom_obj_hook(json_dict):
+    """
+    Private hook to convert some raw json items to values we expect.
+    """
+    for key, value in list(json_dict.items()):
+        _process_conditions_hook(key, value, json_dict)
+        _process_position_hook(key,value)
+        _process_negated_hook(key, value, json_dict)
+    return json_dict

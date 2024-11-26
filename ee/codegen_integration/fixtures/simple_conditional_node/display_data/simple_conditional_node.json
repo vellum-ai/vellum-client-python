@@ -8,6 +8,11 @@
           "label": "Entrypoint Node",
           "source_handle_id": "498eed8e-38d5-48b8-bbc4-f45411100502"
         },
+        "definition": {
+          "bases": [],
+          "module": ["vellum", "workflows", "nodes", "bases", "base"],
+          "name": "BaseNode"
+        },
         "inputs": [],
         "display_data": {
           "width": 124,
@@ -153,6 +158,30 @@
             "x": 1943.4147273142412,
             "y": 292.2355134030261
           }
+        },
+        "definition": {
+          "bases": [
+            {
+              "module": [
+                "workflows",
+                "nodes",
+                "wrappers",
+                "conditional_node"
+              ],
+              "name": "ConditionalNode"
+            }
+          ],
+          "module": [
+            "workflows",
+            "codegen",
+            "tests",
+            "fixtures",
+            "simple_conditional_node",
+            "code",
+            "nodes",
+            "conditional_node"
+          ],
+          "name": "ConditionalNode"
         }
       },
       {
@@ -190,6 +219,30 @@
             "x": 2750,
             "y": 210
           }
+        },
+        "definition": {
+          "bases": [
+            {
+              "module": [
+                "vellum",
+                "workflows",
+                "nodes",
+                "displayable",
+                "final_output_node",
+                "node"
+              ],
+              "name": "FinalOutputNode"
+            }
+          ],
+          "module": [
+            "codegen_integration",
+            "fixtures",
+            "simple_conditional_node",
+            "code",
+            "nodes",
+            "final_output"
+          ],
+          "name": "FinalOutput"
         }
       }
     ],

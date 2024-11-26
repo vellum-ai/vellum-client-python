@@ -1,3 +1,5 @@
+import { MlModels } from "vellum-ai/api/resources/mlModels/client/Client";
+
 import { GENERATED_WORKFLOW_MODULE_NAME } from "src/constants";
 import { InputVariableContext } from "src/context/input-variable-context";
 import { BaseNodeContext } from "src/context/node-context/base";
@@ -60,8 +62,9 @@ export class WorkflowContext {
 
   public readonly portContextById: PortContextById;
 
-  // Used to make API requests to Vellum
+  // Used by the vellum api client
   public readonly vellumApiKey: string;
+  private readonly mlModelNamesById: Record<string, string> = {};
 
   constructor({
     absolutePathToOutputDirectory,
@@ -181,5 +184,18 @@ export class WorkflowContext {
     }
 
     return portContext;
+  }
+
+  public async getMLModelNameById(mlModelId: string): Promise<string> {
+    if (this.mlModelNamesById[mlModelId]) {
+      return this.mlModelNamesById[mlModelId];
+    }
+
+    const mlModel = await new MlModels({ apiKey: this.vellumApiKey }).retrieve(
+      mlModelId
+    );
+
+    this.mlModelNamesById[mlModelId] = mlModel.name;
+    return mlModel.name;
   }
 }

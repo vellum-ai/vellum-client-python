@@ -29,7 +29,7 @@ info:
     ### Official API Clients:
     Vellum maintains official API clients for Python and Node/Typescript. We recommend using these clients to interact
     with all stable endpoints. You can find them here:
-    - [Python](https://github.com/vellum-ai/vellum-client-python)
+    - [Python](https://github.com/vellum-ai/vellum-python-sdks)
     - [Node/Typescript](https://github.com/vellum-ai/vellum-client-node)
   contact:
     name: devops@vellum.ai
@@ -293,6 +293,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeploymentHistoryItem'
           description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/deployments/{id}/release-tags:
     get:
       operationId: list_deployment_release_tags
@@ -1382,6 +1385,33 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - internal
+  /v1/ml-models/{id}:
+    get:
+      operationId: ml_models_retrieve
+      description: |
+        Retrieve details about an ML Model
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Either the ML Model's ID, its unique name, or its ID in the workspace.
+        required: true
+      tags:
+      - ml-models
+      - ml-model-to-workspaces
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MLModelRead'
+          description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/sandboxes/{id}/prompts/{prompt_variant_id}/deploy:
     post:
       operationId: deploy_prompt
@@ -2041,6 +2071,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/WorkflowDeploymentHistoryItem'
           description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - customers
   /v1/workflow-deployments/{id}/release-tags:
     get:
       operationId: list_workflow_release_tags
@@ -5833,6 +5866,20 @@ components:
       description: |-
         * `ALL` - ALL
         * `NONE` - NONE
+    MLModelRead:
+      type: object
+      description: An ML Model that your Workspace has access to.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: The unique name of the ML Model.
+      required:
+      - id
+      - name
     MLModelUsage:
       type: object
       properties:

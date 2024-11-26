@@ -57,7 +57,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
         node_inputs: List[NodeInput] = []
         source_handle_ids = self._get_source_handle_ids() or {}
-        condition_ids = self._get_condition_ids() or {}
+        condition_ids = self._get_condition_ids()
 
         ports_size = sum(1 for _ in node.Ports)
 
@@ -232,4 +232,4 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
         return self._get_explicit_node_display_attr("rule_ids", List[RuleIdMap]) or []
 
     def _get_condition_ids(self)-> List[ConditionId]:
-        return self._get_explicit_node_display_attr("condition_ids", List[ConditionId]) or {}
+        return self._get_explicit_node_display_attr("condition_ids", List[ConditionId]) or []

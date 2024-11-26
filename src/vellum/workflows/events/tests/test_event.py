@@ -73,6 +73,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "foo": "bar",
                     },
                 },
+                "parent": None,
             },
         ),
         (
@@ -104,6 +105,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "node_foo": "bar",
                     },
                 },
+                "parent": None,
             },
         ),
         (
@@ -137,6 +139,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "value": "foo",
                     },
                 },
+                "parent": None
             },
         ),
         (
@@ -168,6 +171,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "example": "foo",
                     },
                 },
+                "parent": None,
             },
         ),
         (
@@ -201,6 +205,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "code": "USER_DEFINED_ERROR",
                     },
                 },
+                "parent": None,
             },
         ),
     ],

@@ -56,6 +56,10 @@ export class NodeInputValuePointerRule extends AstNode {
         throw new Error(
           "Workspace secret node input value pointer rule not yet supported"
         );
+      case "EXECUTION_COUNTER":
+        throw new Error(
+          "Workspace secret node input value pointer rule not yet supported"
+        );
       default: {
         assertUnreachable(ruleType);
       }

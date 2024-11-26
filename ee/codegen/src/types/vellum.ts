@@ -92,11 +92,21 @@ export interface WorkspaceSecretPointer {
   data: WorkspaceSecretData;
 }
 
+export interface ExecutionCounterData {
+  nodeId: string;
+}
+
+export interface ExecutionCounterPointer {
+  type: "EXECUTION_COUNTER";
+  data: ExecutionCounterData;
+}
+
 export type NodeInputValuePointerRule =
   | NodeOutputPointer
   | InputVariablePointer
   | ConstantValuePointer
-  | WorkspaceSecretPointer;
+  | WorkspaceSecretPointer
+  | ExecutionCounterPointer;
 
 export interface NodeInputValuePointer {
   rules: NodeInputValuePointerRule[];

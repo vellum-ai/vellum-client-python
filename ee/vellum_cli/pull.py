@@ -81,6 +81,6 @@ def pull_command(
                 target.write(source.read().decode("utf-8"))
 
     if include_json:
-        logger.warning("Workflow JSON included should be considered unstable and subject to change")
+        logger.warning("The pulled JSON representation of the Workflow should be used for debugging purposely only. Its schema should be considered unstable and subject to change at any time.")
 
     logger.info(f"Successfully pulled Workflow into {workflow_config.module}")

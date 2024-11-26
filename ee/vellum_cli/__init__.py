@@ -43,7 +43,7 @@ def push(
 @main.command()
 @click.argument("module", required=False)
 @click.option("--legacy-module", is_flag=True, help="Pull the workflow as a legacy module")
-@click.option("--include-json", is_flag=True, help="Include the workflow JSON in the pull response")
+@click.option("--include-json", is_flag=True, help="Include the JSON representation of the Workflow in the pull response. Should only be used for debugging purposes.")
 def pull(module: Optional[str], legacy_module: Optional[bool], include_json: Optional[bool]) -> None:
     """Pull Workflow from Vellum"""
     pull_command(module, legacy_module, include_json)

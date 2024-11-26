@@ -80,6 +80,7 @@ export declare namespace WorkflowProjectGenerator {
     absolutePathToOutputDirectory: string;
     workflowsSdkModulePath?: readonly string[];
     workflowVersionExecConfigData: unknown;
+    vellumApiKey?: string;
   }
 
   interface NestedProject extends BaseArgs {
@@ -135,6 +136,13 @@ ${errors.slice(0, 3).map((err) => {
           );
         }
       }
+      const vellumApiKey = rest.vellumApiKey ?? process.env.VELLUM_API_KEY;
+      if (!vellumApiKey) {
+        throw new ProjectSerializationError(
+          "No workspace API key provided or found in environment variables."
+        );
+      }
+
       this.workflowVersionExecConfig = workflowVersionExecConfigResult.value;
       this.workflowContext = new WorkflowContext({
         workflowsSdkModulePath: rest.workflowsSdkModulePath,
@@ -142,6 +150,7 @@ ${errors.slice(0, 3).map((err) => {
         moduleName: moduleName || toSnakeCase(workflowLabel),
         workflowLabel,
         workflowClassName,
+        vellumApiKey,
       });
     }
 

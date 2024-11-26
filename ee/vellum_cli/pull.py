@@ -6,12 +6,14 @@ from typing import Optional
 
 from dotenv import load_dotenv
 
+from vellum.workflows.vellum_client import create_vellum_client
 from vellum_cli.config import load_vellum_cli_config
 from vellum_cli.logger import load_cli_logger
-from vellum.workflows.vellum_client import create_vellum_client
 
 
-def pull_command(module: Optional[str], legacy_module: Optional[bool] = None) -> None:
+def pull_command(
+    module: Optional[str], legacy_module: Optional[bool] = None, include_json: Optional[bool] = None
+) -> None:
     load_dotenv()
     logger = load_cli_logger()
     config = load_vellum_cli_config()
@@ -22,7 +24,9 @@ def pull_command(module: Optional[str], legacy_module: Optional[bool] = None) ->
     if len(config.workflows) > 1 and not module:
         raise ValueError("Multiple workflows found in project to pull. Pulling only a single workflow is supported.")
 
-    workflow_config = next((w for w in config.workflows if w.module == module), None) if module else config.workflows[0]
+    workflow_config = (
+        next((w for w in config.workflows if w.module == module), None) if module else config.workflows[0]
+    )
     if workflow_config is None:
         raise ValueError(f"No workflow config for '{module}' found in project to push.")
 
@@ -31,9 +35,15 @@ def pull_command(module: Optional[str], legacy_module: Optional[bool] = None) ->
 
     logger.info(f"Pulling workflow into {workflow_config.module}")
     client = create_vellum_client()
+    query_parameters = {}
+    if legacy_module:
+        query_parameters["legacyModule"] = legacy_module
+    if include_json:
+        query_parameters["include_json"] = include_json
+
     response = client.workflows.pull(
         workflow_config.workflow_sandbox_id,
-        request_options={"additional_query_parameters": {"legacyModule": legacy_module} if legacy_module else {}},
+        request_options={"additional_query_parameters": query_parameters},
     )
 
     zip_bytes = b"".join(response)
@@ -69,5 +79,8 @@ def pull_command(module: Optional[str], legacy_module: Optional[bool] = None) ->
             with zip_file.open(file_name) as source, open(target_file, "w") as target:
                 logger.info(f"Writing to {target_file}...")
                 target.write(source.read().decode("utf-8"))
+
+    if include_json:
+        logger.warning("Workflow JSON included should be considered unstable and subject to change")
 
     logger.info(f"Successfully pulled Workflow into {workflow_config.module}")

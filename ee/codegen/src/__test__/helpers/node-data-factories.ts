@@ -877,6 +877,16 @@ export function apiNodeFactory({
 export function genericNodeFactory(): GenericNode {
   const nodeData: GenericNode = {
     type: WorkflowNodeType.GENERIC,
+    definition: {
+      name: "MyCustomNode",
+      module: ["my_nodes", "my_custom_node"],
+      bases: [
+        {
+          module: ["vellum", "workflows", "nodes", "bases", "base"],
+          name: "BaseNode",
+        },
+      ],
+    },
   };
   return nodeData;
 }

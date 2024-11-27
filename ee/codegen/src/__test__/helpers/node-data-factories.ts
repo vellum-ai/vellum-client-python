@@ -19,6 +19,7 @@ import {
   MergeNode,
   GenericNode,
   SubworkflowNode,
+  NoteNode,
 } from "src/types/vellum";
 
 export function entrypointNodeDataFactory(): EntrypointNode {
@@ -242,6 +243,23 @@ export function searchNodeDataFactory({
   };
 
   return nodeData;
+}
+
+export function noteNodeDataFactory(): NoteNode {
+  return {
+    id: "<note-node-id>",
+    type: WorkflowNodeType.NOTE,
+    inputs: [],
+    data: {
+      label: "Note Node",
+      text: "This is a note",
+      style: {
+        color: "red",
+        fontSize: 12,
+        fontWeight: "bold",
+      },
+    },
+  };
 }
 
 export function guardrailNodeDataFactory({

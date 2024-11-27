@@ -7,6 +7,7 @@ from .inline_prompt_node import BaseInlinePromptNodeDisplay
 from .inline_subworkflow_node import BaseInlineSubworkflowNodeDisplay
 from .map_node import BaseMapNodeDisplay
 from .merge_node import BaseMergeNodeDisplay
+from .note_node import BaseNoteNodeDisplay
 from .prompt_deployment_node import BasePromptDeploymentNodeDisplay
 from .search_node import BaseSearchNodeDisplay
 from .subworkflow_deployment_node import BaseSubworkflowDeploymentNodeDisplay
@@ -23,6 +24,7 @@ __all__ = [
     "BaseAPINodeDisplay",
     "BaseMapNodeDisplay",
     "BaseMergeNodeDisplay",
+    "BaseNoteNodeDisplay",
     "BaseSearchNodeDisplay",
     "BaseSubworkflowDeploymentNodeDisplay",
     "BaseTemplatingNodeDisplay",

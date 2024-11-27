@@ -1,5 +1,5 @@
 from vellum.workflows.nodes.bases import BaseNode
-from vellum.workflows.nodes.core import (ErrorNode, InlineSubworkflowNode, MapNode, RetryNode, TemplatingNode, TryNode,)
+from vellum.workflows.nodes.core import ErrorNode, InlineSubworkflowNode, MapNode, RetryNode, TemplatingNode, TryNode
 from vellum.workflows.nodes.displayable import (
     APINode,
     CodeExecutionNode,
@@ -7,6 +7,7 @@ from vellum.workflows.nodes.displayable import (
     FinalOutputNode,
     GuardrailNode,
     InlinePromptNode,
+    NoteNode,
     PromptDeploymentNode,
     SearchNode,
     SubworkflowDeploymentNode,
@@ -28,20 +29,18 @@ __all__ = [
     "TemplatingNode",
     "TryNode",
     # Displayable Base Nodes
-    "BaseSearchNode",
     "BaseInlinePromptNode",
     "BasePromptDeploymentNode",
+    "BaseSearchNode",
     # Displayable Nodes
     "APINode",
     "CodeExecutionNode",
+    "ConditionalNode",
+    "FinalOutputNode",
     "GuardrailNode",
     "InlinePromptNode",
+    "NoteNode",
     "PromptDeploymentNode",
     "SearchNode",
-    "ConditionalNode",
-    "GuardrailNode",
     "SubworkflowDeploymentNode",
-    "FinalOutputNode",
-    "PromptDeploymentNode",
-    "SearchNode",
 ]

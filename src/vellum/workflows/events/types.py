@@ -62,18 +62,18 @@ class DeploymentParentContext(BaseParentContext):
 
 
 class NodeParentContext(BaseParentContext):
-    definition: Type['BaseNode']
+    node_definition: Type['BaseNode']
 
-    @field_serializer("definition")
+    @field_serializer("node_definition")
     def serialize_node_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
         return serialize_type_encoder(definition)
 
 
 class WorkflowParentContext(BaseParentContext):
-    definition: Type['BaseWorkflow']
+    workflow_definition: Type['BaseWorkflow']
 
-    @field_serializer("definition")
-    def serialize_node_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
+    @field_serializer("workflow_definition")
+    def serialize_workflow_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
         return serialize_type_encoder(definition)
 
 

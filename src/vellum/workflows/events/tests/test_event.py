@@ -115,12 +115,12 @@ module_root = name_parts[: name_parts.index("events")]
                     },
                 },
                 "parent": {
-                    "definition": {
+                    "node_definition": {
                         "name": "MockNode",
                         "module": module_root + ["events", "tests", "test_event"],
                     },
                     "parent": {
-                        "definition": {
+                        "workflow_definition": {
                             "name": "MockWorkflow",
                             "module": module_root + ["events", "tests", "test_event"],
                         },

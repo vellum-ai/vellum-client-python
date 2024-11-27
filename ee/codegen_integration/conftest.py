@@ -35,7 +35,6 @@ def _get_fixture_paths(root: str) -> Tuple[str, str]:
             "simple_guardrail_node",
             "simple_map_node",
             "simple_code_execution_node",
-            "simple_templating_node",
         }
     )
 )

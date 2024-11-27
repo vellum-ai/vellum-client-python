@@ -1,5 +1,3 @@
-from typing import Optional
-
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.displayable.final_output_node import FinalOutputNode
 from vellum.workflows.state.base import BaseState

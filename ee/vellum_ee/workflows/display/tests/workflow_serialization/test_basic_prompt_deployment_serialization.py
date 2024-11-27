@@ -4,10 +4,10 @@ from uuid import uuid4
 from deepdiff import DeepDiff
 
 from vellum import DeploymentRead
-
-from tests.workflows.basic_text_prompt_deployment.workflow import BasicTextPromptDeployment
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
+
+from tests.workflows.basic_text_prompt_deployment.workflow import BasicTextPromptDeployment
 
 
 def test_serialize_workflow(vellum_client):
@@ -46,17 +46,17 @@ def test_serialize_workflow(vellum_client):
                 "id": "52995b50-84c9-465f-8a4b-a4ee2a92e388",
                 "key": "city",
                 "type": "STRING",
-                "required": None,
+                "required": True,
                 "default": None,
-                "extensions": None,
+                "extensions": { "color": None },
             },
             {
                 "id": "aa3ca842-250c-4a3f-853f-23928c28d0f8",
                 "key": "date",
                 "type": "STRING",
-                "required": None,
+                "required": True,
                 "default": None,
-                "extensions": None,
+                "extensions": { "color": None },
             },
         ],
         input_variables,

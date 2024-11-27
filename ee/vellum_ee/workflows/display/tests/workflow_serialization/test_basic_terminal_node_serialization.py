@@ -1,6 +1,7 @@
-from tests.workflows.basic_final_output_node.workflow import BasicFinalOutputNodeWorkflow
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
+
+from tests.workflows.basic_final_output_node.workflow import BasicFinalOutputNodeWorkflow
 
 
 def test_serialize_workflow():
@@ -26,9 +27,9 @@ def test_serialize_workflow():
             "id": "e39a7b63-de15-490a-ae9b-8112c767aea0",
             "key": "input",
             "type": "STRING",
-            "required": None,
+            "required": True,
             "default": None,
-            "extensions": None,
+            "extensions": { "color": None },
         }
     ]
 

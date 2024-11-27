@@ -2,11 +2,22 @@ import logging
 from uuid import UUID
 from typing import Dict, List, Optional, Type, cast
 
+from vellum.workflows.descriptors.base import BaseDescriptor
+from vellum.workflows.edges import Edge
+from vellum.workflows.nodes.bases import BaseNode
+from vellum.workflows.nodes.displayable.final_output_node import FinalOutputNode
+from vellum.workflows.nodes.utils import get_wrapped_node, has_wrapped_node
+from vellum.workflows.ports import Port
+from vellum.workflows.references import WorkflowInputReference
+from vellum.workflows.references.output import OutputReference
+from vellum.workflows.types.core import JsonArray, JsonObject
+from vellum.workflows.types.generics import WorkflowType
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.types import PortDisplay
+from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
-from vellum_ee.workflows.display.utils.vellum import infer_vellum_variable_type
+from vellum_ee.workflows.display.utils.vellum import infer_vellum_variable_type, primitive_to_vellum_value
 from vellum_ee.workflows.display.vellum import (
     EdgeVellumDisplay,
     EdgeVellumDisplayOverrides,
@@ -21,16 +32,6 @@ from vellum_ee.workflows.display.vellum import (
     WorkflowOutputVellumDisplayOverrides,
 )
 from vellum_ee.workflows.display.workflows.base_workflow_display import BaseWorkflowDisplay
-from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.edges import Edge
-from vellum.workflows.nodes.bases import BaseNode
-from vellum.workflows.nodes.displayable.final_output_node import FinalOutputNode
-from vellum.workflows.nodes.utils import get_wrapped_node, has_wrapped_node
-from vellum.workflows.ports import Port
-from vellum.workflows.references import WorkflowInputReference
-from vellum.workflows.references.output import OutputReference
-from vellum.workflows.types.core import JsonArray, JsonObject
-from vellum.workflows.types.generics import WorkflowType
 
 logger = logging.getLogger(__name__)
 
@@ -56,16 +57,17 @@ class VellumWorkflowDisplay(
     def serialize(self, raise_errors: bool = True) -> JsonObject:
         input_variables: JsonArray = []
         for workflow_input, workflow_input_display in self.display_context.workflow_input_displays.items():
+            default = primitive_to_vellum_value(raise_if_descriptor(workflow_input.instance)) if workflow_input.instance else None
+            required = type(None) not in workflow_input.types
+
             input_variables.append(
                 {
                     "id": str(workflow_input_display.id),
                     "key": workflow_input.name,
                     "type": infer_vellum_variable_type(workflow_input),
-                    # TODO: Add support for serializing default, required, and extensions
-                    #   https://app.shortcut.com/vellum/story/5429
-                    "default": None,
-                    "required": None,
-                    "extensions": None,
+                    "default": default.dict() if default else None,
+                    "required": required,
+                    "extensions": { "color" : workflow_input_display.color },
                 }
             )
 

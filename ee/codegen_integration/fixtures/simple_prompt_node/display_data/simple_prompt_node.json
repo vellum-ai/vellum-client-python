@@ -251,8 +251,8 @@
       "key": "text",
       "type": "STRING",
       "default": null,
-      "required": null,
-      "extensions": null
+      "required": true,
+      "extensions": { "color": null }
     }
   ],
   "output_variables": [

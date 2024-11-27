@@ -16,6 +16,12 @@ describe("Json", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
 
+    it("should handle undefined values", async () => {
+      const json = new Json(undefined);
+      json.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+
     it("should handle strings", async () => {
       const json = new Json("test string");
       json.write(writer);
@@ -119,9 +125,6 @@ describe("Json", () => {
     });
 
     it("should throw error for non-JSON-serializable values", () => {
-      expect(() => new Json(undefined)).toThrow(
-        "Unsupported JSON value type: undefined"
-      );
       expect(() => new Json(() => {})).toThrow(
         "Unsupported JSON value type: function"
       );

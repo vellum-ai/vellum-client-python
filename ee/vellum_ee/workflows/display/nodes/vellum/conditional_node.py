@@ -243,7 +243,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
     def get_nested_rule_details_by_path(
             self, rule_ids: List[RuleIdMap], path: List[int]
-    ) -> tuple[UUID, UUID | None, UUID | None] | None:
+    ) -> Union[Tuple[UUID, Optional[UUID], Optional[UUID]], None]:
         current_rule = rule_ids[path[0]]
 
         for step in path[1:]:

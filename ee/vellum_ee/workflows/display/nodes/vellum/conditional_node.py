@@ -76,7 +76,10 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                 else str(uuid4_from_hash(f"{node_id}|rule|{','.join(str(p) for p in path)}"))
             )
 
-            current_id, field_node_input_id, value_node_input_id = self.get_nested_rule_details_by_path(rule_ids, path) if rule_ids else self._generate_hash_for_rule_ids(node_id, descriptor)
+            result = self.get_nested_rule_details_by_path(rule_ids, path) if rule_ids else None
+            if result is None:
+                result = self._generate_hash_for_rule_ids(node_id, descriptor)
+            current_id, field_node_input_id, value_node_input_id = result
 
             # Recursive step: Keep recursing until we hit the other descriptors
             if isinstance(descriptor, (AndExpression, OrExpression)):
@@ -102,7 +105,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                     node_id, f"{current_id}.field", descriptor._expression, display_context, field_node_input_id
                 )
                 node_inputs.append(expression_node_input)
-                field_node_input_id = expression_node_input.id
+                field_node_input_id = UUID(expression_node_input.id)
                 operator = self._convert_descriptor_to_operator(descriptor)
 
             elif isinstance(descriptor, (BetweenExpression, NotBetweenExpression)):
@@ -114,8 +117,8 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                 )
                 node_inputs.extend([field_node_input, value_node_input])
                 operator = self._convert_descriptor_to_operator(descriptor)
-                field_node_input_id = field_node_input.id
-                value_node_input_id = value_node_input.id
+                field_node_input_id = UUID(field_node_input.id)
+                value_node_input_id = UUID(value_node_input.id)
 
             else:
                 lhs = descriptor._lhs  # type: ignore[attr-defined]
@@ -127,10 +130,10 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                 if descriptor._rhs is not None:  # type: ignore[attr-defined]
                     rhs_node_input = create_node_input(node_id, f"{current_id}.value", rhs, display_context, value_node_input_id)
                     node_inputs.append(rhs_node_input)
-                    value_node_input_id = rhs_node_input.id
+                    value_node_input_id = UUID(rhs_node_input.id)
 
                 operator = self._convert_descriptor_to_operator(descriptor)
-                field_node_input_id = lhs_node_input.id
+                field_node_input_id = UUID(lhs_node_input.id)
 
             return {
                 "id": str(current_id),
@@ -164,6 +167,8 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                 rule_ids = self._get_rule_ids()
                 condition_rule = serialize_rule(port._condition, [idx], rule_ids[idx] if len(rule_ids) > idx else None)
                 rules = condition_rule["rules"] if condition_rule["rules"] else [condition_rule]
+                if port._condition_type is None:
+                    raise ValueError("Condition type is None, but a valid ConditionType is expected.")
                 conditions.append(
                     {
                         "id": condition_id,
@@ -238,7 +243,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
     def get_nested_rule_details_by_path(
             self, rule_ids: List[RuleIdMap], path: List[int]
-    ) -> Optional[Tuple[UUID, UUID, UUID]]:
+    ) -> tuple[UUID, UUID | None, UUID | None] | None:
         current_rule = rule_ids[path[0]]
 
         for step in path[1:]:

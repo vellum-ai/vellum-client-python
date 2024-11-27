@@ -1,7 +1,7 @@
 from functools import cached_property
 import inspect
 from uuid import UUID
-from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Type, TypeVar, get_args, get_origin
+from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Type, TypeVar, get_args, get_origin, cast
 
 from vellum_ee.workflows.display.nodes.types import NodeOutputDisplay, PortDisplay, PortDisplayOverrides
 from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
@@ -102,7 +102,7 @@ class BaseNodeDisplay(Generic[NodeType]):
                     key_type, value_type = args
                     if all(isinstance(k, key_type) and isinstance(v, value_type) for k, v in
                            node_display_attribute.items()):
-                        return node_display_attribute
+                        return cast(_NodeDisplayAttrType, node_display_attribute)
                 raise ValueError(f"Node {cls.__name__} must define an explicit {attribute} of type {attribute_type}.")
 
             # Handle List
@@ -110,7 +110,7 @@ class BaseNodeDisplay(Generic[NodeType]):
                 if len(args) == 1:
                     item_type = args[0]
                     if all(isinstance(item, item_type) for item in node_display_attribute):
-                        return node_display_attribute
+                        return cast(_NodeDisplayAttrType, node_display_attribute)
                 raise ValueError(f"Node {cls.__name__} must define an explicit {attribute} of type {attribute_type}.")
 
             raise ValueError(f"Node {cls.__name__} must define an explicit {attribute} of type {attribute_type}.")

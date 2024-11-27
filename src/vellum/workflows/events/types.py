@@ -63,12 +63,12 @@ class BaseDeploymentParentContext(BaseParentContext):
 
 class WorkflowDeploymentParentContext(BaseDeploymentParentContext):
     type: Literal["WORKFLOW_RELEASE_TAG"] = "WORKFLOW_RELEASE_TAG"
-    version_id: UUID
+    workflow_version_id: UUID
 
 
 class PromptDeploymentParentContext(BaseDeploymentParentContext):
     type: Literal["PROMPT_RELEASE_TAG"] = "PROMPT_RELEASE_TAG"
-    version_id: UUID
+    prompt_version_id: UUID
 
 
 class NodeParentContext(BaseParentContext):

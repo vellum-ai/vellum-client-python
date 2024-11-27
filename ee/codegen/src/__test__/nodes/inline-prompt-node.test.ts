@@ -107,6 +107,10 @@ describe("InlinePromptNode", () => {
           blockType,
         });
 
+        vi.spyOn(workflowContext, "getMLModelNameById").mockResolvedValue(
+          "gpt-4o-mini"
+        );
+
         const nodeContext = (await createNodeContext({
           workflowContext,
           nodeData,

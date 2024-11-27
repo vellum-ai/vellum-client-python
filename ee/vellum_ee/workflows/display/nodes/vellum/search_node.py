@@ -7,16 +7,15 @@ from vellum import (
     VellumValueLogicalConditionGroupRequest,
     VellumValueLogicalConditionRequest,
 )
-
+from vellum.workflows.nodes.displayable.search_node import SearchNode
+from vellum.workflows.references import OutputReference
+from vellum.workflows.types.core import JsonArray, JsonObject
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
 from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.vellum import NodeInput
-from vellum.workflows.nodes.displayable.search_node import SearchNode
-from vellum.workflows.references import OutputReference
-from vellum.workflows.types.core import JsonArray, JsonObject
 
 _SearchNodeType = TypeVar("_SearchNodeType", bound=SearchNode)
 
@@ -76,10 +75,7 @@ class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_Sea
         options = raise_if_descriptor(node.options)
         filters = options.filters if options else None
 
-        if filters and filters.external_ids:
-            # TODO: Add support for serializing external ID filters
-            # https://app.shortcut.com/vellum/story/5563/add-support-for-serializing-external-id-in-text-search-nodes
-            raise NotImplementedError("Serializing External ID filters is not yet supported")
+        external_id_filters = filters.external_ids if filters else None
 
         raw_metadata_filters = filters.metadata if filters else None
         metadata_filters = None
@@ -108,7 +104,7 @@ class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_Sea
                 "result_merging_enabled",
                 ("True" if result_merging_enabled else "False"),
             ),
-            ("external_id_filters", None),
+            ("external_id_filters", external_id_filters),
             ("metadata_filters", metadata_filters),
         ]
 

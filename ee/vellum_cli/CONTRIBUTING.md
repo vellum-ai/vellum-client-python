@@ -56,7 +56,11 @@ If you want to run `vellum pull` locally end to end, here are the steps you'll n
   module = "examples.basic_rag_workflow"
   workflow_sandbox_id = "<your-workflow-sandbox-id>"
   ```
+- Ensure you have an API key stored in your `.env` file:
+  ```
+  VELLUM_API_KEY="<your-api-key>"
+  ```
 - Run the cli command and point it to the local Vellum backend running on `localhost:8000`. For example:
   ```
-  VELLUM_API_URL="http://localhost:8000" VELLUM_API_KEY="<your-api-key>" vellum pull examples.basic_rag_workflow
+  VELLUM_API_URL="http://localhost:8000" vellum pull examples.basic_rag_workflow
   ```

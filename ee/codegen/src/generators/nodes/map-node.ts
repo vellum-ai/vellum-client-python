@@ -5,7 +5,7 @@ import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { MapNodeContext } from "src/context/node-context/map-node";
 import { BaseNestedWorkflowNode } from "src/generators/nodes/bases/nested-workflow-base";
 import { WorkflowProjectGenerator } from "src/project";
-import { MapNode as MapNodeType } from "src/types/vellum";
+import { MapNode as MapNodeType, WorkflowRawData } from "src/types/vellum";
 
 export class MapNode extends BaseNestedWorkflowNode<
   MapNodeType,
@@ -13,6 +13,16 @@ export class MapNode extends BaseNestedWorkflowNode<
 > {
   baseNodeClassName = "MapNode";
   baseNodeDisplayClassName = "BaseMapNodeDisplay";
+
+  getInnerWorkflowData(): WorkflowRawData {
+    if (this.nodeData.data.variant !== "INLINE") {
+      throw new Error(
+        `MapNode only supports INLINE variant. Received: ${this.nodeData.data.variant}`
+      );
+    }
+
+    return this.nodeData.data.workflowRawData;
+  }
 
   getNodeClassBodyStatements(): AstNode[] {
     const nestedWorkflowContext = this.getNestedWorkflowContextByName(

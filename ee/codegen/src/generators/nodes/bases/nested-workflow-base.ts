@@ -3,7 +3,7 @@ import { BaseNode } from "./base";
 import { WorkflowContext } from "src/context";
 import { BaseNodeContext } from "src/context/node-context/base";
 import { WorkflowProjectGenerator } from "src/project";
-import { WorkflowDataNode } from "src/types/vellum";
+import { WorkflowDataNode, WorkflowRawData } from "src/types/vellum";
 
 export abstract class BaseNestedWorkflowNode<
   T extends WorkflowDataNode,
@@ -17,6 +17,8 @@ export abstract class BaseNestedWorkflowNode<
   >;
 
   protected abstract getNestedWorkflowProject(): WorkflowProjectGenerator;
+
+  protected abstract getInnerWorkflowData(): WorkflowRawData;
 
   constructor(args: BaseNode.Args<T, V>) {
     super(args);
@@ -55,6 +57,9 @@ export abstract class BaseNestedWorkflowNode<
 
   protected generateNestedWorkflowContexts(): Map<string, WorkflowContext> {
     const nestedWorkflowLabel = `${this.nodeContext.getNodeLabel()} Workflow`;
+
+    const innerWorkflowData = this.getInnerWorkflowData();
+
     const nestedWorkflowContext = new WorkflowContext({
       absolutePathToOutputDirectory:
         this.workflowContext.absolutePathToOutputDirectory,
@@ -66,7 +71,7 @@ export abstract class BaseNestedWorkflowNode<
       workflowsSdkModulePath:
         this.workflowContext.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
       vellumApiKey: this.workflowContext.vellumApiKey,
-      workflowRawEdges: this.workflowContext.workflowRawEdges,
+      workflowRawEdges: innerWorkflowData.edges,
     });
 
     return new Map([

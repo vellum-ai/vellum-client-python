@@ -5,14 +5,27 @@ import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { InlineSubworkflowNodeContext } from "src/context/node-context/inline-subworkflow-node";
 import { BaseNestedWorkflowNode } from "src/generators/nodes/bases/nested-workflow-base";
 import { WorkflowProjectGenerator } from "src/project";
-import { SubworkflowNode as SubworkflowNodeType } from "src/types/vellum";
+import {
+  SubworkflowNode as SubworkflowNodeType,
+  WorkflowRawData,
+} from "src/types/vellum";
 
-export class SubworkflowNode extends BaseNestedWorkflowNode<
+export class InlineSubworkflowNode extends BaseNestedWorkflowNode<
   SubworkflowNodeType,
   InlineSubworkflowNodeContext
 > {
   baseNodeClassName = "InlineSubworkflowNode";
   baseNodeDisplayClassName = "BaseInlineSubworkflowNodeDisplay";
+
+  getInnerWorkflowData(): WorkflowRawData {
+    if (this.nodeData.data.variant !== "INLINE") {
+      throw new Error(
+        `InlineSubworkflowNode only supports INLINE variant. Received: ${this.nodeData.data.variant}`
+      );
+    }
+
+    return this.nodeData.data.workflowRawData;
+  }
 
   getNodeClassBodyStatements(): AstNode[] {
     const nestedWorkflowContext = this.getNestedWorkflowContextByName(

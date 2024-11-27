@@ -26,6 +26,10 @@ describe("SubworkflowDeploymentNode", () => {
         "workflowDeploymentHistoryItemRetrieve"
       ).mockResolvedValue({
         name: "test-deployment",
+        outputVariables: [
+          { id: "1", key: "output-1", type: "STRING" },
+          { id: "2", key: "output-2", type: "NUMBER" },
+        ],
       } as unknown as WorkflowDeploymentHistoryItem);
 
       const nodeData = subworkflowDeploymentNodeDataFactory();

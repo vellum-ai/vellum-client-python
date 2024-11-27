@@ -4,7 +4,10 @@ exports[`SubworkflowDeploymentNode > basic > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseSubworkflowDeploymentNodeDisplay
 from ...nodes.subworkflow_node import SubworkflowNode
 from uuid import UUID
-from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
+from vellum_ee.workflows.display.nodes.types import (
+    NodeOutputDisplay,
+    PortDisplayOverrides,
+)
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
 
@@ -13,6 +16,14 @@ class SubworkflowNodeDisplay(BaseSubworkflowDeploymentNodeDisplay[SubworkflowNod
     node_id = UUID("c8f2964c-09b8-44e0-a06d-606319fe5e2a")
     target_handle_id = UUID("f5e6bd33-527a-4ba6-8906-cd5e96a4321c")
     node_input_ids_by_name = {"input": UUID("f62b7511-dd69-4dff-a4fc-718a9db3ceba")}
+    output_display = {
+        SubworkflowNode.Outputs.output_1: NodeOutputDisplay(
+            id=UUID("1"), name="output-1"
+        ),
+        SubworkflowNode.Outputs.output_2: NodeOutputDisplay(
+            id=UUID("2"), name="output-2"
+        ),
+    }
     port_displays = {
         SubworkflowNode.Ports.default: PortDisplayOverrides(
             id=UUID("600efd51-8677-4ba3-a582-b298bebb2868")
@@ -34,5 +45,9 @@ class SubworkflowNode(SubworkflowDeploymentNode):
     deployment = "test-deployment"
     release_tag = "LATEST"
     subworkflow_inputs = {"input": None}
+
+    class Outputs(SubworkflowDeploymentNode.Outputs):
+        output_1: str
+        output_2: float
 "
 `;

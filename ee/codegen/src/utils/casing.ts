@@ -66,9 +66,9 @@ export function createPythonClassName(input: string): string {
 
 export function toSnakeCase(str: string): string {
   return str
+    .replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, "") // Remove leading/trailing non-alphanumeric characters first
     .replace(/([a-z])([A-Z])/g, "$1_$2") // Insert underscore between lower and upper case
-    .replace(/[\s-]+/g, "_") // Replace spaces and hyphens with underscores
-    .replace(/[^a-zA-Z0-9]+/g, "_") // Replace consecutive non-alphanumeric characters with a single underscore
-    .replace(/^-+|-+$/g, "") // Remove leading and trailing underscores
+    .replace(/[^a-zA-Z0-9]+/g, "_") // Replace any non-alphanumeric characters with underscore
+    .replace(/^_+|_+$/g, "") // Remove any leading/trailing underscores
     .toLowerCase(); // Convert to lowercase
 }

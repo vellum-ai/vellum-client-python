@@ -60,6 +60,7 @@ describe("Casing utility functions", () => {
       { input: "HelloWorld", expected: "hello_world" },
       { input: "hello world", expected: "hello_world" },
       { input: "Hello-World_Example 123", expected: "hello_world_example_123" },
+      { input: "$hello*World", expected: "hello_world" },
     ];
 
     it.each(testCases)(

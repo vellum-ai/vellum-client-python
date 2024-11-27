@@ -8,7 +8,7 @@ from vellum.workflows.errors.types import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs import BaseOutputs
-from vellum.workflows.types.core import JsonObject, VellumSecret
+from vellum.workflows.types.core import Json, JsonObject, VellumSecret
 from vellum.workflows.types.generics import StateType
 
 
@@ -26,11 +26,11 @@ class BaseAPINode(BaseNode, Generic[StateType]):
     url: str
     method: APIRequestMethod
     data: Optional[str] = None
-    json: Optional["JsonObject"] = None
+    json: Optional["Json"] = None
     headers: Optional[Dict[str, Union[str, VellumSecret]]] = None
 
     class Outputs(BaseOutputs):
-        json: Optional["JsonObject"]
+        json: Optional["Json"]
         headers: Dict[str, str]
         status_code: int
         text: str

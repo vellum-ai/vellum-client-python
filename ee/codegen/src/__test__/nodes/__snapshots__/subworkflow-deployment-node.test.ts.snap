@@ -31,7 +31,7 @@ exports[`SubworkflowDeploymentNode > basic > getNodeFile 1`] = `
 
 
 class SubworkflowNode(SubworkflowDeploymentNode):
-    deployment = "58171df8-cdf9-4d10-a9ed-22eaf545b22a"
+    deployment = "test-deployment"
     release_tag = "LATEST"
     subworkflow_inputs = {"input": None}
 "

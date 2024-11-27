@@ -1,5 +1,7 @@
 import { Writer } from "@fern-api/python-ast/core/Writer";
-import { beforeEach } from "vitest";
+import { WorkflowDeploymentHistoryItem } from "vellum-ai/api";
+import { WorkflowDeployments as WorkflowDeploymentsClient } from "vellum-ai/api/resources/workflowDeployments/client/Client";
+import { beforeEach, vi } from "vitest";
 
 import { workflowContextFactory } from "src/__test__/helpers";
 import { subworkflowDeploymentNodeDataFactory } from "src/__test__/helpers/node-data-factories";
@@ -19,6 +21,13 @@ describe("SubworkflowDeploymentNode", () => {
 
   describe("basic", () => {
     beforeEach(async () => {
+      vi.spyOn(
+        WorkflowDeploymentsClient.prototype,
+        "workflowDeploymentHistoryItemRetrieve"
+      ).mockResolvedValue({
+        name: "test-deployment",
+      } as unknown as WorkflowDeploymentHistoryItem);
+
       const nodeData = subworkflowDeploymentNodeDataFactory();
 
       const nodeContext = (await createNodeContext({

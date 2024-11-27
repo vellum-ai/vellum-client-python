@@ -25,7 +25,7 @@ export class SubworkflowDeploymentNode extends BaseSingleFileNode<
       python.field({
         name: "deployment",
         initializer: python.TypeInstantiation.str(
-          this.nodeData.data.workflowDeploymentId
+          this.nodeContext.workflowDeploymentHistoryItem.name
         ),
       })
     );

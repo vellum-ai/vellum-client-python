@@ -1,6 +1,5 @@
 import {
   ChatMessagePromptBlock,
-  FunctionDefinitionPromptBlock,
   JinjaPromptBlock,
   RichTextPromptBlock,
   VellumVariableType,
@@ -302,7 +301,6 @@ const generateBlockGivenType = (
 ):
   | JinjaPromptBlock
   | ChatMessagePromptBlock
-  | FunctionDefinitionPromptBlock
   | VariablePromptBlock
   | RichTextPromptBlock => {
   if (blockType === "JINJA") {
@@ -334,13 +332,6 @@ const generateBlockGivenType = (
       ],
       chatRole: "SYSTEM",
       chatMessageUnterminated: false,
-      state: "ENABLED",
-    };
-  } else if (blockType === "FUNCTION_DEFINITION") {
-    return {
-      blockType: "FUNCTION_DEFINITION",
-      functionName: "functionTest",
-      functionDescription: "This is a test function",
       state: "ENABLED",
     };
   } else if (blockType === "VARIABLE") {

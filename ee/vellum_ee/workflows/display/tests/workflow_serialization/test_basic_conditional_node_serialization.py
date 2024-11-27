@@ -141,8 +141,8 @@ def test_serialize_workflow():
             "type": "CONDITIONAL",
             "inputs": [
                 {
-                    "id": "eb8f9320-7030-45bc-81fb-fb45017b6a89",
-                    "key": "708bb538-4c77-4ae9-8e87-0706346e2947.field",
+                    "id": "c000588f-a1ca-45aa-b4e2-d54a9786429b",
+                    "key": "ebb31657-c763-4e83-bdc6-aa6d1a3116c0.field",
                     "value": {
                         "rules": [
                             {
@@ -156,8 +156,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "1fb4cf46-f8b3-418f-be30-f7ec57f92285",
-                    "key": "708bb538-4c77-4ae9-8e87-0706346e2947.value",
+                    "id": "82538f2c-ad80-4bd1-8976-f0f634b3933e",
+                    "key": "ebb31657-c763-4e83-bdc6-aa6d1a3116c0.value",
                     "value": {
                         "rules": [
                             {
@@ -169,8 +169,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "ca3a865e-e99a-43b7-a649-18df57180a4f",
-                    "key": "ddee5d1d-46e9-4ae8-b0a8-311747ebadd4.field",
+                    "id": "3fa9312b-a232-4ed7-9c76-45631389b761",
+                    "key": "1d7798aa-a6b1-4fe7-842d-4b9a61ba34ab.field",
                     "value": {
                         "rules": [
                             {
@@ -184,8 +184,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "40957176-de6e-4131-bfa7-55c633312af0",
-                    "key": "ddee5d1d-46e9-4ae8-b0a8-311747ebadd4.value",
+                    "id": "a0509db6-103c-4049-a3b3-c5ad0eff222e",
+                    "key": "1d7798aa-a6b1-4fe7-842d-4b9a61ba34ab.value",
                     "value": {
                         "rules": [
                             {
@@ -197,8 +197,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "9a685f10-f849-445b-9b26-f1a99e1bc625",
-                    "key": "73157578-205a-4816-8985-cf726063647c.field",
+                    "id": "1b38a4f8-023c-41e2-acad-4120589b1589",
+                    "key": "76c29692-ab96-45eb-b013-b904d06b675d.field",
                     "value": {
                         "rules": [
                             {
@@ -212,8 +212,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "93f06582-aff7-4ce5-8c60-f923090ffebc",
-                    "key": "73157578-205a-4816-8985-cf726063647c.value",
+                    "id": "6be7cfea-cf7a-4e22-a1c4-b19f89d54b30",
+                    "key": "76c29692-ab96-45eb-b013-b904d06b675d.value",
                     "value": {
                         "rules": [
                             {
@@ -225,8 +225,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "965010fa-5f14-4f3c-92cb-ede4fad35b92",
-                    "key": "e805add5-7f7f-443d-b9bc-11ad15eeb49c.field",
+                    "id": "86231451-b6dc-49f6-843b-0c00f84aff47",
+                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.field",
                     "value": {
                         "rules": [
                             {
@@ -240,8 +240,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "e759091b-3609-4581-9014-5f46f438a4c9",
-                    "key": "e805add5-7f7f-443d-b9bc-11ad15eeb49c.value",
+                    "id": "96c8658f-c7db-41f8-be1f-d62350adb149",
+                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.value",
                     "value": {
                         "rules": [
                             {
@@ -253,8 +253,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "6b592d70-93ab-4dcf-aeae-03834f37ef83",
-                    "key": "f47d72ff-665f-4143-ada3-6fa66f5bda42.field",
+                    "id": "86231451-b6dc-49f6-843b-0c00f84aff47",
+                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.field",
                     "value": {
                         "rules": [
                             {
@@ -268,8 +268,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "e915cd85-ae55-48be-b31c-f2285db9db10",
-                    "key": "f47d72ff-665f-4143-ada3-6fa66f5bda42.value",
+                    "id": "96c8658f-c7db-41f8-be1f-d62350adb149",
+                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.value",
                     "value": {
                         "rules": [
                             {
@@ -281,8 +281,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "deb43b7d-d084-4453-bed9-0f0b940d0639",
-                    "key": "d3359d60-9bb4-4c6e-8009-b7ea46ab28a7.field",
+                    "id": "86231451-b6dc-49f6-843b-0c00f84aff47",
+                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.field",
                     "value": {
                         "rules": [
                             {
@@ -296,8 +296,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "e5d75ae4-cd46-437e-9695-9df2d79578b4",
-                    "key": "d3359d60-9bb4-4c6e-8009-b7ea46ab28a7.value",
+                    "id": "96c8658f-c7db-41f8-be1f-d62350adb149",
+                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.value",
                     "value": {
                         "rules": [
                             {
@@ -321,13 +321,13 @@ def test_serialize_workflow():
                             "id": "2ccd0730-26d1-4fb4-baa9-1a2a182dd9a0",
                             "rules": [
                                 {
-                                    "id": "708bb538-4c77-4ae9-8e87-0706346e2947",
+                                    "id": "ebb31657-c763-4e83-bdc6-aa6d1a3116c0",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "eb8f9320-7030-45bc-81fb-fb45017b6a89",
+                                    "field_node_input_id": "c000588f-a1ca-45aa-b4e2-d54a9786429b",
                                     "operator": "=",
-                                    "value_node_input_id": "1fb4cf46-f8b3-418f-be30-f7ec57f92285",
+                                    "value_node_input_id": "82538f2c-ad80-4bd1-8976-f0f634b3933e",
                                 }
                             ],
                             "combinator": "AND",
@@ -345,13 +345,13 @@ def test_serialize_workflow():
                             "id": "cc3f0d92-b603-42cc-b2e9-83e3b23b3bcb",
                             "rules": [
                                 {
-                                    "id": "ddee5d1d-46e9-4ae8-b0a8-311747ebadd4",
+                                    "id": "1d7798aa-a6b1-4fe7-842d-4b9a61ba34ab",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "ca3a865e-e99a-43b7-a649-18df57180a4f",
+                                    "field_node_input_id": "3fa9312b-a232-4ed7-9c76-45631389b761",
                                     "operator": "=",
-                                    "value_node_input_id": "40957176-de6e-4131-bfa7-55c633312af0",
+                                    "value_node_input_id": "a0509db6-103c-4049-a3b3-c5ad0eff222e",
                                 }
                             ],
                             "combinator": "AND",
@@ -369,13 +369,13 @@ def test_serialize_workflow():
                             "id": "a5a0f391-7052-452f-9fe1-a5781a491591",
                             "rules": [
                                 {
-                                    "id": "73157578-205a-4816-8985-cf726063647c",
+                                    "id": "76c29692-ab96-45eb-b013-b904d06b675d",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "9a685f10-f849-445b-9b26-f1a99e1bc625",
+                                    "field_node_input_id": "1b38a4f8-023c-41e2-acad-4120589b1589",
                                     "operator": "=",
-                                    "value_node_input_id": "93f06582-aff7-4ce5-8c60-f923090ffebc",
+                                    "value_node_input_id": "6be7cfea-cf7a-4e22-a1c4-b19f89d54b30",
                                 }
                             ],
                             "combinator": "AND",
@@ -393,34 +393,34 @@ def test_serialize_workflow():
                             "id": "efe7a851-2a67-4189-99ec-bc193242b270",
                             "rules": [
                                 {
-                                    "id": "e805add5-7f7f-443d-b9bc-11ad15eeb49c",
+                                    "id": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "965010fa-5f14-4f3c-92cb-ede4fad35b92",
+                                    "field_node_input_id": "86231451-b6dc-49f6-843b-0c00f84aff47",
                                     "operator": "=",
-                                    "value_node_input_id": "e759091b-3609-4581-9014-5f46f438a4c9",
+                                    "value_node_input_id": "96c8658f-c7db-41f8-be1f-d62350adb149",
                                 },
                                 {
                                     "id": "2c78817b-8b73-43fd-8dab-a8923018da9d",
                                     "rules": [
                                         {
-                                            "id": "f47d72ff-665f-4143-ada3-6fa66f5bda42",
+                                            "id": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b",
                                             "rules": None,
                                             "combinator": None,
                                             "negated": False,
-                                            "field_node_input_id": "6b592d70-93ab-4dcf-aeae-03834f37ef83",
+                                            "field_node_input_id": "86231451-b6dc-49f6-843b-0c00f84aff47",
                                             "operator": "=",
-                                            "value_node_input_id": "e915cd85-ae55-48be-b31c-f2285db9db10",
+                                            "value_node_input_id": "96c8658f-c7db-41f8-be1f-d62350adb149",
                                         },
                                         {
-                                            "id": "d3359d60-9bb4-4c6e-8009-b7ea46ab28a7",
+                                            "id": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b",
                                             "rules": None,
                                             "combinator": None,
                                             "negated": False,
-                                            "field_node_input_id": "deb43b7d-d084-4453-bed9-0f0b940d0639",
+                                            "field_node_input_id": "86231451-b6dc-49f6-843b-0c00f84aff47",
                                             "operator": "=",
-                                            "value_node_input_id": "e5d75ae4-cd46-437e-9695-9df2d79578b4",
+                                            "value_node_input_id": "96c8658f-c7db-41f8-be1f-d62350adb149",
                                         },
                                     ],
                                     "combinator": "AND",
@@ -436,6 +436,12 @@ def test_serialize_workflow():
                             "operator": None,
                             "value_node_input_id": None,
                         },
+                    },
+                    {
+                        "id": "c2fa8a44-923b-462a-b0d2-fa800a152e52",
+                        "type": "ELSE",
+                        "source_handle_id": "493024f4-8010-4e1a-abae-b6adbc6fb208",
+                        "data": None,
                     },
                 ],
                 "version": "2",

@@ -22,7 +22,7 @@ def test_code_to_display_data(code_to_display_fixture_paths):
     actual_serialized_workflow: dict = workflow_display.serialize()
 
     with open(expected_display_data_file_path) as file:
-        expected_serialized_workflow = json.load(file)  # noqa: F841
+        expected_serialized_workflow = json.load(file, object_hook=_custom_obj_hook)  # noqa: F841
 
     def exclude_obj_callback(value, key):
         if key.endswith("input_id']") or key.endswith("['input_variable_id']"):
@@ -35,16 +35,10 @@ def test_code_to_display_data(code_to_display_fixture_paths):
         actual_serialized_workflow,
         exclude_obj_callback=exclude_obj_callback,
         significant_digits=6,
+        # This is for the input_variables order being out of order sometimes.
+        ignore_order=True
     )
 
-# Use a hash similar to our serializer for the json library
-def _process_conditions_hook(key, value, current_json_obj):
-    if key == 'type' and value == 'CONDITIONAL':
-        node_id = current_json_obj.get('id')
-        conditions = current_json_obj.get('data').get('conditions')
-        for idx, condition in enumerate(conditions):
-            condition_id = str(uuid4_from_hash(f"{node_id}|conditions|{idx}"))
-            condition['id'] = condition_id
 
 def _process_position_hook(key, value):
     """
@@ -70,7 +64,6 @@ def _custom_obj_hook(json_dict):
     Private hook to convert some raw json items to values we expect.
     """
     for key, value in list(json_dict.items()):
-        _process_conditions_hook(key, value, json_dict)
         _process_position_hook(key,value)
         _process_negated_hook(key, value, json_dict)
     return json_dict

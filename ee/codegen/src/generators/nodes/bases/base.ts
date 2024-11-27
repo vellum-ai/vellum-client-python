@@ -151,7 +151,7 @@ export abstract class BaseNode<
     return generatedNodeInputs;
   }
 
-  private getPortDisplay(): python.Field | undefined {
+  protected getPortDisplay(): python.Field | undefined {
     if (
       !("data" in this.nodeData) ||
       !("sourceHandleId" in this.nodeData.data)

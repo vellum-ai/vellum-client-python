@@ -10,7 +10,13 @@
         },
         "definition": {
           "bases": [],
-          "module": ["vellum", "workflows", "nodes", "bases", "base"],
+          "module": [
+            "vellum",
+            "workflows",
+            "nodes",
+            "bases",
+            "base"
+          ],
           "name": "BaseNode"
         },
         "inputs": [],
@@ -163,18 +169,18 @@
           "bases": [
             {
               "module": [
+                "vellum",
                 "workflows",
                 "nodes",
-                "wrappers",
-                "conditional_node"
+                "displayable",
+                "conditional_node",
+                "node"
               ],
               "name": "ConditionalNode"
             }
           ],
           "module": [
-            "workflows",
-            "codegen",
-            "tests",
+            "codegen_integration",
             "fixtures",
             "simple_conditional_node",
             "code",
@@ -274,10 +280,7 @@
     "definition": {
       "name": "Workflow",
       "module": [
-        "vellum",
-        "workflows",
-        "codegen",
-        "tests",
+        "codegen_integration",
         "fixtures",
         "simple_conditional_node",
         "code",
@@ -303,5 +306,11 @@
       "extensions": null
     }
   ],
-  "output_variables": []
+  "output_variables": [
+    {
+      "id": "d8381526-1225-4843-8c22-eec7747445e4",
+      "key": "final-output",
+      "type": "STRING"
+    }
+  ]
 }

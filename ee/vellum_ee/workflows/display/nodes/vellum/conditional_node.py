@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from uuid import UUID
-from typing import Any, ClassVar, Dict, Generic, List, Optional, TypeVar
+from typing import Any, ClassVar, Dict, Generic, List, Optional, TypeVar, Union, Tuple
 
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
@@ -29,7 +29,7 @@ from vellum.workflows.expressions.not_between import NotBetweenExpression
 from vellum.workflows.expressions.not_in import NotInExpression
 from vellum.workflows.expressions.or_ import OrExpression
 from vellum.workflows.nodes.displayable import ConditionalNode
-from vellum.workflows.types.core import JsonObject
+from vellum.workflows.types.core import JsonObject, ConditionType
 
 _ConditionalNodeType = TypeVar("_ConditionalNodeType", bound=ConditionalNode)
 
@@ -39,11 +39,13 @@ class RuleIdMap:
     id: UUID
     lhs: Optional["RuleIdMap"]
     rhs: Optional["RuleIdMap"]
+    field_node_input_id: Optional[UUID]
+    value_node_input_id: Optional[UUID]
 
 @dataclass
 class ConditionId:
     id: UUID
-    rule_group_id: UUID
+    rule_group_id: Optional[UUID]
 
 
 class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Generic[_ConditionalNodeType]):
@@ -73,8 +75,8 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                 if rule_id_map is not None
                 else str(uuid4_from_hash(f"{node_id}|rule|{','.join(str(p) for p in path)}"))
             )
-            field_node_input_id = None
-            value_node_input_id = None
+
+            current_id, field_node_input_id, value_node_input_id = self.get_nested_rule_details_by_path(rule_ids, path) if rule_ids else self._generate_hash_for_rule_ids(node_id, descriptor)
 
             # Recursive step: Keep recursing until we hit the other descriptors
             if isinstance(descriptor, (AndExpression, OrExpression)):
@@ -97,7 +99,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
             # Base cases for other descriptors
             elif isinstance(descriptor, (IsNullExpression, IsNotNullExpression)):
                 expression_node_input = create_node_input(
-                    node_id, f"{rule_id}.field", descriptor._expression, display_context, None
+                    node_id, f"{current_id}.field", descriptor._expression, display_context, field_node_input_id
                 )
                 node_inputs.append(expression_node_input)
                 field_node_input_id = expression_node_input.id
@@ -105,10 +107,10 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
             elif isinstance(descriptor, (BetweenExpression, NotBetweenExpression)):
                 field_node_input = create_node_input(
-                    node_id, f"{rule_id}.field", descriptor._value, display_context, None
+                    node_id, f"{current_id}.field", descriptor._value, display_context, field_node_input_id
                 )
                 value_node_input = create_node_input(
-                    node_id, f"{rule_id}.value", f"{descriptor._start},{descriptor._end}", display_context, None
+                    node_id, f"{current_id}.value", f"{descriptor._start},{descriptor._end}", display_context, value_node_input_id
                 )
                 node_inputs.extend([field_node_input, value_node_input])
                 operator = self._convert_descriptor_to_operator(descriptor)
@@ -119,11 +121,11 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                 lhs = descriptor._lhs  # type: ignore[attr-defined]
                 rhs = descriptor._rhs  # type: ignore[attr-defined]
 
-                lhs_node_input = create_node_input(node_id, f"{rule_id}.field", lhs, display_context, None)
+                lhs_node_input = create_node_input(node_id, f"{current_id}.field", lhs, display_context, field_node_input_id)
                 node_inputs.append(lhs_node_input)
 
                 if descriptor._rhs is not None:  # type: ignore[attr-defined]
-                    rhs_node_input = create_node_input(node_id, f"{rule_id}.value", rhs, display_context, None)
+                    rhs_node_input = create_node_input(node_id, f"{current_id}.value", rhs, display_context, value_node_input_id)
                     node_inputs.append(rhs_node_input)
                     value_node_input_id = rhs_node_input.id
 
@@ -131,46 +133,55 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                 field_node_input_id = lhs_node_input.id
 
             return {
-                "id": rule_id,
+                "id": str(current_id),
                 "rules": None,
                 "combinator": None,
                 "negated": False,
-                "field_node_input_id": field_node_input_id,
+                "field_node_input_id": str(field_node_input_id),
                 "operator": operator,
-                "value_node_input_id": value_node_input_id,
+                "value_node_input_id": str(value_node_input_id),
             }
 
         conditions = []
         for idx, port in enumerate(node.Ports):
-            if port._condition is None or port._condition_type is None:
-                continue
-
 
             condition_id = str(condition_ids[idx].id if condition_ids else uuid4_from_hash(f"{node_id}|conditions|{idx}"))
             rule_group_id = str(condition_ids[idx].rule_group_id if condition_ids else uuid4_from_hash(f"{condition_id}|rule_group"))
             source_handle_id = str(source_handle_ids.get(idx) or uuid4_from_hash(f"{node_id}|handles|{idx}"))
 
-            rule_ids = self._get_rule_ids()
-            condition_rule = serialize_rule(port._condition, [idx], rule_ids[idx] if len(rule_ids) > idx else None)
-            rules = condition_rule["rules"] if condition_rule["rules"] else [condition_rule]
+            if port._condition is None:
+                if port._condition_type == ConditionType.ELSE:
+                    conditions.append({
+                        "id": condition_id,
+                        "type": ConditionType.ELSE.value,
+                        "source_handle_id": source_handle_id,
+                        "data": None
+                    })
+                else:
+                    continue
 
-            conditions.append(
-                {
-                    "id": condition_id,
-                    "type": port._condition_type.value,
-                    "source_handle_id": source_handle_id,
-                    "data": {
-                        "id": rule_group_id,
-                        "rules": rules,
-                        "combinator": "AND",
-                        "negated": False,
-                        "field_node_input_id": None,
-                        "operator": None,
-                        "value_node_input_id": None,
-                    },
-                }
-            )
+            else:
+                rule_ids = self._get_rule_ids()
+                condition_rule = serialize_rule(port._condition, [idx], rule_ids[idx] if len(rule_ids) > idx else None)
+                rules = condition_rule["rules"] if condition_rule["rules"] else [condition_rule]
+                conditions.append(
+                    {
+                        "id": condition_id,
+                        "type": port._condition_type.value,
+                        "source_handle_id": source_handle_id,
+                        "data": {
+                            "id": rule_group_id,
+                            "rules": rules,
+                            "combinator": "AND",
+                            "negated": False,
+                            "field_node_input_id": None,
+                            "operator": None,
+                            "value_node_input_id": None,
+                        },
+                    }
+                )
 
+        print(node_inputs)
         return {
             "id": str(node_id),
             "type": "CONDITIONAL",
@@ -224,6 +235,36 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
             return "notBetween"
         else:
             raise ValueError(f"Unsupported descriptor type: {descriptor}")
+
+    def get_nested_rule_details_by_path(
+            self, rule_ids: List[RuleIdMap], path: List[int]
+    ) -> Optional[Tuple[UUID, UUID, UUID]]:
+        current_rule = rule_ids[path[0]]
+
+        for step in path[1:]:
+            if step == 0 and current_rule.lhs:
+                current_rule = current_rule.lhs
+            elif step == 1 and current_rule.rhs:
+                current_rule = current_rule.rhs
+            else:
+                return None
+
+        # This is essentially a leaf
+        if current_rule.lhs and current_rule.lhs.lhs is None and current_rule.lhs.rhs is None:
+            return (
+                current_rule.lhs.id,
+                current_rule.lhs.field_node_input_id,
+                current_rule.lhs.value_node_input_id,
+            )
+
+        return None
+
+    def _generate_hash_for_rule_ids(self, node_id, descriptor) -> Tuple[UUID, UUID, UUID]:
+        return (
+            uuid4_from_hash(f"{node_id}|{descriptor.name}|current"),
+            uuid4_from_hash(f"{node_id}|{descriptor.name}||field"),
+            uuid4_from_hash(f"{node_id}|{descriptor.name}||value")
+        )
 
     def _get_source_handle_ids(self) -> Dict[int, UUID]:
         return self._get_explicit_node_display_attr("source_handle_ids", Dict[int, UUID]) or {}

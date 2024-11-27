@@ -5,6 +5,7 @@ export function workflowContextFactory({
   moduleName,
   workflowLabel,
   workflowClassName,
+  workflowRawEdges,
 }: Partial<WorkflowContext.Args> = {}): WorkflowContext {
   return new WorkflowContext({
     absolutePathToOutputDirectory:
@@ -13,5 +14,6 @@ export function workflowContextFactory({
     workflowClassName: workflowLabel || "Workflow",
     workflowLabel: workflowClassName || "Workflow",
     vellumApiKey: "<TEST_API_KEY>",
+    workflowRawEdges: workflowRawEdges || [],
   });
 }

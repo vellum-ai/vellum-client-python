@@ -52,9 +52,9 @@ export async function createNodeContext(
         case "DEPLOYMENT": {
           const { releaseTag, workflowDeploymentId } = subworkflowNodeData.data;
           const workflowDeploymentHistoryItem =
-            await new WorkflowDeploymentsClient(
-              {}
-            ).workflowDeploymentHistoryItemRetrieve(
+            await new WorkflowDeploymentsClient({
+              apiKey: args.workflowContext.vellumApiKey,
+            }).workflowDeploymentHistoryItemRetrieve(
               releaseTag,
               workflowDeploymentId
             );

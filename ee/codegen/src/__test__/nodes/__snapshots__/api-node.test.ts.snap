@@ -58,10 +58,10 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
 `;
 
 exports[`ApiNode > basic > getNodeFile 1`] = `
-"from vellum.workflows.nodes.displayable import ApiNode
+"from vellum.workflows.nodes.displayable import APINode as BaseAPINode
 
 
-class APINode(ApiNode):
+class APINode(BaseAPINode):
     pass
 "
 `;
@@ -128,12 +128,12 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
 `;
 
 exports[`ApiNode > reject on error enabled > getNodeFile 1`] = `
-"from vellum.workflows.nodes.displayable import ApiNode
+"from vellum.workflows.nodes.displayable import APINode as BaseAPINode
 from vellum.workflows.nodes.core import TryNode
 
 
 @TryNode.wrap()
-class APINode(ApiNode):
+class APINode(BaseAPINode):
     pass
 "
 `;

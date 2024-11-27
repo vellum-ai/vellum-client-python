@@ -7,7 +7,7 @@ import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base"
 import { ApiNode as ApiNodeType } from "src/types/vellum";
 
 export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
-  baseNodeClassName = "ApiNode";
+  baseNodeClassName = "APINode";
   baseNodeDisplayClassName = "BaseAPINodeDisplay";
 
   getNodeClassBodyStatements(): AstNode[] {

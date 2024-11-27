@@ -17,7 +17,7 @@ import { InputVariableContext } from "./context/input-variable-context";
 import { InitFile, Inputs, Workflow } from "./generators";
 import { BaseNode } from "./generators/nodes/bases";
 import { GuardrailNode } from "./generators/nodes/guardrail-node";
-import { SubworkflowNode } from "./generators/nodes/inline-subworkflow-node";
+import { InlineSubworkflowNode } from "./generators/nodes/inline-subworkflow-node";
 import { SearchNode } from "./generators/nodes/search-node";
 import { TemplatingNode } from "./generators/nodes/templating-node";
 
@@ -317,7 +317,6 @@ from .workflow import *\
       workflowContext: this.workflowContext,
       inputs,
       nodes: nodesToGenerate,
-      edges: this.workflowVersionExecConfig.workflowRawData.edges,
       displayData: this.workflowVersionExecConfig.workflowRawData.displayData,
     });
 
@@ -351,7 +350,7 @@ from .workflow import *\
           const variant = nodeData.data.variant;
           switch (variant) {
             case "INLINE":
-              node = new SubworkflowNode({
+              node = new InlineSubworkflowNode({
                 workflowContext: this.workflowContext,
                 nodeContext: nodeContext as InlineSubworkflowNodeContext,
               });

@@ -11,6 +11,7 @@ import {
 import { workflowOutputContextFactory } from "src/__test__/helpers/workflow-output-context-factory";
 import * as codegen from "src/codegen";
 import { createNodeContext, WorkflowContext } from "src/context";
+import { WorkflowEdge } from "src/types/vellum";
 
 describe("Workflow", () => {
   let workflowContext: WorkflowContext;
@@ -44,7 +45,6 @@ describe("Workflow", () => {
         workflowContext,
         inputs,
         nodes: [],
-        edges: [],
       });
 
       workflow.getWorkflowFile().write(writer);
@@ -58,7 +58,6 @@ describe("Workflow", () => {
         workflowContext,
         inputs,
         nodes: [],
-        edges: [],
       });
 
       workflow.getWorkflowFile().write(writer);
@@ -86,7 +85,6 @@ describe("Workflow", () => {
         workflowContext,
         inputs,
         nodes: [],
-        edges: [],
       });
 
       workflow.getWorkflowFile().write(writer);
@@ -114,29 +112,32 @@ describe("Workflow", () => {
       });
       workflowContext.addNodeContext(searchNodeContext);
 
+      const edges: WorkflowEdge[] = [
+        {
+          id: "edge-1",
+          type: "DEFAULT",
+          sourceNodeId: entrypointNode.id,
+          sourceHandleId: entrypointNode.data.sourceHandleId,
+          targetNodeId: searchNodeData.id,
+          targetHandleId: searchNodeData.data.sourceHandleId,
+        },
+        {
+          id: "edge-2",
+          type: "DEFAULT",
+          sourceNodeId: searchNodeData.id,
+          sourceHandleId: "some-handle",
+          targetNodeId: "non-existent-node-id",
+          targetHandleId: "some-target-handle",
+        },
+      ];
+
+      workflowContext.addWorkflowEdges(edges);
+
       const workflow = codegen.workflow({
         moduleName,
         workflowContext,
         inputs,
         nodes: [searchNodeData],
-        edges: [
-          {
-            id: "edge-1",
-            type: "DEFAULT",
-            sourceNodeId: entrypointNode.id,
-            sourceHandleId: entrypointNode.data.sourceHandleId,
-            targetNodeId: searchNodeData.id,
-            targetHandleId: searchNodeData.data.sourceHandleId,
-          },
-          {
-            id: "edge-2",
-            type: "DEFAULT",
-            sourceNodeId: searchNodeData.id,
-            sourceHandleId: "some-handle",
-            targetNodeId: "non-existent-node-id",
-            targetHandleId: "some-target-handle",
-          },
-        ],
       });
 
       workflow.getWorkflowFile().write(writer);
@@ -169,21 +170,23 @@ describe("Workflow", () => {
         });
         workflowContext.addNodeContext(searchNodeContext);
 
+        const edges: WorkflowEdge[] = [
+          {
+            id: "edge-1",
+            type: "DEFAULT",
+            sourceNodeId: entrypointNode.id,
+            sourceHandleId: entrypointNode.data.sourceHandleId,
+            targetNodeId: searchNodeData.id,
+            targetHandleId: searchNodeData.data.sourceHandleId,
+          },
+        ];
+        workflowContext.addWorkflowEdges(edges);
+
         const workflow = codegen.workflow({
           moduleName,
           workflowContext,
           inputs,
           nodes: [searchNodeData],
-          edges: [
-            {
-              id: "edge-1",
-              type: "DEFAULT",
-              sourceNodeId: entrypointNode.id,
-              sourceHandleId: entrypointNode.data.sourceHandleId,
-              targetNodeId: searchNodeData.id,
-              targetHandleId: searchNodeData.data.sourceHandleId,
-            },
-          ],
         });
 
         workflow.getWorkflowFile().write(writer);

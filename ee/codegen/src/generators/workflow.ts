@@ -36,8 +36,6 @@ export declare namespace Workflow {
     inputs: Inputs;
     /* The nodes in the workflow */
     nodes: WorkflowDataNode[];
-    /* The edges in the workflow */
-    edges: WorkflowEdge[];
     /* The display data for the workflow */
     displayData?: WorkflowDisplayData;
   }
@@ -52,18 +50,13 @@ export class Workflow {
   private readonly entrypointNodeEdges: WorkflowEdge[];
   private readonly displayData: WorkflowDisplayData | undefined;
 
-  constructor({
-    workflowContext,
-    inputs,
-    nodes,
-    edges,
-    displayData,
-  }: Workflow.Args) {
+  constructor({ workflowContext, inputs, nodes, displayData }: Workflow.Args) {
     this.workflowContext = workflowContext;
     this.inputs = inputs;
     this.nodes = nodes;
     this.displayData = displayData;
 
+    const edges = this.workflowContext.workflowRawEdges;
     const { edgesByPortId, entrypointPortContexts, entrypointNodeEdges } =
       this.getEdgesAndEntrypointNodeContexts({ nodes, edges });
     this.edgesByPortId = edgesByPortId;

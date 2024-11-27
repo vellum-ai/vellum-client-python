@@ -138,3 +138,14 @@ This will bump the version from `0.2.6` to `0.2.6-post1`, `0.2.6-post2`, etc. It
 
 - Version codegen and the sdk independently.
 - Version the SDK with just majors and minors going forward, opening up patch versions for codegen.
+
+We have a GitHub Action that will publish all of the patch versions to NPM (i.e, the ones without a `-post` suffix). If that action fails, or we need to publish a post-release version, we'll need to publish manually.
+
+To publish a package manually, you'll need to run the following commands locally:
+
+```bash
+npm run gar-login
+npm publish
+```
+
+_Note: For some reason, the `gar-login` command doesn't work as part of the `prepublish` script, so it needs to be run separately._

@@ -43,6 +43,7 @@ class RetryNode(BaseNode[StateType], Generic[StateType], metaclass=_RetryNodeMet
             attempt_number = index + 1
             subworkflow = self.subworkflow(
                 parent_state=self.state,
+                context=self._context,
             )
             terminal_event = subworkflow.run(
                 inputs=self.SubworkflowInputs(attempt_number=attempt_number),

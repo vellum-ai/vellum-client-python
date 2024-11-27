@@ -25,6 +25,7 @@ class InlineSubworkflowNode(BaseSubworkflowNode[StateType], Generic[StateType, W
     def run(self) -> Iterator[BaseOutput]:
         subworkflow = self.subworkflow(
             parent_state=self.state,
+            context=self._context,
         )
         subworkflow_stream = subworkflow.stream(
             inputs=self._compile_subworkflow_inputs(),

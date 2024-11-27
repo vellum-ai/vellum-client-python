@@ -59,6 +59,7 @@ class TryNode(BaseNode[StateType], Generic[StateType], metaclass=_TryNodeMeta):
     def run(self) -> Outputs:
         subworkflow = self.subworkflow(
             parent_state=self.state,
+            context=self._context,
         )
         terminal_event = subworkflow.run()
 

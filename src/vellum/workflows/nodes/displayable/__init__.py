@@ -9,6 +9,7 @@ from .final_output_node import FinalOutputNode
 from .guardrail_node import GuardrailNode
 from .inline_prompt_node import InlinePromptNode
 from .merge_node import MergeNode
+from .note_node import NoteNode
 from .prompt_deployment_node import PromptDeploymentNode
 from .search_node import SearchNode
 from .subworkflow_deployment_node import SubworkflowDeploymentNode
@@ -23,6 +24,7 @@ __all__ = [
     "GuardrailNode",
     "MapNode",
     "MergeNode",
+    "NoteNode",
     "SubworkflowDeploymentNode",
     "PromptDeploymentNode",
     "SearchNode",

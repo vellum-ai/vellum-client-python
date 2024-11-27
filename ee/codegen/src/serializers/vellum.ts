@@ -1,7 +1,6 @@
 import {
   ChatMessagePromptBlock,
   ChatMessageRole,
-  FunctionDefinitionPromptBlock,
   JinjaPromptBlock,
   PlainTextPromptBlock,
   PromptBlock,
@@ -203,82 +202,6 @@ export declare namespace ChatMessagePromptTemplateBlockSerializer {
   }
 }
 
-export const FunctionDefinitionPromptTemplateBlockSerializer: ObjectSchema<
-  FunctionDefinitionPromptTemplateBlockSerializer.Raw,
-  FunctionDefinitionPromptBlock
-> = objectSchema({
-  id: stringSchema(),
-  blockType: propertySchema(
-    "block_type",
-    stringLiteralSchema("FUNCTION_DEFINITION")
-  ),
-  state: propertySchema("state", PromptBlockStateSerializer),
-  cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
-  properties: objectSchema({
-    functionName: propertySchema("function_name", stringSchema().optional()),
-    functionDescription: propertySchema(
-      "function_description",
-      stringSchema().optional()
-    ),
-    functionParameters: propertySchema(
-      "function_parameters",
-      anySchema().optional()
-    ),
-    functionForced: propertySchema(
-      "function_forced",
-      booleanSchema().optional()
-    ),
-    functionStrict: propertySchema(
-      "function_strict",
-      booleanSchema().optional()
-    ),
-  }),
-}).transform({
-  transform: (block) =>
-    ({
-      blockType: block.blockType,
-      state: block.state,
-      cacheConfig: block.cacheConfig,
-      functionName: block.properties.functionName,
-      functionDescription: block.properties.functionDescription,
-      functionParameters: block.properties.functionParameters,
-      functionForced: block.properties.functionForced,
-      functionStrict: block.properties.functionStrict,
-    } as FunctionDefinitionPromptBlock),
-  untransform: (block) => ({
-    id: block.id,
-    blockType: block.blockType,
-    state: block.state,
-    cacheConfig: block.cacheConfig,
-    properties: {
-      functionName: block.functionName,
-      functionDescription: block.functionDescription,
-      functionParameters: block.functionParameters,
-      functionForced: block.functionForced,
-      functionStrict: block.functionStrict,
-    },
-  }),
-}) as ObjectSchema<
-  FunctionDefinitionPromptTemplateBlockSerializer.Raw,
-  FunctionDefinitionPromptBlock
->;
-
-export declare namespace FunctionDefinitionPromptTemplateBlockSerializer {
-  interface Raw {
-    id: string;
-    block_type: "FUNCTION_DEFINITION";
-    state: PromptBlockState;
-    cache_config?: { type: "EPHEMERAL" } | null;
-    properties: {
-      function_name?: string | null;
-      function_description?: string | null;
-      function_parameters?: Record<string, unknown> | null;
-      function_forced?: boolean | null;
-      function_strict?: boolean | null;
-    };
-  }
-}
-
 export const VariablePromptTemplateBlockSerializer: ObjectSchema<
   VariablePromptTemplateBlockSerializer.Raw,
   VariablePromptBlock
@@ -408,7 +331,6 @@ export declare namespace PromptTemplateBlockSerializer {
   type Raw =
     | JinjaPromptTemplateBlockSerializer.Raw
     | ChatMessagePromptTemplateBlockSerializer.Raw
-    | FunctionDefinitionPromptTemplateBlockSerializer.Raw
     | VariablePromptTemplateBlockSerializer.Raw
     | RichTextPromptTemplateBlockSerializer.Raw;
 }
@@ -416,7 +338,6 @@ export declare namespace PromptTemplateBlockSerializer {
 const PromptTemplateBlockSerializer = undiscriminatedUnionSchema([
   JinjaPromptTemplateBlockSerializer,
   ChatMessagePromptTemplateBlockSerializer,
-  FunctionDefinitionPromptTemplateBlockSerializer,
   VariablePromptTemplateBlockSerializer,
   RichTextPromptTemplateBlockSerializer,
 ]);

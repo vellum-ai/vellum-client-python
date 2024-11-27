@@ -1,3 +1,4 @@
+import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { NoteNodeContext } from "src/context/node-context/note-node";
@@ -12,12 +13,32 @@ export class NoteNode extends BaseSingleFileNode<
   baseNodeDisplayClassName = "BaseNoteNodeDisplay";
 
   getNodeClassBodyStatements(): AstNode[] {
-    const statements: AstNode[] = [];
-    return statements;
+    // Note Nodes intentionally have no body statements.
+    return [];
   }
 
   getNodeDisplayClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
+
+    statements.push(
+      python.field({
+        name: "text",
+        initializer: python.TypeInstantiation.str(
+          this.nodeData.data.text ?? ""
+        ),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "style",
+        initializer: this.nodeData.data.style
+          ? // TODO: https://app.shortcut.com/vellum/story/5147/correctly-convert-json-to-python-dicts
+            python.codeBlock(JSON.stringify(this.nodeData.data.style))
+          : python.TypeInstantiation.none(),
+      })
+    );
+
     return statements;
   }
 

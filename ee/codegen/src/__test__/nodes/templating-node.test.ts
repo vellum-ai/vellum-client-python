@@ -30,13 +30,13 @@ describe("TemplatingNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = templatingNodeFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as TemplatingNodeContext;
+      })) as TemplatingNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new TemplatingNode({
@@ -57,15 +57,15 @@ describe("TemplatingNode", () => {
   });
 
   describe("reject on error enabled", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = templatingNodeFactory({
         errorOutputId: "e7a1fbea-f5a7-4b31-a9ff-0d26c3de021f",
       });
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as TemplatingNodeContext;
+      })) as TemplatingNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new TemplatingNode({

@@ -18,13 +18,13 @@ describe("FinalOutputNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = finalOutputNodeFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as FinalOutputNodeContext;
+      })) as FinalOutputNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new FinalOutputNode({

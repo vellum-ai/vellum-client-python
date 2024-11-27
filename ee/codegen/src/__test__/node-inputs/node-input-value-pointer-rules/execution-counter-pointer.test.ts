@@ -23,7 +23,7 @@ describe("ExecutionCounterPointer", () => {
 
     const node = searchNodeDataFactory();
     workflowContext.addNodeContext(
-      nodeContextFactory({ workflowContext, nodeData: node })
+      await nodeContextFactory({ workflowContext, nodeData: node })
     );
 
     const executionCounterPointer = new ExecutionCounterPointerRule({

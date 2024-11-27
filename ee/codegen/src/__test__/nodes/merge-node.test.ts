@@ -18,13 +18,13 @@ describe("MergeNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = mergeNodeDataFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as MergeNodeContext;
+      })) as MergeNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new MergeNode({

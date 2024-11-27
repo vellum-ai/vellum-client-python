@@ -94,11 +94,6 @@ export declare namespace WorkflowProjectGenerator {
 export class WorkflowProjectGenerator {
   public readonly workflowVersionExecConfig: WorkflowVersionExecConfig;
   private readonly workflowContext: WorkflowContext;
-  public readonly assets: {
-    inputs: Inputs;
-    workflow: Workflow;
-    nodes: BaseNode<WorkflowDataNode, BaseNodeContext<WorkflowDataNode>>[];
-  };
 
   constructor({
     workflowLabel = "Workflow",
@@ -153,8 +148,6 @@ ${errors.slice(0, 3).map((err) => {
         vellumApiKey,
       });
     }
-
-    this.assets = this.generateAssets();
   }
 
   public getModuleName(): string {
@@ -162,7 +155,7 @@ ${errors.slice(0, 3).map((err) => {
   }
 
   public async generateCode(): Promise<void> {
-    const { inputs, workflow, nodes } = this.assets;
+    const { inputs, workflow, nodes } = await this.generateAssets();
 
     const absolutePathToModuleDirectory = join(
       this.workflowContext.absolutePathToOutputDirectory,
@@ -260,11 +253,11 @@ from .workflow import *\
     return rootDisplayInitFile;
   }
 
-  private generateAssets(): {
+  private async generateAssets(): Promise<{
     inputs: Inputs;
     workflow: Workflow;
     nodes: BaseNode<WorkflowDataNode, BaseNodeContext<WorkflowDataNode>>[];
-  } {
+  }> {
     const moduleName = this.workflowContext.moduleName;
 
     this.workflowVersionExecConfig.inputVariables.forEach((inputVariable) => {
@@ -277,29 +270,33 @@ from .workflow import *\
 
     let entrypointNode: EntrypointNode | undefined;
     const nodesToGenerate: WorkflowDataNode[] = [];
-    this.workflowVersionExecConfig.workflowRawData.nodes.forEach((nodeData) => {
-      if (nodeData.type === "TERMINAL") {
-        this.workflowContext.addWorkflowOutputContext(
-          new WorkflowOutputContext({
-            terminalNodeData: nodeData,
-          })
-        );
-      } else if (nodeData.type === "ENTRYPOINT") {
-        if (entrypointNode) {
-          throw new Error("Multiple entrypoint nodes found");
+    await Promise.all(
+      this.workflowVersionExecConfig.workflowRawData.nodes.map(
+        async (nodeData) => {
+          if (nodeData.type === "TERMINAL") {
+            this.workflowContext.addWorkflowOutputContext(
+              new WorkflowOutputContext({
+                terminalNodeData: nodeData,
+              })
+            );
+          } else if (nodeData.type === "ENTRYPOINT") {
+            if (entrypointNode) {
+              throw new Error("Multiple entrypoint nodes found");
+            }
+            entrypointNode = nodeData;
+            return;
+          }
+
+          nodesToGenerate.push(nodeData);
+
+          const nodeContext = await createNodeContext({
+            workflowContext: this.workflowContext,
+            nodeData,
+          });
+          this.workflowContext.addNodeContext(nodeContext);
         }
-        entrypointNode = nodeData;
-        return;
-      }
-
-      nodesToGenerate.push(nodeData);
-
-      const nodeContext = createNodeContext({
-        workflowContext: this.workflowContext,
-        nodeData,
-      });
-      this.workflowContext.addNodeContext(nodeContext);
-    });
+      )
+    );
     if (!entrypointNode) {
       throw new Error("Entrypoint node not found");
     }

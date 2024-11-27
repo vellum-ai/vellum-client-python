@@ -52,13 +52,13 @@ describe("GuardrailNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = guardrailNodeDataFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as GuardrailNodeContext;
+      })) as GuardrailNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new GuardrailNode({
@@ -79,15 +79,15 @@ describe("GuardrailNode", () => {
   });
 
   describe("reject on error enabled", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = guardrailNodeDataFactory({
         errorOutputId: "38361ff1-c826-49b8-aa8d-28179c3684cc",
       });
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as GuardrailNodeContext;
+      })) as GuardrailNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new GuardrailNode({

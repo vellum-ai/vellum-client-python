@@ -40,13 +40,13 @@ describe("ApiNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = apiNodeFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as ApiNodeContext;
+      })) as ApiNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new ApiNode({
@@ -67,15 +67,15 @@ describe("ApiNode", () => {
   });
 
   describe("reject on error enabled", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = apiNodeFactory({
         errorOutputId: "af589f73-effe-4a80-b48f-fb912ac6ce67",
       });
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as ApiNodeContext;
+      })) as ApiNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new ApiNode({

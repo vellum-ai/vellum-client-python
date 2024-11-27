@@ -90,10 +90,10 @@ module_root = name_parts[: name_parts.index("events")]
                     },
                 ),
                 parent=NodeParentContext(
-                    definition=MockNode,
+                    node_definition=MockNode,
                     span_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
                     parent=WorkflowParentContext(
-                        definition=MockWorkflow,
+                        workflow_definition=MockWorkflow,
                         span_id=UUID("123e4567-e89b-12d3-a456-426614174000")
                     )
                 )

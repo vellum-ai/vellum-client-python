@@ -1,5 +1,5 @@
 import json
-from typing import Dict
+from typing import Dict, Any
 
 from deepdiff import DeepDiff
 
@@ -60,7 +60,7 @@ def _process_negated_hook(key, value, current_json_obj) -> None:
     if key == 'negated' and value is None:
         current_json_obj[key] = False
 
-def _custom_obj_hook(json_dict) -> Dict[str, any]:
+def _custom_obj_hook(json_dict) -> Dict[str, Any]:
     """
     Private hook to convert some raw json items to values we expect.
     """

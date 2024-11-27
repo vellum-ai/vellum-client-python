@@ -1,5 +1,5 @@
 import json
-from typing import Any, ClassVar, Dict, Generic, TypeVar
+from typing import Any, ClassVar, Dict, Generic, TypeVar, Union
 
 from vellum.workflows.nodes import NoteNode
 from vellum.workflows.types.core import JsonObject
@@ -11,7 +11,7 @@ _NoteNodeType = TypeVar("_NoteNodeType", bound=NoteNode)
 
 class BaseNoteNodeDisplay(BaseNodeVellumDisplay[_NoteNodeType], Generic[_NoteNodeType]):
     text: ClassVar[str] = ""
-    style: ClassVar[Dict[str, Any] | None] = None
+    style: ClassVar[Union[Dict[str, Any], None]] = None
 
     def serialize(
         self, display_context: WorkflowDisplayContext, **kwargs: Any

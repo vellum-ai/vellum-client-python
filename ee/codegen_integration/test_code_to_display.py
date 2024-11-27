@@ -30,7 +30,6 @@ def test_code_to_display_data(code_to_display_fixture_paths):
 
         return False
 
-    breakpoint()
     assert not DeepDiff(
         expected_serialized_workflow,
         actual_serialized_workflow,

@@ -122,7 +122,7 @@
                           "type": "CONSTANT_VALUE",
                           "data": {
                             "type": "NUMBER",
-                            "value": 8.0
+                            "value": 8
                           }
                         }
                       ],
@@ -363,16 +363,7 @@
     },
     "definition": {
       "name": "Workflow",
-      "module": [
-        "vellum",
-        "workflows",
-        "codegen",
-        "tests",
-        "fixtures",
-        "simple_inline_subworkflow_node",
-        "code",
-        "workflow"
-      ]
+      "module": ["codegen_integration", "fixtures", "simple_inline_subworkflow_node", "code", "workflow"]
     }
   },
   "input_variables": [

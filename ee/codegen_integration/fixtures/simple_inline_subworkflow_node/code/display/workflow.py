@@ -13,8 +13,6 @@ from vellum_ee.workflows.display.vellum import (
 )
 from vellum_ee.workflows.display.workflows.vellum_workflow_display import VellumWorkflowDisplay
 
-from ee.vellum_ee.workflows.display.nodes.types import NodeOutputDisplay
-
 from ..inputs import Inputs
 from ..nodes.final_output import FinalOutput
 from ..nodes.subworkflow_node import SubworkflowNode

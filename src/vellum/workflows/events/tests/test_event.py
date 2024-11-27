@@ -7,6 +7,7 @@ from deepdiff import DeepDiff
 
 from vellum.workflows.errors.types import VellumError, VellumErrorCode
 from vellum.workflows.events.node import NodeExecutionInitiatedBody, NodeExecutionInitiatedEvent
+from vellum.workflows.events.types import NodeParentContext, WorkflowParentContext
 from vellum.workflows.events.workflow import (
     WorkflowExecutionFulfilledBody,
     WorkflowExecutionFulfilledEvent,
@@ -73,6 +74,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "foo": "bar",
                     },
                 },
+                "parent": None,
             },
         ),
         (
@@ -87,6 +89,14 @@ module_root = name_parts[: name_parts.index("events")]
                         MockNode.node_foo: "bar",
                     },
                 ),
+                parent=NodeParentContext(
+                    node_definition=MockNode,
+                    span_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
+                    parent=WorkflowParentContext(
+                        workflow_definition=MockWorkflow,
+                        span_id=UUID("123e4567-e89b-12d3-a456-426614174000")
+                    )
+                )
             ),
             {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
@@ -103,6 +113,23 @@ module_root = name_parts[: name_parts.index("events")]
                     "inputs": {
                         "node_foo": "bar",
                     },
+                },
+                "parent": {
+                    "node_definition": {
+                        "name": "MockNode",
+                        "module": module_root + ["events", "tests", "test_event"],
+                    },
+                    "parent": {
+                        "workflow_definition": {
+                            "name": "MockWorkflow",
+                            "module": module_root + ["events", "tests", "test_event"],
+                        },
+                        "type": "WORKFLOW",
+                        "parent": None,
+                        "span_id": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "type": "WORKFLOW_NODE",
+                    "span_id": "123e4567-e89b-12d3-a456-426614174000"
                 },
             },
         ),
@@ -137,6 +164,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "value": "foo",
                     },
                 },
+                "parent": None
             },
         ),
         (
@@ -168,6 +196,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "example": "foo",
                     },
                 },
+                "parent": None,
             },
         ),
         (
@@ -201,6 +230,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "code": "USER_DEFINED_ERROR",
                     },
                 },
+                "parent": None,
             },
         ),
     ],

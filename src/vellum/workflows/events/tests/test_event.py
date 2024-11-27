@@ -7,6 +7,7 @@ from deepdiff import DeepDiff
 
 from vellum.workflows.errors.types import VellumError, VellumErrorCode
 from vellum.workflows.events.node import NodeExecutionInitiatedBody, NodeExecutionInitiatedEvent
+from vellum.workflows.events.types import NodeParentContext, WorkflowParentContext
 from vellum.workflows.events.workflow import (
     WorkflowExecutionFulfilledBody,
     WorkflowExecutionFulfilledEvent,
@@ -88,6 +89,14 @@ module_root = name_parts[: name_parts.index("events")]
                         MockNode.node_foo: "bar",
                     },
                 ),
+                parent=NodeParentContext(
+                    definition=MockNode,
+                    span_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
+                    parent=WorkflowParentContext(
+                        definition=MockWorkflow,
+                        span_id=UUID("123e4567-e89b-12d3-a456-426614174000")
+                    )
+                )
             ),
             {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
@@ -105,7 +114,21 @@ module_root = name_parts[: name_parts.index("events")]
                         "node_foo": "bar",
                     },
                 },
-                "parent": None,
+                "parent": {
+                    "definition": {
+                        "name": "MockNode",
+                        "module": module_root + ["events", "tests", "test_event"],
+                    },
+                    "parent": {
+                        "definition": {
+                            "name": "MockWorkflow",
+                            "module": module_root + ["events", "tests", "test_event"],
+                        },
+                        "parent": None,
+                        "span_id": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "span_id": "123e4567-e89b-12d3-a456-426614174000"
+                },
             },
         ),
         (

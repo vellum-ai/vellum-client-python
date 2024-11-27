@@ -2,13 +2,17 @@ from datetime import datetime
 from enum import Enum
 import json
 from uuid import UUID, uuid4
-from typing import Any, Dict, Literal, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union
 
-from pydantic import Field
+from pydantic import Field, field_serializer
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
 from vellum.workflows.state.encoder import DefaultStateEncoder
 from vellum.workflows.types.utils import datetime_now
+
+if TYPE_CHECKING:
+    from vellum.workflows.nodes.bases.base import BaseNode
+    from vellum.workflows.workflows.base import BaseWorkflow
 
 
 class WorkflowEventType(Enum):
@@ -42,14 +46,9 @@ def default_serializer(obj: Any) -> Any:
         )
     )
 
-
 class BaseParentContext(UniversalBaseModel):
     span_id: UUID
-    parent: 'Optional[ParentContext]' = None
-
-
-class WorkflowParentContext(BaseParentContext):
-    class_name: str
+    parent: Optional['ParentContext'] = None
 
 
 class DeploymentParentContext(BaseParentContext):
@@ -63,13 +62,24 @@ class DeploymentParentContext(BaseParentContext):
 
 
 class NodeParentContext(BaseParentContext):
-    node_id: UUID
-    class_name: str
+    definition: Type['BaseNode']
+
+    @field_serializer("definition")
+    def serialize_node_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
+        return serialize_type_encoder(definition)
+
+
+class WorkflowParentContext(BaseParentContext):
+    definition: Type['BaseWorkflow']
+
+    @field_serializer("definition")
+    def serialize_node_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
+        return serialize_type_encoder(definition)
 
 
 ParentContext = Union[
-    WorkflowParentContext,
     NodeParentContext,
+    WorkflowParentContext,
     DeploymentParentContext,
 ]
 
@@ -80,4 +90,4 @@ class BaseEvent(UniversalBaseModel):
     api_version: Literal["2024-10-25"] = "2024-10-25"
     trace_id: UUID
     span_id: UUID
-    parent: Optional[ParentContext] = None
+    parent: Optional['ParentContext'] = None

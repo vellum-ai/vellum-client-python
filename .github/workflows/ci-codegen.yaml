@@ -1,14 +1,30 @@
 name: ci-codegen
 
-on:
-  push:
-    paths:
-      - ".github/workflows/ci-codegen.yaml"
-      - "pyproject.toml"
-      - "ee/codegen/**"
-      - "ee/codegen_integration/**"
+on: [push]
 
 jobs:
+  compile:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm install
+        working-directory: ee/codegen
+      - name: Format
+        run: npm run format:check
+        working-directory: ee/codegen
+      - name: Lint
+        run: npm run lint
+        working-directory: ee/codegen
+      - name: Compile
+        run: npm run types
+        working-directory: ee/codegen
+
   test:
     runs-on: ubuntu-20.04
 
@@ -35,18 +51,41 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Format
-        run: npm run format:check
-        working-directory: ee/codegen
-
-      - name: Lint
-        run: npm run lint
-        working-directory: ee/codegen
-
-      - name: Type check
-        run: npm run types
-        working-directory: ee/codegen
-
       - name: Test
         run: npm test
         working-directory: ee/codegen
+
+  publish:
+    needs: [compile, test]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ee/codegen
+
+      - name: Build
+        run: npm run build
+        working-directory: ee/codegen
+
+      - name: Authenticate with registry
+        run: npm run gar-login
+        working-directory: ee/codegen
+
+      - name: Publish
+        run: npm publish
+        working-directory: ee/codegen
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Publishing failed. Please check the logs and publish manually."
+          echo "Please see the ee/codegen/README.md for more information."

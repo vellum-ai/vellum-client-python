@@ -66,6 +66,7 @@ export abstract class BaseNestedWorkflowNode<
       workflowsSdkModulePath:
         this.workflowContext.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
       vellumApiKey: this.workflowContext.vellumApiKey,
+      workflowRawEdges: this.workflowContext.workflowRawEdges,
     });
 
     return new Map([

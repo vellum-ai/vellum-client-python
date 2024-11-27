@@ -3,6 +3,7 @@ import { Reference } from "@fern-api/python-ast/Reference";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { VellumValue } from "vellum-ai/api/types";
 
+import { PORTS_CLASS_NAME } from "src/constants";
 import { ConditionalNodeContext } from "src/context/node-context/conditional-node";
 import { ConditionalNodePort } from "src/generators/conditional-node-port";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
@@ -76,6 +77,23 @@ export class ConditionalNode extends BaseSingleFileNode<
 
     statements.push(
       python.field({
+        name: "label",
+        initializer: python.TypeInstantiation.str(this.nodeData.data.label),
+      }),
+      python.field({
+        name: "node_id",
+        initializer: python.TypeInstantiation.uuid(this.nodeData.id),
+      }),
+      python.field({
+        name: "target_handle_id",
+        initializer: python.TypeInstantiation.uuid(
+          this.nodeData.data.targetHandleId
+        ),
+      })
+    );
+
+    statements.push(
+      python.field({
         name: "source_handle_ids",
         initializer: python.TypeInstantiation.dict(
           this.nodeData.data.conditions.map((condition, idx) => ({
@@ -135,23 +153,23 @@ export class ConditionalNode extends BaseSingleFileNode<
   ): AstNode[] {
     const conditionIdsList: AstNode[] = [];
     nodeData.conditions.forEach((condition) => {
-      if (condition.data) {
-        conditionIdsList.push(
-          python.instantiateClass({
-            classReference: conditionIdRef,
-            arguments_: [
-              python.methodArgument({
-                name: "id",
-                value: python.TypeInstantiation.uuid(condition.id),
-              }),
-              python.methodArgument({
-                name: "rule_group_id",
-                value: python.TypeInstantiation.uuid(condition.data.id),
-              }),
-            ],
-          })
-        );
-      }
+      conditionIdsList.push(
+        python.instantiateClass({
+          classReference: conditionIdRef,
+          arguments_: [
+            python.methodArgument({
+              name: "id",
+              value: python.TypeInstantiation.uuid(condition.id),
+            }),
+            python.methodArgument({
+              name: "rule_group_id",
+              value: condition.data
+                ? python.TypeInstantiation.uuid(condition.data.id)
+                : python.TypeInstantiation.none(),
+            }),
+          ],
+        })
+      );
     });
     return conditionIdsList;
   }
@@ -183,6 +201,13 @@ export class ConditionalNode extends BaseSingleFileNode<
 
     let lhs = null;
     let rhs = null;
+    let fieldId = null;
+    let valueId = null;
+
+    if (!ruleData.rules) {
+      fieldId = ruleData.fieldNodeInputId;
+      valueId = ruleData.valueNodeInputId;
+    }
 
     // Check first rule in the arr (lhs)
     if (ruleData.rules && ruleData.rules[0]) {
@@ -208,6 +233,18 @@ export class ConditionalNode extends BaseSingleFileNode<
         python.methodArgument({
           name: "rhs",
           value: rhs ? rhs : python.TypeInstantiation.none(),
+        }),
+        python.methodArgument({
+          name: "field_node_input_id",
+          value: fieldId
+            ? python.TypeInstantiation.uuid(fieldId)
+            : python.TypeInstantiation.none(),
+        }),
+        python.methodArgument({
+          name: "value_node_input_id",
+          value: valueId
+            ? python.TypeInstantiation.uuid(valueId)
+            : python.TypeInstantiation.none(),
         }),
       ],
     });
@@ -242,5 +279,61 @@ export class ConditionalNode extends BaseSingleFileNode<
 
   protected getErrorOutputId(): undefined {
     return undefined;
+  }
+
+  protected getPortDisplay(): python.Field | undefined {
+    const portDisplayOverridesDict = new Map();
+
+    Array.from(this.workflowContext.portContextById.entries()).forEach(
+      ([portId, _], idx) => {
+        const conditionData = this.nodeData.data.conditions.find(
+          (condition) => condition.sourceHandleId === portId
+        );
+
+        if (!conditionData) {
+          return;
+        }
+
+        const edge = this.workflowContext.workflowRawEdges.find(
+          (edge) => edge.sourceHandleId === portId
+        );
+
+        if (!edge) {
+          return;
+        }
+
+        const portName = `branch_${idx + 1}`;
+
+        const portDisplayOverrides = python.instantiateClass({
+          classReference: python.reference({
+            name: "PortDisplayOverrides",
+            modulePath:
+              this.workflowContext.sdkModulePathNames
+                .NODE_DISPLAY_TYPES_MODULE_PATH,
+          }),
+          arguments_: [
+            python.methodArgument({
+              name: "id",
+              value: python.TypeInstantiation.uuid(edge.sourceHandleId),
+            }),
+          ],
+        });
+
+        portDisplayOverridesDict.set(portName, portDisplayOverrides);
+      }
+    );
+    return python.field({
+      name: "port_displays",
+      initializer: python.TypeInstantiation.dict(
+        Array.from(portDisplayOverridesDict.entries()).map(([key, value]) => ({
+          key: python.reference({
+            name: this.nodeContext.nodeClassName,
+            modulePath: this.nodeContext.nodeModulePath,
+            attribute: [PORTS_CLASS_NAME, key],
+          }),
+          value: value,
+        }))
+      ),
+    });
   }
 }

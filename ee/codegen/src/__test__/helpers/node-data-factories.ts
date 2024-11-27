@@ -621,11 +621,11 @@ export function subworkflowDeploymentNodeDataFactory(): SubworkflowNode {
 
 export function conditionalNodeFactory(): ConditionalNode {
   const nodeData: ConditionalNode = {
-    id: "30bec4c1-d6fa-437e-9498-f55a7af91931",
+    id: "b81a4453-7b80-41ea-bd55-c62df8878fd3",
     type: WorkflowNodeType.CONDITIONAL,
     data: {
       label: "Conditional Node",
-      targetHandleId: "2dbef7bb-7a6c-4d05-9906-51089b621874",
+      targetHandleId: "842b9dda-7977-47ad-a322-eb15b4c7069d",
       conditions: [
         {
           id: "8d0d8b56-6c17-4684-9f16-45dd6ce23060",

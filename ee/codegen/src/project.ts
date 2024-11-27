@@ -140,6 +140,7 @@ ${errors.slice(0, 3).map((err) => {
       }
 
       this.workflowVersionExecConfig = workflowVersionExecConfigResult.value;
+      const rawEdges = this.workflowVersionExecConfig.workflowRawData.edges;
       this.workflowContext = new WorkflowContext({
         workflowsSdkModulePath: rest.workflowsSdkModulePath,
         absolutePathToOutputDirectory: rest.absolutePathToOutputDirectory,
@@ -147,6 +148,7 @@ ${errors.slice(0, 3).map((err) => {
         workflowLabel,
         workflowClassName,
         vellumApiKey,
+        workflowRawEdges: rawEdges,
       });
     }
   }

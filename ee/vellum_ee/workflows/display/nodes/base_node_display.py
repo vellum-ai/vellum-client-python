@@ -1,7 +1,7 @@
 from functools import cached_property
 import inspect
 from uuid import UUID
-from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Type, TypeVar, get_args
+from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Type, TypeVar, get_args, get_origin, cast
 
 from vellum_ee.workflows.display.nodes.types import NodeOutputDisplay, PortDisplay, PortDisplayOverrides
 from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
@@ -91,6 +91,29 @@ class BaseNodeDisplay(Generic[NodeType]):
 
         if node_display_attribute is None:
             return None
+
+        origin = get_origin(attribute_type)
+        args = get_args(attribute_type)
+
+        if origin is not None:
+            # Handle Dict
+            if origin is dict and isinstance(node_display_attribute, dict):
+                if len(args) == 2:
+                    key_type, value_type = args
+                    if all(isinstance(k, key_type) and isinstance(v, value_type) for k, v in
+                           node_display_attribute.items()):
+                        return cast(_NodeDisplayAttrType, node_display_attribute)
+                raise ValueError(f"Node {cls.__name__} must define an explicit {attribute} of type {attribute_type}.")
+
+            # Handle List
+            elif origin is list and isinstance(node_display_attribute, list):
+                if len(args) == 1:
+                    item_type = args[0]
+                    if all(isinstance(item, item_type) for item in node_display_attribute):
+                        return cast(_NodeDisplayAttrType, node_display_attribute)
+                raise ValueError(f"Node {cls.__name__} must define an explicit {attribute} of type {attribute_type}.")
+
+            raise ValueError(f"Node {cls.__name__} must define an explicit {attribute} of type {attribute_type}.")
 
         if isinstance(node_display_attribute, attribute_type):
             return node_display_attribute

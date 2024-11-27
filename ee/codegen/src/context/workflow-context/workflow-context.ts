@@ -8,7 +8,11 @@ import { generateSdkModulePaths } from "src/context/workflow-context/sdk-module-
 import { SDK_MODULE_PATHS } from "src/context/workflow-context/types";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
 import { BaseNode } from "src/generators/nodes/bases";
-import { EntrypointNode, WorkflowDataNode } from "src/types/vellum";
+import {
+  EntrypointNode,
+  WorkflowDataNode,
+  WorkflowEdge,
+} from "src/types/vellum";
 import { createPythonClassName } from "src/utils/casing";
 
 type InputVariableContextsById = Map<string, InputVariableContext>;
@@ -30,6 +34,7 @@ export declare namespace WorkflowContext {
     workflowsSdkModulePath?: readonly string[];
     portContextByName?: PortContextById;
     vellumApiKey: string;
+    workflowRawEdges: WorkflowEdge[];
   };
 }
 
@@ -66,6 +71,8 @@ export class WorkflowContext {
   public readonly vellumApiKey: string;
   private readonly mlModelNamesById: Record<string, string> = {};
 
+  public readonly workflowRawEdges: WorkflowEdge[];
+
   constructor({
     absolutePathToOutputDirectory,
     moduleName,
@@ -77,6 +84,7 @@ export class WorkflowContext {
     workflowsSdkModulePath = ["vellum", "workflows"] as const,
     portContextByName,
     vellumApiKey,
+    workflowRawEdges,
   }: WorkflowContext.Args) {
     this.absolutePathToOutputDirectory = absolutePathToOutputDirectory;
     this.moduleName = moduleName;
@@ -98,6 +106,7 @@ export class WorkflowContext {
     this.parentNode = parentNode;
 
     this.sdkModulePathNames = generateSdkModulePaths(workflowsSdkModulePath);
+    this.workflowRawEdges = workflowRawEdges;
   }
 
   public addEntrypointNode(entrypointNode: EntrypointNode): void {

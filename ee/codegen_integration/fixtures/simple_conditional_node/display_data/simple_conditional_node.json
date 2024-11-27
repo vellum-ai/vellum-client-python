@@ -8,6 +8,17 @@
           "label": "Entrypoint Node",
           "source_handle_id": "498eed8e-38d5-48b8-bbc4-f45411100502"
         },
+        "definition": {
+          "bases": [],
+          "module": [
+            "vellum",
+            "workflows",
+            "nodes",
+            "bases",
+            "base"
+          ],
+          "name": "BaseNode"
+        },
         "inputs": [],
         "display_data": {
           "width": 124,
@@ -153,6 +164,30 @@
             "x": 1943.4147273142412,
             "y": 292.2355134030261
           }
+        },
+        "definition": {
+          "bases": [
+            {
+              "module": [
+                "vellum",
+                "workflows",
+                "nodes",
+                "displayable",
+                "conditional_node",
+                "node"
+              ],
+              "name": "ConditionalNode"
+            }
+          ],
+          "module": [
+            "codegen_integration",
+            "fixtures",
+            "simple_conditional_node",
+            "code",
+            "nodes",
+            "conditional_node"
+          ],
+          "name": "ConditionalNode"
         }
       },
       {
@@ -190,6 +225,30 @@
             "x": 2750,
             "y": 210
           }
+        },
+        "definition": {
+          "bases": [
+            {
+              "module": [
+                "vellum",
+                "workflows",
+                "nodes",
+                "displayable",
+                "final_output_node",
+                "node"
+              ],
+              "name": "FinalOutputNode"
+            }
+          ],
+          "module": [
+            "codegen_integration",
+            "fixtures",
+            "simple_conditional_node",
+            "code",
+            "nodes",
+            "final_output"
+          ],
+          "name": "FinalOutput"
         }
       }
     ],
@@ -221,10 +280,7 @@
     "definition": {
       "name": "Workflow",
       "module": [
-        "vellum",
-        "workflows",
-        "codegen",
-        "tests",
+        "codegen_integration",
         "fixtures",
         "simple_conditional_node",
         "code",
@@ -237,18 +293,28 @@
       "id": "5f64210f-ec43-48ce-ae40-40a9ba4c4c11",
       "key": "foobar",
       "type": "STRING",
-      "required": null,
+      "required": true,
       "default": null,
-      "extensions": null
+      "extensions": {
+        "color": null
+      }
     },
     {
       "id": "b81c5c88-9528-47d0-8106-14a75520ed47",
       "key": "bazbaz",
       "type": "STRING",
-      "required": null,
+      "required": true,
       "default": null,
-      "extensions": null
+      "extensions": {
+        "color": null
+      }
     }
   ],
-  "output_variables": []
+  "output_variables": [
+    {
+      "id": "d8381526-1225-4843-8c22-eec7747445e4",
+      "key": "final-output",
+      "type": "STRING"
+    }
+  ]
 }

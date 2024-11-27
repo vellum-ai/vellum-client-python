@@ -18,13 +18,13 @@ describe("GenericNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = genericNodeFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as GenericNodeContext;
+      })) as GenericNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new GenericNode({

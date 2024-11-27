@@ -30,13 +30,13 @@ describe("TextSearchNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = searchNodeDataFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as TextSearchNodeContext;
+      })) as TextSearchNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new SearchNode({
@@ -57,15 +57,15 @@ describe("TextSearchNode", () => {
   });
 
   describe("reject on error enabled", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = searchNodeDataFactory({
         errorOutputId: "af589f73-effe-4a80-b48f-fb912ac6ce67",
       });
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as TextSearchNodeContext;
+      })) as TextSearchNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new SearchNode({

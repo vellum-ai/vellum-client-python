@@ -13,7 +13,7 @@ describe("ConditionalNode", () => {
   let writer: Writer;
   let node: ConditionalNode;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     workflowContext = workflowContextFactory();
     writer = new Writer();
 
@@ -30,10 +30,10 @@ describe("ConditionalNode", () => {
       })
     );
 
-    const nodeContext = createNodeContext({
+    const nodeContext = (await createNodeContext({
       workflowContext,
       nodeData,
-    }) as ConditionalNodeContext;
+    })) as ConditionalNodeContext;
     workflowContext.addNodeContext(nodeContext);
 
     node = new ConditionalNode({

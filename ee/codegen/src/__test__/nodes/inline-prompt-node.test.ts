@@ -43,15 +43,15 @@ describe("InlinePromptNode", () => {
     let node: InlinePromptNode;
 
     describe("basic", () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         const nodeData = inlinePromptNodeDataInlineVariantFactory({
           blockType,
         });
 
-        const nodeContext = createNodeContext({
+        const nodeContext = (await createNodeContext({
           workflowContext,
           nodeData,
-        }) as InlinePromptNodeContext;
+        })) as InlinePromptNodeContext;
         workflowContext.addNodeContext(nodeContext);
 
         node = new InlinePromptNode({
@@ -72,16 +72,16 @@ describe("InlinePromptNode", () => {
     });
 
     describe("reject on error enabled", () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         const nodeData = inlinePromptNodeDataInlineVariantFactory({
           blockType,
           errorOutputId: "e7a1fbea-f5a7-4b31-a9ff-0d26c3de021f",
         });
 
-        const nodeContext = createNodeContext({
+        const nodeContext = (await createNodeContext({
           workflowContext,
           nodeData,
-        }) as InlinePromptNodeContext;
+        })) as InlinePromptNodeContext;
         workflowContext.addNodeContext(nodeContext);
 
         node = new InlinePromptNode({
@@ -102,15 +102,15 @@ describe("InlinePromptNode", () => {
     });
 
     describe("legacy prompt variant", () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         const nodeData = inlinePromptNodeDataLegacyVariantFactory({
           blockType,
         });
 
-        const nodeContext = createNodeContext({
+        const nodeContext = (await createNodeContext({
           workflowContext,
           nodeData,
-        }) as InlinePromptNodeContext;
+        })) as InlinePromptNodeContext;
         workflowContext.addNodeContext(nodeContext);
 
         node = new InlinePromptNode({

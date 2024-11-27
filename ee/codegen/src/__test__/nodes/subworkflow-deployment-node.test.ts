@@ -18,13 +18,13 @@ describe("SubworkflowDeploymentNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = subworkflowDeploymentNodeDataFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as SubworkflowDeploymentNodeContext;
+      })) as SubworkflowDeploymentNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new SubworkflowDeploymentNode({

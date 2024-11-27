@@ -8,13 +8,13 @@ import {
   WorkflowNodeType as WorkflowNodeTypeEnum,
 } from "src/types/vellum";
 
-export function nodeContextFactory({
+export async function nodeContextFactory({
   workflowContext,
   nodeData,
-}: Partial<
-  BaseNodeContext.Args<WorkflowDataNode>
-> = {}): BaseNodeContext<WorkflowDataNode> {
-  return createNodeContext({
+}: Partial<BaseNodeContext.Args<WorkflowDataNode>> = {}): Promise<
+  BaseNodeContext<WorkflowDataNode>
+> {
+  return await createNodeContext({
     workflowContext: workflowContext ?? workflowContextFactory(),
     nodeData: nodeData ?? {
       id: "search",

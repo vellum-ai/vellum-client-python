@@ -18,7 +18,7 @@ describe("Workflow", () => {
   const moduleName = "test";
   const entrypointNode = entrypointNodeDataFactory();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     workflowContext = workflowContextFactory({
       workflowLabel: "TestWorkflow",
       workflowClassName: "TestWorkflow",
@@ -27,7 +27,7 @@ describe("Workflow", () => {
 
     const nodeData = terminalNodeDataFactory();
     workflowContext.addNodeContext(
-      createNodeContext({
+      await createNodeContext({
         workflowContext: workflowContext,
         nodeData,
       })
@@ -108,7 +108,7 @@ describe("Workflow", () => {
       const inputs = codegen.inputs({ workflowContext });
 
       const searchNodeData = searchNodeDataFactory();
-      const searchNodeContext = createNodeContext({
+      const searchNodeContext = await createNodeContext({
         workflowContext: workflowContext,
         nodeData: searchNodeData,
       });
@@ -163,7 +163,7 @@ describe("Workflow", () => {
         );
 
         const searchNodeData = searchNodeDataFactory();
-        const searchNodeContext = createNodeContext({
+        const searchNodeContext = await createNodeContext({
           workflowContext: workflowContext,
           nodeData: searchNodeData,
         });

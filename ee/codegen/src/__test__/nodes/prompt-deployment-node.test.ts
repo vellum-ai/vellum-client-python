@@ -18,13 +18,13 @@ describe("PromptDeploymentNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const nodeData = promptDeploymentNodeDataFactory();
 
-      const nodeContext = createNodeContext({
+      const nodeContext = (await createNodeContext({
         workflowContext,
         nodeData,
-      }) as PromptDeploymentNodeContext;
+      })) as PromptDeploymentNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
       node = new PromptDeploymentNode({

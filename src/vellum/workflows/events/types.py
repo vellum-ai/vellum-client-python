@@ -55,10 +55,11 @@ class DeploymentParentContext(BaseParentContext):
     deployment_id: UUID
     deployment_name: str
     deployment_history_item_id: UUID
-    workflow_version_id: UUID
+    version_id: UUID
     release_tag_id: UUID
     release_tag_name: str
     external_id: Optional[str]
+    # TODO: Discriminator between Workflow and Prompt? (waiting on feedback)
 
 
 class NodeParentContext(BaseParentContext):

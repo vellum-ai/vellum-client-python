@@ -5,6 +5,15 @@ import logging
 from uuid import UUID
 from typing import Any, Dict, Generic, Optional, Tuple, Type, get_args
 
+from vellum.workflows.descriptors.base import BaseDescriptor
+from vellum.workflows.edges import Edge
+from vellum.workflows.expressions.coalesce_expression import CoalesceExpression
+from vellum.workflows.nodes.bases import BaseNode
+from vellum.workflows.nodes.utils import get_wrapped_node, has_wrapped_node
+from vellum.workflows.ports import Port
+from vellum.workflows.references import OutputReference, WorkflowInputReference
+from vellum.workflows.types.core import JsonObject
+from vellum.workflows.types.generics import WorkflowType
 from vellum_ee.workflows.display.base import (
     EdgeDisplayOverridesType,
     EdgeDisplayType,
@@ -21,15 +30,6 @@ from vellum_ee.workflows.display.nodes.get_node_display_class import get_node_di
 from vellum_ee.workflows.display.nodes.types import NodeOutputDisplay, PortDisplay, PortDisplayOverrides
 from vellum_ee.workflows.display.types import NodeDisplayType, WorkflowDisplayContext
 from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
-from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.edges import Edge
-from vellum.workflows.expressions.coalesce_expression import CoalesceExpression
-from vellum.workflows.nodes.bases import BaseNode
-from vellum.workflows.nodes.utils import get_wrapped_node, has_wrapped_node
-from vellum.workflows.ports import Port
-from vellum.workflows.references import OutputReference, WorkflowInputReference
-from vellum.workflows.types.core import JsonObject
-from vellum.workflows.types.generics import WorkflowType
 
 logger = logging.getLogger(__name__)
 
@@ -179,6 +179,9 @@ class BaseWorkflowDisplay(
 
         node_displays: Dict[Type[BaseNode], NodeDisplayType] = {}
         port_displays: Dict[Port, PortDisplay] = {}
+
+        # TODO: We should still serialize nodes that are in the workflow's directory but aren't used in the graph.
+        # https://app.shortcut.com/vellum/story/5394
         for node in self._workflow.get_nodes():
             node_display = self._get_node_display(node)
             node_displays[node] = node_display

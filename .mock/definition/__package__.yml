@@ -2744,6 +2744,27 @@ types:
       outputs: list<TestSuiteRunMetricOutput>
     source:
       openapi: openapi/openapi.yml
+  MetricDefinitionHistoryItem:
+    properties:
+      id:
+        type: string
+        validation:
+          format: uuid
+      label:
+        type: string
+        docs: A human-readable label for the metric
+        validation:
+          maxLength: 150
+      name:
+        type: string
+        docs: A name that uniquely identifies this metric within its workspace
+        validation:
+          maxLength: 150
+      description: string
+      input_variables: list<VellumVariable>
+      output_variables: list<VellumVariable>
+    source:
+      openapi: openapi/openapi.yml
   MetricDefinitionInput:
     discriminated: false
     union:

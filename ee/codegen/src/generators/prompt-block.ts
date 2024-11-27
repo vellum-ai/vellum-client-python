@@ -1,46 +1,27 @@
 import { python } from "@fern-api/python-ast";
 import { ClassInstantiation } from "@fern-api/python-ast/ClassInstantiation";
 import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
-import { AstNode } from "@fern-api/python-ast/core/AstNode";
-import { Writer } from "@fern-api/python-ast/core/Writer";
 import {
   PromptBlock as PromptBlockType,
   JinjaPromptBlock as JinjaPromptBlockType,
   ChatMessagePromptBlock as ChatMessagePromptBlockType,
-  FunctionDefinitionPromptBlock as FunctionDefinitionPromptBlockType,
   VariablePromptBlock as VariablePromptBlockType,
   RichTextPromptBlock as RichTextPromptBlockType,
   PlainTextPromptBlock as PlainTextPromptBlockType,
 } from "vellum-ai/api";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
-
-export declare namespace PromptBlock {
-  interface Args {
-    promptBlock: PromptBlockType;
-  }
-}
+import { BasePromptBlock } from "src/generators/base-prompt-block";
 
 // Flesh out unit tests for various prompt configurations
 // https://app.shortcut.com/vellum/story/5249
-export class PromptBlock extends AstNode {
-  private promptBlock: python.ClassInstantiation;
-
-  public constructor({ promptBlock }: PromptBlock.Args) {
-    super();
-    this.promptBlock = this.generatePromptBlock(promptBlock);
-  }
-
-  private generatePromptBlock(
-    promptBlock: PromptBlockType
-  ): ClassInstantiation {
+export class PromptBlock extends BasePromptBlock<PromptBlockType> {
+  protected generateAstNode(promptBlock: PromptBlockType): ClassInstantiation {
     switch (promptBlock.blockType) {
       case "JINJA":
         return this.generateJinjaPromptBlock(promptBlock);
       case "CHAT_MESSAGE":
         return this.generateChatMessagePromptBlock(promptBlock);
-      case "FUNCTION_DEFINITION":
-        return this.generateFunctionDefinitionPromptBlock(promptBlock);
       case "VARIABLE":
         return this.generateVariablePromptBlock(promptBlock);
       case "RICH_TEXT":
@@ -56,9 +37,6 @@ export class PromptBlock extends AstNode {
         break;
       case "CHAT_MESSAGE":
         pathName = "ChatMessagePromptBlock";
-        break;
-      case "FUNCTION_DEFINITION":
-        pathName = "FunctionDefinitionPromptBlock";
         break;
       case "VARIABLE":
         pathName = "VariablePromptBlock";
@@ -140,7 +118,7 @@ export class PromptBlock extends AstNode {
         name: "blocks",
         value: python.TypeInstantiation.list(
           promptBlock.blocks.map((block) => {
-            return this.generatePromptBlock(block);
+            return this.generateAstNode(block);
           })
         ),
       })
@@ -153,69 +131,6 @@ export class PromptBlock extends AstNode {
 
     this.inheritReferences(chatBlock);
     return chatBlock;
-  }
-
-  private generateFunctionDefinitionPromptBlock(
-    promptBlock: FunctionDefinitionPromptBlockType
-  ): python.ClassInstantiation {
-    const classArgs: MethodArgument[] = [
-      ...this.constructCommonClassArguments(promptBlock),
-    ];
-
-    if (promptBlock.functionName) {
-      classArgs.push(
-        new MethodArgument({
-          name: "function_name",
-          value: python.TypeInstantiation.str(promptBlock.functionName),
-        })
-      );
-    }
-
-    if (promptBlock.functionDescription) {
-      classArgs.push(
-        new MethodArgument({
-          name: "function_description",
-          value: python.TypeInstantiation.str(promptBlock.functionDescription),
-        })
-      );
-    }
-
-    if (promptBlock.functionParameters) {
-      classArgs.push(
-        new MethodArgument({
-          name: "function_parameters",
-          value: python.codeBlock(
-            JSON.stringify(promptBlock.functionParameters)
-          ),
-        })
-      );
-    }
-
-    if (promptBlock.functionForced) {
-      classArgs.push(
-        new MethodArgument({
-          name: "function_forced",
-          value: python.TypeInstantiation.bool(promptBlock.functionForced),
-        })
-      );
-    }
-
-    if (promptBlock.functionStrict) {
-      classArgs.push(
-        new MethodArgument({
-          name: "function_strict",
-          value: python.TypeInstantiation.bool(promptBlock.functionStrict),
-        })
-      );
-    }
-
-    const functionBlock = python.instantiateClass({
-      classReference: this.getPromptBlockRef(promptBlock),
-      arguments_: classArgs,
-    });
-
-    this.inheritReferences(functionBlock);
-    return functionBlock;
   }
 
   private generateVariablePromptBlock(
@@ -320,48 +235,5 @@ export class PromptBlock extends AstNode {
 
     this.inheritReferences(richBlock);
     return richBlock;
-  }
-
-  private constructCommonClassArguments(
-    promptBlock: PromptBlockType
-  ): MethodArgument[] {
-    const args: MethodArgument[] = [];
-
-    if (promptBlock.state) {
-      args.push(
-        new MethodArgument({
-          name: "state",
-          value: python.TypeInstantiation.str(promptBlock.state),
-        })
-      );
-    }
-
-    const cacheConfigValue = this.extractCacheConfig(promptBlock);
-    args.push(
-      new MethodArgument({
-        name: "cache_config",
-        value: cacheConfigValue,
-      })
-    );
-
-    return args;
-  }
-
-  private extractCacheConfig(
-    promptBlock: PromptBlockType
-  ): python.TypeInstantiation {
-    if (
-      promptBlock.cacheConfig !== undefined &&
-      promptBlock.cacheConfig !== null
-    ) {
-      if (promptBlock.cacheConfig.type) {
-        return python.TypeInstantiation.str(promptBlock.cacheConfig.type);
-      }
-    }
-    return python.TypeInstantiation.none();
-  }
-
-  public write(writer: Writer): void {
-    this.promptBlock.write(writer);
   }
 }

@@ -1,5 +1,6 @@
 import pytest
 
+from vellum.client import Vellum
 from vellum.workflows.errors.types import VellumError, VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.inputs.base import BaseInputs
@@ -7,6 +8,7 @@ from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.nodes.core.try_node.node import TryNode
 from vellum.workflows.outputs import BaseOutputs
 from vellum.workflows.state.base import BaseState, StateMeta
+from vellum.workflows.state.context import WorkflowContext
 
 
 def test_try_node__on_error_code__successfully_caught():
@@ -80,3 +82,25 @@ def test_try_node__use_parent_inputs_and_state():
 
     # THEN the data is used successfully
     assert outputs == {"value": "foo bar"}
+
+
+def test_try_node__use_parent_execution_context():
+    # GIVEN a try node that uses node context to use the vellum client
+    @TryNode.wrap()
+    class TestNode(BaseNode):
+        class Outputs(BaseOutputs):
+            key: str
+
+        def run(self) -> Outputs:
+            return self.Outputs(key=self._context.vellum_client.ad_hoc._client_wrapper.api_key)
+
+    # WHEN the node is run with a custom vellum client
+    node = TestNode(
+        context=WorkflowContext(
+            _vellum_client=Vellum(api_key="test-key"),
+        )
+    )
+    outputs = node.run()
+
+    # THEN the inner node had access to the key
+    assert outputs == {"key": "test-key"}

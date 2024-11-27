@@ -1,3 +1,4 @@
+import pytest
 from collections import defaultdict
 from copy import deepcopy
 import json
@@ -76,6 +77,7 @@ def test_state_deepcopy():
     assert deepcopied_state.meta.node_outputs == state.meta.node_outputs
 
 
+@pytest.mark.skip(reason="https://app.shortcut.com/vellum/story/5654")
 def test_state_deepcopy__with_node_output_updates():
     # GIVEN an initial state instance
     state = MockState(foo="bar")

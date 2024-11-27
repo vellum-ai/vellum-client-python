@@ -8,6 +8,7 @@ import {
 } from "vellum-ai/api";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
+import { Json } from "src/generators/json";
 import { assertUnreachable } from "src/utils/typing";
 
 export namespace ChatMessageContent {
@@ -119,9 +120,7 @@ export class ChatMessageContent extends AstNode {
         functionCallChatMessageContentValueArgs.push(
           new MethodArgument({
             name: "arguments",
-            value: python.codeBlock(
-              JSON.stringify(functionCallChatMessageContentValue.arguments)
-            ),
+            value: new Json(functionCallChatMessageContentValue.arguments),
           })
         );
       }

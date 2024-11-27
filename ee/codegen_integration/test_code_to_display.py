@@ -1,4 +1,5 @@
 import json
+from typing import Dict
 
 from deepdiff import DeepDiff
 
@@ -40,7 +41,7 @@ def test_code_to_display_data(code_to_display_fixture_paths):
     )
 
 
-def _process_position_hook(key, value):
+def _process_position_hook(key, value) -> None:
     """
     Private hook to ensure 'position' keys 'x' and 'y' are floats instead of ints.
     x and y in json is int so json library parses to int even though we have it as float in our serializers
@@ -51,7 +52,7 @@ def _process_position_hook(key, value):
         if 'y' in value and isinstance(value['y'], int):
             value['y'] = float(value['y'])
 
-def _process_negated_hook(key, value, current_json_obj):
+def _process_negated_hook(key, value, current_json_obj) -> None:
     """
     Private hook to replace the 'negated' key's None value with False.
     negated can be sent as null in the raw payload, but we expect serialization to produce boolean values
@@ -59,7 +60,7 @@ def _process_negated_hook(key, value, current_json_obj):
     if key == 'negated' and value is None:
         current_json_obj[key] = False
 
-def _custom_obj_hook(json_dict):
+def _custom_obj_hook(json_dict) -> Dict[str, any]:
     """
     Private hook to convert some raw json items to values we expect.
     """

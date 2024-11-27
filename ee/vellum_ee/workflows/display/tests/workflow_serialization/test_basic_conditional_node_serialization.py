@@ -13,20 +13,30 @@ from vellum.workflows.expressions.does_not_equal import DoesNotEqualExpression
 from vellum.workflows.expressions.ends_with import EndsWithExpression
 from vellum.workflows.expressions.equals import EqualsExpression
 from vellum.workflows.expressions.greater_than import GreaterThanExpression
-from vellum.workflows.expressions.greater_than_or_equal_to import GreaterThanOrEqualToExpression
+from vellum.workflows.expressions.greater_than_or_equal_to import (
+    GreaterThanOrEqualToExpression,
+)
 from vellum.workflows.expressions.in_ import InExpression
 from vellum.workflows.expressions.is_not_null import IsNotNullExpression
 from vellum.workflows.expressions.is_null import IsNullExpression
 from vellum.workflows.expressions.less_than import LessThanExpression
-from vellum.workflows.expressions.less_than_or_equal_to import LessThanOrEqualToExpression
+from vellum.workflows.expressions.less_than_or_equal_to import (
+    LessThanOrEqualToExpression,
+)
 from vellum.workflows.expressions.not_between import NotBetweenExpression
 from vellum.workflows.expressions.not_in import NotInExpression
-from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
+from vellum_ee.workflows.display.nodes.base_node_vellum_display import (
+    BaseNodeVellumDisplay,
+)
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
-from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
+from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import (
+    get_workflow_display,
+)
 
 from tests.workflows.basic_conditional_node.workflow import CategoryWorkflow
-from tests.workflows.basic_conditional_node.workflow_with_only_one_conditional_node import create_simple_workflow
+from tests.workflows.basic_conditional_node.workflow_with_only_one_conditional_node import (
+    create_simple_workflow,
+)
 
 
 def test_serialize_workflow():
@@ -60,7 +70,7 @@ def test_serialize_workflow():
                 "type": "STRING",
                 "required": True,
                 "default": None,
-                "extensions": { "color": None },
+                "extensions": {"color": None},
             },
         ],
         input_variables,
@@ -141,8 +151,8 @@ def test_serialize_workflow():
             "type": "CONDITIONAL",
             "inputs": [
                 {
-                    "id": "c000588f-a1ca-45aa-b4e2-d54a9786429b",
-                    "key": "ebb31657-c763-4e83-bdc6-aa6d1a3116c0.field",
+                    "id": "c99fb71e-a8ad-4627-b9a2-aa36bf1fdc02",
+                    "key": "e0490a35-c863-422b-a12a-f18858d75241.field",
                     "value": {
                         "rules": [
                             {
@@ -156,8 +166,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "82538f2c-ad80-4bd1-8976-f0f634b3933e",
-                    "key": "ebb31657-c763-4e83-bdc6-aa6d1a3116c0.value",
+                    "id": "7aaebb17-b670-4366-80f9-fb569c8f8f85",
+                    "key": "e0490a35-c863-422b-a12a-f18858d75241.value",
                     "value": {
                         "rules": [
                             {
@@ -169,8 +179,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "3fa9312b-a232-4ed7-9c76-45631389b761",
-                    "key": "1d7798aa-a6b1-4fe7-842d-4b9a61ba34ab.field",
+                    "id": "d8675161-1aa1-4f10-8b98-ea6384211c87",
+                    "key": "f7818d41-3f66-42c7-8218-de5c30379906.field",
                     "value": {
                         "rules": [
                             {
@@ -184,8 +194,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "a0509db6-103c-4049-a3b3-c5ad0eff222e",
-                    "key": "1d7798aa-a6b1-4fe7-842d-4b9a61ba34ab.value",
+                    "id": "4c77a541-9a13-41b2-b68e-ed1487d195d3",
+                    "key": "f7818d41-3f66-42c7-8218-de5c30379906.value",
                     "value": {
                         "rules": [
                             {
@@ -197,8 +207,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "1b38a4f8-023c-41e2-acad-4120589b1589",
-                    "key": "76c29692-ab96-45eb-b013-b904d06b675d.field",
+                    "id": "a593293c-9c17-45c5-8c99-fc867aad580e",
+                    "key": "38483416-c474-4e50-bfbc-7e92de2b4c2c.field",
                     "value": {
                         "rules": [
                             {
@@ -212,8 +222,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "6be7cfea-cf7a-4e22-a1c4-b19f89d54b30",
-                    "key": "76c29692-ab96-45eb-b013-b904d06b675d.value",
+                    "id": "d9ea5424-44d5-481a-b769-3bce5ef6c353",
+                    "key": "38483416-c474-4e50-bfbc-7e92de2b4c2c.value",
                     "value": {
                         "rules": [
                             {
@@ -225,8 +235,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "86231451-b6dc-49f6-843b-0c00f84aff47",
-                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.field",
+                    "id": "2066a9e9-7a55-4ef0-8897-7df32e31f0e8",
+                    "key": "aa692069-9672-4adb-b874-74da98745f24.field",
                     "value": {
                         "rules": [
                             {
@@ -240,8 +250,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "96c8658f-c7db-41f8-be1f-d62350adb149",
-                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.value",
+                    "id": "fbbef65b-0d3b-4a10-9479-ebe07b8e3a82",
+                    "key": "aa692069-9672-4adb-b874-74da98745f24.value",
                     "value": {
                         "rules": [
                             {
@@ -253,8 +263,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "86231451-b6dc-49f6-843b-0c00f84aff47",
-                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.field",
+                    "id": "3c1186a8-5a0f-4b6b-8637-9c09aea9c14d",
+                    "key": "25aaa0ca-9312-49d7-9ad5-b6f40f8a0658.field",
                     "value": {
                         "rules": [
                             {
@@ -268,8 +278,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "96c8658f-c7db-41f8-be1f-d62350adb149",
-                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.value",
+                    "id": "78e99399-ed5a-4d26-8a42-c4f355cf60e3",
+                    "key": "25aaa0ca-9312-49d7-9ad5-b6f40f8a0658.value",
                     "value": {
                         "rules": [
                             {
@@ -281,8 +291,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "86231451-b6dc-49f6-843b-0c00f84aff47",
-                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.field",
+                    "id": "5b7e4b08-68eb-471e-9eda-36c768f8eb46",
+                    "key": "e59504e1-4134-46dc-8055-114c6a606af8.field",
                     "value": {
                         "rules": [
                             {
@@ -296,8 +306,8 @@ def test_serialize_workflow():
                     },
                 },
                 {
-                    "id": "96c8658f-c7db-41f8-be1f-d62350adb149",
-                    "key": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b.value",
+                    "id": "02d26ab6-8faa-4da3-84b1-190581a6fd66",
+                    "key": "e59504e1-4134-46dc-8055-114c6a606af8.value",
                     "value": {
                         "rules": [
                             {
@@ -321,13 +331,13 @@ def test_serialize_workflow():
                             "id": "2ccd0730-26d1-4fb4-baa9-1a2a182dd9a0",
                             "rules": [
                                 {
-                                    "id": "ebb31657-c763-4e83-bdc6-aa6d1a3116c0",
+                                    "id": "e0490a35-c863-422b-a12a-f18858d75241",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "c000588f-a1ca-45aa-b4e2-d54a9786429b",
+                                    "field_node_input_id": "c99fb71e-a8ad-4627-b9a2-aa36bf1fdc02",
                                     "operator": "=",
-                                    "value_node_input_id": "82538f2c-ad80-4bd1-8976-f0f634b3933e",
+                                    "value_node_input_id": "7aaebb17-b670-4366-80f9-fb569c8f8f85",
                                 }
                             ],
                             "combinator": "AND",
@@ -345,13 +355,13 @@ def test_serialize_workflow():
                             "id": "cc3f0d92-b603-42cc-b2e9-83e3b23b3bcb",
                             "rules": [
                                 {
-                                    "id": "1d7798aa-a6b1-4fe7-842d-4b9a61ba34ab",
+                                    "id": "f7818d41-3f66-42c7-8218-de5c30379906",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "3fa9312b-a232-4ed7-9c76-45631389b761",
+                                    "field_node_input_id": "d8675161-1aa1-4f10-8b98-ea6384211c87",
                                     "operator": "=",
-                                    "value_node_input_id": "a0509db6-103c-4049-a3b3-c5ad0eff222e",
+                                    "value_node_input_id": "4c77a541-9a13-41b2-b68e-ed1487d195d3",
                                 }
                             ],
                             "combinator": "AND",
@@ -369,13 +379,13 @@ def test_serialize_workflow():
                             "id": "a5a0f391-7052-452f-9fe1-a5781a491591",
                             "rules": [
                                 {
-                                    "id": "76c29692-ab96-45eb-b013-b904d06b675d",
+                                    "id": "38483416-c474-4e50-bfbc-7e92de2b4c2c",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "1b38a4f8-023c-41e2-acad-4120589b1589",
+                                    "field_node_input_id": "a593293c-9c17-45c5-8c99-fc867aad580e",
                                     "operator": "=",
-                                    "value_node_input_id": "6be7cfea-cf7a-4e22-a1c4-b19f89d54b30",
+                                    "value_node_input_id": "d9ea5424-44d5-481a-b769-3bce5ef6c353",
                                 }
                             ],
                             "combinator": "AND",
@@ -393,34 +403,34 @@ def test_serialize_workflow():
                             "id": "efe7a851-2a67-4189-99ec-bc193242b270",
                             "rules": [
                                 {
-                                    "id": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b",
+                                    "id": "aa692069-9672-4adb-b874-74da98745f24",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "86231451-b6dc-49f6-843b-0c00f84aff47",
+                                    "field_node_input_id": "2066a9e9-7a55-4ef0-8897-7df32e31f0e8",
                                     "operator": "=",
-                                    "value_node_input_id": "96c8658f-c7db-41f8-be1f-d62350adb149",
+                                    "value_node_input_id": "fbbef65b-0d3b-4a10-9479-ebe07b8e3a82",
                                 },
                                 {
                                     "id": "2c78817b-8b73-43fd-8dab-a8923018da9d",
                                     "rules": [
                                         {
-                                            "id": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b",
+                                            "id": "25aaa0ca-9312-49d7-9ad5-b6f40f8a0658",
                                             "rules": None,
                                             "combinator": None,
                                             "negated": False,
-                                            "field_node_input_id": "86231451-b6dc-49f6-843b-0c00f84aff47",
+                                            "field_node_input_id": "3c1186a8-5a0f-4b6b-8637-9c09aea9c14d",
                                             "operator": "=",
-                                            "value_node_input_id": "96c8658f-c7db-41f8-be1f-d62350adb149",
+                                            "value_node_input_id": "78e99399-ed5a-4d26-8a42-c4f355cf60e3",
                                         },
                                         {
-                                            "id": "beac61ea-68f1-406e-a48b-8f8a0ca5a53b",
+                                            "id": "e59504e1-4134-46dc-8055-114c6a606af8",
                                             "rules": None,
                                             "combinator": None,
                                             "negated": False,
-                                            "field_node_input_id": "86231451-b6dc-49f6-843b-0c00f84aff47",
+                                            "field_node_input_id": "5b7e4b08-68eb-471e-9eda-36c768f8eb46",
                                             "operator": "=",
-                                            "value_node_input_id": "96c8658f-c7db-41f8-be1f-d62350adb149",
+                                            "value_node_input_id": "02d26ab6-8faa-4da3-84b1-190581a6fd66",
                                         },
                                     ],
                                     "combinator": "AND",
@@ -955,14 +965,15 @@ def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(
 
     # AND the conditional node should be what we expect
     conditional_node = workflow_raw_data["nodes"][1]
+    print(conditional_node)
     assert not DeepDiff(
         {
             "id": "a9143814-6bb0-4cb3-a817-4fc076417121",
             "type": "CONDITIONAL",
             "inputs": [
                 {
-                    "id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
-                    "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.field",
+                    "id": "738a274f-962d-466e-9aee-7774d3e05ab9",
+                    "key": "f497b2bf-7d35-43af-b162-ced2d8abd46f.field",
                     "value": {
                         "rules": [
                             {
@@ -974,8 +985,8 @@ def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(
                     },
                 },
                 {
-                    "id": "aadade8a-c253-483a-8620-31fe8171c0fd",
-                    "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.value",
+                    "id": "f30bceb4-39bf-433a-9229-b6871dbdbe00",
+                    "key": "f497b2bf-7d35-43af-b162-ced2d8abd46f.value",
                     "value": {
                         "rules": [
                             {
@@ -999,13 +1010,13 @@ def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(
                             "id": "650e7105-3e76-43ca-858f-b290970b438b",
                             "rules": [
                                 {
-                                    "id": "abe7afac-952f-4cfc-ab07-47b47f34105f",
+                                    "id": "f497b2bf-7d35-43af-b162-ced2d8abd46f",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
+                                    "field_node_input_id": "738a274f-962d-466e-9aee-7774d3e05ab9",
                                     "operator": f"{operator}",
-                                    "value_node_input_id": "aadade8a-c253-483a-8620-31fe8171c0fd",
+                                    "value_node_input_id": "f30bceb4-39bf-433a-9229-b6871dbdbe00",
                                 }
                             ],
                             "combinator": "AND",
@@ -1014,14 +1025,28 @@ def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(
                             "operator": None,
                             "value_node_input_id": None,
                         },
-                    }
+                    },
+                    {
+                        "id": "342e5497-ea2b-4e5c-99cf-e6492f133a3c",
+                        "type": "ELSE",
+                        "source_handle_id": "4df924c0-7bed-4f4a-9db4-2bfe51841755",
+                        "data": None,
+                    },
                 ],
                 "version": "2",
             },
             "display_data": {"position": {"x": 0.0, "y": 0.0}},
             "definition": {
+                "name": "SimpleConditionalNode",
+                "module": [
+                    "tests",
+                    "workflows",
+                    "basic_conditional_node",
+                    "workflow_with_only_one_conditional_node",
+                ],
                 "bases": [
                     {
+                        "name": "ConditionalNode",
                         "module": [
                             "vellum",
                             "workflows",
@@ -1030,16 +1055,8 @@ def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(
                             "conditional_node",
                             "node",
                         ],
-                        "name": "ConditionalNode",
                     }
                 ],
-                "module": [
-                    "tests",
-                    "workflows",
-                    "basic_conditional_node",
-                    "workflow_with_only_one_conditional_node",
-                ],
-                "name": "SimpleConditionalNode",
             },
         },
         conditional_node,
@@ -1081,8 +1098,8 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
             "type": "CONDITIONAL",
             "inputs": [
                 {
-                    "id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
-                    "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.field",
+                    "id": "738a274f-962d-466e-9aee-7774d3e05ab9",
+                    "key": "f497b2bf-7d35-43af-b162-ced2d8abd46f.field",
                     "value": {
                         "rules": [
                             {
@@ -1106,13 +1123,13 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
                             "id": "650e7105-3e76-43ca-858f-b290970b438b",
                             "rules": [
                                 {
-                                    "id": "abe7afac-952f-4cfc-ab07-47b47f34105f",
+                                    "id": "f497b2bf-7d35-43af-b162-ced2d8abd46f",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
+                                    "field_node_input_id": "738a274f-962d-466e-9aee-7774d3e05ab9",
                                     "operator": f"{operator}",
-                                    "value_node_input_id": None,
+                                    "value_node_input_id": "f30bceb4-39bf-433a-9229-b6871dbdbe00",
                                 }
                             ],
                             "combinator": "AND",
@@ -1121,14 +1138,28 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
                             "operator": None,
                             "value_node_input_id": None,
                         },
-                    }
+                    },
+                    {
+                        "id": "342e5497-ea2b-4e5c-99cf-e6492f133a3c",
+                        "type": "ELSE",
+                        "source_handle_id": "4df924c0-7bed-4f4a-9db4-2bfe51841755",
+                        "data": None,
+                    },
                 ],
                 "version": "2",
             },
             "display_data": {"position": {"x": 0.0, "y": 0.0}},
             "definition": {
+                "name": "SimpleConditionalNode",
+                "module": [
+                    "tests",
+                    "workflows",
+                    "basic_conditional_node",
+                    "workflow_with_only_one_conditional_node",
+                ],
                 "bases": [
                     {
+                        "name": "ConditionalNode",
                         "module": [
                             "vellum",
                             "workflows",
@@ -1137,16 +1168,8 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
                             "conditional_node",
                             "node",
                         ],
-                        "name": "ConditionalNode",
                     }
                 ],
-                "module": [
-                    "tests",
-                    "workflows",
-                    "basic_conditional_node",
-                    "workflow_with_only_one_conditional_node",
-                ],
-                "name": "SimpleConditionalNode",
             },
         },
         conditional_node,
@@ -1192,8 +1215,8 @@ def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(
             "type": "CONDITIONAL",
             "inputs": [
                 {
-                    "id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
-                    "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.field",
+                    "id": "738a274f-962d-466e-9aee-7774d3e05ab9",
+                    "key": "f497b2bf-7d35-43af-b162-ced2d8abd46f.field",
                     "value": {
                         "rules": [
                             {
@@ -1205,8 +1228,8 @@ def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(
                     },
                 },
                 {
-                    "id": "aadade8a-c253-483a-8620-31fe8171c0fd",
-                    "key": "abe7afac-952f-4cfc-ab07-47b47f34105f.value",
+                    "id": "f30bceb4-39bf-433a-9229-b6871dbdbe00",
+                    "key": "f497b2bf-7d35-43af-b162-ced2d8abd46f.value",
                     "value": {
                         "rules": [
                             {
@@ -1230,13 +1253,13 @@ def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(
                             "id": "650e7105-3e76-43ca-858f-b290970b438b",
                             "rules": [
                                 {
-                                    "id": "abe7afac-952f-4cfc-ab07-47b47f34105f",
+                                    "id": "f497b2bf-7d35-43af-b162-ced2d8abd46f",
                                     "rules": None,
                                     "combinator": None,
                                     "negated": False,
-                                    "field_node_input_id": "2262b7b4-a2f2-408b-9d4d-362940ca1ed3",
+                                    "field_node_input_id": "738a274f-962d-466e-9aee-7774d3e05ab9",
                                     "operator": f"{operator}",
-                                    "value_node_input_id": "aadade8a-c253-483a-8620-31fe8171c0fd",
+                                    "value_node_input_id": "f30bceb4-39bf-433a-9229-b6871dbdbe00",
                                 }
                             ],
                             "combinator": "AND",
@@ -1245,14 +1268,28 @@ def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(
                             "operator": None,
                             "value_node_input_id": None,
                         },
-                    }
+                    },
+                    {
+                        "id": "342e5497-ea2b-4e5c-99cf-e6492f133a3c",
+                        "type": "ELSE",
+                        "source_handle_id": "4df924c0-7bed-4f4a-9db4-2bfe51841755",
+                        "data": None,
+                    },
                 ],
                 "version": "2",
             },
             "display_data": {"position": {"x": 0.0, "y": 0.0}},
             "definition": {
+                "name": "SimpleConditionalNode",
+                "module": [
+                    "tests",
+                    "workflows",
+                    "basic_conditional_node",
+                    "workflow_with_only_one_conditional_node",
+                ],
                 "bases": [
                     {
+                        "name": "ConditionalNode",
                         "module": [
                             "vellum",
                             "workflows",
@@ -1261,16 +1298,8 @@ def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(
                             "conditional_node",
                             "node",
                         ],
-                        "name": "ConditionalNode",
                     }
                 ],
-                "module": [
-                    "tests",
-                    "workflows",
-                    "basic_conditional_node",
-                    "workflow_with_only_one_conditional_node",
-                ],
-                "name": "SimpleConditionalNode",
             },
         },
         conditional_node,

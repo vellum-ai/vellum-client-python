@@ -293,17 +293,21 @@
       "id": "5f64210f-ec43-48ce-ae40-40a9ba4c4c11",
       "key": "foobar",
       "type": "STRING",
-      "required": null,
+      "required": true,
       "default": null,
-      "extensions": null
+      "extensions": {
+        "color": null
+      }
     },
     {
       "id": "b81c5c88-9528-47d0-8106-14a75520ed47",
       "key": "bazbaz",
       "type": "STRING",
-      "required": null,
+      "required": true,
       "default": null,
-      "extensions": null
+      "extensions": {
+        "color": null
+      }
     }
   ],
   "output_variables": [

@@ -78,7 +78,7 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
             result = self.get_nested_rule_details_by_path(rule_ids, path) if rule_ids else None
             if result is None:
-                result = self._generate_hash_for_rule_ids(node_id, descriptor)
+                result = self._generate_hash_for_rule_ids(node_id, rule_id)
             current_id, field_node_input_id, value_node_input_id = result
 
             # Recursive step: Keep recursing until we hit the other descriptors
@@ -186,7 +186,6 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
                     }
                 )
 
-        print(node_inputs)
         return {
             "id": str(node_id),
             "type": "CONDITIONAL",
@@ -264,11 +263,11 @@ class BaseConditionalNodeDisplay(BaseNodeVellumDisplay[_ConditionalNodeType], Ge
 
         return None
 
-    def _generate_hash_for_rule_ids(self, node_id, descriptor) -> Tuple[UUID, UUID, UUID]:
+    def _generate_hash_for_rule_ids(self, node_id, rule_id) -> Tuple[UUID, UUID, UUID]:
         return (
-            uuid4_from_hash(f"{node_id}|{descriptor.name}|current"),
-            uuid4_from_hash(f"{node_id}|{descriptor.name}||field"),
-            uuid4_from_hash(f"{node_id}|{descriptor.name}||value")
+            uuid4_from_hash(f"{node_id}|{rule_id}|current"),
+            uuid4_from_hash(f"{node_id}|{rule_id}||field"),
+            uuid4_from_hash(f"{node_id}|{rule_id}||value")
         )
 
     def _get_source_handle_ids(self) -> Dict[int, UUID]:

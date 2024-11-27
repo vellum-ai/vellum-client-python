@@ -72,10 +72,11 @@ export class Inputs extends BasePersistedFile {
 
     inputVariables.forEach((inputVariableContext) => {
       const inputVariableData = inputVariableContext.getInputVariableData();
+      const inputVariableName = inputVariableContext.getInputVariableName();
       const vellumVariableField = codegen.vellumVariable({
         variable: {
           id: inputVariableData.id,
-          name: inputVariableData.key,
+          name: inputVariableName,
           type: inputVariableData.type,
         },
       });

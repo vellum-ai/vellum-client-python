@@ -1,5 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Inputs > write > should convert input variable names into valid python attributes 1`] = `
+"from vellum.workflows.inputs import BaseInputs
+
+
+class Inputs(BaseInputs):
+    my_input: str
+    my_input: float
+"
+`;
+
 exports[`Inputs > write > should generate correct code for complex input variables 1`] = `
 "from vellum.workflows.inputs import BaseInputs
 from typing import List

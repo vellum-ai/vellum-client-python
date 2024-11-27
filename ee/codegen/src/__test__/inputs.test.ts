@@ -93,5 +93,26 @@ describe("Inputs", () => {
       inputs.write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
+
+    it("should convert input variable names into valid python attributes", async () => {
+      const inputVariables: VellumVariable[] = [
+        { id: "1", key: "My Input", type: "STRING" },
+        { id: "2", key: "$My*Input", type: "NUMBER" },
+      ];
+      inputVariables.forEach((inputVariableData) => {
+        workflowContext.addInputVariableContext(
+          inputVariableContextFactory({
+            inputVariableData: inputVariableData,
+            workflowContext,
+          })
+        );
+      });
+      const inputs = codegen.inputs({
+        workflowContext,
+      });
+
+      inputs.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
   });
 });

@@ -20,7 +20,7 @@ export class Json extends AstNode {
   }
 
   private generateAstNode(value: unknown): python.AstNode {
-    if (value === null) {
+    if (value === null || value === undefined) {
       return python.TypeInstantiation.none();
     }
 

@@ -88,3 +88,8 @@ exports[`Json > write > should handle strings 1`] = `
 ""test string"
 "
 `;
+
+exports[`Json > write > should handle undefined values 1`] = `
+"None
+"
+`;

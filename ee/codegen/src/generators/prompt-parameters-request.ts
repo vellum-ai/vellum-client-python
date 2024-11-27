@@ -6,6 +6,7 @@ import { isNil } from "lodash";
 import { PromptParameters as PromptParametersType } from "vellum-ai/api";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
+import { Json } from "src/generators/json";
 
 export declare namespace PromptParameters {
   interface Args {
@@ -120,11 +121,7 @@ export class PromptParameters extends AstNode {
       })
     );
 
-    const logitBiasValue = isNil(this.promptParametersRequest.logitBias)
-      ? python.TypeInstantiation.none()
-      : python.codeBlock(
-          JSON.stringify(this.promptParametersRequest.logitBias)
-        );
+    const logitBiasValue = new Json(this.promptParametersRequest.logitBias);
     classArgs.push(
       new MethodArgument({
         name: "logit_bias",
@@ -132,13 +129,9 @@ export class PromptParameters extends AstNode {
       })
     );
 
-    const custom_parameters_value = isNil(
+    const custom_parameters_value = new Json(
       this.promptParametersRequest.customParameters
-    )
-      ? python.TypeInstantiation.none()
-      : python.codeBlock(
-          JSON.stringify(this.promptParametersRequest.customParameters)
-        );
+    );
     classArgs.push(
       new MethodArgument({
         name: "custom_parameters",

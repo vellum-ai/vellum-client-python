@@ -5,6 +5,7 @@ import { FunctionDefinition as FunctionDefinitionType } from "vellum-ai/api";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
 import { BasePromptBlock } from "src/generators/base-prompt-block";
+import { Json } from "src/generators/json";
 
 export class FunctionDefinition extends BasePromptBlock<FunctionDefinitionType> {
   protected generateAstNode(
@@ -36,9 +37,7 @@ export class FunctionDefinition extends BasePromptBlock<FunctionDefinitionType> 
       classArgs.push(
         new MethodArgument({
           name: "parameters",
-          value: python.codeBlock(
-            JSON.stringify(functionDefinition.parameters)
-          ),
+          value: new Json(functionDefinition.parameters),
         })
       );
     }

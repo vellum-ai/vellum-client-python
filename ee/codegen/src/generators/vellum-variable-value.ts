@@ -1,7 +1,6 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
-import { TypeInstantiation } from "@fern-api/python-ast/python";
 import {
   ChatMessageRequest,
   VellumValue as VellumVariableValueType,
@@ -10,6 +9,7 @@ import {
 import { ChatMessageContent } from "./chat-message-content";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
+import { Json } from "src/generators/json";
 
 class StringVellumValue extends AstNode {
   private value: string;
@@ -38,24 +38,16 @@ class NumberVellumValue extends AstNode {
 }
 
 class JsonVellumValue extends AstNode {
-  private value: unknown;
+  private astNode: Json;
 
   public constructor(value: unknown) {
     super();
-    this.value = value;
+    this.astNode = new Json(value);
+    this.inheritReferences(this.astNode);
   }
 
   public write(writer: Writer): void {
-    if (this.value === null) {
-      TypeInstantiation.none().write(writer);
-      return;
-    }
-
-    // TODO: Correctly convert JSON to Python dicts. At a minimum, we need to recursively
-    //    replace all instances of `null` with `None`. It's likely this should be implemented
-    //    on fern's end in TypeInstantiation.
-    //    https://app.shortcut.com/vellum/story/5147
-    writer.write(JSON.stringify(this.value));
+    this.astNode.write(writer);
   }
 }
 

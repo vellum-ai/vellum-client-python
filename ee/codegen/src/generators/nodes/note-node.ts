@@ -2,6 +2,7 @@ import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { NoteNodeContext } from "src/context/node-context/note-node";
+import { Json } from "src/generators/json";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
 import { NoteNode as NoteNodeType } from "src/types/vellum";
 
@@ -29,13 +30,14 @@ export class NoteNode extends BaseSingleFileNode<
       })
     );
 
+    const styleValue = this.nodeData.data.style
+      ? new Json(this.nodeData.data.style)
+      : python.TypeInstantiation.none();
+
     statements.push(
       python.field({
         name: "style",
-        initializer: this.nodeData.data.style
-          ? // TODO: https://app.shortcut.com/vellum/story/5147/correctly-convert-json-to-python-dicts
-            python.codeBlock(JSON.stringify(this.nodeData.data.style))
-          : python.TypeInstantiation.none(),
+        initializer: styleValue,
       })
     );
 

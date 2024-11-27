@@ -86,7 +86,13 @@ export class TemplatingNode extends BaseSingleFileNode<
         initializer: python.TypeInstantiation.uuid(
           this.nodeData.data.targetHandleId
         ),
-      })
+      }),
+      python.field({
+        name: "template_input_id",
+        initializer: python.TypeInstantiation.uuid(
+          this.nodeData.data.templateNodeInputId
+        ),
+      }),
     );
 
     return statements;

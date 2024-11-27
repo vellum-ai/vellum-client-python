@@ -11,6 +11,10 @@ export class WorkspaceSecretPointerRule extends BaseNodeInputValuePointerRule<Wo
 
     const workspaceSecretName = workspaceSecretPointerData.workspaceSecretId;
 
+    if (isNil(workspaceSecretName)) {
+      return python.TypeInstantiation.none();
+    }
+
     return python.instantiateClass({
       classReference: python.reference({
         name: "VellumSecretReference",
@@ -21,9 +25,7 @@ export class WorkspaceSecretPointerRule extends BaseNodeInputValuePointerRule<Wo
       }),
       arguments_: [
         python.methodArgument({
-          value: isNil(workspaceSecretName)
-            ? python.TypeInstantiation.none()
-            : python.TypeInstantiation.str(workspaceSecretName),
+          value: python.TypeInstantiation.str(workspaceSecretName),
         }),
       ],
     });

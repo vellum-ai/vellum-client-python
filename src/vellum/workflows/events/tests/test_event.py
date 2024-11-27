@@ -124,9 +124,11 @@ module_root = name_parts[: name_parts.index("events")]
                             "name": "MockWorkflow",
                             "module": module_root + ["events", "tests", "test_event"],
                         },
+                        "type": "WORKFLOW",
                         "parent": None,
                         "span_id": "123e4567-e89b-12d3-a456-426614174000"
                     },
+                    "type": "WORKFLOW_NODE",
                     "span_id": "123e4567-e89b-12d3-a456-426614174000"
                 },
             },

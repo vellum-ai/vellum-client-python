@@ -46,23 +46,33 @@ def default_serializer(obj: Any) -> Any:
         )
     )
 
+
 class BaseParentContext(UniversalBaseModel):
     span_id: UUID
     parent: Optional['ParentContext'] = None
 
 
-class DeploymentParentContext(BaseParentContext):
+class BaseDeploymentParentContext(BaseParentContext):
     deployment_id: UUID
     deployment_name: str
     deployment_history_item_id: UUID
-    version_id: UUID
     release_tag_id: UUID
     release_tag_name: str
     external_id: Optional[str]
-    # TODO: Discriminator between Workflow and Prompt? (waiting on feedback)
+
+
+class WorkflowDeploymentParentContext(BaseDeploymentParentContext):
+    type: Literal["WORKFLOW_RELEASE_TAG"] = "WORKFLOW_RELEASE_TAG"
+    version_id: UUID
+
+
+class PromptDeploymentParentContext(BaseDeploymentParentContext):
+    type: Literal["PROMPT_RELEASE_TAG"] = "PROMPT_RELEASE_TAG"
+    version_id: UUID
 
 
 class NodeParentContext(BaseParentContext):
+    type: Literal["WORKFLOW_NODE"] = "WORKFLOW_NODE"
     node_definition: Type['BaseNode']
 
     @field_serializer("node_definition")
@@ -71,6 +81,7 @@ class NodeParentContext(BaseParentContext):
 
 
 class WorkflowParentContext(BaseParentContext):
+    type: Literal["WORKFLOW"] = "WORKFLOW"
     workflow_definition: Type['BaseWorkflow']
 
     @field_serializer("workflow_definition")
@@ -81,7 +92,8 @@ class WorkflowParentContext(BaseParentContext):
 ParentContext = Union[
     NodeParentContext,
     WorkflowParentContext,
-    DeploymentParentContext,
+    PromptDeploymentParentContext,
+    WorkflowDeploymentParentContext,
 ]
 
 

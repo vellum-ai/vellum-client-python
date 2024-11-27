@@ -45,5 +45,47 @@ service:
                   name: name
       audiences:
         - internal
+    metric_definition_history_item_retrieve:
+      path: /v1/metric-definitions/{id}/history/{history_id_or_release_tag}
+      method: GET
+      auth: true
+      path-parameters:
+        history_id_or_release_tag:
+          type: string
+          docs: >-
+            Either the UUID of Metric Definition History Item you'd like to
+            retrieve, or the name of a Release Tag that's pointing to the Metric
+            Definition History Item you'd like to retrieve.
+        id:
+          type: string
+          docs: A UUID string identifying this metric definition.
+      response:
+        docs: ''
+        type: root.MetricDefinitionHistoryItem
+      url: Default
+      examples:
+        - path-parameters:
+            history_id_or_release_tag: history_id_or_release_tag
+            id: id
+          response:
+            body:
+              id: id
+              label: label
+              name: name
+              description: description
+              input_variables:
+                - id: id
+                  key: key
+                  type: STRING
+                  required: true
+                  default:
+                    type: STRING
+              output_variables:
+                - id: id
+                  key: key
+                  type: STRING
+                  required: true
+                  default:
+                    type: STRING
   source:
     openapi: openapi/openapi.yml

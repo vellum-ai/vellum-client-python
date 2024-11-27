@@ -1385,6 +1385,37 @@ paths:
       x-fern-availability: beta
       x-fern-audiences:
       - internal
+  /v1/metric-definitions/{id}/history/{history_id_or_release_tag}:
+    get:
+      operationId: metric_definition_history_item_retrieve
+      parameters:
+      - in: path
+        name: history_id_or_release_tag
+        schema:
+          type: string
+          format: uuid
+        description: Either the UUID of Metric Definition History Item you'd like
+          to retrieve, or the name of a Release Tag that's pointing to the Metric
+          Definition History Item you'd like to retrieve.
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this metric definition.
+        required: true
+      tags:
+      - metric-definitions
+      security:
+      - apiKeyAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricDefinitionHistoryItem'
+          description: ''
   /v1/ml-models/{id}:
     get:
       operationId: ml_models_retrieve
@@ -6031,6 +6062,39 @@ components:
             $ref: '#/components/schemas/TestSuiteRunMetricOutput'
       required:
       - outputs
+    MetricDefinitionHistoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        label:
+          type: string
+          description: A human-readable label for the metric
+          maxLength: 150
+        name:
+          type: string
+          description: A name that uniquely identifies this metric within its workspace
+          maxLength: 150
+        description:
+          type: string
+        input_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+          readOnly: true
+        output_variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/VellumVariable'
+          readOnly: true
+      required:
+      - description
+      - id
+      - input_variables
+      - label
+      - name
+      - output_variables
     MetricDefinitionInput:
       oneOf:
       - $ref: '#/components/schemas/StringInput'

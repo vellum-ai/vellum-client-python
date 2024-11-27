@@ -207,4 +207,8 @@ export class WorkflowContext {
     this.mlModelNamesById[mlModelId] = mlModel.name;
     return mlModel.name;
   }
+
+  public addWorkflowEdges(edges: WorkflowEdge[]): void {
+    this.workflowRawEdges.push(...edges);
+  }
 }

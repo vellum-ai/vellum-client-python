@@ -317,7 +317,6 @@ from .workflow import *\
       workflowContext: this.workflowContext,
       inputs,
       nodes: nodesToGenerate,
-      edges: this.workflowVersionExecConfig.workflowRawData.edges,
       displayData: this.workflowVersionExecConfig.workflowRawData.displayData,
     });
 

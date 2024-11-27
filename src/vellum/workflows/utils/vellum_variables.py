@@ -1,3 +1,4 @@
+import typing
 from typing import List, Tuple, Type, Union, get_args, get_origin
 
 from vellum import (
@@ -17,8 +18,8 @@ from vellum import (
     VellumValueRequest,
     VellumVariableType,
 )
-
 from vellum.workflows.descriptors.base import BaseDescriptor
+from vellum.workflows.types.core import Json
 
 
 def primitive_type_to_vellum_variable_type(type_: Union[Type, BaseDescriptor]) -> VellumVariableType:
@@ -32,6 +33,17 @@ def primitive_type_to_vellum_variable_type(type_: Union[Type, BaseDescriptor]) -
             return "JSON"
 
         if len(types) != 1:
+            # Check explicitly for our internal JSON type.
+            # Matches the type found at vellum.workflows.utils.vellum_variables.Json
+            if types == [
+                bool,
+                int,
+                float,
+                str,
+                typing.List[typing.ForwardRef('Json')],  # type: ignore [misc]
+                typing.Dict[str, typing.ForwardRef('Json')],  # type: ignore [misc]
+            ]:
+                return "JSON"
             raise ValueError(f"Expected Descriptor to only have one type, got {types}")
 
         type_ = type_.types[0]

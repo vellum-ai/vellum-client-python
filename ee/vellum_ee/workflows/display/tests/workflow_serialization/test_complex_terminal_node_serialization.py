@@ -3,11 +3,12 @@ from unittest import mock
 
 from deepdiff import DeepDiff
 
-from tests.workflows.complex_final_output_node.missing_final_output_node import MissingFinalOutputNodeWorkflow
-from tests.workflows.complex_final_output_node.missing_workflow_output import MissingWorkflowOutputWorkflow
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
+
+from tests.workflows.complex_final_output_node.missing_final_output_node import MissingFinalOutputNodeWorkflow
+from tests.workflows.complex_final_output_node.missing_workflow_output import MissingWorkflowOutputWorkflow
 
 
 def test_serialize_workflow__missing_final_output_node():
@@ -40,17 +41,17 @@ def test_serialize_workflow__missing_final_output_node():
                 "id": "da086239-d743-4246-b666-5c91e22fb88c",
                 "key": "alpha",
                 "type": "STRING",
+                "required": True,
                 "default": None,
-                "required": None,
-                "extensions": None,
+                "extensions": { "color": None },
             },
             {
                 "id": "a8b6c5d4-a0e9-4457-834b-46b633c466a6",
                 "key": "beta",
                 "type": "STRING",
+                "required": True,
                 "default": None,
-                "required": None,
-                "extensions": None,
+                "extensions": { "color": None },
             },
         ],
         input_variables,

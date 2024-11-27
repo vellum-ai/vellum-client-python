@@ -10,5 +10,8 @@ export default defineConfig({
         inline: [/@fern-api\/.*/], // Force inline these packages
       },
     },
+    env: {
+      ISORT_CMD: "poetry run isort",
+    },
   },
 });

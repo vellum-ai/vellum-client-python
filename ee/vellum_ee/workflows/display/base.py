@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from uuid import UUID
-from typing import TypeVar
+from typing import Optional, TypeVar
 
 
 @dataclass
@@ -20,6 +20,7 @@ WorkflowMetaDisplayOverridesType = TypeVar("WorkflowMetaDisplayOverridesType", b
 @dataclass
 class WorkflowInputsDisplayOverrides:
     id: UUID
+    color: Optional[str] = None
 
 
 @dataclass

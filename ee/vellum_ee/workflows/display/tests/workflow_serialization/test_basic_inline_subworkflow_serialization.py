@@ -2,10 +2,11 @@ from unittest import mock
 
 from deepdiff import DeepDiff
 
-from tests.workflows.basic_inline_subworkflow.workflow import BasicInlineSubworkflowWorkflow
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
+
+from tests.workflows.basic_inline_subworkflow.workflow import BasicInlineSubworkflowWorkflow
 
 
 def test_serialize_workflow():
@@ -37,17 +38,17 @@ def test_serialize_workflow():
                 "id": "fa73da37-34c3-47a9-be58-69cc6cdbfca5",
                 "key": "city",
                 "type": "STRING",
-                "required": None,
+                "required": True,
                 "default": None,
-                "extensions": None,
+                "extensions": { "color": None },
             },
             {
                 "id": "aba1e6e0-dfa7-4c15-a4e6-aec6feebfaca",
                 "key": "date",
                 "type": "STRING",
-                "required": None,
+                "required": True,
                 "default": None,
-                "extensions": None,
+                "extensions": { "color": None },
             },
         ],
         input_variables,

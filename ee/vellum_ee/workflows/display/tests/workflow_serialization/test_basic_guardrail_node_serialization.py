@@ -1,8 +1,9 @@
 from deepdiff import DeepDiff
 
-from tests.workflows.basic_guardrail_node.workflow import BasicGuardrailNodeWorkflow
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
+
+from tests.workflows.basic_guardrail_node.workflow import BasicGuardrailNodeWorkflow
 
 
 def test_serialize_workflow():
@@ -26,17 +27,17 @@ def test_serialize_workflow():
                 "id": "eb1b1913-9fb8-4b8c-8901-09d9b9edc1c3",
                 "key": "actual",
                 "type": "STRING",
-                "required": None,
+                "required": True,
                 "default": None,
-                "extensions": None,
+                "extensions": { "color": None },
             },
             {
                 "id": "545ff95e-e86f-4d06-a991-602781e72605",
                 "key": "expected",
                 "type": "STRING",
-                "required": None,
+                "required": True,
                 "default": None,
-                "extensions": None,
+                "extensions": { "color": None },
             },
         ],
         input_variables,

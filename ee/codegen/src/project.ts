@@ -37,6 +37,7 @@ import { MapNodeContext } from "src/context/node-context/map-node";
 import { MergeNodeContext } from "src/context/node-context/merge-node";
 import { NoteNodeContext } from "src/context/node-context/note-node";
 import { PromptDeploymentNodeContext } from "src/context/node-context/prompt-deployment-node";
+import { SubworkflowDeploymentNodeContext } from "src/context/node-context/subworkflow-deployment-node";
 import { TemplatingNodeContext } from "src/context/node-context/templating-node";
 import { TextSearchNodeContext } from "src/context/node-context/text-search-node";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
@@ -356,7 +357,7 @@ from .workflow import *\
             case "DEPLOYMENT":
               node = new SubworkflowDeploymentNode({
                 workflowContext: this.workflowContext,
-                nodeContext: nodeContext as InlineSubworkflowNodeContext,
+                nodeContext: nodeContext as SubworkflowDeploymentNodeContext,
               });
               break;
             default: {

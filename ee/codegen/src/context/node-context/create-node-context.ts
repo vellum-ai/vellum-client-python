@@ -1,3 +1,5 @@
+import { WorkflowDeployments as WorkflowDeploymentsClient } from "vellum-ai/api/resources/workflowDeployments/client/Client";
+
 import { BaseNodeContext } from "./base";
 import { GuardrailNodeContext } from "./guardrail-node";
 import { InlineSubworkflowNodeContext } from "./inline-subworkflow-node";
@@ -48,9 +50,19 @@ export async function createNodeContext(
           });
         }
         case "DEPLOYMENT": {
+          const { releaseTag, workflowDeploymentId } = subworkflowNodeData.data;
+          const workflowDeploymentHistoryItem =
+            await new WorkflowDeploymentsClient(
+              {}
+            ).workflowDeploymentHistoryItemRetrieve(
+              releaseTag,
+              workflowDeploymentId
+            );
+
           return new SubworkflowDeploymentNodeContext({
             ...args,
             nodeData: subworkflowNodeData,
+            workflowDeploymentHistoryItem,
           });
         }
         default: {

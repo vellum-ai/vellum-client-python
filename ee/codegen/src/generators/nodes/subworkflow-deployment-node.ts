@@ -1,8 +1,10 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
+import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { SubworkflowDeploymentNodeContext } from "src/context/node-context/subworkflow-deployment-node";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
+import { codegen } from "src/index";
 import { SubworkflowNode as SubworkflowNodeType } from "src/types/vellum";
 
 export class SubworkflowDeploymentNode extends BaseSingleFileNode<
@@ -25,7 +27,7 @@ export class SubworkflowDeploymentNode extends BaseSingleFileNode<
       python.field({
         name: "deployment",
         initializer: python.TypeInstantiation.str(
-          this.nodeData.data.workflowDeploymentId
+          this.nodeContext.workflowDeploymentHistoryItem.name
         ),
       })
     );
@@ -51,7 +53,37 @@ export class SubworkflowDeploymentNode extends BaseSingleFileNode<
       })
     );
 
+    statements.push(this.generateOutputsClass());
+
     return statements;
+  }
+
+  private generateOutputsClass(): python.Class {
+    const nodeBaseClassRef = this.getNodeBaseClass();
+    const outputsClass = python.class_({
+      name: OUTPUTS_CLASS_NAME,
+      extends_: [
+        python.reference({
+          name: nodeBaseClassRef.name,
+          modulePath: nodeBaseClassRef.modulePath,
+          alias: nodeBaseClassRef.alias,
+          attribute: [OUTPUTS_CLASS_NAME],
+        }),
+      ],
+    });
+
+    this.nodeContext.workflowDeploymentHistoryItem.outputVariables.forEach(
+      (output) => {
+        const outputName = this.nodeContext.getNodeOutputNameById(output.id);
+        outputsClass.add(
+          codegen.vellumVariable({
+            variable: { name: outputName, type: output.type, id: output.id },
+          })
+        );
+      }
+    );
+
+    return outputsClass;
   }
 
   getNodeDisplayClassBodyStatements(): AstNode[] {
@@ -80,10 +112,48 @@ export class SubworkflowDeploymentNode extends BaseSingleFileNode<
       })
     );
 
-    // TODO: Add stable id references for inputs and outputs
-    // https://app.shortcut.com/vellum/story/5639
-
     return statements;
+  }
+
+  protected getOutputDisplay(): python.Field {
+    return python.field({
+      name: "output_display",
+      initializer: python.TypeInstantiation.dict(
+        this.nodeContext.workflowDeploymentHistoryItem.outputVariables.map(
+          (output) => {
+            const outputName = this.nodeContext.getNodeOutputNameById(
+              output.id
+            );
+
+            return {
+              key: python.reference({
+                name: this.nodeContext.nodeClassName,
+                modulePath: this.nodeContext.nodeModulePath,
+                attribute: [OUTPUTS_CLASS_NAME, outputName],
+              }),
+              value: python.instantiateClass({
+                classReference: python.reference({
+                  name: "NodeOutputDisplay",
+                  modulePath:
+                    this.workflowContext.sdkModulePathNames
+                      .NODE_DISPLAY_TYPES_MODULE_PATH,
+                }),
+                arguments_: [
+                  python.methodArgument({
+                    name: "id",
+                    value: python.TypeInstantiation.uuid(output.id),
+                  }),
+                  python.methodArgument({
+                    name: "name",
+                    value: python.TypeInstantiation.str(output.key),
+                  }),
+                ],
+              }),
+            };
+          }
+        )
+      ),
+    });
   }
 
   protected getErrorOutputId(): string | undefined {

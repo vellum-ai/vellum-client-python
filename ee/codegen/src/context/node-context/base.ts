@@ -28,7 +28,7 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
 
   public nodeData: T;
 
-  private readonly nodeOutputNamesById: Record<string, string> = {};
+  private nodeOutputNamesById: Record<string, string> | undefined;
   public readonly portContextsById: Map<string, PortContext>;
 
   constructor(args: BaseNodeContext.Args<T>) {
@@ -58,8 +58,6 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
       this.nodeDisplayModuleName
     );
 
-    this.nodeOutputNamesById = this.getNodeOutputNamesById();
-
     const portContexts = this.createPortContexts();
     portContexts.forEach((portContext) => {
       this.workflowContext.addPortContext(portContext);
@@ -86,6 +84,11 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
   }
 
   public getNodeOutputNameById(outputId: string): string {
+    // Lazily load node output names
+    if (!this.nodeOutputNamesById) {
+      this.nodeOutputNamesById = this.getNodeOutputNamesById();
+    }
+
     const nodeOutputName = this.nodeOutputNamesById[outputId];
 
     if (!nodeOutputName) {

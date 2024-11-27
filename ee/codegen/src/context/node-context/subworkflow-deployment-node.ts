@@ -1,13 +1,33 @@
+import { WorkflowDeploymentHistoryItem } from "vellum-ai/api";
+
 import { BaseNodeContext } from "./base";
 
 import { PortContext } from "src/context/port-context";
 import { SubworkflowNode as SubworkflowNodeType } from "src/types/vellum";
+import { toSnakeCase } from "src/utils/casing";
+
+export declare namespace SubworkflowDeploymentNodeContext {
+  interface Args extends BaseNodeContext.Args<SubworkflowNodeType> {
+    workflowDeploymentHistoryItem: WorkflowDeploymentHistoryItem;
+  }
+}
 
 export class SubworkflowDeploymentNodeContext extends BaseNodeContext<SubworkflowNodeType> {
-  // TODO: Hit an API to get a subworkflow deployment node's outputs at runtime
-  // https://app.shortcut.com/vellum/story/5638/fetch-subworkflow-deployment-node-outputs-via-api
+  public workflowDeploymentHistoryItem: WorkflowDeploymentHistoryItem;
+
+  constructor(args: SubworkflowDeploymentNodeContext.Args) {
+    super(args);
+
+    this.workflowDeploymentHistoryItem = args.workflowDeploymentHistoryItem;
+  }
+
   getNodeOutputNamesById(): Record<string, string> {
-    return {};
+    return this.workflowDeploymentHistoryItem.outputVariables.reduce<
+      Record<string, string>
+    >((acc, output) => {
+      acc[output.id] = toSnakeCase(output.key);
+      return acc;
+    }, {});
   }
 
   createPortContexts(): PortContext[] {

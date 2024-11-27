@@ -89,7 +89,7 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
         return self.Outputs(**mapped_items)
 
     def _run_subworkflow(self, *, item: MapNodeItemType, index: int) -> None:
-        subworkflow = self.subworkflow(parent_state=self.state)
+        subworkflow = self.subworkflow(parent_state=self.state, context=self._context)
         events = subworkflow.stream(inputs=self.SubworkflowInputs(index=index, item=item, all_items=self.items))
 
         for event in events:

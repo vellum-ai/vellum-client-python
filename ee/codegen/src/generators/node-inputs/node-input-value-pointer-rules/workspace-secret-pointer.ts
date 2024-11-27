@@ -1,4 +1,5 @@
 import { python } from "@fern-api/python-ast";
+import { isNil } from "lodash";
 
 import { BaseNodeInputValuePointerRule } from "./base";
 
@@ -10,8 +11,8 @@ export class WorkspaceSecretPointerRule extends BaseNodeInputValuePointerRule<Wo
 
     const workspaceSecretName = workspaceSecretPointerData.workspaceSecretId;
 
-    if (!workspaceSecretName) {
-      throw new Error("Workspace secret name is required");
+    if (isNil(workspaceSecretName)) {
+      return python.TypeInstantiation.none();
     }
 
     return python.instantiateClass({

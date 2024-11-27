@@ -31,4 +31,22 @@ describe("WorkspaceSecretPointer", () => {
     workspaceSecretPointer.write(writer);
     expect(await writer.toStringFormatted()).toMatchSnapshot();
   });
+
+  it("should handle the the case where the workspace secret isn't yet specified", async () => {
+    const workflowContext = workflowContextFactory();
+
+    const workspaceSecretPointer = new WorkspaceSecretPointerRule({
+      workflowContext: workflowContext,
+      nodeInputValuePointerRule: {
+        type: "WORKSPACE_SECRET",
+        data: {
+          type: "STRING",
+          workspaceSecretId: undefined,
+        },
+      },
+    });
+
+    workspaceSecretPointer.write(writer);
+    expect(await writer.toStringFormatted()).toMatchSnapshot();
+  });
 });

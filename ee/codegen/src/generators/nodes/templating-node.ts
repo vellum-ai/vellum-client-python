@@ -92,7 +92,7 @@ export class TemplatingNode extends BaseSingleFileNode<
         initializer: python.TypeInstantiation.uuid(
           this.nodeData.data.templateNodeInputId
         ),
-      }),
+      })
     );
 
     return statements;

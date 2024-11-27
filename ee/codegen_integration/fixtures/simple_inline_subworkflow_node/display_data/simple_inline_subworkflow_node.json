@@ -271,10 +271,7 @@
             {
               "id": "6ab3665f-881d-488b-9124-a6da40136c68",
               "key": "final-output",
-              "type": "STRING",
-              "required": null,
-              "default": null,
-              "extensions": null
+              "type": "STRING"
             }
           ],
           "label": "Subworkflow Node",
@@ -374,9 +371,9 @@
       "id": "ffa88d81-4453-4cd6-a800-a35832c0aaa7",
       "key": "query",
       "type": "STRING",
-      "required": null,
+      "required": true,
       "default": null,
-      "extensions": null
+      "extensions": { "color": null }
     }
   ],
   "output_variables": [

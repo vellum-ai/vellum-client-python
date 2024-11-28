@@ -9,7 +9,7 @@ from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 
 
-def test_code_to_display_data(code_to_display_fixture_paths):
+def test_code_to_display_data(code_to_display_fixture_paths, mock_open_code_execution_file):
     """Confirms that code representations of workflows are correctly serialized into their display representations."""
 
     expected_display_data_file_path, code_dir = code_to_display_fixture_paths

@@ -16,6 +16,7 @@ _CodeExecutionNodeType = TypeVar("_CodeExecutionNodeType", bound=CodeExecutionNo
 class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType], Generic[_CodeExecutionNodeType]):
     code_input_id: ClassVar[Optional[UUID]] = None
     runtime_input_id: ClassVar[Optional[UUID]] = None
+    arg_input_id: ClassVar[Optional[UUID]] = None
 
     output_id: ClassVar[Optional[UUID]] = None
     log_output_id: ClassVar[Optional[UUID]] = None
@@ -27,6 +28,19 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
         node_id = self.node_id
 
         code = read_file_from_path(raise_if_descriptor(node.filepath))
+        inputs = []
+
+        if self.arg_input_id:
+            code_inputs = raise_if_descriptor(node.code_inputs)
+            value = next((value for key, value in code_inputs.items() if key == "arg"), None)
+            arg_node_input = create_node_input(
+                node_id=node_id,
+                input_name="arg",
+                value=value,
+                display_context=display_context,
+                input_id=self.arg_input_id,
+            )
+            inputs.append(arg_node_input)
         code_node_input = create_node_input(
             node_id=node_id,
             input_name="code",
@@ -41,7 +55,7 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
             display_context=display_context,
             input_id=self.runtime_input_id,
         )
-        inputs = [code_node_input, runtime_node_input]
+        inputs.extend([code_node_input, runtime_node_input])
 
         packages = raise_if_descriptor(node.packages)
 

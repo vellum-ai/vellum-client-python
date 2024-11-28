@@ -4,6 +4,7 @@ import * as path from "path";
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
+import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { CodeExecutionContext } from "src/context/node-context/code-execution-node";
 import { InitFile } from "src/generators";
 import { BaseState } from "src/generators/base-state";
@@ -131,6 +132,16 @@ export class CodeExecutionNode extends BaseSingleFileNode<
       })
     );
 
+    const argId = this.nodeInputsByKey.get("arg")?.nodeInputData.id;
+    if (argId) {
+      statements.push(
+        python.field({
+          name: "arg_input_id",
+          initializer: python.TypeInstantiation.uuid(argId),
+        })
+      );
+    }
+
     statements.push(
       python.field({
         name: "runtime_input_id",
@@ -151,6 +162,29 @@ export class CodeExecutionNode extends BaseSingleFileNode<
         initializer: nodeData.logOutputId
           ? python.TypeInstantiation.uuid(nodeData.logOutputId)
           : python.TypeInstantiation.none(),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "label",
+        initializer: python.TypeInstantiation.str(this.nodeData.data.label),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "node_id",
+        initializer: python.TypeInstantiation.uuid(this.nodeData.id),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "target_handle_id",
+        initializer: python.TypeInstantiation.uuid(
+          this.nodeData.data.targetHandleId
+        ),
       })
     );
 
@@ -197,5 +231,69 @@ export class CodeExecutionNode extends BaseSingleFileNode<
     await mkdir(path.dirname(absolutePathToScriptFile), { recursive: true });
     await writeFile(absolutePathToScriptFile, scriptFileContents);
     return;
+  }
+
+  protected getOutputDisplay(): python.Field {
+    return python.field({
+      name: "output_display",
+      initializer: python.TypeInstantiation.dict([
+        {
+          key: python.reference({
+            name: this.nodeContext.nodeClassName,
+            modulePath: this.nodeContext.nodeModulePath,
+            attribute: [OUTPUTS_CLASS_NAME, "result"],
+          }),
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "NodeOutputDisplay",
+              modulePath:
+                this.workflowContext.sdkModulePathNames
+                  .NODE_DISPLAY_TYPES_MODULE_PATH,
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "id",
+                value: python.TypeInstantiation.uuid(
+                  this.nodeData.data.outputId
+                ),
+              }),
+              python.methodArgument({
+                name: "name",
+                value: python.TypeInstantiation.str("result"),
+              }),
+            ],
+          }),
+        },
+        {
+          key: python.reference({
+            name: this.nodeContext.nodeClassName,
+            modulePath: this.nodeContext.nodeModulePath,
+            attribute: [OUTPUTS_CLASS_NAME, "log"],
+          }),
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "NodeOutputDisplay",
+              modulePath:
+                this.workflowContext.sdkModulePathNames
+                  .NODE_DISPLAY_TYPES_MODULE_PATH,
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "id",
+                value: this.nodeData.data.logOutputId
+                  ? python.TypeInstantiation.uuid(
+                      this.nodeData.data.logOutputId
+                    )
+                  : python.TypeInstantiation.none(),
+              }),
+              python.methodArgument({
+                name: "name",
+                value: python.TypeInstantiation.str("log"),
+              }),
+            ],
+          }),
+        },
+      ]),
+    });
   }
 }

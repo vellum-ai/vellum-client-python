@@ -1,14 +1,14 @@
 from uuid import UUID
 from typing import ClassVar, Generic, Optional, TypeVar
 
-from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
-from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
-from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
-from vellum_ee.workflows.display.types import WorkflowDisplayContext
 from vellum.workflows.nodes.displayable.code_execution_node import CodeExecutionNode
 from vellum.workflows.nodes.displayable.code_execution_node.utils import read_file_from_path
 from vellum.workflows.types.core import JsonObject
 from vellum.workflows.utils.vellum_variables import primitive_type_to_vellum_variable_type
+from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
+from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
+from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
+from vellum_ee.workflows.display.types import WorkflowDisplayContext
 
 _CodeExecutionNodeType = TypeVar("_CodeExecutionNodeType", bound=CodeExecutionNode)
 

@@ -31,7 +31,7 @@ class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_Sea
     variable_ids: Optional[VariableIdMap] = None
 
     def serialize(
-        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs: Any
+        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs
     ) -> JsonObject:
         node = self._node
         node_id = self.node_id

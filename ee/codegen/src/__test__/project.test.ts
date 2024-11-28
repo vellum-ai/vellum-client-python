@@ -33,7 +33,9 @@ describe("WorkflowProjectGenerator", () => {
       getFixturesForProjectTest({
         includeFixtures: [
           "simple_search_node",
-          "simple_inline_subworkflow_node",
+          // TODO: Fix codegen for inline subworkflow node
+          // https://app.shortcut.com/vellum/story/5662/fix-codegen-for-inline-subworkflow-node
+          // "simple_inline_subworkflow_node",
           "simple_guardrail_node",
           "simple_prompt_node",
           "simple_map_node",

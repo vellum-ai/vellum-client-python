@@ -16,7 +16,8 @@
             "x": 0,
             "y": 151.5
           }
-        }
+        },
+        "definition": {"name": "BaseNode", "module": ["vellum", "workflows", "nodes", "bases", "base"], "bases": []}
       },
       {
         "id": "72cb9f1e-aedd-47af-861e-4f38d27053b6",
@@ -372,7 +373,8 @@
             "x": 864,
             "y": 58.5
           }
-        }
+        },
+        "definition": {"name": "FinalOutput", "module": ["codegen_integration", "fixtures", "simple_map_node", "code", "nodes", "final_output"], "bases": [{"name": "FinalOutputNode", "module": ["vellum", "workflows", "nodes", "displayable", "final_output_node", "node"]}]}
       }
     ],
     "edges": [

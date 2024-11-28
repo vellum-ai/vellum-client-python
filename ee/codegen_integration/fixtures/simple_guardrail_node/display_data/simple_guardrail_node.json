@@ -80,7 +80,7 @@
           "name": "final-output",
           "target_handle_id": "0ef13a41-8905-45ad-9aee-09c201368981",
           "output_id": "493cfa4b-5235-4b71-99ef-270955f35fcb",
-          "output_type": "STRING",
+          "output_type": "NUMBER",
           "node_input_id": "ff856e07-ed9a-47fa-8cec-76ebd8795cdb"
         },
         "inputs": [
@@ -90,10 +90,8 @@
             "value": {
               "rules": [
                 {
-                  "type": "INPUT_VARIABLE",
-                  "data": {
-                    "input_variable_id": "1472503c-1662-4da9-beb9-73026be90c68"
-                  }
+                  "type": "NODE_OUTPUT",
+                  "data": {"node_id": "c207b440-6aac-4047-a37c-e25fcb5b9cfb", "output_id": "0e455862-ccc4-47a4-a9a5-061fadc94fd6"}
                 }
               ],
               "combinator": "OR"
@@ -160,7 +158,7 @@
     {
       "id": "493cfa4b-5235-4b71-99ef-270955f35fcb",
       "key": "final-output",
-      "type": "STRING"
+      "type": "NUMBER"
     }
   ]
 }

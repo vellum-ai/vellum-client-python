@@ -1,9 +1,9 @@
 from vellum.workflows.nodes.displayable import FinalOutputNode
 from vellum.workflows.state import BaseState
 
-from ..inputs import Inputs
+from .guardrail_node import GuardrailNode
 
 
-class FinalOutput(FinalOutputNode[BaseState, str]):
+class FinalOutput(FinalOutputNode[BaseState, float]):
     class Outputs(FinalOutputNode.Outputs):
-        value = Inputs.actual
+        value = GuardrailNode.Outputs.score

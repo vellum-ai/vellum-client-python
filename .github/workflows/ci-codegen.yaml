@@ -46,8 +46,7 @@ jobs:
         with:
           python-version: 3.9
       - name: Bootstrap poetry
-        run: |
-          make setup-poetry
+        run: make setup-poetry
       - name: Install dependencies
         run: poetry install
 

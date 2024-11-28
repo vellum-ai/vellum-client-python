@@ -22,6 +22,18 @@ make setup
 make test
 ```
 
+## Tooling
+
+This section talks through the tooling you should be familiar with to contribute to the Vellum Python SDKs.
+
+### Fern
+
+[Fern](https://buildwithfern.com/) is used to auto-generate the Vellum Python SDKs. It's a CLI tool that can generate SDKs in a variety of languages. All files not specified in the `.fernignore` file are assumed to be auto-generated and should not be modified manually. All files and directories specified there explicitly are assumed to be manually maintained and are open to direct contribution from this repository.
+
+### Poetry
+
+[Poetry](https://python-poetry.org/) is used to manage dependencies, build, and publish the Vellum Python SDKs. It manages a virtual environment in the `.venv` directory and allows you to install dependencies in an isolated environment. It additionally supports building and publishing to PyPI.
+
 ## Development
 
 Each contribution should be made in its own branch, and accompanied with a test:

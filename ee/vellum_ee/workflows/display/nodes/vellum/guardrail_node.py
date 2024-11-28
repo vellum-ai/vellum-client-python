@@ -14,7 +14,9 @@ _GuardrailNodeType = TypeVar("_GuardrailNodeType", bound=GuardrailNode)
 class BaseGuardrailNodeDisplay(BaseNodeVellumDisplay[_GuardrailNodeType], Generic[_GuardrailNodeType]):
     metric_input_ids_by_name: ClassVar[Dict[str, UUID]] = {}
 
-    def serialize(self, display_context: WorkflowDisplayContext) -> JsonObject:
+    def serialize(
+        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs
+    ) -> JsonObject:
         node = self._node
         node_id = self.node_id
 
@@ -38,7 +40,7 @@ class BaseGuardrailNodeDisplay(BaseNodeVellumDisplay[_GuardrailNodeType], Generi
                 "label": self.label,
                 "source_handle_id": str(self.get_source_handle_id(display_context.port_displays)),
                 "target_handle_id": str(self.get_target_handle_id()),
-                "error_output_id": None,
+                "error_output_id": str(error_output_id) if error_output_id else None,
                 "metric_definition_id": str(raise_if_descriptor(node.metric_definition)),
                 "release_tag": raise_if_descriptor(node.release_tag),
             },

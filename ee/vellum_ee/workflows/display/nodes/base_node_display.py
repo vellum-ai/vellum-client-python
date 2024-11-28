@@ -31,7 +31,7 @@ class BaseNodeDisplay(Generic[NodeType]):
     def __init__(self, node: Type[NodeType]):
         self._node = node
 
-    def serialize(self, display_context: "WorkflowDisplayContext") -> JsonObject:
+    def serialize(self, display_context: "WorkflowDisplayContext", **kwargs: Any) -> JsonObject:
         raise NotImplementedError(f"Serialization for nodes of type {self._node.__name__} is not supported.")
 
     def get_definition(self) -> NodeDefinition:

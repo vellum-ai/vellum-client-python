@@ -134,6 +134,7 @@ Message: {event.error.message}""",
             # This dynamic module allows calls to `type_hints` to work
             sys.modules[dynamic_module] = ModuleType(dynamic_module)
 
+            # We use a dynamic wrapped node class to be uniquely tied to this `inner_cls` node during serialization
             WrappedNode = type(
                 cls.__name__,
                 (TryNode,),

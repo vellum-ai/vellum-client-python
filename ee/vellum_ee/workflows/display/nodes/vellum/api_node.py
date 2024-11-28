@@ -32,7 +32,9 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
     # A mapping between node input keys and their ids for inputs representing additional header values
     additional_header_value_input_ids: ClassVar[Optional[Dict[str, UUID]]] = None
 
-    def serialize(self, display_context: WorkflowDisplayContext) -> JsonObject:
+    def serialize(
+        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs: Any
+    ) -> JsonObject:
         node = self._node
         node_id = self.node_id
 
@@ -175,7 +177,7 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
             "inputs": [input.dict() for input in inputs],
             "data": {
                 "label": self.label,
-                "error_output_id": None,
+                "error_output_id": str(error_output_id) if error_output_id else None,
                 "source_handle_id": str(self.get_source_handle_id(display_context.port_displays)),
                 "target_handle_id": str(self.get_target_handle_id()),
                 "url_input_id": url_node_input.id,

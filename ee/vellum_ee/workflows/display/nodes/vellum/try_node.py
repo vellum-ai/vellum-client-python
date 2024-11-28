@@ -30,13 +30,10 @@ class BaseTryNodeDisplay(BaseNodeVellumDisplay[_TryNodeType], Generic[_TryNodeTy
         node_display_class = get_node_display_class(BaseNodeVellumDisplay, inner_node)
         node_display = node_display_class(inner_node)
 
-        serialized_node = node_display.serialize(display_context)
-
-        serialized_node_data = serialized_node.get("data")
-        if isinstance(serialized_node_data, dict):
-            serialized_node_data["error_output_id"] = str(
-                self.error_output_id or uuid4_from_hash(f"{node_display.node_id}|error_output_id")
-            )
+        serialized_node = node_display.serialize(
+            display_context,
+            error_output_id=self.error_output_id or uuid4_from_hash(f"{node_display.node_id}|error_output_id"),
+        )
 
         serialized_node_definition = serialized_node.get("definition")
         if isinstance(serialized_node_definition, dict):

@@ -20,7 +20,9 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
     output_id: ClassVar[Optional[UUID]] = None
     log_output_id: ClassVar[Optional[UUID]] = None
 
-    def serialize(self, display_context: WorkflowDisplayContext) -> JsonObject:
+    def serialize(
+        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs
+    ) -> JsonObject:
         node = self._node
         node_id = self.node_id
 
@@ -54,7 +56,7 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
             "inputs": [input.dict() for input in inputs],
             "data": {
                 "label": self.label,
-                "error_output_id": None,
+                "error_output_id": str(error_output_id) if error_output_id else None,
                 "source_handle_id": str(self.get_source_handle_id(display_context.port_displays)),
                 "target_handle_id": str(self.get_target_handle_id()),
                 "code_input_id": str(self.code_input_id) if self.code_input_id else code_node_input.id,

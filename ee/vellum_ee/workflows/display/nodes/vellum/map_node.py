@@ -18,7 +18,9 @@ _MapNodeType = TypeVar("_MapNodeType", bound=MapNode)
 class BaseMapNodeDisplay(BaseNodeVellumDisplay[_MapNodeType], Generic[_MapNodeType]):
     workflow_input_ids_by_name: ClassVar[Dict[str, UUID]] = {}
 
-    def serialize(self, display_context: WorkflowDisplayContext) -> JsonObject:
+    def serialize(
+        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs
+    ) -> JsonObject:
         node = self._node
         node_id = self.node_id
 
@@ -67,7 +69,7 @@ class BaseMapNodeDisplay(BaseNodeVellumDisplay[_MapNodeType], Generic[_MapNodeTy
             "inputs": [node_input.dict() for node_input in node_inputs],
             "data": {
                 "label": self.label,
-                "error_output_id": None,
+                "error_output_id": str(error_output_id) if error_output_id else None,
                 "source_handle_id": str(self.get_source_handle_id(display_context.port_displays)),
                 "target_handle_id": str(self.get_target_handle_id()),
                 "variant": "INLINE",

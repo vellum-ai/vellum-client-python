@@ -11,8 +11,7 @@ from vellum import (
     StringVellumValue,
     VellumError,
 )
-from vellum.workflows.constants import UNDEF
-from vellum.workflows.errors import VellumError as WacVellumError
+from vellum.workflows.errors import VellumError as SdkVellumError
 from vellum.workflows.errors.types import VellumErrorCode
 from vellum.workflows.inputs import BaseInputs
 from vellum.workflows.nodes import InlinePromptNode
@@ -141,7 +140,7 @@ def test_inline_text_prompt_node__catch_provider_error(vellum_adhoc_prompt_clien
     # THEN the node should have produced the outputs we expect
     assert BaseOutput(
         name="error",
-        value=WacVellumError(
+        value=SdkVellumError(
             message="OpenAI failed",
             code=VellumErrorCode.PROVIDER_ERROR,
         ),

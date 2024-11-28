@@ -20,7 +20,9 @@ class BasePromptDeploymentNodeDisplay(
     array_output_id: ClassVar[Optional[UUID]] = None
     prompt_input_ids_by_name: ClassVar[Dict[str, UUID]] = {}
 
-    def serialize(self, display_context: WorkflowDisplayContext) -> JsonObject:
+    def serialize(
+        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs
+    ) -> JsonObject:
         node = self._node
         node_id = self.node_id
 
@@ -53,7 +55,7 @@ class BasePromptDeploymentNodeDisplay(
             "data": {
                 "label": self.label,
                 "output_id": str(output_display.id),
-                "error_output_id": None,
+                "error_output_id": str(error_output_id) if error_output_id else None,
                 "array_output_id": str(array_display.id),
                 "source_handle_id": str(self.get_source_handle_id(display_context.port_displays)),
                 "target_handle_id": str(self.get_target_handle_id()),

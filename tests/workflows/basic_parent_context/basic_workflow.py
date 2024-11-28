@@ -13,13 +13,5 @@ class StartNode(BaseNode):
         return self.Outputs(next_value=random.randint(0, 100))
 
 
-class NextNode(BaseNode):
-    class Outputs(BaseOutputs):
-        next_value: int
-
-    def run(self) -> Outputs:
-        return self.Outputs(next_value=random.randint(0, 100))
-
-
 class TrivialWorkflow(BaseWorkflow):
-    graph = StartNode >> NextNode
+    graph = StartNode

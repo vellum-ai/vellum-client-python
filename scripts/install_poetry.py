@@ -16,12 +16,8 @@ It will perform the following steps:
     * Attempt to inform the user if they need to add this bin directory to their `$PATH`, as well as how to do so.
     * Upon failure, write an error log to `poetry-installer-error-<hash>.log and restore any previous environment.
 
-This script performs minimal magic, and should be relatively stable. However, it is optimized for interactive developer
-use and trivial pipelines. If you are considering using this script in production, you should consider manually-managed
-installs, or use of pipx as alternatives to executing arbitrary, unversioned code from the internet. If you prefer this
-script to alternatives, consider maintaining a local copy as part of your infrastructure.
-
-For full documentation, visit https://python-poetry.org/docs/#installation.
+This script started from the Poetry installer, but has been heavily modified to work with Vellum's needs, 
+as recommended by Poetry. Source: https://install.python-poetry.org/
 """
 import sys
 
@@ -40,11 +36,12 @@ import os
 from pathlib import Path
 import re
 import shutil
+import ssl
 import subprocess
 import sysconfig
 import tempfile
 from urllib.request import Request, urlopen
-from typing import Optional
+from typing import Generator, Optional
 
 SHELL = os.getenv("SHELL", "")
 WINDOWS = sys.platform.startswith("win") or (sys.platform == "cli" and os.name == "nt")
@@ -146,8 +143,9 @@ def string_to_bool(value):
 
 
 def data_dir() -> Path:
-    if os.getenv("POETRY_HOME"):
-        return Path(os.getenv("POETRY_HOME")).expanduser()
+    home_env = os.getenv("POETRY_HOME")
+    if home_env:
+        return Path(home_env).expanduser() / "Library/Application Support/pypoetry"
 
     if WINDOWS:
         base_dir = Path(_get_win_folder("CSIDL_APPDATA"))
@@ -161,8 +159,9 @@ def data_dir() -> Path:
 
 
 def bin_dir() -> Path:
-    if os.getenv("POETRY_HOME"):
-        return Path(os.getenv("POETRY_HOME")).expanduser() / "bin"
+    home_env = os.getenv("POETRY_HOME")
+    if home_env:
+        return Path(home_env).expanduser() / "bin"
 
     if WINDOWS and not MINGW:
         return Path(_get_win_folder("CSIDL_APPDATA")) / "Python/Scripts"
@@ -179,11 +178,11 @@ def _get_win_folder_from_registry(csidl_name):
         "CSIDL_LOCAL_APPDATA": "Local AppData",
     }[csidl_name]
 
-    key = _winreg.OpenKey(
-        _winreg.HKEY_CURRENT_USER,
+    key = _winreg.OpenKey(  # type: ignore[attr-defined]
+        _winreg.HKEY_CURRENT_USER,  # type: ignore[attr-defined]
         r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders",
     )
-    path, _ = _winreg.QueryValueEx(key, shell_folder_name)
+    path, _ = _winreg.QueryValueEx(key, shell_folder_name)  # type: ignore[attr-defined]
 
     return path
 
@@ -198,7 +197,7 @@ def _get_win_folder_with_ctypes(csidl_name):
     }[csidl_name]
 
     buf = ctypes.create_unicode_buffer(1024)
-    ctypes.windll.shell32.SHGetFolderPathW(None, csidl_const, None, 0, buf)
+    ctypes.windll.shell32.SHGetFolderPathW(None, csidl_const, None, 0, buf)  # type: ignore[attr-defined]
 
     # Downgrade to short path name if have highbit chars. See
     # <http://bugs.activestate.com/show_bug.cgi?id=85099>.
@@ -209,7 +208,7 @@ def _get_win_folder_with_ctypes(csidl_name):
             break
     if has_high_char:
         buf2 = ctypes.create_unicode_buffer(1024)
-        if ctypes.windll.kernel32.GetShortPathNameW(buf.value, buf2, 1024):
+        if ctypes.windll.kernel32.GetShortPathNameW(buf.value, buf2, 1024):  # type: ignore[attr-defined]
             buf = buf2
 
     return buf.value
@@ -217,7 +216,7 @@ def _get_win_folder_with_ctypes(csidl_name):
 
 if WINDOWS:
     try:
-        from ctypes import windll  # noqa: F401
+        from ctypes import windll  # type: ignore[attr-defined] # noqa: F401
 
         _get_win_folder = _get_win_folder_with_ctypes
     except ImportError:
@@ -291,13 +290,9 @@ class PoetryInstallationError(RuntimeError):
 class VirtualEnvironment:
     def __init__(self, path: Path) -> None:
         self._path = path
-        self._bin_path = self._path.joinpath(
-            "Scripts" if WINDOWS and not MINGW else "bin"
-        )
+        self._bin_path = self._path.joinpath("Scripts" if WINDOWS and not MINGW else "bin")
         # str is for compatibility with subprocess.run on CPython <= 3.7 on Windows
-        self._python = str(
-            self._path.joinpath(self._bin_path, "python.exe" if WINDOWS else "python")
-        )
+        self._python = str(self._path.joinpath(self._bin_path, "python.exe" if WINDOWS else "python"))
 
     @property
     def path(self):
@@ -326,30 +321,20 @@ class VirtualEnvironment:
             builder = venv.EnvBuilder(clear=True, with_pip=True, symlinks=False)
             context = builder.ensure_directories(target)
 
-            if (
-                WINDOWS
-                and hasattr(context, "env_exec_cmd")
-                and context.env_exe != context.env_exec_cmd
-            ):
+            if WINDOWS and hasattr(context, "env_exec_cmd") and context.env_exe != context.env_exec_cmd:
                 target = target.resolve()
 
             builder.create(target)
         except ImportError:
             # fallback to using virtualenv package if venv is not available, eg: ubuntu
             python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-            virtualenv_bootstrap_url = (
-                f"https://bootstrap.pypa.io/virtualenv/{python_version}/virtualenv.pyz"
-            )
+            virtualenv_bootstrap_url = f"https://bootstrap.pypa.io/virtualenv/{python_version}/virtualenv.pyz"
 
             with tempfile.TemporaryDirectory(prefix="poetry-installer") as temp_dir:
                 virtualenv_pyz = Path(temp_dir) / "virtualenv.pyz"
-                request = Request(
-                    virtualenv_bootstrap_url, headers={"User-Agent": "Python Poetry"}
-                )
+                request = Request(virtualenv_bootstrap_url, headers={"User-Agent": "Python Poetry"})
                 virtualenv_pyz.write_bytes(urlopen(request).read())
-                cls.run(
-                    sys.executable, virtualenv_pyz, "--clear", "--always-copy", target
-                )
+                cls.run(sys.executable, virtualenv_pyz, "--clear", "--always-copy", target)
 
         # We add a special file so that Poetry can detect
         # its own virtual environment
@@ -501,8 +486,8 @@ class Installer:
         self._path = path
 
         self._cursor = Cursor()
-        self._bin_dir = None
-        self._data_dir = None
+        self._bin_dir: Optional[Path] = None
+        self._data_dir: Optional[Path] = None
 
     @property
     def bin_dir(self) -> Path:
@@ -568,9 +553,7 @@ class Installer:
         try:
             self.install(version)
         except subprocess.CalledProcessError as e:
-            raise PoetryInstallationError(
-                return_code=e.returncode, log=e.output.decode()
-            ) from e
+            raise PoetryInstallationError(return_code=e.returncode, log=e.output.decode()) from e
 
         self._write("")
         self.display_post_message(version)
@@ -581,11 +564,7 @@ class Installer:
         """
         Installs Poetry in $POETRY_HOME.
         """
-        self._write(
-            "Installing {} ({})".format(
-                colorize("info", "Poetry"), colorize("info", version)
-            )
-        )
+        self._write("Installing {} ({})".format(colorize("info", "Poetry"), colorize("info", version)))
 
         with self.make_env(version) as env:
             self.install_poetry(version, env)
@@ -597,9 +576,7 @@ class Installer:
 
     def uninstall(self) -> int:
         if not self.data_dir.exists():
-            self._write(
-                "{} is not currently installed.".format(colorize("info", "Poetry"))
-            )
+            self._write("{} is not currently installed.".format(colorize("info", "Poetry")))
 
             return 1
 
@@ -608,11 +585,7 @@ class Installer:
             version = self.version_file.read_text().strip()
 
         if version:
-            self._write(
-                "Removing {} ({})".format(
-                    colorize("info", "Poetry"), colorize("b", version)
-                )
-            )
+            self._write("Removing {} ({})".format(colorize("info", "Poetry"), colorize("b", version)))
         else:
             self._write("Removing {}".format(colorize("info", "Poetry")))
 
@@ -633,7 +606,7 @@ class Installer:
         )
 
     @contextmanager
-    def make_env(self, version: str) -> VirtualEnvironment:
+    def make_env(self, version: str) -> Generator[VirtualEnvironment, None, None]:
         env_path = self.data_dir.joinpath("venv")
         env_path_saved = env_path.with_suffix(".save")
 
@@ -648,15 +621,11 @@ class Installer:
             yield VirtualEnvironment.make(env_path)
         except Exception as e:
             if env_path.exists():
-                self._install_comment(
-                    version, "An error occurred. Removing partial environment."
-                )
+                self._install_comment(version, "An error occurred. Removing partial environment.")
                 shutil.rmtree(env_path)
 
             if env_path_saved.exists():
-                self._install_comment(
-                    version, "Restoring previously saved environment."
-                )
+                self._install_comment(version, "Restoring previously saved environment.")
                 shutil.move(env_path_saved, env_path)
 
             raise e
@@ -732,17 +701,15 @@ class Installer:
     def get_windows_path_var(self) -> Optional[str]:
         import winreg
 
-        with winreg.ConnectRegistry(
-            None, winreg.HKEY_CURRENT_USER
-        ) as root, winreg.OpenKey(root, "Environment", 0, winreg.KEY_ALL_ACCESS) as key:
-            path, _ = winreg.QueryValueEx(key, "PATH")
+        with winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER) as root, winreg.OpenKey(  # type: ignore[attr-defined]
+            root, "Environment", 0, winreg.KEY_ALL_ACCESS  # type: ignore[attr-defined]
+        ) as key:
+            path, _ = winreg.QueryValueEx(key, "PATH")  # type: ignore[attr-defined]
 
             return path
 
     def display_post_message_fish(self, version: str) -> None:
-        fish_user_paths = subprocess.check_output(
-            ["fish", "-c", "echo $fish_user_paths"]
-        ).decode("utf-8")
+        fish_user_paths = subprocess.check_output(["fish", "-c", "echo $fish_user_paths"]).decode("utf-8")
 
         message = POST_MESSAGE_NOT_IN_PATH
         if fish_user_paths and str(self.bin_dir) in fish_user_paths:
@@ -798,6 +765,9 @@ class Installer:
             mx = self.VERSION_REGEX.match(x)
             my = self.VERSION_REGEX.match(y)
 
+            if mx is None or my is None:
+                return 0
+
             vx = (*tuple(int(p) for p in mx.groups()[:3]), mx.group(5))
             vy = (*tuple(int(p) for p in my.groups()[:3]), my.group(5))
 
@@ -809,9 +779,7 @@ class Installer:
             return 0
 
         self._write("")
-        releases = sorted(
-            metadata["releases"].keys(), key=cmp_to_key(_compare_versions)
-        )
+        releases = sorted(metadata["releases"].keys(), key=cmp_to_key(_compare_versions))
 
         if self._version and self._version not in releases:
             msg = f"Version {self._version} does not exist."
@@ -823,7 +791,7 @@ class Installer:
         if not version:
             for release in reversed(releases):
                 m = self.VERSION_REGEX.match(release)
-                if m.group(5) and not self.allows_prereleases():
+                if m and m.group(5) and not self.allows_prereleases():
                     continue
 
                 version = release
@@ -831,9 +799,7 @@ class Installer:
                 break
 
         if current_version == version and not self._force:
-            self._write(
-                f'The latest version ({colorize("b", version)}) is already installed.'
-            )
+            self._write(f'The latest version ({colorize("b", version)}) is already installed.')
 
             return None, current_version
 
@@ -851,16 +817,24 @@ class Installer:
         self._write(line)
 
     def _get(self, url):
+        context = None
+        if MACOS:
+            # Use macOS certificates from the system keychain
+            cert_path = "/etc/ssl/cert.pem"
+            if not os.path.exists(cert_path):
+                # Fallback path for macOS certificates
+                cert_path = "/private/etc/ssl/cert.pem"
+
+            context = ssl.create_default_context(cafile=cert_path)
+
         request = Request(url, headers={"User-Agent": "Python Poetry"})
 
-        with closing(urlopen(request)) as r:
+        with closing(urlopen(request, context=context)) as r:
             return r.read()
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Installs the latest (or given) version of poetry"
-    )
+    parser = argparse.ArgumentParser(description="Installs the latest (or given) version of poetry")
     parser.add_argument(
         "-p",
         "--preview",
@@ -906,10 +880,7 @@ def main():
         "--git",
         dest="git",
         action="store",
-        help=(
-            "Install from a git repository instead of fetching the latest version "
-            "of Poetry available online."
-        ),
+        help=("Install from a git repository instead of fetching the latest version " "of Poetry available online."),
     )
 
     args = parser.parse_args()
@@ -918,9 +889,7 @@ def main():
         version=args.version or os.getenv("POETRY_VERSION"),
         preview=args.preview or string_to_bool(os.getenv("POETRY_PREVIEW", "0")),
         force=args.force,
-        accept_all=args.accept_all
-        or string_to_bool(os.getenv("POETRY_ACCEPT", "0"))
-        or not is_interactive(),
+        accept_all=args.accept_all or string_to_bool(os.getenv("POETRY_ACCEPT", "0")) or not is_interactive(),
         path=args.path,
         git=args.git,
     )

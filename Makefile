@@ -10,7 +10,7 @@ setup-python:
 	brew list python@3.9 || brew install python@3.9
 
 setup-poetry:
-	which poetry || curl -sSL https://install.python-poetry.org | python - -y --version 1.5.1
+	python -m scripts.install_poetry -y --version 1.5.1
 
 install-deps:
 	poetry lock && poetry install

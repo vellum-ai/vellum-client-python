@@ -13,10 +13,6 @@ jobs:
           python-version: 3.9
       - name: Bootstrap poetry
         run: make setup-poetry
-      - name: Check Poetry Python
-        run: |
-          poetry env info
-          poetry run python --version
       - name: Install dependencies
         run: poetry install
       - name: Compile

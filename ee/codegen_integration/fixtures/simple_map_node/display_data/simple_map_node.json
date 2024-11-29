@@ -277,35 +277,32 @@
               "id": "b8d66997-444e-4409-b315-5bef0c06192a",
               "key": "items",
               "type": "JSON",
-              "required": null,
+              "required": true,
               "default": null,
-              "extensions": null
+              "extensions": { "color": null }
             },
             {
               "id": "2619e147-870f-40ec-8f21-f3e131fcd65a",
               "key": "item",
               "type": "JSON",
-              "required": null,
+              "required": true,
               "default": null,
-              "extensions": null
+              "extensions": { "color": null }
             },
             {
               "id": "edecf894-c35b-485a-998f-118833a4b045",
               "key": "index",
               "type": "NUMBER",
-              "required": null,
+              "required": true,
               "default": null,
-              "extensions": null
+              "extensions": { "color": null }
             }
           ],
           "output_variables": [
             {
               "id": "bffc4749-00b8-44db-90ee-db655cbc7e62",
               "key": "final-output",
-              "type": "STRING",
-              "required": null,
-              "default": null,
-              "extensions": null
+              "type": "STRING"
             }
           ],
           "concurrency": 4,
@@ -335,9 +332,9 @@
           }
         ],
         "display_data": {
+          "width": null,
+          "height": null,
           "position": {
-            "width": null,
-            "height": null,
             "x": 254,
             "y": 0
           }

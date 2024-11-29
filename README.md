@@ -23,7 +23,6 @@
 
 # Introduction
 
-
 [Vellum](https://www.vellum.ai/) is the end-to-end development platform for building production-grade AI applications
 
 ### Core Features
@@ -45,22 +44,21 @@
 - [Contributing](#contributing)
 - [Open-source vs paid](#open-source-vs-paid)
 
-
 ## Get Started
+
 Most functionality within the SDKs here requires a Vellum account and API key. To sign up, [talk to us](https://www.vellum.ai/landing-pages/request-demo)
 or visit our [pricing page](https://www.vellum.ai/pricing).
 
 Even without a Vellum account, you can use the Workflows SDK to define the control flow of your AI systems. [Learn
 more below](#workflows-sdk).
 
-
-
 ## Client SDK
+
 The Vellum Client SDK, found within `src/client` is a low-level client used to interact directly with the Vellum API.
 Learn more and get started by visiting the [Vellum Client SDK README](/src/vellum/client/README.md).
 
-
 ## Workflows SDK
+
 The Vellum Workflows SDK is a high-level framework for defining and debugging the control flow of AI systems. At
 it's core, it's a powerful workflow engine with syntactic sugar for intuitively defining graphs, the nodes within,
 and the relationships between them.
@@ -71,6 +69,9 @@ and debugging via a UI.
 
 To learn more and get started, visit the [Vellum Workflows SDK README](/src/vellum/workflows/README.md).
 
+## Contributing
+
+See the [CONTRIBUTING.md](/CONTRIBUTING.md) for information on how to contribute to the Vellum SDKs.
 
 ## Open-Source vs. Paid
 

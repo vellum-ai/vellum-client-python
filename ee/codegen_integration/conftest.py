@@ -26,15 +26,20 @@ def _get_fixture_paths(root: str) -> Tuple[str, str]:
     return display_file, code_dir
 
 
+_fixture_paths = _get_fixtures(
+    # TODO: Remove exclusions on all of these fixtures
+    # https://app.shortcut.com/vellum/story/4649/remove-fixture-exclusions-for-serialization
+    exclude_fixtures={
+        "simple_map_node",
+        "simple_code_execution_node",
+    }
+)
+_fixture_ids = [os.path.basename(path) for path in _fixture_paths]
+
+
 @pytest.fixture(
-    params=_get_fixtures(
-        # TODO: Remove exclusions on all of these fixtures
-        # https://app.shortcut.com/vellum/story/4649/remove-fixture-exclusions-for-serialization
-        exclude_fixtures={
-            "simple_map_node",
-            "simple_code_execution_node",
-        }
-    )
+    params=_fixture_paths,
+    ids=_fixture_ids,
 )
 def code_to_display_fixture_paths(request) -> Tuple[str, str]:
     root = request.param

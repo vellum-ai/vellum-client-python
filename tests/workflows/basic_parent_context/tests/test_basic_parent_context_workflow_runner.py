@@ -26,6 +26,7 @@ def test_stream_workflow__happy_path():
     assert parent_context.get('type') == 'WORKFLOW'
     assert parent_context.get('parent') is None
     workflow_def = parent_context.get('workflow_definition')
+    assert workflow_def is not None
     assert workflow_def.get('name') == 'TrivialWorkflow'
     assert workflow_def.get('module') == ['tests', 'workflows', 'basic_parent_context', 'basic_workflow']
 

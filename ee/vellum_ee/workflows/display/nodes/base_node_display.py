@@ -1,7 +1,7 @@
 from functools import cached_property
 import inspect
 from uuid import UUID
-from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Type, TypeVar, get_args, get_origin, cast
+from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Type, TypeVar, cast, get_args, get_origin
 
 from vellum.workflows.nodes.bases.base import BaseNode
 from vellum.workflows.nodes.utils import get_wrapped_node, has_wrapped_node

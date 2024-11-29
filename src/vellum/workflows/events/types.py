@@ -11,8 +11,8 @@ from vellum.workflows.state.encoder import DefaultStateEncoder
 from vellum.workflows.types.utils import datetime_now
 
 if TYPE_CHECKING:
-    from vellum.workflows import BaseWorkflow
-    from vellum.workflows.nodes import BaseNode
+    from vellum.workflows.nodes.bases.base import BaseNode
+    from vellum.workflows.workflows.base import BaseWorkflow
 
 
 class WorkflowEventType(Enum):

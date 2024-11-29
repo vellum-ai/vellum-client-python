@@ -12,8 +12,9 @@ setup-python:
 setup-poetry:
 	python -m scripts.install_poetry -y --version 1.5.1
 
+# We use the full path to poetry to avoid any issues with the shell configuration from the setup-poetry step
 install-deps:
-	poetry lock && poetry install
+	$(HOME)/.local/bin/poetry lock && $(HOME)/.local/bin/poetry install
 
 setup-pre-commit:
 	pre-commit install \

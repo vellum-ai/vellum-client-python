@@ -255,6 +255,20 @@ You can test that everything is set up by executing:
 `{test_command}`
 """
 
+POST_MESSAGE_RC_ADDED_PATH = """{poetry} ({version}) is installed now. Great!
+
+To help you get started, we added {poetry}'s bin directory ({poetry_home_bin}) to your `PATH`
+environment variable in your shell configuration file ({rc_file}).
+
+Please apply the changes by sourcing the file:
+
+`source {rc_file}`
+
+You can test that everything is set up by executing:
+
+`{test_command}`
+"""
+
 POST_MESSAGE_CONFIGURE_UNIX = """
 Add `export PATH="{poetry_home_bin}:$PATH"` to your shell configuration file.
 """
@@ -515,7 +529,7 @@ class Installer:
             version = self._path
         else:
             try:
-                version, current_version = self.get_version()
+                version = self.get_version()
             except ValueError:
                 return 1
 
@@ -732,8 +746,34 @@ class Installer:
         paths = os.getenv("PATH", "").split(":")
 
         message = POST_MESSAGE_NOT_IN_PATH
-        if paths and str(self.bin_dir) in paths:
+        bin_dir_str = str(self.bin_dir)
+        if paths and bin_dir_str in paths:
             message = POST_MESSAGE
+            rc_file = None
+        else:
+            shell = os.environ.get("SHELL", "")
+            home = Path.home()
+
+            if "zsh" in shell:
+                rc_file = home / ".zshrc"
+            elif "bash" in shell:
+                rc_file = home / ".bashrc"
+            else:
+                rc_file = None
+
+            if rc_file:
+                if not rc_file.exists():
+                    rc_file.touch()
+
+                with open(rc_file) as f:
+                    rc_file_content = f.read()
+
+                if bin_dir_str not in rc_file_content:
+                    message = POST_MESSAGE_RC_ADDED_PATH
+                    rc_file_content += f"\n\n# Add Poetry to PATH\nexport PATH=\"{bin_dir_str}:$PATH\"\n"
+
+                    with open(rc_file, "w") as f:
+                        f.write(rc_file_content)
 
         self._write(
             message.format(
@@ -745,6 +785,7 @@ class Installer:
                     poetry_home_bin=colorize("comment", self.bin_dir)
                 ),
                 test_command=colorize("b", "poetry --version"),
+                rc_file=colorize("b", rc_file),
             )
         )
 
@@ -799,11 +840,11 @@ class Installer:
                 break
 
         if current_version == version and not self._force:
-            self._write(f'The latest version ({colorize("b", version)}) is already installed.')
+            self._write(f'The selected version ({colorize("b", version)}) is already installed.')
 
-            return None, current_version
+            return None
 
-        return version, current_version
+        return version
 
     def _write(self, line) -> None:
         sys.stdout.write(line + "\n")

@@ -10,5 +10,4 @@ src/vellum/plugins
 src/vellum/workflows
 scripts
 tests/workflows
-tests/helpers.py
 conftest.py

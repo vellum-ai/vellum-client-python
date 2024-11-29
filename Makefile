@@ -14,7 +14,7 @@ setup-poetry:
 
 # We use the full path to poetry to avoid any issues with the shell configuration from the setup-poetry step
 install-deps:
-	$(HOME)/.local/bin/poetry lock && $(HOME)/.local/bin/poetry install
+	$(HOME)/.local/bin/poetry env use 3.9 && $(HOME)/.local/bin/poetry lock && $(HOME)/.local/bin/poetry install
 
 setup-pre-commit:
 	pre-commit install \

@@ -770,7 +770,7 @@ class Installer:
 
                 if bin_dir_str not in rc_file_content:
                     message = POST_MESSAGE_RC_ADDED_PATH
-                    rc_file_content += f"\n\n# Add Poetry to PATH\nexport PATH=\"{bin_dir_str}:$PATH\"\n"
+                    rc_file_content += f'\n\n# Add Poetry to PATH\nexport PATH="{bin_dir_str}:$PATH"\n'
 
                     with open(rc_file, "w") as f:
                         f.write(rc_file_content)
@@ -937,6 +937,12 @@ def main():
 
     if args.uninstall or string_to_bool(os.getenv("POETRY_UNINSTALL", "0")):
         return installer.uninstall()
+
+    preexisting_venv = os.environ.get("VIRTUAL_ENV")
+    if preexisting_venv:
+        # We need to deactivate the existing virtual environment, if it exists, in case the contributor
+        # switching from elsewhere in the Vellum ecosystem
+        os.system("deactivate")
 
     try:
         return installer.run()

@@ -34,6 +34,8 @@ This section talks through the tooling you should be familiar with to contribute
 
 [Poetry](https://python-poetry.org/) is used to manage dependencies, build, and publish the Vellum Python SDKs. It manages a virtual environment in the `.venv` directory and allows you to install dependencies in an isolated environment. It additionally supports building and publishing to PyPI.
 
+Use the `poetry env info` command to verify information about the current virtual environment. To switch the Python version, use the `poetry env use <python-version>` command.
+
 ## Development
 
 Each contribution should be made in its own branch, and accompanied with a test:

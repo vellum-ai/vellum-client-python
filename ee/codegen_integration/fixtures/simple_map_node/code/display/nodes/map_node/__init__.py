@@ -5,6 +5,8 @@ from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
 from ....nodes.map_node import MapNode
+from .nodes import *
+from .workflow import *
 
 
 class MapNodeDisplay(BaseMapNodeDisplay[MapNode]):

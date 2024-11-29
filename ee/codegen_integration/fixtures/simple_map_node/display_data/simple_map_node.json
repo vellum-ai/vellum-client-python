@@ -27,6 +27,24 @@
           "workflow_raw_data": {
             "nodes": [
               {
+                "id": "79145e96-23c3-4763-ad7e-f3c6529fe535",
+                "type": "ENTRYPOINT",
+                "data": {
+                  "label": "Entrypoint Node",
+                  "source_handle_id": "b4b974ea-716d-4187-a5fb-808284272fe2"
+                },
+                "inputs": [],
+                "display_data": {
+                  "width": 124,
+                  "height": 48,
+                  "position": {
+                    "x": 1545,
+                    "y": 330
+                  }
+                },
+                "definition": {"name": "BaseNode", "module": ["vellum", "workflows", "nodes", "bases", "base"], "bases": []}
+              },
+              {
                 "id": "4b0a7578-e5ec-4d72-b396-62abdecbd101",
                 "type": "SEARCH",
                 "data": {
@@ -184,24 +202,8 @@
                     "x": 1909.9521341463415,
                     "y": 212.0475201437282
                   }
-                }
-              },
-              {
-                "id": "79145e96-23c3-4763-ad7e-f3c6529fe535",
-                "type": "ENTRYPOINT",
-                "data": {
-                  "label": "Entrypoint Node",
-                  "source_handle_id": "b4b974ea-716d-4187-a5fb-808284272fe2"
                 },
-                "inputs": [],
-                "display_data": {
-                  "width": 124,
-                  "height": 48,
-                  "position": {
-                    "x": 1545,
-                    "y": 330
-                  }
-                }
+                "definition": {"name": "SearchNode", "module": ["codegen_integration", "fixtures", "simple_map_node", "code", "nodes", "map_node", "nodes", "search_node"], "bases": [{"name": "SearchNode", "module": ["vellum", "workflows", "nodes", "displayable", "search_node", "node"]}]}
               },
               {
                 "id": "d9d29911-dd45-45d5-9ac8-1a06bb596c2f",
@@ -239,7 +241,8 @@
                     "x": 2750,
                     "y": 210
                   }
-                }
+                },
+                "definition": {"name": "FinalOutput", "module": ["codegen_integration", "fixtures", "simple_map_node", "code", "nodes", "map_node", "nodes", "final_output"], "bases": [{"name": "FinalOutputNode", "module": ["vellum", "workflows", "nodes", "displayable", "final_output_node", "node"]}]}
               }
             ],
             "edges": [
@@ -266,7 +269,8 @@
                 "y": 126.402223675605,
                 "zoom": 0.6256812731632875
               }
-            }
+            },
+            "definition": {"name": "MapNodeWorkflow", "module": ["codegen_integration", "fixtures", "simple_map_node", "code", "nodes", "map_node", "workflow"]}
           },
           "input_variables": [
             {

@@ -17,7 +17,7 @@ class BaseTemplatingNodeDisplay(BaseNodeVellumDisplay[_TemplatingNodeType], Gene
     input_ids_by_name: ClassVar[Dict[str, UUID]] = {}
 
     def serialize(
-        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs: Any
+        self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs
     ) -> JsonObject:
         node = self._node
         node_id = self.node_id

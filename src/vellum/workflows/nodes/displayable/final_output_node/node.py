@@ -16,9 +16,13 @@ class _FinalOutputNodeMeta(BaseNodeMeta):
 
         # We use the compiled class to infer the output type for the Outputs.value descriptor.
         if not isinstance(parent, _FinalOutputNodeMeta):
-            raise ValueError("CodeExecutionNode must be created with the CodeExecutionNodeMeta metaclass")
+            raise ValueError("FinalOutputNode must be created with the FinalOutputNodeMeta metaclass")
 
-        parent.__dict__["Outputs"].__annotations__["value"] = parent.get_output_type()
+        annotations = parent.__dict__["Outputs"].__annotations__
+        parent.__dict__["Outputs"].__annotations__ = {
+            **annotations,
+            "value": parent.get_output_type(),
+        }
         return parent
 
     def get_output_type(cls) -> Type:

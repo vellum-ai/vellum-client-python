@@ -1,13 +1,13 @@
 from uuid import UUID
 from typing import Any, ClassVar, Generic, Optional, TypeVar
 
+from vellum.workflows.nodes.core.try_node.node import TryNode
+from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME, get_wrapped_node
+from vellum.workflows.types.core import JsonObject
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.get_node_display_class import get_node_display_class
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
 from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
-from vellum.workflows.nodes.core.try_node.node import TryNode
-from vellum.workflows.nodes.utils import get_wrapped_node
-from vellum.workflows.types.core import JsonObject
 
 _TryNodeType = TypeVar("_TryNodeType", bound=TryNode)
 
@@ -32,7 +32,19 @@ class BaseTryNodeDisplay(BaseNodeVellumDisplay[_TryNodeType], Generic[_TryNodeTy
 
         serialized_node = node_display.serialize(
             display_context,
-            error_output_id=str(self.error_output_id or uuid4_from_hash(f"{node_display.node_id}|error_output_id")),
+            error_output_id=self.error_output_id or uuid4_from_hash(f"{node_display.node_id}|error_output_id"),
         )
+
+        serialized_node_definition = serialized_node.get("definition")
+        if isinstance(serialized_node_definition, dict):
+            serialized_node_definition_module = serialized_node_definition.get("module")
+            if isinstance(serialized_node_definition_module, list):
+                serialized_node_definition_module.extend(
+                    [
+                        serialized_node_definition["name"],
+                        ADORNMENT_MODULE_NAME,
+                    ]
+                )
+                serialized_node_definition["name"] = node.__name__
 
         return serialized_node

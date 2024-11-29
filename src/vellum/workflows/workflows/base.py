@@ -211,7 +211,9 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
                 trace_id=uuid4(),
                 span_id=uuid4(),
                 body=WorkflowExecutionRejectedBody(
-                    error=VellumError(code=VellumErrorCode.INTERNAL_ERROR, message="Initiated event was never emitted"),
+                    error=VellumError(
+                        code=VellumErrorCode.INTERNAL_ERROR, message="Initiated event was never emitted"
+                    ),
                     workflow_definition=self.__class__,
                 ),
             )

@@ -177,37 +177,42 @@ class WorkflowRunner(Generic[StateType]):
                 streaming_output_queues: Dict[str, Queue] = {}
                 outputs = node.Outputs()
 
+                def initiate_node_streaming_output(output: BaseOutput) -> None:
+                    streaming_output_queues[output.name] = Queue()
+                    output_descriptor = OutputReference(
+                        name=output.name,
+                        types=(type(output.delta),),
+                        instance=None,
+                        outputs_class=node.Outputs,
+                    )
+                    node.state.meta.node_outputs[output_descriptor] = streaming_output_queues[output.name]
+                    self._work_item_event_queue.put(
+                        WorkItemEvent(
+                            node=node,
+                            event=NodeExecutionStreamingEvent(
+                                trace_id=node.state.meta.trace_id,
+                                span_id=span_id,
+                                body=NodeExecutionStreamingBody(
+                                    node_definition=node.__class__,
+                                    output=BaseOutput(name=output.name),
+                                ),
+                                parent=WorkflowParentContext(
+                                    span_id=span_id,
+                                    workflow_definition=self.workflow.__class__,
+                                    parent=self._parent_context
+                                )
+                            ),
+                            invoked_ports=invoked_ports,
+                        )
+                    )
+
                 for output in node_run_response:
                     invoked_ports = output > ports
-                    if not output.is_fulfilled:
+                    if output.is_initiated:
+                        initiate_node_streaming_output(output)
+                    elif output.is_streaming:
                         if output.name not in streaming_output_queues:
-                            streaming_output_queues[output.name] = Queue()
-                            output_descriptor = OutputReference(
-                                name=output.name,
-                                types=(type(output.delta),),
-                                instance=None,
-                                outputs_class=node.Outputs,
-                            )
-                            node.state.meta.node_outputs[output_descriptor] = streaming_output_queues[output.name]
-                            self._work_item_event_queue.put(
-                                WorkItemEvent(
-                                    node=node,
-                                    event=NodeExecutionStreamingEvent(
-                                        trace_id=node.state.meta.trace_id,
-                                        span_id=span_id,
-                                        body=NodeExecutionStreamingBody(
-                                            node_definition=node.__class__,
-                                            output=BaseOutput(name=output.name),
-                                        ),
-                                        parent=WorkflowParentContext(
-                                            span_id=span_id,
-                                            workflow_definition=self.workflow.__class__,
-                                            parent=self._parent_context
-                                        )
-                                    ),
-                                    invoked_ports=invoked_ports,
-                                )
-                            )
+                            initiate_node_streaming_output(output)
 
                         streaming_output_queues[output.name].put(output.delta)
                         self._work_item_event_queue.put(
@@ -229,7 +234,7 @@ class WorkflowRunner(Generic[StateType]):
                                 invoked_ports=invoked_ports,
                             )
                         )
-                    else:
+                    elif output.is_fulfilled:
                         if output.name in streaming_output_queues:
                             streaming_output_queues[output.name].put(UNDEF)
 
@@ -255,6 +260,11 @@ class WorkflowRunner(Generic[StateType]):
                         )
 
             for descriptor, output_value in outputs:
+                if output_value is UNDEF:
+                    if descriptor in node.state.meta.node_outputs:
+                        del node.state.meta.node_outputs[descriptor]
+                    continue
+
                 node.state.meta.node_outputs[descriptor] = output_value
 
             invoked_ports = ports(outputs, node.state)
@@ -582,11 +592,15 @@ class WorkflowRunner(Generic[StateType]):
         )
 
     def stream(self) -> WorkflowEventStream:
-        background_thread = Thread(target=self._run_background_thread)
+        background_thread = Thread(
+            target=self._run_background_thread, name=f"{self.workflow.__class__.__name__}.background_thread"
+        )
         background_thread.start()
 
         if self._cancel_signal:
-            cancel_thread = Thread(target=self._run_cancel_thread)
+            cancel_thread = Thread(
+                target=self._run_cancel_thread, name=f"{self.workflow.__class__.__name__}.cancel_thread"
+            )
             cancel_thread.start()
 
         event: WorkflowEvent
@@ -599,7 +613,7 @@ class WorkflowRunner(Generic[StateType]):
         self._initial_state.meta.is_terminated = False
 
         # The extra level of indirection prevents the runner from waiting on the caller to consume the event stream
-        stream_thread = Thread(target=self._stream)
+        stream_thread = Thread(target=self._stream, name=f"{self.workflow.__class__.__name__}.stream_thread")
         stream_thread.start()
 
         while stream_thread.is_alive():

@@ -12,8 +12,7 @@ jobs:
         with:
           python-version: 3.9
       - name: Bootstrap poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python - -y --version 1.5.1
+        run: make setup-poetry
       - name: Install dependencies
         run: poetry install
       - name: Compile
@@ -28,8 +27,7 @@ jobs:
         with:
           python-version: 3.9
       - name: Bootstrap poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python - -y --version 1.5.1
+        run: make setup-poetry
       - name: Install dependencies
         run: poetry install
 
@@ -50,8 +48,7 @@ jobs:
         with:
           python-version: 3.9
       - name: Bootstrap poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python - -y --version 1.5.1
+        run: make setup-poetry
       - name: Install dependencies
         run: poetry install
       - name: Publish to pypi

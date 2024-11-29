@@ -16,7 +16,8 @@
             "x": 1545.0,
             "y": 330.0
           }
-        }
+        },
+        "definition": {"name": "BaseNode", "module": ["vellum", "workflows", "nodes", "bases", "base"], "bases": []}
       },
       {
         "id": "c207b440-6aac-4047-a37c-e25fcb5b9cfb",
@@ -68,7 +69,8 @@
             "x": 1985.9562846580402,
             "y": 180.75743992606283
           }
-        }
+        },
+        "definition": {"name": "GuardrailNode", "module": ["codegen_integration", "fixtures", "simple_guardrail_node", "code", "nodes", "guardrail_node"], "bases": [{"name": "GuardrailNode", "module": ["vellum", "workflows", "nodes", "displayable", "guardrail_node", "node"]}]}
       },
       {
         "id": "a9455dc7-85f5-43a9-8be7-f131bc5f08e2",
@@ -86,7 +88,12 @@
             "id": "ff856e07-ed9a-47fa-8cec-76ebd8795cdb",
             "key": "node_input",
             "value": {
-              "rules": [],
+              "rules": [
+                {
+                  "type": "NODE_OUTPUT",
+                  "data": {"node_id": "c207b440-6aac-4047-a37c-e25fcb5b9cfb", "output_id": "0e455862-ccc4-47a4-a9a5-061fadc94fd6"}
+                }
+              ],
               "combinator": "OR"
             }
           }
@@ -98,7 +105,8 @@
             "x": 2750.0,
             "y": 210.0
           }
-        }
+        },
+        "definition": {"name": "FinalOutput", "module": ["codegen_integration", "fixtures", "simple_guardrail_node", "code", "nodes", "final_output"], "bases": [{"name": "FinalOutputNode", "module": ["vellum", "workflows", "nodes", "displayable", "final_output_node", "node"]}]}
       }
     ],
     "edges": [
@@ -126,30 +134,24 @@
         "zoom": 0.59148308095993
       }
     },
-    "definition": {
-      "name": "Workflow",
-      "module": [
-        "vellum",
-        "workflows",
-        "codegen",
-        "tests",
-        "fixtures",
-        "simple_guardrail_node",
-        "code",
-        "workflow"
-      ]
-    }
+    "definition": {"name": "Workflow", "module": ["codegen_integration", "fixtures", "simple_guardrail_node", "code", "workflow"]}
   },
   "input_variables": [
     {
       "id": "a6ef8809-346e-469c-beed-2e5c4e9844c5",
       "key": "expected",
-      "type": "STRING"
+      "type": "STRING",
+      "required": true,
+      "default": null,
+      "extensions": { "color": null }
     },
     {
       "id": "1472503c-1662-4da9-beb9-73026be90c68",
       "key": "actual",
-      "type": "STRING"
+      "type": "STRING",
+      "required": true,
+      "default": null,
+      "extensions": { "color": null }
     }
   ],
   "output_variables": [

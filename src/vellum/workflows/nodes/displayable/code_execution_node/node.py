@@ -19,7 +19,6 @@ from vellum import (
     VellumValue,
 )
 from vellum.core import RequestOptions
-
 from vellum.workflows.errors.types import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
@@ -44,7 +43,11 @@ class _CodeExecutionNodeMeta(BaseNodeMeta):
         if not isinstance(parent, _CodeExecutionNodeMeta):
             raise ValueError("CodeExecutionNode must be created with the CodeExecutionNodeMeta metaclass")
 
-        parent.__dict__["Outputs"].__annotations__["result"] = parent.get_output_type()
+        annotations = parent.__dict__["Outputs"].__annotations__
+        parent.__dict__["Outputs"].__annotations__ = {
+            **annotations,
+            "result": parent.get_output_type(),
+        }
         return parent
 
     def get_output_type(cls) -> Type:

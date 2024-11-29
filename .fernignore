@@ -8,5 +8,6 @@ Makefile
 src/vellum/evaluations
 src/vellum/plugins
 src/vellum/workflows
+scripts
 tests/workflows
 conftest.py

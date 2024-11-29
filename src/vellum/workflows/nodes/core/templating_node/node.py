@@ -49,7 +49,11 @@ class _TemplatingNodeMeta(BaseNodeMeta):
         if not isinstance(parent, _TemplatingNodeMeta):
             raise ValueError("TemplatingNode must be created with the TemplatingNodeMeta metaclass")
 
-        parent.__dict__["Outputs"].__annotations__["result"] = parent.get_output_type()
+        annotations = parent.__dict__["Outputs"].__annotations__
+        parent.__dict__["Outputs"].__annotations__ = {
+            **annotations,
+            "result": parent.get_output_type(),
+        }
         return parent
 
     def get_output_type(cls) -> Type:

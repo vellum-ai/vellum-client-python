@@ -74,6 +74,9 @@ types-requests = "2.32.0.20240712"
 [tool.pytest.ini_options]
 testpaths = [ "tests" ]
 asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::pytest.PytestCollectionWarning"
+]
 
 [tool.mypy]
 plugins = [

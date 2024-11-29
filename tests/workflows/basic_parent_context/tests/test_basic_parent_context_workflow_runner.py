@@ -25,7 +25,9 @@ def test_stream_workflow__happy_path():
     parent_context = events[1].parent.model_dump() if events[1].parent else {}
     assert parent_context.get('type') == 'WORKFLOW'
     assert parent_context.get('parent') is None
-    assert parent_context.get('workflow_definition') is not None
+    workflow_def = parent_context.get('workflow_definition')
+    assert workflow_def.get('name') == 'TrivialWorkflow'
+    assert workflow_def.get('module') == ['tests', 'workflows', 'basic_parent_context', 'basic_workflow']
 
     assert events[-1].name == "workflow.execution.fulfilled"
     assert events[-1].parent is None

@@ -215,7 +215,6 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
     #   https://app.shortcut.com/vellum/story/4008/auto-inherit-basenodeoutputs-in-outputs-classes
     class Outputs(BaseOutputs):
         _node_class: Optional[Type["BaseNode"]] = None
-        pass
 
     class Ports(NodePorts):
         default = Port(default=True)

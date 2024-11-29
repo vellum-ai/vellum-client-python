@@ -2,7 +2,9 @@ from contextlib import contextmanager
 from functools import wraps
 import inspect
 import threading
-from typing import Any, Callable, Dict, Iterator, Optional, Protocol, TypeVar, Union, cast
+from typing import Any, Callable, Dict, Iterator, TypeVar, Union, cast
+
+from vellum.workflows.events.types import ParentContext
 
 LoggingContext = Dict[str, Any]
 _CONTEXT_KEY = "_execution_context"
@@ -11,11 +13,6 @@ local = threading.local()
 
 F = TypeVar('F', bound=Callable[..., Any])
 T = TypeVar('T')
-
-
-class ParentContextProtocol(Protocol):
-    """Protocol defining the required structure for context objects."""
-    parent: Optional['ParentContextProtocol']
 
 
 def get_execution_context() -> LoggingContext:
@@ -40,7 +37,7 @@ def execution_context(**kwargs: Any) -> Iterator[None]:
 
 
 def wrapper_execution_parent_context(
-    context: Union[ParentContextProtocol, Callable[[Any], ParentContextProtocol]] = LoggingContext,
+    context: Union[ParentContext, Callable[[Any], ParentContext]] = LoggingContext,
     **kwargs: Any
 ) -> Callable[[F], F]:
     """Decorator for wrapping functions with execution context.
@@ -58,10 +55,9 @@ def wrapper_execution_parent_context(
             first_param = next(iter(inspect.signature(fn).parameters), None)
             is_method = first_param in ('self', 'cls')
             has_instance = bool(args)
-            is_context_factory = callable(context)
             
             # Create the appropriate context
-            if is_method and has_instance and is_context_factory:
+            if is_method and has_instance and callable(context):
                 instance = args[0]
                 new_context = context(instance)
             else:

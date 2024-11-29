@@ -46,8 +46,6 @@ class BaseMapNodeDisplay(BaseNodeVellumDisplay[_MapNodeType], Generic[_MapNodeTy
         item_workflow_input = next(input for input in workflow_inputs if input.key == "item")
         index_workflow_input = next(input for input in workflow_inputs if input.key == "index")
 
-        workflow_outputs = self._generate_workflow_outputs(node)
-
         items_node_input = create_node_input(
             node_id=node_id,
             input_name="items",

@@ -406,19 +406,7 @@
         "zoom": 0.6573565995604552
       }
     },
-    "definition": {
-      "name": "Workflow",
-      "module": [
-        "vellum",
-        "workflows",
-        "codegen",
-        "tests",
-        "fixtures",
-        "simple_map_node",
-        "code",
-        "workflow"
-      ]
-    }
+    "definition": {"name": "Workflow", "module": ["codegen_integration", "fixtures", "simple_map_node", "code", "workflow"]}
   },
   "input_variables": [
     {

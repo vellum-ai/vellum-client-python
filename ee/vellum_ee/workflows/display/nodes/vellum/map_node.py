@@ -53,7 +53,7 @@ class BaseMapNodeDisplay(BaseNodeVellumDisplay[_MapNodeType], Generic[_MapNodeTy
             input_name="items",
             value=node.items,
             display_context=display_context,
-            input_id=UUID(items_workflow_input.id),
+            input_id=self.node_input_ids_by_name.get("items"),
         )
         node_inputs = [items_node_input]
 

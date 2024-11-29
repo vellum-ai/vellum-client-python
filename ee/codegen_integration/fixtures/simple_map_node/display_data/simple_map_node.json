@@ -332,10 +332,13 @@
         ],
         "display_data": {
           "position": {
+            "width": null,
+            "height": null,
             "x": 254,
             "y": 0
           }
-        }
+        },
+        "definition": {"name": "MapNode", "module": ["codegen_integration", "fixtures", "simple_map_node", "code", "nodes", "map_node"], "bases": [{"name": "MapNode", "module": ["vellum", "workflows", "nodes", "core", "map_node", "node"]}]}
       },
       {
         "id": "fa0d5829-f259-4db8-a11a-b12fd7237ea5",

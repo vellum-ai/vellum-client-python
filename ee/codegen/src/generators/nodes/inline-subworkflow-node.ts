@@ -118,6 +118,50 @@ export class InlineSubworkflowNode extends BaseNestedWorkflowNode<
     return outputsClass;
   }
 
+  protected getOutputDisplay(): python.Field {
+    const nestedWorkflowContext = this.getNestedWorkflowContextByName(
+      BaseNestedWorkflowNode.subworkflowNestedProjectName
+    );
+
+    return python.field({
+      name: "output_display",
+      initializer: python.TypeInstantiation.dict(
+        nestedWorkflowContext.workflowOutputContexts.map((outputContext) => {
+          const outputName = outputContext.getOutputName();
+          const terminalNodeData = outputContext.getFinalOutputNodeData().data;
+
+          return {
+            key: python.reference({
+              name: this.nodeContext.nodeClassName,
+              modulePath: this.nodeContext.nodeModulePath,
+              attribute: [OUTPUTS_CLASS_NAME, outputName],
+            }),
+            value: python.instantiateClass({
+              classReference: python.reference({
+                name: "NodeOutputDisplay",
+                modulePath:
+                  this.workflowContext.sdkModulePathNames
+                    .NODE_DISPLAY_TYPES_MODULE_PATH,
+              }),
+              arguments_: [
+                python.methodArgument({
+                  name: "id",
+                  value: python.TypeInstantiation.uuid(
+                    terminalNodeData.outputId
+                  ),
+                }),
+                python.methodArgument({
+                  name: "name",
+                  value: python.TypeInstantiation.str(terminalNodeData.name),
+                }),
+              ],
+            }),
+          };
+        })
+      ),
+    });
+  }
+
   protected getNestedWorkflowProject(): WorkflowProjectGenerator {
     if (this.nodeData.data.variant !== "INLINE") {
       throw new Error(

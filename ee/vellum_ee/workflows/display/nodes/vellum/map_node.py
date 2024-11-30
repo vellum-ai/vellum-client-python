@@ -1,15 +1,12 @@
 from uuid import UUID
-from typing import Any, ClassVar, Dict, Generic, List, Optional, Type, TypeVar
+from typing import Collection, Dict, Generic, List, Optional, TypeVar, cast
 
-from vellum import VellumVariable
 from vellum.workflows.nodes import MapNode
 from vellum.workflows.types.core import JsonObject
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
-from vellum_ee.workflows.display.utils.vellum import infer_vellum_variable_type
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 
 _MapNodeType = TypeVar("_MapNodeType", bound=MapNode)
@@ -39,12 +36,18 @@ class BaseMapNodeDisplay(BaseNodeVellumDisplay[_MapNodeType], Generic[_MapNodeTy
         )
         serialized_subworkflow = subworkflow_display.serialize()
 
-        vellum_input_variables = [{ **input_variable, "key": "items" if input_variable["key"] == "all_items" else input_variable["key"] } for input_variable in serialized_subworkflow["input_variables"]]
+        renamed_input_variables = []
+        for input_variable in cast(List[Dict[str, str]], serialized_subworkflow["input_variables"]):
+            if input_variable["key"] == "all_items":
+                renamed_item = { **input_variable, "key": "items" }
+                renamed_input_variables.append(renamed_item)
+            else:
+                renamed_input_variables.append(input_variable)
 
         # Note: This must match the items input ID for the map node's node input
-        items_workflow_input_id = next(input_variable["id"] for input_variable in vellum_input_variables if input_variable["key"] == "items")
-        item_workflow_input_id = next(input_variable["id"] for input_variable in vellum_input_variables if input_variable["key"] == "item")
-        index_workflow_input_id = next(input_variable["id"] for input_variable in vellum_input_variables if input_variable["key"] == "index")
+        items_workflow_input_id = next(input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "items")
+        item_workflow_input_id = next(input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "item")
+        index_workflow_input_id = next(input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "index")
 
         return {
             "id": str(node_id),
@@ -57,7 +60,7 @@ class BaseMapNodeDisplay(BaseNodeVellumDisplay[_MapNodeType], Generic[_MapNodeTy
                 "target_handle_id": str(self.get_target_handle_id()),
                 "variant": "INLINE",
                 "workflow_raw_data": serialized_subworkflow["workflow_raw_data"],
-                "input_variables": vellum_input_variables,
+                "input_variables": cast(JsonObject, renamed_input_variables),
                 "output_variables": serialized_subworkflow["output_variables"],
                 "concurrency": raise_if_descriptor(node.concurrency),
                 "items_input_id": items_workflow_input_id,

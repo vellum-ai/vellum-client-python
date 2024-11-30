@@ -109,6 +109,29 @@ export class WorkflowContext {
     this.workflowRawEdges = workflowRawEdges;
   }
 
+  /* Create a new workflow context for a nested workflow from its parent */
+  public createNestedWorkflowContext({
+    workflowLabel,
+    parentNode,
+    workflowRawEdges,
+  }: {
+    workflowLabel: string;
+    parentNode: BaseNode<WorkflowDataNode, BaseNodeContext<WorkflowDataNode>>;
+    workflowRawEdges: WorkflowEdge[];
+  }) {
+    return new WorkflowContext({
+      absolutePathToOutputDirectory: this.absolutePathToOutputDirectory,
+      moduleName: this.moduleName,
+      workflowLabel,
+      inputVariableContextsById: this.inputVariableContextsById,
+      nodeContextsByNodeId: this.nodeContextsByNodeId,
+      parentNode,
+      workflowsSdkModulePath: this.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
+      vellumApiKey: this.vellumApiKey,
+      workflowRawEdges,
+    });
+  }
+
   public addEntrypointNode(entrypointNode: EntrypointNode): void {
     if (this.entrypointNode) {
       throw new Error("Entrypoint node already exists");

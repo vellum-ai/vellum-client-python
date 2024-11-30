@@ -1,7 +1,7 @@
 from vellum import SearchFiltersRequest, SearchRequestOptionsRequest, SearchResultMergingRequest, SearchWeightsRequest
 from vellum.workflows.nodes.displayable import SearchNode as BaseSearchNode
 
-from ....inputs import Inputs
+from ....nodes.map_node.inputs import Inputs
 
 
 class SearchNode(BaseSearchNode):

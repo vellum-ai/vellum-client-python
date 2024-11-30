@@ -30,7 +30,6 @@ _fixture_paths = _get_fixtures(
     # TODO: Remove exclusions on all of these fixtures
     # https://app.shortcut.com/vellum/story/4649/remove-fixture-exclusions-for-serialization
     exclude_fixtures={
-        "simple_map_node",
         "simple_code_execution_node",
     }
 )

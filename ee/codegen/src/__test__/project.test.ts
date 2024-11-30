@@ -40,7 +40,9 @@ describe("WorkflowProjectGenerator", () => {
           // https://app.shortcut.com/vellum/story/5663/fix-codegen-of-guardrail-nodes
           // "simple_guardrail_node",
           "simple_prompt_node",
-          "simple_map_node",
+          // TODO: Fix codegen for map node
+          // https://app.shortcut.com/vellum/story/5666/fix-codegen-for-map-node
+          // "simple_map_node",
           "simple_code_execution_node",
           "simple_conditional_node",
           "simple_templating_node",

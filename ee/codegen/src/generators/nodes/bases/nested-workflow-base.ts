@@ -60,19 +60,12 @@ export abstract class BaseNestedWorkflowNode<
 
     const innerWorkflowData = this.getInnerWorkflowData();
 
-    const nestedWorkflowContext = new WorkflowContext({
-      absolutePathToOutputDirectory:
-        this.workflowContext.absolutePathToOutputDirectory,
-      moduleName: this.workflowContext.moduleName,
-      workflowLabel: nestedWorkflowLabel,
-      inputVariableContextsById: this.workflowContext.inputVariableContextsById,
-      nodeContextsByNodeId: this.workflowContext.nodeContextsByNodeId,
-      parentNode: this,
-      workflowsSdkModulePath:
-        this.workflowContext.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
-      vellumApiKey: this.workflowContext.vellumApiKey,
-      workflowRawEdges: innerWorkflowData.edges,
-    });
+    const nestedWorkflowContext =
+      this.workflowContext.createNestedWorkflowContext({
+        workflowLabel: nestedWorkflowLabel,
+        parentNode: this,
+        workflowRawEdges: innerWorkflowData.edges,
+      });
 
     return new Map([
       [

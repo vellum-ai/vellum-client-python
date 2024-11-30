@@ -3,6 +3,7 @@ import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
 import {
   ChatMessageRequest,
+  VellumError,
   VellumValue as VellumVariableValueType,
 } from "vellum-ai/api";
 
@@ -10,6 +11,7 @@ import { ChatMessageContent } from "./chat-message-content";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
 import { Json } from "src/generators/json";
+import { assertUnreachable } from "src/utils/typing";
 
 class StringVellumValue extends AstNode {
   private value: string;
@@ -141,6 +143,41 @@ class ChatHistoryVellumValue extends AstNode {
     python.TypeInstantiation.list(chatMessages).write(writer);
   }
 }
+
+class ErrorVellumValue extends AstNode {
+  private astNode: AstNode;
+
+  public constructor(value: VellumError) {
+    super();
+    this.astNode = this.generateVellumError(value);
+  }
+
+  private generateVellumError({ message, code }: VellumError) {
+    const vellumErrorClass = python.instantiateClass({
+      classReference: python.reference({
+        name: "VellumError",
+        modulePath: VELLUM_CLIENT_MODULE_PATH,
+      }),
+      arguments_: [
+        python.methodArgument({
+          name: "message",
+          value: python.TypeInstantiation.str(message),
+        }),
+        python.methodArgument({
+          name: "code",
+          value: python.TypeInstantiation.str(code),
+        }),
+      ],
+    });
+    this.inheritReferences(vellumErrorClass);
+    return vellumErrorClass;
+  }
+
+  public write(writer: Writer): void {
+    this.astNode.write(writer);
+  }
+}
+
 export namespace VellumValue {
   export type Args = {
     vellumValue: VellumVariableValueType;
@@ -175,8 +212,19 @@ export class VellumValue extends AstNode {
           isRequestType,
         });
         break;
-      default:
+      case "ERROR":
+        this.astNode = new ErrorVellumValue(vellumValue.value);
+        break;
+      // TODO: Handle other vellum variable types
+      // https://app.shortcut.com/vellum/story/5661
+      case "IMAGE":
+      case "AUDIO":
+      case "FUNCTION_CALL":
+      case "SEARCH_RESULTS":
+      case "ARRAY":
         throw new Error(`Unknown vellum value type: ${vellumValue.type}`);
+      default:
+        assertUnreachable(vellumValue);
     }
 
     this.inheritReferences(this.astNode);

@@ -97,4 +97,20 @@ describe("VellumValue", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
+
+  describe("ERROR", () => {
+    it("should write a ERROR value correctly", async () => {
+      const errorValue = codegen.vellumValue({
+        vellumValue: {
+          type: "ERROR",
+          value: {
+            message: "This is an error!",
+            code: "INTERNAL_SERVER_ERROR",
+          },
+        },
+      });
+      errorValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
 });

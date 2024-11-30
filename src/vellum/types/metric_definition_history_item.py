@@ -3,22 +3,28 @@
 from __future__ import annotations
 from ..core.pydantic_utilities import UniversalBaseModel
 from .array_vellum_value import ArrayVellumValue
-import typing
-from .vellum_value import VellumValue
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
 import pydantic
+import typing
+from .vellum_variable import VellumVariable
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.pydantic_utilities import update_forward_refs
 
 
-class TestSuiteRunExecutionArrayOutput(UniversalBaseModel):
+class MetricDefinitionHistoryItem(UniversalBaseModel):
+    id: str
+    label: str = pydantic.Field()
     """
-    Execution output of an entity evaluated during a Test Suite Run that is of type ARRAY
+    A human-readable label for the metric
     """
 
-    name: str
-    type: typing.Literal["ARRAY"] = "ARRAY"
-    value: typing.Optional[typing.List[VellumValue]] = None
-    output_variable_id: str
+    name: str = pydantic.Field()
+    """
+    A name that uniquely identifies this metric within its workspace
+    """
+
+    description: str
+    input_variables: typing.List[VellumVariable]
+    output_variables: typing.List[VellumVariable]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -30,4 +36,4 @@ class TestSuiteRunExecutionArrayOutput(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-update_forward_refs(ArrayVellumValue, TestSuiteRunExecutionArrayOutput=TestSuiteRunExecutionArrayOutput)
+update_forward_refs(ArrayVellumValue, MetricDefinitionHistoryItem=MetricDefinitionHistoryItem)

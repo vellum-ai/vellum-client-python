@@ -3821,6 +3821,71 @@ client.metric_definitions.execute_metric_definition(
 </dl>
 </details>
 
+<details><summary><code>client.metric_definitions.<a href="src/vellum/resources/metric_definitions/client.py">metric_definition_history_item_retrieve</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.metric_definitions.metric_definition_history_item_retrieve(
+    history_id_or_release_tag="history_id_or_release_tag",
+    id="id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**history_id_or_release_tag:** `str` — Either the UUID of Metric Definition History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Metric Definition History Item you'd like to retrieve.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `str` — A UUID string identifying this metric definition.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## MlModels
 <details><summary><code>client.ml_models.<a href="src/vellum/resources/ml_models/client.py">retrieve</a>(...)</code></summary>
 <dl>

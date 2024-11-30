@@ -13,6 +13,7 @@ from typing import (
     Type,
     TypeVar,
     Union,
+    cast,
     get_args,
     get_origin,
     get_type_hints,
@@ -81,6 +82,8 @@ def infer_types(object_: Type, attr_name: str, localns: Optional[Dict[str, Any]]
                 if type_hint in type_var_mapping:
                     return (type_var_mapping[type_hint],)
                 return type_hint.__constraints__
+            if type_hint is Any:
+                return cast(Tuple[Type[Any], ...], (Any,))
 
         for base in reversed(class_.__mro__):
             class_attributes = vars(base)

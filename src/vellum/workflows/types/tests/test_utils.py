@@ -1,5 +1,5 @@
 import pytest
-from typing import ClassVar, Generic, List, TypeVar, Union
+from typing import Any, ClassVar, Generic, List, TypeVar, Union
 
 from vellum.workflows.nodes.bases.base import BaseNode
 from vellum.workflows.nodes.core.try_node.node import TryNode
@@ -20,6 +20,7 @@ class ExampleClass:
     )
     zeta: ClassVar[str]
     eta: List[str]
+    kappa: Any
 
 
 T = TypeVar("T")
@@ -53,6 +54,7 @@ class ExampleNode(BaseNode):
         (ExampleInheritedClass, "alpha", (str,)),
         (ExampleInheritedClass, "beta", (int,)),
         (ExampleNode.Outputs, "iota", (str,)),
+        (ExampleClass, "kappa", (Any,)),
     ],
     ids=[
         "str",
@@ -67,6 +69,7 @@ class ExampleNode(BaseNode):
         "inherited_parent_annotation",
         "inherited_parent_class_var",
         "try_node_output",
+        "any",
     ],
 )
 def test_infer_types(cls, attr_name, expected_type):
@@ -76,9 +79,9 @@ def test_infer_types(cls, attr_name, expected_type):
 @pytest.mark.parametrize(
     "cls, expected_attr_names",
     [
-        (ExampleClass, {"alpha", "beta", "gamma", "epsilon", "zeta", "eta"}),
+        (ExampleClass, {"alpha", "beta", "gamma", "epsilon", "zeta", "eta", "kappa"}),
         (ExampleGenericClass, {"delta"}),
-        (ExampleInheritedClass, {"alpha", "beta", "gamma", "epsilon", "zeta", "eta", "theta"}),
+        (ExampleInheritedClass, {"alpha", "beta", "gamma", "epsilon", "zeta", "eta", "theta", "kappa"}),
     ],
 )
 def test_class_attr_names(cls, expected_attr_names):

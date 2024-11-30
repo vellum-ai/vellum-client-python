@@ -28,8 +28,8 @@ export declare namespace WorkflowContext {
     moduleName: string;
     workflowLabel?: string;
     workflowClassName?: string;
-    inputVariableContextsById?: InputVariableContextsById;
-    nodeContextsByNodeId?: NodeContextsByNodeId;
+    globalInputVariableContextsById?: InputVariableContextsById;
+    globalNodeContextsByNodeId?: NodeContextsByNodeId;
     parentNode?: BaseNode<WorkflowDataNode, BaseNodeContext<WorkflowDataNode>>;
     workflowsSdkModulePath?: readonly string[];
     portContextByName?: PortContextById;
@@ -46,13 +46,17 @@ export class WorkflowContext {
   public readonly workflowClassName: string;
 
   // Maps workflow input variable IDs to the input variable
+  // Tracks local and global contexts in the case of nested workflows.
   public readonly inputVariableContextsById: InputVariableContextsById;
+  public readonly globalInputVariableContextsById: InputVariableContextsById;
+
+  // Maps node IDs to a mapping of output IDs to output names.
+  // Tracks local and global contexts in the case of nested workflows.
+  public readonly nodeContextsByNodeId: NodeContextsByNodeId;
+  public readonly globalNodeContextsByNodeId: NodeContextsByNodeId;
 
   // A list of all outputs this workflow produces
   public readonly workflowOutputContexts: WorkflowOutputContext[] = [];
-
-  // Maps node IDs to a mapping of output IDs to output names
-  public readonly nodeContextsByNodeId: NodeContextsByNodeId;
 
   // If this workflow is a nested workflow belonging to a node, track that node's context here.
   public readonly parentNode?: BaseNode<
@@ -78,8 +82,8 @@ export class WorkflowContext {
     moduleName,
     workflowLabel,
     workflowClassName,
-    inputVariableContextsById,
-    nodeContextsByNodeId,
+    globalInputVariableContextsById,
+    globalNodeContextsByNodeId,
     parentNode,
     workflowsSdkModulePath = ["vellum", "workflows"] as const,
     portContextByName,
@@ -99,8 +103,13 @@ export class WorkflowContext {
       workflowClassName || createPythonClassName(this.label);
     this.vellumApiKey = vellumApiKey;
 
-    this.inputVariableContextsById = inputVariableContextsById ?? new Map();
-    this.nodeContextsByNodeId = nodeContextsByNodeId ?? new Map();
+    this.inputVariableContextsById = new Map();
+    this.globalInputVariableContextsById =
+      globalInputVariableContextsById ?? new Map();
+
+    this.nodeContextsByNodeId = new Map();
+    this.globalNodeContextsByNodeId = globalNodeContextsByNodeId ?? new Map();
+
     this.portContextById = portContextByName ?? new Map();
 
     this.parentNode = parentNode;
@@ -123,8 +132,8 @@ export class WorkflowContext {
       absolutePathToOutputDirectory: this.absolutePathToOutputDirectory,
       moduleName: this.moduleName,
       workflowLabel,
-      inputVariableContextsById: this.inputVariableContextsById,
-      nodeContextsByNodeId: this.nodeContextsByNodeId,
+      globalInputVariableContextsById: this.globalInputVariableContextsById,
+      globalNodeContextsByNodeId: this.globalNodeContextsByNodeId,
       parentNode,
       workflowsSdkModulePath: this.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
       vellumApiKey: this.vellumApiKey,
@@ -152,14 +161,25 @@ export class WorkflowContext {
     inputVariableContext: InputVariableContext
   ): void {
     const inputVariableId = inputVariableContext.getInputVariableId();
+
+    if (this.inputVariableContextsById.get(inputVariableId)) {
+      throw new Error(
+        `Input variable context already exists for input variable ID: ${inputVariableId}`
+      );
+    }
+
     this.inputVariableContextsById.set(inputVariableId, inputVariableContext);
+    this.globalInputVariableContextsById.set(
+      inputVariableId,
+      inputVariableContext
+    );
   }
 
   public getInputVariableContextById(
     inputVariableId: string
   ): InputVariableContext {
     const inputVariableContext =
-      this.inputVariableContextsById.get(inputVariableId);
+      this.globalInputVariableContextsById.get(inputVariableId);
 
     if (!inputVariableContext) {
       throw new Error(
@@ -184,6 +204,7 @@ export class WorkflowContext {
     }
 
     this.nodeContextsByNodeId.set(nodeId, nodeContext);
+    this.globalNodeContextsByNodeId.set(nodeId, nodeContext);
   }
 
   public getNodeContext<T extends WorkflowDataNode>(

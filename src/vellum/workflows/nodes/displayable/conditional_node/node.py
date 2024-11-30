@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Set
 
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs.base import BaseOutputs
@@ -15,7 +15,7 @@ class ConditionalNode(BaseNode):
     """
 
     class Ports(NodePorts):
-        def __call__(self, outputs: BaseOutputs, state: BaseState) -> Iterable[Port]:
+        def __call__(self, outputs: BaseOutputs, state: BaseState) -> Set[Port]:    
             all_ports = [port for port in self.__class__]
             enforce_single_invoked_port = validate_ports(all_ports)
 

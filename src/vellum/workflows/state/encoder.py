@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.outputs.base import BaseOutput, BaseOutputs
+from vellum.workflows.ports.port import Port
 from vellum.workflows.state.base import BaseState, NodeExecutionCache
 
 
@@ -22,7 +23,7 @@ class DefaultStateEncoder(JSONEncoder):
         if isinstance(obj, (BaseInputs, BaseOutputs)):
             return {descriptor.name: value for descriptor, value in obj}
 
-        if isinstance(obj, BaseOutput):
+        if isinstance(obj, (BaseOutput, Port)):
             return obj.serialize()
 
         if isinstance(obj, NodeExecutionCache):

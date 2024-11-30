@@ -1,13 +1,13 @@
-from typing import Any, Dict, Generic, Literal, Type, Union
+from typing import Any, Dict, Generic, Iterable, List, Literal, Optional, Set, Type, Union
 
 from pydantic import field_serializer
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
-
 from vellum.workflows.errors import VellumError
 from vellum.workflows.expressions.accessor import AccessorExpression
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs.base import BaseOutput
+from vellum.workflows.ports.port import Port
 from vellum.workflows.references.node import NodeReference
 from vellum.workflows.types.generics import OutputsType
 
@@ -31,6 +31,7 @@ class _BaseNodeEvent(BaseEvent):
 
 
 NodeInputName = Union[NodeReference, AccessorExpression]
+InvokedPorts = Optional[Set["Port"]]
 
 
 class NodeExecutionInitiatedBody(_BaseNodeExecutionBody):
@@ -52,10 +53,17 @@ class NodeExecutionInitiatedEvent(_BaseNodeEvent):
 
 class NodeExecutionStreamingBody(_BaseNodeExecutionBody):
     output: BaseOutput
+    invoked_ports: InvokedPorts = None
 
     @field_serializer("output")
     def serialize_output(self, output: BaseOutput, _info: Any) -> Dict[str, Any]:
         return default_serializer(output)
+
+    @field_serializer("invoked_ports")
+    def serialize_invoked_ports(self, invoked_ports: InvokedPorts, _info: Any) -> Optional[List[Dict[str, Any]]]:
+        if invoked_ports is None:
+            return None
+        return [default_serializer(port) for port in invoked_ports]
 
 
 class NodeExecutionStreamingEvent(_BaseNodeEvent):
@@ -66,13 +74,24 @@ class NodeExecutionStreamingEvent(_BaseNodeEvent):
     def output(self) -> BaseOutput:
         return self.body.output
 
+    @property
+    def invoked_ports(self) -> InvokedPorts:
+        return self.body.invoked_ports
+
 
 class NodeExecutionFulfilledBody(_BaseNodeExecutionBody, Generic[OutputsType]):
     outputs: OutputsType
+    invoked_ports: InvokedPorts = None
 
     @field_serializer("outputs")
     def serialize_outputs(self, outputs: OutputsType, _info: Any) -> Dict[str, Any]:
         return default_serializer(outputs)
+
+    @field_serializer("invoked_ports")
+    def serialize_invoked_ports(self, invoked_ports: InvokedPorts, _info: Any) -> Optional[List[Dict[str, Any]]]:
+        if invoked_ports is None:
+            return None
+        return [default_serializer(port) for port in invoked_ports]
 
 
 class NodeExecutionFulfilledEvent(_BaseNodeEvent, Generic[OutputsType]):
@@ -82,6 +101,10 @@ class NodeExecutionFulfilledEvent(_BaseNodeEvent, Generic[OutputsType]):
     @property
     def outputs(self) -> OutputsType:
         return self.body.outputs
+
+    @property
+    def invoked_ports(self) -> InvokedPorts:
+        return self.body.invoked_ports
 
 
 class NodeExecutionRejectedBody(_BaseNodeExecutionBody):

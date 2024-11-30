@@ -3,7 +3,12 @@ import * as fs from "node:fs";
 import { join } from "path";
 
 import { difference } from "lodash";
-import { expect } from "vitest";
+import { WorkflowDeploymentHistoryItem } from "vellum-ai/api";
+import {
+  WorkflowDeployments,
+  WorkflowDeployments as WorkflowDeploymentsClient,
+} from "vellum-ai/api/resources/workflowDeployments/client/Client";
+import { expect, vi } from "vitest";
 
 import {
   getAllFilesInDir,
@@ -12,6 +17,29 @@ import {
 import { makeTempDir } from "./helpers/temp-dir";
 
 import { WorkflowProjectGenerator } from "src/project";
+
+interface MockReturnValue {
+  workflowDeploymentHistoryItemRetrieve?: Awaited<
+    ReturnType<WorkflowDeployments["workflowDeploymentHistoryItemRetrieve"]>
+  >;
+}
+
+const MOCK_RETURN_VALUES_BY_FIXTURE_NAME: Readonly<
+  Record<string, MockReturnValue>
+> = {
+  faa_q_and_a_bot: {
+    workflowDeploymentHistoryItemRetrieve: {
+      name: "test-deployment",
+      outputVariables: [
+        {
+          id: "53970e88-0bf6-4364-86b3-840d78a2afe5",
+          key: "chat_history",
+          type: "CHAT_HISTORY",
+        },
+      ],
+    } as unknown as WorkflowDeploymentHistoryItem,
+  },
+};
 
 describe("WorkflowProjectGenerator", () => {
   let tempDir: string;
@@ -46,11 +74,27 @@ describe("WorkflowProjectGenerator", () => {
           "simple_code_execution_node",
           "simple_conditional_node",
           "simple_templating_node",
+          "faa_q_and_a_bot",
         ],
       })
     )(
       "should correctly generate code for fixture $fixtureName",
-      async ({ displayFile, codeDir }) => {
+      async ({ displayFile, codeDir, fixtureName }) => {
+        if (
+          MOCK_RETURN_VALUES_BY_FIXTURE_NAME[fixtureName]?.[
+            "workflowDeploymentHistoryItemRetrieve"
+          ]
+        ) {
+          vi.spyOn(
+            WorkflowDeploymentsClient.prototype,
+            "workflowDeploymentHistoryItemRetrieve"
+          ).mockResolvedValue(
+            MOCK_RETURN_VALUES_BY_FIXTURE_NAME[fixtureName][
+              "workflowDeploymentHistoryItemRetrieve"
+            ]
+          );
+        }
+
         const displayData: unknown = JSON.parse(
           fs.readFileSync(displayFile, "utf-8")
         );

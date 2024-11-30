@@ -18,7 +18,7 @@ describe("InputVariablePointer", () => {
   it("should generate correct Python code", async () => {
     const workflowContext = workflowContextFactory();
     const mockInputVariable = {
-      getInputVariableName: vi.fn().mockReturnValue("test-variable"),
+      getInputVariableName: vi.fn().mockReturnValue("test_variable"),
       modulePath: [],
     };
     vi.spyOn(workflowContext, "getInputVariableContextById").mockReturnValue(

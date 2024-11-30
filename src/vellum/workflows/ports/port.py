@@ -77,6 +77,11 @@ class Port:
         value = self._condition.resolve(state)
         return bool(value)
 
+    def serialize(self) -> dict:
+        return {
+            "name": self.name,
+        }
+
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source_type: Type[Any], handler: GetCoreSchemaHandler

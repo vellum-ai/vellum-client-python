@@ -4,7 +4,7 @@ import json
 from uuid import UUID, uuid4
 from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union
 
-from pydantic import Field, field_serializer
+from pydantic import ConfigDict, Field, field_serializer
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
 from vellum.workflows.state.encoder import DefaultStateEncoder

@@ -4,6 +4,7 @@ from .lazy import LazyReference
 from .node import NodeReference
 from .output import OutputReference
 from .state_value import StateValueReference
+from .vellum_secret import VellumSecretReference
 from .workflow_input import WorkflowInputReference
 
 __all__ = [
@@ -13,5 +14,6 @@ __all__ = [
     "NodeReference",
     "OutputReference",
     "StateValueReference",
+    "VellumSecretReference",
     "WorkflowInputReference",
 ]

@@ -63,12 +63,8 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
       this.workflowContext.addPortContext(portContext);
     });
 
-    this.portContextsById = portContexts.reduce<Map<string, PortContext>>(
-      (acc, portContext) => {
-        acc.set(portContext.portId, portContext);
-        return acc;
-      },
-      new Map()
+    this.portContextsById = new Map(
+      portContexts.map((portContext) => [portContext.portId, portContext])
     );
   }
 

@@ -6,8 +6,8 @@ from threading import Event as ThreadingEvent, Thread
 from uuid import UUID, uuid4
 from typing import TYPE_CHECKING, Any, Dict, Generic, Iterable, Iterator, Optional, Sequence, Set, Type, Union
 
-from vellum.core.context import execution_context, get_execution_context, wrapper_execution_parent_context
 from vellum.workflows.constants import UNDEF
+from vellum.workflows.context import get_execution_context, wrapper_execution_parent_context
 from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.edges.edge import Edge
 from vellum.workflows.errors import VellumError, VellumErrorCode
@@ -29,7 +29,7 @@ from vellum.workflows.events.node import (
     NodeExecutionRejectedBody,
     NodeExecutionStreamingBody,
 )
-from vellum.workflows.events.types import BaseEvent, ParentContext, WorkflowParentContext
+from vellum.workflows.events.types import BaseEvent, WorkflowParentContext
 from vellum.workflows.events.utils import is_terminal_event
 from vellum.workflows.events.workflow import (
     WorkflowExecutionFulfilledBody,

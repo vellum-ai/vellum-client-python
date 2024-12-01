@@ -1,5 +1,6 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
+import { isNil } from "lodash";
 
 import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { MapNodeContext } from "src/context/node-context/map-node";
@@ -29,6 +30,14 @@ export class MapNode extends BaseNestedWorkflowNode<
   }
 
   getNodeClassBodyStatements(): AstNode[] {
+    const statements: AstNode[] = [];
+
+    const itemsField = python.field({
+      name: "items",
+      initializer: this.getNodeInputByName("items"),
+    });
+    statements.push(itemsField);
+
     const nestedWorkflowContext = this.getNestedWorkflowContextByName(
       BaseNestedWorkflowNode.subworkflowNestedProjectName
     );
@@ -42,15 +51,22 @@ export class MapNode extends BaseNestedWorkflowNode<
       name: "subworkflow",
       initializer: nestedWorkflowReference,
     });
+    statements.push(subworkflowField);
 
-    const itemsField = python.field({
-      name: "items",
-      initializer: this.getNodeInputByName("items"),
-    });
+    if (!isNil(this.nodeData.data.concurrency)) {
+      const concurrencyField = python.field({
+        name: "concurrency",
+        initializer: python.TypeInstantiation.int(
+          this.nodeData.data.concurrency
+        ),
+      });
+      statements.push(concurrencyField);
+    }
 
     const outputsClass = this.generateOutputsClass();
+    statements.push(outputsClass);
 
-    return [itemsField, subworkflowField, outputsClass];
+    return statements;
   }
 
   getNodeDisplayClassBodyStatements(): AstNode[] {

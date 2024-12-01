@@ -162,7 +162,7 @@ export class WorkflowContext {
   ): void {
     const inputVariableId = inputVariableContext.getInputVariableId();
 
-    if (this.inputVariableContextsById.get(inputVariableId)) {
+    if (this.globalInputVariableContextsById.get(inputVariableId)) {
       throw new Error(
         `Input variable context already exists for input variable ID: ${inputVariableId}`
       );
@@ -199,7 +199,7 @@ export class WorkflowContext {
   public addNodeContext(nodeContext: BaseNodeContext<WorkflowDataNode>): void {
     const nodeId = nodeContext.getNodeId();
 
-    if (this.nodeContextsByNodeId.get(nodeId)) {
+    if (this.globalNodeContextsByNodeId.get(nodeId)) {
       throw new Error(`Node context already exists for node ID: ${nodeId}`);
     }
 

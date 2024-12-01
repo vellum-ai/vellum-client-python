@@ -63,7 +63,7 @@ describe("NodeInputValuePointerRule", () => {
 
   it("should generate correct AST for INPUT_VARIABLE pointer", async () => {
     const mockInputVariable = {
-      getInputVariableName: vi.fn().mockReturnValue("test-variable"),
+      getInputVariableName: vi.fn().mockReturnValue("test_variable"),
       modulePath: [],
     };
     vi.spyOn(workflowContext, "getInputVariableContextById").mockReturnValue(

@@ -21,7 +21,7 @@ export declare namespace NodeInputValuePointerRule {
 
 export class NodeInputValuePointerRule extends AstNode {
   private workflowContext: WorkflowContext;
-  private astNode: AstNode;
+  private astNode: BaseNodeInputValuePointerRule<NodeInputValuePointerRuleType>;
   public readonly ruleType: NodeInputValuePointerRuleType["type"];
 
   public constructor(args: NodeInputValuePointerRule.Args) {

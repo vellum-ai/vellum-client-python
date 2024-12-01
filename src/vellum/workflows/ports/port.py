@@ -1,5 +1,8 @@
 from typing import TYPE_CHECKING, Any, Iterator, List, Optional, Type
 
+from pydantic import GetCoreSchemaHandler
+from pydantic_core import core_schema
+
 from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.edges.edge import Edge
 from vellum.workflows.graph import Graph, GraphTarget
@@ -73,3 +76,14 @@ class Port:
 
         value = self._condition.resolve(state)
         return bool(value)
+
+    def serialize(self) -> dict:
+        return {
+            "name": self.name,
+        }
+
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source_type: Type[Any], handler: GetCoreSchemaHandler
+    ) -> core_schema.CoreSchema:
+        return core_schema.is_instance_schema(cls)

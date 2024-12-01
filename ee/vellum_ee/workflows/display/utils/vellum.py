@@ -4,7 +4,9 @@ import typing
 from typing import Any, List, Union, cast
 
 from vellum import ChatMessage, SearchResult, SearchResultRequest, VellumVariableType
+from vellum.client.types.array_vellum_value import ArrayVellumValue
 from vellum.workflows.descriptors.base import BaseDescriptor
+from vellum.workflows.nodes.core.map_node.node import MapNodeItemType
 from vellum.workflows.references import OutputReference, WorkflowInputReference
 from vellum.workflows.references.execution_count import ExecutionCountReference
 from vellum.workflows.references.node import NodeReference
@@ -45,9 +47,8 @@ def infer_vellum_variable_type(value: Any) -> VellumVariableType:
                 raise ValueError(
                     f"Expected NodeReference {descriptor.name} to have an instance pointing to a descriptor"
                 )
-
             descriptor = descriptor.instance
-
+        
         inferred_type = primitive_type_to_vellum_variable_type(descriptor)
     else:
         vellum_variable_value = primitive_to_vellum_value(value)

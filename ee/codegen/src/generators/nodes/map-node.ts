@@ -1,11 +1,16 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
+import { isNil } from "lodash";
 
 import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { MapNodeContext } from "src/context/node-context/map-node";
 import { BaseNestedWorkflowNode } from "src/generators/nodes/bases/nested-workflow-base";
 import { WorkflowProjectGenerator } from "src/project";
-import { MapNode as MapNodeType, WorkflowRawData } from "src/types/vellum";
+import {
+  InlineMapNodeData,
+  MapNode as MapNodeType,
+  WorkflowRawData,
+} from "src/types/vellum";
 
 export class MapNode extends BaseNestedWorkflowNode<
   MapNodeType,
@@ -25,6 +30,14 @@ export class MapNode extends BaseNestedWorkflowNode<
   }
 
   getNodeClassBodyStatements(): AstNode[] {
+    const statements: AstNode[] = [];
+
+    const itemsField = python.field({
+      name: "items",
+      initializer: this.getNodeInputByName("items"),
+    });
+    statements.push(itemsField);
+
     const nestedWorkflowContext = this.getNestedWorkflowContextByName(
       BaseNestedWorkflowNode.subworkflowNestedProjectName
     );
@@ -38,15 +51,22 @@ export class MapNode extends BaseNestedWorkflowNode<
       name: "subworkflow",
       initializer: nestedWorkflowReference,
     });
+    statements.push(subworkflowField);
 
-    const itemsField = python.field({
-      name: "items",
-      initializer: this.getNodeInputByName("items"),
-    });
+    if (!isNil(this.nodeData.data.concurrency)) {
+      const concurrencyField = python.field({
+        name: "concurrency",
+        initializer: python.TypeInstantiation.int(
+          this.nodeData.data.concurrency
+        ),
+      });
+      statements.push(concurrencyField);
+    }
 
     const outputsClass = this.generateOutputsClass();
+    statements.push(outputsClass);
 
-    return [itemsField, subworkflowField, outputsClass];
+    return statements;
   }
 
   getNodeDisplayClassBodyStatements(): AstNode[] {
@@ -72,13 +92,6 @@ export class MapNode extends BaseNestedWorkflowNode<
         initializer: python.TypeInstantiation.uuid(
           this.nodeData.data.targetHandleId
         ),
-      })
-    );
-
-    statements.push(
-      python.field({
-        name: "workflow_input_ids_by_name",
-        initializer: python.TypeInstantiation.dict([]),
       })
     );
 
@@ -139,6 +152,60 @@ export class MapNode extends BaseNestedWorkflowNode<
         outputVariables: mapNodeData.outputVariables,
       },
       workflowContext: nestedWorkflowContext,
+    });
+  }
+
+  protected getOutputDisplay(): python.Field {
+    let nodeData: InlineMapNodeData;
+    if (this.nodeData.data.variant !== "INLINE") {
+      throw new Error(
+        `MapNode only supports INLINE variant. Received: ${this.nodeData.data.variant}`
+      );
+    } else {
+      nodeData = this.nodeData.data;
+    }
+
+    let outputValue: AstNode;
+    const output = nodeData.outputVariables.find(
+      (output) => output.key === "final-output"
+    );
+    if (output?.id) {
+      outputValue = python.TypeInstantiation.uuid(output.id);
+    } else {
+      throw new Error(
+        "Output with key 'final-output' is missing from map node"
+      );
+    }
+
+    return python.field({
+      name: "output_display",
+      initializer: python.TypeInstantiation.dict([
+        {
+          key: python.reference({
+            name: this.nodeContext.nodeClassName,
+            modulePath: this.nodeContext.nodeModulePath,
+            attribute: [OUTPUTS_CLASS_NAME, "final_output"],
+          }),
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "NodeOutputDisplay",
+              modulePath:
+                this.workflowContext.sdkModulePathNames
+                  .NODE_DISPLAY_TYPES_MODULE_PATH,
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "id",
+                value: outputValue,
+              }),
+              python.methodArgument({
+                name: "name",
+                value: python.TypeInstantiation.str("final_output"),
+              }),
+            ],
+          }),
+        },
+      ]),
     });
   }
 

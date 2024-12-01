@@ -197,10 +197,10 @@ class WorkflowRunner(Generic[StateType]):
                                 body=NodeExecutionStreamingBody(
                                     node_definition=node.__class__,
                                     output=BaseOutput(name=output.name),
+                                    invoked_ports=invoked_ports,
                                 ),
                                 parent=parent_context
                             ),
-                            invoked_ports=invoked_ports,
                         )
                     )
 
@@ -222,10 +222,10 @@ class WorkflowRunner(Generic[StateType]):
                                     body=NodeExecutionStreamingBody(
                                         node_definition=node.__class__,
                                         output=output,
+                                        invoked_ports=invoked_ports,
                                     ),
                                     parent=parent_context,
                                 ),
-                                invoked_ports=invoked_ports,
                             )
                         )
                     elif output.is_fulfilled:
@@ -242,10 +242,10 @@ class WorkflowRunner(Generic[StateType]):
                                     body=NodeExecutionStreamingBody(
                                         node_definition=node.__class__,
                                         output=output,
+                                        invoked_ports=invoked_ports,
                                     ),
                                     parent=parent_context,
                                 ),
-                                invoked_ports=invoked_ports,
                             )
                         )
 
@@ -269,10 +269,10 @@ class WorkflowRunner(Generic[StateType]):
                         body=NodeExecutionFulfilledBody(
                             node_definition=node.__class__,
                             outputs=outputs,
+                            invoked_ports=invoked_ports,
                         ),
                         parent=parent_context,
                     ),
-                    invoked_ports=invoked_ports,
                 )
             )
         except NodeException as e:
@@ -354,7 +354,6 @@ class WorkflowRunner(Generic[StateType]):
     def _handle_work_item_event(self, work_item_event: WorkItemEvent[StateType]) -> Optional[VellumError]:
         node = work_item_event.node
         event = work_item_event.event
-        invoked_ports = work_item_event.invoked_ports
 
         if event.name == "node.execution.initiated":
             return None
@@ -383,13 +382,13 @@ class WorkflowRunner(Generic[StateType]):
                     )
                 )
 
-            self._handle_invoked_ports(node.state, invoked_ports)
+            self._handle_invoked_ports(node.state, event.invoked_ports)
 
             return None
 
         if event.name == "node.execution.fulfilled":
             self._active_nodes_by_execution_id.pop(event.span_id)
-            self._handle_invoked_ports(node.state, invoked_ports)
+            self._handle_invoked_ports(node.state, event.invoked_ports)
 
             return None
 

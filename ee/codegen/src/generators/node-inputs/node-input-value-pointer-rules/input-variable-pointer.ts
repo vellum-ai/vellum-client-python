@@ -3,7 +3,6 @@ import { python } from "@fern-api/python-ast";
 import { BaseNodeInputValuePointerRule } from "./base";
 
 import { InputVariablePointer } from "src/types/vellum";
-import { toSnakeCase } from "src/utils/casing";
 
 export class InputVariablePointerRule extends BaseNodeInputValuePointerRule<InputVariablePointer> {
   getAstNode(): python.Reference {
@@ -17,7 +16,7 @@ export class InputVariablePointerRule extends BaseNodeInputValuePointerRule<Inpu
     return python.reference({
       name: "Inputs",
       modulePath: inputVariableContext.modulePath,
-      attribute: [toSnakeCase(inputVariableContext.getInputVariableName())],
+      attribute: [inputVariableContext.getInputVariableName()],
     });
   }
 }

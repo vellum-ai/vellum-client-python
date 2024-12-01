@@ -6,7 +6,14 @@ from uuid import UUID
 from deepdiff import DeepDiff
 
 from vellum.workflows.errors.types import VellumError, VellumErrorCode
-from vellum.workflows.events.node import NodeExecutionInitiatedBody, NodeExecutionInitiatedEvent
+from vellum.workflows.events.node import (
+    NodeExecutionFulfilledBody,
+    NodeExecutionFulfilledEvent,
+    NodeExecutionInitiatedBody,
+    NodeExecutionInitiatedEvent,
+    NodeExecutionStreamingBody,
+    NodeExecutionStreamingEvent,
+)
 from vellum.workflows.events.types import NodeParentContext, WorkflowParentContext
 from vellum.workflows.events.workflow import (
     WorkflowExecutionFulfilledBody,
@@ -93,10 +100,9 @@ module_root = name_parts[: name_parts.index("events")]
                     node_definition=MockNode,
                     span_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
                     parent=WorkflowParentContext(
-                        workflow_definition=MockWorkflow,
-                        span_id=UUID("123e4567-e89b-12d3-a456-426614174000")
-                    )
-                )
+                        workflow_definition=MockWorkflow, span_id=UUID("123e4567-e89b-12d3-a456-426614174000")
+                    ),
+                ),
             ),
             {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
@@ -126,10 +132,10 @@ module_root = name_parts[: name_parts.index("events")]
                         },
                         "type": "WORKFLOW",
                         "parent": None,
-                        "span_id": "123e4567-e89b-12d3-a456-426614174000"
+                        "span_id": "123e4567-e89b-12d3-a456-426614174000",
                     },
                     "type": "WORKFLOW_NODE",
-                    "span_id": "123e4567-e89b-12d3-a456-426614174000"
+                    "span_id": "123e4567-e89b-12d3-a456-426614174000",
                 },
             },
         ),
@@ -164,7 +170,7 @@ module_root = name_parts[: name_parts.index("events")]
                         "value": "foo",
                     },
                 },
-                "parent": None
+                "parent": None,
             },
         ),
         (
@@ -233,6 +239,78 @@ module_root = name_parts[: name_parts.index("events")]
                 "parent": None,
             },
         ),
+        (
+            NodeExecutionStreamingEvent(
+                id=UUID("123e4567-e89b-12d3-a456-426614174000"),
+                timestamp=datetime(2024, 1, 1, 12, 0, 0),
+                trace_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
+                span_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
+                body=NodeExecutionStreamingBody(
+                    node_definition=MockNode,
+                    output=BaseOutput(
+                        name="example",
+                        value="foo",
+                    ),
+                ),
+            ),
+            {
+                "id": "123e4567-e89b-12d3-a456-426614174000",
+                "api_version": "2024-10-25",
+                "timestamp": "2024-01-01T12:00:00",
+                "trace_id": "123e4567-e89b-12d3-a456-426614174000",
+                "span_id": "123e4567-e89b-12d3-a456-426614174000",
+                "name": "node.execution.streaming",
+                "body": {
+                    "node_definition": {
+                        "name": "MockNode",
+                        "module": module_root + ["events", "tests", "test_event"],
+                    },
+                    "output": {
+                        "name": "example",
+                        "value": "foo",
+                    },
+                },
+                "parent": None,
+            },
+        ),
+        (
+            NodeExecutionFulfilledEvent(
+                id=UUID("123e4567-e89b-12d3-a456-426614174000"),
+                timestamp=datetime(2024, 1, 1, 12, 0, 0),
+                trace_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
+                span_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
+                body=NodeExecutionFulfilledBody(
+                    node_definition=MockNode,
+                    outputs=MockNode.Outputs(
+                        example="foo",
+                    ),
+                    invoked_ports={MockNode.Ports.default},
+                ),
+            ),
+            {
+                "id": "123e4567-e89b-12d3-a456-426614174000",
+                "api_version": "2024-10-25",
+                "timestamp": "2024-01-01T12:00:00",
+                "trace_id": "123e4567-e89b-12d3-a456-426614174000",
+                "span_id": "123e4567-e89b-12d3-a456-426614174000",
+                "name": "node.execution.fulfilled",
+                "body": {
+                    "node_definition": {
+                        "name": "MockNode",
+                        "module": module_root + ["events", "tests", "test_event"],
+                    },
+                    "outputs": {
+                        "example": "foo",
+                    },
+                    "invoked_ports": [
+                        {
+                            "name": "default",
+                        }
+                    ],
+                },
+                "parent": None,
+            },
+        ),
     ],
     ids=[
         "workflow.execution.initiated",
@@ -240,7 +318,9 @@ module_root = name_parts[: name_parts.index("events")]
         "workflow.execution.streaming",
         "workflow.execution.fulfilled",
         "workflow.execution.rejected",
+        "node.execution.streaming",
+        "node.execution.fulfilled",
     ],
 )
 def test_event_serialization(event, expected_json):
-    assert not DeepDiff(json.loads(event.model_dump_json()), expected_json)
+    assert not DeepDiff(event.model_dump(mode="json"), expected_json)

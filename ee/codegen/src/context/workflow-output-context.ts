@@ -1,7 +1,4 @@
-import {
-  NodeInput as NodeInputType,
-  FinalOutputNode as FinalOutputNodeType,
-} from "src/types/vellum";
+import { FinalOutputNode as FinalOutputNodeType } from "src/types/vellum";
 import { toSnakeCase } from "src/utils/casing";
 
 export declare namespace WorkflowOutputContext {
@@ -27,19 +24,5 @@ export class WorkflowOutputContext {
 
   public getOutputName(): string {
     return toSnakeCase(this.terminalNodeData.data.name);
-  }
-
-  public getFinalOutputNodeInputData(): NodeInputType {
-    const nodeInputData = this.terminalNodeData.inputs.find(
-      (input) => input.id === this.terminalNodeData.data.nodeInputId
-    );
-
-    if (!nodeInputData) {
-      throw new Error(
-        `Node input data not found for node input ID: ${this.terminalNodeData.data.nodeInputId}`
-      );
-    }
-
-    return nodeInputData;
   }
 }

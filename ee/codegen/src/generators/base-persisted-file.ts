@@ -2,6 +2,8 @@ import { mkdir, writeFile } from "fs/promises";
 import path, { join } from "path";
 
 import { python } from "@fern-api/python-ast";
+import { Comment } from "@fern-api/python-ast/Comment";
+import { StarImport } from "@fern-api/python-ast/StarImport";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
 
@@ -29,6 +31,14 @@ export abstract class BasePersistedFile extends AstNode {
 
   protected abstract getFileStatements(): AstNode[] | undefined;
 
+  protected getFileImports(): StarImport[] | undefined {
+    return undefined;
+  }
+
+  protected getComments(): Comment[] | undefined {
+    return undefined;
+  }
+
   public write(writer: Writer): void {
     const fileStatements = this.getFileStatements();
     if (!fileStatements) {
@@ -38,10 +48,12 @@ export abstract class BasePersistedFile extends AstNode {
     const file = python.file({
       path: this.getModulePath(),
       isInitFile: this.isInitFile,
+      statements: fileStatements,
+      imports: this.getFileImports(),
+      comments: this.getComments(),
     });
 
     file.inheritReferences(this);
-    fileStatements.forEach((statement) => file.addStatement(statement));
 
     file.write(writer);
   }

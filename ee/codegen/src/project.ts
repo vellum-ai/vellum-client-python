@@ -237,20 +237,33 @@ ${errors.slice(0, 3).map((err) => {
   }
 
   private generateDisplayRootInitFile(): InitFile {
-    let statements: AstNode[];
+    const statements: AstNode[] = [];
+    const imports: StarImport[] = [];
+    const comments: Comment[] = [];
 
     const parentNode = this.workflowContext.parentNode;
     if (parentNode) {
-      statements = parentNode.generateNodeDisplayClasses();
+      statements.push(...parentNode.generateNodeDisplayClasses());
     } else {
-      statements = [
-        python.codeBlock(`\
-# flake8: noqa: F401, F403
-
-from .nodes import *
-from .workflow import *\
-`),
-      ];
+      comments.push(python.comment({ docs: "flake8: noqa: F401, F403" }));
+      imports.push(
+        python.starImport({
+          modulePath: [
+            this.workflowContext.moduleName,
+            GENERATED_DISPLAY_MODULE_NAME,
+            "nodes",
+          ],
+        })
+      );
+      imports.push(
+        python.starImport({
+          modulePath: [
+            this.workflowContext.moduleName,
+            GENERATED_DISPLAY_MODULE_NAME,
+            "workflow",
+          ],
+        })
+      );
     }
 
     const rootDisplayInitFile = codegen.initFile({
@@ -259,6 +272,8 @@ from .workflow import *\
         ? [...this.workflowContext.parentNode.getNodeDisplayModulePath()]
         : [this.workflowContext.moduleName, GENERATED_DISPLAY_MODULE_NAME],
       statements,
+      imports,
+      comments,
     });
 
     return rootDisplayInitFile;

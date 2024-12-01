@@ -20,10 +20,9 @@ export class FinalOutputNode extends BaseSingleFileNode<
       workflowContext: this.workflowContext,
     });
 
-    const primitiveOutputType = getVellumVariablePrimitiveType({
-      type: this.nodeData.data.outputType,
-      workflowContext: this.workflowContext,
-    });
+    const primitiveOutputType = getVellumVariablePrimitiveType(
+      this.nodeData.data.outputType
+    );
 
     return [baseStateClassReference, primitiveOutputType];
   }

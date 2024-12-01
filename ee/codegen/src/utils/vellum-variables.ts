@@ -2,31 +2,18 @@ import { python } from "@fern-api/python-ast";
 import * as Vellum from "vellum-ai/api";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
-import { WorkflowContext } from "src/context";
 import { assertUnreachable } from "src/utils/typing";
 
-export function getVellumVariablePrimitiveType({
-  type,
-  workflowContext,
-}: {
-  type: Vellum.VellumVariableType;
-  workflowContext: WorkflowContext;
-}): python.Type {
-  switch (type) {
+export function getVellumVariablePrimitiveType(
+  vellumVariableType: Vellum.VellumVariableType
+): python.Type {
+  switch (vellumVariableType) {
     case "STRING":
       return python.Type.str();
     case "NUMBER":
       return python.Type.float();
     case "JSON":
-      return python.Type.reference(
-        python.reference({
-          name: "Json",
-          modulePath: [
-            ...workflowContext.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
-            "types",
-          ],
-        })
-      );
+      return python.Type.any();
     case "CHAT_HISTORY":
       return python.Type.list(
         python.Type.reference(

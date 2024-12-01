@@ -79,7 +79,6 @@ export class Inputs extends BasePersistedFile {
           name: inputVariableName,
           type: inputVariableData.type,
         },
-        workflowContext: this.workflowContext,
       });
 
       inputsClass.add(vellumVariableField);

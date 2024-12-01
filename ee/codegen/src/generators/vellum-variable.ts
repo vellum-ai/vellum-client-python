@@ -3,7 +3,6 @@ import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
 import { VellumValue } from "vellum-ai/api/types";
 
-import { WorkflowContext } from "src/context";
 import { getVellumVariablePrimitiveType } from "src/utils/vellum-variables";
 
 type VellumVariableWithName = (VellumValue | { type: "NULL"; value?: null }) &
@@ -13,7 +12,6 @@ type VellumVariableWithName = (VellumValue | { type: "NULL"; value?: null }) &
 
 export declare namespace VellumVariable {
   interface Args {
-    workflowContext: WorkflowContext;
     variable: VellumVariableWithName;
     initializer?: AstNode;
   }
@@ -21,15 +19,14 @@ export declare namespace VellumVariable {
 
 export class VellumVariable extends AstNode {
   private readonly field: python.Field;
+  private readonly variable: VellumVariableWithName;
 
-  constructor({ workflowContext, variable, initializer }: VellumVariable.Args) {
+  constructor({ variable, initializer }: VellumVariable.Args) {
     super();
+    this.variable = variable;
     this.field = python.field({
       name: variable.name ?? variable.key,
-      type: getVellumVariablePrimitiveType({
-        type: variable.type,
-        workflowContext,
-      }),
+      type: getVellumVariablePrimitiveType(variable.type),
       initializer,
     });
     this.inheritReferences(this.field);

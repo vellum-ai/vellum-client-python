@@ -78,6 +78,7 @@ export class SubworkflowDeploymentNode extends BaseSingleFileNode<
         outputsClass.add(
           codegen.vellumVariable({
             variable: { name: outputName, type: output.type, id: output.id },
+            workflowContext: this.workflowContext,
           })
         );
       }

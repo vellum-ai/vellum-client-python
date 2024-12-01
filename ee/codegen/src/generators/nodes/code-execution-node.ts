@@ -21,9 +21,10 @@ export class CodeExecutionNode extends BaseSingleFileNode<
       workflowContext: this.workflowContext,
     });
 
-    const primitiveOutputType = getVellumVariablePrimitiveType(
-      this.nodeData.data.outputType
-    );
+    const primitiveOutputType = getVellumVariablePrimitiveType({
+      type: this.nodeData.data.outputType,
+      workflowContext: this.workflowContext,
+    });
 
     return [baseStateClassReference, primitiveOutputType];
   }

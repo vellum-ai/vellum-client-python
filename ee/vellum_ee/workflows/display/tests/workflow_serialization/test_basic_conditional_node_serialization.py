@@ -13,30 +13,20 @@ from vellum.workflows.expressions.does_not_equal import DoesNotEqualExpression
 from vellum.workflows.expressions.ends_with import EndsWithExpression
 from vellum.workflows.expressions.equals import EqualsExpression
 from vellum.workflows.expressions.greater_than import GreaterThanExpression
-from vellum.workflows.expressions.greater_than_or_equal_to import (
-    GreaterThanOrEqualToExpression,
-)
+from vellum.workflows.expressions.greater_than_or_equal_to import GreaterThanOrEqualToExpression
 from vellum.workflows.expressions.in_ import InExpression
 from vellum.workflows.expressions.is_not_null import IsNotNullExpression
 from vellum.workflows.expressions.is_null import IsNullExpression
 from vellum.workflows.expressions.less_than import LessThanExpression
-from vellum.workflows.expressions.less_than_or_equal_to import (
-    LessThanOrEqualToExpression,
-)
+from vellum.workflows.expressions.less_than_or_equal_to import LessThanOrEqualToExpression
 from vellum.workflows.expressions.not_between import NotBetweenExpression
 from vellum.workflows.expressions.not_in import NotInExpression
-from vellum_ee.workflows.display.nodes.base_node_vellum_display import (
-    BaseNodeVellumDisplay,
-)
+from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
-from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import (
-    get_workflow_display,
-)
+from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 
 from tests.workflows.basic_conditional_node.workflow import CategoryWorkflow
-from tests.workflows.basic_conditional_node.workflow_with_only_one_conditional_node import (
-    create_simple_workflow,
-)
+from tests.workflows.basic_conditional_node.workflow_with_only_one_conditional_node import create_simple_workflow
 
 
 def test_serialize_workflow():
@@ -965,7 +955,6 @@ def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(
 
     # AND the conditional node should be what we expect
     conditional_node = workflow_raw_data["nodes"][1]
-    print(conditional_node)
     assert not DeepDiff(
         {
             "id": "a9143814-6bb0-4cb3-a817-4fc076417121",

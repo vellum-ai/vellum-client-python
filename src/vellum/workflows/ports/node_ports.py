@@ -33,7 +33,7 @@ class _NodePortsMeta(type):
 
 
 class NodePorts(metaclass=_NodePortsMeta):
-    def __call__(self, outputs: BaseOutputs, state: BaseState) -> Iterable[Port]:
+    def __call__(self, outputs: BaseOutputs, state: BaseState) -> Set[Port]:
         """
         Invokes the appropriate ports based on the fulfilled outputs and state.
         """
@@ -67,7 +67,7 @@ class NodePorts(metaclass=_NodePortsMeta):
 
         return invoked_ports
 
-    def __lt__(self, output: BaseOutput) -> Iterable[Port]:
+    def __lt__(self, output: BaseOutput) -> Set[Port]:
         """
         Invokes the appropriate ports based on the streamed output
         """

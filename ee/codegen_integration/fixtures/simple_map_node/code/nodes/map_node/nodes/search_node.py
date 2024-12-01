@@ -1,11 +1,11 @@
 from vellum import SearchFiltersRequest, SearchRequestOptionsRequest, SearchResultMergingRequest, SearchWeightsRequest
 from vellum.workflows.nodes.displayable import SearchNode as BaseSearchNode
 
-from ....inputs import Inputs
+from ..inputs import Inputs
 
 
 class SearchNode(BaseSearchNode):
-    query = Inputs.items
+    query = Inputs.item
     document_index = "bb9a427f-23d4-4dc6-bd41-ad2b83727171"
     options = SearchRequestOptionsRequest(
         limit=8,

@@ -1,5 +1,5 @@
 import time
-from typing import Iterable, Iterator, List
+from typing import Iterable, Iterator, List, Set
 
 from vellum.workflows.inputs import BaseInputs
 from vellum.workflows.nodes import BaseNode
@@ -27,10 +27,10 @@ class FirstNode(BaseNode[State]):
     class Ports(BaseNode.Ports):
         default = Port(default=True)
 
-        def __call__(self, outputs: BaseOutputs, state: BaseState) -> Iterable[Port]:
+        def __call__(self, outputs: BaseOutputs, state: BaseState) -> Set[Port]:
             return set()
 
-        def __lt__(self, output: BaseOutput) -> Iterable[Port]:
+        def __lt__(self, output: BaseOutput) -> Set[Port]:
             return {self.default}
 
     def run(self) -> Iterator[BaseOutput]:

@@ -4,6 +4,11 @@ exports[`VellumValue > CHAT_HISTORY > should write a CHAT_HISTORY value with a s
 
 exports[`VellumValue > CHAT_HISTORY > should write a CHAT_HISTORY value with just text 1`] = `"[ChatMessageRequest(role="USER", text="Hello, AI!")]"`;
 
+exports[`VellumValue > ERROR > should write a ERROR value correctly 1`] = `
+"VellumError(message="This is an error!", code="INTERNAL_SERVER_ERROR")
+"
+`;
+
 exports[`VellumValue > JSON > should write a JSON value correctly 1`] = `
 "{"key": "value", "nested": {"array": [1, 2, 3]}}
 "

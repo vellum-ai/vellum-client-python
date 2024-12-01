@@ -4,6 +4,8 @@ import { mkdir } from "fs/promises";
 import { join } from "path";
 
 import { python } from "@fern-api/python-ast";
+import { Comment } from "@fern-api/python-ast/Comment";
+import { StarImport } from "@fern-api/python-ast/StarImport";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import {
@@ -202,19 +204,23 @@ ${errors.slice(0, 3).map((err) => {
   }
 
   private generateRootInitFile(): InitFile {
-    let statements: AstNode[];
+    const statements: AstNode[] = [];
+    const imports: StarImport[] = [];
+    const comments: Comment[] = [];
 
     const parentNode = this.workflowContext.parentNode;
     if (parentNode) {
-      statements = [parentNode.generateNodeClass()];
+      statements.push(parentNode.generateNodeClass());
     } else {
-      statements = [
-        python.codeBlock(`\
-# flake8: noqa: F401, F403
-
-from .display import *\
-`),
-      ];
+      comments.push(python.comment({ docs: "flake8: noqa: F401, F403" }));
+      imports.push(
+        python.starImport({
+          modulePath: [
+            this.workflowContext.moduleName,
+            GENERATED_DISPLAY_MODULE_NAME,
+          ],
+        })
+      );
     }
 
     const rootInitFile = codegen.initFile({
@@ -223,6 +229,8 @@ from .display import *\
         ? [...this.workflowContext.parentNode.getNodeModulePath()]
         : [this.workflowContext.moduleName],
       statements,
+      imports,
+      comments,
     });
 
     return rootInitFile;

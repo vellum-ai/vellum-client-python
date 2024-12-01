@@ -127,20 +127,33 @@ export class CodeExecutionNode extends BaseSingleFileNode<
 
     statements.push(
       python.field({
+        name: "label",
+        initializer: python.TypeInstantiation.str(this.nodeData.data.label),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "node_id",
+        initializer: python.TypeInstantiation.uuid(this.nodeData.id),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "target_handle_id",
+        initializer: python.TypeInstantiation.uuid(
+          this.nodeData.data.targetHandleId
+        ),
+      })
+    );
+
+    statements.push(
+      python.field({
         name: "code_input_id",
         initializer: python.TypeInstantiation.uuid(nodeData.codeInputId),
       })
     );
-
-    const argId = this.nodeInputsByKey.get("arg")?.nodeInputData.id;
-    if (argId) {
-      statements.push(
-        python.field({
-          name: "arg_input_id",
-          initializer: python.TypeInstantiation.uuid(argId),
-        })
-      );
-    }
 
     statements.push(
       python.field({
@@ -162,29 +175,6 @@ export class CodeExecutionNode extends BaseSingleFileNode<
         initializer: nodeData.logOutputId
           ? python.TypeInstantiation.uuid(nodeData.logOutputId)
           : python.TypeInstantiation.none(),
-      })
-    );
-
-    statements.push(
-      python.field({
-        name: "label",
-        initializer: python.TypeInstantiation.str(this.nodeData.data.label),
-      })
-    );
-
-    statements.push(
-      python.field({
-        name: "node_id",
-        initializer: python.TypeInstantiation.uuid(this.nodeData.id),
-      })
-    );
-
-    statements.push(
-      python.field({
-        name: "target_handle_id",
-        initializer: python.TypeInstantiation.uuid(
-          this.nodeData.data.targetHandleId
-        ),
       })
     );
 

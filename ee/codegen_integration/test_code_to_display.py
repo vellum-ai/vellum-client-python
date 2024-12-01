@@ -1,4 +1,6 @@
+import pytest
 import json
+from unittest import mock
 from typing import Any, Dict
 
 from deepdiff import DeepDiff
@@ -67,3 +69,20 @@ def _custom_obj_hook(json_dict) -> Dict[str, Any]:
         _process_position_hook(key,value)
         _process_negated_hook(key, value, json_dict)
     return json_dict
+
+
+# Save the original `open`
+builtin_open = open
+
+# Fixture that mocks open for code execution nodes
+@pytest.fixture
+def mock_open_code_execution_file():
+    def _mock_open(file_path, mode='r'):
+        # This is for code execution file reads
+        if not file_path.endswith(".json"):
+            mock_file = mock.mock_open(read_data="def main(arg: str) -> str:\n    return arg\n    ")
+            return mock_file()
+        return builtin_open(file_path, mode)
+
+    with mock.patch("builtins.open", _mock_open),  mock.patch("os.path.exists", return_value=True):
+        yield _mock_open

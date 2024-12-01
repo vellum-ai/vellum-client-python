@@ -1,5 +1,3 @@
-from unittest import mock
-
 import pytest
 import glob
 import os
@@ -46,23 +44,3 @@ _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
 def code_to_display_fixture_paths(request) -> Tuple[str, str]:
     root = request.param
     return _get_fixture_paths(root)
-
-# Save the original `open`
-builtin_open = open
-
-# Fixture that mocks open for code execution nodes
-@pytest.fixture
-def mock_open_code_execution_file():
-    def _mock_open(file_path, mode='r'):
-        # This is for code execution file reads
-        if not file_path.endswith(".json"):
-            mock_file = mock.mock_open(read_data="def main(arg: str) -> str:\n    return arg\n    ")
-            return mock_file()
-        return builtin_open(file_path, mode)
-
-    with mock.patch("builtins.open", _mock_open),  mock.patch("os.path.exists", return_value=True):
-        yield _mock_open
-
-
-
-

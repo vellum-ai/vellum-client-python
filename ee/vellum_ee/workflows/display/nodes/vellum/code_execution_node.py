@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import ClassVar, Generic, Optional, TypeVar
+from typing import ClassVar, Dict, Generic, Optional, TypeVar
 
 from vellum.workflows.nodes.displayable.code_execution_node import CodeExecutionNode
 from vellum.workflows.nodes.displayable.code_execution_node.utils import read_file_from_path
@@ -16,10 +16,11 @@ _CodeExecutionNodeType = TypeVar("_CodeExecutionNodeType", bound=CodeExecutionNo
 class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType], Generic[_CodeExecutionNodeType]):
     code_input_id: ClassVar[Optional[UUID]] = None
     runtime_input_id: ClassVar[Optional[UUID]] = None
-    arg_input_id: ClassVar[Optional[UUID]] = None
 
     output_id: ClassVar[Optional[UUID]] = None
     log_output_id: ClassVar[Optional[UUID]] = None
+
+    node_input_ids_by_name: ClassVar[Dict[str, UUID]] = {}
 
     def serialize(
         self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs
@@ -28,19 +29,19 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
         node_id = self.node_id
 
         code = read_file_from_path(raise_if_descriptor(node.filepath))
-        inputs = []
+        code_inputs = raise_if_descriptor(node.code_inputs)
 
-        if self.arg_input_id:
-            code_inputs = raise_if_descriptor(node.code_inputs)
-            value = next((value for key, value in code_inputs.items() if key == "arg"), None)
-            arg_node_input = create_node_input(
+        inputs = [
+            create_node_input(
                 node_id=node_id,
-                input_name="arg",
-                value=value,
+                input_name=variable_name,
+                value=variable_value,
                 display_context=display_context,
-                input_id=self.arg_input_id,
+                input_id=self.node_input_ids_by_name.get(variable_name),
             )
-            inputs.append(arg_node_input)
+            for variable_name, variable_value in code_inputs.items()
+        ]
+
         code_node_input = create_node_input(
             node_id=node_id,
             input_name="code",

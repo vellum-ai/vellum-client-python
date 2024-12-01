@@ -11,6 +11,8 @@ service:
       docs: >-
         An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -24,6 +26,7 @@ service:
               type: optional<string>
               validation:
                 minLength: 1
+        content-type: application/json
       response:
         docs: ''
         type: root.MetricDefinitionExecution
@@ -49,6 +52,8 @@ service:
       path: /v1/metric-definitions/{id}/history/{history_id_or_release_tag}
       method: GET
       auth: true
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         history_id_or_release_tag:
           type: string
@@ -63,6 +68,7 @@ service:
         docs: ''
         type: root.MetricDefinitionHistoryItem
       url: Default
+      availability: pre-release
       examples:
         - path-parameters:
             history_id_or_release_tag: history_id_or_release_tag
@@ -87,5 +93,7 @@ service:
                   required: true
                   default:
                     type: STRING
+      audiences:
+        - internal
   source:
     openapi: openapi/openapi.yml

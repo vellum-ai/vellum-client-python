@@ -8,6 +8,8 @@ service:
       path: /v1/sandboxes/{id}/prompts/{prompt_variant_id}/deploy
       method: POST
       auth: true
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -50,6 +52,7 @@ service:
                 Optionally provide the release tags that you'd like to be
                 associated with the latest release of the created/updated Prompt
                 Deployment.
+        content-type: application/json
       response:
         docs: ''
         type: root.DeploymentRead
@@ -101,6 +104,8 @@ service:
         not provided will be removed
 
         or overwritten with default values.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -122,6 +127,7 @@ service:
                 will be generated and a new scenario will be appended.
               validation:
                 minLength: 1
+        content-type: application/json
       response:
         docs: ''
         type: root.SandboxScenario
@@ -178,6 +184,8 @@ service:
       docs: >-
         Deletes an existing scenario from a sandbox, keying off of the provided
         scenario id.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string

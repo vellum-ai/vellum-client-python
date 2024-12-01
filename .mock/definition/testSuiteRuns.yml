@@ -9,6 +9,8 @@ service:
       method: POST
       auth: true
       docs: Trigger a Test Suite and create a new Test Suite Run
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: TestSuiteRunCreateRequest
         body:
@@ -30,6 +32,7 @@ service:
             exec_config:
               type: root.TestSuiteRunExecConfigRequest
               docs: Configuration that defines how the Test Suite should be run
+        content-type: application/json
       response:
         docs: ''
         type: root.TestSuiteRunRead
@@ -64,6 +67,8 @@ service:
       method: GET
       auth: true
       docs: Retrieve a specific Test Suite Run by ID
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -98,6 +103,8 @@ service:
       path: /v1/test-suite-runs/{id}/executions
       method: GET
       auth: true
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string

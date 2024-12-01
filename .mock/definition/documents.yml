@@ -9,6 +9,8 @@ service:
       method: GET
       auth: true
       docs: Used to list documents. Optionally filter on supported fields.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: DocumentsListRequest
         query-parameters:
@@ -18,6 +20,8 @@ service:
               Filter down to only those documents that are included in the
               specified index. You may provide either the Vellum-generated ID or
               the unique name of the index specified upon initial creation.
+            validation:
+              format: uuid
           limit:
             type: optional<integer>
             docs: Number of results to return per page.
@@ -62,6 +66,8 @@ service:
       docs: >-
         Retrieve a Document, keying off of either its Vellum-generated ID or its
         external ID.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -99,6 +105,8 @@ service:
       docs: >-
         Delete a Document, keying off of either its Vellum-generated ID or its
         external ID.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -117,6 +125,8 @@ service:
       docs: >-
         Update a Document, keying off of either its Vellum-generated ID or its
         external ID. Particularly useful for updating its metadata.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -144,6 +154,7 @@ service:
               docs: >-
                 A JSON object containing any metadata associated with the
                 document that you'd like to filter upon later.
+        content-type: application/json
       response:
         docs: ''
         type: root.DocumentRead
@@ -202,6 +213,8 @@ service:
         - `metadata: dict[str, Any]` - A stringified JSON object containing any
         metadata associated with the document that you'd like to filter upon
         later.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: UploadDocumentBodyRequest
         body:
@@ -226,7 +239,9 @@ service:
               validation:
                 minLength: 1
                 maxLength: 1000
-            contents: file
+            contents:
+              type: file
+              docs: The file contents of the document.
             keywords:
               type: optional<list<string>>
               docs: >-

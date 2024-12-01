@@ -10,6 +10,8 @@ service:
       auth: true
       docs: |
         Retrieve details about an ML Model
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string

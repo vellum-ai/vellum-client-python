@@ -11,6 +11,8 @@ service:
       docs: >-
         An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: AdHocExecutePromptStream
         body:
@@ -26,6 +28,7 @@ service:
             blocks: list<root.PromptBlock>
             functions: optional<list<root.FunctionDefinition>>
             expand_meta: optional<root.AdHocExpandMeta>
+        content-type: application/json
       response-stream:
         docs: ''
         type: root.AdHocExecutePromptEvent
@@ -36,6 +39,28 @@ service:
         - root.BadRequestError
         - root.ForbiddenError
         - root.InternalServerError
+      examples:
+        - request:
+            ml_model: ml_model
+            input_values:
+              - key: key
+                type: STRING
+                value: value
+            input_variables:
+              - id: id
+                key: key
+                type: STRING
+            parameters: {}
+            blocks:
+              - block_type: JINJA
+                template: template
+          response:
+            stream:
+              - state: INITIATED
+                meta:
+                  model_name: model_name
+                  latency: 1
+                execution_id: execution_id
       audiences:
         - internal
   source:

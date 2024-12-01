@@ -2,15 +2,38 @@ errors:
   BadRequestError:
     status-code: 400
     type: unknown
+    docs: ''
+    examples:
+      - value:
+          detail: detail
+      - value:
+          message: message
+          log: log
+      - value:
+          key: value
   ForbiddenError:
     status-code: 403
     type: unknown
+    docs: ''
+    examples:
+      - value:
+          detail: detail
   InternalServerError:
     status-code: 500
     type: unknown
+    docs: ''
+    examples:
+      - value:
+          detail: detail
   NotFoundError:
     status-code: 404
     type: unknown
+    docs: ''
+    examples:
+      - value:
+          detail: detail
+      - value:
+          key: value
 service:
   auth: false
   base-path: ''
@@ -22,6 +45,8 @@ service:
       docs: >-
         An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: CodeExecutor
         body:
@@ -34,6 +59,7 @@ service:
             input_values: list<CodeExecutorInput>
             packages: list<CodeExecutionPackage>
             output_type: VellumVariableType
+        content-type: application/json
       response:
         docs: ''
         type: CodeExecutorResponse
@@ -66,6 +92,8 @@ service:
       method: POST
       auth: true
       docs: Executes a deployed Prompt and returns the result.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: ExecutePromptRequest
         body:
@@ -130,6 +158,7 @@ service:
                 Arbitrary JSON metadata associated with this request. Can be
                 used to capture additional monitoring data such as user id,
                 session id, etc. for future analysis.
+        content-type: application/json
       response:
         docs: ''
         type: ExecutePromptResponse
@@ -179,6 +208,8 @@ service:
       method: POST
       auth: true
       docs: Executes a deployed Prompt and streams back the results.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: ExecutePromptStreamRequest
         body:
@@ -243,6 +274,7 @@ service:
                 Arbitrary JSON metadata associated with this request. Can be
                 used to capture additional monitoring data such as user id,
                 session id, etc. for future analysis.
+        content-type: application/json
       response-stream:
         docs: ''
         type: ExecutePromptEvent
@@ -254,6 +286,21 @@ service:
         - ForbiddenError
         - NotFoundError
         - InternalServerError
+      examples:
+        - request:
+            inputs:
+              - name: name
+                type: STRING
+                value: value
+          response:
+            stream:
+              - state: INITIATED
+                meta:
+                  model_name: model_name
+                  latency: 1
+                  deployment_release_tag: deployment_release_tag
+                  prompt_version_id: prompt_version_id
+                execution_id: execution_id
       audiences:
         - customers
     execute-workflow:
@@ -261,6 +308,8 @@ service:
       method: POST
       auth: true
       docs: Executes a deployed Workflow and returns its outputs.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: ExecuteWorkflowRequest
         body:
@@ -312,6 +361,7 @@ service:
                 Arbitrary JSON metadata associated with this request. Can be
                 used to capture additional monitoring data such as user id,
                 session id, etc. for future analysis.
+        content-type: application/json
       response:
         docs: ''
         type: ExecuteWorkflowResponse
@@ -347,6 +397,8 @@ service:
       method: POST
       auth: true
       docs: Executes a deployed Workflow and streams back its results.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: ExecuteWorkflowStreamRequest
         body:
@@ -404,6 +456,7 @@ service:
                 Arbitrary JSON metadata associated with this request. Can be
                 used to capture additional monitoring data such as user id,
                 session id, etc. for future analysis.
+        content-type: application/json
       response-stream:
         docs: ''
         type: WorkflowStreamEvent
@@ -414,6 +467,41 @@ service:
         - BadRequestError
         - NotFoundError
         - InternalServerError
+      examples:
+        - request:
+            inputs:
+              - name: name
+                type: STRING
+                value: value
+          response:
+            stream:
+              - execution_id: execution_id
+                run_id: run_id
+                external_id: external_id
+                type: WORKFLOW
+                data:
+                  id: id
+                  state: INITIATED
+                  ts: '2024-01-15T09:30:00Z'
+                  output:
+                    id: id
+                    name: name
+                    state: INITIATED
+                    node_id: node_id
+                    delta: delta
+                    type: STRING
+                    value: value
+                  error:
+                    message: message
+                    code: WORKFLOW_INITIALIZATION
+                  outputs:
+                    - id: id
+                      name: name
+                      type: STRING
+                  inputs:
+                    - id: id
+                      name: name
+                      type: STRING
       audiences:
         - customers
     generate:
@@ -425,6 +513,8 @@ service:
 
         Important: This endpoint is DEPRECATED and has been superseded by
         [execute-prompt](/api-reference/api-reference/execute-prompt).
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: GenerateBodyRequest
         body:
@@ -453,6 +543,7 @@ service:
               docs: >-
                 Additional configuration that can be used to control what's
                 included in the response.
+        content-type: application/json
       response:
         docs: ''
         type: GenerateResponse
@@ -493,6 +584,8 @@ service:
         Important: This endpoint is DEPRECATED and has been superseded by
 
         [execute-prompt-stream](/api-reference/api-reference/execute-prompt-stream).
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: GenerateStreamBodyRequest
         body:
@@ -521,6 +614,7 @@ service:
               docs: >-
                 Additional configuration that can be used to control what's
                 included in the response.
+        content-type: application/json
       response-stream:
         docs: ''
         type: GenerateStreamResponse
@@ -532,6 +626,25 @@ service:
         - ForbiddenError
         - NotFoundError
         - InternalServerError
+      examples:
+        - request:
+            requests:
+              - input_values:
+                  key: value
+          response:
+            stream:
+              - delta:
+                  request_index: 1
+                  data:
+                    completion_index: 1
+                    completion:
+                      id: id
+                      text: text
+                      prompt_version_id: prompt_version_id
+                      deployment_release_tag: deployment_release_tag
+                      model_name: model_name
+                  error:
+                    message: message
       audiences:
         - deprecated
     search:
@@ -539,6 +652,8 @@ service:
       method: POST
       auth: true
       docs: Perform a search against a document index.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: SearchRequestBodyRequest
         body:
@@ -565,6 +680,7 @@ service:
             options:
               type: optional<SearchRequestOptionsRequest>
               docs: Configuration options for the search.
+        content-type: application/json
       response:
         docs: ''
         type: SearchResponse
@@ -595,6 +711,8 @@ service:
       docs: >-
         Used to submit feedback regarding the quality of previously generated
         completions.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: SubmitCompletionActualsRequest
         body:
@@ -618,6 +736,7 @@ service:
                 Feedback regarding the quality of previously generated
                 completions
               type: list<SubmitCompletionActualRequest>
+        content-type: application/json
       url: Predict
       availability: generally-available
       errors:
@@ -638,6 +757,8 @@ service:
             Used to submit feedback regarding the quality of previous workflow execution and its outputs.
 
             **Note:** Uses a base url of `https://predict.vellum.ai`.    
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: SubmitWorkflowExecutionActualsRequest
         body:
@@ -662,6 +783,7 @@ service:
                 actuals for. Must provide either this or execution_id.
               validation:
                 minLength: 1
+        content-type: application/json
       url: Predict
       availability: generally-available
       examples:
@@ -1318,6 +1440,7 @@ types:
       - string
     source:
       openapi: openapi/openapi.yml
+    inline: true
   DeploymentProviderPayloadResponse:
     properties:
       payload: DeploymentProviderPayloadResponsePayload

@@ -16,6 +16,8 @@ service:
       method: GET
       auth: true
       docs: Used to retrieve a list of Document Indexes.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: DocumentIndexesListRequest
         query-parameters:
@@ -70,6 +72,8 @@ service:
       method: POST
       auth: true
       docs: Creates a new document index.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: DocumentIndexCreateRequest
         body:
@@ -110,6 +114,7 @@ service:
                 index
               validation:
                 format: uuid
+        content-type: application/json
       response:
         docs: ''
         type: root.DocumentIndexRead
@@ -209,6 +214,8 @@ service:
       method: GET
       auth: true
       docs: Used to retrieve a Document Index given its ID or name.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -242,6 +249,8 @@ service:
       method: PUT
       auth: true
       docs: Used to fully update a Document Index given its ID or name.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -271,6 +280,7 @@ service:
                 * `DEVELOPMENT` - Development
                 * `STAGING` - Staging
                 * `PRODUCTION` - Production
+        content-type: application/json
       response:
         docs: ''
         type: root.DocumentIndexRead
@@ -302,6 +312,8 @@ service:
       method: DELETE
       auth: true
       docs: Used to delete a Document Index given its ID or name.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -318,6 +330,8 @@ service:
       method: PATCH
       auth: true
       docs: Used to partial update a Document Index given its ID or name.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -347,6 +361,7 @@ service:
                 * `DEVELOPMENT` - Development
                 * `STAGING` - Staging
                 * `PRODUCTION` - Production
+        content-type: application/json
       response:
         docs: ''
         type: root.DocumentIndexRead
@@ -377,6 +392,8 @@ service:
       method: POST
       auth: true
       docs: Adds a previously uploaded Document to the specified Document Index.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         document_id:
           type: string
@@ -404,6 +421,8 @@ service:
       docs: >-
         Removes a Document from a Document Index without deleting the Document
         itself.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         document_id:
           type: string

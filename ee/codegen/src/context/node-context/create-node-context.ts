@@ -1,3 +1,4 @@
+import { MetricDefinitions as MetricDefinitionsClient } from "vellum-ai/api/resources/metricDefinitions/client/Client";
 import { WorkflowDeployments as WorkflowDeploymentsClient } from "vellum-ai/api/resources/workflowDeployments/client/Client";
 
 import { BaseNodeContext } from "./base";
@@ -87,9 +88,16 @@ export async function createNodeContext(
     }
     case WorkflowNodeType.METRIC: {
       const guardrailNodeData = nodeData;
+      const metricDefinitionsHistoryItem = await new MetricDefinitionsClient({
+        apiKey: args.workflowContext.vellumApiKey,
+      }).metricDefinitionHistoryItemRetrieve(
+        guardrailNodeData.data.releaseTag,
+        guardrailNodeData.data.metricDefinitionId
+      );
       return new GuardrailNodeContext({
         ...args,
         nodeData: guardrailNodeData,
+        metricDefinitionsHistoryItem,
       });
     }
     case WorkflowNodeType.CODE_EXECUTION: {

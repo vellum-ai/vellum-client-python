@@ -1,6 +1,8 @@
 import { readdirSync } from "fs";
 import { basename, join, relative } from "path";
 
+import { MockInstance } from "vitest";
+
 const fixtureDir = join(
   __dirname,
   "..",
@@ -50,18 +52,26 @@ export function getFixturesForProjectTest(
   {
     excludeFixtures,
     includeFixtures,
+    fixtureMocks,
   }: {
     excludeFixtures?: Set<string> | string[];
     includeFixtures?: Set<string> | string[];
-  } = { excludeFixtures: new Set(), includeFixtures: new Set() }
+    fixtureMocks?: Record<string, MockInstance>;
+  } = {
+    excludeFixtures: new Set(),
+    includeFixtures: new Set(),
+    fixtureMocks: {},
+  }
 ): {
   fixtureName: string;
   displayFile: string;
   codeDir: string;
+  mock?: MockInstance;
 }[] {
   return getFixtures(excludeFixtures, includeFixtures).map((root) => ({
     fixtureName: root,
     ...getFixturePaths(root),
+    mock: fixtureMocks?.[root],
   }));
 }
 

@@ -1,7 +1,11 @@
+import { mkdir, writeFile } from "fs/promises";
+import * as path from "path";
+
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { CodeExecutionContext } from "src/context/node-context/code-execution-node";
+import { InitFile } from "src/generators";
 import { BaseState } from "src/generators/base-state";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
 import { CodeExecutionNode as CodeExecutionNodeType } from "src/types/vellum";
@@ -15,6 +19,21 @@ export class CodeExecutionNode extends BaseSingleFileNode<
 
   baseNodeClassName = "CodeExecutionNode";
   baseNodeDisplayClassName = "BaseCodeExecutionNodeDisplay";
+
+  // Override
+  public async persist(): Promise<void> {
+    const nodeInitFile = new InitFile({
+      workflowContext: this.workflowContext,
+      modulePath: this.nodeContext.nodeModulePath,
+      statements: [this.generateNodeClass()],
+    });
+
+    await Promise.all([
+      nodeInitFile.persist(),
+      this.persistScriptFile(),
+      this.getNodeDisplayFile().persist(),
+    ]);
+  }
 
   protected getNodeBaseGenericTypes(): AstNode[] {
     const baseStateClassReference = new BaseState({
@@ -140,5 +159,43 @@ export class CodeExecutionNode extends BaseSingleFileNode<
 
   protected getErrorOutputId(): string | undefined {
     return this.nodeData.data.errorOutputId;
+  }
+
+  private async persistScriptFile(): Promise<void> {
+    const filepath = this.nodeData.data.filepath ?? "./script.py";
+
+    const codeInputId = this.nodeData.data.codeInputId;
+    const codeInput = this.nodeData.inputs.find(
+      (nodeInput) => nodeInput.id === codeInputId
+    );
+
+    const codeInputRule = codeInput?.value.rules[0];
+    if (
+      !codeInputRule ||
+      codeInputRule.type !== "CONSTANT_VALUE" ||
+      codeInputRule.data.type !== "STRING"
+    ) {
+      throw new Error("Expected to find code input with constant string value");
+    }
+
+    const scriptFileContents = codeInputRule.data.value ?? "";
+
+    const absolutPathToNodeDirectory = `${
+      this.workflowContext.absolutePathToOutputDirectory
+    }/${this.nodeContext.nodeModulePath.join("/")}`;
+
+    let absolutePathToScriptFile: string;
+    if (path.isAbsolute(filepath)) {
+      absolutePathToScriptFile = filepath;
+    } else {
+      // Resolve it relative to the basePath
+      absolutePathToScriptFile = path.resolve(
+        absolutPathToNodeDirectory,
+        filepath
+      );
+    }
+    await mkdir(path.dirname(absolutePathToScriptFile), { recursive: true });
+    await writeFile(absolutePathToScriptFile, scriptFileContents);
+    return;
   }
 }

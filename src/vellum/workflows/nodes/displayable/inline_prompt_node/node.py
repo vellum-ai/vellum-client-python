@@ -9,13 +9,15 @@ from vellum.workflows.types.generics import StateType
 
 class InlinePromptNode(BaseInlinePromptNode[StateType]):
     """
-    Used to execute an Inline Prompt and surface a string output for convenience.
+    Used to execute a Prompt defined inline.
 
     prompt_inputs: EntityInputsInterface - The inputs for the Prompt
     ml_model: str - Either the ML Model's UUID or its name.
-    blocks: List[PromptBlockRequest] - The blocks that make up the Prompt
+    blocks: List[PromptBlock] - The blocks that make up the Prompt
+    functions: Optional[List[FunctionDefinition]] - The functions to include in the Prompt
     parameters: PromptParameters - The parameters for the Prompt
-    expand_meta: Optional[AdHocExpandMetaRequest] - Set of expandable execution fields to include in the response
+    expand_meta: Optional[AdHocExpandMeta] - Expandable execution fields to include in the response
+    request_options: Optional[RequestOptions] - The request options to use for the Prompt Execution
     """
 
     class Outputs(BaseInlinePromptNode.Outputs):

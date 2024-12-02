@@ -39,14 +39,14 @@ To update the table of contents, run `doctoc README.md`
    ```bash
    npm install
    ```
-5. If you haven't already, go to the CONTRIBUTING.md guide and run the setup steps there
+5. If you haven't already, go to the [CONTRIBUTING.md](/CONTRIBUTING.md) guide and run the setup steps there
 
 ## Testing
 
 To run unit tests:
 
-For these tests to run successfully, you'll need to run the poetry virtual environment.
-The steps to set this up are in the README at the root of this repo.
+For these tests to run successfully, you'll need to have an active python virtual environment with `isort` installed.
+The steps to set this up are in the [CONTRIBUTING.md](/CONTRIBUTING.md) guide at the root of this repo.
 
 ```bash
 npm run test

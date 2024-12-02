@@ -1,6 +1,48 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GuardrailNode > basic > getNodeDisplayFile 1`] = `
+exports[`GuardrailNode > basic > getNodeDisplayFile - multiple output variables 1`] = `
+"from vellum_ee.workflows.display.nodes import BaseGuardrailNodeDisplay
+from ...nodes.guardrail_node import GuardrailNode
+from uuid import UUID
+from vellum_ee.workflows.display.nodes.types import (
+    NodeOutputDisplay,
+    PortDisplayOverrides,
+)
+from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
+
+
+class GuardrailNodeDisplay(BaseGuardrailNodeDisplay[GuardrailNode]):
+    label = "Guardrail Node"
+    node_id = UUID("metric")
+    target_handle_id = UUID("1817fbab-db21-4219-8b34-0e150ce78887")
+    metric_input_ids_by_name = {
+        "expected": UUID("3f917af8-03a4-4ca4-8d40-fa662417fe9c"),
+        "actual": UUID("bed55ada-923e-46ef-8340-1a5b0b563dc1"),
+    }
+    node_input_ids_by_name = {
+        "expected": UUID("3f917af8-03a4-4ca4-8d40-fa662417fe9c"),
+        "actual": UUID("bed55ada-923e-46ef-8340-1a5b0b563dc1"),
+    }
+    output_display = {
+        GuardrailNode.Outputs.score1: NodeOutputDisplay(
+            id=UUID("mocked-input-id-1"), name="score1"
+        ),
+        GuardrailNode.Outputs.score2: NodeOutputDisplay(
+            id=UUID("mocked-input-id-2"), name="score2"
+        ),
+    }
+    port_displays = {
+        GuardrailNode.Ports.default: PortDisplayOverrides(
+            id=UUID("92aafe31-101b-47d3-86f2-e261c7747c16")
+        )
+    }
+    display_data = NodeDisplayData(
+        position=NodeDisplayPosition(x=0, y=0), width=None, height=None
+    )
+"
+`;
+
+exports[`GuardrailNode > basic > getNodeDisplayFile - single output variable 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseGuardrailNodeDisplay
 from ...nodes.guardrail_node import GuardrailNode
 from uuid import UUID
@@ -39,7 +81,19 @@ class GuardrailNodeDisplay(BaseGuardrailNodeDisplay[GuardrailNode]):
 "
 `;
 
-exports[`GuardrailNode > basic > getNodeFile 1`] = `
+exports[`GuardrailNode > basic > getNodeFile - multiple output variables 1`] = `
+"from vellum.workflows.nodes.displayable import GuardrailNode as BaseGuardrailNode
+from ..inputs import Inputs
+
+
+class GuardrailNode(BaseGuardrailNode):
+    metric_definition = "589df5bd-8c0d-4797-9a84-9598ecd043de"
+    metric_inputs = {"expected": Inputs.expected, "actual": Inputs.output}
+    release_tag = "LATEST"
+"
+`;
+
+exports[`GuardrailNode > basic > getNodeFile - single output variable 1`] = `
 "from vellum.workflows.nodes.displayable import GuardrailNode as BaseGuardrailNode
 from ..inputs import Inputs
 
@@ -82,9 +136,12 @@ class GuardrailNodeDisplay(BaseGuardrailNodeDisplay[GuardrailNode]):
         "actual": UUID("bed55ada-923e-46ef-8340-1a5b0b563dc1"),
     }
     output_display = {
-        GuardrailNode.Outputs.score: NodeOutputDisplay(
-            id=UUID("mocked-input-id"), name="score"
-        )
+        GuardrailNode.Outputs.score1: NodeOutputDisplay(
+            id=UUID("mocked-input-id-1"), name="score1"
+        ),
+        GuardrailNode.Outputs.score2: NodeOutputDisplay(
+            id=UUID("mocked-input-id-2"), name="score2"
+        ),
     }
     port_displays = {
         GuardrailNode.Ports.default: PortDisplayOverrides(

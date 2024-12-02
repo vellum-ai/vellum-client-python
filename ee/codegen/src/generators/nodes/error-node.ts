@@ -1,3 +1,4 @@
+import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { ErrorNodeContext } from "src/context/node-context/error-node";
@@ -12,8 +13,16 @@ export class ErrorNode extends BaseSingleFileNode<
   baseNodeDisplayClassName = "BaseErrorNodeDisplay";
 
   getNodeClassBodyStatements(): AstNode[] {
-    const statements: AstNode[] = [];
-    return statements;
+    const bodyStatements: AstNode[] = [];
+
+    bodyStatements.push(
+      python.field({
+        name: "error_source_input_id",
+        initializer: this.getNodeInputByName("error_source_input_id"),
+      })
+    );
+
+    return bodyStatements;
   }
 
   getNodeDisplayClassBodyStatements(): AstNode[] {

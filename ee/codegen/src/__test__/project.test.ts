@@ -36,14 +36,14 @@ describe("WorkflowProjectGenerator", () => {
     it.each(
       getFixturesForProjectTest({
         includeFixtures: [
-          // "simple_search_node",
-          // "simple_inline_subworkflow_node",
+          "simple_search_node",
+          "simple_inline_subworkflow_node",
           "simple_guardrail_node",
-          // "simple_prompt_node",
-          // "simple_map_node",
-          // "simple_code_execution_node",
-          // "simple_conditional_node",
-          // "simple_templating_node",
+          "simple_prompt_node",
+          "simple_map_node",
+          "simple_code_execution_node",
+          "simple_conditional_node",
+          "simple_templating_node",
         ],
         fixtureMocks: fixtureMocks,
       })

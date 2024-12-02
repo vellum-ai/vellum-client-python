@@ -1,24 +1,27 @@
-import { MetricDefinitions as MetricDefinitionsClient } from "vellum-ai/api/resources/metricDefinitions/client/Client";
+import { MetricDefinitionHistoryItem } from "vellum-ai/api";
 
 import { BaseNodeContext } from "./base";
 
 import { PortContext } from "src/context/port-context";
 import { GuardrailNode as GuardrailNodeType } from "src/types/vellum";
 
+export declare namespace GuardrailNodeContext {
+  interface Args extends BaseNodeContext.Args<GuardrailNodeType> {
+    metricDefinitionsHistoryItem: MetricDefinitionHistoryItem;
+  }
+}
+
 export class GuardrailNodeContext extends BaseNodeContext<GuardrailNodeType> {
-  async getNodeOutputNamesById(): Promise<Record<string, string>> {
-    const metricDefinitionId = this.nodeData.data.metricDefinitionId;
-    const metricDefinitionsClient = new MetricDefinitionsClient({
-      apiKey: this.workflowContext.vellumApiKey,
-    });
+  public metricDefinitionsHistoryItem: MetricDefinitionHistoryItem;
 
-    const metricDefinitionHistoryItem =
-      await metricDefinitionsClient.metricDefinitionHistoryItemRetrieve(
-        this.nodeData.data.releaseTag,
-        metricDefinitionId
-      );
+  constructor(args: GuardrailNodeContext.Args) {
+    super(args);
 
-    return metricDefinitionHistoryItem.outputVariables.reduce(
+    this.metricDefinitionsHistoryItem = args.metricDefinitionsHistoryItem;
+  }
+
+  getNodeOutputNamesById(): Record<string, string> {
+    return this.metricDefinitionsHistoryItem.outputVariables.reduce(
       (acc, variable) => {
         acc[variable.id] = variable.key;
         return acc;

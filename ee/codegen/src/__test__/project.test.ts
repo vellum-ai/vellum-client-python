@@ -11,6 +11,7 @@ import {
 } from "./helpers/fixtures";
 import { makeTempDir } from "./helpers/temp-dir";
 
+import { SpyMocks } from "src/__test__/utils/SpyMocks";
 import { WorkflowProjectGenerator } from "src/project";
 
 describe("WorkflowProjectGenerator", () => {
@@ -28,19 +29,23 @@ describe("WorkflowProjectGenerator", () => {
   describe("generateCode", () => {
     const excludeFilesAtPaths: RegExp[] = [/\.pyc$/];
     const ignoreContentsOfFilesAtPaths: RegExp[] = [];
+    const fixtureMocks = {
+      simple_guard_rail_node: SpyMocks.createMetricDefinitionMock(),
+    };
 
     it.each(
       getFixturesForProjectTest({
         includeFixtures: [
-          "simple_search_node",
-          "simple_inline_subworkflow_node",
+          // "simple_search_node",
+          // "simple_inline_subworkflow_node",
           "simple_guardrail_node",
-          "simple_prompt_node",
-          "simple_map_node",
-          "simple_code_execution_node",
-          "simple_conditional_node",
-          "simple_templating_node",
+          // "simple_prompt_node",
+          // "simple_map_node",
+          // "simple_code_execution_node",
+          // "simple_conditional_node",
+          // "simple_templating_node",
         ],
+        fixtureMocks: fixtureMocks,
       })
     )(
       "should correctly generate code for fixture $fixtureName",

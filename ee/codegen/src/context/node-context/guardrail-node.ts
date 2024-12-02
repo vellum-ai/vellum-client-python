@@ -6,24 +6,25 @@ import { PortContext } from "src/context/port-context";
 import { GuardrailNode as GuardrailNodeType } from "src/types/vellum";
 
 export class GuardrailNodeContext extends BaseNodeContext<GuardrailNodeType> {
-  getNodeOutputNamesById(): Record<string, string> {
+  async getNodeOutputNamesById(): Promise<Record<string, string>> {
     const metricDefinitionId = this.nodeData.data.metricDefinitionId;
-    return (async () => {
-      const metricDefinitionHistoryItem = await new MetricDefinitionsClient({
-        apiKey: this.workflowContext.vellumApiKey,
-      }).metricDefinitionHistoryItemRetrieve(
+    const metricDefinitionsClient = new MetricDefinitionsClient({
+      apiKey: this.workflowContext.vellumApiKey,
+    });
+
+    const metricDefinitionHistoryItem =
+      await metricDefinitionsClient.metricDefinitionHistoryItemRetrieve(
         this.nodeData.data.releaseTag,
         metricDefinitionId
       );
-      const score = metricDefinitionHistoryItem.outputVariables.find(
-        (variable) => variable.key === "score"
-      );
-      return score
-        ? {
-            [score.id]: "score",
-          }
-        : {};
-    })() as unknown as Record<string, string>;
+
+    return metricDefinitionHistoryItem.outputVariables.reduce(
+      (acc, variable) => {
+        acc[variable.id] = variable.key;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
   }
 
   createPortContexts(): PortContext[] {

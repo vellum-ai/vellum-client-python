@@ -10,6 +10,13 @@ export abstract class BaseSingleFileNode<
   T extends WorkflowDataNode,
   V extends BaseNodeContext<T>
 > extends BaseNode<T, V> {
+  public async persist(): Promise<void> {
+    await Promise.all([
+      this.getNodeFile().persist(),
+      this.getNodeDisplayFile().persist(),
+    ]);
+  }
+
   public getNodeFile(): NodeImplementationFile<T, V> {
     return new NodeImplementationFile({ node: this });
   }

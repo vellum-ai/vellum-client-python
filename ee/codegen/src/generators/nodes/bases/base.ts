@@ -40,6 +40,8 @@ export abstract class BaseNode<
     this.errorOutputId = this.getErrorOutputId();
   }
 
+  public abstract persist(): Promise<void>;
+
   protected abstract getNodeClassBodyStatements(): AstNode[];
 
   protected abstract getNodeDisplayClassBodyStatements(): AstNode[];

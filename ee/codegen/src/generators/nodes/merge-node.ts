@@ -17,7 +17,10 @@ export class MergeNode extends BaseSingleFileNode<
 
     const mergeStrategyRef = python.reference({
       name: "MergeBehavior",
-      modulePath: ["vellum", "types"],
+      modulePath: [
+        ...this.workflowContext.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
+        "types",
+      ],
       attribute: [this.nodeData.data.mergeStrategy],
     });
 

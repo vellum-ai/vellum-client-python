@@ -56,6 +56,8 @@ export function getGeneratedNodeModuleInfo({
 
   // In the case of adorned Nodes, we need to traverse the Adornment Node's definition to get
   // info about the inner Node that it adorns.
+  // TODO: Handle case where there's multiple adornments on the same Node
+  //  https://app.shortcut.com/vellum/story/5699
   if (modulePathLeaf && modulePathLeaf === "<adornment>") {
     moduleName =
       nodeDefinition?.module?.[nodeDefinition.module.length - 3] ??

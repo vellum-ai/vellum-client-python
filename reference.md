@@ -281,12 +281,7 @@ Executes a deployed Prompt and streams back the results.
 <dd>
 
 ```python
-from vellum import (
-    PromptDeploymentExpandMetaRequest,
-    RawPromptExecutionOverridesRequest,
-    StringInputRequest,
-    Vellum,
-)
+from vellum import StringInputRequest, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -294,30 +289,10 @@ client = Vellum(
 response = client.execute_prompt_stream(
     inputs=[
         StringInputRequest(
-            name="string",
-            value="string",
+            name="name",
+            value="value",
         )
     ],
-    prompt_deployment_id="string",
-    prompt_deployment_name="string",
-    release_tag="string",
-    external_id="string",
-    expand_meta=PromptDeploymentExpandMetaRequest(
-        model_name=True,
-        usage=True,
-        cost=True,
-        finish_reason=True,
-        latency=True,
-        deployment_release_tag=True,
-        prompt_version_id=True,
-    ),
-    raw_overrides=RawPromptExecutionOverridesRequest(
-        body={"string": {"key": "value"}},
-        headers={"string": {"key": "value"}},
-        url="string",
-    ),
-    expand_raw=["string"],
-    metadata={"string": {"key": "value"}},
 )
 for chunk in response:
     yield chunk
@@ -570,11 +545,7 @@ Executes a deployed Workflow and streams back its results.
 <dd>
 
 ```python
-from vellum import (
-    Vellum,
-    WorkflowExpandMetaRequest,
-    WorkflowRequestStringInputRequest,
-)
+from vellum import Vellum, WorkflowRequestStringInputRequest
 
 client = Vellum(
     api_key="YOUR_API_KEY",
@@ -582,19 +553,10 @@ client = Vellum(
 response = client.execute_workflow_stream(
     inputs=[
         WorkflowRequestStringInputRequest(
-            name="string",
-            value="string",
+            name="name",
+            value="value",
         )
     ],
-    expand_meta=WorkflowExpandMetaRequest(
-        usage=True,
-    ),
-    workflow_deployment_id="string",
-    workflow_deployment_name="string",
-    release_tag="string",
-    external_id="string",
-    event_types=["NODE"],
-    metadata={"string": {"key": "value"}},
 )
 for chunk in response:
     yield chunk
@@ -820,39 +782,17 @@ Important: This endpoint is DEPRECATED and has been superseded by
 <dd>
 
 ```python
-from vellum import (
-    ChatMessageRequest,
-    GenerateOptionsRequest,
-    GenerateRequest,
-    StringChatMessageContentRequest,
-    Vellum,
-)
+from vellum import GenerateRequest, Vellum
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 response = client.generate_stream(
-    deployment_id="string",
-    deployment_name="string",
     requests=[
         GenerateRequest(
-            input_values={"string": {"key": "value"}},
-            chat_history=[
-                ChatMessageRequest(
-                    text="string",
-                    role="SYSTEM",
-                    content=StringChatMessageContentRequest(
-                        value="string",
-                    ),
-                    source="string",
-                )
-            ],
-            external_ids=["string"],
+            input_values={"key": "value"},
         )
     ],
-    options=GenerateOptionsRequest(
-        logprobs="ALL",
-    ),
 )
 for chunk in response:
     yield chunk
@@ -1212,82 +1152,37 @@ An internal-only endpoint that's subject to breaking changes without notice. Not
 
 ```python
 from vellum import (
-    AdHocExpandMeta,
-    EphemeralPromptCacheConfig,
-    FunctionDefinition,
     JinjaPromptBlock,
     PromptParameters,
     PromptRequestStringInput,
-    PromptSettings,
-    StringVellumValue,
     Vellum,
     VellumVariable,
-    VellumVariableExtensions,
 )
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 response = client.ad_hoc.adhoc_execute_prompt_stream(
-    ml_model="string",
+    ml_model="ml_model",
     input_values=[
         PromptRequestStringInput(
-            key="string",
-            value="string",
+            key="key",
+            value="value",
         )
     ],
     input_variables=[
         VellumVariable(
-            id="string",
-            key="string",
+            id="id",
+            key="key",
             type="STRING",
-            required=True,
-            default=StringVellumValue(
-                value="string",
-            ),
-            extensions=VellumVariableExtensions(
-                color={"key": "value"},
-            ),
         )
     ],
-    parameters=PromptParameters(
-        stop=["string"],
-        temperature=1.1,
-        max_tokens=1,
-        top_p=1.1,
-        top_k=1,
-        frequency_penalty=1.1,
-        presence_penalty=1.1,
-        logit_bias={"string": {"key": "value"}},
-        custom_parameters={"string": {"key": "value"}},
-    ),
-    settings=PromptSettings(
-        timeout=1.1,
-    ),
+    parameters=PromptParameters(),
     blocks=[
         JinjaPromptBlock(
-            state="ENABLED",
-            cache_config=EphemeralPromptCacheConfig(),
-            template="string",
+            template="template",
         )
     ],
-    functions=[
-        FunctionDefinition(
-            state="ENABLED",
-            cache_config=EphemeralPromptCacheConfig(),
-            name="string",
-            description="string",
-            parameters={"string": {"key": "value"}},
-            forced=True,
-            strict=True,
-        )
-    ],
-    expand_meta=AdHocExpandMeta(
-        cost=True,
-        model_name=True,
-        usage=True,
-        finish_reason=True,
-    ),
 )
 for chunk in response:
     yield chunk
@@ -3821,6 +3716,71 @@ client.metric_definitions.execute_metric_definition(
 </dl>
 </details>
 
+<details><summary><code>client.metric_definitions.<a href="src/vellum/resources/metric_definitions/client.py">metric_definition_history_item_retrieve</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from vellum import Vellum
+
+client = Vellum(
+    api_key="YOUR_API_KEY",
+)
+client.metric_definitions.metric_definition_history_item_retrieve(
+    history_id_or_release_tag="history_id_or_release_tag",
+    id="id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**history_id_or_release_tag:** `str` — Either the UUID of Metric Definition History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Metric Definition History Item you'd like to retrieve.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `str` — A UUID string identifying this metric definition.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## MlModels
 <details><summary><code>client.ml_models.<a href="src/vellum/resources/ml_models/client.py">retrieve</a>(...)</code></summary>
 <dl>
@@ -4691,25 +4651,21 @@ client = Vellum(
     api_key="YOUR_API_KEY",
 )
 response = client.test_suites.test_suite_test_cases_bulk(
-    id="string",
+    id="id",
     request=[
         TestSuiteTestCaseCreateBulkOperationRequest(
-            id="string",
+            id="id",
             data=CreateTestSuiteTestCaseRequest(
-                label="string",
                 input_values=[
                     NamedTestCaseStringVariableValueRequest(
-                        value="string",
-                        name="string",
+                        name="name",
                     )
                 ],
                 evaluation_values=[
                     NamedTestCaseStringVariableValueRequest(
-                        value="string",
-                        name="string",
+                        name="name",
                     )
                 ],
-                external_id="string",
             ),
         )
     ],
@@ -5447,85 +5403,6 @@ client.workflow_sandboxes.deploy_workflow(
 </details>
 
 ## Workflows
-<details><summary><code>client.workflows.<a href="src/vellum/resources/workflows/client.py">pull</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from vellum import Vellum
-
-client = Vellum(
-    api_key="YOUR_API_KEY",
-)
-client.workflows.pull(
-    id="string",
-    format="json",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` — The ID of the Workflow to pull from
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**format:** `typing.Optional[WorkflowsPullRequestFormat]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.workflows.<a href="src/vellum/resources/workflows/client.py">push</a>(...)</code></summary>
 <dl>
 <dd>

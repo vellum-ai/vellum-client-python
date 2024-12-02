@@ -1416,6 +1416,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/MetricDefinitionHistoryItem'
           description: ''
+      x-fern-availability: beta
+      x-fern-audiences:
+      - internal
   /v1/ml-models/{id}:
     get:
       operationId: ml_models_retrieve

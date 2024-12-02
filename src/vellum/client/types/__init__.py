@@ -197,6 +197,7 @@ from .metadata_filter_rule_combinator import MetadataFilterRuleCombinator
 from .metadata_filter_rule_request import MetadataFilterRuleRequest
 from .metadata_filters_request import MetadataFiltersRequest
 from .metric_definition_execution import MetricDefinitionExecution
+from .metric_definition_history_item import MetricDefinitionHistoryItem
 from .metric_definition_input import MetricDefinitionInput
 from .metric_node_result import MetricNodeResult
 from .ml_model_read import MlModelRead
@@ -685,6 +686,7 @@ __all__ = [
     "MetadataFilterRuleRequest",
     "MetadataFiltersRequest",
     "MetricDefinitionExecution",
+    "MetricDefinitionHistoryItem",
     "MetricDefinitionInput",
     "MetricNodeResult",
     "MlModelRead",

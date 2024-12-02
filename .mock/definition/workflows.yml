@@ -18,6 +18,8 @@ service:
       docs: >-
         An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -42,6 +44,8 @@ service:
       docs: >-
         An internal-only endpoint that's subject to breaking changes without
         notice. Not intended for public use.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: WorkflowPushRequest
         body:

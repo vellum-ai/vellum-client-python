@@ -91,82 +91,37 @@ The SDK supports streaming responses, as well, the response will be a generator 
 
 ```python
 from vellum import (
-    AdHocExpandMeta,
-    EphemeralPromptCacheConfig,
-    FunctionDefinition,
     JinjaPromptBlock,
     PromptParameters,
     PromptRequestStringInput,
-    PromptSettings,
-    StringVellumValue,
     Vellum,
     VellumVariable,
-    VellumVariableExtensions,
 )
 
 client = Vellum(
     api_key="YOUR_API_KEY",
 )
 response = client.ad_hoc.adhoc_execute_prompt_stream(
-    ml_model="string",
+    ml_model="ml_model",
     input_values=[
         PromptRequestStringInput(
-            key="string",
-            value="string",
+            key="key",
+            value="value",
         )
     ],
     input_variables=[
         VellumVariable(
-            id="string",
-            key="string",
+            id="id",
+            key="key",
             type="STRING",
-            required=True,
-            default=StringVellumValue(
-                value="string",
-            ),
-            extensions=VellumVariableExtensions(
-                color={"key": "value"},
-            ),
         )
     ],
-    parameters=PromptParameters(
-        stop=["string"],
-        temperature=1.1,
-        max_tokens=1,
-        top_p=1.1,
-        top_k=1,
-        frequency_penalty=1.1,
-        presence_penalty=1.1,
-        logit_bias={"string": {"key": "value"}},
-        custom_parameters={"string": {"key": "value"}},
-    ),
-    settings=PromptSettings(
-        timeout=1.1,
-    ),
+    parameters=PromptParameters(),
     blocks=[
         JinjaPromptBlock(
-            state="ENABLED",
-            cache_config=EphemeralPromptCacheConfig(),
-            template="string",
+            template="template",
         )
     ],
-    functions=[
-        FunctionDefinition(
-            state="ENABLED",
-            cache_config=EphemeralPromptCacheConfig(),
-            name="string",
-            description="string",
-            parameters={"string": {"key": "value"}},
-            forced=True,
-            strict=True,
-        )
-    ],
-    expand_meta=AdHocExpandMeta(
-        cost=True,
-        model_name=True,
-        usage=True,
-        finish_reason=True,
-    ),
 )
 for chunk in response:
     yield chunk

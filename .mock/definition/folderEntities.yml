@@ -16,6 +16,8 @@ service:
       method: GET
       auth: false
       docs: List all folder entities within a specified folder.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: FolderEntitiesListRequest
         query-parameters:
@@ -92,6 +94,8 @@ service:
 
         Adding an entity to a folder will remove it from any other folders it
         might have been a member of.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         folder_id:
           type: string
@@ -117,6 +121,7 @@ service:
               docs: The ID of the entity you would like to move.
               validation:
                 format: uuid
+        content-type: application/json
       url: Default
       availability: pre-release
       examples:

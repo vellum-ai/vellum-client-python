@@ -232,25 +232,21 @@ class TestSuitesClient:
             api_key="YOUR_API_KEY",
         )
         response = client.test_suites.test_suite_test_cases_bulk(
-            id="string",
+            id="id",
             request=[
                 TestSuiteTestCaseCreateBulkOperationRequest(
-                    id="string",
+                    id="id",
                     data=CreateTestSuiteTestCaseRequest(
-                        label="string",
                         input_values=[
                             NamedTestCaseStringVariableValueRequest(
-                                value="string",
-                                name="string",
+                                name="name",
                             )
                         ],
                         evaluation_values=[
                             NamedTestCaseStringVariableValueRequest(
-                                value="string",
-                                name="string",
+                                name="name",
                             )
                         ],
-                        external_id="string",
                     ),
                 )
             ],
@@ -571,25 +567,21 @@ class AsyncTestSuitesClient:
 
         async def main() -> None:
             response = await client.test_suites.test_suite_test_cases_bulk(
-                id="string",
+                id="id",
                 request=[
                     TestSuiteTestCaseCreateBulkOperationRequest(
-                        id="string",
+                        id="id",
                         data=CreateTestSuiteTestCaseRequest(
-                            label="string",
                             input_values=[
                                 NamedTestCaseStringVariableValueRequest(
-                                    value="string",
-                                    name="string",
+                                    name="name",
                                 )
                             ],
                             evaluation_values=[
                                 NamedTestCaseStringVariableValueRequest(
-                                    value="string",
-                                    name="string",
+                                    name="name",
                                 )
                             ],
-                            external_id="string",
                         ),
                     )
                 ],

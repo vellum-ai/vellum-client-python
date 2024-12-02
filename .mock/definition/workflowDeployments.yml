@@ -22,6 +22,8 @@ service:
       method: GET
       auth: true
       docs: Used to list all Workflow Deployments.
+      source:
+        openapi: openapi/openapi.yml
       request:
         name: WorkflowDeploymentsListRequest
         query-parameters:
@@ -72,6 +74,8 @@ service:
       method: GET
       auth: true
       docs: Used to retrieve a workflow deployment given its ID or name.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -118,6 +122,8 @@ service:
       docs: >-
         Retrieve a specific Workflow Deployment History Item by either its UUID
         or the name of a Release Tag that points to it.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         history_id_or_release_tag:
           type: string
@@ -166,6 +172,8 @@ service:
       method: GET
       auth: true
       docs: List Release Tags associated with the specified Workflow Deployment
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -211,6 +219,8 @@ service:
       docs: >-
         Retrieve a Workflow Release Tag by tag name, associated with a specified
         Workflow Deployment.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -245,6 +255,8 @@ service:
       docs: >-
         Updates an existing Release Tag associated with the specified Workflow
         Deployment.
+      source:
+        openapi: openapi/openapi.yml
       path-parameters:
         id:
           type: string
@@ -263,6 +275,7 @@ service:
               docs: The ID of the Workflow Deployment History Item to tag
               validation:
                 format: uuid
+        content-type: application/json
       response:
         docs: ''
         type: root.WorkflowReleaseTagRead

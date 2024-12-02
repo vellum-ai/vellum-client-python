@@ -447,12 +447,7 @@ class Vellum:
 
         Examples
         --------
-        from vellum import (
-            PromptDeploymentExpandMetaRequest,
-            RawPromptExecutionOverridesRequest,
-            StringInputRequest,
-            Vellum,
-        )
+        from vellum import StringInputRequest, Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
@@ -460,30 +455,10 @@ class Vellum:
         response = client.execute_prompt_stream(
             inputs=[
                 StringInputRequest(
-                    name="string",
-                    value="string",
+                    name="name",
+                    value="value",
                 )
             ],
-            prompt_deployment_id="string",
-            prompt_deployment_name="string",
-            release_tag="string",
-            external_id="string",
-            expand_meta=PromptDeploymentExpandMetaRequest(
-                model_name=True,
-                usage=True,
-                cost=True,
-                finish_reason=True,
-                latency=True,
-                deployment_release_tag=True,
-                prompt_version_id=True,
-            ),
-            raw_overrides=RawPromptExecutionOverridesRequest(
-                body={"string": {"key": "value"}},
-                headers={"string": {"key": "value"}},
-                url="string",
-            ),
-            expand_raw=["string"],
-            metadata={"string": {"key": "value"}},
         )
         for chunk in response:
             yield chunk
@@ -752,11 +727,7 @@ class Vellum:
 
         Examples
         --------
-        from vellum import (
-            Vellum,
-            WorkflowExpandMetaRequest,
-            WorkflowRequestStringInputRequest,
-        )
+        from vellum import Vellum, WorkflowRequestStringInputRequest
 
         client = Vellum(
             api_key="YOUR_API_KEY",
@@ -764,19 +735,10 @@ class Vellum:
         response = client.execute_workflow_stream(
             inputs=[
                 WorkflowRequestStringInputRequest(
-                    name="string",
-                    value="string",
+                    name="name",
+                    value="value",
                 )
             ],
-            expand_meta=WorkflowExpandMetaRequest(
-                usage=True,
-            ),
-            workflow_deployment_id="string",
-            workflow_deployment_name="string",
-            release_tag="string",
-            external_id="string",
-            event_types=["NODE"],
-            metadata={"string": {"key": "value"}},
         )
         for chunk in response:
             yield chunk
@@ -1016,39 +978,17 @@ class Vellum:
 
         Examples
         --------
-        from vellum import (
-            ChatMessageRequest,
-            GenerateOptionsRequest,
-            GenerateRequest,
-            StringChatMessageContentRequest,
-            Vellum,
-        )
+        from vellum import GenerateRequest, Vellum
 
         client = Vellum(
             api_key="YOUR_API_KEY",
         )
         response = client.generate_stream(
-            deployment_id="string",
-            deployment_name="string",
             requests=[
                 GenerateRequest(
-                    input_values={"string": {"key": "value"}},
-                    chat_history=[
-                        ChatMessageRequest(
-                            text="string",
-                            role="SYSTEM",
-                            content=StringChatMessageContentRequest(
-                                value="string",
-                            ),
-                            source="string",
-                        )
-                    ],
-                    external_ids=["string"],
+                    input_values={"key": "value"},
                 )
             ],
-            options=GenerateOptionsRequest(
-                logprobs="ALL",
-            ),
         )
         for chunk in response:
             yield chunk
@@ -1785,12 +1725,7 @@ class AsyncVellum:
         --------
         import asyncio
 
-        from vellum import (
-            AsyncVellum,
-            PromptDeploymentExpandMetaRequest,
-            RawPromptExecutionOverridesRequest,
-            StringInputRequest,
-        )
+        from vellum import AsyncVellum, StringInputRequest
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
@@ -1801,30 +1736,10 @@ class AsyncVellum:
             response = await client.execute_prompt_stream(
                 inputs=[
                     StringInputRequest(
-                        name="string",
-                        value="string",
+                        name="name",
+                        value="value",
                     )
                 ],
-                prompt_deployment_id="string",
-                prompt_deployment_name="string",
-                release_tag="string",
-                external_id="string",
-                expand_meta=PromptDeploymentExpandMetaRequest(
-                    model_name=True,
-                    usage=True,
-                    cost=True,
-                    finish_reason=True,
-                    latency=True,
-                    deployment_release_tag=True,
-                    prompt_version_id=True,
-                ),
-                raw_overrides=RawPromptExecutionOverridesRequest(
-                    body={"string": {"key": "value"}},
-                    headers={"string": {"key": "value"}},
-                    url="string",
-                ),
-                expand_raw=["string"],
-                metadata={"string": {"key": "value"}},
             )
             async for chunk in response:
                 yield chunk
@@ -2106,11 +2021,7 @@ class AsyncVellum:
         --------
         import asyncio
 
-        from vellum import (
-            AsyncVellum,
-            WorkflowExpandMetaRequest,
-            WorkflowRequestStringInputRequest,
-        )
+        from vellum import AsyncVellum, WorkflowRequestStringInputRequest
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
@@ -2121,19 +2032,10 @@ class AsyncVellum:
             response = await client.execute_workflow_stream(
                 inputs=[
                     WorkflowRequestStringInputRequest(
-                        name="string",
-                        value="string",
+                        name="name",
+                        value="value",
                     )
                 ],
-                expand_meta=WorkflowExpandMetaRequest(
-                    usage=True,
-                ),
-                workflow_deployment_id="string",
-                workflow_deployment_name="string",
-                release_tag="string",
-                external_id="string",
-                event_types=["NODE"],
-                metadata={"string": {"key": "value"}},
             )
             async for chunk in response:
                 yield chunk
@@ -2386,13 +2288,7 @@ class AsyncVellum:
         --------
         import asyncio
 
-        from vellum import (
-            AsyncVellum,
-            ChatMessageRequest,
-            GenerateOptionsRequest,
-            GenerateRequest,
-            StringChatMessageContentRequest,
-        )
+        from vellum import AsyncVellum, GenerateRequest
 
         client = AsyncVellum(
             api_key="YOUR_API_KEY",
@@ -2401,27 +2297,11 @@ class AsyncVellum:
 
         async def main() -> None:
             response = await client.generate_stream(
-                deployment_id="string",
-                deployment_name="string",
                 requests=[
                     GenerateRequest(
-                        input_values={"string": {"key": "value"}},
-                        chat_history=[
-                            ChatMessageRequest(
-                                text="string",
-                                role="SYSTEM",
-                                content=StringChatMessageContentRequest(
-                                    value="string",
-                                ),
-                                source="string",
-                            )
-                        ],
-                        external_ids=["string"],
+                        input_values={"key": "value"},
                     )
                 ],
-                options=GenerateOptionsRequest(
-                    logprobs="ALL",
-                ),
             )
             async for chunk in response:
                 yield chunk

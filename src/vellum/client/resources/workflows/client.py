@@ -47,18 +47,6 @@ class WorkflowsClient:
         ------
         typing.Iterator[bytes]
 
-
-        Examples
-        --------
-        from vellum import Vellum
-
-        client = Vellum(
-            api_key="YOUR_API_KEY",
-        )
-        client.workflows.pull(
-            id="string",
-            format="json",
-        )
         """
         with self._client_wrapper.httpx_client.stream(
             f"v1/workflows/{jsonable_encoder(id)}/pull",
@@ -196,26 +184,6 @@ class AsyncWorkflowsClient:
         ------
         typing.AsyncIterator[bytes]
 
-
-        Examples
-        --------
-        import asyncio
-
-        from vellum import AsyncVellum
-
-        client = AsyncVellum(
-            api_key="YOUR_API_KEY",
-        )
-
-
-        async def main() -> None:
-            await client.workflows.pull(
-                id="string",
-                format="json",
-            )
-
-
-        asyncio.run(main())
         """
         async with self._client_wrapper.httpx_client.stream(
             f"v1/workflows/{jsonable_encoder(id)}/pull",

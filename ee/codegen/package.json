@@ -33,7 +33,7 @@
     "@fern-fern/generator-cli-sdk": "file:./stubs/generator-cli-sdk",
     "@fern-fern/generator-exec-sdk": "file:./stubs/generator-exec-sdk",
     "lodash": "^4.17.21",
-    "vellum-ai": "0.10.2"
+    "vellum-ai": "0.10.7"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",

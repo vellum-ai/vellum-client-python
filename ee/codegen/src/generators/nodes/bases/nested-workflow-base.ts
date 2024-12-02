@@ -27,7 +27,12 @@ export abstract class BaseNestedWorkflowNode<
     this.nestedProjectsByName = this.generateNestedProjectsByName();
   }
 
-  public getNestedProjects(): WorkflowProjectGenerator[] {
+  public async persist(): Promise<void> {
+    const nestedProjects = this.getNestedProjects();
+    await Promise.all(nestedProjects.map((project) => project.generateCode()));
+  }
+
+  private getNestedProjects(): WorkflowProjectGenerator[] {
     return Array.from(this.nestedProjectsByName.values());
   }
 

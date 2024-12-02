@@ -44,8 +44,6 @@ import { TemplatingNodeContext } from "src/context/node-context/templating-node"
 import { TextSearchNodeContext } from "src/context/node-context/text-search-node";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
 import { ApiNode } from "src/generators/nodes/api-node";
-import { BaseNestedWorkflowNode } from "src/generators/nodes/bases/nested-workflow-base";
-import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
 import { CodeExecutionNode } from "src/generators/nodes/code-execution-node";
 import { ConditionalNode } from "src/generators/nodes/conditional-node";
 import { ErrorNode } from "src/generators/nodes/error-node";
@@ -525,7 +523,7 @@ ${errors.slice(0, 3).map((err) => {
 
   private generateNodeFiles(
     nodes: BaseNode<WorkflowDataNode, BaseNodeContext<WorkflowDataNode>>[]
-  ): Promise<void>[] {
+  ): Promise<unknown>[] {
     const rootNodesInitFileStatements: AstNode[] = [];
     const rootDisplayNodesInitFileStatements: AstNode[] = [];
     if (nodes.length) {
@@ -591,30 +589,17 @@ ${errors.slice(0, 3).map((err) => {
       );
     });
 
-    const nodePromises: Promise<void>[] = [];
-    nodes.forEach((node) => {
-      if (node instanceof BaseSingleFileNode) {
-        nodePromises.push(node.getNodeFile().persist());
-        nodePromises.push(node.getNodeDisplayFile().persist());
-      } else if (node instanceof BaseNestedWorkflowNode) {
-        const nestedProjects = node.getNestedProjects();
-        nestedProjects.forEach((project) => {
-          nodePromises.push(project.generateCode());
-        });
-
-        // If this nested node, then it means we've already defined it's implementation and display classes in
-        // init files at a previous step.
-        return;
-      }
+    const nodePromises = nodes.map(async (node) => {
+      return await node.persist();
     });
 
     return [
       // nodes/__init__.py
       rootNodesInitFile.persist(),
-      // nodes/* and display/nodes/*
-      ...nodePromises,
       // display/nodes/__init__.py
       rootDisplayNodesInitFile.persist(),
+      // nodes/* and display/nodes/*
+      ...nodePromises,
     ];
   }
 

@@ -1,11 +1,10 @@
 import { WorkflowContext } from "src/context";
 import { PortContext } from "src/context/port-context";
 import { WorkflowDataNode } from "src/types/vellum";
-import { createPythonClassName, toSnakeCase } from "src/utils/casing";
 import { getNodeId, getNodeLabel } from "src/utils/nodes";
 import {
   getGeneratedNodeDisplayModulePath,
-  getGeneratedNodeModulePath,
+  getGeneratedNodeModuleInfo,
 } from "src/utils/paths";
 
 export declare namespace BaseNodeContext {
@@ -33,22 +32,18 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
 
   constructor(args: BaseNodeContext.Args<T>) {
     this.workflowContext = args.workflowContext;
-
     this.nodeData = args.nodeData;
 
-    const nodeLabel = this.getNodeLabel();
-
-    this.nodeModuleName =
-      args.nodeData.definition?.module?.[
-        args.nodeData.definition.module.length - 1
-      ] ?? toSnakeCase(nodeLabel);
+    const { moduleName, nodeClassName, modulePath } =
+      getGeneratedNodeModuleInfo({
+        workflowContext: args.workflowContext,
+        nodeDefinition: args.nodeData.definition,
+        nodeLabel: this.getNodeLabel(),
+      });
+    this.nodeModuleName = moduleName;
+    this.nodeClassName = nodeClassName;
+    this.nodeModulePath = modulePath;
     this.nodeFileName = `${this.nodeModuleName}.py`;
-    this.nodeClassName =
-      args.nodeData.definition?.name ?? createPythonClassName(nodeLabel);
-    this.nodeModulePath = getGeneratedNodeModulePath(
-      args.workflowContext,
-      this.nodeModuleName
-    );
 
     this.nodeDisplayModuleName = this.nodeModuleName;
     this.nodeDisplayFileName = `${this.nodeDisplayModuleName}.py`;

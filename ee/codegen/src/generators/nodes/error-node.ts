@@ -15,12 +15,12 @@ export class ErrorNode extends BaseSingleFileNode<
   getNodeClassBodyStatements(): AstNode[] {
     const bodyStatements: AstNode[] = [];
 
-    bodyStatements.push(
-      python.field({
-        name: "error",
-        initializer: this.getNodeInputByName("error"),
-      })
-    );
+    // bodyStatements.push(
+    //   python.field({
+    //     name: "error",
+    //     initializer: this.getNodeInputByName("error"),
+    //   })
+    // );
 
     return bodyStatements;
   }

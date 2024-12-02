@@ -23,6 +23,11 @@ class PromptDeploymentNode(BasePromptDeploymentNode[StateType]):
     """
 
     class Outputs(BasePromptDeploymentNode.Outputs):
+        """
+        The outputs of the PromptDeploymentNode.
+
+        text: str - The result of the Prompt Execution
+        """
         text: str
 
     def run(self) -> Iterator[BaseOutput]:

@@ -17,8 +17,8 @@ export class ErrorNode extends BaseSingleFileNode<
 
     bodyStatements.push(
       python.field({
-        name: "error_source_input_id",
-        initializer: this.getNodeInputByName("error_source_input_id"),
+        name: "error",
+        initializer: this.getNodeInputByName("error"),
       })
     );
 

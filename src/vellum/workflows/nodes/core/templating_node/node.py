@@ -82,6 +82,11 @@ class TemplatingNode(BaseNode[StateType], Generic[StateType, _OutputType], metac
     jinja_custom_filters: Mapping[str, Callable[[Union[str, bytes]], bool]] = _DEFAULT_JINJA_CUSTOM_FILTERS
 
     class Outputs(BaseNode.Outputs):
+        """
+        The outputs of the TemplatingNode.
+
+        result: _OutputType - The result of the template rendering
+        """
         # We use our mypy plugin to override the _OutputType with the actual output type
         # for downstream references to this output.
         result: _OutputType  # type: ignore[valid-type]

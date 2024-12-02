@@ -65,7 +65,7 @@ def test_text_prompt_deployment_node__basic(vellum_client):
     assert text_output.name == "text"
     assert text_output.value == "Hello, world!"
 
-    # AND we should have made the expected call to Vellum search
+    # AND we should have made the expected call to stream the prompt execution
     vellum_client.execute_prompt_stream.assert_called_once_with(
         expand_meta=OMIT,
         expand_raw=OMIT,

@@ -18,6 +18,7 @@ class InlineSubworkflowNode(BaseSubworkflowNode[StateType], Generic[StateType, W
     Used to execute a Subworkflow defined inline.
 
     subworkflow: Type["BaseWorkflow[WorkflowInputsType, InnerStateType]"] - The Subworkflow to execute
+    subworkflow_inputs: ClassVar[EntityInputsInterface] = {}
     """
 
     subworkflow: Type["BaseWorkflow[WorkflowInputsType, InnerStateType]"]

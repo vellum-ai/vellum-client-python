@@ -8,7 +8,7 @@ from vellum.workflows.references.vellum_secret import VellumSecretReference
 class APINode(BaseAPINode):
     """
     Used to execute an API call. This node exists to be backwards compatible with Vellum's API Node, and for most cases,
-    you should extend from `APINode` directly.
+    you should extend from `BaseAPINode` directly.
 
     url: str - The URL to send the request to.
     method: APIRequestMethod - The HTTP method to use for the request.

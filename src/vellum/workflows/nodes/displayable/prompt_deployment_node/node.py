@@ -14,7 +14,7 @@ class PromptDeploymentNode(BasePromptDeploymentNode[StateType]):
     prompt_inputs: EntityInputsInterface - The inputs for the Prompt
     deployment: Union[UUID, str] - Either the Prompt Deployment's UUID or its name.
     release_tag: str - The release tag to use for the Prompt Execution
-    external_id: Optional[str] - The external ID to use for the Prompt Execution
+    external_id: Optional[str] - Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
     expand_meta: Optional[PromptDeploymentExpandMetaRequest] - Expandable execution fields to include in the response
     raw_overrides: Optional[RawPromptExecutionOverridesRequest] - The raw overrides to use for the Prompt Execution
     expand_raw: Optional[Sequence[str]] - Expandable raw fields to include in the response
@@ -23,6 +23,11 @@ class PromptDeploymentNode(BasePromptDeploymentNode[StateType]):
     """
 
     class Outputs(BasePromptDeploymentNode.Outputs):
+        """
+        The outputs of the PromptDeploymentNode.
+
+        text: str - The result of the Prompt Execution
+        """
         text: str
 
     def run(self) -> Iterator[BaseOutput]:

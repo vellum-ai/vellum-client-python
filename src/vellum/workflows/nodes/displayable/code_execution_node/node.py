@@ -67,9 +67,8 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
 
     filepath: str - The path to the script to execute.
     code_inputs: EntityInputsInterface - The inputs for the custom script.
-    output_type: VellumVariableType = "STRING" - The type of the output from the custom script.
     runtime: CodeExecutionRuntime = "PYTHON_3_12" - The runtime to use for the custom script.
-    packages: Optional[Sequence[CodeExecutionPackageRequest]] = None - The packages to use for the custom script.
+    packages: Optional[Sequence[CodeExecutionPackage]] = None - The packages to use for the custom script.
     request_options: Optional[RequestOptions] = None - The request options to use for the custom script.
     """
 

@@ -34,9 +34,7 @@ describe("WorkflowProjectGenerator", () => {
         includeFixtures: [
           "simple_search_node",
           "simple_inline_subworkflow_node",
-          // TODO: Fix codegen for guardrail node
-          // https://app.shortcut.com/vellum/story/5663/fix-codegen-of-guardrail-nodes
-          // "simple_guardrail_node",
+          "simple_guardrail_node",
           "simple_prompt_node",
           "simple_map_node",
           "simple_code_execution_node",

@@ -1,5 +1,7 @@
 import { Writer } from "@fern-api/python-ast/core/Writer";
-import { beforeEach } from "vitest";
+import { MetricDefinitionHistoryItem } from "vellum-ai/api";
+import { MetricDefinitions as MetricDefinitionsClient } from "vellum-ai/api/resources/metricDefinitions/client/Client";
+import { beforeEach, vi } from "vitest";
 
 import { workflowContextFactory } from "src/__test__/helpers";
 import { inputVariableContextFactory } from "src/__test__/helpers/input-variable-context-factory";
@@ -53,6 +55,18 @@ describe("GuardrailNode", () => {
 
   describe("basic", () => {
     beforeEach(async () => {
+      vi.spyOn(
+        MetricDefinitionsClient.prototype,
+        "metricDefinitionHistoryItemRetrieve"
+      ).mockResolvedValue({
+        id: "mocked-metric-output-id",
+        label: "mocked-metric-output-label",
+        name: "mocked-metric-output-name",
+        description: "mocked-metric-output-description",
+        outputVariables: [
+          { id: "mocked-input-id", key: "score", type: "NUMBER" },
+        ],
+      } as unknown as MetricDefinitionHistoryItem);
       const nodeData = guardrailNodeDataFactory();
 
       const nodeContext = (await createNodeContext({

@@ -1,6 +1,7 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
+import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { GuardrailNodeContext } from "src/context/node-context/guardrail-node";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
 import { GuardrailNode as GuardrailNodeType } from "src/types/vellum";
@@ -95,6 +96,51 @@ export class GuardrailNode extends BaseSingleFileNode<
     );
 
     return statements;
+  }
+
+  protected getOutputDisplay(): python.Field | undefined {
+    const record = this.nodeContext.getNodeOutputNamesById();
+    Promise.resolve(record).then((record) => {
+      const scoreId = Object.keys(record).find(
+        (key) => record[key] === "score"
+      );
+      if (!scoreId) {
+        throw new Error(
+          "Score id is not found in the guardrail node output displays"
+        );
+      }
+      return python.field({
+        name: "output_display",
+        initializer: python.TypeInstantiation.dict([
+          {
+            key: python.reference({
+              name: this.nodeContext.nodeClassName,
+              modulePath: this.nodeContext.nodeModulePath,
+              attribute: [OUTPUTS_CLASS_NAME, "score"],
+            }),
+            value: python.instantiateClass({
+              classReference: python.reference({
+                name: "NodeOutputDisplay",
+                modulePath:
+                  this.workflowContext.sdkModulePathNames
+                    .NODE_DISPLAY_TYPES_MODULE_PATH,
+              }),
+              arguments_: [
+                python.methodArgument({
+                  name: "id",
+                  value: python.TypeInstantiation.uuid(scoreId),
+                }),
+                python.methodArgument({
+                  name: "name",
+                  value: python.TypeInstantiation.str("score"),
+                }),
+              ],
+            }),
+          },
+        ]),
+      });
+    });
+    return undefined;
   }
 
   protected getErrorOutputId(): string | undefined {

@@ -4,7 +4,10 @@ exports[`GuardrailNode > basic > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseGuardrailNodeDisplay
 from ...nodes.guardrail_node import GuardrailNode
 from uuid import UUID
-from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
+from vellum_ee.workflows.display.nodes.types import (
+    NodeOutputDisplay,
+    PortDisplayOverrides,
+)
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
 
@@ -19,6 +22,11 @@ class GuardrailNodeDisplay(BaseGuardrailNodeDisplay[GuardrailNode]):
     node_input_ids_by_name = {
         "expected": UUID("3f917af8-03a4-4ca4-8d40-fa662417fe9c"),
         "actual": UUID("bed55ada-923e-46ef-8340-1a5b0b563dc1"),
+    }
+    output_display = {
+        GuardrailNode.Outputs.score: NodeOutputDisplay(
+            id=UUID("mocked-input-id"), name="score"
+        )
     }
     port_displays = {
         GuardrailNode.Ports.default: PortDisplayOverrides(
@@ -50,7 +58,10 @@ exports[`GuardrailNode > reject on error enabled > getNodeDisplayFile 1`] = `
 )
 from uuid import UUID
 from ...nodes.guardrail_node import GuardrailNode
-from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
+from vellum_ee.workflows.display.nodes.types import (
+    NodeOutputDisplay,
+    PortDisplayOverrides,
+)
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
 
@@ -69,6 +80,11 @@ class GuardrailNodeDisplay(BaseGuardrailNodeDisplay[GuardrailNode]):
     node_input_ids_by_name = {
         "expected": UUID("3f917af8-03a4-4ca4-8d40-fa662417fe9c"),
         "actual": UUID("bed55ada-923e-46ef-8340-1a5b0b563dc1"),
+    }
+    output_display = {
+        GuardrailNode.Outputs.score: NodeOutputDisplay(
+            id=UUID("mocked-input-id"), name="score"
+        )
     }
     port_displays = {
         GuardrailNode.Ports.default: PortDisplayOverrides(

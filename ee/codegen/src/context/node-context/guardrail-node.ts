@@ -12,7 +12,7 @@ export declare namespace GuardrailNodeContext {
 }
 
 export class GuardrailNodeContext extends BaseNodeContext<GuardrailNodeType> {
-  public metricDefinitionsHistoryItem: MetricDefinitionHistoryItem;
+  public readonly metricDefinitionsHistoryItem: MetricDefinitionHistoryItem;
 
   constructor(args: GuardrailNodeContext.Args) {
     super(args);

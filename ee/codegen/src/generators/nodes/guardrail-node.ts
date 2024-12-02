@@ -98,49 +98,43 @@ export class GuardrailNode extends BaseSingleFileNode<
     return statements;
   }
 
-  protected getOutputDisplay(): python.Field | undefined {
-    const record = this.nodeContext.getNodeOutputNamesById();
-    Promise.resolve(record).then((record) => {
-      const scoreId = Object.keys(record).find(
-        (key) => record[key] === "score"
-      );
-      if (!scoreId) {
-        throw new Error(
-          "Score id is not found in the guardrail node output displays"
-        );
-      }
-      return python.field({
-        name: "output_display",
-        initializer: python.TypeInstantiation.dict([
-          {
-            key: python.reference({
-              name: this.nodeContext.nodeClassName,
-              modulePath: this.nodeContext.nodeModulePath,
-              attribute: [OUTPUTS_CLASS_NAME, "score"],
-            }),
-            value: python.instantiateClass({
-              classReference: python.reference({
-                name: "NodeOutputDisplay",
-                modulePath:
-                  this.workflowContext.sdkModulePathNames
-                    .NODE_DISPLAY_TYPES_MODULE_PATH,
+  protected getOutputDisplay(): python.Field {
+    return python.field({
+      name: "output_display",
+      initializer: python.TypeInstantiation.dict(
+        this.nodeContext.metricDefinitionsHistoryItem.outputVariables.map(
+          (output) => {
+            const name = this.nodeContext.getNodeOutputNameById(output.id);
+
+            return {
+              key: python.reference({
+                name: this.nodeContext.nodeClassName,
+                modulePath: this.nodeContext.nodeModulePath,
+                attribute: [OUTPUTS_CLASS_NAME, name],
               }),
-              arguments_: [
-                python.methodArgument({
-                  name: "id",
-                  value: python.TypeInstantiation.uuid(scoreId),
+              value: python.instantiateClass({
+                classReference: python.reference({
+                  name: "NodeOutputDisplay",
+                  modulePath:
+                    this.workflowContext.sdkModulePathNames
+                      .NODE_DISPLAY_TYPES_MODULE_PATH,
                 }),
-                python.methodArgument({
-                  name: "name",
-                  value: python.TypeInstantiation.str("score"),
-                }),
-              ],
-            }),
-          },
-        ]),
-      });
+                arguments_: [
+                  python.methodArgument({
+                    name: "id",
+                    value: python.TypeInstantiation.uuid(output.id),
+                  }),
+                  python.methodArgument({
+                    name: "name",
+                    value: python.TypeInstantiation.str(output.key),
+                  }),
+                ],
+              }),
+            };
+          }
+        )
+      ),
     });
-    return undefined;
   }
 
   protected getErrorOutputId(): string | undefined {

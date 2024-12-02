@@ -48,12 +48,27 @@ export function getGeneratedNodeModuleInfo({
   nodeDefinition: WorkflowNodeDefinition | undefined;
   nodeLabel: string;
 }): { moduleName: string; nodeClassName: string; modulePath: string[] } {
-  const moduleName =
-    nodeDefinition?.module?.[nodeDefinition.module.length - 1] ??
-    toSnakeCase(nodeLabel);
+  const modulePathLeaf =
+    nodeDefinition?.module?.[nodeDefinition.module.length - 1];
 
-  const nodeClassName =
-    nodeDefinition?.name ?? createPythonClassName(nodeLabel);
+  let moduleName: string;
+  let nodeClassName: string;
+
+  // In the case of adorned Nodes, we need to traverse the Adornment Node's definition to get
+  // info about the inner Node that it adorns.
+  if (modulePathLeaf && modulePathLeaf === "<adornment>") {
+    moduleName =
+      nodeDefinition?.module?.[nodeDefinition.module.length - 3] ??
+      toSnakeCase(nodeLabel);
+
+    nodeClassName =
+      nodeDefinition?.module?.[nodeDefinition.module.length - 2] ??
+      createPythonClassName(nodeLabel);
+  } else {
+    moduleName = modulePathLeaf ?? toSnakeCase(nodeLabel);
+
+    nodeClassName = nodeDefinition?.name ?? createPythonClassName(nodeLabel);
+  }
 
   const modulePath = [
     ...getGeneratedNodesModulePath(workflowContext),

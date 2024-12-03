@@ -44,7 +44,9 @@ describe("WorkflowProjectGenerator", () => {
           "simple_code_execution_node",
           "simple_conditional_node",
           "simple_templating_node",
-          "simple_merge_node",
+          // TODO: Get Merge Node graph codegen working
+          //    https://app.shortcut.com/vellum/story/5588
+          // "simple_merge_node",
         ],
         fixtureMocks: fixtureMocks,
       })

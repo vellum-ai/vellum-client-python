@@ -1,15 +1,16 @@
+import pytest
 import json
+from unittest import mock
 from typing import Any, Dict
 
 from deepdiff import DeepDiff
 
 from vellum.workflows.workflows.base import BaseWorkflow
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 
 
-def test_code_to_display_data(code_to_display_fixture_paths):
+def test_code_to_display_data(code_to_display_fixture_paths, mock_open_code_execution_file):
     """Confirms that code representations of workflows are correctly serialized into their display representations."""
 
     expected_display_data_file_path, code_dir = code_to_display_fixture_paths
@@ -24,16 +25,10 @@ def test_code_to_display_data(code_to_display_fixture_paths):
     with open(expected_display_data_file_path) as file:
         expected_serialized_workflow = json.load(file, object_hook=_custom_obj_hook)  # noqa: F841
 
-    def exclude_obj_callback(value, key):
-        if key.endswith("input_id']") or key.endswith("['input_variable_id']"):
-            return True
-
-        return False
 
     assert not DeepDiff(
         expected_serialized_workflow,
         actual_serialized_workflow,
-        exclude_obj_callback=exclude_obj_callback,
         significant_digits=6,
         # This is for the input_variables order being out of order sometimes.
         ignore_order=True
@@ -67,3 +62,20 @@ def _custom_obj_hook(json_dict) -> Dict[str, Any]:
         _process_position_hook(key,value)
         _process_negated_hook(key, value, json_dict)
     return json_dict
+
+
+# Save the original `open`
+builtin_open = open
+
+# Fixture that mocks open for code execution nodes
+@pytest.fixture
+def mock_open_code_execution_file():
+    def _mock_open(file_path, mode='r'):
+        # This is for code execution file reads
+        if not file_path.endswith(".json"):
+            mock_file = mock.mock_open(read_data="def main(arg: str) -> str:\n    return arg\n    ")
+            return mock_file()
+        return builtin_open(file_path, mode)
+
+    with mock.patch("builtins.open", _mock_open),  mock.patch("os.path.exists", return_value=True):
+        yield _mock_open

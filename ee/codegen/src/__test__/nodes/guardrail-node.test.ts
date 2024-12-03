@@ -1,5 +1,7 @@
 import { Writer } from "@fern-api/python-ast/core/Writer";
-import { beforeEach } from "vitest";
+import { MetricDefinitionHistoryItem } from "vellum-ai/api";
+import { MetricDefinitions as MetricDefinitionsClient } from "vellum-ai/api/resources/metricDefinitions/client/Client";
+import { beforeEach, vi } from "vitest";
 
 import { workflowContextFactory } from "src/__test__/helpers";
 import { inputVariableContextFactory } from "src/__test__/helpers/input-variable-context-factory";
@@ -52,7 +54,27 @@ describe("GuardrailNode", () => {
   });
 
   describe("basic", () => {
-    beforeEach(async () => {
+    const mockMetricDefinition = (
+      outputVariables: { id: string; key: string; type: string }[]
+    ) => ({
+      id: "mocked-metric-output-id",
+      label: "mocked-metric-output-label",
+      name: "mocked-metric-output-name",
+      description: "mocked-metric-output-description",
+      outputVariables,
+    });
+
+    const createNode = async (
+      outputVariables: { id: string; key: string; type: string }[]
+    ) => {
+      vi.spyOn(
+        MetricDefinitionsClient.prototype,
+        "metricDefinitionHistoryItemRetrieve"
+      ).mockResolvedValue(
+        mockMetricDefinition(
+          outputVariables
+        ) as unknown as MetricDefinitionHistoryItem
+      );
       const nodeData = guardrailNodeDataFactory();
 
       const nodeContext = (await createNodeContext({
@@ -61,18 +83,48 @@ describe("GuardrailNode", () => {
       })) as GuardrailNodeContext;
       workflowContext.addNodeContext(nodeContext);
 
-      node = new GuardrailNode({
+      return new GuardrailNode({
         workflowContext: workflowContext,
         nodeContext,
       });
-    });
+    };
 
-    it("getNodeFile", async () => {
+    beforeEach(async () => {});
+
+    it.each([
+      [
+        "single output variable",
+        [{ id: "mocked-input-id", key: "score", type: "NUMBER" }],
+      ],
+      [
+        "multiple output variables",
+        [
+          { id: "mocked-input-id-1", key: "score1", type: "NUMBER" },
+          { id: "mocked-input-id-2", key: "score2", type: "NUMBER" },
+        ],
+      ],
+    ])("getNodeFile - %s", async (_, outputVariables) => {
+      const node = await createNode(outputVariables);
+
       node.getNodeFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
 
-    it("getNodeDisplayFile", async () => {
+    it.each([
+      [
+        "single output variable",
+        [{ id: "mocked-input-id", key: "score", type: "NUMBER" }],
+      ],
+      [
+        "multiple output variables",
+        [
+          { id: "mocked-input-id-1", key: "score1", type: "NUMBER" },
+          { id: "mocked-input-id-2", key: "score2", type: "NUMBER" },
+        ],
+      ],
+    ])("getNodeDisplayFile - %s", async (_, outputVariables) => {
+      const node = await createNode(outputVariables);
+
       node.getNodeDisplayFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });

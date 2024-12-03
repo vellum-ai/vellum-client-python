@@ -1,6 +1,8 @@
-import { ChatMessage, PromptBlock } from "vellum-ai/api";
+import { ChatMessage } from "vellum-ai/api";
 import {
   ChatMessageRequest,
+  ChatMessageRole,
+  PromptBlockState,
   PromptParameters,
   SearchResult,
   SearchResultRequest,
@@ -170,9 +172,86 @@ export interface EntrypointNode extends BaseDisplayableWorkflowNode {
   data: EntrypointNodeData;
 }
 
+export interface CacheConfig {
+  type: "EPHEMERAL";
+}
+
+export interface JinjaPromptTemplateBlock {
+  id: string;
+  blockType: "JINJA";
+  state: PromptBlockState;
+  cacheConfig?: CacheConfig;
+  properties: {
+    template: string;
+    templateType?: VellumVariableType;
+  };
+}
+
+export interface ChatMessagePromptTemplateBlock {
+  id: string;
+  blockType: "CHAT_MESSAGE";
+  state: PromptBlockState;
+  cacheConfig?: CacheConfig;
+  properties: {
+    chatRole: ChatMessageRole;
+    chatSource?: string;
+    chatMessageUnterminated: boolean;
+    blocks: PromptTemplateBlock[];
+  };
+}
+
+export interface VariablePromptTemplateBlock {
+  id: string;
+  blockType: "VARIABLE";
+  state: PromptBlockState;
+  cacheConfig?: CacheConfig;
+  inputVariableId: string;
+}
+
+export interface PlainTextPromptTemplateBlock {
+  id: string;
+  blockType: "PLAIN_TEXT";
+  state: PromptBlockState;
+  cacheConfig?: CacheConfig;
+  text: string;
+}
+
+export type RichTextChildPromptTemplateBlock =
+  | PlainTextPromptTemplateBlock
+  | VariablePromptTemplateBlock;
+
+export interface RichTextPromptTemplateBlock {
+  id: string;
+  blockType: "RICH_TEXT";
+  state: PromptBlockState;
+  cacheConfig?: CacheConfig;
+  blocks: RichTextChildPromptTemplateBlock[];
+}
+
+export interface FunctionDefinitionPromptTemplateBlock {
+  id: string;
+  blockType: "FUNCTION_DEFINITION";
+  state: PromptBlockState;
+  cacheConfig?: CacheConfig;
+  properties: {
+    functionName?: string;
+    functionDescription?: string;
+    functionParameters?: Record<string, unknown>;
+    functionForced?: boolean;
+    functionStrict?: boolean;
+  };
+}
+
+export type PromptTemplateBlock =
+  | JinjaPromptTemplateBlock
+  | ChatMessagePromptTemplateBlock
+  | VariablePromptTemplateBlock
+  | RichTextPromptTemplateBlock
+  | FunctionDefinitionPromptTemplateBlock;
+
 export interface PromptTemplateBlockData {
   version: number;
-  blocks: PromptBlock[];
+  blocks: PromptTemplateBlock[];
 }
 
 export interface PromptSettings {
@@ -239,6 +318,11 @@ export type PromptNodeData =
   | InlinePromptNodeData
   | DeploymentPromptNodeData
   | LegacyPromptNodeData;
+
+export interface InlinePromptNode extends BaseDisplayableWorkflowNode {
+  type: "PROMPT";
+  data: InlinePromptNodeData;
+}
 
 export interface PromptNode extends BaseDisplayableWorkflowNode {
   type: "PROMPT";

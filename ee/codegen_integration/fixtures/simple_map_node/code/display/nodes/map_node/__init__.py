@@ -18,7 +18,7 @@ class MapNodeDisplay(BaseMapNodeDisplay[MapNode]):
     node_input_ids_by_name = {"items": UUID("b8d66997-444e-4409-b315-5bef0c06192a")}
     output_display = {
         MapNode.Outputs.final_output: NodeOutputDisplay(
-            id=UUID("bffc4749-00b8-44db-90ee-db655cbc7e62"), name="final_output"
+            id=UUID("bffc4749-00b8-44db-90ee-db655cbc7e62"), name="final-output"
         )
     }
     port_displays = {MapNode.Ports.default: PortDisplayOverrides(id=UUID("239a1483-e4f5-4650-81a4-21c77d72cc5e"))}

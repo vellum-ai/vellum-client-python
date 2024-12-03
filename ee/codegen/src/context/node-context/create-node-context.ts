@@ -1,3 +1,4 @@
+import { MetricDefinitions as MetricDefinitionsClient } from "vellum-ai/api/resources/metricDefinitions/client/Client";
 import { WorkflowDeployments as WorkflowDeploymentsClient } from "vellum-ai/api/resources/workflowDeployments/client/Client";
 
 import { BaseNodeContext } from "./base";
@@ -19,6 +20,7 @@ import { PromptDeploymentNodeContext } from "src/context/node-context/prompt-dep
 import { SubworkflowDeploymentNodeContext } from "src/context/node-context/subworkflow-deployment-node";
 import { TemplatingNodeContext } from "src/context/node-context/templating-node";
 import {
+  InlinePromptNode,
   InlinePromptNodeData,
   LegacyPromptNodeData,
   WorkflowDataNode,
@@ -87,9 +89,16 @@ export async function createNodeContext(
     }
     case WorkflowNodeType.METRIC: {
       const guardrailNodeData = nodeData;
+      const metricDefinitionsHistoryItem = await new MetricDefinitionsClient({
+        apiKey: args.workflowContext.vellumApiKey,
+      }).metricDefinitionHistoryItemRetrieve(
+        guardrailNodeData.data.releaseTag,
+        guardrailNodeData.data.metricDefinitionId
+      );
       return new GuardrailNodeContext({
         ...args,
         nodeData: guardrailNodeData,
+        metricDefinitionsHistoryItem,
       });
     }
     case WorkflowNodeType.CODE_EXECUTION: {
@@ -107,7 +116,7 @@ export async function createNodeContext(
         case "INLINE": {
           return new InlinePromptNodeContext({
             ...args,
-            nodeData: promptNodeData,
+            nodeData: promptNodeData as InlinePromptNode,
           });
         }
         case "LEGACY": {

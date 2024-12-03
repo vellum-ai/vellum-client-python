@@ -151,6 +151,7 @@ export class MapNode extends BaseNestedWorkflowNode<
         inputVariables: mapNodeData.inputVariables,
         outputVariables: mapNodeData.outputVariables,
       },
+      moduleName: nestedWorkflowContext.moduleName,
       workflowContext: nestedWorkflowContext,
     });
   }
@@ -165,22 +166,10 @@ export class MapNode extends BaseNestedWorkflowNode<
       nodeData = this.nodeData.data;
     }
 
-    let outputValue: AstNode;
-    const output = nodeData.outputVariables.find(
-      (output) => output.key === "final-output"
-    );
-    if (output?.id) {
-      outputValue = python.TypeInstantiation.uuid(output.id);
-    } else {
-      throw new Error(
-        "Output with key 'final-output' is missing from map node"
-      );
-    }
-
     return python.field({
       name: "output_display",
-      initializer: python.TypeInstantiation.dict([
-        {
+      initializer: python.TypeInstantiation.dict(
+        nodeData.outputVariables.map((output) => ({
           key: python.reference({
             name: this.nodeContext.nodeClassName,
             modulePath: this.nodeContext.nodeModulePath,
@@ -196,16 +185,16 @@ export class MapNode extends BaseNestedWorkflowNode<
             arguments_: [
               python.methodArgument({
                 name: "id",
-                value: outputValue,
+                value: python.TypeInstantiation.uuid(output.id),
               }),
               python.methodArgument({
                 name: "name",
-                value: python.TypeInstantiation.str("final_output"),
+                value: python.TypeInstantiation.str(output.key),
               }),
             ],
           }),
-        },
-      ]),
+        }))
+      ),
     });
   }
 

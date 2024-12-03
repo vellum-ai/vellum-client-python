@@ -44,6 +44,7 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         "additional_header_key_3": UUID("13c2dd5e-cdd0-431b-aa91-46ad8da1cb51"),
         "additional_header_value_3": UUID("408c2b3d-7c30-4e01-a2e3-276753beadbc"),
     }
+    output_display = {}
     port_displays = {
         APINode.Ports.default: PortDisplayOverrides(
             id=UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e")
@@ -114,6 +115,7 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         "additional_header_key_3": UUID("13c2dd5e-cdd0-431b-aa91-46ad8da1cb51"),
         "additional_header_value_3": UUID("408c2b3d-7c30-4e01-a2e3-276753beadbc"),
     }
+    output_display = {}
     port_displays = {
         APINode.Ports.default: PortDisplayOverrides(
             id=UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e")

@@ -1,14 +1,4 @@
-import {
-  ChatMessagePromptBlock,
-  ChatMessageRole,
-  JinjaPromptBlock,
-  PlainTextPromptBlock,
-  PromptBlock,
-  PromptBlockState,
-  RichTextChildBlock,
-  RichTextPromptBlock,
-  VariablePromptBlock,
-} from "vellum-ai/api";
+import { ChatMessageRole, PromptBlockState } from "vellum-ai/api";
 import {
   object as objectSchema,
   list as listSchema,
@@ -22,6 +12,8 @@ import {
   lazy,
   property as propertySchema,
   Schema,
+  record as recordSchema,
+  unknown as unknownSchema,
 } from "vellum-ai/core/schemas";
 import {
   ChatMessageRole as ChatMessageRoleSerializer,
@@ -64,7 +56,6 @@ import {
   PromptNode,
   PromptNodeData,
   PromptSettings,
-  PromptTemplateBlockData,
   PromptVersionExecConfig,
   SearchNode,
   SearchNodeData,
@@ -91,6 +82,12 @@ import {
   GenericNode,
   ExecutionCounterPointer,
   GenericNodeDisplayData,
+  JinjaPromptTemplateBlock,
+  VariablePromptTemplateBlock,
+  ChatMessagePromptTemplateBlock,
+  RichTextPromptTemplateBlock,
+  PlainTextPromptTemplateBlock,
+  FunctionDefinitionPromptTemplateBlock,
 } from "src/types/vellum";
 
 const CacheConfigSerializer = objectSchema({
@@ -99,7 +96,7 @@ const CacheConfigSerializer = objectSchema({
 
 export const JinjaPromptTemplateBlockSerializer: ObjectSchema<
   JinjaPromptTemplateBlockSerializer.Raw,
-  JinjaPromptBlock
+  JinjaPromptTemplateBlock
 > = objectSchema({
   id: stringSchema(),
   blockType: propertySchema("block_type", stringLiteralSchema("JINJA")),
@@ -107,24 +104,12 @@ export const JinjaPromptTemplateBlockSerializer: ObjectSchema<
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   properties: objectSchema({
     template: stringSchema(),
-    templateType: propertySchema("template_type", stringSchema().optional()),
+    templateType: propertySchema(
+      "template_type",
+      VellumVariableTypeSerializer.optional()
+    ),
   }),
-}).transform({
-  transform: (block) =>
-    ({
-      blockType: block.blockType,
-      state: block.state,
-      cacheConfig: block.cacheConfig,
-      template: block.properties.template,
-    } as JinjaPromptBlock),
-  untransform: (block) => ({
-    id: block.id,
-    blockType: block.blockType,
-    state: block.state,
-    cacheConfig: block.cacheConfig,
-    properties: { template: block.template, templateType: "STRING" },
-  }),
-}) as ObjectSchema<JinjaPromptTemplateBlockSerializer.Raw, JinjaPromptBlock>;
+});
 
 export declare namespace JinjaPromptTemplateBlockSerializer {
   interface Raw {
@@ -141,7 +126,7 @@ export declare namespace JinjaPromptTemplateBlockSerializer {
 
 export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
   ChatMessagePromptTemplateBlockSerializer.Raw,
-  ChatMessagePromptBlock
+  ChatMessagePromptTemplateBlock
 > = objectSchema({
   id: stringSchema(),
   blockType: propertySchema("block_type", stringLiteralSchema("CHAT_MESSAGE")),
@@ -159,33 +144,7 @@ export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
       listSchema(lazy(() => PromptTemplateBlockSerializer))
     ),
   }),
-}).transform({
-  transform: (block) =>
-    ({
-      blockType: block.blockType,
-      state: block.state,
-      cacheConfig: block.cacheConfig,
-      chatRole: block.properties.chatRole,
-      chatSource: block.properties.chatSource,
-      chatMessageUnterminated: block.properties.chatMessageUnterminated,
-      blocks: block.properties.blocks,
-    } as ChatMessagePromptBlock),
-  untransform: (block) => ({
-    id: block.id,
-    blockType: block.blockType,
-    state: block.state,
-    cacheConfig: block.cacheConfig,
-    properties: {
-      chatRole: block.chatRole,
-      chatSource: block.chatSource,
-      chatMessageUnterminated: block.chatMessageUnterminated,
-      blocks: block.blocks,
-    },
-  }),
-}) as ObjectSchema<
-  ChatMessagePromptTemplateBlockSerializer.Raw,
-  ChatMessagePromptBlock
->;
+});
 
 export declare namespace ChatMessagePromptTemplateBlockSerializer {
   interface Raw {
@@ -204,32 +163,14 @@ export declare namespace ChatMessagePromptTemplateBlockSerializer {
 
 export const VariablePromptTemplateBlockSerializer: ObjectSchema<
   VariablePromptTemplateBlockSerializer.Raw,
-  VariablePromptBlock
+  VariablePromptTemplateBlock
 > = objectSchema({
   id: stringSchema(),
   blockType: propertySchema("block_type", stringLiteralSchema("VARIABLE")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   inputVariableId: propertySchema("input_variable_id", stringSchema()),
-}).transform({
-  transform: (block) =>
-    ({
-      blockType: block.blockType,
-      state: block.state,
-      cacheConfig: block.cacheConfig,
-      inputVariable: block.inputVariableId,
-    } as VariablePromptBlock),
-  untransform: (block) => ({
-    id: block.id,
-    blockType: block.blockType,
-    state: block.state,
-    cacheConfig: block.cacheConfig,
-    inputVariableId: block.inputVariable,
-  }),
-}) as ObjectSchema<
-  VariablePromptTemplateBlockSerializer.Raw,
-  VariablePromptBlock
->;
+});
 
 export declare namespace VariablePromptTemplateBlockSerializer {
   interface Raw {
@@ -243,32 +184,14 @@ export declare namespace VariablePromptTemplateBlockSerializer {
 
 export const PlainTextPromptTemplateBlockSerializer: ObjectSchema<
   PlainTextPromptTemplateBlockSerializer.Raw,
-  PlainTextPromptBlock
+  PlainTextPromptTemplateBlock
 > = objectSchema({
   id: stringSchema(),
   blockType: propertySchema("block_type", stringLiteralSchema("PLAIN_TEXT")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   text: stringSchema(),
-}).transform({
-  transform: (block) =>
-    ({
-      blockType: block.blockType,
-      state: block.state,
-      cacheConfig: block.cacheConfig,
-      text: block.text,
-    } as PlainTextPromptBlock),
-  untransform: (block) => ({
-    id: block.id,
-    blockType: block.blockType,
-    state: block.state,
-    cacheConfig: block.cacheConfig,
-    text: block.text,
-  }),
-}) as ObjectSchema<
-  PlainTextPromptTemplateBlockSerializer.Raw,
-  PlainTextPromptBlock
->;
+});
 
 export declare namespace PlainTextPromptTemplateBlockSerializer {
   interface Raw {
@@ -282,7 +205,7 @@ export declare namespace PlainTextPromptTemplateBlockSerializer {
 
 export const RichTextPromptTemplateBlockSerializer: ObjectSchema<
   RichTextPromptTemplateBlockSerializer.Raw,
-  RichTextPromptBlock
+  RichTextPromptTemplateBlock
 > = objectSchema({
   id: stringSchema(),
   blockType: propertySchema("block_type", stringLiteralSchema("RICH_TEXT")),
@@ -294,25 +217,7 @@ export const RichTextPromptTemplateBlockSerializer: ObjectSchema<
       VariablePromptTemplateBlockSerializer,
     ])
   ),
-}).transform({
-  transform: (block) =>
-    ({
-      blockType: block.blockType,
-      state: block.state,
-      cacheConfig: block.cacheConfig,
-      blocks: block.blocks,
-    } as RichTextPromptBlock),
-  untransform: (block) => ({
-    id: block.id,
-    blockType: block.blockType,
-    state: block.state,
-    cacheConfig: block.cacheConfig,
-    blocks: block.blocks,
-  }),
-}) as ObjectSchema<
-  RichTextPromptTemplateBlockSerializer.Raw,
-  RichTextPromptBlock
->;
+});
 
 export declare namespace RichTextPromptTemplateBlockSerializer {
   interface Raw {
@@ -327,12 +232,61 @@ export declare namespace RichTextPromptTemplateBlockSerializer {
   }
 }
 
+export const FunctionDefinitionPromptTemplateBlockSerializer: ObjectSchema<
+  FunctionDefinitionPromptTemplateBlockSerializer.Raw,
+  FunctionDefinitionPromptTemplateBlock
+> = objectSchema({
+  id: stringSchema(),
+  blockType: propertySchema(
+    "block_type",
+    stringLiteralSchema("FUNCTION_DEFINITION")
+  ),
+  state: propertySchema("state", PromptBlockStateSerializer),
+  cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
+  properties: objectSchema({
+    functionName: propertySchema("function_name", stringSchema().optional()),
+    functionDescription: propertySchema(
+      "function_description",
+      stringSchema().optional()
+    ),
+    functionParameters: propertySchema(
+      "function_parameters",
+      recordSchema(stringSchema(), unknownSchema()).optional()
+    ),
+    functionForced: propertySchema(
+      "function_forced",
+      booleanSchema().optional()
+    ),
+    functionStrict: propertySchema(
+      "function_strict",
+      booleanSchema().optional()
+    ),
+  }),
+});
+
+export declare namespace FunctionDefinitionPromptTemplateBlockSerializer {
+  interface Raw {
+    id: string;
+    block_type: "FUNCTION_DEFINITION";
+    state: PromptBlockState;
+    cache_config?: { type: "EPHEMERAL" } | null;
+    properties: {
+      function_name?: string | null;
+      function_description?: string | null;
+      function_parameters?: Record<string, unknown> | null;
+      function_forced?: boolean | null;
+      function_strict?: boolean | null;
+    };
+  }
+}
+
 export declare namespace PromptTemplateBlockSerializer {
   type Raw =
     | JinjaPromptTemplateBlockSerializer.Raw
     | ChatMessagePromptTemplateBlockSerializer.Raw
     | VariablePromptTemplateBlockSerializer.Raw
-    | RichTextPromptTemplateBlockSerializer.Raw;
+    | RichTextPromptTemplateBlockSerializer.Raw
+    | FunctionDefinitionPromptTemplateBlockSerializer.Raw;
 }
 
 const PromptTemplateBlockSerializer = undiscriminatedUnionSchema([
@@ -340,6 +294,7 @@ const PromptTemplateBlockSerializer = undiscriminatedUnionSchema([
   ChatMessagePromptTemplateBlockSerializer,
   VariablePromptTemplateBlockSerializer,
   RichTextPromptTemplateBlockSerializer,
+  FunctionDefinitionPromptTemplateBlockSerializer,
 ]);
 
 export const NodeOutputPointerSerializer: ObjectSchema<
@@ -517,13 +472,7 @@ export declare namespace WorkflowNodeDefinitionSerializer {
 export const PromptTemplateBlockDataSerializer = objectSchema({
   version: numberSchema(),
   blocks: listSchema(PromptTemplateBlockSerializer),
-}).transform({
-  transform: (data) => data as PromptTemplateBlockData,
-  untransform: (data) => data,
-}) as ObjectSchema<
-  PromptTemplateBlockDataSerializer.Raw,
-  PromptTemplateBlockData
->;
+});
 
 export declare namespace PromptTemplateBlockDataSerializer {
   interface Raw {
@@ -545,36 +494,6 @@ export declare namespace PromptSettingsSerializer {
   }
 }
 
-const fixVariableBlock = <B extends PromptBlock | RichTextChildBlock>(
-  block: B,
-  inputVariableNameById: Record<string, string>
-): B => {
-  if (block.blockType === "VARIABLE") {
-    return {
-      ...block,
-      inputVariable:
-        inputVariableNameById[block.inputVariable] ?? block.inputVariable,
-    };
-  }
-  if (block.blockType === "CHAT_MESSAGE") {
-    return {
-      ...block,
-      blocks: block.blocks.map((b) =>
-        fixVariableBlock(b, inputVariableNameById)
-      ),
-    };
-  }
-  if (block.blockType === "RICH_TEXT") {
-    return {
-      ...block,
-      blocks: block.blocks.map((b) =>
-        fixVariableBlock(b, inputVariableNameById)
-      ),
-    };
-  }
-  return block;
-};
-
 export const PromptVersionExecConfigSerializer: Schema<
   PromptVersionExecConfigSerializer.Raw,
   PromptVersionExecConfig
@@ -589,28 +508,6 @@ export const PromptVersionExecConfigSerializer: Schema<
     PromptTemplateBlockDataSerializer
   ),
   settings: PromptSettingsSerializer.optional(),
-}).transform({
-  transform: (config) =>
-    ({
-      parameters: config.parameters,
-      inputVariables: config.inputVariables,
-      promptTemplateBlockData: {
-        version: 1,
-        blocks: config.promptTemplateBlockData.blocks.map((block) =>
-          fixVariableBlock(
-            block,
-            Object.fromEntries(config.inputVariables.map((v) => [v.id, v.key]))
-          )
-        ),
-      },
-      settings: config.settings,
-    } as PromptVersionExecConfig),
-  untransform: (config) => ({
-    parameters: config.parameters,
-    inputVariables: config.inputVariables,
-    promptTemplateBlockData: config.promptTemplateBlockData,
-    settings: config.settings,
-  }),
 });
 
 export declare namespace PromptVersionExecConfigSerializer {

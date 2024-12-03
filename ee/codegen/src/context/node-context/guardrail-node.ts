@@ -1,13 +1,33 @@
+import { MetricDefinitionHistoryItem } from "vellum-ai/api";
+
 import { BaseNodeContext } from "./base";
 
 import { PortContext } from "src/context/port-context";
 import { GuardrailNode as GuardrailNodeType } from "src/types/vellum";
 
+export declare namespace GuardrailNodeContext {
+  interface Args extends BaseNodeContext.Args<GuardrailNodeType> {
+    metricDefinitionsHistoryItem: MetricDefinitionHistoryItem;
+  }
+}
+
 export class GuardrailNodeContext extends BaseNodeContext<GuardrailNodeType> {
-  // TODO: Figure out a way to correctly get the node outputs from metric definitions
-  // https://app.shortcut.com/vellum/story/5348/figure-out-correct-way-to-handle-guardrailnode-output
+  public readonly metricDefinitionsHistoryItem: MetricDefinitionHistoryItem;
+
+  constructor(args: GuardrailNodeContext.Args) {
+    super(args);
+
+    this.metricDefinitionsHistoryItem = args.metricDefinitionsHistoryItem;
+  }
+
   getNodeOutputNamesById(): Record<string, string> {
-    return {};
+    return this.metricDefinitionsHistoryItem.outputVariables.reduce(
+      (acc, variable) => {
+        acc[variable.id] = variable.key;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
   }
 
   createPortContexts(): PortContext[] {

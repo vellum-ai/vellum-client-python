@@ -1,5 +1,4 @@
 import { Writer } from "@fern-api/python-ast/core/Writer";
-import { PromptBlock } from "vellum-ai/api";
 import { beforeEach } from "vitest";
 
 import { workflowContextFactory } from "src/__test__/helpers";
@@ -32,12 +31,13 @@ describe("InlinePromptNode", () => {
     );
   });
 
-  const promptInputBlockTypes: PromptBlock["blockType"][] = [
+  const promptInputBlockTypes = [
     "JINJA",
     "CHAT_MESSAGE",
+    "FUNCTION_DEFINITION",
     "VARIABLE",
     "RICH_TEXT",
-  ];
+  ] as const;
 
   describe.each(promptInputBlockTypes)("%s block type", (blockType) => {
     let node: InlinePromptNode;

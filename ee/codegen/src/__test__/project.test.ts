@@ -11,6 +11,7 @@ import {
 } from "./helpers/fixtures";
 import { makeTempDir } from "./helpers/temp-dir";
 
+import { SpyMocks } from "src/__test__/utils/SpyMocks";
 import { WorkflowProjectGenerator } from "src/project";
 
 describe("WorkflowProjectGenerator", () => {
@@ -28,22 +29,27 @@ describe("WorkflowProjectGenerator", () => {
   describe("generateCode", () => {
     const excludeFilesAtPaths: RegExp[] = [/\.pyc$/];
     const ignoreContentsOfFilesAtPaths: RegExp[] = [];
+    const fixtureMocks = {
+      simple_guard_rail_node: SpyMocks.createMetricDefinitionMock(),
+    };
 
     it.each(
       getFixturesForProjectTest({
         includeFixtures: [
           "simple_search_node",
           "simple_inline_subworkflow_node",
-          // TODO: Fix codegen for guardrail node
-          // https://app.shortcut.com/vellum/story/5663/fix-codegen-of-guardrail-nodes
-          // "simple_guardrail_node",
+          "simple_guardrail_node",
           "simple_prompt_node",
           "simple_map_node",
           "simple_code_execution_node",
           "simple_conditional_node",
           "simple_templating_node",
           "simple_error_node",
+          // TODO: Get Merge Node graph codegen working
+          //    https://app.shortcut.com/vellum/story/5588
+          // "simple_merge_node",
         ],
+        fixtureMocks: fixtureMocks,
       })
     )(
       "should correctly generate code for fixture $fixtureName",
@@ -54,7 +60,6 @@ describe("WorkflowProjectGenerator", () => {
 
         const project = new WorkflowProjectGenerator({
           absolutePathToOutputDirectory: tempDir,
-          workflowLabel: "Workflow",
           workflowVersionExecConfigData: displayData,
           moduleName: "code",
           vellumApiKey: "<TEST_API_KEY>",

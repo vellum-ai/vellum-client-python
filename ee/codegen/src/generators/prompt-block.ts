@@ -1,22 +1,26 @@
 import { python } from "@fern-api/python-ast";
 import { ClassInstantiation } from "@fern-api/python-ast/ClassInstantiation";
 import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
-import {
-  PromptBlock as PromptBlockType,
-  JinjaPromptBlock as JinjaPromptBlockType,
-  ChatMessagePromptBlock as ChatMessagePromptBlockType,
-  VariablePromptBlock as VariablePromptBlockType,
-  RichTextPromptBlock as RichTextPromptBlockType,
-  PlainTextPromptBlock as PlainTextPromptBlockType,
-} from "vellum-ai/api";
+import { PlainTextPromptBlock as PlainTextPromptBlockType } from "vellum-ai/api";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
-import { BasePromptBlock } from "src/generators/base-prompt-block";
+import {
+  BasePromptBlock,
+  PromptTemplateBlockExcludingFunctionDefinition,
+} from "src/generators/base-prompt-block";
+import {
+  ChatMessagePromptTemplateBlock,
+  JinjaPromptTemplateBlock,
+  RichTextPromptTemplateBlock,
+  VariablePromptTemplateBlock,
+} from "src/types/vellum";
 
 // Flesh out unit tests for various prompt configurations
 // https://app.shortcut.com/vellum/story/5249
-export class PromptBlock extends BasePromptBlock<PromptBlockType> {
-  protected generateAstNode(promptBlock: PromptBlockType): ClassInstantiation {
+export class PromptBlock extends BasePromptBlock<PromptTemplateBlockExcludingFunctionDefinition> {
+  protected generateAstNode(
+    promptBlock: PromptTemplateBlockExcludingFunctionDefinition
+  ): ClassInstantiation {
     switch (promptBlock.blockType) {
       case "JINJA":
         return this.generateJinjaPromptBlock(promptBlock);
@@ -29,7 +33,9 @@ export class PromptBlock extends BasePromptBlock<PromptBlockType> {
     }
   }
 
-  private getPromptBlockRef(promptBlock: PromptBlockType): python.Reference {
+  private getPromptBlockRef(
+    promptBlock: PromptTemplateBlockExcludingFunctionDefinition
+  ): python.Reference {
     let pathName;
     switch (promptBlock.blockType) {
       case "JINJA":
@@ -52,17 +58,17 @@ export class PromptBlock extends BasePromptBlock<PromptBlockType> {
   }
 
   private generateJinjaPromptBlock(
-    promptBlock: JinjaPromptBlockType
+    promptBlock: JinjaPromptTemplateBlock
   ): python.ClassInstantiation {
     const classArgs: MethodArgument[] = [
       ...this.constructCommonClassArguments(promptBlock),
     ];
 
-    if (promptBlock.template) {
+    if (promptBlock.properties.template) {
       classArgs.push(
         new MethodArgument({
           name: "template",
-          value: python.TypeInstantiation.str(promptBlock.template),
+          value: python.TypeInstantiation.str(promptBlock.properties.template),
         })
       );
     }
@@ -77,17 +83,17 @@ export class PromptBlock extends BasePromptBlock<PromptBlockType> {
   }
 
   private generateChatMessagePromptBlock(
-    promptBlock: ChatMessagePromptBlockType
+    promptBlock: ChatMessagePromptTemplateBlock
   ): python.ClassInstantiation {
     const classArgs: MethodArgument[] = [
       ...this.constructCommonClassArguments(promptBlock),
     ];
 
-    if (promptBlock.chatRole) {
+    if (promptBlock.properties.chatRole) {
       classArgs.push(
         new MethodArgument({
           name: "chat_role",
-          value: python.TypeInstantiation.str(promptBlock.chatRole),
+          value: python.TypeInstantiation.str(promptBlock.properties.chatRole),
         })
       );
     }
@@ -95,16 +101,18 @@ export class PromptBlock extends BasePromptBlock<PromptBlockType> {
     classArgs.push(
       new MethodArgument({
         name: "chat_source",
-        value: promptBlock.chatSource
-          ? python.TypeInstantiation.str(promptBlock.chatSource)
+        value: promptBlock.properties.chatSource
+          ? python.TypeInstantiation.str(promptBlock.properties.chatSource)
           : python.TypeInstantiation.none(),
       })
     );
 
     const chatMessageUnterminatedValue =
-      promptBlock.chatMessageUnterminated !== undefined &&
-      promptBlock.chatMessageUnterminated !== null
-        ? python.TypeInstantiation.bool(promptBlock.chatMessageUnterminated)
+      promptBlock.properties.chatMessageUnterminated !== undefined &&
+      promptBlock.properties.chatMessageUnterminated !== null
+        ? python.TypeInstantiation.bool(
+            promptBlock.properties.chatMessageUnterminated
+          )
         : python.TypeInstantiation.none();
     classArgs.push(
       new MethodArgument({
@@ -113,11 +121,15 @@ export class PromptBlock extends BasePromptBlock<PromptBlockType> {
       })
     );
 
+    const childBlocks = promptBlock.properties.blocks.filter(
+      (block): block is PromptTemplateBlockExcludingFunctionDefinition =>
+        block.blockType !== "FUNCTION_DEFINITION"
+    );
     classArgs.push(
       new MethodArgument({
         name: "blocks",
         value: python.TypeInstantiation.list(
-          promptBlock.blocks.map((block) => {
+          childBlocks.map((block) => {
             return this.generateAstNode(block);
           })
         ),
@@ -134,15 +146,19 @@ export class PromptBlock extends BasePromptBlock<PromptBlockType> {
   }
 
   private generateVariablePromptBlock(
-    promptBlock: VariablePromptBlockType
+    promptBlock: VariablePromptTemplateBlock
   ): python.ClassInstantiation {
     const classArgs: MethodArgument[] = [
       ...this.constructCommonClassArguments(promptBlock),
     ];
+    const inputVariableName =
+      this.inputVariableNameById[promptBlock.inputVariableId] ??
+      promptBlock.inputVariableId;
+
     classArgs.push(
       new MethodArgument({
         name: "input_variable",
-        value: python.TypeInstantiation.str(promptBlock.inputVariable),
+        value: python.TypeInstantiation.str(inputVariableName),
       })
     );
 
@@ -207,7 +223,7 @@ export class PromptBlock extends BasePromptBlock<PromptBlockType> {
   }
 
   private generateRichTextPromptBlock(
-    promptBlock: RichTextPromptBlockType
+    promptBlock: RichTextPromptTemplateBlock
   ): python.ClassInstantiation {
     const classArgs: MethodArgument[] = [
       ...this.constructCommonClassArguments(promptBlock),

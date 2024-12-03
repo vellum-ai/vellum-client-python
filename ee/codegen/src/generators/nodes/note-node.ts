@@ -1,4 +1,5 @@
 import { python } from "@fern-api/python-ast";
+import { Field } from "@fern-api/python-ast/Field";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { NoteNodeContext } from "src/context/node-context/note-node";
@@ -42,6 +43,10 @@ export class NoteNode extends BaseSingleFileNode<
     );
 
     return statements;
+  }
+
+  protected getOutputDisplay(): Field | undefined {
+    return undefined;
   }
 
   getErrorOutputId(): string | undefined {

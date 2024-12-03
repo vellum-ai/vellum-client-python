@@ -42,11 +42,30 @@ def push(
 
 @main.command()
 @click.argument("module", required=False)
-@click.option("--legacy-module", is_flag=True, help="Pull the workflow as a legacy module")
-@click.option("--include-json", is_flag=True, help="Include the JSON representation of the Workflow in the pull response. Should only be used for debugging purposes.")
-def pull(module: Optional[str], legacy_module: Optional[bool], include_json: Optional[bool]) -> None:
+@click.option(
+    "--include-json",
+    is_flag=True,
+    help="Include the JSON representation of the Workflow in the pull response. Should only be used for debugging purposes.",
+)
+@click.option("--workflow-sandbox-id", type=str, help="Pull the Workflow from a specific Sandbox ID")
+@click.option(
+    "--exclude-code",
+    is_flag=True,
+    help="Exclude the code definition of the Workflow from the pull response. Should only be used for debugging purposes.",
+)
+def pull(
+    module: Optional[str],
+    include_json: Optional[bool],
+    workflow_sandbox_id: Optional[str],
+    exclude_code: Optional[bool],
+) -> None:
     """Pull Workflow from Vellum"""
-    pull_command(module, legacy_module, include_json)
+    pull_command(
+        module=module,
+        include_json=include_json,
+        workflow_sandbox_id=workflow_sandbox_id,
+        exclude_code=exclude_code,
+    )
 
 
 @main.group(aliases=["images", "image"])

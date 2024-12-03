@@ -1,4 +1,5 @@
 import { python } from "@fern-api/python-ast";
+import { Field } from "@fern-api/python-ast/Field";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { MergeNodeContext } from "src/context/node-context/merge-node";
@@ -17,7 +18,10 @@ export class MergeNode extends BaseSingleFileNode<
 
     const mergeStrategyRef = python.reference({
       name: "MergeBehavior",
-      modulePath: ["vellum", "types"],
+      modulePath: [
+        ...this.workflowContext.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
+        "types",
+      ],
       attribute: [this.nodeData.data.mergeStrategy],
     });
 
@@ -61,7 +65,11 @@ export class MergeNode extends BaseSingleFileNode<
     return statements;
   }
 
+  protected getOutputDisplay(): Field | undefined {
+    return undefined;
+  }
+
   getErrorOutputId(): string | undefined {
-    return;
+    return undefined;
   }
 }

@@ -22,7 +22,7 @@ class MergeNodeDisplay(BaseMergeNodeDisplay[MergeNode]):
 
 exports[`MergeNode > basic > getNodeFile 1`] = `
 "from vellum.workflows.nodes.displayable import MergeNode as BaseMergeNode
-from vellum.types import MergeBehavior
+from vellum.workflows.types import MergeBehavior
 
 
 class MergeNode(BaseMergeNode):

@@ -44,6 +44,7 @@ describe("WorkflowProjectGenerator", () => {
           "simple_code_execution_node",
           "simple_conditional_node",
           "simple_templating_node",
+          "simple_merge_node",
         ],
         fixtureMocks: fixtureMocks,
       })

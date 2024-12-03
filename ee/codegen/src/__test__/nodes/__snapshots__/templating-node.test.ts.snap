@@ -14,7 +14,6 @@ from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosit
 class TemplatingNodeDisplay(BaseTemplatingNodeDisplay[TemplatingNode]):
     label = "Templating Node"
     node_id = UUID("7e09927b-6d6f-4829-92c9-54e66bdcaf80")
-    output_id = UUID("2d4f1826-de75-499a-8f84-0a690c8136ad")
     target_handle_id = UUID("3feb7e71-ec63-4d58-82ba-c3df829a2948")
     template_input_id = UUID("7b8af68b-cf60-4fca-9c57-868042b5b616")
     node_input_ids_by_name = {"text": UUID("7b8af68b-cf60-4fca-9c57-868042b5b616")}
@@ -66,7 +65,6 @@ class TryNodeDisplay(BaseTryNodeDisplay):
 class TemplatingNodeDisplay(BaseTemplatingNodeDisplay[TemplatingNode]):
     label = "Templating Node"
     node_id = UUID("7e09927b-6d6f-4829-92c9-54e66bdcaf80")
-    output_id = UUID("2d4f1826-de75-499a-8f84-0a690c8136ad")
     target_handle_id = UUID("3feb7e71-ec63-4d58-82ba-c3df829a2948")
     template_input_id = UUID("7b8af68b-cf60-4fca-9c57-868042b5b616")
     node_input_ids_by_name = {"text": UUID("7b8af68b-cf60-4fca-9c57-868042b5b616")}

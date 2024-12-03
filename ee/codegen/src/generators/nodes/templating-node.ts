@@ -79,10 +79,6 @@ export class TemplatingNode extends BaseSingleFileNode<
 
     statements.push(
       python.field({
-        name: "output_id",
-        initializer: python.TypeInstantiation.uuid(this.nodeData.data.outputId),
-      }),
-      python.field({
         name: "target_handle_id",
         initializer: python.TypeInstantiation.uuid(
           this.nodeData.data.targetHandleId

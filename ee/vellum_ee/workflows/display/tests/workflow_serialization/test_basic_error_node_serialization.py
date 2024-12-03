@@ -10,7 +10,7 @@ from tests.workflows.basic_error_node.workflow import BasicErrorNodeWorkflow
 
 
 def test_serialize_workflow():
-    # GIVEN a Workflow with a code execution node
+    # GIVEN a Workflow with an error node
     # WHEN we serialize it
     workflow_display = get_workflow_display(
         base_display_class=VellumWorkflowDisplay, workflow_class=BasicErrorNodeWorkflow

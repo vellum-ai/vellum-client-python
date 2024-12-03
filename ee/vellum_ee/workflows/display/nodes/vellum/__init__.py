@@ -17,20 +17,20 @@ from .try_node import BaseTryNodeDisplay
 
 # All node display classes must be imported here to be registered in BaseNodeDisplay's node display registry
 __all__ = [
+    "BaseAPINodeDisplay",
     "BaseCodeExecutionNodeDisplay",
     "BaseConditionalNodeDisplay",
+    "BaseErrorNodeDisplay",
+    "BaseFinalOutputNodeDisplay",
     "BaseGuardrailNodeDisplay",
     "BaseInlinePromptNodeDisplay",
     "BaseInlineSubworkflowNodeDisplay",
-    "BaseAPINodeDisplay",
     "BaseMapNodeDisplay",
     "BaseMergeNodeDisplay",
     "BaseNoteNodeDisplay",
+    "BasePromptDeploymentNodeDisplay",
     "BaseSearchNodeDisplay",
     "BaseSubworkflowDeploymentNodeDisplay",
     "BaseTemplatingNodeDisplay",
-    "BasePromptDeploymentNodeDisplay",
-    "BaseFinalOutputNodeDisplay",
-    "BaseTryNodeDisplay",
-    "BaseErrorNodeDisplay"
+    "BaseTryNodeDisplay"
 ]

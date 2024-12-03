@@ -59,44 +59,6 @@
           "width": 480,
           "height": 180
         }
-      },
-      {
-        "id": "ed688426-1976-4d0c-9f3a-2a0b0fae161a",
-        "type": "TERMINAL",
-        "data": {
-          "name": "final-output",
-          "label": "Final Output",
-          "target_handle_id": "b28439f6-0c1e-44c0-87b1-b7fa3c7408b2",
-          "output_id": "43e128f4-24fe-4484-9d08-948a4a390707",
-          "output_type": "STRING",
-          "node_input_id": "097798e5-9330-46a4-b8ec-e93532668d37"
-        },
-        "inputs": [
-          {
-            "id": "097798e5-9330-46a4-b8ec-e93532668d37",
-            "key": "node_input",
-            "value": {
-              "rules": [
-                {
-                  "type": "NODE_OUTPUT",
-                  "data": {
-                    "node_id": "e5ff9360-a29c-437b-a9c1-05fc52df2834",
-                    "output_id": "77839b3c-fe1c-4dcb-9c61-2fac827f729b"
-                  }
-                }
-              ],
-              "combinator": "OR"
-            }
-          }
-        ],
-        "display_data": {
-          "position": {
-            "x": 2750.0,
-            "y": 210.0
-          },
-          "width": 480,
-          "height": 234
-        }
       }
     ],
     "edges": [
@@ -107,14 +69,6 @@
         "source_handle_id": "6cbf47ee-84ef-42cb-b1df-7b9e0fee2bee",
         "target_node_id": "e5ff9360-a29c-437b-a9c1-05fc52df2834",
         "target_handle_id": "370d712d-3369-424e-bcf7-f4da1aef3928"
-      },
-      {
-        "id": "2fb36bc6-ac91-4aad-bb58-fbc6c95ed6e3",
-        "type": "DEFAULT",
-        "source_node_id": "e5ff9360-a29c-437b-a9c1-05fc52df2834",
-        "source_handle_id": "e4dedb66-0638-4f0c-9941-6420bfe353b2",
-        "target_node_id": "ed688426-1976-4d0c-9f3a-2a0b0fae161a",
-        "target_handle_id": "b28439f6-0c1e-44c0-87b1-b7fa3c7408b2"
       }
     ],
     "display_data": {
@@ -135,11 +89,5 @@
       "extensions": { "color": null }
     }
   ],
-  "output_variables": [
-    {
-      "id": "43e128f4-24fe-4484-9d08-948a4a390707",
-      "key": "final-output",
-      "type": "STRING"
-    }
-  ]
+  "output_variables": []
 }

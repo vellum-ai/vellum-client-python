@@ -15,7 +15,6 @@ from vellum_ee.workflows.display.workflows.vellum_workflow_display import Vellum
 
 from ..inputs import Inputs
 from ..nodes.error_node import ErrorNode
-from ..nodes.final_output import FinalOutput
 from ..workflow import Workflow
 
 
@@ -37,20 +36,5 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
             edge_display=EdgeVellumDisplayOverrides(id=UUID("bcd998c4-0df4-4f59-8b15-ed1f64c5c157")),
         )
     }
-    edge_displays = {
-        (ErrorNode.Ports.default, FinalOutput): EdgeVellumDisplayOverrides(
-            id=UUID("2fb36bc6-ac91-4aad-bb58-fbc6c95ed6e3")
-        )
-    }
-    output_displays = {
-        Workflow.Outputs.final_output: WorkflowOutputVellumDisplayOverrides(
-            id=UUID("43e128f4-24fe-4484-9d08-948a4a390707"),
-            node_id=UUID("ed688426-1976-4d0c-9f3a-2a0b0fae161a"),
-            node_input_id=UUID("097798e5-9330-46a4-b8ec-e93532668d37"),
-            name="final-output",
-            label="Final Output",
-            target_handle_id=UUID("b28439f6-0c1e-44c0-87b1-b7fa3c7408b2"),
-            display_data=NodeDisplayData(position=NodeDisplayPosition(x=2750, y=210), width=480, height=234),
-            edge_id=UUID("2fb36bc6-ac91-4aad-bb58-fbc6c95ed6e3"),
-        )
-    }
+    edge_displays = {}
+    output_displays = {}

@@ -7,28 +7,39 @@ from typing import Optional
 from dotenv import load_dotenv
 
 from vellum.workflows.vellum_client import create_vellum_client
-from vellum_cli.config import load_vellum_cli_config
+from vellum_cli.config import WorkflowConfig, load_vellum_cli_config
 from vellum_cli.logger import load_cli_logger
 
 
 def pull_command(
-    module: Optional[str], legacy_module: Optional[bool] = None, include_json: Optional[bool] = None
+    module: Optional[str] = None,
+    workflow_sandbox_id: Optional[str] = None,
+    legacy_module: Optional[bool] = None,
+    include_json: Optional[bool] = None,
+    exclude_code: Optional[bool] = None,
 ) -> None:
     load_dotenv()
     logger = load_cli_logger()
     config = load_vellum_cli_config()
 
-    if not config.workflows:
-        raise ValueError("No Workflows found in project to pull.")
-
-    if len(config.workflows) > 1 and not module:
-        raise ValueError("Multiple workflows found in project to pull. Pulling only a single workflow is supported.")
-
     workflow_config = (
-        next((w for w in config.workflows if w.module == module), None) if module else config.workflows[0]
+        next((w for w in config.workflows if w.module == module), None)
+        if module
+        else (config.workflows[0] if config.workflows else None)
     )
+    save_lock_file = False
     if workflow_config is None:
-        raise ValueError(f"No workflow config for '{module}' found in project to push.")
+        if module:
+            raise ValueError(f"No workflow config for '{module}' found in project to push.")
+        elif workflow_sandbox_id:
+            workflow_config = WorkflowConfig(
+                workflow_sandbox_id=workflow_sandbox_id,
+                module=f"workflow_{workflow_sandbox_id.split('-')[0]}",
+            )
+            config.workflows.append(workflow_config)
+            save_lock_file = True
+        else:
+            raise ValueError("No workflow config found in project to pull from.")
 
     if not workflow_config.workflow_sandbox_id:
         raise ValueError("No workflow sandbox ID found in project to pull from.")
@@ -40,6 +51,8 @@ def pull_command(
         query_parameters["legacyModule"] = legacy_module
     if include_json:
         query_parameters["include_json"] = include_json
+    if exclude_code:
+        query_parameters["exclude_code"] = exclude_code
 
     response = client.workflows.pull(
         workflow_config.workflow_sandbox_id,
@@ -81,6 +94,11 @@ def pull_command(
                 target.write(source.read().decode("utf-8"))
 
     if include_json:
-        logger.warning("The pulled JSON representation of the Workflow should be used for debugging purposely only. Its schema should be considered unstable and subject to change at any time.")
+        logger.warning(
+            "The pulled JSON representation of the Workflow should be used for debugging purposely only. Its schema should be considered unstable and subject to change at any time."
+        )
+
+    if save_lock_file:
+        config.save()
 
     logger.info(f"Successfully pulled Workflow into {workflow_config.module}")

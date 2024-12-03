@@ -965,7 +965,7 @@ export function errorNodeDataFactory(): ErrorNode {
       label: "Error Node",
       name: "error-node",
       targetHandleId: "06573a05-e6f0-48b9-bc6e-07e06d0bc1b1",
-      errorSourceInputId,
+      errorSourceInputId: errorSourceInputId,
       errorOutputId: "69250713-617d-42a4-9326-456c70d0ef20",
       sourceHandleId: "370d712d-3369-424e-bcf7-f4da1aef3928",
     },

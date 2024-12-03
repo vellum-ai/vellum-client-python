@@ -95,6 +95,12 @@ traverse the `workflows/codegen/tests/fixtures` directory and run the tests on e
 
 `codegen/src/__test__/project.test.ts` is responsible for running these integration tests.
 
+To run the integration tests, run this command from the root of the repo:
+
+```bash
+make test
+```
+
 ## Developing Alongside Fern
 
 We use fern's python [codegen package](https://github.com/fern-api/fern/tree/main/generators/python-v2/codegen) to

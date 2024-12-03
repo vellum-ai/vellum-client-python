@@ -75,18 +75,6 @@ export class ErrorNode extends BaseSingleFileNode<
       })
     );
 
-    statements.push(
-      python.field({
-        name: "error_inputs_by_name",
-        initializer: python.TypeInstantiation.dict(
-          Array.from(this.nodeInputsByKey.entries()).map(([key, value]) => ({
-            key: python.TypeInstantiation.str(key),
-            value: value,
-          }))
-        ),
-      })
-    );
-
     return statements;
   }
 

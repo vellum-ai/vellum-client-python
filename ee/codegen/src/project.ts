@@ -134,8 +134,9 @@ ${errors.slice(0, 3).map((err) => {
       this.workflowVersionExecConfig = workflowVersionExecConfigResult.value;
       const rawEdges = this.workflowVersionExecConfig.workflowRawData.edges;
 
-      // TODO: Drive from definition
-      const workflowClassName = "Workflow";
+      const workflowClassName =
+        this.workflowVersionExecConfig.workflowRawData.definition?.name ||
+        "Workflow";
 
       this.workflowContext = new WorkflowContext({
         workflowsSdkModulePath: rest.workflowsSdkModulePath,

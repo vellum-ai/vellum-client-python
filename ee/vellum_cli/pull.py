@@ -14,7 +14,6 @@ from vellum_cli.logger import load_cli_logger
 def pull_command(
     module: Optional[str] = None,
     workflow_sandbox_id: Optional[str] = None,
-    legacy_module: Optional[bool] = None,
     include_json: Optional[bool] = None,
     exclude_code: Optional[bool] = None,
 ) -> None:
@@ -47,8 +46,6 @@ def pull_command(
     logger.info(f"Pulling workflow into {workflow_config.module}")
     client = create_vellum_client()
     query_parameters = {}
-    if legacy_module:
-        query_parameters["legacyModule"] = legacy_module
     if include_json:
         query_parameters["include_json"] = include_json
     if exclude_code:

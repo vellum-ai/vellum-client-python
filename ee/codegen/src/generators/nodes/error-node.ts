@@ -17,7 +17,7 @@ export class ErrorNode extends BaseSingleFileNode<
     bodyStatements.push(
       python.field({
         name: "error",
-        initializer: this.getNodeInputByName("error_source"),
+        initializer: this.getNodeInputByName("error_source_input_id"),
       })
     );
 
@@ -26,6 +26,14 @@ export class ErrorNode extends BaseSingleFileNode<
 
   getNodeDisplayClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
+
+    statements.push(
+      python.field({
+        name: "label",
+        initializer: python.TypeInstantiation.str(this.nodeData.data.label),
+      })
+    );
+
     return statements;
   }
 

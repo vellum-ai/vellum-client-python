@@ -194,6 +194,17 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
     return statements;
   }
 
+  protected getOutputDisplay(): python.Field {
+    return python.field({
+      name: "output_display",
+      initializer: python.TypeInstantiation.dict(
+        // TODO: Specify output displays
+        //    https://app.shortcut.com/vellum/story/5640
+        []
+      ),
+    });
+  }
+
   getErrorOutputId(): string | undefined {
     return this.nodeData.data.errorOutputId;
   }

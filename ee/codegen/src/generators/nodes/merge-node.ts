@@ -1,4 +1,5 @@
 import { python } from "@fern-api/python-ast";
+import { Field } from "@fern-api/python-ast/Field";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { MergeNodeContext } from "src/context/node-context/merge-node";
@@ -61,7 +62,11 @@ export class MergeNode extends BaseSingleFileNode<
     return statements;
   }
 
+  protected getOutputDisplay(): Field | undefined {
+    return undefined;
+  }
+
   getErrorOutputId(): string | undefined {
-    return;
+    return undefined;
   }
 }

@@ -1,4 +1,5 @@
 import { python } from "@fern-api/python-ast";
+import { Field } from "@fern-api/python-ast/Field";
 import { Reference } from "@fern-api/python-ast/Reference";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { VellumValue } from "vellum-ai/api/types";
@@ -145,6 +146,10 @@ export class ConditionalNode extends BaseSingleFileNode<
     );
 
     return statements;
+  }
+
+  protected getOutputDisplay(): Field | undefined {
+    return undefined;
   }
 
   private createConditionIdList(

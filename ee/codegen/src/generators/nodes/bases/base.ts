@@ -47,9 +47,7 @@ export abstract class BaseNode<
   protected abstract getNodeDisplayClassBodyStatements(): AstNode[];
 
   // Override to specify a custom output display
-  protected getOutputDisplay(): python.Field | undefined {
-    return undefined;
-  }
+  protected abstract getOutputDisplay(): python.Field | undefined;
 
   // If the node supports the Reject on Error toggle, then implement this to return
   // the error_output_id from this.nodeData. If returned, a @TryNode decorator will be

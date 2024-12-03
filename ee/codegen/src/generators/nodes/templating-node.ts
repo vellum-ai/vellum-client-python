@@ -1,6 +1,7 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
+import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { TemplatingNodeContext } from "src/context/node-context/templating-node";
 import { BaseState } from "src/generators/base-state";
 import { NodeInputValuePointer } from "src/generators/node-inputs/node-input-value-pointer";
@@ -126,6 +127,41 @@ export class TemplatingNode extends BaseSingleFileNode<
     }
 
     return python.TypeInstantiation.str(templateRule.data.value);
+  }
+
+  protected getOutputDisplay(): python.Field {
+    return python.field({
+      name: "output_display",
+      initializer: python.TypeInstantiation.dict([
+        {
+          key: python.reference({
+            name: this.nodeContext.nodeClassName,
+            modulePath: this.nodeContext.nodeModulePath,
+            attribute: [OUTPUTS_CLASS_NAME, "result"],
+          }),
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "NodeOutputDisplay",
+              modulePath:
+                this.workflowContext.sdkModulePathNames
+                  .NODE_DISPLAY_TYPES_MODULE_PATH,
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "id",
+                value: python.TypeInstantiation.uuid(
+                  this.nodeData.data.outputId
+                ),
+              }),
+              python.methodArgument({
+                name: "name",
+                value: python.TypeInstantiation.str("result"),
+              }),
+            ],
+          }),
+        },
+      ]),
+    });
   }
 
   protected getErrorOutputId(): string | undefined {

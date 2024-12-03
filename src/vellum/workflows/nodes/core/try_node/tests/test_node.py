@@ -111,3 +111,19 @@ def test_try_node__use_parent_execution_context():
     # THEN the inner node had access to the key
     assert len(outputs) == 1
     assert outputs[-1] == BaseOutput(name="key", value="test-key")
+
+
+def test_try_node__resolved_inputs():
+    """
+    This test ensures that the inputs of a node wrapped in a TryNode are correctly resolved.
+    """
+
+    class State(BaseState):
+        counter = 3.0
+
+    @TryNode.wrap()
+    class MyNode(BaseNode[State]):
+        foo = State.counter
+
+    node = MyNode()
+    assert node._inputs == {MyNode.foo: 3}

@@ -1,10 +1,4 @@
-import {
-  ChatMessagePromptBlock,
-  JinjaPromptBlock,
-  RichTextPromptBlock,
-  VellumVariableType,
-} from "vellum-ai/api";
-import { VariablePromptBlock } from "vellum-ai/api/types/VariablePromptBlock";
+import { VellumVariableType } from "vellum-ai/api";
 
 import {
   EntrypointNode,
@@ -20,6 +14,7 @@ import {
   GenericNode,
   SubworkflowNode,
   NoteNode,
+  PromptTemplateBlock,
 } from "src/types/vellum";
 
 export function entrypointNodeDataFactory(): EntrypointNode {
@@ -314,60 +309,76 @@ export function guardrailNodeDataFactory({
   return nodeData;
 }
 
-const generateBlockGivenType = (
-  blockType: string
-):
-  | JinjaPromptBlock
-  | ChatMessagePromptBlock
-  | VariablePromptBlock
-  | RichTextPromptBlock => {
+const generateBlockGivenType = (blockType: string): PromptTemplateBlock => {
   if (blockType === "JINJA") {
     return {
+      id: "block-id",
       blockType: "JINJA",
-      template: "Summarize what this means {{ INPUT_VARIABLE }}",
+      properties: {
+        template: "Summarize what this means {{ INPUT_VARIABLE }}",
+      },
       state: "ENABLED",
     };
   } else if (blockType === "CHAT_MESSAGE") {
     return {
+      id: "block-id",
       blockType: "CHAT_MESSAGE",
-      blocks: [
-        {
-          blockType: "RICH_TEXT",
-          blocks: [
-            {
-              blockType: "PLAIN_TEXT",
-              text: "Summarize the following text:\n\n",
-              state: "ENABLED",
-            },
-            {
-              blockType: "VARIABLE",
-              state: "ENABLED",
-              inputVariable: "text",
-            },
-          ],
-          state: "ENABLED",
-        },
-      ],
-      chatRole: "SYSTEM",
-      chatMessageUnterminated: false,
+      properties: {
+        blocks: [
+          {
+            id: "block-id",
+            blockType: "RICH_TEXT",
+            blocks: [
+              {
+                id: "block-id",
+                blockType: "PLAIN_TEXT",
+                text: "Summarize the following text:\n\n",
+                state: "ENABLED",
+              },
+              {
+                id: "block-id",
+                blockType: "VARIABLE",
+                state: "ENABLED",
+                inputVariableId: "text",
+              },
+            ],
+            state: "ENABLED",
+          },
+        ],
+        chatRole: "SYSTEM",
+        chatMessageUnterminated: false,
+      },
       state: "ENABLED",
     };
   } else if (blockType === "VARIABLE") {
     return {
+      id: "block-id",
       blockType: "VARIABLE",
       state: "ENABLED",
-      inputVariable: "text",
+      inputVariableId: "text",
     };
   } else if (blockType === "RICH_TEXT") {
     return {
+      id: "block-id",
       blockType: "RICH_TEXT",
       blocks: [
         {
+          id: "block-id",
           blockType: "PLAIN_TEXT",
           text: "Hello World!",
           state: "ENABLED",
         },
       ],
+      state: "ENABLED",
+    };
+  } else if (blockType === "FUNCTION_DEFINITION") {
+    return {
+      id: "block-id",
+      blockType: "FUNCTION_DEFINITION",
+      properties: {
+        functionName: "functionTest",
+        functionDescription: "This is a test function",
+      },
       state: "ENABLED",
     };
   } else {

@@ -20,6 +20,7 @@ import { PromptDeploymentNodeContext } from "src/context/node-context/prompt-dep
 import { SubworkflowDeploymentNodeContext } from "src/context/node-context/subworkflow-deployment-node";
 import { TemplatingNodeContext } from "src/context/node-context/templating-node";
 import {
+  InlinePromptNode,
   InlinePromptNodeData,
   LegacyPromptNodeData,
   WorkflowDataNode,
@@ -115,7 +116,7 @@ export async function createNodeContext(
         case "INLINE": {
           return new InlinePromptNodeContext({
             ...args,
-            nodeData: promptNodeData,
+            nodeData: promptNodeData as InlinePromptNode,
           });
         }
         case "LEGACY": {

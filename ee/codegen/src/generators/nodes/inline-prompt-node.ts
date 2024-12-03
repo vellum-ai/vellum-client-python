@@ -3,13 +3,19 @@ import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { InlinePromptNodeContext } from "src/context/node-context/inline-prompt-node";
+import { PromptTemplateBlockExcludingFunctionDefinition } from "src/generators/base-prompt-block";
+import { FunctionDefinition } from "src/generators/function-definition";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
 import { PromptBlock } from "src/generators/prompt-block";
 import { PromptParameters } from "src/generators/prompt-parameters-request";
-import { InlinePromptNodeData, PromptNode } from "src/types/vellum";
+import {
+  InlinePromptNode as InlinePromptNodeType,
+  FunctionDefinitionPromptTemplateBlock,
+  InlinePromptNodeData,
+} from "src/types/vellum";
 
 export class InlinePromptNode extends BaseSingleFileNode<
-  PromptNode,
+  InlinePromptNodeType,
   InlinePromptNodeContext
 > {
   baseNodeClassName = "InlinePromptNode";
@@ -25,6 +31,17 @@ export class InlinePromptNode extends BaseSingleFileNode<
     }
 
     const nodeData: InlinePromptNodeData = this.nodeData.data;
+    const blocksExcludingFunctionDefinition =
+      nodeData.execConfig.promptTemplateBlockData.blocks.filter(
+        (block): block is PromptTemplateBlockExcludingFunctionDefinition =>
+          block.blockType !== "FUNCTION_DEFINITION"
+      );
+
+    const functionDefinitions =
+      nodeData.execConfig.promptTemplateBlockData.blocks.filter(
+        (block): block is FunctionDefinitionPromptTemplateBlock =>
+          block.blockType === "FUNCTION_DEFINITION"
+      );
 
     statements.push(
       python.field({
@@ -36,13 +53,16 @@ export class InlinePromptNode extends BaseSingleFileNode<
       python.field({
         name: "blocks",
         initializer: python.TypeInstantiation.list(
-          this.nodeData.data.execConfig.promptTemplateBlockData.blocks.map(
-            (block) => {
-              return new PromptBlock({
-                promptBlock: block,
-              });
-            }
-          )
+          blocksExcludingFunctionDefinition.map((block) => {
+            return new PromptBlock({
+              promptBlock: block,
+              inputVariableNameById: Object.fromEntries(
+                this.nodeData.data.execConfig.inputVariables.map(
+                  (inputVariable) => [inputVariable.id, inputVariable.key]
+                )
+              ),
+            });
+          })
         ),
       })
     );
@@ -67,6 +87,20 @@ export class InlinePromptNode extends BaseSingleFileNode<
         ),
       })
     );
+
+    if (functionDefinitions.length > 0) {
+      statements.push(
+        python.field({
+          name: "functions",
+          initializer: python.TypeInstantiation.list(
+            functionDefinitions.map(
+              (functionDefinition) =>
+                new FunctionDefinition({ functionDefinition })
+            )
+          ),
+        })
+      );
+    }
 
     return statements;
   }

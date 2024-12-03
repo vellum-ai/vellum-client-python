@@ -90,7 +90,7 @@ def test_serialize_workflow():
         (
             (node, index)
             for index, node in enumerate(workflow_raw_data["nodes"])
-            if node.get("data", {}).get("label") == "Error Node"
+            if node.get("data", {}).get("label") == "Fail Node"
         ),
         (None, None),
     )
@@ -99,7 +99,7 @@ def test_serialize_workflow():
             "data": {
                 "error_output_id": "None",
                 "error_source_input_id": "None",
-                "label": "Error Node",
+                "label": "Fail Node",
                 "target_handle_id": "70c19f1c-309c-4a5d-ba65-664c0bb2fedf",
             },
             "definition": {

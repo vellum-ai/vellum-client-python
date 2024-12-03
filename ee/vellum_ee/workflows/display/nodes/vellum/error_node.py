@@ -17,7 +17,6 @@ class BaseErrorNodeDisplay(BaseNodeVellumDisplay[_ErrorNodeType], Generic[_Error
     ) -> JsonObject:
         node = self._node
         node_id = self.node_id
-
         error_source_input_id = self.node_input_ids_by_name.get("error_source_input_id")
 
         node_inputs = [

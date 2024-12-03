@@ -75,16 +75,23 @@ jobs:
         run: npm run build
         working-directory: ee/codegen
 
+      - id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: "access_token"
+          create_credentials_file: true
+          workload_identity_provider: "projects/585775334980/locations/global/workloadIdentityPools/github-pool/providers/github-actions-provider"
+          service_account: "github-gcr-service-account@vocify-prod.iam.gserviceaccount.com"
+          access_token_lifetime: "1200s"
+
       - name: Authenticate with registry
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
         run: npm run gar-login
         working-directory: ee/codegen
 
       - name: Publish
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
         run: npm publish
         working-directory: ee/codegen
-
-      - name: Notify on failure
-        if: failure()
-        run: |
-          echo "Publishing failed. Please check the logs and publish manually."
-          echo "Please see the ee/codegen/README.md for more information."

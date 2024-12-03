@@ -1,7 +1,7 @@
 from .api_node import APINodeDisplay
 from .conditional_node import ConditionalNodeDisplay
 from .faa_document_store import FAADocumentStoreDisplay
-from .final_output_2 import FinalOutput2Display
+from .final_output import FinalOutputDisplay
 from .formatted_search_results import FormattedSearchResultsDisplay
 from .most_recent_message import MostRecentMessageDisplay
 from .prompt_node import PromptNodeDisplay
@@ -27,7 +27,7 @@ __all__ = [
     "PromptNodeDisplay",
     "PromptNode9Display",
     "FAADocumentStoreDisplay",
-    "FinalOutput2Display",
+    "FinalOutputDisplay",
     "MostRecentMessageDisplay",
     "FormattedSearchResultsDisplay",
 ]

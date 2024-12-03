@@ -1446,7 +1446,7 @@
         "id": "f9c5254c-b86d-420d-811a-a1674df273cd",
         "type": "TERMINAL",
         "data": {
-          "label": "Final Output 2",
+          "label": "Final Output",
           "name": "answer",
           "target_handle_id": "87d73dc6-cafd-4f8b-b2fd-8367baba5d61",
           "output_id": "8c6e5464-8916-4039-b911-cf707855d372",

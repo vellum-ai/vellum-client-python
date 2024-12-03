@@ -1,8 +1,8 @@
 from uuid import UUID
-from typing import ClassVar, Generic, Optional, TypeVar
+from typing import Any, ClassVar, Dict, Generic, Optional, TypeVar
 
 from vellum.workflows.nodes import ErrorNode
-from vellum.workflows.types.core import EntityInputsInterface, JsonObject
+from vellum.workflows.types.core import EntityInputsInterface, Json, JsonObject
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
@@ -11,7 +11,7 @@ _ErrorNodeType = TypeVar("_ErrorNodeType", bound=ErrorNode)
 
 class BaseErrorNodeDisplay(BaseNodeVellumDisplay[_ErrorNodeType], Generic[_ErrorNodeType]):
     error_output_id: ClassVar[Optional[UUID]] = None
-    error_inputs_by_name: ClassVar[EntityInputsInterface] = {}
+    error_inputs_by_name: ClassVar[Dict[str, Any]] = {}
     name: ClassVar[str] = "error-node"
 
     def serialize(

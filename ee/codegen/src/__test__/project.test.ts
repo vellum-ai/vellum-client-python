@@ -56,7 +56,6 @@ describe("WorkflowProjectGenerator", () => {
 
         const project = new WorkflowProjectGenerator({
           absolutePathToOutputDirectory: tempDir,
-          workflowLabel: "Workflow",
           workflowVersionExecConfigData: displayData,
           moduleName: "code",
           vellumApiKey: "<TEST_API_KEY>",

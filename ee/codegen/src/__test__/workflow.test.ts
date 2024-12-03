@@ -21,7 +21,6 @@ describe("Workflow", () => {
 
   beforeEach(async () => {
     workflowContext = workflowContextFactory({
-      workflowLabel: "TestWorkflow",
       workflowClassName: "TestWorkflow",
     });
     workflowContext.addEntrypointNode(entrypointNode);

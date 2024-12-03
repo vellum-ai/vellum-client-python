@@ -13,7 +13,6 @@ import {
   WorkflowDataNode,
   WorkflowEdge,
 } from "src/types/vellum";
-import { createPythonClassName } from "src/utils/casing";
 
 type InputVariableContextsById = Map<string, InputVariableContext>;
 
@@ -26,8 +25,7 @@ export declare namespace WorkflowContext {
   export type Args = {
     absolutePathToOutputDirectory: string;
     moduleName: string;
-    workflowLabel?: string;
-    workflowClassName?: string;
+    workflowClassName: string;
     globalInputVariableContextsById?: InputVariableContextsById;
     globalNodeContextsByNodeId?: NodeContextsByNodeId;
     parentNode?: BaseNode<WorkflowDataNode, BaseNodeContext<WorkflowDataNode>>;
@@ -80,7 +78,6 @@ export class WorkflowContext {
   constructor({
     absolutePathToOutputDirectory,
     moduleName,
-    workflowLabel,
     workflowClassName,
     globalInputVariableContextsById,
     globalNodeContextsByNodeId,
@@ -98,9 +95,7 @@ export class WorkflowContext {
           GENERATED_WORKFLOW_MODULE_NAME,
         ]
       : [this.moduleName, GENERATED_WORKFLOW_MODULE_NAME];
-    this.label = workflowLabel || "Workflow";
-    this.workflowClassName =
-      workflowClassName || createPythonClassName(this.label);
+    this.workflowClassName = workflowClassName;
     this.vellumApiKey = vellumApiKey;
 
     this.inputVariableContextsById = new Map();
@@ -120,18 +115,18 @@ export class WorkflowContext {
 
   /* Create a new workflow context for a nested workflow from its parent */
   public createNestedWorkflowContext({
-    workflowLabel,
     parentNode,
+    workflowClassName,
     workflowRawEdges,
   }: {
-    workflowLabel: string;
     parentNode: BaseNode<WorkflowDataNode, BaseNodeContext<WorkflowDataNode>>;
+    workflowClassName: string;
     workflowRawEdges: WorkflowEdge[];
   }) {
     return new WorkflowContext({
       absolutePathToOutputDirectory: this.absolutePathToOutputDirectory,
       moduleName: this.moduleName,
-      workflowLabel,
+      workflowClassName: workflowClassName,
       globalInputVariableContextsById: this.globalInputVariableContextsById,
       globalNodeContextsByNodeId: this.globalNodeContextsByNodeId,
       parentNode,

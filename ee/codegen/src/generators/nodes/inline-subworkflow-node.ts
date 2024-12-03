@@ -180,6 +180,7 @@ export class InlineSubworkflowNode extends BaseNestedWorkflowNode<
         inputVariables: inlineSubworkflowNodeData.inputVariables,
         outputVariables: inlineSubworkflowNodeData.outputVariables,
       },
+      moduleName: nestedWorkflowContext.moduleName,
       workflowContext: nestedWorkflowContext,
     });
   }

@@ -42,17 +42,17 @@ def push(
 
 @main.command()
 @click.argument("module", required=False)
-@click.option("--legacy-module", is_flag=True, help="Pull the workflow as a legacy module")
+@click.option("--legacy-module", is_flag=True, help="Pull the Workflow as a legacy module")
 @click.option(
     "--include-json",
     is_flag=True,
     help="Include the JSON representation of the Workflow in the pull response. Should only be used for debugging purposes.",
 )
-@click.option("--workflow-sandbox-id", type=str, help="Pull the workflow from a specific sandbox ID")
+@click.option("--workflow-sandbox-id", type=str, help="Pull the Workflow from a specific Sandbox ID")
 @click.option(
     "--exclude-code",
     is_flag=True,
-    help="Exclude the code from the pull response. Should only be used for debugging purposes.",
+    help="Exclude the code definition of the Workflow from the pull response. Should only be used for debugging purposes.",
 )
 def pull(
     module: Optional[str],

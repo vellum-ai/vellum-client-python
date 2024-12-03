@@ -30,7 +30,7 @@ def pull_command(
     save_lock_file = False
     if workflow_config is None:
         if module:
-            raise ValueError(f"No workflow config for '{module}' found in project to push.")
+            raise ValueError(f"No workflow config for '{module}' found in project to pull.")
         elif workflow_sandbox_id:
             workflow_config = WorkflowConfig(
                 workflow_sandbox_id=workflow_sandbox_id,

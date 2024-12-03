@@ -62,7 +62,6 @@ import {
   WorkflowNodeType as WorkflowNodeTypeEnum,
   WorkflowVersionExecConfig,
 } from "src/types/vellum";
-import { toSnakeCase } from "src/utils/casing";
 import { getNodeId } from "src/utils/nodes";
 import { assertUnreachable } from "src/utils/typing";
 
@@ -72,9 +71,7 @@ export class ProjectSerializationError extends Error {
 
 export declare namespace WorkflowProjectGenerator {
   interface BaseArgs {
-    workflowLabel?: string;
-    moduleName?: string;
-    workflowClassName?: string;
+    moduleName: string;
   }
 
   interface BaseProject extends BaseArgs {
@@ -96,12 +93,7 @@ export class WorkflowProjectGenerator {
   public readonly workflowVersionExecConfig: WorkflowVersionExecConfig;
   private readonly workflowContext: WorkflowContext;
 
-  constructor({
-    workflowLabel = "Workflow",
-    moduleName,
-    workflowClassName,
-    ...rest
-  }: WorkflowProjectGenerator.Args) {
+  constructor({ moduleName, ...rest }: WorkflowProjectGenerator.Args) {
     if ("workflowContext" in rest) {
       this.workflowContext = rest.workflowContext;
       this.workflowVersionExecConfig = rest.workflowVersionExecConfig;
@@ -141,11 +133,15 @@ ${errors.slice(0, 3).map((err) => {
 
       this.workflowVersionExecConfig = workflowVersionExecConfigResult.value;
       const rawEdges = this.workflowVersionExecConfig.workflowRawData.edges;
+
+      const workflowClassName =
+        this.workflowVersionExecConfig.workflowRawData.definition?.name ||
+        "Workflow";
+
       this.workflowContext = new WorkflowContext({
         workflowsSdkModulePath: rest.workflowsSdkModulePath,
         absolutePathToOutputDirectory: rest.absolutePathToOutputDirectory,
-        moduleName: moduleName || toSnakeCase(workflowLabel),
-        workflowLabel,
+        moduleName,
         workflowClassName,
         vellumApiKey,
         workflowRawEdges: rawEdges,

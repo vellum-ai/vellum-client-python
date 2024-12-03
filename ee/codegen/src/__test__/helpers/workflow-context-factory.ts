@@ -3,7 +3,6 @@ import { WorkflowContext } from "src/context";
 export function workflowContextFactory({
   absolutePathToOutputDirectory,
   moduleName,
-  workflowLabel,
   workflowClassName,
   workflowRawEdges,
 }: Partial<WorkflowContext.Args> = {}): WorkflowContext {
@@ -11,8 +10,7 @@ export function workflowContextFactory({
     absolutePathToOutputDirectory:
       absolutePathToOutputDirectory || "./src/__tests__/",
     moduleName: moduleName || "code",
-    workflowClassName: workflowLabel || "Workflow",
-    workflowLabel: workflowClassName || "Workflow",
+    workflowClassName: workflowClassName || "Workflow",
     vellumApiKey: "<TEST_API_KEY>",
     workflowRawEdges: workflowRawEdges || [],
   });

@@ -151,6 +151,7 @@ export class MapNode extends BaseNestedWorkflowNode<
         inputVariables: mapNodeData.inputVariables,
         outputVariables: mapNodeData.outputVariables,
       },
+      moduleName: nestedWorkflowContext.moduleName,
       workflowContext: nestedWorkflowContext,
     });
   }

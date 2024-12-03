@@ -494,36 +494,6 @@ export declare namespace PromptSettingsSerializer {
   }
 }
 
-// const fixVariableBlock = <B extends PromptBlock | RichTextChildBlock>(
-//   block: B,
-//   inputVariableNameById: Record<string, string>
-// ): B => {
-//   if (block.blockType === "VARIABLE") {
-//     return {
-//       ...block,
-//       inputVariable:
-//         inputVariableNameById[block.inputVariable] ?? block.inputVariable,
-//     };
-//   }
-//   if (block.blockType === "CHAT_MESSAGE") {
-//     return {
-//       ...block,
-//       blocks: block.blocks.map((b) =>
-//         fixVariableBlock(b, inputVariableNameById)
-//       ),
-//     };
-//   }
-//   if (block.blockType === "RICH_TEXT") {
-//     return {
-//       ...block,
-//       blocks: block.blocks.map((b) =>
-//         fixVariableBlock(b, inputVariableNameById)
-//       ),
-//     };
-//   }
-//   return block;
-// };
-
 export const PromptVersionExecConfigSerializer: Schema<
   PromptVersionExecConfigSerializer.Raw,
   PromptVersionExecConfig

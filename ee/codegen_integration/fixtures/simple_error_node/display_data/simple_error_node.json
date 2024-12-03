@@ -29,6 +29,7 @@
         "data": {
           "name": "error-node",
           "label": "Error Node",
+          "source_handle_id": "e4dedb66-0638-4f0c-9941-6420bfe353b2",
           "target_handle_id": "370d712d-3369-424e-bcf7-f4da1aef3928",
           "error_source_input_id": "f3a0d8b9-7772-4db6-8e28-f49f8c4d9e2a",
           "error_output_id": "77839b3c-fe1c-4dcb-9c61-2fac827f729b"
@@ -111,7 +112,7 @@
         "id": "2fb36bc6-ac91-4aad-bb58-fbc6c95ed6e3",
         "type": "DEFAULT",
         "source_node_id": "e5ff9360-a29c-437b-a9c1-05fc52df2834",
-        "source_handle_id": "77839b3c-fe1c-4dcb-9c61-2fac827f729b",
+        "source_handle_id": "e4dedb66-0638-4f0c-9941-6420bfe353b2",
         "target_node_id": "ed688426-1976-4d0c-9f3a-2a0b0fae161a",
         "target_handle_id": "b28439f6-0c1e-44c0-87b1-b7fa3c7408b2"
       }

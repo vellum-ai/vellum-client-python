@@ -15,7 +15,7 @@ class ErrorNodeDisplay(BaseErrorNodeDisplay[ErrorNode]):
     }
     port_displays = {
         ErrorNode.Ports.default: PortDisplayOverrides(
-            id=UUID("370d712d-3369-424e-bcf7-f4da1aef3928")
+            id=UUID("e4dedb66-0638-4f0c-9941-6420bfe353b2")
         )
     }
     display_data = NodeDisplayData(

@@ -9,7 +9,6 @@ from vellum_ee.workflows.display.vellum import (
     WorkflowDisplayDataViewport,
     WorkflowInputsVellumDisplayOverrides,
     WorkflowMetaVellumDisplayOverrides,
-    WorkflowOutputVellumDisplayOverrides,
 )
 from vellum_ee.workflows.display.workflows.vellum_workflow_display import VellumWorkflowDisplay
 
@@ -36,5 +35,4 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
             edge_display=EdgeVellumDisplayOverrides(id=UUID("bcd998c4-0df4-4f59-8b15-ed1f64c5c157")),
         )
     }
-    edge_displays = {}
     output_displays = {}

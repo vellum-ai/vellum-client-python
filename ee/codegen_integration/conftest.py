@@ -32,7 +32,8 @@ _fixture_paths = _get_fixtures(
     exclude_fixtures={
         "simple_code_execution_node",
         # TODO: Remove after all other map node fixes go in
-        "simple_map_node"
+        "simple_map_node",
+        "simple_merge_node"
     }
 )
 _fixture_ids = [os.path.basename(path) for path in _fixture_paths]

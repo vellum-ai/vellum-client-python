@@ -22,9 +22,9 @@ class ErrorNode(BaseErrorNode[StateType]):
         """
         The outputs of the ErrorNode.
 
-        error: str - The error message
+        value: str - The error message
         """
-        error: str
+        value: str
 
     def run(self) -> Outputs:
         return self.Outputs(error=self.error_source_input_id)

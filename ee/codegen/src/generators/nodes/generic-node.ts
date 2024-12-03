@@ -1,3 +1,4 @@
+import { Field } from "@fern-api/python-ast/Field";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
 import { GenericNodeContext } from "src/context/node-context/generic-node";
@@ -19,6 +20,10 @@ export class GenericNode extends BaseSingleFileNode<
   getNodeDisplayClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
     return statements;
+  }
+
+  protected getOutputDisplay(): Field | undefined {
+    return undefined;
   }
 
   protected getErrorOutputId(): string | undefined {

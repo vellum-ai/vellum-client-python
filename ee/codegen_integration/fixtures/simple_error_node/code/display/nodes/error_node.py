@@ -9,6 +9,7 @@ from ...nodes.error_node import ErrorNode
 
 class ErrorNodeDisplay(BaseErrorNodeDisplay[ErrorNode]):
     label = "Error Node"
+    error_output_id = UUID("77839b3c-fe1c-4dcb-9c61-2fac827f729b")
     node_input_ids_by_name = {"error_source_input_id": UUID("f3a0d8b9-7772-4db6-8e28-f49f8c4d9e2a")}
     port_displays = {ErrorNode.Ports.default: PortDisplayOverrides(id=UUID("e4dedb66-0638-4f0c-9941-6420bfe353b2"))}
     display_data = NodeDisplayData(

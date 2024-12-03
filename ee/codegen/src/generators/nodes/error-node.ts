@@ -35,6 +35,15 @@ export class ErrorNode extends BaseSingleFileNode<
       })
     );
 
+    statements.push(
+      python.field({
+        name: "error_output_id",
+        initializer: python.TypeInstantiation.uuid(
+          this.nodeData.data.errorOutputId
+        ),
+      })
+    );
+
     return statements;
   }
 

@@ -985,7 +985,18 @@ export function errorNodeDataFactory(): ErrorNode {
         id: errorSourceInputId,
         key: "error_source_input_id",
         value: {
-          rules: [],
+          rules: [
+            {
+              type: "CONSTANT_VALUE",
+              data: {
+                type: "ERROR",
+                value: {
+                  message: "Something went wrong!",
+                  code: "USER_DEFINED_ERROR",
+                },
+              },
+            },
+          ],
           combinator: "OR",
         },
       },

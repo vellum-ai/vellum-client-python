@@ -10,6 +10,7 @@ from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosit
 
 class ErrorNodeDisplay(BaseErrorNodeDisplay[ErrorNode]):
     label = "Error Node"
+    error_output_id = UUID("69250713-617d-42a4-9326-456c70d0ef20")
     node_input_ids_by_name = {
         "error_source_input_id": UUID("d2287fee-98fb-421c-9464-e54d8f70f046")
     }
@@ -26,9 +27,10 @@ class ErrorNodeDisplay(BaseErrorNodeDisplay[ErrorNode]):
 
 exports[`ErrorNode > basic > getNodeFile 1`] = `
 "from vellum.workflows.nodes.displayable import ErrorNode as BaseErrorNode
+from vellum import VellumError
 
 
 class ErrorNode(BaseErrorNode):
-    error = None
+    error = VellumError(message="Something went wrong!", code="USER_DEFINED_ERROR")
 "
 `;

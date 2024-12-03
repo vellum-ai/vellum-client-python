@@ -1,6 +1,7 @@
 from .api_node import BaseAPINodeDisplay
 from .code_execution_node import BaseCodeExecutionNodeDisplay
 from .conditional_node import BaseConditionalNodeDisplay
+from .error_node import BaseErrorNodeDisplay
 from .final_output_node import BaseFinalOutputNodeDisplay
 from .guardrail_node import BaseGuardrailNodeDisplay
 from .inline_prompt_node import BaseInlinePromptNodeDisplay
@@ -16,19 +17,20 @@ from .try_node import BaseTryNodeDisplay
 
 # All node display classes must be imported here to be registered in BaseNodeDisplay's node display registry
 __all__ = [
+    "BaseAPINodeDisplay",
     "BaseCodeExecutionNodeDisplay",
     "BaseConditionalNodeDisplay",
+    "BaseErrorNodeDisplay",
+    "BaseFinalOutputNodeDisplay",
     "BaseGuardrailNodeDisplay",
     "BaseInlinePromptNodeDisplay",
     "BaseInlineSubworkflowNodeDisplay",
-    "BaseAPINodeDisplay",
     "BaseMapNodeDisplay",
     "BaseMergeNodeDisplay",
     "BaseNoteNodeDisplay",
+    "BasePromptDeploymentNodeDisplay",
     "BaseSearchNodeDisplay",
     "BaseSubworkflowDeploymentNodeDisplay",
     "BaseTemplatingNodeDisplay",
-    "BasePromptDeploymentNodeDisplay",
-    "BaseFinalOutputNodeDisplay",
-    "BaseTryNodeDisplay",
+    "BaseTryNodeDisplay"
 ]

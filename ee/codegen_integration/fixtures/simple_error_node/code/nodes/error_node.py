@@ -1,7 +1,7 @@
-from vellum.workflows.nodes.bases.base import BaseNode
+from vellum.workflows.nodes.displayable import ErrorNode as BaseErrorNode
 
 from ..inputs import Inputs
 
 
-class ErrorNode(BaseNode):
-    error = Inputs.error
+class ErrorNode(BaseErrorNode):
+    error = Inputs.query

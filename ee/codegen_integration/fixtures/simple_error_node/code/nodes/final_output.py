@@ -6,4 +6,4 @@ from .error_node import ErrorNode
 
 class FinalOutput(FinalOutputNode[BaseState, str]):
     class Outputs(FinalOutputNode.Outputs):
-        value = ErrorNode.Outputs.text
+        value = ErrorNode.Outputs.error

@@ -44,6 +44,15 @@ export class ErrorNode extends BaseSingleFileNode<
       })
     );
 
+    statements.push(
+      python.field({
+        name: "source_handle_id",
+        initializer: python.TypeInstantiation.uuid(
+          this.nodeData.data.sourceHandleId
+        ),
+      })
+    );
+
     return statements;
   }
 

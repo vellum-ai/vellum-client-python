@@ -69,8 +69,33 @@ def test_pull(vellum_client, mock_module):
     pull_command(module)
 
     # THEN the workflow.py file is written to the module directory
-    assert os.path.exists(os.path.join(temp_dir, *module.split("."), "workflow.py"))
-    with open(os.path.join(temp_dir, *module.split("."), "workflow.py")) as f:
+    workflow_py = os.path.join(temp_dir, *module.split("."), "workflow.py")
+    assert os.path.exists(workflow_py)
+    with open(workflow_py) as f:
+        assert f.read() == "print('hello')"
+
+
+def test_pull__sandbox_id_with_no_config(vellum_client):
+    # GIVEN a workflow sandbox id
+    workflow_sandbox_id = "87654321-0000-0000-0000-000000000000"
+
+    # AND the workflow pull API call returns a zip file
+    vellum_client.workflows.pull.return_value = iter([zip_file_map({"workflow.py": "print('hello')"})])
+
+    # AND we are currently in a new directory
+    current_dir = os.getcwd()
+    temp_dir = tempfile.mkdtemp()
+    os.chdir(temp_dir)
+
+    # WHEN the user runs the pull command with the workflow sandbox id and no module
+    pull_command(workflow_sandbox_id=workflow_sandbox_id)
+    os.chdir(current_dir)
+
+    # THEN the pull api is called with exclude_code=True
+    vellum_client.workflows.pull.assert_called_once()
+    workflow_py = os.path.join(temp_dir, "workflow_87654321", "workflow.py")
+    assert os.path.exists(workflow_py)
+    with open(workflow_py) as f:
         assert f.read() == "print('hello')"
 
 
@@ -168,3 +193,21 @@ def test_pull__include_json(vellum_client, mock_module):
     vellum_client.workflows.pull.assert_called_once()
     call_args = vellum_client.workflows.pull.call_args.kwargs
     assert call_args["request_options"]["additional_query_parameters"] == {"include_json": True}
+
+
+def test_pull__exclude_code(vellum_client, mock_module):
+    # GIVEN a module on the user's filesystem
+    _, module = mock_module
+
+    # AND the workflow pull API call returns a zip file
+    vellum_client.workflows.pull.return_value = iter(
+        [zip_file_map({"workflow.py": "print('hello')", "workflow.json": "{}"})]
+    )
+
+    # WHEN the user runs the pull command
+    pull_command(module, exclude_code=True)
+
+    # THEN the pull api is called with exclude_code=True
+    vellum_client.workflows.pull.assert_called_once()
+    call_args = vellum_client.workflows.pull.call_args.kwargs
+    assert call_args["request_options"]["additional_query_parameters"] == {"exclude_code": True}

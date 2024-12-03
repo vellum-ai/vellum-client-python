@@ -25,7 +25,6 @@ def test_code_to_display_data(code_to_display_fixture_paths, mock_open_code_exec
     with open(expected_display_data_file_path) as file:
         expected_serialized_workflow = json.load(file, object_hook=_custom_obj_hook)  # noqa: F841
 
-
     assert not DeepDiff(
         expected_serialized_workflow,
         actual_serialized_workflow,

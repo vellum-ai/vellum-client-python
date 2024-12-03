@@ -30,6 +30,19 @@ export class ErrorNode extends BaseSingleFileNode<
 
     statements.push(
       python.field({
+        name: "name",
+        initializer: python.TypeInstantiation.str(this.nodeData.data.name),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "node_id",
+        initializer: python.TypeInstantiation.uuid(this.nodeData.id),
+      })
+    );
+    statements.push(
+      python.field({
         name: "label",
         initializer: python.TypeInstantiation.str(this.nodeData.data.label),
       })
@@ -49,6 +62,27 @@ export class ErrorNode extends BaseSingleFileNode<
         name: "source_handle_id",
         initializer: python.TypeInstantiation.uuid(
           this.nodeData.data.sourceHandleId
+        ),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "target_handle_id",
+        initializer: python.TypeInstantiation.uuid(
+          this.nodeData.data.targetHandleId
+        ),
+      })
+    );
+
+    statements.push(
+      python.field({
+        name: "error_inputs_by_name",
+        initializer: python.TypeInstantiation.dict(
+          Array.from(this.nodeInputsByKey.entries()).map(([key, value]) => ({
+            key: python.TypeInstantiation.str(key),
+            value: value,
+          }))
         ),
       })
     );

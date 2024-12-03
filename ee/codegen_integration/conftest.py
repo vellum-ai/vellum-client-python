@@ -32,7 +32,8 @@ _fixture_paths = _get_fixtures(
     exclude_fixtures={
         "faa_q_and_a_bot",
         "simple_merge_node"
-    }
+    },
+    include_fixtures={"simple_error_node"}
 )
 _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
 

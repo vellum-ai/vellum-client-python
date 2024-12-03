@@ -3,24 +3,35 @@ import { ClassInstantiation } from "@fern-api/python-ast/ClassInstantiation";
 import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
+
 import {
-  PromptBlock as PromptBlockType,
-  FunctionDefinition as FunctionDefinitionType,
-} from "vellum-ai/api";
+  FunctionDefinitionPromptTemplateBlock,
+  PromptTemplateBlock,
+} from "src/types/vellum";
+
+export type PromptTemplateBlockExcludingFunctionDefinition = Exclude<
+  PromptTemplateBlock,
+  FunctionDefinitionPromptTemplateBlock
+>;
 
 export declare namespace BasePromptBlock {
-  interface Args<T extends PromptBlockType | FunctionDefinitionType> {
+  interface Args<T extends PromptTemplateBlockExcludingFunctionDefinition> {
     promptBlock: T;
+    inputVariableNameById: Record<string, string>;
   }
 }
 
 export abstract class BasePromptBlock<
-  T extends PromptBlockType | FunctionDefinitionType
+  T extends PromptTemplateBlockExcludingFunctionDefinition
 > extends AstNode {
   private astNode: python.ClassInstantiation;
-
-  public constructor({ promptBlock }: BasePromptBlock.Args<T>) {
+  protected inputVariableNameById: Record<string, string>;
+  public constructor({
+    promptBlock,
+    inputVariableNameById,
+  }: BasePromptBlock.Args<T>) {
     super();
+    this.inputVariableNameById = inputVariableNameById;
     this.astNode = this.generateAstNode(promptBlock);
   }
 

@@ -1,61 +1,81 @@
 import { python } from "@fern-api/python-ast";
 import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
+import { Writer } from "@fern-api/python-ast/core/Writer";
+import { AstNode } from "@fern-api/python-ast/python";
 import { isNil } from "lodash";
-import { FunctionDefinition as FunctionDefinitionType } from "vellum-ai/api";
 
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
-import { BasePromptBlock } from "src/generators/base-prompt-block";
 import { Json } from "src/generators/json";
+import { FunctionDefinitionPromptTemplateBlock } from "src/types/vellum";
 
-export class FunctionDefinition extends BasePromptBlock<FunctionDefinitionType> {
+export declare namespace FunctionDefinition {
+  interface Args {
+    functionDefinition: FunctionDefinitionPromptTemplateBlock;
+  }
+}
+
+export class FunctionDefinition extends AstNode {
+  private astNode: python.ClassInstantiation;
+
+  public constructor({ functionDefinition }: FunctionDefinition.Args) {
+    super();
+    this.astNode = this.generateAstNode(functionDefinition);
+  }
+
   protected generateAstNode(
-    functionDefinition: FunctionDefinitionType
+    functionDefinition: FunctionDefinitionPromptTemplateBlock
   ): python.ClassInstantiation {
-    const classArgs: MethodArgument[] = [
-      ...this.constructCommonClassArguments(functionDefinition),
-    ];
+    const classArgs: MethodArgument[] = [];
 
-    if (!isNil(functionDefinition.name)) {
+    if (!isNil(functionDefinition.properties.functionName)) {
       classArgs.push(
         new MethodArgument({
           name: "name",
-          value: python.TypeInstantiation.str(functionDefinition.name),
+          value: python.TypeInstantiation.str(
+            functionDefinition.properties.functionName
+          ),
         })
       );
     }
 
-    if (!isNil(functionDefinition.description)) {
+    if (!isNil(functionDefinition.properties.functionDescription)) {
       classArgs.push(
         new MethodArgument({
           name: "description",
-          value: python.TypeInstantiation.str(functionDefinition.description),
+          value: python.TypeInstantiation.str(
+            functionDefinition.properties.functionDescription
+          ),
         })
       );
     }
 
-    if (!isNil(functionDefinition.parameters)) {
+    if (!isNil(functionDefinition.properties.functionParameters)) {
       classArgs.push(
         new MethodArgument({
           name: "parameters",
-          value: new Json(functionDefinition.parameters),
+          value: new Json(functionDefinition.properties.functionParameters),
         })
       );
     }
 
-    if (!isNil(functionDefinition.forced)) {
+    if (!isNil(functionDefinition.properties.functionForced)) {
       classArgs.push(
         new MethodArgument({
           name: "function_forced",
-          value: python.TypeInstantiation.bool(functionDefinition.forced),
+          value: python.TypeInstantiation.bool(
+            functionDefinition.properties.functionForced
+          ),
         })
       );
     }
 
-    if (!isNil(functionDefinition.strict)) {
+    if (!isNil(functionDefinition.properties.functionStrict)) {
       classArgs.push(
         new MethodArgument({
           name: "function_strict",
-          value: python.TypeInstantiation.bool(functionDefinition.strict),
+          value: python.TypeInstantiation.bool(
+            functionDefinition.properties.functionStrict
+          ),
         })
       );
     }
@@ -70,5 +90,9 @@ export class FunctionDefinition extends BasePromptBlock<FunctionDefinitionType> 
 
     this.inheritReferences(functionDefinitionClass);
     return functionDefinitionClass;
+  }
+
+  public write(writer: Writer): void {
+    this.astNode.write(writer);
   }
 }

@@ -115,6 +115,22 @@ export abstract class BaseNode<
     return nodeInput;
   }
 
+  protected findNodeInputById(nodeInputId: string): NodeInput | undefined {
+    const nodeInput = Array.from(Object.values(this.nodeInputsByKey)).find(
+      (nodeInput: NodeInput) => nodeInput.nodeInputData.id === nodeInputId
+    );
+    return nodeInput;
+  }
+
+  protected getNodeInputById(nodeInputId: string): NodeInput {
+    const nodeInput = this.findNodeInputById(nodeInputId);
+    if (!nodeInput) {
+      throw new Error(`No input found with ID of "${nodeInputId}"`);
+    }
+
+    return nodeInput;
+  }
+
   public getNodeClassName() {
     return this.nodeContext.nodeClassName;
   }

@@ -1,5 +1,6 @@
-from tests.workflows.basic_node_streaming.workflow import BasicNodeStreaming, Inputs, StreamingNode
 from vellum.workflows.events.types import WorkflowEventType
+
+from tests.workflows.basic_node_streaming.workflow import BasicNodeStreaming, Inputs, StreamingNode
 
 
 def test_run_workflow__happy_path():
@@ -8,7 +9,7 @@ def test_run_workflow__happy_path():
 
     # WHEN the workflow is run
     inputs = Inputs(foo="Hello")
-    events = list(workflow.stream(event_types={WorkflowEventType.WORKFLOW, WorkflowEventType.NODE}, inputs=inputs))
+    events = list(workflow.stream(event_filter=workflow.ROOT_EVENT_FILTER, inputs=inputs))
 
     # THEN the workflow should have emitted 14 events
     #

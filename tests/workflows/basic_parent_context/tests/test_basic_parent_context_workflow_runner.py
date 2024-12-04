@@ -14,7 +14,7 @@ def test_run_workflow__happy_path():
 
 def test_stream_workflow__happy_path():
     workflow = TrivialWorkflow()
-    events = list(workflow.stream(event_types={WorkflowEventType.WORKFLOW, WorkflowEventType.NODE}))
+    events = list(workflow.stream(event_filter=workflow.ROOT_EVENT_FILTER))
 
     assert len(events) == 4
 
@@ -23,9 +23,9 @@ def test_stream_workflow__happy_path():
 
     assert events[1].name == "node.execution.initiated"
     parent_context = events[1].parent.model_dump() if events[1].parent else {}
-    assert parent_context.get('type') == 'WORKFLOW'
-    assert parent_context.get('parent') is None
-    assert parent_context.get('workflow_definition') is not None
+    assert parent_context.get("type") == "WORKFLOW"
+    assert parent_context.get("parent") is None
+    assert parent_context.get("workflow_definition") is not None
 
     assert events[-1].name == "workflow.execution.fulfilled"
     assert events[-1].parent is None

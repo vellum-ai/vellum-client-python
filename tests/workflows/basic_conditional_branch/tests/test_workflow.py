@@ -54,7 +54,7 @@ def test_stream_workflow__verify_invoked_ports():
     # WHEN we stream the Workflow
     stream = workflow.stream(
         inputs=Inputs(value=True),
-        event_types={WorkflowEventType.WORKFLOW, WorkflowEventType.NODE},
+        event_filter=workflow.ROOT_EVENT_FILTER,
     )
     events = list(stream)
 

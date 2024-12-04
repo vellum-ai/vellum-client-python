@@ -13,6 +13,7 @@ from threading import Event as ThreadingEvent
 from uuid import uuid4
 from typing import (
     Any,
+    Callable,
     ClassVar,
     Dict,
     Generator,
@@ -239,14 +240,14 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
 
     def stream(
         self,
-        event_types: Optional[Set[WorkflowEventType]] = None,
+        event_filter: Optional[Callable[[WorkflowEvent], bool]] = None,
         inputs: Optional[WorkflowInputsType] = None,
         state: Optional[StateType] = None,
         entrypoint_nodes: Optional[RunFromNodeArg] = None,
         external_inputs: Optional[ExternalInputsArg] = None,
         cancel_signal: Optional[ThreadingEvent] = None,
     ) -> WorkflowEventStream:
-        event_types = event_types or {WorkflowEventType.WORKFLOW}
+        should_yield = event_filter or self.DEFAULT_EVENT_FILTER
         for event in WorkflowRunner(
             self,
             inputs=inputs,
@@ -255,8 +256,40 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             external_inputs=external_inputs,
             cancel_signal=cancel_signal,
         ).stream():
-            if WorkflowEventType(event.name.split(".")[0].upper()) in event_types:
+            if should_yield(event):
                 yield event
+
+    def DEFAULT_EVENT_FILTER(self, event: WorkflowEvent) -> bool:
+        if (
+            event.name == "workflow.execution.initiated"
+            or event.name == "workflow.execution.resumed"
+            or event.name == "workflow.execution.fulfilled"
+            or event.name == "workflow.execution.rejected"
+            or event.name == "workflow.execution.paused"
+            or event.name == "workflow.execution.streaming"
+        ):
+            return event.workflow_definition == self.__class__
+
+        return False
+
+    def ROOT_EVENT_FILTER(self, event: WorkflowEvent) -> bool:
+        if (
+            event.name == "workflow.execution.initiated"
+            or event.name == "workflow.execution.resumed"
+            or event.name == "workflow.execution.fulfilled"
+            or event.name == "workflow.execution.rejected"
+            or event.name == "workflow.execution.paused"
+            or event.name == "workflow.execution.streaming"
+        ):
+            return event.workflow_definition == self.__class__
+
+        if not event.parent:
+            return False
+
+        if event.parent.type != "WORKFLOW":
+            return False
+
+        return event.parent.workflow_definition == self.__class__
 
     def validate(self) -> None:
         """

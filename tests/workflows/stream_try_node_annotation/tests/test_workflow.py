@@ -16,7 +16,7 @@ def test_workflow_stream__happy_path():
     # WHEN we stream the events of the Workflow
     stream = workflow.stream(
         inputs=Inputs(items=["apple", "banana", "cherry"]),
-        event_types={WorkflowEventType.NODE, WorkflowEventType.WORKFLOW},
+        event_filter=workflow.ROOT_EVENT_FILTER,
     )
     events = list(stream)
 

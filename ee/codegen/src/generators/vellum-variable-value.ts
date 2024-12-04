@@ -348,7 +348,6 @@ export class VellumValue extends AstNode {
     if (vellumValue.value === undefined) {
       return;
     }
-
     switch (vellumValue.type) {
       case "STRING":
         this.astNode = new StringVellumValue(vellumValue.value);

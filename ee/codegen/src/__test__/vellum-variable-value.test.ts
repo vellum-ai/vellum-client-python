@@ -135,8 +135,20 @@ describe("VellumValue", () => {
         vellumValue: {
           type: "ARRAY",
           value: [
-            { type: "STRING", value: "Hello, World!" },
-            { type: "NUMBER", value: 42 },
+            {
+              type: "STRING",
+              value: "Hello, World!",
+            },
+            {
+              type: "NUMBER",
+              value: 42,
+            },
+            {
+              type: "AUDIO",
+              value: {
+                src: "https://example.com/audio.mp3",
+              },
+            },
           ],
         },
       });

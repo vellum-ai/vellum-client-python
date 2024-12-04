@@ -3,7 +3,7 @@ from copy import deepcopy
 import logging
 from queue import Empty, Queue
 from threading import Event as ThreadingEvent, Thread
-from uuid import UUID, uuid4
+from uuid import UUID
 from typing import TYPE_CHECKING, Any, Dict, Generic, Iterable, Iterator, Optional, Sequence, Set, Type, Union
 
 from vellum.workflows.constants import UNDEF
@@ -194,7 +194,7 @@ class WorkflowRunner(Generic[StateType]):
                                 span_id=span_id,
                                 body=NodeExecutionStreamingBody(
                                     node_definition=node.__class__,
-                                    output=BaseOutput(name=output.name),
+                                    output=initiated_output,
                                     invoked_ports=initiated_ports,
                                 ),
                                 parent=WorkflowParentContext(

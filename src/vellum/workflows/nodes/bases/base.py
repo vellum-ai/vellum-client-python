@@ -6,7 +6,7 @@ from typing import Any, Dict, Generic, Iterator, Optional, Set, Tuple, Type, Typ
 
 from vellum.workflows.constants import UNDEF
 from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.descriptors.utils import resolve_value
+from vellum.workflows.descriptors.utils import is_unresolved, resolve_value
 from vellum.workflows.edges.edge import Edge
 from vellum.workflows.errors.types import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
@@ -230,6 +230,22 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
             Determines whether a Node's execution should be initiated. Override this method to define custom
             trigger criteria.
             """
+
+            if cls.merge_behavior == MergeBehavior.AWAIT_ATTRIBUTES:
+                if state.meta.node_execution_cache.is_node_execution_initiated(cls.node_class, node_span_id):
+                    return False
+
+                is_ready = True
+                for descriptor in cls.node_class:
+                    if not descriptor.instance:
+                        continue
+
+                    resolved_value = resolve_value(descriptor.instance, state, path=descriptor.name)
+                    if is_unresolved(resolved_value):
+                        is_ready = False
+                        break
+
+                return is_ready
 
             if cls.merge_behavior == MergeBehavior.AWAIT_ANY:
                 if state.meta.node_execution_cache.is_node_execution_initiated(cls.node_class, node_span_id):

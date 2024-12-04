@@ -118,7 +118,9 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
         self._parent_state = parent_state
         self._parent_context = parent_context
         self.emitters = emitters or (self.emitters if hasattr(self, "emitters") else [])
-        self.resolvers = resolvers or (self.resolvers if hasattr(self, "resolvers") else [])
+        self.resolvers = resolvers or (
+            self.resolvers if hasattr(self, "resolvers") else []
+        )
         self._context = context or WorkflowContext()
         self._store = Store()
 
@@ -135,7 +137,8 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             return [original_graph]
         if isinstance(original_graph, set):
             return [
-                subgraph if isinstance(subgraph, Graph) else Graph.from_node(subgraph) for subgraph in original_graph
+                subgraph if isinstance(subgraph, Graph) else Graph.from_node(subgraph)
+                for subgraph in original_graph
             ]
         if issubclass(original_graph, BaseNode):
             return [Graph.from_node(original_graph)]
@@ -192,10 +195,15 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             cancel_signal=cancel_signal,
             parent_context=self._parent_context,
         ).stream()
-        first_event: Optional[Union[WorkflowExecutionInitiatedEvent, WorkflowExecutionResumedEvent]] = None
+        first_event: Optional[
+            Union[WorkflowExecutionInitiatedEvent, WorkflowExecutionResumedEvent]
+        ] = None
         last_event = None
         for event in events:
-            if event.name == "workflow.execution.initiated" or event.name == "workflow.execution.resumed":
+            if (
+                event.name == "workflow.execution.initiated"
+                or event.name == "workflow.execution.resumed"
+            ):
                 first_event = event
             last_event = event
 
@@ -204,7 +212,10 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
                 trace_id=uuid4(),
                 span_id=uuid4(),
                 body=WorkflowExecutionRejectedBody(
-                    error=VellumError(code=VellumErrorCode.INTERNAL_ERROR, message="No events were emitted"),
+                    error=VellumError(
+                        code=VellumErrorCode.INTERNAL_ERROR,
+                        message="No events were emitted",
+                    ),
                     workflow_definition=self.__class__,
                 ),
             )
@@ -215,7 +226,8 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
                 span_id=uuid4(),
                 body=WorkflowExecutionRejectedBody(
                     error=VellumError(
-                        code=VellumErrorCode.INTERNAL_ERROR, message="Initiated event was never emitted"
+                        code=VellumErrorCode.INTERNAL_ERROR,
+                        message="Initiated event was never emitted",
                     ),
                     workflow_definition=self.__class__,
                 ),
@@ -257,6 +269,7 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             entrypoint_nodes=entrypoint_nodes,
             external_inputs=external_inputs,
             cancel_signal=cancel_signal,
+            parent_context=self._parent_context,
         ).stream():
             if WorkflowEventType(event.name.split(".")[0].upper()) in event_types:
                 yield event
@@ -271,7 +284,9 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
 
     @classmethod
     @lru_cache
-    def _get_parameterized_classes(cls) -> Tuple[Type[WorkflowInputsType], Type[StateType]]:
+    def _get_parameterized_classes(
+        cls,
+    ) -> Tuple[Type[WorkflowInputsType], Type[StateType]]:
         original_base = get_original_base(cls)
 
         inputs_type, state_type = get_args(original_base)
@@ -282,10 +297,14 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             state_type = BaseState
 
         if not issubclass(inputs_type, BaseInputs):
-            raise ValueError(f"Expected first type to be a subclass of BaseInputs, was: {inputs_type}")
+            raise ValueError(
+                f"Expected first type to be a subclass of BaseInputs, was: {inputs_type}"
+            )
 
         if not issubclass(state_type, BaseState):
-            raise ValueError(f"Expected second type to be a subclass of BaseState, was: {state_type}")
+            raise ValueError(
+                f"Expected second type to be a subclass of BaseState, was: {state_type}"
+            )
 
         return (inputs_type, state_type)
 
@@ -300,15 +319,23 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
     def get_default_inputs(self) -> WorkflowInputsType:
         return self.get_inputs_class()()
 
-    def get_default_state(self, workflow_inputs: Optional[WorkflowInputsType] = None) -> StateType:
+    def get_default_state(
+        self, workflow_inputs: Optional[WorkflowInputsType] = None
+    ) -> StateType:
         return self.get_state_class()(
-            meta=StateMeta(parent=self._parent_state, workflow_inputs=workflow_inputs or self.get_default_inputs())
+            meta=StateMeta(
+                parent=self._parent_state,
+                workflow_inputs=workflow_inputs or self.get_default_inputs(),
+            )
         )
 
     def get_state_at_node(self, node: Type[BaseNode]) -> StateType:
         event_ts = datetime.min
         for event in self._store.events:
-            if event.name == "node.execution.initiated" and event.node_definition == node:
+            if (
+                event.name == "node.execution.initiated"
+                and event.node_definition == node
+            ):
                 event_ts = event.timestamp
 
         most_recent_state_snapshot: Optional[StateType] = None
@@ -330,7 +357,9 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             next_state = cast(StateType, snapshot)
             if not most_recent_state_snapshot:
                 most_recent_state_snapshot = next_state
-            elif next_state.meta.updated_ts >= most_recent_state_snapshot.meta.updated_ts:
+            elif (
+                next_state.meta.updated_ts >= most_recent_state_snapshot.meta.updated_ts
+            ):
                 most_recent_state_snapshot = next_state
 
         if not most_recent_state_snapshot:

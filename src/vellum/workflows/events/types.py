@@ -4,7 +4,7 @@ import json
 from uuid import UUID, uuid4
 from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union
 
-from pydantic import Field, ValidationError, field_serializer, field_validator
+from pydantic import Field, field_serializer
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
 from vellum.workflows.state.encoder import DefaultStateEncoder
@@ -50,7 +50,7 @@ def default_serializer(obj: Any) -> Any:
 
 class BaseParentContext(UniversalBaseModel):
     span_id: UUID
-    parent: Optional['ParentContext'] = None
+    parent: Optional["ParentContext"] = None
 
 
 class BaseDeploymentParentContext(BaseParentContext):
@@ -74,20 +74,34 @@ class PromptDeploymentParentContext(BaseDeploymentParentContext):
 
 class NodeParentContext(BaseParentContext):
     type: Literal["WORKFLOW_NODE"] = "WORKFLOW_NODE"
-    node_definition: Union[Type['BaseNode'], CodeResourceDefinition]
+    node_definition: Union[Type["BaseNode"], CodeResourceDefinition]
 
     @field_serializer("node_definition")
-    def serialize_node_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
-        return serialize_type_encoder(definition)
+    def serialize_node_definition(
+        self, definition: Union[Type["BaseNode"], CodeResourceDefinition], _info: Any
+    ) -> Dict[str, Any]:
+        return (
+            serialize_type_encoder(definition)
+            if type(definition) is type
+            else default_serializer(definition)
+        )
 
 
 class WorkflowParentContext(BaseParentContext):
     type: Literal["WORKFLOW"] = "WORKFLOW"
-    workflow_definition: Union[Type['BaseWorkflow'], CodeResourceDefinition]
+    workflow_definition: Union[Type["BaseWorkflow"], CodeResourceDefinition]
 
     @field_serializer("workflow_definition")
-    def serialize_workflow_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
-        return serialize_type_encoder(definition)
+    def serialize_workflow_definition(
+        self,
+        definition: Union[Type["BaseWorkflow"], CodeResourceDefinition],
+        _info: Any,
+    ) -> Dict[str, Any]:
+        return (
+            serialize_type_encoder(definition)
+            if type(definition) is type
+            else default_serializer(definition)
+        )
 
 
 ParentContext = Union[

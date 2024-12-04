@@ -5,6 +5,8 @@ import { isNil } from "lodash";
 import {
   ChatMessageRequest,
   FunctionCall,
+  SearchResult,
+  VellumAudio,
   VellumError,
   VellumImage,
   VellumValue as VellumVariableValueType,
@@ -218,6 +220,43 @@ class ImageVellumValue extends AstNode {
   }
 }
 
+class AudioVellumValue extends AstNode {
+  private value: VellumAudio;
+
+  public constructor(value: VellumAudio) {
+    super();
+    this.value = value;
+  }
+
+  public write(writer: Writer): void {
+    const arguments_ = [
+      python.methodArgument({
+        name: "src",
+        value: python.TypeInstantiation.str(this.value.src),
+      }),
+    ];
+
+    if (!isNil(this.value.metadata)) {
+      arguments_.push(
+        python.methodArgument({
+          name: "metadata",
+          value: new Json(this.value.metadata),
+        })
+      );
+    }
+
+    python
+      .instantiateClass({
+        classReference: python.reference({
+          name: "VellumAudio",
+          modulePath: VELLUM_CLIENT_MODULE_PATH,
+        }),
+        arguments_: arguments_,
+      })
+      .write(writer);
+  }
+}
+
 class FunctionCallVellumValue extends AstNode {
   private value: FunctionCall;
 
@@ -268,6 +307,62 @@ class FunctionCallVellumValue extends AstNode {
   }
 }
 
+class SearchResultsVellumValue extends AstNode {
+  private value: SearchResult[];
+
+  public constructor(value: SearchResult[]) {
+    super();
+    this.value = value;
+  }
+
+  public write(writer: Writer): void {
+    const searchResults = this.value.map((result) => {
+      const arguments_ = [
+        python.methodArgument({
+          name: "text",
+          value: python.TypeInstantiation.str(result.text),
+        }),
+        python.methodArgument({
+          name: "score",
+          value: python.TypeInstantiation.float(result.score),
+        }),
+        python.methodArgument({
+          name: "keywords",
+          value: python.TypeInstantiation.list(
+            result.keywords.map((k) => python.TypeInstantiation.str(k))
+          ),
+        }),
+        python.methodArgument({
+          name: "document",
+          value: python.reference({
+            name: "document", // Assuming document is already instantiated
+            modulePath: VELLUM_CLIENT_MODULE_PATH,
+          }),
+        }),
+      ];
+
+      if (result.meta) {
+        arguments_.push(
+          python.methodArgument({
+            name: "meta",
+            value: new Json(result.meta),
+          })
+        );
+      }
+
+      return python.instantiateClass({
+        classReference: python.reference({
+          name: "SearchResult",
+          modulePath: VELLUM_CLIENT_MODULE_PATH,
+        }),
+        arguments_: arguments_,
+      });
+    });
+
+    python.TypeInstantiation.list(searchResults).write(writer);
+  }
+}
+
 export namespace VellumValue {
   export type Args = {
     vellumValue: VellumVariableValueType;
@@ -308,13 +403,18 @@ export class VellumValue extends AstNode {
       case "IMAGE":
         this.astNode = new ImageVellumValue(vellumValue.value);
         break;
+      case "AUDIO":
+        this.astNode = new AudioVellumValue(vellumValue.value);
+        break;
+      case "SEARCH_RESULTS":
+        this.astNode = new SearchResultsVellumValue(vellumValue.value);
+        break;
       case "FUNCTION_CALL":
         this.astNode = new FunctionCallVellumValue(vellumValue.value);
         break;
       // TODO: Handle other vellum variable types
       // https://app.shortcut.com/vellum/story/5661
-      case "AUDIO":
-      case "SEARCH_RESULTS":
+
       case "ARRAY":
         throw new Error(`Unknown vellum value type: ${vellumValue.type}`);
       default:

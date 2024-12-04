@@ -4,6 +4,7 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import { isNil } from "lodash";
 import {
   ChatMessageRequest,
+  FunctionCall,
   VellumError,
   VellumImage,
   VellumValue as VellumVariableValueType,
@@ -217,6 +218,56 @@ class ImageVellumValue extends AstNode {
   }
 }
 
+class FunctionCallVellumValue extends AstNode {
+  private value: FunctionCall;
+
+  public constructor(value: FunctionCall) {
+    super();
+    this.value = value;
+  }
+
+  public write(writer: Writer): void {
+    const arguments_ = [
+      python.methodArgument({
+        name: "arguments",
+        value: new Json(this.value.arguments),
+      }),
+      python.methodArgument({
+        name: "name",
+        value: python.TypeInstantiation.str(this.value.name),
+      }),
+    ];
+
+    if (!isNil(this.value.id)) {
+      arguments_.push(
+        python.methodArgument({
+          name: "id",
+          value: python.TypeInstantiation.str(this.value.id),
+        })
+      );
+    }
+
+    if (!isNil(this.value.state)) {
+      arguments_.push(
+        python.methodArgument({
+          name: "state",
+          value: python.TypeInstantiation.str(this.value.state),
+        })
+      );
+    }
+
+    python
+      .instantiateClass({
+        classReference: python.reference({
+          name: "FunctionCall",
+          modulePath: VELLUM_CLIENT_MODULE_PATH,
+        }),
+        arguments_: arguments_,
+      })
+      .write(writer);
+  }
+}
+
 export namespace VellumValue {
   export type Args = {
     vellumValue: VellumVariableValueType;
@@ -257,10 +308,12 @@ export class VellumValue extends AstNode {
       case "IMAGE":
         this.astNode = new ImageVellumValue(vellumValue.value);
         break;
+      case "FUNCTION_CALL":
+        this.astNode = new FunctionCallVellumValue(vellumValue.value);
+        break;
       // TODO: Handle other vellum variable types
       // https://app.shortcut.com/vellum/story/5661
       case "AUDIO":
-      case "FUNCTION_CALL":
       case "SEARCH_RESULTS":
       case "ARRAY":
         throw new Error(`Unknown vellum value type: ${vellumValue.type}`);

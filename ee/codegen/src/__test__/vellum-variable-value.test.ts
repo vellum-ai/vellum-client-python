@@ -128,4 +128,24 @@ describe("VellumValue", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
+
+  describe("FUNCTION_CALL", () => {
+    it("should write a FUNCTION_CALL value correctly", async () => {
+      const functionCallValue = codegen.vellumValue({
+        vellumValue: {
+          type: "FUNCTION_CALL",
+          value: {
+            arguments: {
+              key: "value",
+            },
+            name: "test",
+            id: "123",
+            state: "FULFILLED",
+          },
+        },
+      });
+      functionCallValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
 });

@@ -50,6 +50,7 @@ def test_stream_workflow__happy_path_inital_context():
     }
     initial_parent_context = NodeParentContext(**initial_parent_context_json)
     assert type(initial_parent_context.node_definition) == CodeResourceDefinition
+
     workflow = TrivialWorkflow(parent_context=initial_parent_context)
     events = list(
         workflow.stream(

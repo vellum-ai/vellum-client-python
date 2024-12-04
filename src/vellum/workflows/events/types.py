@@ -80,11 +80,10 @@ class NodeParentContext(BaseParentContext):
     def serialize_node_definition(
         self, definition: Union[Type["BaseNode"], CodeResourceDefinition], _info: Any
     ) -> Dict[str, Any]:
-        return (
-            serialize_type_encoder(definition)
-            if type(definition) is type
-            else default_serializer(definition)
-        )
+        if hasattr(definition, "__name__"):
+            return serialize_type_encoder(definition)
+        else:
+            return definition.model_dump()
 
 
 class WorkflowParentContext(BaseParentContext):
@@ -93,15 +92,12 @@ class WorkflowParentContext(BaseParentContext):
 
     @field_serializer("workflow_definition")
     def serialize_workflow_definition(
-        self,
-        definition: Union[Type["BaseWorkflow"], CodeResourceDefinition],
-        _info: Any,
+        self, definition: Union[Type["BaseWorkflow"], CodeResourceDefinition]
     ) -> Dict[str, Any]:
-        return (
-            serialize_type_encoder(definition)
-            if type(definition) is type
-            else default_serializer(definition)
-        )
+        if hasattr(definition, "__name__"):
+            return serialize_type_encoder(definition)
+        else:
+            return definition.model_dump()
 
 
 ParentContext = Union[

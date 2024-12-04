@@ -54,8 +54,6 @@ def test_stream_workflow__happy_path_inital_context():
     assert type(initial_parent_context.node_definition) == CodeResourceDefinition
 
     workflow = TrivialWorkflow(parent_context=initial_parent_context)
-    definition = workflow.__class__
-    assert isinstance(definition, type)
     events = list(
         workflow.stream(
             event_types={WorkflowEventType.WORKFLOW, WorkflowEventType.NODE}

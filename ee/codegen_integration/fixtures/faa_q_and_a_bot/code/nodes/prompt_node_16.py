@@ -50,4 +50,4 @@ class PromptNode16(InlinePromptNode):
         logit_bias={},
         custom_parameters=None,
     )
-    prompt_inputs = {"most_recent_message": MostRecentMessage.Outputs.result}
+    prompt_inputs = {"most_recent_message": MostRecentMessage.Outputs.result}  # type: ignore

@@ -75,4 +75,4 @@ class PromptNode(InlinePromptNode):
             },
         },
     )
-    prompt_inputs = {"var_1": MostRecentMessage.Outputs.result}
+    prompt_inputs = {"var_1": MostRecentMessage.Outputs.result}  # type: ignore

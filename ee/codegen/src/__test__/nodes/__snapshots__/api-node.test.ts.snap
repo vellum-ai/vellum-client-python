@@ -60,10 +60,23 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
 
 exports[`ApiNode > basic > getNodeFile 1`] = `
 "from vellum.workflows.nodes.displayable import APINode as BaseAPINode
+from vellum.workflows.constants import APIRequestMethod
+from ..inputs import Inputs
 
 
 class APINode(BaseAPINode):
-    pass
+    url = "fasdfadsf"
+    method = APIRequestMethod.POST
+    json = {}
+    headers = {
+        "foo": Inputs.additional_header_value,
+        "bar": Inputs.additional_header_value,
+        "baz": Inputs.additional_header_value,
+    }
+    api_key_header_key = "96c8343d-cc94-4df0-9001-eb2905a00be7"
+    authorization_type = None
+    api_key_header_value = "<my-bearer-token>"
+    bearer_token_value = "<my-bearer-token>"
 "
 `;
 
@@ -132,10 +145,23 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
 exports[`ApiNode > reject on error enabled > getNodeFile 1`] = `
 "from vellum.workflows.nodes.displayable import APINode as BaseAPINode
 from vellum.workflows.nodes.core import TryNode
+from vellum.workflows.constants import APIRequestMethod
+from ..inputs import Inputs
 
 
 @TryNode.wrap()
 class APINode(BaseAPINode):
-    pass
+    url = "fasdfadsf"
+    method = APIRequestMethod.POST
+    json = {}
+    headers = {
+        "foo": Inputs.additional_header_value,
+        "bar": Inputs.additional_header_value,
+        "baz": Inputs.additional_header_value,
+    }
+    api_key_header_key = "96c8343d-cc94-4df0-9001-eb2905a00be7"
+    authorization_type = None
+    api_key_header_value = "<my-bearer-token>"
+    bearer_token_value = "<my-bearer-token>"
 "
 `;

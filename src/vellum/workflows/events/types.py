@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 import json
 from uuid import UUID, uuid4
-from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union
+from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union, cast
 
 from pydantic import Field, field_serializer
 
@@ -81,7 +81,7 @@ class NodeParentContext(BaseParentContext):
         self, definition: Union[Type["BaseNode"], CodeResourceDefinition], _info: Any
     ) -> Dict[str, Any]:
         if hasattr(definition, "__name__"):
-            return serialize_type_encoder(definition)
+            return serialize_type_encoder(cast(type, definition))
         else:
             return definition.model_dump()
 
@@ -95,7 +95,7 @@ class WorkflowParentContext(BaseParentContext):
         self, definition: Union[Type["BaseWorkflow"], CodeResourceDefinition]
     ) -> Dict[str, Any]:
         if hasattr(definition, "__name__"):
-            return serialize_type_encoder(definition)
+            return serialize_type_encoder(cast(type, definition))
         else:
             return definition.model_dump()
 

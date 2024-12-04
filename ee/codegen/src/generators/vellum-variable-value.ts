@@ -263,7 +263,6 @@ class FunctionCallVellumValue extends AstNode {
   public constructor(value: FunctionCall) {
     super();
     this.value = value;
-    this.inheritReferences(new Json(this.value.arguments));
   }
 
   public write(writer: Writer): void {
@@ -287,15 +286,16 @@ class FunctionCallVellumValue extends AstNode {
       );
     }
 
-    python
-      .instantiateClass({
-        classReference: python.reference({
-          name: "FunctionCall",
-          modulePath: VELLUM_CLIENT_MODULE_PATH,
-        }),
-        arguments_: arguments_,
-      })
-      .write(writer);
+    const functionCall = python.instantiateClass({
+      classReference: python.reference({
+        name: "FunctionCall",
+        modulePath: VELLUM_CLIENT_MODULE_PATH,
+      }),
+      arguments_: arguments_,
+    });
+
+    this.inheritReferences(functionCall);
+    functionCall.write(writer);
   }
 }
 

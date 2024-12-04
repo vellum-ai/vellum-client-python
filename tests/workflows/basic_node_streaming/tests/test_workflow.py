@@ -1,5 +1,3 @@
-from vellum.workflows.events.types import WorkflowEventType
-
 from tests.workflows.basic_node_streaming.workflow import BasicNodeStreaming, Inputs, StreamingNode
 
 

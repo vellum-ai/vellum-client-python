@@ -48,7 +48,6 @@ from vellum.workflows.events.node import (
     NodeExecutionStreamingBody,
     NodeExecutionStreamingEvent,
 )
-from vellum.workflows.events.types import WorkflowEventType
 from vellum.workflows.events.workflow import (
     GenericWorkflowEvent,
     WorkflowExecutionFulfilledBody,

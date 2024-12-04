@@ -1,6 +1,3 @@
-from vellum.workflows.events import WorkflowEventType
-from vellum.workflows.events.types import WorkflowParentContext
-
 from tests.workflows.basic_parent_context.basic_workflow import TrivialWorkflow
 
 

@@ -1,4 +1,3 @@
-from vellum.workflows.events.types import WorkflowEventType
 from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME
 
 from tests.workflows.stream_try_node_annotation.workflow import InnerNode, Inputs, StreamingTryExample

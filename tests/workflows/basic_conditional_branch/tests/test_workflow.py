@@ -1,5 +1,4 @@
 from vellum.workflows.constants import UNDEF
-from vellum.workflows.events.types import WorkflowEventType
 
 from tests.workflows.basic_conditional_branch.workflow import (
     BasicConditionalBranchWorkflow,

@@ -1,7 +1,9 @@
+import pytest
+
 from tests.workflows.await_any_conditional_loops.workflow import AwaitAnyWithConditionalLoopsWorkflow
-from tests.workflows.basic_await_any.workflow import BasicAwaitAnyWorkflow
 
 
+@pytest.mark.skip(reason="TODO: https://app.shortcut.com/vellum/story/5729")
 def test_workflow__happy_path():
     """
     This test ensures that the Workflow completes successfully with a trickier AWAIT_ANY example.

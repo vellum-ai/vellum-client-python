@@ -14,6 +14,10 @@ class TopNode(BaseNode):
         failure = Port.on_else()
 
 
+class TopSuccessNode(BaseNode):
+    pass
+
+
 class TopDeadEndNode(BaseNode):
     pass
 
@@ -22,6 +26,10 @@ class BottomNode(BaseNode):
     class Ports(BaseNode.Ports):
         success = Port.on_if(StartNode.Execution.count.equals(2))
         failure = Port.on_else()
+
+
+class BottomSuccessNode(BaseNode):
+    pass
 
 
 class BottomDeadEndNode(BaseNode):
@@ -70,8 +78,8 @@ class AwaitAnyWithConditionalLoopsWorkflow(BaseWorkflow):
     graph = StartNode >> {
         TopNode.Ports.failure >> TopDeadEndNode,
         {
-            TopNode.Ports.success,
-            BottomNode.Ports.success,
+            TopNode.Ports.success >> TopSuccessNode,
+            BottomNode.Ports.success >> BottomSuccessNode,
         }
         >> MergeNode
         >> {

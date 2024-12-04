@@ -146,10 +146,8 @@ class WorkflowRunner(Generic[StateType]):
                         inputs=node._inputs,
                     ),
                     parent=WorkflowParentContext(
-                        span_id=span_id,
-                        workflow_definition=self.workflow.__class__,
-                        parent=self._parent_context
-                    )
+                        span_id=span_id, workflow_definition=self.workflow.__class__, parent=self._parent_context
+                    ),
                 ),
             )
         )
@@ -186,6 +184,8 @@ class WorkflowRunner(Generic[StateType]):
                         outputs_class=node.Outputs,
                     )
                     node.state.meta.node_outputs[output_descriptor] = streaming_output_queues[output.name]
+                    initiated_output: BaseOutput = BaseOutput(name=output.name)
+                    initiated_ports = initiated_output > ports
                     self._work_item_event_queue.put(
                         WorkItemEvent(
                             node=node,
@@ -195,13 +195,13 @@ class WorkflowRunner(Generic[StateType]):
                                 body=NodeExecutionStreamingBody(
                                     node_definition=node.__class__,
                                     output=BaseOutput(name=output.name),
-                                    invoked_ports=invoked_ports,
+                                    invoked_ports=initiated_ports,
                                 ),
                                 parent=WorkflowParentContext(
                                     span_id=span_id,
                                     workflow_definition=self.workflow.__class__,
-                                    parent=self._parent_context
-                                )
+                                    parent=self._parent_context,
+                                ),
                             ),
                         )
                     )
@@ -230,7 +230,7 @@ class WorkflowRunner(Generic[StateType]):
                                         span_id=span_id,
                                         workflow_definition=self.workflow.__class__,
                                         parent=self._parent_context,
-                                    )
+                                    ),
                                 ),
                             )
                         )
@@ -254,7 +254,7 @@ class WorkflowRunner(Generic[StateType]):
                                         span_id=span_id,
                                         workflow_definition=self.workflow.__class__,
                                         parent=self._parent_context,
-                                    )
+                                    ),
                                 ),
                             )
                         )
@@ -285,7 +285,7 @@ class WorkflowRunner(Generic[StateType]):
                             span_id=span_id,
                             workflow_definition=self.workflow.__class__,
                             parent=self._parent_context,
-                        )
+                        ),
                     ),
                 )
             )
@@ -304,7 +304,7 @@ class WorkflowRunner(Generic[StateType]):
                             span_id=span_id,
                             workflow_definition=self.workflow.__class__,
                             parent=self._parent_context,
-                        )
+                        ),
                     ),
                 )
             )
@@ -325,10 +325,8 @@ class WorkflowRunner(Generic[StateType]):
                             ),
                         ),
                         parent=WorkflowParentContext(
-                            span_id=span_id,
-                            workflow_definition=self.workflow.__class__,
-                            parent=self._parent_context
-                        )
+                            span_id=span_id, workflow_definition=self.workflow.__class__, parent=self._parent_context
+                        ),
                     ),
                 )
             )
@@ -362,11 +360,11 @@ class WorkflowRunner(Generic[StateType]):
                     return
 
             all_deps = self._dependencies[node_class]
-            if not node_class.Trigger.should_initiate(state, all_deps, invoked_by):
+            node_span_id = state.meta.node_execution_cache.queue_node_execution(node_class, all_deps, invoked_by)
+            if not node_class.Trigger.should_initiate(state, all_deps, node_span_id):
                 return
 
             node = node_class(state=state, context=self.workflow.context)
-            node_span_id = uuid4()
             state.meta.node_execution_cache.initiate_node_execution(node_class, node_span_id)
             self._active_nodes_by_execution_id[node_span_id] = node
 
@@ -435,7 +433,7 @@ class WorkflowRunner(Generic[StateType]):
                 workflow_definition=self.workflow.__class__,
                 output=output,
             ),
-            parent=self._parent_context
+            parent=self._parent_context,
         )
 
     def _fulfill_workflow_event(self, outputs: OutputsType) -> WorkflowExecutionFulfilledEvent:

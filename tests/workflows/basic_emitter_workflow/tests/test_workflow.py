@@ -20,12 +20,11 @@ def mock_datetime_now(mocker):
 def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
     # GIVEN a uuid for our state
     state_id_generator = mock_uuid4_generator("vellum.workflows.state.base.uuid4")
-    runner_generator = mock_uuid4_generator("vellum.workflows.runner.runner.uuid4")
     state_id = state_id_generator()
     trace_id = state_id_generator()
     workflow_span_id = state_id_generator()
-    start_node_span_id = runner_generator()
-    next_node_span_id = runner_generator()
+    start_node_span_id = state_id_generator()
+    next_node_span_id = state_id_generator()
 
     # AND a workflow that uses a custom event emitter
     emitter = ExampleEmitter()
@@ -85,8 +84,9 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
                 "node_outputs": {},
                 "parent": None,
                 "node_execution_cache": {
-                    "node_execution_ids": {},
+                    "node_executions_fulfilled": {},
                     "node_executions_initiated": {},
+                    "node_executions_queued": {},
                     "dependencies_invoked": {},
                 },
             },
@@ -108,8 +108,9 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
                 "node_outputs": {"StartNode.Outputs.final_value": "Hello, World!"},
                 "parent": None,
                 "node_execution_cache": {
-                    "node_execution_ids": {},
+                    "node_executions_fulfilled": {},
                     "node_executions_initiated": {f"{base_module}.workflow.StartNode": [str(start_node_span_id)]},
+                    "node_executions_queued": {},
                     "dependencies_invoked": {},
                 },
             },
@@ -133,14 +134,19 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
                 },
                 "parent": None,
                 "node_execution_cache": {
-                    "node_execution_ids": {
+                    "node_executions_fulfilled": {
                         f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
                     },
                     "node_executions_initiated": {
-                        f"{base_module}.workflow.StartNode": [],
+                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
                         f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
                     },
-                    "dependencies_invoked": {},
+                    "node_executions_queued": {
+                        f"{base_module}.workflow.NextNode": [],
+                    },
+                    "dependencies_invoked": {
+                        str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
+                    },
                 },
             },
             "score": 13,
@@ -163,14 +169,19 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
                     "NextNode.Outputs.final_value": "Score: 13",
                 },
                 "node_execution_cache": {
-                    "node_execution_ids": {
+                    "node_executions_fulfilled": {
                         f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
                     },
                     "node_executions_initiated": {
-                        f"{base_module}.workflow.StartNode": [],
+                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
                         f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
                     },
-                    "dependencies_invoked": {},
+                    "node_executions_queued": {
+                        f"{base_module}.workflow.NextNode": [],
+                    },
+                    "dependencies_invoked": {
+                        str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
+                    },
                 },
                 "parent": None,
             },
@@ -194,15 +205,20 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
                     "NextNode.Outputs.final_value": "Score: 13",
                 },
                 "node_execution_cache": {
-                    "node_execution_ids": {
+                    "node_executions_fulfilled": {
                         f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
                         f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
                     },
                     "node_executions_initiated": {
-                        f"{base_module}.workflow.StartNode": [],
+                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                        f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
+                    },
+                    "node_executions_queued": {
                         f"{base_module}.workflow.NextNode": [],
                     },
-                    "dependencies_invoked": {},
+                    "dependencies_invoked": {
+                        str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
+                    },
                 },
                 "parent": None,
             },

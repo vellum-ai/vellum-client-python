@@ -1,5 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Workflow > write > graph > should be correct for a basic merge node case 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .nodes.templating_node import TemplatingNode
+from .nodes.merge_node import MergeNode
+from .nodes.templating_node_2 import TemplatingNode2
+
+
+class TestWorkflow(BaseWorkflow):
+    graph = {TemplatingNode, TemplatingNode2} >> MergeNode
+
+    class Outputs(BaseWorkflow.Outputs):
+        pass
+"
+`;
+
 exports[`Workflow > write > graph > should be correct for a basic single node case 1`] = `
 "from vellum.workflows import BaseWorkflow
 from .inputs import Inputs

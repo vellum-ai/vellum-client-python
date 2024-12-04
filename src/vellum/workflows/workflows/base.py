@@ -182,6 +182,31 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
         external_inputs: Optional[ExternalInputsArg] = None,
         cancel_signal: Optional[ThreadingEvent] = None,
     ) -> TerminalWorkflowEvent:
+        """
+        Invoke a Workflow, returning the last event emitted, which should be one of:
+        - `WorkflowExecutionFulfilledEvent` if the Workflow Execution was successful
+        - `WorkflowExecutionRejectedEvent` if the Workflow Execution was rejected
+        - `WorkflowExecutionPausedEvent` if the Workflow Execution was paused
+
+        Parameters
+        ----------
+        inputs: Optional[WorkflowInputsType] = None
+            The Inputs instance used to initiate the Workflow Execution.
+
+        state: Optional[StateType] = None
+            The State instance to run the Workflow with. Workflows maintain a global state that can be used to
+            deterministically resume execution from any point.
+
+        entrypoint_nodes: Optional[RunFromNodeArg] = None
+            The entrypoint nodes to run the Workflow with. Useful for resuming execution from a specific node.
+
+        external_inputs: Optional[ExternalInputsArg] = None
+            External inputs to pass to the Workflow. Useful for providing human-in-the-loop behavior to the Workflow.
+
+        cancel_signal: Optional[ThreadingEvent] = None
+            A threading event that can be used to cancel the Workflow Execution.
+        """
+
         events = WorkflowRunner(
             self,
             inputs=inputs,
@@ -247,6 +272,32 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
         external_inputs: Optional[ExternalInputsArg] = None,
         cancel_signal: Optional[ThreadingEvent] = None,
     ) -> WorkflowEventStream:
+        """
+        Invoke a Workflow, yielding events as they are emitted.
+
+        Parameters
+        ----------
+        event_filter: Optional[Callable[[Type["BaseWorkflow"], WorkflowEvent], bool]] = None
+            A filter that can be used to filter events based on the Workflow Class and the event itself. If the method
+            returns `False`, the event will not be yielded.
+
+        inputs: Optional[WorkflowInputsType] = None
+            The Inputs instance used to initiate the Workflow Execution.
+
+        state: Optional[StateType] = None
+            The State instance to run the Workflow with. Workflows maintain a global state that can be used to
+            deterministically resume execution from any point.
+
+        entrypoint_nodes: Optional[RunFromNodeArg] = None
+            The entrypoint nodes to run the Workflow with. Useful for resuming execution from a specific node.
+
+        external_inputs: Optional[ExternalInputsArg] = None
+            External inputs to pass to the Workflow. Useful for providing human-in-the-loop behavior to the Workflow.
+
+        cancel_signal: Optional[ThreadingEvent] = None
+            A threading event that can be used to cancel the Workflow Execution.
+        """
+
         should_yield = event_filter or workflow_event_filter
         for event in WorkflowRunner(
             self,

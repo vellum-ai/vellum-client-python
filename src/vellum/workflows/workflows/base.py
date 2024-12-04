@@ -4,6 +4,7 @@ import importlib
 import inspect
 
 from vellum.plugins.utils import load_runtime_plugins
+from vellum.workflows.workflows.event_filters import workflow_event_filter
 
 load_runtime_plugins()
 
@@ -239,14 +240,14 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
 
     def stream(
         self,
-        event_filter: Optional[Callable[[WorkflowEvent], bool]] = None,
+        event_filter: Optional[Callable[[Type["BaseWorkflow"], WorkflowEvent], bool]] = None,
         inputs: Optional[WorkflowInputsType] = None,
         state: Optional[StateType] = None,
         entrypoint_nodes: Optional[RunFromNodeArg] = None,
         external_inputs: Optional[ExternalInputsArg] = None,
         cancel_signal: Optional[ThreadingEvent] = None,
     ) -> WorkflowEventStream:
-        should_yield = event_filter or self.DEFAULT_EVENT_FILTER
+        should_yield = event_filter or workflow_event_filter
         for event in WorkflowRunner(
             self,
             inputs=inputs,
@@ -255,40 +256,8 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             external_inputs=external_inputs,
             cancel_signal=cancel_signal,
         ).stream():
-            if should_yield(event):
+            if should_yield(self.__class__, event):
                 yield event
-
-    def DEFAULT_EVENT_FILTER(self, event: WorkflowEvent) -> bool:
-        if (
-            event.name == "workflow.execution.initiated"
-            or event.name == "workflow.execution.resumed"
-            or event.name == "workflow.execution.fulfilled"
-            or event.name == "workflow.execution.rejected"
-            or event.name == "workflow.execution.paused"
-            or event.name == "workflow.execution.streaming"
-        ):
-            return event.workflow_definition == self.__class__
-
-        return False
-
-    def ROOT_EVENT_FILTER(self, event: WorkflowEvent) -> bool:
-        if (
-            event.name == "workflow.execution.initiated"
-            or event.name == "workflow.execution.resumed"
-            or event.name == "workflow.execution.fulfilled"
-            or event.name == "workflow.execution.rejected"
-            or event.name == "workflow.execution.paused"
-            or event.name == "workflow.execution.streaming"
-        ):
-            return event.workflow_definition == self.__class__
-
-        if not event.parent:
-            return False
-
-        if event.parent.type != "WORKFLOW":
-            return False
-
-        return event.parent.workflow_definition == self.__class__
 
     def validate(self) -> None:
         """

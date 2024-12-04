@@ -1,3 +1,5 @@
+from vellum.workflows.workflows.event_filters import root_workflow_event_filter
+
 from tests.workflows.basic_parent_context.basic_workflow import TrivialWorkflow
 
 
@@ -11,7 +13,7 @@ def test_run_workflow__happy_path():
 
 def test_stream_workflow__happy_path():
     workflow = TrivialWorkflow()
-    events = list(workflow.stream(event_filter=workflow.ROOT_EVENT_FILTER))
+    events = list(workflow.stream(event_filter=root_workflow_event_filter))
 
     assert len(events) == 4
 

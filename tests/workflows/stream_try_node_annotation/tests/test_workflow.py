@@ -1,4 +1,5 @@
 from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME
+from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
 from tests.workflows.stream_try_node_annotation.workflow import InnerNode, Inputs, StreamingTryExample
 
@@ -15,7 +16,7 @@ def test_workflow_stream__happy_path():
     # WHEN we stream the events of the Workflow
     stream = workflow.stream(
         inputs=Inputs(items=["apple", "banana", "cherry"]),
-        event_filter=workflow.ROOT_EVENT_FILTER,
+        event_filter=root_workflow_event_filter,
     )
     events = list(stream)
 

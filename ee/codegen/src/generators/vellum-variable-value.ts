@@ -195,7 +195,7 @@ class ImageVellumValue extends AstNode {
       }),
     ];
 
-    if (this.value.metadata !== undefined) {
+    if (!isNil(this.value.metadata)) {
       arguments_.push(
         python.methodArgument({
           name: "metadata",

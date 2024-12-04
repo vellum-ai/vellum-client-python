@@ -96,15 +96,24 @@ def test_serialize_workflow():
     )
     assert not DeepDiff(
         {
+            "id": "5cf9c5e3-0eae-4daf-8d73-8b9536258eb9",
+            "type": "ERROR",
+            "inputs": [],
             "data": {
-                "error_output_id": "None",
-                "error_source_input_id": "None",
+                "name": "error-node",
                 "label": "Fail Node",
+                "source_handle_id": "ca17d318-a0f5-4f7c-be6c-59c9dc1dd7ed",
                 "target_handle_id": "70c19f1c-309c-4a5d-ba65-664c0bb2fedf",
+                "error_source_input_id": "None",
+                "error_output_id": "None",
             },
+            "display_data": {"position": {"x": 0.0, "y": 0.0}},
             "definition": {
+                "name": "FailNode",
+                "module": ["tests", "workflows", "basic_error_node", "workflow"],
                 "bases": [
                     {
+                        "name": "ErrorNode",
                         "module": [
                             "vellum",
                             "workflows",
@@ -113,16 +122,9 @@ def test_serialize_workflow():
                             "error_node",
                             "node",
                         ],
-                        "name": "ErrorNode",
                     }
                 ],
-                "module": ["tests", "workflows", "basic_error_node", "workflow"],
-                "name": "FailNode",
             },
-            "display_data": {"position": {"x": 0.0, "y": 0.0}},
-            "id": "5cf9c5e3-0eae-4daf-8d73-8b9536258eb9",
-            "inputs": [],
-            "type": "ERROR",
         },
         error_node,
         ignore_order=True,

@@ -186,8 +186,33 @@ class ImageVellumValue extends AstNode {
     super();
     this.value = value;
   }
+
   public write(writer: Writer): void {
-    python.TypeInstantiation.str(this.value.src).write(writer);
+    const arguments_ = [
+      python.methodArgument({
+        name: "src",
+        value: python.TypeInstantiation.str(this.value.src),
+      }),
+    ];
+
+    if (this.value.metadata !== undefined) {
+      arguments_.push(
+        python.methodArgument({
+          name: "metadata",
+          value: new Json(this.value.metadata),
+        })
+      );
+    }
+
+    python
+      .instantiateClass({
+        classReference: python.reference({
+          name: "VellumImage",
+          modulePath: VELLUM_CLIENT_MODULE_PATH,
+        }),
+        arguments_: arguments_,
+      })
+      .write(writer);
   }
 }
 

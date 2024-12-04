@@ -560,19 +560,27 @@ export function promptDeploymentNodeDataFactory(): PromptNode {
 }
 
 export function templatingNodeFactory({
+  id,
+  label,
+  sourceHandleId,
+  targetHandleId,
   errorOutputId,
 }: {
+  id?: string;
+  label?: string;
+  sourceHandleId?: string;
+  targetHandleId?: string;
   errorOutputId?: string;
 } = {}): TemplatingNode {
   const nodeData: TemplatingNode = {
-    id: "7e09927b-6d6f-4829-92c9-54e66bdcaf80",
+    id: id ?? "7e09927b-6d6f-4829-92c9-54e66bdcaf80",
     type: WorkflowNodeType.TEMPLATING,
     data: {
-      label: "Templating Node",
+      label: label ?? "Templating Node",
       outputId: "2d4f1826-de75-499a-8f84-0a690c8136ad",
       errorOutputId,
-      sourceHandleId: "dd8397b1-5a41-4fa0-8c24-e5dffee4fb98",
-      targetHandleId: "3feb7e71-ec63-4d58-82ba-c3df829a2948",
+      sourceHandleId: sourceHandleId ?? "dd8397b1-5a41-4fa0-8c24-e5dffee4fb98",
+      targetHandleId: targetHandleId ?? "3feb7e71-ec63-4d58-82ba-c3df829a2948",
       templateNodeInputId: "7b8af68b-cf60-4fca-9c57-868042b5b616",
       outputType: VellumVariableType.String,
     },

@@ -245,6 +245,8 @@ describe("Workflow", () => {
           workflowContext,
           inputs,
           nodes: [templatingNodeData1, templatingNodeData2],
+          // This test case fails with the legacy graph generation algorithm
+          // so we don't parameterize over it.
           breadthFirstGraphGeneration: true,
         });
 
@@ -301,8 +303,6 @@ describe("Workflow", () => {
             workflowContext,
             inputs,
             nodes: [templatingNodeData1, templatingNodeData2],
-            // This test case fails with the legacy graph generation algorithm
-            // so we don't parameterize over it.
             breadthFirstGraphGeneration,
           });
 

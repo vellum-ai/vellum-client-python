@@ -1,5 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`VellumValue > ARRAY > should write a ARRAY value correctly 1`] = `
+"["Hello, World!", 42, VellumAudio(src="https://example.com/audio.mp3")]
+"
+`;
+
 exports[`VellumValue > AUDIO > should write a AUDIO value correctly 1`] = `
 "VellumAudio(src="https://example.com/audio.mp3")
 "

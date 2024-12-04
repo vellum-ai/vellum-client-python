@@ -1,9 +1,11 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
+import { isNil } from "lodash";
 import {
   ChatMessageRequest,
   VellumError,
+  VellumImage,
   VellumValue as VellumVariableValueType,
 } from "vellum-ai/api";
 
@@ -178,6 +180,43 @@ class ErrorVellumValue extends AstNode {
   }
 }
 
+class ImageVellumValue extends AstNode {
+  private value: VellumImage;
+
+  public constructor(value: VellumImage) {
+    super();
+    this.value = value;
+  }
+
+  public write(writer: Writer): void {
+    const arguments_ = [
+      python.methodArgument({
+        name: "src",
+        value: python.TypeInstantiation.str(this.value.src),
+      }),
+    ];
+
+    if (!isNil(this.value.metadata)) {
+      arguments_.push(
+        python.methodArgument({
+          name: "metadata",
+          value: new Json(this.value.metadata),
+        })
+      );
+    }
+
+    python
+      .instantiateClass({
+        classReference: python.reference({
+          name: "VellumImage",
+          modulePath: VELLUM_CLIENT_MODULE_PATH,
+        }),
+        arguments_: arguments_,
+      })
+      .write(writer);
+  }
+}
+
 export namespace VellumValue {
   export type Args = {
     vellumValue: VellumVariableValueType;
@@ -215,9 +254,11 @@ export class VellumValue extends AstNode {
       case "ERROR":
         this.astNode = new ErrorVellumValue(vellumValue.value);
         break;
+      case "IMAGE":
+        this.astNode = new ImageVellumValue(vellumValue.value);
+        break;
       // TODO: Handle other vellum variable types
       // https://app.shortcut.com/vellum/story/5661
-      case "IMAGE":
       case "AUDIO":
       case "FUNCTION_CALL":
       case "SEARCH_RESULTS":

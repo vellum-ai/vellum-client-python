@@ -14,6 +14,7 @@ import {
   PORTS_CLASS_NAME,
 } from "src/constants";
 import { WorkflowContext } from "src/context";
+import { BaseNodeContext } from "src/context/node-context/base";
 import { PortContext } from "src/context/port-context";
 import { BaseState } from "src/generators/base-state";
 import { Inputs } from "src/generators/inputs";
@@ -38,6 +39,13 @@ export declare namespace Workflow {
     nodes: WorkflowDataNode[];
     /* The display data for the workflow */
     displayData?: WorkflowDisplayData;
+    /*
+    Whether to use the new graph generation algorithm
+
+    We are using this as a feature flag to build out the new graph generation algorithm
+    over the course of a few PRs, each with a new test to satisfy, instead of all at once.
+    */
+    breadthFirstGraphGeneration?: boolean;
   }
 }
 
@@ -49,19 +57,32 @@ export class Workflow {
   private readonly entrypointPortContexts: PortContext[];
   private readonly entrypointNodeEdges: WorkflowEdge[];
   private readonly displayData: WorkflowDisplayData | undefined;
-
-  constructor({ workflowContext, inputs, nodes, displayData }: Workflow.Args) {
+  private readonly breadthFirstGraphGeneration: boolean;
+  private readonly entrypointNodeId: string;
+  constructor({
+    workflowContext,
+    inputs,
+    nodes,
+    displayData,
+    breadthFirstGraphGeneration,
+  }: Workflow.Args) {
     this.workflowContext = workflowContext;
     this.inputs = inputs;
     this.nodes = nodes;
     this.displayData = displayData;
 
     const edges = this.workflowContext.workflowRawEdges;
-    const { edgesByPortId, entrypointPortContexts, entrypointNodeEdges } =
-      this.getEdgesAndEntrypointNodeContexts({ nodes, edges });
+    const {
+      edgesByPortId,
+      entrypointPortContexts,
+      entrypointNodeEdges,
+      entrypointNodeId,
+    } = this.getEdgesAndEntrypointNodeContexts({ nodes, edges });
     this.edgesByPortId = edgesByPortId;
     this.entrypointPortContexts = entrypointPortContexts;
     this.entrypointNodeEdges = entrypointNodeEdges;
+    this.entrypointNodeId = entrypointNodeId;
+    this.breadthFirstGraphGeneration = breadthFirstGraphGeneration ?? false;
   }
 
   private getEdgesAndEntrypointNodeContexts({
@@ -71,9 +92,10 @@ export class Workflow {
     nodes: WorkflowDataNode[];
     edges: WorkflowEdge[];
   }) {
+    const entrypointNodeId = this.workflowContext.getEntrypointNode().id;
     const nodeIds = new Set<string>([
       ...nodes.map((node) => getNodeId(node)),
-      this.workflowContext.getEntrypointNode().id,
+      entrypointNodeId,
     ]);
     const edgesByPortId = new Map<string, WorkflowEdge[]>();
     let entrypointPortContexts: PortContext[] = [];
@@ -85,7 +107,7 @@ export class Workflow {
         return;
       }
 
-      if (edge.sourceNodeId === this.workflowContext.getEntrypointNode().id) {
+      if (edge.sourceNodeId === entrypointNodeId) {
         const targetNodeContext = this.workflowContext.getNodeContext(
           edge.targetNodeId
         );
@@ -107,7 +129,12 @@ export class Workflow {
       edgesByPortId.set(portId, edges);
     });
 
-    return { edgesByPortId, entrypointPortContexts, entrypointNodeEdges };
+    return {
+      edgesByPortId,
+      entrypointPortContexts,
+      entrypointNodeEdges,
+      entrypointNodeId,
+    };
   }
 
   private generateParentWorkflowClass(): python.Reference {
@@ -535,7 +562,7 @@ export class Workflow {
     return Array.from(this.edgesByPortId.values()).flat();
   }
 
-  private buildGraph({
+  private buildGraphLegacy({
     portContexts,
   }: {
     portContexts: PortContext | PortContext[];
@@ -546,7 +573,7 @@ export class Workflow {
           .filter((portContext) => {
             return this.edgesByPortId.has(portContext.portId);
           })
-          .map((portContext) => this.buildGraphBranch({ portContext }))
+          .map((portContext) => this.buildGraphBranchLegacy({ portContext }))
           .filter(isDefined);
 
         if (graphItems.length > 1) {
@@ -559,14 +586,14 @@ export class Workflow {
         if (!portContext) {
           return;
         }
-        return this.buildGraphBranch({ portContext });
+        return this.buildGraphBranchLegacy({ portContext });
       }
     } else {
-      return this.buildGraphBranch({ portContext: portContexts });
+      return this.buildGraphBranchLegacy({ portContext: portContexts });
     }
   }
 
-  private buildGraphBranch({
+  private buildGraphBranchLegacy({
     portContext,
   }: {
     portContext: PortContext;
@@ -608,7 +635,7 @@ export class Workflow {
           });
         }
 
-        return this.buildGraph({ portContexts });
+        return this.buildGraphLegacy({ portContexts });
       })
       .filter(isDefined);
 
@@ -636,14 +663,161 @@ export class Workflow {
     });
   }
 
+  private buildGraphAttribute(): AstNode | undefined {
+    if (!this.breadthFirstGraphGeneration) {
+      return this.buildGraphLegacy({
+        portContexts: this.entrypointPortContexts,
+      });
+    }
+
+    // This graph attribute generation is a breadth-first traversal of the WorkflowEdges
+    // starting at the entrypoint port edges. We process each one sequentially and incrementally
+    // build up the graph as we go.
+    type GraphEmpty = { type: "empty" };
+    type GraphSet = { type: "set"; values: GraphMutableAst[] };
+    type GraphNodeReference = {
+      type: "node_reference";
+      reference: BaseNodeContext<WorkflowDataNode>;
+    };
+    type GraphPortReference = {
+      type: "port_reference";
+      reference: PortContext;
+    };
+    type GraphRightShift = {
+      type: "right_shift";
+      lhs: GraphMutableAst;
+      rhs: GraphMutableAst;
+    };
+    type GraphMutableAst =
+      | GraphEmpty
+      | GraphSet
+      | GraphNodeReference
+      | GraphPortReference
+      | GraphRightShift;
+
+    let graphMutableAst: GraphMutableAst = { type: "empty" };
+    const edgesQueue = [...this.entrypointNodeEdges];
+    const processedEdges = new Set<WorkflowEdge>();
+
+    while (edgesQueue.length > 0) {
+      const edge = edgesQueue.shift();
+      if (!edge) {
+        continue;
+      }
+
+      const sourceNode =
+        edge.sourceNodeId === this.entrypointNodeId
+          ? null
+          : this.workflowContext.getNodeContext(edge.sourceNodeId);
+
+      const targetNode = this.workflowContext.getNodeContext(edge.targetNodeId);
+      if (!targetNode) {
+        processedEdges.add(edge);
+        continue;
+      }
+
+      if (graphMutableAst.type === "empty") {
+        graphMutableAst = {
+          type: "node_reference",
+          reference: targetNode,
+        };
+      } else if (graphMutableAst.type === "node_reference") {
+        if (graphMutableAst.reference === sourceNode) {
+          graphMutableAst = {
+            type: "right_shift",
+            lhs: graphMutableAst,
+            rhs: { type: "node_reference", reference: targetNode },
+          };
+        } else {
+          graphMutableAst = {
+            type: "set",
+            values: [
+              graphMutableAst,
+              { type: "node_reference", reference: targetNode },
+            ],
+          };
+        }
+      } else if (graphMutableAst.type === "set") {
+        if (
+          graphMutableAst.values.some(
+            (value) =>
+              value.type === "node_reference" && value.reference === sourceNode
+          )
+        ) {
+          graphMutableAst = {
+            type: "right_shift",
+            lhs: graphMutableAst,
+            rhs: { type: "node_reference", reference: targetNode },
+          };
+        } else {
+          graphMutableAst = {
+            type: "set",
+            values: [
+              graphMutableAst,
+              { type: "node_reference", reference: targetNode },
+            ],
+          };
+        }
+      }
+
+      targetNode.portContextsById.forEach((portContext) => {
+        const edges = this.edgesByPortId.get(portContext.portId);
+        edges?.forEach((edge) => {
+          if (processedEdges.has(edge)) {
+            return;
+          }
+          edgesQueue.push(edge);
+        });
+      });
+
+      processedEdges.add(edge);
+    }
+
+    const buildAstNode = (
+      graphMutableAst: GraphMutableAst
+    ): AstNode | undefined => {
+      if (graphMutableAst.type === "empty") {
+        return;
+      }
+
+      if (graphMutableAst.type === "node_reference") {
+        return python.reference({
+          name: graphMutableAst.reference.nodeClassName,
+          modulePath: graphMutableAst.reference.nodeModulePath,
+        });
+      }
+
+      if (graphMutableAst.type === "set") {
+        return python.TypeInstantiation.set(
+          graphMutableAst.values.map(buildAstNode).filter(isDefined)
+        );
+      }
+
+      if (graphMutableAst.type === "right_shift") {
+        const lhs = buildAstNode(graphMutableAst.lhs);
+        const rhs = buildAstNode(graphMutableAst.rhs);
+        if (!lhs || !rhs) {
+          return;
+        }
+        return python.operator({
+          operator: OperatorType.RightShift,
+          lhs,
+          rhs,
+        });
+      }
+
+      return;
+    };
+
+    return buildAstNode(graphMutableAst);
+  }
+
   private addGraph(workflowClass: python.Class): void {
     if (this.nodes.length === 0) {
       return;
     }
 
-    const graph = this.buildGraph({
-      portContexts: this.entrypointPortContexts,
-    });
+    const graph = this.buildGraphAttribute();
 
     if (!graph) {
       return;

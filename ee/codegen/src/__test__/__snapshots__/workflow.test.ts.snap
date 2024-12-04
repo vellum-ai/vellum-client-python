@@ -3,8 +3,8 @@
 exports[`Workflow > write > graph > should be correct for a basic merge node case 1`] = `
 "from vellum.workflows import BaseWorkflow
 from .nodes.templating_node import TemplatingNode
-from .nodes.merge_node import MergeNode
 from .nodes.templating_node_2 import TemplatingNode2
+from .nodes.merge_node import MergeNode
 
 
 class TestWorkflow(BaseWorkflow):
@@ -15,7 +15,65 @@ class TestWorkflow(BaseWorkflow):
 "
 `;
 
+exports[`Workflow > write > graph > should be correct for a basic multiple nodes case 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .nodes.templating_node import TemplatingNode
+from .nodes.templating_node_2 import TemplatingNode2
+
+
+class TestWorkflow(BaseWorkflow):
+    graph = {TemplatingNode, TemplatingNode2}
+
+    class Outputs(BaseWorkflow.Outputs):
+        pass
+"
+`;
+
+exports[`Workflow > write > graph > should be correct for a basic single edge case 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .nodes.templating_node import TemplatingNode
+from .nodes.templating_node_2 import TemplatingNode2
+
+
+class TestWorkflow(BaseWorkflow):
+    graph = TemplatingNode >> TemplatingNode2
+
+    class Outputs(BaseWorkflow.Outputs):
+        pass
+"
+`;
+
+exports[`Workflow > write > graph > should be correct for a basic single edge case 2`] = `
+"from vellum.workflows import BaseWorkflow
+from .nodes.templating_node import TemplatingNode
+from .nodes.templating_node_2 import TemplatingNode2
+
+
+class TestWorkflow(BaseWorkflow):
+    graph = TemplatingNode >> TemplatingNode2
+
+    class Outputs(BaseWorkflow.Outputs):
+        pass
+"
+`;
+
 exports[`Workflow > write > graph > should be correct for a basic single node case 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .inputs import Inputs
+from vellum.workflows.state import BaseState
+from .nodes.search_node import SearchNode
+from .nodes.final_output import FinalOutput
+
+
+class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
+    graph = SearchNode
+
+    class Outputs(BaseWorkflow.Outputs):
+        query = FinalOutput.Outputs.value
+"
+`;
+
+exports[`Workflow > write > graph > should be correct for a basic single node case 2`] = `
 "from vellum.workflows import BaseWorkflow
 from .inputs import Inputs
 from vellum.workflows.state import BaseState

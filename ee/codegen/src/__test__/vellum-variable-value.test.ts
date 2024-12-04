@@ -140,7 +140,6 @@ describe("VellumValue", () => {
             },
             name: "test",
             id: "123",
-            state: "FULFILLED",
           },
         },
       });

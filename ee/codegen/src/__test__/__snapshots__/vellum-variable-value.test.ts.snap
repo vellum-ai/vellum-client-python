@@ -15,7 +15,7 @@ exports[`VellumValue > ERROR > should write a ERROR value correctly 1`] = `
 `;
 
 exports[`VellumValue > FUNCTION_CALL > should write a FUNCTION_CALL value correctly 1`] = `
-"FunctionCall(arguments={"key": "value"}, name="test", id="123", state="FULFILLED")
+"FunctionCall(arguments={"key": "value"}, name="test", id="123")
 "
 `;
 

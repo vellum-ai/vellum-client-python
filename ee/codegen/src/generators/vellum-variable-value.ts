@@ -286,15 +286,6 @@ class FunctionCallVellumValue extends AstNode {
       );
     }
 
-    if (!isNil(this.value.state)) {
-      arguments_.push(
-        python.methodArgument({
-          name: "state",
-          value: python.TypeInstantiation.str(this.value.state),
-        })
-      );
-    }
-
     python
       .instantiateClass({
         classReference: python.reference({

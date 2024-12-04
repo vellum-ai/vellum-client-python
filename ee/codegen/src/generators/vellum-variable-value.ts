@@ -263,6 +263,7 @@ class FunctionCallVellumValue extends AstNode {
   public constructor(value: FunctionCall) {
     super();
     this.value = value;
+    this.inheritReferences(new Json(this.value.arguments));
   }
 
   public write(writer: Writer): void {

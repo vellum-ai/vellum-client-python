@@ -1,5 +1,5 @@
 from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME
-from vellum.workflows.workflows.event_filters import root_workflow_event_filter
+from vellum.workflows.workflows.event_filters import all_workflow_event_filter, root_workflow_event_filter
 
 from tests.workflows.stream_try_node_annotation.workflow import InnerNode, Inputs, StreamingTryExample
 
@@ -16,61 +16,103 @@ def test_workflow_stream__happy_path():
     # WHEN we stream the events of the Workflow
     stream = workflow.stream(
         inputs=Inputs(items=["apple", "banana", "cherry"]),
-        event_filter=root_workflow_event_filter,
+        event_filter=all_workflow_event_filter,
     )
     events = list(stream)
 
-    # THEN we see the expected events in the correct order
-    assert events[0].name == "workflow.execution.initiated"
-    assert events[0].workflow_definition == StreamingTryExample
+    # THEN we see the expected events in the correct relative order
+    InnerWorkflow = InnerNode.subworkflow.instance
+    WrappedNode = InnerNode.__wrapped_node__
 
-    assert events[1].name == "node.execution.initiated"
-    assert events[1].node_definition == InnerNode
-    assert events[1].model_dump(mode="json")["body"]["node_definition"] == {
+    # workflow initiated events
+    workflow_initiated_events = [e for e in events if e.name == "workflow.execution.initiated"]
+    assert workflow_initiated_events[0].workflow_definition == StreamingTryExample
+    assert workflow_initiated_events[0].parent is None
+    assert workflow_initiated_events[1].workflow_definition == InnerWorkflow
+    # TODO: Try Node Parent Context - https://app.shortcut.com/vellum/story/5601
+    # assert workflow_initiated_events[1].parent is not None
+    # assert workflow_initiated_events[1].parent.type == "WORKFLOW_NODE"
+    # assert workflow_initiated_events[1].parent.node_definition == InnerNode
+    assert len(workflow_initiated_events) == 2
+
+    # node initiated events
+    node_initiated_events = [e for e in events if e.name == "node.execution.initiated"]
+    assert node_initiated_events[0].node_definition == InnerNode
+    assert node_initiated_events[0].model_dump(mode="json")["body"]["node_definition"] == {
         "name": "TryNode",
         "module": ["tests", "workflows", "stream_try_node_annotation", "workflow", "InnerNode", ADORNMENT_MODULE_NAME],
     }
+    assert node_initiated_events[0].parent is not None
+    assert node_initiated_events[0].parent.type == "WORKFLOW"
+    assert node_initiated_events[0].parent.workflow_definition == StreamingTryExample
+    assert node_initiated_events[1].node_definition == WrappedNode
+    assert node_initiated_events[1].parent is not None
+    assert node_initiated_events[1].parent.type == "WORKFLOW"
+    assert node_initiated_events[1].parent.workflow_definition == InnerWorkflow
+    assert len(node_initiated_events) == 2
 
-    assert events[2].name == "workflow.execution.initiated"
-    assert events[2].workflow_definition == InnerNode.subworkflow
+    # inner node streaming events
+    inner_node_streaming_events = [
+        e for e in events if e.name == "node.execution.streaming" and e.node_definition == WrappedNode
+    ]
+    assert inner_node_streaming_events[0].output.name == "processed"
+    assert inner_node_streaming_events[0].output.is_initiated
+    assert inner_node_streaming_events[1].output.delta == "apple apple"
+    assert inner_node_streaming_events[2].output.delta == "banana banana"
+    assert inner_node_streaming_events[3].output.delta == "cherry cherry"
+    assert inner_node_streaming_events[4].output.value == ["apple apple", "banana banana", "cherry cherry"]
+    assert len(inner_node_streaming_events) == 5
 
-    assert events[3].name == "node.execution.streaming"
-    assert events[3].output.name == "processed"
-    assert events[3].output.is_initiated
+    # inner workflow streaming events
+    inner_workflow_streaming_events = [
+        e for e in events if e.name == "workflow.execution.streaming" and e.workflow_definition == InnerWorkflow
+    ]
+    assert inner_workflow_streaming_events[0].output.name == "processed"
+    assert inner_workflow_streaming_events[0].output.is_initiated
+    assert inner_workflow_streaming_events[1].output.delta == "apple apple"
+    assert inner_workflow_streaming_events[2].output.delta == "banana banana"
+    assert inner_workflow_streaming_events[3].output.delta == "cherry cherry"
+    assert inner_workflow_streaming_events[4].output.value == ["apple apple", "banana banana", "cherry cherry"]
+    assert len(inner_workflow_streaming_events) == 5
 
-    assert events[3].name == "workflow.execution.streaming"
-    assert events[3].output.name == "final_value"
-    assert events[3].output.is_initiated
+    # outer node streaming events
+    outer_node_streaming_events = [
+        e for e in events if e.name == "node.execution.streaming" and e.node_definition == InnerNode
+    ]
+    assert outer_node_streaming_events[0].output.name == "processed"
+    assert outer_node_streaming_events[0].output.is_initiated
+    assert outer_node_streaming_events[1].output.delta == "apple apple"
+    assert outer_node_streaming_events[2].output.delta == "banana banana"
+    assert outer_node_streaming_events[3].output.delta == "cherry cherry"
+    assert outer_node_streaming_events[4].output.value == ["apple apple", "banana banana", "cherry cherry"]
+    assert len(outer_node_streaming_events) == 5
 
-    assert events[4].name == "node.execution.streaming"
-    assert events[4].output.delta == "apple apple"
+    # outer workflow streaming events
+    outer_workflow_streaming_events = [
+        e for e in events if e.name == "workflow.execution.streaming" and e.workflow_definition == StreamingTryExample
+    ]
+    assert outer_workflow_streaming_events[0].output.name == "final_value"
+    assert outer_workflow_streaming_events[0].output.is_initiated
+    assert outer_workflow_streaming_events[1].output.delta == "apple apple"
+    assert outer_workflow_streaming_events[2].output.delta == "banana banana"
+    assert outer_workflow_streaming_events[3].output.delta == "cherry cherry"
+    assert outer_workflow_streaming_events[4].output.value == ["apple apple", "banana banana", "cherry cherry"]
+    assert len(outer_workflow_streaming_events) == 5
 
-    assert events[5].name == "workflow.execution.streaming"
-    assert events[5].output.delta == "apple apple"
+    # node fulfilled events
+    node_fulfilled_events = [e for e in events if e.name == "node.execution.fulfilled"]
+    assert node_fulfilled_events[0].node_definition == WrappedNode
+    assert node_fulfilled_events[0].outputs.processed == ["apple apple", "banana banana", "cherry cherry"]
+    assert node_fulfilled_events[1].node_definition == InnerNode
+    assert node_fulfilled_events[1].outputs.processed == ["apple apple", "banana banana", "cherry cherry"]
+    assert len(node_fulfilled_events) == 2
 
-    assert events[6].name == "node.execution.streaming"
-    assert events[6].output.name == "processed"
-    assert events[6].output.delta == "banana banana"
+    # workflow fulfilled events
+    workflow_fulfilled_events = [e for e in events if e.name == "workflow.execution.fulfilled"]
+    assert workflow_fulfilled_events[0].workflow_definition == InnerWorkflow
+    assert workflow_fulfilled_events[0].outputs == {"processed": ["apple apple", "banana banana", "cherry cherry"]}
+    assert workflow_fulfilled_events[1].workflow_definition == StreamingTryExample
+    assert workflow_fulfilled_events[1].outputs.final_value == ["apple apple", "banana banana", "cherry cherry"]
+    assert len(workflow_fulfilled_events) == 2
 
-    assert events[7].name == "workflow.execution.streaming"
-    assert events[7].output.delta == "banana banana"
-
-    assert events[8].name == "node.execution.streaming"
-    assert events[8].output.delta == "cherry cherry"
-
-    assert events[9].name == "workflow.execution.streaming"
-    assert events[9].output.delta == "cherry cherry"
-
-    assert events[10].name == "node.execution.streaming"
-    assert events[10].output.value == ["apple apple", "banana banana", "cherry cherry"]
-
-    assert events[11].name == "workflow.execution.streaming"
-    assert events[11].output.value == ["apple apple", "banana banana", "cherry cherry"]
-
-    assert events[12].name == "node.execution.fulfilled"
-    assert events[12].outputs.processed == ["apple apple", "banana banana", "cherry cherry"]
-
-    assert events[13].name == "workflow.execution.fulfilled"
-    assert events[13].outputs.final_value == ["apple apple", "banana banana", "cherry cherry"]
-
-    assert len(events) == 14
+    assert len(events) == 28

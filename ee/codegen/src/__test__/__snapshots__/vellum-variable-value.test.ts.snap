@@ -32,10 +32,16 @@ exports[`VellumValue > NUMBER > should write a NUMBER value correctly 1`] = `
 exports[`VellumValue > SEARCH_RESULTS > should write a SEARCH_RESULTS value correctly 1`] = `
 "[
     SearchResult(
-        text="Hello, World!", score=0.5, keywords=["hello", "world"], document=document
+        text="Hello, World!",
+        score=0.5,
+        keywords=["hello", "world"],
+        document=Document(id="123", label="Example Document"),
     ),
     SearchResult(
-        text="Hello, AI!", score=0.7, keywords=["hello", "ai"], document=document
+        text="Hello, AI!",
+        score=0.7,
+        keywords=["hello", "ai"],
+        document=Document(id="456", label="Another Document"),
     ),
 ]
 "

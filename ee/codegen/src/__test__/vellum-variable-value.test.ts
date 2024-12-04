@@ -113,4 +113,19 @@ describe("VellumValue", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
+
+  describe("IMAGE", () => {
+    it("should write a IMAGE value correctly", async () => {
+      const imageValue = codegen.vellumValue({
+        vellumValue: {
+          type: "IMAGE",
+          value: {
+            src: "https://example.com/image.png",
+          },
+        },
+      });
+      imageValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
 });

@@ -228,11 +228,11 @@ export class VellumValue extends AstNode {
       case "ERROR":
         this.astNode = new ErrorVellumValue(vellumValue.value);
         break;
-      // TODO: Handle other vellum variable types
-      // https://app.shortcut.com/vellum/story/5661
       case "IMAGE":
         this.astNode = new ImageVellumValue(vellumValue.value);
         break;
+      // TODO: Handle other vellum variable types
+      // https://app.shortcut.com/vellum/story/5661
       case "AUDIO":
       case "FUNCTION_CALL":
       case "SEARCH_RESULTS":

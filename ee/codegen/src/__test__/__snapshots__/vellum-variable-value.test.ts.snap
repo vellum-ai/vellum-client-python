@@ -9,6 +9,11 @@ exports[`VellumValue > ERROR > should write a ERROR value correctly 1`] = `
 "
 `;
 
+exports[`VellumValue > IMAGE > should write a IMAGE value correctly 1`] = `
+""https://example.com/image.png"
+"
+`;
+
 exports[`VellumValue > JSON > should write a JSON value correctly 1`] = `
 "{"key": "value", "nested": {"array": [1, 2, 3]}}
 "

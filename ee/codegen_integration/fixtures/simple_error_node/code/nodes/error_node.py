@@ -4,4 +4,4 @@ from ..inputs import Inputs
 
 
 class ErrorNode(BaseErrorNode):
-    error = Inputs.query
+    error = Inputs.custom_error

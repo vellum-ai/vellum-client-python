@@ -59,7 +59,30 @@
           "width": 480,
           "height": 180
         },
-        "definition": {"name": "ErrorNode", "module": ["codegen_integration", "fixtures", "simple_error_node", "code", "nodes", "error_node"], "bases": [{"name": "ErrorNode", "module": ["vellum", "workflows", "nodes", "core", "error_node", "node"]}]}
+        "definition": {
+          "name": "ErrorNode",
+          "module": [
+            "codegen_integration",
+            "fixtures",
+            "simple_error_node",
+            "code",
+            "nodes",
+            "error_node"
+          ],
+          "bases": [
+            {
+              "name": "ErrorNode",
+              "module": [
+                "vellum",
+                "workflows",
+                "nodes",
+                "core",
+                "error_node",
+                "node"
+              ]
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -79,12 +102,21 @@
         "zoom": 0.7790666306986781
       }
     },
-    "definition": {"name": "Workflow", "module": ["codegen_integration", "fixtures", "simple_error_node", "code", "workflow"]}
+    "definition": {
+      "name": "Workflow",
+      "module": [
+        "codegen_integration",
+        "fixtures",
+        "simple_error_node",
+        "code",
+        "workflow"
+      ]
+    }
   },
   "input_variables": [
     {
       "id": "a6ef8809-346e-469c-beed-2e5c4e9844c5",
-      "key": "query",
+      "key": "custom_error",
       "type": "STRING",
       "default": null,
       "required": true,

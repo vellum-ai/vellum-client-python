@@ -144,4 +144,51 @@ describe("VellumValue", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
+
+  describe("AUDIO", () => {
+    it("should write a AUDIO value correctly", async () => {
+      const audioValue = codegen.vellumValue({
+        vellumValue: {
+          type: "AUDIO",
+          value: {
+            src: "https://example.com/audio.mp3",
+          },
+        },
+      });
+      audioValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
+
+  describe("SEARCH_RESULTS", () => {
+    it("should write a SEARCH_RESULTS value correctly", async () => {
+      const searchResultsValue = codegen.vellumValue({
+        vellumValue: {
+          type: "SEARCH_RESULTS",
+          value: [
+            {
+              text: "Hello, World!",
+              score: 0.5,
+              keywords: ["hello", "world"],
+              document: {
+                id: "123",
+                label: "Example Document",
+              },
+            },
+            {
+              text: "Hello, AI!",
+              score: 0.7,
+              keywords: ["hello", "ai"],
+              document: {
+                id: "456",
+                label: "Another Document",
+              },
+            },
+          ],
+        },
+      });
+      searchResultsValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
 });

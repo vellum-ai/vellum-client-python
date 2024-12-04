@@ -2,6 +2,8 @@
 
 exports[`VellumValue > ARRAY > should write a ARRAY value correctly 1`] = `
 "["Hello, World!", 42]
+exports[`VellumValue > AUDIO > should write a AUDIO value correctly 1`] = `
+"VellumAudio(src="https://example.com/audio.mp3")
 "
 `;
 
@@ -26,6 +28,18 @@ exports[`VellumValue > JSON > should write a JSON value correctly 1`] = `
 
 exports[`VellumValue > NUMBER > should write a NUMBER value correctly 1`] = `
 "42
+"
+`;
+
+exports[`VellumValue > SEARCH_RESULTS > should write a SEARCH_RESULTS value correctly 1`] = `
+"[
+    SearchResult(
+        text="Hello, World!", score=0.5, keywords=["hello", "world"], document=document
+    ),
+    SearchResult(
+        text="Hello, AI!", score=0.7, keywords=["hello", "ai"], document=document
+    ),
+]
 "
 `;
 

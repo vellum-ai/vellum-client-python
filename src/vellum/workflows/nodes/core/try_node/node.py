@@ -1,5 +1,5 @@
 import sys
-from types import ModuleType
+from types import MappingProxyType, ModuleType
 from typing import TYPE_CHECKING, Any, Callable, Dict, Generic, Iterator, Optional, Set, Tuple, Type, TypeVar, cast
 
 from vellum.workflows.errors.types import VellumError, VellumErrorCode
@@ -43,6 +43,14 @@ class _TryNodeMeta(BaseNodeMeta):
             setattr(outputs_class, descriptor.name, descriptor)
 
         return node_class
+
+    def __getattribute__(cls, name: str) -> Any:
+        try:
+            return super().__getattribute__(name)
+        except AttributeError:
+            if name != "__wrapped_node__" and hasattr(cls, "__wrapped_node__"):
+                return getattr(cls.__wrapped_node__, name)
+            raise
 
 
 class TryNode(BaseNode[StateType], Generic[StateType], metaclass=_TryNodeMeta):
@@ -122,8 +130,9 @@ Message: {event.error.message}""",
             # https://app.shortcut.com/vellum/story/4116
             from vellum.workflows import BaseWorkflow
 
+            inner_cls._is_wrapped_node = True
+
             class Subworkflow(BaseWorkflow):
-                inner_cls._is_wrapped_node = True
                 graph = inner_cls
 
                 # mypy is wrong here, this works and is defined
@@ -139,6 +148,7 @@ Message: {event.error.message}""",
                 cls.__name__,
                 (TryNode,),
                 {
+                    "__wrapped_node__": inner_cls,
                     "__module__": dynamic_module,
                     "on_error_code": _on_error_code,
                     "subworkflow": Subworkflow,

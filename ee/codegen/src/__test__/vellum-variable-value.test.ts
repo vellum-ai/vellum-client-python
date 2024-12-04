@@ -128,4 +128,19 @@ describe("VellumValue", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
+
+  describe("AUDIO", () => {
+    it("should write a AUDIO value correctly", async () => {
+      const audioValue = codegen.vellumValue({
+        vellumValue: {
+          type: "AUDIO",
+          value: {
+            src: "https://example.com/audio.mp3",
+          },
+        },
+      });
+      audioValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
 });

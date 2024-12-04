@@ -1,5 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`VellumValue > AUDIO > should write a AUDIO value correctly 1`] = `
+"VellumAudio(src="https://example.com/audio.mp3")
+"
+`;
+
 exports[`VellumValue > CHAT_HISTORY > should write a CHAT_HISTORY value with a string content 1`] = `"[ChatMessageRequest(role="USER", content=StringChatMessageContentRequest(value="Hello, AI!"))]"`;
 
 exports[`VellumValue > CHAT_HISTORY > should write a CHAT_HISTORY value with just text 1`] = `"[ChatMessageRequest(role="USER", text="Hello, AI!")]"`;

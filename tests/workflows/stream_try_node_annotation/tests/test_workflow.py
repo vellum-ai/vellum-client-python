@@ -22,6 +22,7 @@ def test_workflow_stream__happy_path():
 
     # THEN we see the expected events in the correct order
     assert events[0].name == "workflow.execution.initiated"
+    assert events[0].workflow_definition == StreamingTryExample
 
     assert events[1].name == "node.execution.initiated"
     assert events[1].node_definition == InnerNode
@@ -30,9 +31,12 @@ def test_workflow_stream__happy_path():
         "module": ["tests", "workflows", "stream_try_node_annotation", "workflow", "InnerNode", ADORNMENT_MODULE_NAME],
     }
 
-    assert events[2].name == "node.execution.streaming"
-    assert events[2].output.name == "processed"
-    assert events[2].output.is_initiated
+    assert events[2].name == "workflow.execution.initiated"
+    assert events[2].workflow_definition == InnerNode.subworkflow
+
+    assert events[3].name == "node.execution.streaming"
+    assert events[3].output.name == "processed"
+    assert events[3].output.is_initiated
 
     assert events[3].name == "workflow.execution.streaming"
     assert events[3].output.name == "final_value"

@@ -1,6 +1,7 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
+import { isNil } from "lodash";
 import {
   ChatMessageRequest,
   VellumError,
@@ -13,7 +14,6 @@ import { ChatMessageContent } from "./chat-message-content";
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
 import { Json } from "src/generators/json";
 import { assertUnreachable } from "src/utils/typing";
-import { isNil } from "lodash";
 
 class StringVellumValue extends AstNode {
   private value: string;

@@ -47,7 +47,7 @@ from vellum.workflows.events.node import (
     NodeExecutionStreamingBody,
     NodeExecutionStreamingEvent,
 )
-from vellum.workflows.events.types import WorkflowEventType
+from vellum.workflows.events.types import ParentContext, WorkflowEventType
 from vellum.workflows.events.workflow import (
     GenericWorkflowEvent,
     WorkflowExecutionFulfilledBody,
@@ -113,8 +113,10 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
         emitters: Optional[List[BaseWorkflowEmitter]] = None,
         resolvers: Optional[List[BaseWorkflowResolver]] = None,
         context: Optional[WorkflowContext] = None,
+        parent_context: Optional[ParentContext] = None,
     ):
         self._parent_state = parent_state
+        self._parent_context = parent_context
         self.emitters = emitters or (self.emitters if hasattr(self, "emitters") else [])
         self.resolvers = resolvers or (self.resolvers if hasattr(self, "resolvers") else [])
         self._context = context or WorkflowContext()
@@ -188,6 +190,7 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             entrypoint_nodes=entrypoint_nodes,
             external_inputs=external_inputs,
             cancel_signal=cancel_signal,
+            parent_context=self._parent_context,
         ).stream()
         first_event: Optional[Union[WorkflowExecutionInitiatedEvent, WorkflowExecutionResumedEvent]] = None
         last_event = None

@@ -8,6 +8,7 @@ from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.descriptors.utils import resolve_value
 from vellum.workflows.edges.edge import Edge
 from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.events.types import ParentContext
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.graph import Graph
 from vellum.workflows.graph.graph import GraphTarget
@@ -99,12 +100,12 @@ class BaseNodeMeta(type):
     def __getattribute__(cls, name: str) -> Any:
         attribute = super().__getattribute__(name)
         if (
-            name.startswith("_")
-            or inspect.isfunction(attribute)
-            or inspect.ismethod(attribute)
-            or is_nested_class(attribute, cls)
-            or isinstance(attribute, (property, cached_property))
-            or not issubclass(cls, BaseNode)
+                name.startswith("_")
+                or inspect.isfunction(attribute)
+                or inspect.ismethod(attribute)
+                or is_nested_class(attribute, cls)
+                or isinstance(attribute, (property, cached_property))
+                or not issubclass(cls, BaseNode)
         ):
             return attribute
 
@@ -206,6 +207,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
     _context: WorkflowContext
     _inputs: MappingProxyType[NodeReference, Any]
     _is_wrapped_node: bool = False
+    _parent_context: Optional[ParentContext] = None
 
     class ExternalInputs(BaseInputs):
         __descriptor_class__ = ExternalInputReference
@@ -225,7 +227,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
 
         @classmethod
         def should_initiate(
-            cls, state: StateType, dependencies: Set["Type[BaseNode]"], invoked_by: "Optional[Edge]" = None
+                cls, state: StateType, dependencies: Set["Type[BaseNode]"], invoked_by: "Optional[Edge]" = None
         ) -> bool:
             """
             Determines whether a Node's execution should be initiated. Override this method to define custom
@@ -273,7 +275,10 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
         node_class: Type["BaseNode"]
         count: int
 
-    def __init__(self, *, state: Optional[StateType] = None, context: Optional[WorkflowContext] = None):
+    def __init__(
+            self, *, state: Optional[StateType] = None, context: Optional[WorkflowContext] = None,
+            parent_context: Optional[ParentContext] = None
+    ):
         if state:
             self.state = state
         else:
@@ -323,6 +328,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
             all_inputs[inputs_key] = value
 
         self._inputs = MappingProxyType(all_inputs)
+        self._parent_context = parent_context
 
     def run(self) -> Union[BaseOutputs, Iterator[BaseOutput]]:
         return self.Outputs()

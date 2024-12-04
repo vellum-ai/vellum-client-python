@@ -4,7 +4,7 @@ import json
 from uuid import UUID, uuid4
 from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union
 
-from pydantic import Field, field_serializer
+from pydantic import Field, field_serializer, field_validator
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
 from vellum.workflows.state.encoder import DefaultStateEncoder
@@ -73,20 +73,38 @@ class PromptDeploymentParentContext(BaseDeploymentParentContext):
 
 class NodeParentContext(BaseParentContext):
     type: Literal["WORKFLOW_NODE"] = "WORKFLOW_NODE"
-    node_definition: Type['BaseNode']
+    node_definition: Union[Type['BaseNode'], dict[str, str]]
 
     @field_serializer("node_definition")
     def serialize_node_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
         return serialize_type_encoder(definition)
 
+    @field_validator("node_definition")
+    def validate_definition(self, node_definition: Union[Type['BaseNode'], dict[str, str]]):
+        if type(node_definition) is dict:
+            assert 'module' in node_definition
+            assert 'name' in node_definition
+        else:
+            assert type(node_definition) is Type[BaseNode]
+        return node_definition
+
 
 class WorkflowParentContext(BaseParentContext):
     type: Literal["WORKFLOW"] = "WORKFLOW"
-    workflow_definition: Type['BaseWorkflow']
+    workflow_definition: Union[Type['BaseWorkflow'], dict[str, str]]
 
     @field_serializer("workflow_definition")
     def serialize_workflow_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
         return serialize_type_encoder(definition)
+
+    @field_validator("workflow_definition")
+    def validate_definition(self, workflow_definition: Union[Type['BaseWorkflow'], dict[str, str]]):
+        if type(workflow_definition) is dict:
+            assert 'module' in workflow_definition
+            assert 'name' in workflow_definition
+        else:
+            assert type(workflow_definition) is Type[BaseWorkflow]
+        return workflow_definition
 
 
 ParentContext = Union[

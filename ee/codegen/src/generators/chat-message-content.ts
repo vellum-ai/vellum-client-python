@@ -42,6 +42,8 @@ export class ChatMessageContent extends AstNode {
     } else if (this.chatMessageContent.type === "FUNCTION_CALL") {
       this.addReference(this.getFunctionCallChatMessageContentRef());
       this.addReference(this.getFunctionCallChatMessageContentValueRef());
+    } else if (this.chatMessageContent.type === "AUDIO") {
+      this.addReference(this.getAudioChatMessageContentRef());
     }
   }
 
@@ -74,6 +76,13 @@ export class ChatMessageContent extends AstNode {
       name:
         "FunctionCallChatMessageContentValue" +
         (this.isRequestType ? "Request" : ""),
+      modulePath: VELLUM_CLIENT_MODULE_PATH,
+    });
+  }
+
+  private getAudioChatMessageContentRef(): python.Reference {
+    return python.reference({
+      name: "AudioChatMessageContent" + (this.isRequestType ? "Request" : ""),
       modulePath: VELLUM_CLIENT_MODULE_PATH,
     });
   }
@@ -165,9 +174,13 @@ export class ChatMessageContent extends AstNode {
     }
 
     if (contentType === "AUDIO") {
-      // TODO: Implement audio types
-      //    https://app.shortcut.com/vellum/story/4937/flesh-out-codegen-for-all-chat-message-content-types
-      throw new Error("Unhandled type: AUDIO");
+      const audioContentValue = this.chatMessageContent.value;
+
+      const audioChatMessageContentRequestRef =
+        this.getAudioChatMessageContentRef();
+      audioChatMessageContentRequestRef.write(writer);
+      writer.write(`(value="${audioContentValue}")`);
+      return;
     }
 
     assertUnreachable(contentType);

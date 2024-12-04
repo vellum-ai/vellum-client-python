@@ -13,6 +13,7 @@ import { ChatMessageContent } from "./chat-message-content";
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
 import { Json } from "src/generators/json";
 import { assertUnreachable } from "src/utils/typing";
+import { isNil } from "lodash";
 
 class StringVellumValue extends AstNode {
   private value: string;

@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING, Any, Dict, Generator, Generic, Iterable, Liter
 from pydantic import field_serializer
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
-
 from vellum.workflows.errors import VellumError
 from vellum.workflows.outputs.base import BaseOutput
 from vellum.workflows.references import ExternalInputReference
@@ -31,6 +30,14 @@ class _BaseWorkflowExecutionBody(UniversalBaseModel):
         return serialize_type_encoder(workflow_definition)
 
 
+class _BaseWorkflowEvent(BaseEvent):
+    body: _BaseWorkflowExecutionBody
+
+    @property
+    def workflow_definition(self) -> Type["BaseWorkflow"]:
+        return self.body.workflow_definition
+
+
 class WorkflowExecutionInitiatedBody(_BaseWorkflowExecutionBody, Generic[WorkflowInputsType]):
     inputs: WorkflowInputsType
 
@@ -39,7 +46,7 @@ class WorkflowExecutionInitiatedBody(_BaseWorkflowExecutionBody, Generic[Workflo
         return default_serializer(inputs)
 
 
-class WorkflowExecutionInitiatedEvent(BaseEvent, Generic[WorkflowInputsType]):
+class WorkflowExecutionInitiatedEvent(_BaseWorkflowEvent, Generic[WorkflowInputsType]):
     name: Literal["workflow.execution.initiated"] = "workflow.execution.initiated"
     body: WorkflowExecutionInitiatedBody[WorkflowInputsType]
 
@@ -56,7 +63,7 @@ class WorkflowExecutionStreamingBody(_BaseWorkflowExecutionBody):
         return default_serializer(output)
 
 
-class WorkflowExecutionStreamingEvent(BaseEvent):
+class WorkflowExecutionStreamingEvent(_BaseWorkflowEvent):
     name: Literal["workflow.execution.streaming"] = "workflow.execution.streaming"
     body: WorkflowExecutionStreamingBody
 
@@ -73,7 +80,7 @@ class WorkflowExecutionFulfilledBody(_BaseWorkflowExecutionBody, Generic[Outputs
         return default_serializer(outputs)
 
 
-class WorkflowExecutionFulfilledEvent(BaseEvent, Generic[OutputsType]):
+class WorkflowExecutionFulfilledEvent(_BaseWorkflowEvent, Generic[OutputsType]):
     name: Literal["workflow.execution.fulfilled"] = "workflow.execution.fulfilled"
     body: WorkflowExecutionFulfilledBody[OutputsType]
 
@@ -86,7 +93,7 @@ class WorkflowExecutionRejectedBody(_BaseWorkflowExecutionBody):
     error: VellumError
 
 
-class WorkflowExecutionRejectedEvent(BaseEvent):
+class WorkflowExecutionRejectedEvent(_BaseWorkflowEvent):
     name: Literal["workflow.execution.rejected"] = "workflow.execution.rejected"
     body: WorkflowExecutionRejectedBody
 
@@ -99,7 +106,7 @@ class WorkflowExecutionPausedBody(_BaseWorkflowExecutionBody):
     external_inputs: Iterable[ExternalInputReference]
 
 
-class WorkflowExecutionPausedEvent(BaseEvent):
+class WorkflowExecutionPausedEvent(_BaseWorkflowEvent):
     name: Literal["workflow.execution.paused"] = "workflow.execution.paused"
     body: WorkflowExecutionPausedBody
 
@@ -112,7 +119,7 @@ class WorkflowExecutionResumedBody(_BaseWorkflowExecutionBody):
     pass
 
 
-class WorkflowExecutionResumedEvent(BaseEvent):
+class WorkflowExecutionResumedEvent(_BaseWorkflowEvent):
     name: Literal["workflow.execution.resumed"] = "workflow.execution.resumed"
     body: WorkflowExecutionResumedBody
 

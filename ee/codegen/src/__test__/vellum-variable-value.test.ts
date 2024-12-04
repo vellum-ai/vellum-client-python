@@ -148,6 +148,34 @@ describe("VellumValue", () => {
     });
   });
 
+  describe("ARRAY", () => {
+    it("should write a ARRAY value correctly", async () => {
+      const arrayValue = codegen.vellumValue({
+        vellumValue: {
+          type: "ARRAY",
+          value: [
+            {
+              type: "STRING",
+              value: "Hello, World!",
+            },
+            {
+              type: "NUMBER",
+              value: 42,
+            },
+            {
+              type: "AUDIO",
+              value: {
+                src: "https://example.com/audio.mp3",
+              },
+            },
+          ],
+        },
+      });
+      arrayValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
+
   describe("AUDIO", () => {
     it("should write a AUDIO value correctly", async () => {
       const audioValue = codegen.vellumValue({

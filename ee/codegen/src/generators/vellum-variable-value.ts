@@ -220,6 +220,25 @@ class ImageVellumValue extends AstNode {
   }
 }
 
+class ArrayVellumValue extends AstNode {
+  private astNode: python.AstNode;
+
+  public constructor(value: unknown) {
+    super();
+    if (!Array.isArray(value)) {
+      throw new Error("Expected array value for ArrayVellumValue");
+    }
+    this.astNode = python.TypeInstantiation.list(
+      value.map((item) => new VellumValue({ vellumValue: item }))
+    );
+    this.inheritReferences(this.astNode);
+  }
+
+  public write(writer: Writer): void {
+    this.astNode.write(writer);
+  }
+}
+
 class AudioVellumValue extends AstNode {
   private value: VellumAudio;
 
@@ -372,7 +391,6 @@ export class VellumValue extends AstNode {
     if (vellumValue.value === undefined) {
       return;
     }
-
     switch (vellumValue.type) {
       case "STRING":
         this.astNode = new StringVellumValue(vellumValue.value);
@@ -395,6 +413,9 @@ export class VellumValue extends AstNode {
       case "IMAGE":
         this.astNode = new ImageVellumValue(vellumValue.value);
         break;
+      case "ARRAY":
+        this.astNode = new ArrayVellumValue(vellumValue.value);
+        break;
       case "AUDIO":
         this.astNode = new AudioVellumValue(vellumValue.value);
         break;
@@ -404,8 +425,6 @@ export class VellumValue extends AstNode {
       case "FUNCTION_CALL":
         this.astNode = new FunctionCallVellumValue(vellumValue.value);
         break;
-      case "ARRAY":
-        throw new Error(`Unknown vellum value type: ${vellumValue.type}`);
       default:
         assertUnreachable(vellumValue);
     }

@@ -404,9 +404,6 @@ export class VellumValue extends AstNode {
       case "FUNCTION_CALL":
         this.astNode = new FunctionCallVellumValue(vellumValue.value);
         break;
-      // TODO: Handle other vellum variable types
-      // https://app.shortcut.com/vellum/story/5661
-
       case "ARRAY":
         throw new Error(`Unknown vellum value type: ${vellumValue.type}`);
       default:

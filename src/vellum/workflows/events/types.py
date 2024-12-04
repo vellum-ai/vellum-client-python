@@ -15,11 +15,6 @@ if TYPE_CHECKING:
     from vellum.workflows.workflows.base import BaseWorkflow
 
 
-class WorkflowEventType(Enum):
-    NODE = "NODE"
-    WORKFLOW = "WORKFLOW"
-
-
 def default_datetime_factory() -> datetime:
     """
     Makes it possible to mock the datetime factory for testing.
@@ -49,7 +44,7 @@ def default_serializer(obj: Any) -> Any:
 
 class BaseParentContext(UniversalBaseModel):
     span_id: UUID
-    parent: Optional['ParentContext'] = None
+    parent: Optional["ParentContext"] = None
 
 
 class BaseDeploymentParentContext(BaseParentContext):
@@ -73,7 +68,7 @@ class PromptDeploymentParentContext(BaseDeploymentParentContext):
 
 class NodeParentContext(BaseParentContext):
     type: Literal["WORKFLOW_NODE"] = "WORKFLOW_NODE"
-    node_definition: Type['BaseNode']
+    node_definition: Type["BaseNode"]
 
     @field_serializer("node_definition")
     def serialize_node_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:
@@ -82,7 +77,7 @@ class NodeParentContext(BaseParentContext):
 
 class WorkflowParentContext(BaseParentContext):
     type: Literal["WORKFLOW"] = "WORKFLOW"
-    workflow_definition: Type['BaseWorkflow']
+    workflow_definition: Type["BaseWorkflow"]
 
     @field_serializer("workflow_definition")
     def serialize_workflow_definition(self, definition: Type, _info: Any) -> Dict[str, Any]:

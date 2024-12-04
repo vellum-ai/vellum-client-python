@@ -144,22 +144,12 @@ Message: {event.error.message}""",
             sys.modules[dynamic_module] = ModuleType(dynamic_module)
 
             # We use a dynamic wrapped node class to be uniquely tied to this `inner_cls` node during serialization
-            def new_init(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-                self._inputs = MappingProxyType(
-                    {
-                        **self.subworkflow.graph(*args, **kwargs)._inputs,
-                        **self._inputs,
-                    }
-                )
-
             WrappedNode = type(
                 cls.__name__,
                 (TryNode,),
                 {
                     "__wrapped_node__": inner_cls,
                     "__module__": dynamic_module,
-                    "__init__": new_init,
                     "on_error_code": _on_error_code,
                     "subworkflow": Subworkflow,
                 },

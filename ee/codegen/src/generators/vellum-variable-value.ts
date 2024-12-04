@@ -14,6 +14,8 @@ import { ChatMessageContent } from "./chat-message-content";
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
 import { Json } from "src/generators/json";
 import { assertUnreachable } from "src/utils/typing";
+import { Vellum } from "vellum-ai";
+import { AbstractWriter } from "@fern-api/browser-compatible-base-generator";
 
 class StringVellumValue extends AstNode {
   private value: string;
@@ -217,6 +219,25 @@ class ImageVellumValue extends AstNode {
   }
 }
 
+class ArrayVellumValue extends AstNode {
+  private astNode: python.AstNode;
+
+  public constructor(value: unknown) {
+    super();
+    if (!Array.isArray(value)) {
+      throw new Error("Expected array value for ArrayVellumValue");
+    }
+    this.astNode = python.TypeInstantiation.list(
+      value.map((item) => new VellumValue({ vellumValue: item }))
+    );
+    this.inheritReferences(this.astNode);
+  }
+
+  public write(writer: Writer): void {
+    this.astNode.write(writer);
+  }
+}
+
 export namespace VellumValue {
   export type Args = {
     vellumValue: VellumVariableValueType;
@@ -257,12 +278,14 @@ export class VellumValue extends AstNode {
       case "IMAGE":
         this.astNode = new ImageVellumValue(vellumValue.value);
         break;
+      case "ARRAY":
+        this.astNode = new ArrayVellumValue(vellumValue.value);
+        break;
       // TODO: Handle other vellum variable types
       // https://app.shortcut.com/vellum/story/5661
       case "AUDIO":
       case "FUNCTION_CALL":
       case "SEARCH_RESULTS":
-      case "ARRAY":
         throw new Error(`Unknown vellum value type: ${vellumValue.type}`);
       default:
         assertUnreachable(vellumValue);

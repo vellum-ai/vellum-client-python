@@ -128,4 +128,20 @@ describe("VellumValue", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
+
+  describe("ARRAY", () => {
+    it("should write a ARRAY value correctly", async () => {
+      const arrayValue = codegen.vellumValue({
+        vellumValue: {
+          type: "ARRAY",
+          value: [
+            { type: "STRING", value: "Hello, World!" },
+            { type: "NUMBER", value: 42 },
+          ],
+        },
+      });
+      arrayValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
 });

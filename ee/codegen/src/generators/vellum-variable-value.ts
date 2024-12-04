@@ -324,25 +324,21 @@ class SearchResultsVellumValue extends AstNode {
       ];
 
       if (result.meta) {
-        const metaJson = new Json(result.meta);
-        this.inheritReferences(metaJson);
         arguments_.push(
           python.methodArgument({
             name: "meta",
-            value: metaJson,
+            value: new Json(result.meta),
           })
         );
       }
 
-      const searchResult = python.instantiateClass({
+      return python.instantiateClass({
         classReference: python.reference({
           name: "SearchResult",
           modulePath: VELLUM_CLIENT_MODULE_PATH,
         }),
         arguments_: arguments_,
       });
-      this.inheritReferences(searchResult);
-      return searchResult;
     });
 
     const searchResultsList = python.TypeInstantiation.list(searchResults);

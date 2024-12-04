@@ -4,6 +4,7 @@ import importlib
 import inspect
 
 from vellum.plugins.utils import load_runtime_plugins
+from vellum.workflows.workflows.event_filters import workflow_event_filter
 
 load_runtime_plugins()
 
@@ -13,6 +14,7 @@ from threading import Event as ThreadingEvent
 from uuid import uuid4
 from typing import (
     Any,
+    Callable,
     ClassVar,
     Dict,
     Generator,
@@ -47,7 +49,6 @@ from vellum.workflows.events.node import (
     NodeExecutionStreamingBody,
     NodeExecutionStreamingEvent,
 )
-from vellum.workflows.events.types import WorkflowEventType
 from vellum.workflows.events.workflow import (
     GenericWorkflowEvent,
     WorkflowExecutionFulfilledBody,
@@ -239,14 +240,14 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
 
     def stream(
         self,
-        event_types: Optional[Set[WorkflowEventType]] = None,
+        event_filter: Optional[Callable[[Type["BaseWorkflow"], WorkflowEvent], bool]] = None,
         inputs: Optional[WorkflowInputsType] = None,
         state: Optional[StateType] = None,
         entrypoint_nodes: Optional[RunFromNodeArg] = None,
         external_inputs: Optional[ExternalInputsArg] = None,
         cancel_signal: Optional[ThreadingEvent] = None,
     ) -> WorkflowEventStream:
-        event_types = event_types or {WorkflowEventType.WORKFLOW}
+        should_yield = event_filter or workflow_event_filter
         for event in WorkflowRunner(
             self,
             inputs=inputs,
@@ -255,7 +256,7 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             external_inputs=external_inputs,
             cancel_signal=cancel_signal,
         ).stream():
-            if WorkflowEventType(event.name.split(".")[0].upper()) in event_types:
+            if should_yield(self.__class__, event):
                 yield event
 
     def validate(self) -> None:

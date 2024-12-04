@@ -4,6 +4,7 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import {
   ChatMessageRequest,
   VellumError,
+  VellumImage,
   VellumValue as VellumVariableValueType,
 } from "vellum-ai/api";
 
@@ -178,6 +179,18 @@ class ErrorVellumValue extends AstNode {
   }
 }
 
+class ImageVellumValue extends AstNode {
+  private value: VellumImage;
+
+  public constructor(value: VellumImage) {
+    super();
+    this.value = value;
+  }
+  public write(writer: Writer): void {
+    python.TypeInstantiation.str(this.value.src).write(writer);
+  }
+}
+
 export namespace VellumValue {
   export type Args = {
     vellumValue: VellumVariableValueType;
@@ -218,6 +231,8 @@ export class VellumValue extends AstNode {
       // TODO: Handle other vellum variable types
       // https://app.shortcut.com/vellum/story/5661
       case "IMAGE":
+        this.astNode = new ImageVellumValue(vellumValue.value);
+        break;
       case "AUDIO":
       case "FUNCTION_CALL":
       case "SEARCH_RESULTS":

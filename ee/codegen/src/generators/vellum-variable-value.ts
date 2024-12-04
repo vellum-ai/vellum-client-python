@@ -4,6 +4,7 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import { isNil } from "lodash";
 import {
   ChatMessageRequest,
+  VellumAudio,
   VellumError,
   VellumImage,
   VellumValue as VellumVariableValueType,
@@ -217,6 +218,43 @@ class ImageVellumValue extends AstNode {
   }
 }
 
+class AudioVellumValue extends AstNode {
+  private value: VellumAudio;
+
+  public constructor(value: VellumAudio) {
+    super();
+    this.value = value;
+  }
+
+  public write(writer: Writer): void {
+    const arguments_ = [
+      python.methodArgument({
+        name: "src",
+        value: python.TypeInstantiation.str(this.value.src),
+      }),
+    ];
+
+    if (!isNil(this.value.metadata)) {
+      arguments_.push(
+        python.methodArgument({
+          name: "metadata",
+          value: new Json(this.value.metadata),
+        })
+      );
+    }
+
+    python
+      .instantiateClass({
+        classReference: python.reference({
+          name: "VellumAudio",
+          modulePath: VELLUM_CLIENT_MODULE_PATH,
+        }),
+        arguments_: arguments_,
+      })
+      .write(writer);
+  }
+}
+
 export namespace VellumValue {
   export type Args = {
     vellumValue: VellumVariableValueType;
@@ -257,9 +295,11 @@ export class VellumValue extends AstNode {
       case "IMAGE":
         this.astNode = new ImageVellumValue(vellumValue.value);
         break;
+      case "AUDIO":
+        this.astNode = new AudioVellumValue(vellumValue.value);
+        break;
       // TODO: Handle other vellum variable types
       // https://app.shortcut.com/vellum/story/5661
-      case "AUDIO":
       case "FUNCTION_CALL":
       case "SEARCH_RESULTS":
       case "ARRAY":

@@ -48,10 +48,10 @@ export class ConditionalNodePort extends AstNode {
       methodReference: python.reference({
         name: "Port",
         modulePath:
-        this.portContext.workflowContext.sdkModulePathNames.PORTS_MODULE_PATH,
+          this.portContext.workflowContext.sdkModulePathNames.PORTS_MODULE_PATH,
         attribute: [
           this.convertConditionTypeToPortAttribute(
-              this.conditionalNodeData.type
+            this.conditionalNodeData.type
           ),
         ],
       }),
@@ -74,16 +74,16 @@ export class ConditionalNodePort extends AstNode {
   }
 
   private buildCondition(
-      conditionData: ConditionalRuleData | undefined
+    conditionData: ConditionalRuleData | undefined
   ): AstNode {
     if (!conditionData) {
       return python.TypeInstantiation.none();
     }
 
     if (
-        conditionData &&
-        conditionData.fieldNodeInputId &&
-        conditionData.valueNodeInputId
+      conditionData &&
+      conditionData.fieldNodeInputId &&
+      conditionData.valueNodeInputId
     ) {
       return this.buildDescriptor(conditionData);
     }
@@ -93,21 +93,21 @@ export class ConditionalNodePort extends AstNode {
     });
 
     const combine =
-        conditionData.combinator === "AND"
-            ? (lhs: AstNode, rhs: AstNode): AstNode => {
-              return python.operator({
-                operator: OperatorType.And,
-                lhs: lhs,
-                rhs: rhs,
-              });
-            }
-            : (lhs: AstNode, rhs: AstNode): AstNode => {
-              return python.operator({
-                operator: OperatorType.Or,
-                lhs: lhs,
-                rhs: rhs,
-              });
-            };
+      conditionData.combinator === "AND"
+        ? (lhs: AstNode, rhs: AstNode): AstNode => {
+            return python.operator({
+              operator: OperatorType.And,
+              lhs: lhs,
+              rhs: rhs,
+            });
+          }
+        : (lhs: AstNode, rhs: AstNode): AstNode => {
+            return python.operator({
+              operator: OperatorType.Or,
+              lhs: lhs,
+              rhs: rhs,
+            });
+          };
 
     const combinedConditions = otherConditions.reduce((prev, curr) => {
       return combine(prev, curr);
@@ -137,8 +137,8 @@ export class ConditionalNodePort extends AstNode {
     const lhs = this.nodeInputsByKey.get(lhsKey);
     const rhs = this.nodeInputsByKey.get(rhsKey);
     const expression = conditionData.operator
-        ? this.convertOperatorToMethod(conditionData.operator)
-        : undefined;
+      ? this.convertOperatorToMethod(conditionData.operator)
+      : undefined;
     if (isNil(lhs) || isNil(expression)) {
       throw new Error("Port conditions require a lhs and an expression");
     }

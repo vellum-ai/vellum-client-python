@@ -5,8 +5,8 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 export declare namespace Expression {
   interface Args {
     lhs: AstNode;
-    expression: "equals" | "less_than";
-    rhs: AstNode;
+    expression: string;
+    rhs?: AstNode | undefined;
   }
 }
 
@@ -21,12 +21,15 @@ export class Expression extends AstNode {
 
   private generateAstNode({ lhs, expression, rhs }: Expression.Args): AstNode {
     this.inheritReferences(lhs);
-    this.inheritReferences(rhs);
+    if (rhs) {
+      this.inheritReferences(rhs);
+    }
 
     // TODO: We should ideally perform this using native fern functionality, but it requires being able to create
     //  a Reference object from an existing AstNode, which in turn requires all AstNode's to internally track their
     //  name and modulePath.
-    const rawExpression = `${lhs.toString()}.${expression}(${rhs.toString()})`;
+    const rhsExpression = rhs ? `(${rhs.toString()})` : "";
+    const rawExpression = `${lhs.toString()}.${expression}${rhsExpression}`;
 
     return python.codeBlock(rawExpression);
   }

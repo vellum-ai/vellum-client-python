@@ -80,10 +80,10 @@ class ConditionalNodeDisplay(BaseConditionalNodeDisplay[ConditionalNode]):
         "d8e94b2f-e9b5-484c-bd0c-a388747153b9.value": UUID("2398764a-060b-4ee9-9531-60e06b2c95b9"),
     }
     port_displays = {
-        ConditionalNode.Ports.branch_8: PortDisplayOverrides(id=UUID("d4f0db7d-b04a-4c4d-b9d3-aa3eb61fa3a2")),
-        ConditionalNode.Ports.branch_9: PortDisplayOverrides(id=UUID("d3489082-f03f-4121-ae60-877fd361c5fe")),
-        ConditionalNode.Ports.branch_10: PortDisplayOverrides(id=UUID("a913cb88-261b-4fa8-9915-d215e19749ee")),
-        ConditionalNode.Ports.branch_11: PortDisplayOverrides(id=UUID("fec240f8-8baf-40f9-87e7-f268bff4ed94")),
+        ConditionalNode.Ports.branch_1: PortDisplayOverrides(id=UUID("d4f0db7d-b04a-4c4d-b9d3-aa3eb61fa3a2")),
+        ConditionalNode.Ports.branch_2: PortDisplayOverrides(id=UUID("d3489082-f03f-4121-ae60-877fd361c5fe")),
+        ConditionalNode.Ports.branch_3: PortDisplayOverrides(id=UUID("a913cb88-261b-4fa8-9915-d215e19749ee")),
+        ConditionalNode.Ports.branch_4: PortDisplayOverrides(id=UUID("fec240f8-8baf-40f9-87e7-f268bff4ed94")),
     }
     display_data = NodeDisplayData(
         position=NodeDisplayPosition(x=2084.4413934539916, y=503.21512629358983), width=480, height=283

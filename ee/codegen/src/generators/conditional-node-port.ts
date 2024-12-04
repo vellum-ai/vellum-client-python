@@ -3,45 +3,42 @@ import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
 import { OperatorType } from "@fern-api/python-ast/OperatorType";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
+import { isNil } from "lodash";
 
 import { PortContext } from "src/context/port-context";
-import { NodeInputValuePointer } from "src/generators/node-inputs";
+import { Expression } from "src/generators/expression";
+import { NodeInput } from "src/generators/node-inputs";
 import {
   ConditionalNodeConditionData,
   ConditionalRuleData,
-  ExecutionCounterData,
-  InputVariableData,
-  NodeInput as NodeInputType,
-  NodeInputValuePointer as NodeInputValuePointerType,
-  NodeOutputData,
-  WorkspaceSecretData,
 } from "src/types/vellum";
-import { toSnakeCase } from "src/utils/casing";
-import { assertUnreachable } from "src/utils/typing";
 
 export declare namespace ConditionalNodePort {
   export interface Args {
     portContext: PortContext;
-    inputFieldsByRuleId: Map<string, NodeInputType>;
-    valueInputsByRuleIds: Map<string, NodeInputValuePointerType>;
+    inputFieldKeysByRuleId: Map<string, string>;
+    valueInputKeysByRuleId: Map<string, string>;
     conditionData: ConditionalNodeConditionData;
+    nodeInputsByKey: Map<string, NodeInput>;
   }
 }
 
 export class ConditionalNodePort extends AstNode {
   private portContext: PortContext;
   private conditionalNodeData: ConditionalNodeConditionData;
-  private inputFieldsByRuleId: Map<string, NodeInputType>;
-  private valueInputsByRuleIds: Map<string, NodeInputValuePointerType>;
+  private inputFieldKeysByRuleId: Map<string, string>;
+  private valueInputKeysByRuleId: Map<string, string>;
+  private nodeInputsByKey: Map<string, NodeInput>;
   private astNode: AstNode;
 
   public constructor(args: ConditionalNodePort.Args) {
     super();
 
     this.portContext = args.portContext;
-    this.inputFieldsByRuleId = args.inputFieldsByRuleId;
-    this.valueInputsByRuleIds = args.valueInputsByRuleIds;
+    this.inputFieldKeysByRuleId = args.inputFieldKeysByRuleId;
+    this.valueInputKeysByRuleId = args.valueInputKeysByRuleId;
     this.conditionalNodeData = args.conditionData;
+    this.nodeInputsByKey = args.nodeInputsByKey;
     this.astNode = this.constructPort();
     this.inheritReferences(this.astNode);
   }
@@ -131,122 +128,24 @@ export class ConditionalNodePort extends AstNode {
 
   private buildDescriptor(conditionData: ConditionalRuleData): AstNode {
     const ruleId = conditionData.id;
-    const fieldInput = this.inputFieldsByRuleId.get(ruleId);
-    if (!fieldInput) {
-      throw new Error(`No input found given ${ruleId}`);
-    }
 
-    const rule = fieldInput.value.rules[0];
-    if (!rule) {
-      throw new Error(`No node input pointer for rule ${ruleId}`);
+    const lhsKey = this.inputFieldKeysByRuleId.get(ruleId);
+    const rhsKey = this.valueInputKeysByRuleId.get(ruleId);
+    if (isNil(lhsKey) || isNil(rhsKey)) {
+      throw new Error(`Could not find input field key given rule id ${ruleId}`);
     }
-    let fieldInputRef;
-    switch (rule.type) {
-      case "CONSTANT_VALUE": {
-        throw new Error(
-          "Descriptors with a constant value on the left hand side is not supported"
-        );
-      }
-      case "NODE_OUTPUT": {
-        const data = rule.data as NodeOutputData;
-        const nodeContext = this.portContext.workflowContext.getNodeContext(
-          data.nodeId
-        );
-        fieldInputRef = python.reference({
-          name: nodeContext.getNodeOutputNameById(data.outputId),
-          modulePath: nodeContext.nodeModulePath,
-          attribute: (() => {
-            return conditionData.operator
-              ? [this.convertOperatorToMethod(conditionData.operator)]
-              : [];
-          })(),
-        });
-        break;
-      }
-      case "INPUT_VARIABLE": {
-        const data = rule.data as InputVariableData;
-        const inputContext =
-          this.portContext.workflowContext.getInputVariableContextById(
-            data.inputVariableId
-          );
-        fieldInputRef = python.reference({
-          name: "Inputs",
-          modulePath: inputContext.modulePath,
-          attribute: (() => {
-            return conditionData.operator
-              ? [
-                  toSnakeCase(inputContext.getInputVariableName()),
-                  this.convertOperatorToMethod(conditionData.operator),
-                ]
-              : [];
-          })(),
-        });
-        break;
-      }
-      case "WORKSPACE_SECRET": {
-        const data = rule.data as WorkspaceSecretData;
-        if (data.workspaceSecretId) {
-          fieldInputRef = python.reference({
-            name: "VellumSecretReference",
-            modulePath: [
-              ...this.portContext.workflowContext.sdkModulePathNames
-                .WORKFLOWS_MODULE_PATH,
-              "references",
-            ],
-            attribute: (() => {
-              return conditionData.operator
-                ? [
-                    data.workspaceSecretId,
-                    this.convertOperatorToMethod(conditionData.operator),
-                  ]
-                : [];
-            })(),
-          });
-        }
-        break;
-      }
-      case "EXECUTION_COUNTER": {
-        const data = rule.data as ExecutionCounterData;
-        const nodeContext = this.portContext.nodeContext;
-        fieldInputRef = python.reference({
-          name: nodeContext.getNodeOutputNameById(data.nodeId),
-          modulePath: nodeContext.nodeModulePath,
-          attribute: (() => {
-            return conditionData.operator
-              ? [
-                  "Execution",
-                  "count",
-                  this.convertOperatorToMethod(conditionData.operator),
-                ]
-              : [];
-          })(),
-        });
-        break;
-      }
-      default: {
-        assertUnreachable(rule);
-      }
+    const lhs = this.nodeInputsByKey.get(lhsKey);
+    const rhs = this.nodeInputsByKey.get(rhsKey);
+    const expression = conditionData.operator
+      ? this.convertOperatorToMethod(conditionData.operator)
+      : undefined;
+    if (isNil(lhs) || isNil(expression)) {
+      throw new Error("Port conditions require a lhs and an expression");
     }
-
-    if (!fieldInputRef) {
-      throw new Error("No reference made for field input");
-    }
-
-    return python.invokeMethod({
-      methodReference: fieldInputRef,
-      arguments_: (() => {
-        const value = this.valueInputsByRuleIds.get(ruleId);
-        return value
-          ? [
-              new MethodArgument({
-                value: new NodeInputValuePointer({
-                  workflowContext: this.portContext.workflowContext,
-                  nodeInputValuePointerData: value,
-                }),
-              }),
-            ]
-          : [];
-      })(),
+    return new Expression({
+      lhs: lhs,
+      expression: expression,
+      rhs: rhs,
     });
   }
 

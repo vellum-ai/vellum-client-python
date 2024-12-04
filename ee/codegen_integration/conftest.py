@@ -30,8 +30,9 @@ _fixture_paths = _get_fixtures(
     # TODO: Remove exclusions on all of these fixtures
     # https://app.shortcut.com/vellum/story/4649/remove-fixture-exclusions-for-serialization
     exclude_fixtures={
-        "faa_q_and_a_bot",
         "simple_merge_node"
+        # TODO: Remove after api node is fixed
+        "faa_q_and_a_bot"
     },
     include_fixtures={"simple_error_node"}
 )

@@ -5,7 +5,7 @@ from .inputs import Inputs
 from .nodes.api_node import APINode
 from .nodes.conditional_node import ConditionalNode
 from .nodes.faa_document_store import FAADocumentStore
-from .nodes.final_output import FinalOutput
+from .nodes.final_output_2 import FinalOutput2
 from .nodes.formatted_search_results import FormattedSearchResults
 from .nodes.most_recent_message import MostRecentMessage
 from .nodes.prompt_node import PromptNode
@@ -25,17 +25,17 @@ class Workflow(BaseWorkflow[Inputs, BaseState]):
         >> PromptNode
         >> TemplatingNode
         >> {
-            ConditionalNode.Ports.branch_1 >> SubworkflowNode >> PromptNode14 >> FinalOutput,
+            ConditionalNode.Ports.branch_1 >> SubworkflowNode >> PromptNode14 >> FinalOutput2,
             ConditionalNode.Ports.branch_2
             >> PromptNode16
             >> TemplatingNode15
             >> APINode
             >> PromptNode18
-            >> FinalOutput,
-            ConditionalNode.Ports.branch_3 >> FAADocumentStore >> FormattedSearchResults >> PromptNode9 >> FinalOutput,
-            ConditionalNode.Ports.branch_4 >> PromptNode19 >> FinalOutput,
+            >> FinalOutput2,
+            ConditionalNode.Ports.branch_3 >> FAADocumentStore >> FormattedSearchResults >> PromptNode9 >> FinalOutput2,
+            ConditionalNode.Ports.branch_4 >> PromptNode19 >> FinalOutput2,
         }
     )
 
     class Outputs(BaseWorkflow.Outputs):
-        answer = FinalOutput.Outputs.value
+        answer = FinalOutput2.Outputs.value

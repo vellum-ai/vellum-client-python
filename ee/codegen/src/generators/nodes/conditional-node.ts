@@ -11,9 +11,8 @@ import {
   ConditionalNode as ConditionalNodeType,
   ConditionalNodeData,
   ConditionalRuleData,
-  NodeInput,
-  NodeInputValuePointer,
 } from "src/types/vellum";
+import { isNilOrEmpty } from "src/utils/typing";
 
 export class ConditionalNode extends BaseSingleFileNode<
   ConditionalNodeType,
@@ -25,11 +24,11 @@ export class ConditionalNode extends BaseSingleFileNode<
   protected getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 
-    const inputFieldsByRuleId = new Map<string, NodeInput>();
-    const valueInputsByRuleId = new Map<string, NodeInputValuePointer>();
+    const inputFieldKeysByRuleId = new Map<string, string>();
+    const valueInputKeysByRuleId = new Map<string, string>();
     this.constructMapContextForAllConditions(
-      inputFieldsByRuleId,
-      valueInputsByRuleId,
+      inputFieldKeysByRuleId,
+      valueInputKeysByRuleId,
       this.nodeData.data
     );
 
@@ -49,7 +48,7 @@ export class ConditionalNode extends BaseSingleFileNode<
       extends_: [ref],
     });
     Array.from(this.workflowContext.portContextById.entries()).forEach(
-      ([portId, context], idx) => {
+      ([portId, context]) => {
         const conditionData = this.nodeData.data.conditions.find(
           (condition) => condition.sourceHandleId === portId
         );
@@ -58,16 +57,15 @@ export class ConditionalNode extends BaseSingleFileNode<
           return;
         }
 
-        const portName = `branch_${idx + 1}`;
-
         portsClass.addField(
           python.field({
-            name: portName,
+            name: context.portName,
             initializer: new ConditionalNodePort({
               portContext: context,
-              inputFieldsByRuleId: inputFieldsByRuleId,
-              valueInputsByRuleIds: valueInputsByRuleId,
+              inputFieldKeysByRuleId: inputFieldKeysByRuleId,
+              valueInputKeysByRuleId: valueInputKeysByRuleId,
               conditionData: conditionData,
+              nodeInputsByKey: this.nodeInputsByKey,
             }),
           })
         );
@@ -261,15 +259,15 @@ export class ConditionalNode extends BaseSingleFileNode<
   }
 
   private constructMapContextForAllConditions(
-    inputFieldsByRuleId: Map<string, NodeInput>,
-    valueInputsByRuleIds: Map<string, unknown>,
+    inputFieldKeysByRuleId: Map<string, string>,
+    valueInputKeysByRuleId: Map<string, string>,
     nodeData: ConditionalNodeData
   ): void {
     nodeData.conditions.forEach((condition) => {
       if (condition.data) {
         this.constructMapContextByRuleIds(
-          inputFieldsByRuleId,
-          valueInputsByRuleIds,
+          inputFieldKeysByRuleId,
+          valueInputKeysByRuleId,
           condition.data
         );
       }
@@ -277,76 +275,37 @@ export class ConditionalNode extends BaseSingleFileNode<
   }
 
   private constructMapContextByRuleIds(
-    inputFieldsByRuleId: Map<string, NodeInput>,
-    valueInputsByRuleIds: Map<string, unknown>,
+    inputFieldsByRuleId: Map<string, string>,
+    valueInputsByRuleIds: Map<string, string>,
     ruleData: ConditionalRuleData
   ): void {
-    const processLeafRule = (rule: ConditionalRuleData): void => {
-      if (!rule.id) return;
-
-      if (rule.fieldNodeInputId && !inputFieldsByRuleId.has(rule.id)) {
-        processFieldInputs(rule);
-      }
-
-      if (rule.valueNodeInputId) {
-        processValueNodeInput(rule);
-      }
-    };
-
-    const processFieldInputs = (rule: ConditionalRuleData): void => {
+    if (!ruleData) {
+      return;
+    }
+    if (
+      isNilOrEmpty(ruleData.rules) &&
+      ruleData.fieldNodeInputId &&
+      ruleData.valueNodeInputId
+    ) {
       this.nodeData.inputs.forEach((input) => {
-        if (input.id === rule.fieldNodeInputId) {
-          if (!inputFieldsByRuleId.has(rule.id) && input) {
-            inputFieldsByRuleId.set(rule.id, input);
-          }
+        if (input.id === ruleData.fieldNodeInputId) {
+          inputFieldsByRuleId.set(ruleData.id, input.key);
+        }
+        if (input.id === ruleData.valueNodeInputId) {
+          valueInputsByRuleIds.set(ruleData.id, input.key);
         }
       });
-    };
+    }
 
-    const processValueNodeInput = (rule: ConditionalRuleData): void => {
-      this.nodeData.inputs.forEach((input) => {
-        if (input.id === rule.valueNodeInputId) {
-          input.value.rules.forEach((valuePointer) => {
-            let value;
-            switch (valuePointer.type) {
-              case "CONSTANT_VALUE":
-                value = input.value;
-                break;
-              case "NODE_OUTPUT": {
-                value = input.value;
-                break;
-              }
-              case "WORKSPACE_SECRET": {
-                value = input.value;
-                break;
-              }
-              case "INPUT_VARIABLE": {
-                value = input.value;
-                break;
-              }
-              case "EXECUTION_COUNTER": {
-                value = input.value;
-                break;
-              }
-            }
-            if (!valueInputsByRuleIds.has(rule.id)) {
-              valueInputsByRuleIds.set(rule.id, value);
-            }
-          });
-        }
+    if (ruleData.rules) {
+      ruleData.rules.forEach((rule) => {
+        this.constructMapContextByRuleIds(
+          inputFieldsByRuleId,
+          valueInputsByRuleIds,
+          rule
+        );
       });
-    };
-
-    const processRule = (rule: ConditionalRuleData): void => {
-      if (!rule) return;
-      else if (rule.rules && rule.rules.length !== 0) {
-        rule.rules.forEach((childRule) => processRule(childRule));
-      } else {
-        processLeafRule(rule);
-      }
-    };
-
-    processRule(ruleData);
+    }
   }
 
   protected getErrorOutputId(): undefined {
@@ -357,7 +316,7 @@ export class ConditionalNode extends BaseSingleFileNode<
     const portDisplayOverridesDict = new Map();
 
     Array.from(this.workflowContext.portContextById.entries()).forEach(
-      ([portId, _], idx) => {
+      ([portId, context]) => {
         const conditionData = this.nodeData.data.conditions.find(
           (condition) => condition.sourceHandleId === portId
         );
@@ -374,8 +333,6 @@ export class ConditionalNode extends BaseSingleFileNode<
           return;
         }
 
-        const portName = `branch_${idx + 1}`;
-
         const portDisplayOverrides = python.instantiateClass({
           classReference: python.reference({
             name: "PortDisplayOverrides",
@@ -391,7 +348,7 @@ export class ConditionalNode extends BaseSingleFileNode<
           ],
         });
 
-        portDisplayOverridesDict.set(portName, portDisplayOverrides);
+        portDisplayOverridesDict.set(context.portName, portDisplayOverrides);
       }
     );
     return python.field({

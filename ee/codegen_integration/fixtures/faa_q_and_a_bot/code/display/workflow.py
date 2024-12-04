@@ -17,7 +17,7 @@ from ..inputs import Inputs
 from ..nodes.api_node import APINode
 from ..nodes.conditional_node import ConditionalNode
 from ..nodes.faa_document_store import FAADocumentStore
-from ..nodes.final_output import FinalOutput
+from ..nodes.final_output_2 import FinalOutput2
 from ..nodes.formatted_search_results import FormattedSearchResults
 from ..nodes.most_recent_message import MostRecentMessage
 from ..nodes.prompt_node import PromptNode
@@ -57,7 +57,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         (FormattedSearchResults.Ports.default, PromptNode9): EdgeVellumDisplayOverrides(
             id=UUID("bde304f6-a485-4e87-836a-6dcb897ed38a")
         ),
-        (PromptNode9.Ports.default, FinalOutput): EdgeVellumDisplayOverrides(
+        (PromptNode9.Ports.default, FinalOutput2): EdgeVellumDisplayOverrides(
             id=UUID("9e19ee9e-24a6-47e7-8b10-44781a53018f")
         ),
         (MostRecentMessage.Ports.default, PromptNode): EdgeVellumDisplayOverrides(
@@ -75,7 +75,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         (SubworkflowNode.Ports.default, PromptNode14): EdgeVellumDisplayOverrides(
             id=UUID("84229185-fb0e-4f7f-bd11-1de423396872")
         ),
-        (PromptNode14.Ports.default, FinalOutput): EdgeVellumDisplayOverrides(
+        (PromptNode14.Ports.default, FinalOutput2): EdgeVellumDisplayOverrides(
             id=UUID("417f05e4-f73a-4d93-98ab-ada609062d38")
         ),
         (ConditionalNode.Ports.branch_2, PromptNode16): EdgeVellumDisplayOverrides(
@@ -90,7 +90,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         (APINode.Ports.default, PromptNode18): EdgeVellumDisplayOverrides(
             id=UUID("1e4489fd-62ee-4b2d-8abb-b3082485ef01")
         ),
-        (PromptNode18.Ports.default, FinalOutput): EdgeVellumDisplayOverrides(
+        (PromptNode18.Ports.default, FinalOutput2): EdgeVellumDisplayOverrides(
             id=UUID("87051c37-8d28-4849-9c09-e6d243b744b6")
         ),
         (ConditionalNode.Ports.branch_3, FAADocumentStore): EdgeVellumDisplayOverrides(
@@ -99,7 +99,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         (ConditionalNode.Ports.branch_4, PromptNode19): EdgeVellumDisplayOverrides(
             id=UUID("a5d7013a-4ecb-4f35-8230-ef8fbfecda27")
         ),
-        (PromptNode19.Ports.default, FinalOutput): EdgeVellumDisplayOverrides(
+        (PromptNode19.Ports.default, FinalOutput2): EdgeVellumDisplayOverrides(
             id=UUID("f88c3cad-c845-41af-abe6-118e0606ac16")
         ),
     }
@@ -109,7 +109,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
             node_id=UUID("f9c5254c-b86d-420d-811a-a1674df273cd"),
             node_input_id=UUID("4a999b21-0555-404c-a4f4-c613cd108450"),
             name="answer",
-            label="Final Output",
+            label="Final Output 2",
             target_handle_id=UUID("87d73dc6-cafd-4f8b-b2fd-8367baba5d61"),
             display_data=NodeDisplayData(position=NodeDisplayPosition(x=5134, y=443), width=480, height=271),
             edge_id=UUID("9e19ee9e-24a6-47e7-8b10-44781a53018f"),

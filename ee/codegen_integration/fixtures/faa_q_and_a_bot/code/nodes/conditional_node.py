@@ -1,12 +1,12 @@
 from vellum.workflows.nodes.displayable import ConditionalNode as BaseConditionalNode
 from vellum.workflows.ports import Port
 
-from .templating_node import BaseTemplatingNode
+from .templating_node import TemplatingNode
 
 
 class ConditionalNode(BaseConditionalNode):
     class Ports(BaseConditionalNode.Ports):
-        branch_8 = Port.on_if(result.equals("weather"))
-        branch_9 = Port.on_elif(result.equals("flight status"))
-        branch_10 = Port.on_elif(result.equals("faa"))
-        branch_11 = Port.on_else()
+        branch_1 = Port.on_if(TemplatingNode.Outputs.result.equals("weather"))
+        branch_2 = Port.on_elif(TemplatingNode.Outputs.result.equals("flight status"))
+        branch_3 = Port.on_elif(TemplatingNode.Outputs.result.equals("faa"))
+        branch_4 = Port.on_else()

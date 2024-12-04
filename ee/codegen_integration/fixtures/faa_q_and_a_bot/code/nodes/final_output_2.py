@@ -7,7 +7,7 @@ from .prompt_node_18 import PromptNode18
 from .prompt_node_19 import PromptNode19
 
 
-class FinalOutput(FinalOutputNode[BaseState, str]):
+class FinalOutput2(FinalOutputNode[BaseState, str]):
     class Outputs(FinalOutputNode.Outputs):
         value = (
             PromptNode9.Outputs.text.coalesce(PromptNode14.Outputs.text)

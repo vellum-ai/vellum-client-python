@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 import json
 from uuid import UUID, uuid4
-from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union
 
 from pydantic import Field, field_serializer
 

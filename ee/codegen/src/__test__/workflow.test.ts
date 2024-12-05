@@ -444,7 +444,7 @@ describe("Workflow", () => {
               targetHandleId: conditionalNodeData.data.targetHandleId,
             },
             {
-              id: "edge-3",
+              id: "edge-2",
               type: "DEFAULT",
               sourceNodeId: conditionalNodeData.id,
               sourceHandleId: conditionalSourceHandle1,

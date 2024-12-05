@@ -25,15 +25,9 @@ class FAADocumentStoreDisplay(BaseSearchNodeDisplay[FAADocumentStore]):
         FAADocumentStore.Outputs.results: NodeOutputDisplay(
             id=UUID("564d7f2a-aa8c-4e9a-b93f-24d8f6418aaf"), name="results"
         ),
-        FAADocumentStore.Outputs.text: NodeOutputDisplay(
-            id=UUID("2f4b7f20-9161-4dea-bfb3-f6154c675640"), name="text"
-        ),
+        FAADocumentStore.Outputs.text: NodeOutputDisplay(id=UUID("2f4b7f20-9161-4dea-bfb3-f6154c675640"), name="text"),
     }
     port_displays = {
-        FAADocumentStore.Ports.default: PortDisplayOverrides(
-            id=UUID("0b203edd-ed4c-4593-9e17-deaeb2780e14")
-        )
+        FAADocumentStore.Ports.default: PortDisplayOverrides(id=UUID("0b203edd-ed4c-4593-9e17-deaeb2780e14"))
     }
-    display_data = NodeDisplayData(
-        position=NodeDisplayPosition(x=3318, y=271.25), width=452, height=177
-    )
+    display_data = NodeDisplayData(position=NodeDisplayPosition(x=3318, y=271.25), width=452, height=177)

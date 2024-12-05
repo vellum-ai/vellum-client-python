@@ -29,13 +29,8 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         "api_key_header_key": UUID("bcf3aac0-536e-42d5-b666-22cfe40eae98"),
         "api_key_header_value": UUID("bc73ee61-ca29-48fe-b3f2-fea5d8f638f6"),
     }
-    port_displays = {
-        APINode.Ports.default: PortDisplayOverrides(
-            id=UUID("5fd01b0b-f0fb-488b-a9c7-4ba1dd7df80e")
-        )
-    }
+    output_display = {}
+    port_displays = {APINode.Ports.default: PortDisplayOverrides(id=UUID("5fd01b0b-f0fb-488b-a9c7-4ba1dd7df80e"))}
     display_data = NodeDisplayData(
-        position=NodeDisplayPosition(x=3916.027261439447, y=917.3816601522587),
-        width=455,
-        height=230,
+        position=NodeDisplayPosition(x=3916.027261439447, y=917.3816601522587), width=455, height=230
     )

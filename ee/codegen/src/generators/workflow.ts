@@ -795,6 +795,14 @@ export class Workflow {
               ],
             };
           }
+        } else if (graphMutableAst.rhs.type === "node_reference") {
+          if (sourceNode && graphMutableAst.rhs.reference === sourceNode) {
+            graphMutableAst = {
+              type: "right_shift",
+              lhs: graphMutableAst,
+              rhs: { type: "node_reference", reference: targetNode },
+            };
+          }
         }
       }
 

@@ -61,9 +61,7 @@ export class GraphAttribute extends AstNode {
     this.workflowContext = workflowContext;
     this.edgesByPortId = edgesByPortId;
 
-    const graphMutableAst = this.generateGraphMutableAst();
-    this.astNode = this.getGraphAttributeAstNode(graphMutableAst);
-    this.inheritReferences(this.astNode);
+    this.astNode = this.generateGraphAttribute();
   }
 
   /**
@@ -363,12 +361,10 @@ export class GraphAttribute extends AstNode {
     }
 
     if (mutableAst.type === "node_reference") {
-      const nodeRef = python.reference({
+      return python.reference({
         name: mutableAst.reference.nodeClassName,
         modulePath: mutableAst.reference.nodeModulePath,
       });
-      this.addReference(nodeRef);
-      return nodeRef;
     }
 
     if (mutableAst.type === "port_reference") {
@@ -401,6 +397,13 @@ export class GraphAttribute extends AstNode {
     }
 
     return python.TypeInstantiation.none();
+  }
+
+  private generateGraphAttribute(): AstNode {
+    const graphMutableAst = this.generateGraphMutableAst();
+    const astNode = this.getGraphAttributeAstNode(graphMutableAst);
+    this.inheritReferences(astNode);
+    return astNode;
   }
 
   public write(writer: Writer): void {

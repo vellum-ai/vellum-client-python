@@ -7,6 +7,3 @@ from .nodes.error_node import ErrorNode
 
 class Workflow(BaseWorkflow[Inputs, BaseState]):
     graph = ErrorNode
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass

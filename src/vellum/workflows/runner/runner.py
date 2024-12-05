@@ -210,7 +210,6 @@ class WorkflowRunner(Generic[StateType]):
                                     span_id=span_id,
                                     workflow_definition=self.workflow.__class__,
                                     parent=self._parent_context,
-                                    type="WORKFLOW",
                                 ),
                             ),
                         )
@@ -240,7 +239,6 @@ class WorkflowRunner(Generic[StateType]):
                                         span_id=span_id,
                                         workflow_definition=self.workflow.__class__,
                                         parent=self._parent_context,
-                                        type="WORKFLOW",
                                     ),
                                 ),
                             )
@@ -265,7 +263,6 @@ class WorkflowRunner(Generic[StateType]):
                                         span_id=span_id,
                                         workflow_definition=self.workflow.__class__,
                                         parent=self._parent_context,
-                                        type="WORKFLOW",
                                     ),
                                 ),
                             )
@@ -299,7 +296,6 @@ class WorkflowRunner(Generic[StateType]):
                             span_id=span_id,
                             workflow_definition=self.workflow.__class__,
                             parent=self._parent_context,
-                            type="WORKFLOW",
                         ),
                     ),
                 )
@@ -319,7 +315,6 @@ class WorkflowRunner(Generic[StateType]):
                             span_id=span_id,
                             workflow_definition=self.workflow.__class__,
                             parent=self._parent_context,
-                            type="WORKFLOW",
                         ),
                     ),
                 )
@@ -346,7 +341,6 @@ class WorkflowRunner(Generic[StateType]):
                             span_id=span_id,
                             workflow_definition=self.workflow.__class__,
                             parent=self._parent_context,
-                            type="WORKFLOW",
                         ),
                     ),
                 )

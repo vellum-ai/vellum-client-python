@@ -65,27 +65,27 @@ class BaseDeploymentParentContext(BaseParentContext):
 
 
 class WorkflowDeploymentParentContext(BaseDeploymentParentContext):
-    type: Literal["WORKFLOW_RELEASE_TAG"]
+    type: Literal["WORKFLOW_RELEASE_TAG"] = "WORKFLOW_RELEASE_TAG"
     workflow_version_id: UUID
 
 
 class PromptDeploymentParentContext(BaseDeploymentParentContext):
-    type: Literal["PROMPT_RELEASE_TAG"]
+    type: Literal["PROMPT_RELEASE_TAG"] = "PROMPT_RELEASE_TAG"
     prompt_version_id: UUID
 
 
 class NodeParentContext(BaseParentContext):
-    type: Literal["WORKFLOW_NODE"]
+    type: Literal["WORKFLOW_NODE"] = "WORKFLOW_NODE"
     node_definition: VellumCodeResourceDefinition
 
 
 class WorkflowParentContext(BaseParentContext):
-    type: Literal["WORKFLOW"]
+    type: Literal["WORKFLOW"] = "WORKFLOW"
     workflow_definition: VellumCodeResourceDefinition
 
 
 # Define the discriminated union
-ParentContextUnion = Annotated[
+ParentContext = Annotated[
     Union[
         WorkflowParentContext,
         NodeParentContext,
@@ -94,9 +94,6 @@ ParentContextUnion = Annotated[
     ],
     Field(discriminator="type"),
 ]
-
-# Create the final type
-ParentContext = Optional[ParentContextUnion]
 
 # Update the forward references
 BaseParentContext.model_rebuild()

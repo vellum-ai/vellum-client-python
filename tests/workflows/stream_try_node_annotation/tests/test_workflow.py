@@ -1,3 +1,4 @@
+from vellum.workflows.events.types import CodeResourceDefinition
 from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME
 from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
@@ -30,12 +31,14 @@ def test_workflow_stream__happy_path():
     ]
     assert workflow_initiated_events[0].workflow_definition == StreamingTryExample
     assert workflow_initiated_events[0].parent is None
-    assert workflow_initiated_events[1].workflow_definition == InnerWorkflow
+
     # TODO: Try Node Parent Context - https://app.shortcut.com/vellum/story/5601
+    # filter will filter out any events without parent if it expects a parent
+    # assert workflow_initiated_events[1].workflow_definition == InnerWorkflow
     # assert workflow_initiated_events[1].parent is not None
     # assert workflow_initiated_events[1].parent.type == "WORKFLOW_NODE"
     # assert workflow_initiated_events[1].parent.node_definition == InnerNode
-    assert len(workflow_initiated_events) == 2
+    assert len(workflow_initiated_events) == 1
 
     # node initiated events
     node_initiated_events = [e for e in events if e.name == "node.execution.initiated"]
@@ -55,17 +58,15 @@ def test_workflow_stream__happy_path():
     }
     assert node_initiated_events[0].parent is not None
     assert node_initiated_events[0].parent.type == "WORKFLOW"
-    assert (
-        node_initiated_events[0].parent.workflow_definition
-        == StreamingTryExample.to_encoded_value()
-    )
+    assert node_initiated_events[
+        0
+    ].parent.workflow_definition == CodeResourceDefinition.encode(StreamingTryExample)
     assert node_initiated_events[1].node_definition == WrappedNode
     assert node_initiated_events[1].parent is not None
     assert node_initiated_events[1].parent.type == "WORKFLOW"
-    assert (
-        node_initiated_events[1].parent.workflow_definition
-        == InnerWorkflow.to_encoded_value()
-    )
+    assert node_initiated_events[
+        1
+    ].parent.workflow_definition == CodeResourceDefinition.encode(InnerWorkflow)
     assert len(node_initiated_events) == 2
 
     # inner node streaming events

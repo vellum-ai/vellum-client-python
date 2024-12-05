@@ -392,10 +392,6 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
 
         return workflows[0]
 
-    @classmethod
-    def to_encoded_value(cls):
-        return CodeResourceDefinition.encode(cls)
-
 
 WorkflowExecutionInitiatedBody.model_rebuild()
 WorkflowExecutionFulfilledBody.model_rebuild()

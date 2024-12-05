@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, Type
 
+from vellum.workflows.events.types import CodeResourceDefinition
+
 if TYPE_CHECKING:
     from vellum.workflows.events.workflow import WorkflowEvent
     from vellum.workflows.workflows.base import BaseWorkflow
@@ -20,7 +22,7 @@ def workflow_event_filter(
         or event.name == "workflow.execution.paused"
         or event.name == "workflow.execution.streaming"
     ):
-        return event.workflow_definition == workflow_definition.to_encoded_value()
+        return event.workflow_definition == workflow_definition
 
     return False
 
@@ -48,7 +50,9 @@ def root_workflow_event_filter(
     if event.parent.type != "WORKFLOW":
         return False
 
-    return event.parent.workflow_definition == workflow_definition.to_encoded_value()
+    return event.parent.workflow_definition == CodeResourceDefinition.encode(
+        workflow_definition
+    )
 
 
 def all_workflow_event_filter(

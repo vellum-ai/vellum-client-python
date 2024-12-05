@@ -3,6 +3,7 @@ from uuid import uuid4
 from vellum.workflows import BaseWorkflow
 from vellum.workflows.events import WorkflowEvent
 from vellum.workflows.events.types import CodeResourceDefinition, NodeParentContext
+from vellum.workflows.state.context import WorkflowContext
 
 from tests.workflows.basic_parent_context.basic_workflow import TrivialWorkflow
 
@@ -63,7 +64,9 @@ def test_stream_workflow__happy_path_inital_context():
     assert initial_parent_context.parent is not None
     assert isinstance(initial_parent_context.node_definition, CodeResourceDefinition)
 
-    workflow = TrivialWorkflow(parent_context=initial_parent_context)
+    workflow = TrivialWorkflow(
+        context=WorkflowContext(_parent_context=initial_parent_context)
+    )
 
     events = list(workflow.stream(event_filter=allow_all_events))
 

@@ -49,7 +49,6 @@ from vellum.workflows.events.node import (
     NodeExecutionStreamingBody,
     NodeExecutionStreamingEvent,
 )
-from vellum.workflows.events.types import ParentContext
 from vellum.workflows.events.workflow import (
     GenericWorkflowEvent,
     WorkflowExecutionFulfilledBody,
@@ -271,7 +270,7 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             entrypoint_nodes=entrypoint_nodes,
             external_inputs=external_inputs,
             cancel_signal=cancel_signal,
-            parent_context=self._parent_context,
+            parent_context=self.context.parent_context,
         ).stream():
             if should_yield(self.__class__, event):
                 yield event

@@ -692,10 +692,9 @@ export declare namespace SubworkflowNodeSerializer {
 
 export const InlinePromptNodeDataSerializer: ObjectSchema<
   InlinePromptNodeDataSerializer.Raw,
-  InlinePromptNodeData
+  Omit<InlinePromptNodeData, "variant">
 > = objectSchema({
   label: stringSchema(),
-  variant: stringLiteralSchema("INLINE"),
   outputId: propertySchema("output_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
   arrayOutputId: propertySchema("array_output_id", stringSchema()),
@@ -713,7 +712,6 @@ export declare namespace InlinePromptNodeDataSerializer {
     array_output_id: string;
     source_handle_id: string;
     target_handle_id: string;
-    variant: "INLINE";
     exec_config: PromptVersionExecConfigSerializer.Raw;
     ml_model_name: string;
   }
@@ -721,10 +719,9 @@ export declare namespace InlinePromptNodeDataSerializer {
 
 export const DeploymentPromptNodeDataSerializer: ObjectSchema<
   DeploymentPromptNodeDataSerializer.Raw,
-  DeploymentPromptNodeData
+  Omit<DeploymentPromptNodeData, "variant">
 > = objectSchema({
   label: stringSchema(),
-  variant: stringLiteralSchema("DEPLOYMENT"),
   promptDeploymentId: propertySchema("prompt_deployment_id", stringSchema()),
   releaseTag: propertySchema("release_tag", stringSchema()),
   outputId: propertySchema("output_id", stringSchema()),
@@ -736,7 +733,6 @@ export const DeploymentPromptNodeDataSerializer: ObjectSchema<
 
 export declare namespace DeploymentPromptNodeDataSerializer {
   interface Raw {
-    variant: "DEPLOYMENT";
     prompt_deployment_id: string;
     release_tag: string;
     label: string;
@@ -821,10 +817,9 @@ export declare namespace PromptNodeDeploymentSerializer {
 
 export const LegacyPromptNodeDataSerializer: ObjectSchema<
   LegacyPromptNodeDataSerializer.Raw,
-  LegacyPromptNodeData
+  Omit<LegacyPromptNodeData, "variant">
 > = objectSchema({
   label: stringSchema(),
-  variant: stringLiteralSchema("LEGACY"),
   outputId: propertySchema("output_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
   arrayOutputId: propertySchema("array_output_id", stringSchema()),
@@ -844,7 +839,6 @@ export const LegacyPromptNodeDataSerializer: ObjectSchema<
 export declare namespace LegacyPromptNodeDataSerializer {
   interface Raw {
     label: string;
-    variant: "LEGACY";
     output_id: string;
     error_output_id?: string | null;
     array_output_id: string;
@@ -859,11 +853,11 @@ export declare namespace LegacyPromptNodeDataSerializer {
 export const PromptNodeDataSerializer: Schema<
   PromptNodeDataSerializer.Raw,
   PromptNodeData
-> = undiscriminatedUnionSchema([
-  InlinePromptNodeDataSerializer,
-  DeploymentPromptNodeDataSerializer,
-  LegacyPromptNodeDataSerializer,
-]);
+> = union("variant", {
+  INLINE: InlinePromptNodeDataSerializer,
+  DEPLOYMENT: DeploymentPromptNodeDataSerializer,
+  LEGACY: LegacyPromptNodeDataSerializer,
+});
 
 export declare namespace PromptNodeDataSerializer {
   type Raw =

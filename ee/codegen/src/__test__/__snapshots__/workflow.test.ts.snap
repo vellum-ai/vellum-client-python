@@ -12,9 +12,6 @@ class TestWorkflow(BaseWorkflow):
         ConditionalNode.Ports.branch_1 >> TemplatingNode,
         ConditionalNode.Ports.branch_2 >> TemplatingNode2,
     }
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;
 
@@ -28,9 +25,6 @@ from .nodes.templating_node_3 import TemplatingNode3
 
 class TestWorkflow(BaseWorkflow):
     graph = {TemplatingNode, TemplatingNode2} >> MergeNode >> TemplatingNode3
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;
 
@@ -43,9 +37,6 @@ from .nodes.merge_node import MergeNode
 
 class TestWorkflow(BaseWorkflow):
     graph = {TemplatingNode, TemplatingNode2} >> MergeNode
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;
 
@@ -57,9 +48,6 @@ from .nodes.templating_node_2 import TemplatingNode2
 
 class TestWorkflow(BaseWorkflow):
     graph = {TemplatingNode, TemplatingNode2}
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;
 
@@ -71,9 +59,6 @@ from .nodes.templating_node_2 import TemplatingNode2
 
 class TestWorkflow(BaseWorkflow):
     graph = TemplatingNode >> TemplatingNode2
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;
 
@@ -102,13 +87,10 @@ from .nodes.templating_node_3 import TemplatingNode3
 
 class TestWorkflow(BaseWorkflow):
     graph = TemplatingNode >> TemplatingNode2 >> TemplatingNode3
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;
 
-exports[`Workflow > write > graph > should be correct for set a node to a set 1`] = `
+exports[`Workflow > write > graph > should be correct for a node to a set 1`] = `
 "from vellum.workflows import BaseWorkflow
 from .nodes.templating_node import TemplatingNode
 from .nodes.templating_node_2 import TemplatingNode2
@@ -117,9 +99,6 @@ from .nodes.templating_node_3 import TemplatingNode3
 
 class TestWorkflow(BaseWorkflow):
     graph = TemplatingNode >> {TemplatingNode2, TemplatingNode3}
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;
 
@@ -132,9 +111,6 @@ from .nodes.templating_node_3 import TemplatingNode3
 
 class TestWorkflow(BaseWorkflow):
     graph = {TemplatingNode >> TemplatingNode2, TemplatingNode3}
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;
 
@@ -143,8 +119,7 @@ exports[`Workflow > write > should generate correct code when there are input va
 
 
 class TestWorkflow(BaseWorkflow):
-    class Outputs(BaseWorkflow.Outputs):
-        pass
+    pass
 "
 `;
 
@@ -153,8 +128,7 @@ exports[`Workflow > write > should generate correct code when there are no input
 
 
 class TestWorkflow(BaseWorkflow):
-    class Outputs(BaseWorkflow.Outputs):
-        pass
+    pass
 "
 `;
 
@@ -180,8 +154,5 @@ from .nodes.search_node import SearchNode
 
 class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
     graph = SearchNode
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
 "
 `;

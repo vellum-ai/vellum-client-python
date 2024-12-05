@@ -721,7 +721,7 @@ describe("Workflow", () => {
         expect(await writer.toStringFormatted()).toMatchSnapshot();
       });
 
-      it("should be correct for set a node to a set", async () => {
+      it("should be correct for a node to a set", async () => {
         const inputs = codegen.inputs({ workflowContext });
 
         const templatingNodeData1 = templatingNodeFactory();

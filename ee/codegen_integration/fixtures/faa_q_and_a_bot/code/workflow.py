@@ -45,4 +45,4 @@ class Workflow(BaseWorkflow[Inputs, BaseState]):
     )
 
     class Outputs(BaseWorkflow.Outputs):
-        answer = FinalOutput2.Outputs.value
+        answer = FinalOutput2.Outputs.value  #type: ignore

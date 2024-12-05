@@ -48,9 +48,6 @@ describe("WorkflowProjectGenerator", () => {
           "simple_error_node",
           "simple_merge_node",
           "simple_api_node",
-
-          // Real customer workflows:
-          //"faa_q_and_a_bot",
         ],
         fixtureMocks: fixtureMocks,
       })

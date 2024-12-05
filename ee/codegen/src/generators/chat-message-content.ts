@@ -10,6 +10,7 @@ import {
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
 import { Json } from "src/generators/json";
 import { assertUnreachable } from "src/utils/typing";
+import { isNil } from "lodash";
 
 export namespace ChatMessageContent {
   export interface Args {
@@ -178,8 +179,29 @@ export class ChatMessageContent extends AstNode {
 
       const audioChatMessageContentRequestRef =
         this.getAudioChatMessageContentRef();
-      audioChatMessageContentRequestRef.write(writer);
-      writer.write(`(value="${audioContentValue.src}")`); // TODO: Handle metadata and src as properties here
+
+      const arguments_ = [
+        python.methodArgument({
+          name: "src",
+          value: python.TypeInstantiation.str(audioContentValue.src),
+        }),
+      ];
+
+      if (!isNil(audioContentValue.metadata)) {
+        arguments_.push(
+          python.methodArgument({
+            name: "metadata",
+            value: new Json(audioContentValue.metadata),
+          })
+        );
+      }
+
+      python
+        .instantiateClass({
+          classReference: audioChatMessageContentRequestRef,
+          arguments_: arguments_,
+        })
+        .write(writer);
       return;
     }
 

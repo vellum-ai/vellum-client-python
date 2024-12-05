@@ -1,7 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`ChatMessageContent > AUDIO > should write an audio content correctly 1`] = `
-"AudioChatMessageContentRequest(value="https://example.com/audio.mp3")
+"AudioChatMessageContentRequest(
+    src="https://example.com/audio.mp3", metadata={"key": "value"}
+)
 "
 `;
 

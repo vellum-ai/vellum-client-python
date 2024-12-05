@@ -61,7 +61,10 @@ describe("ChatMessageContent", () => {
       const chatMessageContent = new ChatMessageContent({
         chatMessageContent: {
           type: "AUDIO",
-          value: { src: "https://example.com/audio.mp3" },
+          value: {
+            src: "https://example.com/audio.mp3",
+            metadata: { key: "value" },
+          },
         },
       });
       chatMessageContent.write(writer);

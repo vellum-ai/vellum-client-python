@@ -56,6 +56,23 @@ describe("ChatMessageContent", () => {
     });
   });
 
+  describe("AUDIO", () => {
+    it("should write an audio content correctly", async () => {
+      const chatMessageContent = new ChatMessageContent({
+        chatMessageContent: {
+          type: "AUDIO",
+          value: {
+            src: "https://example.com/audio.mp3",
+            metadata: { key: "value" },
+          },
+        },
+      });
+      chatMessageContent.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+      expect(chatMessageContent.getReferences()).toHaveLength(2);
+    });
+  });
+
   describe("IMAGE", () => {
     it("should write an image content correctly", async () => {
       const chatMessageContent = new ChatMessageContent({

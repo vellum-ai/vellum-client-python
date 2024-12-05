@@ -276,15 +276,15 @@ class AudioVellumValue extends AstNode {
 }
 
 class SearchResultsVellumValue extends AstNode {
-  private value: SearchResult[];
+  private astNode: AstNode;
 
   public constructor(value: SearchResult[]) {
     super();
-    this.value = value;
+    this.astNode = this.generateAstNode(value);
   }
 
-  public write(writer: Writer): void {
-    const searchResults = this.value.map((result) => {
+  private generateAstNode(value: SearchResult[]): AstNode {
+    const searchResultItems = value.map((result) => {
       const arguments_ = [
         python.methodArgument({
           name: "text",
@@ -345,9 +345,15 @@ class SearchResultsVellumValue extends AstNode {
       });
     });
 
-    const searchResultsList = python.TypeInstantiation.list(searchResults);
-    this.inheritReferences(searchResultsList);
-    searchResultsList.write(writer);
+    const searchResults = python.TypeInstantiation.list(searchResultItems);
+
+    this.inheritReferences(searchResults);
+
+    return searchResults;
+  }
+
+  public write(writer: Writer): void {
+    this.astNode.write(writer);
   }
 }
 

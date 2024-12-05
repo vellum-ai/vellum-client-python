@@ -78,7 +78,9 @@ describe("VellumValue", () => {
         },
       });
       searchResultsValue.write(writer);
+
       expect(await writer.toStringFormatted()).toMatchSnapshot();
+      expect(searchResultsValue.getReferences()).toHaveLength(1);
     });
   });
 

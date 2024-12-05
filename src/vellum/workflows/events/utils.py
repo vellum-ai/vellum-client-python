@@ -1,4 +1,3 @@
-from optparse import Option
 from typing import Optional
 
 from vellum.workflows.events.types import (
@@ -9,7 +8,6 @@ from vellum.workflows.events.types import (
     WorkflowParentContext,
 )
 from vellum.workflows.events.workflow import WorkflowEvent
-from vellum_ee.workflows.display.vellum import CodeResourceDefinition
 
 
 def is_terminal_event(event: WorkflowEvent) -> bool:

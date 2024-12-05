@@ -716,6 +716,49 @@ export class Workflow {
         continue;
       }
 
+      const isPlural = (mutableAst: GraphMutableAst): boolean => {
+        return (
+          mutableAst.type === "right_shift" ||
+          (mutableAst.type === "set" && mutableAst.values.every(isPlural))
+        );
+      };
+
+      const getAstTerminals = (
+        mutableAst: GraphMutableAst
+      ): GraphNodeReference[] => {
+        if (mutableAst.type === "empty") {
+          return [];
+        } else if (mutableAst.type === "node_reference") {
+          return [mutableAst];
+        } else if (mutableAst.type === "set") {
+          return mutableAst.values.flatMap(getAstTerminals);
+        } else if (mutableAst.type === "right_shift") {
+          return getAstTerminals(mutableAst.rhs);
+        } else if (mutableAst.type == "port_reference") {
+          return [
+            {
+              type: "node_reference",
+              reference: mutableAst.reference.nodeContext,
+            },
+          ];
+        } else {
+          return [];
+        }
+      };
+
+      const popTerminals = (mutableAst: GraphMutableAst): GraphMutableAst => {
+        if (mutableAst.type === "set") {
+          return {
+            type: "set",
+            values: mutableAst.values.map(popTerminals),
+          };
+        } else if (mutableAst.type === "right_shift") {
+          return mutableAst.lhs;
+        } else {
+          return { type: "empty" };
+        }
+      };
+
       const addEdgeToGraph = (
         mutableAst: GraphMutableAst
       ): GraphMutableAst | undefined => {
@@ -747,7 +790,7 @@ export class Workflow {
                 };
               }
             }
-          } else {
+          } else if (!sourceNode) {
             return {
               type: "set",
               values: [
@@ -757,19 +800,14 @@ export class Workflow {
             };
           }
         } else if (mutableAst.type === "set") {
-          if (
-            mutableAst.values.some(
-              (value) =>
-                value.type === "node_reference" &&
-                value.reference === sourceNode
-            )
-          ) {
-            return {
-              type: "right_shift",
-              lhs: mutableAst,
-              rhs: { type: "node_reference", reference: targetNode },
-            };
-          } else {
+          const newSet = mutableAst.values.map((subAst) => {
+            const newSubAst = addEdgeToGraph(subAst);
+            if (!newSubAst) {
+              return { edgeAdded: false, value: subAst };
+            }
+            return { edgeAdded: true, value: newSubAst };
+          });
+          if (newSet.every(({ edgeAdded }) => !edgeAdded)) {
             return {
               type: "set",
               values: [
@@ -778,6 +816,31 @@ export class Workflow {
               ],
             };
           }
+          const newSetAst: GraphSet = {
+            type: "set",
+            values: newSet.map(({ value }) => value),
+          };
+
+          if (isPlural(newSetAst)) {
+            const newAstTerminals = newSetAst.values.flatMap((value) =>
+              getAstTerminals(value)
+            );
+
+            const uniqueAstTerminalIds = new Set(
+              newAstTerminals.map((terminal) => terminal.reference.getNodeId())
+            );
+            if (uniqueAstTerminalIds.size === 1 && newAstTerminals[0]) {
+              // If all the terminals are the same, we can simplify the graph into a
+              // right shift between the set and the target node.
+              return {
+                type: "right_shift",
+                lhs: popTerminals(newSetAst),
+                rhs: newAstTerminals[0],
+              };
+            }
+          }
+
+          return newSetAst;
         } else if (mutableAst.type === "right_shift") {
           if (mutableAst.lhs.type == "port_reference") {
             const sourcePortContext = sourceNode?.portContextsById.get(

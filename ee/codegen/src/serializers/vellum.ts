@@ -611,7 +611,7 @@ export declare namespace EntrypointNodeSerializer {
 
 export const InlineSubworkflowNodeDataSerializer: ObjectSchema<
   InlineSubworkflowNodeDataSerializer.Raw,
-  InlineSubworkflowNodeData
+  Omit<InlineSubworkflowNodeData, "variant">
 > = objectSchema({
   workflowRawData: propertySchema(
     "workflow_raw_data",
@@ -629,7 +629,6 @@ export const InlineSubworkflowNodeDataSerializer: ObjectSchema<
   sourceHandleId: propertySchema("source_handle_id", stringSchema()),
   targetHandleId: propertySchema("target_handle_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
-  variant: stringLiteralSchema("INLINE"),
 });
 
 export declare namespace InlineSubworkflowNodeDataSerializer {
@@ -641,19 +640,17 @@ export declare namespace InlineSubworkflowNodeDataSerializer {
     source_handle_id: string;
     target_handle_id: string;
     error_output_id?: string | null;
-    variant: "INLINE";
   }
 }
 
 export const DeploymentSubworkflowNodeDataSerializer: ObjectSchema<
   DeploymentSubworkflowNodeDataSerializer.Raw,
-  DeploymentSubworkflowNodeData
+  Omit<DeploymentSubworkflowNodeData, "variant">
 > = objectSchema({
   label: stringSchema(),
   sourceHandleId: propertySchema("source_handle_id", stringSchema()),
   targetHandleId: propertySchema("target_handle_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
-  variant: stringLiteralSchema("DEPLOYMENT"),
   workflowDeploymentId: propertySchema(
     "workflow_deployment_id",
     stringSchema()
@@ -667,16 +664,15 @@ export declare namespace DeploymentSubworkflowNodeDataSerializer {
     source_handle_id: string;
     target_handle_id: string;
     error_output_id?: string | null;
-    variant: "DEPLOYMENT";
     workflow_deployment_id: string;
     release_tag: string;
   }
 }
 
-export const SubworkflowNodeDataSerializer = undiscriminatedUnionSchema([
-  InlineSubworkflowNodeDataSerializer,
-  DeploymentSubworkflowNodeDataSerializer,
-]);
+export const SubworkflowNodeDataSerializer = union("variant", {
+  INLINE: InlineSubworkflowNodeDataSerializer,
+  DEPLOYMENT: DeploymentSubworkflowNodeDataSerializer,
+});
 
 export declare namespace SubworkflowNodeDataSerializer {
   type Raw =

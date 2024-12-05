@@ -2,6 +2,7 @@ import { python } from "@fern-api/python-ast";
 import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
+import { isNil } from "lodash";
 import {
   ChatMessageContentRequest as ChatMessageContentRequestType,
   ChatMessageContent as ChatMessageContentType,
@@ -10,7 +11,6 @@ import {
 import { VELLUM_CLIENT_MODULE_PATH } from "src/constants";
 import { Json } from "src/generators/json";
 import { assertUnreachable } from "src/utils/typing";
-import { isNil } from "lodash";
 
 export namespace ChatMessageContent {
   export interface Args {

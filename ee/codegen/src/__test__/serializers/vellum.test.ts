@@ -1,6 +1,41 @@
-import { PromptNodeSerializer } from "src/serializers/vellum";
+import { union as unionSchema } from "vellum-ai/core/schemas/builders/union/union";
+
+import {
+  PlainTextPromptTemplateBlockSerializer,
+  PromptNodeSerializer,
+  VariablePromptTemplateBlockSerializer,
+} from "src/serializers/vellum";
 
 describe("vellum", () => {
+  describe("temp", () => {
+    it("temp", () => {
+      const schema = unionSchema("block_type", {
+        PLAIN_TEXT: PlainTextPromptTemplateBlockSerializer,
+        VARIABLE: VariablePromptTemplateBlockSerializer,
+      });
+
+      const data = [
+        {
+          id: "block-1",
+          block_type: "PLAIN_TEXT",
+          state: "ENABLED",
+          cache_config: null,
+          text: "FOO",
+        },
+        {
+          id: "block-2",
+          block_type: "VARIABLE",
+          state: "ENABLED",
+          cache_config: null,
+          input_variable_id: "ac96a699-ef55-4814-bc37-b4298abcb08b",
+        },
+      ];
+
+      const parsedData = schema.parse(data[0]);
+      expect(parsedData.ok).toBe(true);
+    });
+  });
+
   describe("PromptNodeSerializer", () => {
     it("should serialize legacy prompt nodes", () => {
       const data = {

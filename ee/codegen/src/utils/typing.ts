@@ -20,7 +20,10 @@ export function isNilOrEmpty<T>(
   }
 
   if (typeof collection === "object") {
-    return Object.keys(collection).length === 0;
+    return (
+      Object.keys(collection).length === 0 ||
+      Object.values(collection).every((value) => value === undefined)
+    );
   }
 
   return false;

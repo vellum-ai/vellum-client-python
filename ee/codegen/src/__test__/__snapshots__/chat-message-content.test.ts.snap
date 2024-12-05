@@ -12,6 +12,13 @@ exports[`ChatMessageContent > ARRAY > should write an array of content correctly
 "
 `;
 
+exports[`ChatMessageContent > AUDIO > should write an audio content correctly 1`] = `
+"AudioChatMessageContentRequest(
+    src="https://example.com/audio.mp3", metadata={"key": "value"}
+)
+"
+`;
+
 exports[`ChatMessageContent > FUNCTION_CALL > should write a function call content with id correctly 1`] = `
 "FunctionCallChatMessageContentRequest(
     value=FunctionCallChatMessageContentValueRequest(

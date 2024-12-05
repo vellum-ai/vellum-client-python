@@ -79,6 +79,13 @@ export class ChatMessageContent extends AstNode {
     });
   }
 
+  private getAudioChatMessageContentRef(): python.Reference {
+    return python.reference({
+      name: "AudioChatMessageContent" + (this.isRequestType ? "Request" : ""),
+      modulePath: VELLUM_CLIENT_MODULE_PATH,
+    });
+  }
+
   private getImageChatMessageContentRef(): python.Reference {
     return python.reference({
       name: "ImageChatMessageContent" + (this.isRequestType ? "Request" : ""),
@@ -189,7 +196,6 @@ export class ChatMessageContent extends AstNode {
 
       if (!isNil(imageContentValue.metadata)) {
         const metadataJson = new Json(imageContentValue.metadata);
-        this.inheritReferences(metadataJson);
         arguments_.push(
           python.methodArgument({
             name: "metadata",
@@ -208,9 +214,35 @@ export class ChatMessageContent extends AstNode {
     }
 
     if (contentType === "AUDIO") {
-      // TODO: Implement audio types
-      //    https://app.shortcut.com/vellum/story/4937/flesh-out-codegen-for-all-chat-message-content-types
-      throw new Error("Unhandled type: AUDIO");
+      const audioContentValue = this.chatMessageContent.value;
+
+      const audioChatMessageContentRequestRef =
+        this.getAudioChatMessageContentRef();
+
+      const arguments_ = [
+        python.methodArgument({
+          name: "src",
+          value: python.TypeInstantiation.str(audioContentValue.src),
+        }),
+      ];
+
+      if (!isNil(audioContentValue.metadata)) {
+        const metadataJson = new Json(audioContentValue.metadata);
+        arguments_.push(
+          python.methodArgument({
+            name: "metadata",
+            value: metadataJson,
+          })
+        );
+      }
+
+      const instance = python.instantiateClass({
+        classReference: audioChatMessageContentRequestRef,
+        arguments_: arguments_,
+      });
+      this.inheritReferences(instance);
+      instance.write(writer);
+      return;
     }
 
     assertUnreachable(contentType);

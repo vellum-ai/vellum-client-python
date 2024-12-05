@@ -37,6 +37,8 @@ from vellum.workflows.events.workflow import (
     WorkflowExecutionRejectedBody,
     WorkflowExecutionResumedBody,
     WorkflowExecutionResumedEvent,
+    WorkflowExecutionSnapshottedBody,
+    WorkflowExecutionSnapshottedEvent,
     WorkflowExecutionStreamingBody,
 )
 from vellum.workflows.exceptions import NodeException
@@ -131,6 +133,17 @@ class WorkflowRunner(Generic[StateType]):
         self.workflow.context._register_event_queue(self._workflow_event_inner_queue)
 
     def _snapshot_state(self, state: StateType) -> StateType:
+        self._workflow_event_queue.put(
+            WorkflowExecutionSnapshottedEvent(
+                trace_id=state.meta.trace_id,
+                span_id=state.meta.span_id,
+                body=WorkflowExecutionSnapshottedBody(
+                    workflow_definition=self.workflow.__class__,
+                    state=state,
+                ),
+                parent=self._parent_context,
+            )
+        )
         self.workflow._store.append_state_snapshot(state)
         self._background_thread_queue.put(state)
         return state
@@ -256,14 +269,6 @@ class WorkflowRunner(Generic[StateType]):
                             )
                         )
 
-            for descriptor, output_value in outputs:
-                if output_value is UNDEF:
-                    if descriptor in node.state.meta.node_outputs:
-                        del node.state.meta.node_outputs[descriptor]
-                    continue
-
-                node.state.meta.node_outputs[descriptor] = output_value
-
             invoked_ports = ports(outputs, node.state)
             node.state.meta.node_execution_cache.fulfill_node_execution(node.__class__, span_id)
 
@@ -283,6 +288,14 @@ class WorkflowRunner(Generic[StateType]):
                     ),
                 )
             )
+
+            for descriptor, output_value in outputs:
+                if output_value is UNDEF:
+                    if descriptor in node.state.meta.node_outputs:
+                        del node.state.meta.node_outputs[descriptor]
+                    continue
+
+                node.state.meta.node_outputs[descriptor] = output_value
         except NodeException as e:
             self._workflow_event_inner_queue.put(
                 NodeExecutionRejectedEvent(

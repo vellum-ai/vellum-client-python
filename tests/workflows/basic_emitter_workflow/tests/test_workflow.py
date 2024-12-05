@@ -1,8 +1,10 @@
 import pytest
 from datetime import datetime
+import json
 import time
 
-from deepdiff import DeepDiff
+from vellum.workflows.events.types import default_serializer
+from vellum.workflows.state.encoder import DefaultStateEncoder
 
 from tests.workflows.basic_emitter_workflow.workflow import BasicEmitterWorkflow, ExampleEmitter, NextNode, StartNode
 
@@ -39,191 +41,179 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
     time.sleep(0.01)
 
     # THEN the emitter should have emitted all of the expected events
+    base_module = ".".join(__name__.split(".")[:-2])
     events = list(emitter.events)
-
-    assert len(events) == 6, final_event
 
     assert events[0].name == "workflow.execution.initiated"
     assert events[0].trace_id == trace_id
     assert events[0].span_id == workflow_span_id
     assert events[0].timestamp == frozen_datetime
 
-    assert events[1].name == "node.execution.initiated"
-    assert events[1].node_definition == StartNode
+    assert events[1].name == "workflow.execution.snapshotted"
+    assert default_serializer(events[1].state) == {
+        "meta": {
+            "id": str(state_id),
+            "trace_id": str(trace_id),
+            "span_id": str(workflow_span_id),
+            "updated_ts": "2024-01-01T12:00:00",
+            "is_terminated": False,
+            "workflow_inputs": {},
+            "external_inputs": {},
+            "node_outputs": {},
+            "parent": None,
+            "node_execution_cache": {
+                "node_executions_fulfilled": {},
+                "node_executions_initiated": {},
+                "node_executions_queued": {},
+                "dependencies_invoked": {},
+            },
+        },
+        "score": 0,
+    }
 
-    assert events[2].name == "node.execution.fulfilled"
+    assert events[2].name == "node.execution.initiated"
     assert events[2].node_definition == StartNode
-    assert events[2].outputs == {"final_value": "Hello, World!"}
 
-    assert events[3].name == "node.execution.initiated"
-    assert events[3].node_definition == NextNode
+    assert events[3].name == "node.execution.fulfilled"
+    assert events[3].node_definition == StartNode
+    assert events[3].outputs == {"final_value": "Hello, World!"}
 
-    assert events[4].name == "node.execution.fulfilled"
-    assert events[4].node_definition == NextNode
-    assert events[4].outputs == {"final_value": "Score: 13"}
+    assert events[4].name == "workflow.execution.snapshotted"
+    assert default_serializer(events[4].state) == {
+        "meta": {
+            "id": str(state_id),
+            "trace_id": str(trace_id),
+            "span_id": str(workflow_span_id),
+            "updated_ts": "2024-01-01T12:00:00",
+            "is_terminated": False,
+            "workflow_inputs": {},
+            "external_inputs": {},
+            "node_outputs": {"StartNode.Outputs.final_value": "Hello, World!"},
+            "parent": None,
+            "node_execution_cache": {
+                "node_executions_fulfilled": {},
+                "node_executions_initiated": {f"{base_module}.workflow.StartNode": [str(start_node_span_id)]},
+                "node_executions_queued": {},
+                "dependencies_invoked": {},
+            },
+        },
+        "score": 0,
+    }
 
-    assert events[5].name == "workflow.execution.fulfilled"
-    assert events[5].outputs == {"final_value": "Score: 13"}
+    assert events[5].name == "node.execution.initiated"
+    assert events[5].node_definition == NextNode
+
+    assert events[6].name == "workflow.execution.snapshotted"
+    assert default_serializer(events[6].state) == {
+        "meta": {
+            "id": str(state_id),
+            "trace_id": str(trace_id),
+            "span_id": str(workflow_span_id),
+            "updated_ts": "2024-01-01T12:00:00",
+            "is_terminated": False,
+            "workflow_inputs": {},
+            "external_inputs": {},
+            "node_outputs": {
+                "StartNode.Outputs.final_value": "Hello, World!",
+            },
+            "parent": None,
+            "node_execution_cache": {
+                "node_executions_fulfilled": {
+                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                },
+                "node_executions_initiated": {
+                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
+                },
+                "node_executions_queued": {
+                    f"{base_module}.workflow.NextNode": [],
+                },
+                "dependencies_invoked": {
+                    str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
+                },
+            },
+        },
+        "score": 13,
+    }
+
+    assert events[7].name == "node.execution.fulfilled"
+    assert events[7].node_definition == NextNode
+    assert events[7].outputs == {"final_value": "Score: 13"}
+
+    assert events[8].name == "workflow.execution.snapshotted"
+    assert default_serializer(events[8].state) == {
+        "meta": {
+            "id": str(state_id),
+            "trace_id": str(trace_id),
+            "span_id": str(workflow_span_id),
+            "updated_ts": "2024-01-01T12:00:00",
+            "is_terminated": False,
+            "workflow_inputs": {},
+            "external_inputs": {},
+            "node_outputs": {
+                "StartNode.Outputs.final_value": "Hello, World!",
+                "NextNode.Outputs.final_value": "Score: 13",
+            },
+            "node_execution_cache": {
+                "node_executions_fulfilled": {
+                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                },
+                "node_executions_initiated": {
+                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
+                },
+                "node_executions_queued": {
+                    f"{base_module}.workflow.NextNode": [],
+                },
+                "dependencies_invoked": {
+                    str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
+                },
+            },
+            "parent": None,
+        },
+        "score": 13,
+    }
+
+    assert events[9].name == "workflow.execution.snapshotted"
+    assert default_serializer(events[9].state) == {
+        "meta": {
+            "id": str(state_id),
+            "trace_id": str(trace_id),
+            "span_id": str(workflow_span_id),
+            "updated_ts": "2024-01-01T12:00:00",
+            "is_terminated": True,
+            "workflow_inputs": {},
+            "external_inputs": {},
+            "node_outputs": {
+                "StartNode.Outputs.final_value": "Hello, World!",
+                "NextNode.Outputs.final_value": "Score: 13",
+            },
+            "node_execution_cache": {
+                "node_executions_fulfilled": {
+                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
+                },
+                "node_executions_initiated": {
+                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
+                },
+                "node_executions_queued": {
+                    f"{base_module}.workflow.NextNode": [],
+                },
+                "dependencies_invoked": {
+                    str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
+                },
+            },
+            "parent": None,
+        },
+        "score": 13,
+    }
+
+    assert events[10].name == "workflow.execution.fulfilled"
+    assert events[10].outputs == {"final_value": "Score: 13"}
+
+    assert len(events) == 11, final_event
 
     # AND the emitter should have emitted all of the expected state snapshots
     state_snapshots = list(emitter.state_snapshots)
-
-    base_module = ".".join(__name__.split(".")[:-2])
-
-    assert not DeepDiff(
-        state_snapshots[0],
-        {
-            "meta": {
-                "id": str(state_id),
-                "trace_id": str(trace_id),
-                "span_id": str(workflow_span_id),
-                "updated_ts": "2024-01-01T12:00:00",
-                "is_terminated": False,
-                "workflow_inputs": {},
-                "external_inputs": {},
-                "node_outputs": {},
-                "parent": None,
-                "node_execution_cache": {
-                    "node_executions_fulfilled": {},
-                    "node_executions_initiated": {},
-                    "node_executions_queued": {},
-                    "dependencies_invoked": {},
-                },
-            },
-            "score": 0,
-        },
-    )
-
-    assert not DeepDiff(
-        state_snapshots[1],
-        {
-            "meta": {
-                "id": str(state_id),
-                "trace_id": str(trace_id),
-                "span_id": str(workflow_span_id),
-                "updated_ts": "2024-01-01T12:00:00",
-                "is_terminated": False,
-                "workflow_inputs": {},
-                "external_inputs": {},
-                "node_outputs": {"StartNode.Outputs.final_value": "Hello, World!"},
-                "parent": None,
-                "node_execution_cache": {
-                    "node_executions_fulfilled": {},
-                    "node_executions_initiated": {f"{base_module}.workflow.StartNode": [str(start_node_span_id)]},
-                    "node_executions_queued": {},
-                    "dependencies_invoked": {},
-                },
-            },
-            "score": 0,
-        },
-    )
-
-    assert not DeepDiff(
-        state_snapshots[2],
-        {
-            "meta": {
-                "id": str(state_id),
-                "trace_id": str(trace_id),
-                "span_id": str(workflow_span_id),
-                "updated_ts": "2024-01-01T12:00:00",
-                "is_terminated": False,
-                "workflow_inputs": {},
-                "external_inputs": {},
-                "node_outputs": {
-                    "StartNode.Outputs.final_value": "Hello, World!",
-                },
-                "parent": None,
-                "node_execution_cache": {
-                    "node_executions_fulfilled": {
-                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                    },
-                    "node_executions_initiated": {
-                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                        f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
-                    },
-                    "node_executions_queued": {
-                        f"{base_module}.workflow.NextNode": [],
-                    },
-                    "dependencies_invoked": {
-                        str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
-                    },
-                },
-            },
-            "score": 13,
-        },
-    )
-
-    assert not DeepDiff(
-        state_snapshots[3],
-        {
-            "meta": {
-                "id": str(state_id),
-                "trace_id": str(trace_id),
-                "span_id": str(workflow_span_id),
-                "updated_ts": "2024-01-01T12:00:00",
-                "is_terminated": False,
-                "workflow_inputs": {},
-                "external_inputs": {},
-                "node_outputs": {
-                    "StartNode.Outputs.final_value": "Hello, World!",
-                    "NextNode.Outputs.final_value": "Score: 13",
-                },
-                "node_execution_cache": {
-                    "node_executions_fulfilled": {
-                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                    },
-                    "node_executions_initiated": {
-                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                        f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
-                    },
-                    "node_executions_queued": {
-                        f"{base_module}.workflow.NextNode": [],
-                    },
-                    "dependencies_invoked": {
-                        str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
-                    },
-                },
-                "parent": None,
-            },
-            "score": 13,
-        },
-    )
-
-    assert not DeepDiff(
-        state_snapshots[4],
-        {
-            "meta": {
-                "id": str(state_id),
-                "trace_id": str(trace_id),
-                "span_id": str(workflow_span_id),
-                "updated_ts": "2024-01-01T12:00:00",
-                "is_terminated": True,
-                "workflow_inputs": {},
-                "external_inputs": {},
-                "node_outputs": {
-                    "StartNode.Outputs.final_value": "Hello, World!",
-                    "NextNode.Outputs.final_value": "Score: 13",
-                },
-                "node_execution_cache": {
-                    "node_executions_fulfilled": {
-                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                        f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
-                    },
-                    "node_executions_initiated": {
-                        f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                        f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
-                    },
-                    "node_executions_queued": {
-                        f"{base_module}.workflow.NextNode": [],
-                    },
-                    "dependencies_invoked": {
-                        str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
-                    },
-                },
-                "parent": None,
-            },
-            "score": 13,
-        },
-    )
-
     assert len(state_snapshots) == 5

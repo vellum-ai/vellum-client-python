@@ -5815,6 +5815,8 @@ components:
       - notBetween
       - blank
       - notBlank
+      - coalesce
+      - accessField
       type: string
       description: |-
         * `=` - EQUALS
@@ -5837,6 +5839,8 @@ components:
         * `notBetween` - NOT_BETWEEN
         * `blank` - BLANK
         * `notBlank` - NOT_BLANK
+        * `coalesce` - COALESCE
+        * `accessField` - ACCESS_FIELD
       x-fern-enum:
         '=':
           name: EQUALS

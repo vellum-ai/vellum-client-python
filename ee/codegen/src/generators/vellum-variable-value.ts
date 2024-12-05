@@ -4,6 +4,7 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import { isNil } from "lodash";
 import {
   ChatMessageRequest,
+  FunctionCall,
   SearchResult,
   VellumAudio,
   VellumError,
@@ -275,16 +276,58 @@ class AudioVellumValue extends AstNode {
   }
 }
 
-class SearchResultsVellumValue extends AstNode {
-  private value: SearchResult[];
+class FunctionCallVellumValue extends AstNode {
+  private value: FunctionCall;
 
-  public constructor(value: SearchResult[]) {
+  public constructor(value: FunctionCall) {
     super();
     this.value = value;
+    this.inheritReferences(new Json(this.value.arguments));
   }
 
   public write(writer: Writer): void {
-    const searchResults = this.value.map((result) => {
+    const arguments_ = [
+      python.methodArgument({
+        name: "arguments",
+        value: new Json(this.value.arguments),
+      }),
+      python.methodArgument({
+        name: "name",
+        value: python.TypeInstantiation.str(this.value.name),
+      }),
+    ];
+
+    if (!isNil(this.value.id)) {
+      arguments_.push(
+        python.methodArgument({
+          name: "id",
+          value: python.TypeInstantiation.str(this.value.id),
+        })
+      );
+    }
+
+    python
+      .instantiateClass({
+        classReference: python.reference({
+          name: "FunctionCall",
+          modulePath: VELLUM_CLIENT_MODULE_PATH,
+        }),
+        arguments_: arguments_,
+      })
+      .write(writer);
+  }
+}
+
+class SearchResultsVellumValue extends AstNode {
+  private astNode: AstNode;
+
+  public constructor(value: SearchResult[]) {
+    super();
+    this.astNode = this.generateAstNode(value);
+  }
+
+  private generateAstNode(value: SearchResult[]): AstNode {
+    const searchResultItems = value.map((result) => {
       const arguments_ = [
         python.methodArgument({
           name: "text",
@@ -302,10 +345,28 @@ class SearchResultsVellumValue extends AstNode {
         }),
         python.methodArgument({
           name: "document",
-          value: python.reference({
-            name: "document", // Assuming document is already instantiated
-            modulePath: VELLUM_CLIENT_MODULE_PATH,
-          }),
+          value: (() => {
+            const document = python.instantiateClass({
+              classReference: python.reference({
+                name: "Document",
+                modulePath: VELLUM_CLIENT_MODULE_PATH,
+              }),
+              arguments_: [
+                python.methodArgument({
+                  name: "id",
+                  value: python.TypeInstantiation.str(result.document.id ?? ""),
+                }),
+                python.methodArgument({
+                  name: "label",
+                  value: python.TypeInstantiation.str(
+                    result.document.label ?? ""
+                  ),
+                }),
+              ],
+            });
+            this.inheritReferences(document);
+            return document;
+          })(),
         }),
       ];
 
@@ -327,7 +388,15 @@ class SearchResultsVellumValue extends AstNode {
       });
     });
 
-    python.TypeInstantiation.list(searchResults).write(writer);
+    const searchResults = python.TypeInstantiation.list(searchResultItems);
+
+    this.inheritReferences(searchResults);
+
+    return searchResults;
+  }
+
+  public write(writer: Writer): void {
+    this.astNode.write(writer);
   }
 }
 
@@ -379,10 +448,9 @@ export class VellumValue extends AstNode {
       case "SEARCH_RESULTS":
         this.astNode = new SearchResultsVellumValue(vellumValue.value);
         break;
-      // TODO: Handle other vellum variable types
-      // https://app.shortcut.com/vellum/story/5661
       case "FUNCTION_CALL":
-        throw new Error(`Unknown vellum value type: ${vellumValue.type}`);
+        this.astNode = new FunctionCallVellumValue(vellumValue.value);
+        break;
       default:
         assertUnreachable(vellumValue);
     }

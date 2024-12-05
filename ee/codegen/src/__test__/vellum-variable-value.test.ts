@@ -69,19 +69,6 @@ describe("VellumValue", () => {
     });
   });
 
-  describe.skip("SEARCH_RESULTS", () => {
-    it("should write a SEARCH_RESULTS value correctly", async () => {
-      const searchResultsValue = codegen.vellumValue({
-        vellumValue: {
-          type: "SEARCH_RESULTS",
-          value: [],
-        },
-      });
-      searchResultsValue.write(writer);
-      expect(await writer.toStringFormatted()).toMatchSnapshot();
-    });
-  });
-
   describe("JSON", () => {
     it("should write a JSON value correctly", async () => {
       const jsonValue = codegen.vellumValue({
@@ -125,6 +112,25 @@ describe("VellumValue", () => {
         },
       });
       imageValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
+
+  describe("FUNCTION_CALL", () => {
+    it("should write a FUNCTION_CALL value correctly", async () => {
+      const functionCallValue = codegen.vellumValue({
+        vellumValue: {
+          type: "FUNCTION_CALL",
+          value: {
+            arguments: {
+              key: "value",
+            },
+            name: "test",
+            id: "123",
+          },
+        },
+      });
+      functionCallValue.write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
@@ -201,6 +207,7 @@ describe("VellumValue", () => {
       });
       searchResultsValue.write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
+      expect(searchResultsValue.getReferences()).toHaveLength(4);
     });
   });
 });

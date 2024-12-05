@@ -1,0 +1,344 @@
+{
+  "workflow_raw_data": {
+    "nodes": [
+      {
+        "id": "c4ef480d-635a-49c8-900f-6583c4b79fb5",
+        "type": "ENTRYPOINT",
+        "data": {
+          "label": "Entrypoint Node",
+          "source_handle_id": "0465edea-e797-4558-aabb-65bce040e095"
+        },
+        "inputs": [],
+        "display_data": {
+          "position": {
+            "x": 1545.0,
+            "y": 330.0
+          },
+          "comment": null,
+          "width": 124.0,
+          "height": 48.0
+        },
+        "definition": null
+      },
+      {
+        "id": "743aec59-2aa9-402c-963a-d9b86a80a1c2",
+        "type": "API",
+        "data": {
+          "label": "API Node",
+          "method_input_id": "4bc3ec8f-f889-45c2-bad0-5498f28cc8af",
+          "url_input_id": "d2f4547b-eaa3-4b9a-a0f7-0da0975d4e11",
+          "body_input_id": "65dbcf74-183a-49e0-b553-2a3d25ad741d",
+          "authorization_type_input_id": "c9b08ce9-2dfc-4cbe-9e65-0bf6f8e248c0",
+          "bearer_token_value_input_id": "6d330109-ec8e-4c39-af30-63d77f07c35d",
+          "api_key_header_key_input_id": "908e1fb5-bcba-4388-ae1d-a53d256eda97",
+          "api_key_header_value_input_id": "efefc4f7-6c95-4561-b7a0-b48533e0c68f",
+          "additional_headers": [
+            {
+              "header_key_input_id": "7dbd1729-ec2e-4be5-a868-e542ba421115",
+              "header_value_input_id": "a7a796b5-ac5b-471d-af20-b45c66b699ce"
+            },
+            {
+              "header_key_input_id": "4e7557f4-16ec-4fec-97a6-fe221eae1ee5",
+              "header_value_input_id": "58099189-1676-4d89-a01d-9c1d79ba833a"
+            }
+          ],
+          "text_output_id": "6a3c1704-7020-411d-a440-84b2a481691e",
+          "json_output_id": "f6f469ae-3f50-4276-a294-43d8d0fcf477",
+          "status_code_output_id": "6ab9d555-7007-43e1-9f90-d2ca21ea99cf",
+          "error_output_id": null,
+          "target_handle_id": "fd10e0db-0130-4fdc-8fc7-146eafe1b470",
+          "source_handle_id": "b8ad3fd2-c96c-4ae8-8eae-d234fb13a139"
+        },
+        "inputs": [
+          {
+            "id": "4bc3ec8f-f889-45c2-bad0-5498f28cc8af",
+            "key": "method",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": "POST"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "d2f4547b-eaa3-4b9a-a0f7-0da0975d4e11",
+            "key": "url",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": "https://www.testing.com"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "65dbcf74-183a-49e0-b553-2a3d25ad741d",
+            "key": "body",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": "\"hii\""
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "c9b08ce9-2dfc-4cbe-9e65-0bf6f8e248c0",
+            "key": "authorization_type",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": null
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "6d330109-ec8e-4c39-af30-63d77f07c35d",
+            "key": "bearer_token_value",
+            "value": {
+              "rules": [
+                {
+                  "type": "WORKSPACE_SECRET",
+                  "data": {
+                    "type": "STRING",
+                    "workspace_secret_id": null
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "908e1fb5-bcba-4388-ae1d-a53d256eda97",
+            "key": "api_key_header_key",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": null
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "efefc4f7-6c95-4561-b7a0-b48533e0c68f",
+            "key": "api_key_header_value",
+            "value": {
+              "rules": [
+                {
+                  "type": "WORKSPACE_SECRET",
+                  "data": {
+                    "type": "STRING",
+                    "workspace_secret_id": null
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "7dbd1729-ec2e-4be5-a868-e542ba421115",
+            "key": "additional_header_key",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": "test"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "a7a796b5-ac5b-471d-af20-b45c66b699ce",
+            "key": "additional_header_value",
+            "value": {
+              "rules": [
+                {
+                  "type": "WORKSPACE_SECRET",
+                  "data": {
+                    "type": "STRING",
+                    "workspace_secret_id": "cecd16a2-4de5-444d-acff-37a5c400600c"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "4e7557f4-16ec-4fec-97a6-fe221eae1ee5",
+            "key": "additional_header_key",
+            "value": {
+              "rules": [
+                {
+                  "type": "CONSTANT_VALUE",
+                  "data": {
+                    "type": "STRING",
+                    "value": "nom"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "58099189-1676-4d89-a01d-9c1d79ba833a",
+            "key": "additional_header_value",
+            "value": {
+              "rules": [
+                {
+                  "type": "WORKSPACE_SECRET",
+                  "data": {
+                    "type": "STRING",
+                    "workspace_secret_id": "cecd16a2-4de5-444d-acff-37a5c400600c"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          }
+        ],
+        "display_data": {
+          "position": {
+            "x": 1889.865705614568,
+            "y": 236.61265174506826
+          },
+          "comment": null,
+          "width": 467.0,
+          "height": 288.0
+        },
+        "definition": {
+          "bases": [
+            {
+              "module": [
+                "vellum",
+                "workflows",
+                "nodes",
+                "displayable",
+                "api_node",
+                "node"
+              ],
+              "name": "ApiNode"
+            }
+          ],
+          "module": [
+            "codegen_integration",
+            "fixtures",
+            "simple_api_node",
+            "code",
+            "nodes",
+            "api_node"
+          ],
+          "name": "ApiNode"
+        }
+      },
+      {
+        "id": "dad01b99-c0b4-4904-a75e-066fa947d256",
+        "type": "TERMINAL",
+        "data": {
+          "label": "Final Output",
+          "name": "final-output",
+          "target_handle_id": "2d005e2b-e8bb-404a-9702-8faf10c2213d",
+          "output_id": "e53bdfb1-f74d-43f0-a3fc-24c7a5162a62",
+          "output_type": "STRING",
+          "node_input_id": "bc3e4cad-e6b6-4f3d-b0d8-ee7099fe6352"
+        },
+        "inputs": [
+          {
+            "id": "bc3e4cad-e6b6-4f3d-b0d8-ee7099fe6352",
+            "key": "node_input",
+            "value": {
+              "rules": [],
+              "combinator": "OR"
+            }
+          }
+        ],
+        "display_data": {
+          "position": {
+            "x": 2750.0,
+            "y": 210.0
+          },
+          "comment": null,
+          "width": 467.0,
+          "height": 234.0
+        },
+        "definition": null
+      }
+    ],
+    "edges": [
+      {
+        "type": "DEFAULT",
+        "id": "eaa80dca-eb90-48bb-9903-bedbe51f5a2e",
+        "source_node_id": "c4ef480d-635a-49c8-900f-6583c4b79fb5",
+        "source_handle_id": "0465edea-e797-4558-aabb-65bce040e095",
+        "target_node_id": "743aec59-2aa9-402c-963a-d9b86a80a1c2",
+        "target_handle_id": "fd10e0db-0130-4fdc-8fc7-146eafe1b470"
+      },
+      {
+        "type": "DEFAULT",
+        "id": "dc149e06-f71f-48ba-be58-0c3f6be13719",
+        "source_node_id": "743aec59-2aa9-402c-963a-d9b86a80a1c2",
+        "source_handle_id": "b8ad3fd2-c96c-4ae8-8eae-d234fb13a139",
+        "target_node_id": "dad01b99-c0b4-4904-a75e-066fa947d256",
+        "target_handle_id": "2d005e2b-e8bb-404a-9702-8faf10c2213d"
+      }
+    ],
+    "display_data": {
+      "viewport": {
+        "x": -1047.2625054371465,
+        "y": 194.66659417137888,
+        "zoom": 0.7166159199652022
+      }
+    },
+    "definition": {
+      "name": "Workflow",
+      "module": [
+        "codegen_integration",
+        "fixtures",
+        "simple_api_node",
+        "code",
+        "workflow"
+      ]
+    }
+  },
+  "input_variables": [
+    {
+      "id": "c6f392da-bd3a-40ba-8fdd-75fc36b18fd8",
+      "key": "foo",
+      "type": "STRING",
+      "required": null,
+      "default": null,
+      "extensions": null
+    }
+  ],
+  "output_variables": []
+}

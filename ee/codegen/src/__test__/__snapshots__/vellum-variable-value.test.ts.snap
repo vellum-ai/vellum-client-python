@@ -19,6 +19,11 @@ exports[`VellumValue > ERROR > should write a ERROR value correctly 1`] = `
 "
 `;
 
+exports[`VellumValue > FUNCTION_CALL > should write a FUNCTION_CALL value correctly 1`] = `
+"FunctionCall(arguments={"key": "value"}, name="test", id="123")
+"
+`;
+
 exports[`VellumValue > IMAGE > should write a IMAGE value correctly 1`] = `
 "VellumImage(src="https://example.com/image.png")
 "
@@ -37,10 +42,16 @@ exports[`VellumValue > NUMBER > should write a NUMBER value correctly 1`] = `
 exports[`VellumValue > SEARCH_RESULTS > should write a SEARCH_RESULTS value correctly 1`] = `
 "[
     SearchResult(
-        text="Hello, World!", score=0.5, keywords=["hello", "world"], document=document
+        text="Hello, World!",
+        score=0.5,
+        keywords=["hello", "world"],
+        document=Document(id="123", label="Example Document"),
     ),
     SearchResult(
-        text="Hello, AI!", score=0.7, keywords=["hello", "ai"], document=document
+        text="Hello, AI!",
+        score=0.7,
+        keywords=["hello", "ai"],
+        document=Document(id="456", label="Another Document"),
     ),
 ]
 "

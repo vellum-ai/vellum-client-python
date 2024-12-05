@@ -27,4 +27,11 @@ exports[`ChatMessageContent > FUNCTION_CALL > should write a function call conte
 "
 `;
 
+exports[`ChatMessageContent > IMAGE > should write an image content correctly 1`] = `
+"ImageChatMessageContentRequest(
+    src="https://example.com/image.png", metadata={"key": "value"}
+)
+"
+`;
+
 exports[`ChatMessageContent > STRING > should write a string content correctly 1`] = `"StringChatMessageContentRequest(value="Hello, AI!")"`;

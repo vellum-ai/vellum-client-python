@@ -55,4 +55,17 @@ describe("ChatMessageContent", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
+
+  describe("AUDIO", () => {
+    it("should write an audio content correctly", async () => {
+      const chatMessageContent = new ChatMessageContent({
+        chatMessageContent: {
+          type: "AUDIO",
+          value: { src: "https://example.com/audio.mp3" },
+        },
+      });
+      chatMessageContent.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
 });

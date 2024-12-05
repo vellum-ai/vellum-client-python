@@ -179,7 +179,7 @@ export class ChatMessageContent extends AstNode {
       const audioChatMessageContentRequestRef =
         this.getAudioChatMessageContentRef();
       audioChatMessageContentRequestRef.write(writer);
-      writer.write(`(value="${audioContentValue}")`);
+      writer.write(`(value="${audioContentValue.src}")`); // TODO: Handle metadata and src as properties here
       return;
     }
 

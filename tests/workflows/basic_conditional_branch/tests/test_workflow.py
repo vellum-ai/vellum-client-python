@@ -59,7 +59,9 @@ def test_stream_workflow__verify_invoked_ports():
     events = list(stream)
 
     # THEN we should see the invoked ports in the node events
-    node_fulfilled_events = [event for event in events if event.name == "node.execution.fulfilled"]
+    node_fulfilled_events = [
+        event for event in events if event.name == "node.execution.fulfilled"
+    ]
     assert len(node_fulfilled_events) == 2
     assert node_fulfilled_events[0].invoked_ports == {StartNode.Ports.branch_a}
     assert node_fulfilled_events[1].invoked_ports == {BranchANode.Ports.default}

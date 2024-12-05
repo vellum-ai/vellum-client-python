@@ -1,3 +1,7 @@
+from uuid import uuid4
+
+from vellum.workflows.events.types import CodeResourceDefinition, NodeParentContext
+from vellum.workflows.state.context import WorkflowContext
 from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
 from tests.workflows.basic_parent_context.basic_workflow import TrivialWorkflow
@@ -28,3 +32,52 @@ def test_stream_workflow__happy_path():
 
     assert events[-1].name == "workflow.execution.fulfilled"
     assert events[-1].parent is None
+
+
+def test_stream_workflow__happy_path_inital_context():
+    initial_parent_context_json = {
+        "span_id": uuid4(),
+        "node_definition": {
+            "module": ["example", "test"],
+            "name": "node_workflow",
+        },
+        "parent": None,
+        "type": "WORKFLOW_NODE",
+    }
+    initial_parent_context_json["parent"] = {
+        "span_id": uuid4(),
+        "node_definition": {
+            "module": ["example", "test"],
+            "name": "node_workflow",
+        },
+        "parent": None,
+        "type": "WORKFLOW_NODE",
+    }
+    initial_parent_context = NodeParentContext(**initial_parent_context_json)
+    assert isinstance(initial_parent_context, NodeParentContext)
+    assert initial_parent_context is not None
+    assert initial_parent_context.parent is not None
+    assert isinstance(initial_parent_context.node_definition, CodeResourceDefinition)
+
+    workflow = TrivialWorkflow(
+        context=WorkflowContext(_parent_context=initial_parent_context)
+    )
+
+    events = list(workflow.stream(event_filter=root_workflow_event_filter))
+
+    assert len(events) == 4
+
+    assert events[0].name == "workflow.execution.initiated"
+    assert events[0].parent is not None
+    assert events[0].parent == initial_parent_context
+
+    assert events[1].name == "node.execution.initiated"
+    assert events[1].parent is not None
+    parent_context = events[1].parent.model_dump()
+    assert parent_context is not None
+    assert parent_context.get("type") == "WORKFLOW"
+    assert parent_context.get("parent") == initial_parent_context_json
+    assert parent_context.get("workflow_definition") is not None
+
+    assert events[-1].name == "workflow.execution.fulfilled"
+    assert events[-1].parent == initial_parent_context

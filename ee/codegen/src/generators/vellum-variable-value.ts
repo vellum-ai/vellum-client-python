@@ -302,24 +302,28 @@ class SearchResultsVellumValue extends AstNode {
         }),
         python.methodArgument({
           name: "document",
-          value: python.instantiateClass({
-            classReference: python.reference({
-              name: "Document",
-              modulePath: VELLUM_CLIENT_MODULE_PATH,
-            }),
-            arguments_: [
-              python.methodArgument({
-                name: "id",
-                value: python.TypeInstantiation.str(result.document.id ?? ""),
+          value: (() => {
+            const document = python.instantiateClass({
+              classReference: python.reference({
+                name: "Document",
+                modulePath: VELLUM_CLIENT_MODULE_PATH,
               }),
-              python.methodArgument({
-                name: "label",
-                value: python.TypeInstantiation.str(
-                  result.document.label ?? ""
-                ),
-              }),
-            ],
-          }),
+              arguments_: [
+                python.methodArgument({
+                  name: "id",
+                  value: python.TypeInstantiation.str(result.document.id ?? ""),
+                }),
+                python.methodArgument({
+                  name: "label",
+                  value: python.TypeInstantiation.str(
+                    result.document.label ?? ""
+                  ),
+                }),
+              ],
+            });
+            this.inheritReferences(document);
+            return document;
+          })(),
         }),
       ];
 

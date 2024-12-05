@@ -9,12 +9,12 @@ import {
   any as anySchema,
   boolean as booleanSchema,
   ObjectSchema,
-  lazy,
+  lazy as lazySchema,
   property as propertySchema,
   Schema,
   record as recordSchema,
   unknown as unknownSchema,
-  union,
+  union as unionSchema,
 } from "vellum-ai/core/schemas";
 import {
   ChatMessageRole as ChatMessageRoleSerializer,
@@ -143,7 +143,7 @@ export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
     blocks: propertySchema(
       "blocks",
       listSchema(
-        lazy(() => {
+        lazySchema(() => {
           return PromptTemplateBlockSerializer as unknown as Schema<
             PromptTemplateBlockSerializer.Raw,
             PromptTemplateBlock
@@ -214,7 +214,7 @@ export const RichTextPromptTemplateBlockSerializer: ObjectSchema<
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   blocks: listSchema(
-    union(
+    unionSchema(
       {
         parsedDiscriminant: "blockType",
         rawDiscriminant: "block_type",
@@ -295,7 +295,7 @@ export declare namespace PromptTemplateBlockSerializer {
     | FunctionDefinitionPromptTemplateBlockSerializer.Raw;
 }
 
-const PromptTemplateBlockSerializer = union(
+const PromptTemplateBlockSerializer = unionSchema(
   { parsedDiscriminant: "blockType", rawDiscriminant: "block_type" },
   {
     JINJA: JinjaPromptTemplateBlockSerializer,
@@ -396,7 +396,7 @@ export declare namespace ExecutionCounterPointerSerializer {
 export const NodeInputValuePointerRuleSerializer: Schema<
   NodeInputValuePointerRuleSerializer.Raw,
   NodeInputValuePointerRule
-> = union("type", {
+> = unionSchema("type", {
   NODE_OUTPUT: NodeOutputPointerSerializer,
   INPUT_VARIABLE: InputVariablePointerSerializer,
   CONSTANT_VALUE: ConstantValuePointerSerializer,
@@ -621,7 +621,7 @@ export const InlineSubworkflowNodeDataSerializer: ObjectSchema<
 > = objectSchema({
   workflowRawData: propertySchema(
     "workflow_raw_data",
-    lazy(() => WorkflowRawDataSerializer)
+    lazySchema(() => WorkflowRawDataSerializer)
   ),
   inputVariables: propertySchema(
     "input_variables",
@@ -675,7 +675,7 @@ export declare namespace DeploymentSubworkflowNodeDataSerializer {
   }
 }
 
-export const SubworkflowNodeDataSerializer = union("variant", {
+export const SubworkflowNodeDataSerializer = unionSchema("variant", {
   INLINE: InlineSubworkflowNodeDataSerializer,
   DEPLOYMENT: DeploymentSubworkflowNodeDataSerializer,
 });
@@ -869,7 +869,7 @@ export declare namespace LegacyPromptNodeDataSerializer {
 export const PromptNodeDataSerializer: Schema<
   PromptNodeDataSerializer.Raw,
   PromptNodeData
-> = union("variant", {
+> = unionSchema("variant", {
   INLINE: InlinePromptNodeDataSerializer,
   DEPLOYMENT: DeploymentPromptNodeDataSerializer,
   LEGACY: LegacyPromptNodeDataSerializer,
@@ -942,7 +942,7 @@ export const InlineMapNodeDataSerializer: ObjectSchema<
 > = objectSchema({
   workflowRawData: propertySchema(
     "workflow_raw_data",
-    lazy(() => WorkflowRawDataSerializer)
+    lazySchema(() => WorkflowRawDataSerializer)
   ),
   inputVariables: propertySchema(
     "input_variables",
@@ -981,7 +981,7 @@ export declare namespace InlineMapNodeDataSerializer {
 export const MapNodeDataSerializer: Schema<
   MapNodeDataSerializer.Raw,
   MapNodeData
-> = union("variant", {
+> = unionSchema("variant", {
   INLINE: InlineMapNodeDataSerializer,
   DEPLOYMENT: DeploymentMapNodeDataSerializer,
 });
@@ -1191,7 +1191,7 @@ export const ConditionalRuleDataSerializer: ObjectSchema<
   ConditionalRuleData
 > = objectSchema({
   id: stringSchema(),
-  rules: listSchema(lazy(() => ConditionalRuleDataSerializer)).optional(),
+  rules: listSchema(lazySchema(() => ConditionalRuleDataSerializer)).optional(),
   combinator: stringSchema().optional(),
   negated: booleanSchema().optional(),
   fieldNodeInputId: propertySchema(
@@ -1582,7 +1582,7 @@ export declare namespace GenericNodeSerializer {
 export const WorkflowNodeSerializer: Schema<
   WorkflowNodeSerializer.Raw,
   WorkflowNode
-> = union("type", {
+> = unionSchema("type", {
   ENTRYPOINT: EntrypointNodeSerializer,
   PROMPT: PromptNodeSerializer,
   SEARCH: SearchNodeSerializer,

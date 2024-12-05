@@ -9,11 +9,12 @@ import {
   any as anySchema,
   boolean as booleanSchema,
   ObjectSchema,
-  lazy,
+  lazy as lazySchema,
   property as propertySchema,
   Schema,
   record as recordSchema,
   unknown as unknownSchema,
+  union as unionSchema,
 } from "vellum-ai/core/schemas";
 import {
   ChatMessageRole as ChatMessageRoleSerializer,
@@ -88,6 +89,9 @@ import {
   RichTextPromptTemplateBlock,
   PlainTextPromptTemplateBlock,
   FunctionDefinitionPromptTemplateBlock,
+  PromptTemplateBlock,
+  RichTextChildPromptTemplateBlock,
+  PromptTemplateBlockData,
 } from "src/types/vellum";
 
 const CacheConfigSerializer = objectSchema({
@@ -96,10 +100,9 @@ const CacheConfigSerializer = objectSchema({
 
 export const JinjaPromptTemplateBlockSerializer: ObjectSchema<
   JinjaPromptTemplateBlockSerializer.Raw,
-  JinjaPromptTemplateBlock
+  Omit<JinjaPromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("JINJA")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   properties: objectSchema({
@@ -114,7 +117,6 @@ export const JinjaPromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace JinjaPromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "JINJA";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     properties: {
@@ -126,10 +128,9 @@ export declare namespace JinjaPromptTemplateBlockSerializer {
 
 export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
   ChatMessagePromptTemplateBlockSerializer.Raw,
-  ChatMessagePromptTemplateBlock
+  Omit<ChatMessagePromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("CHAT_MESSAGE")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   properties: objectSchema({
@@ -141,7 +142,14 @@ export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
     ),
     blocks: propertySchema(
       "blocks",
-      listSchema(lazy(() => PromptTemplateBlockSerializer))
+      listSchema(
+        lazySchema(() => {
+          return PromptTemplateBlockSerializer as unknown as Schema<
+            PromptTemplateBlockSerializer.Raw,
+            PromptTemplateBlock
+          >;
+        })
+      )
     ),
   }),
 });
@@ -149,7 +157,6 @@ export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace ChatMessagePromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "CHAT_MESSAGE";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     properties: {
@@ -163,10 +170,9 @@ export declare namespace ChatMessagePromptTemplateBlockSerializer {
 
 export const VariablePromptTemplateBlockSerializer: ObjectSchema<
   VariablePromptTemplateBlockSerializer.Raw,
-  VariablePromptTemplateBlock
+  Omit<VariablePromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("VARIABLE")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   inputVariableId: propertySchema("input_variable_id", stringSchema()),
@@ -175,7 +181,6 @@ export const VariablePromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace VariablePromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "VARIABLE";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     input_variable_id: string;
@@ -184,10 +189,9 @@ export declare namespace VariablePromptTemplateBlockSerializer {
 
 export const PlainTextPromptTemplateBlockSerializer: ObjectSchema<
   PlainTextPromptTemplateBlockSerializer.Raw,
-  PlainTextPromptTemplateBlock
+  Omit<PlainTextPromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("PLAIN_TEXT")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   text: stringSchema(),
@@ -196,7 +200,6 @@ export const PlainTextPromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace PlainTextPromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "PLAIN_TEXT";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     text: string;
@@ -205,24 +208,32 @@ export declare namespace PlainTextPromptTemplateBlockSerializer {
 
 export const RichTextPromptTemplateBlockSerializer: ObjectSchema<
   RichTextPromptTemplateBlockSerializer.Raw,
-  RichTextPromptTemplateBlock
+  Omit<RichTextPromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("RICH_TEXT")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   blocks: listSchema(
-    undiscriminatedUnionSchema([
-      PlainTextPromptTemplateBlockSerializer,
-      VariablePromptTemplateBlockSerializer,
-    ])
+    unionSchema(
+      {
+        parsedDiscriminant: "blockType",
+        rawDiscriminant: "block_type",
+      },
+      {
+        PLAIN_TEXT: PlainTextPromptTemplateBlockSerializer,
+        VARIABLE: VariablePromptTemplateBlockSerializer,
+      }
+    ) as unknown as Schema<
+      | PlainTextPromptTemplateBlockSerializer.Raw
+      | VariablePromptTemplateBlockSerializer.Raw,
+      RichTextChildPromptTemplateBlock
+    >
   ),
 });
 
 export declare namespace RichTextPromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "RICH_TEXT";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     blocks: Array<
@@ -234,13 +245,9 @@ export declare namespace RichTextPromptTemplateBlockSerializer {
 
 export const FunctionDefinitionPromptTemplateBlockSerializer: ObjectSchema<
   FunctionDefinitionPromptTemplateBlockSerializer.Raw,
-  FunctionDefinitionPromptTemplateBlock
+  Omit<FunctionDefinitionPromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema(
-    "block_type",
-    stringLiteralSchema("FUNCTION_DEFINITION")
-  ),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   properties: objectSchema({
@@ -267,7 +274,6 @@ export const FunctionDefinitionPromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace FunctionDefinitionPromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "FUNCTION_DEFINITION";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     properties: {
@@ -289,19 +295,21 @@ export declare namespace PromptTemplateBlockSerializer {
     | FunctionDefinitionPromptTemplateBlockSerializer.Raw;
 }
 
-const PromptTemplateBlockSerializer = undiscriminatedUnionSchema([
-  JinjaPromptTemplateBlockSerializer,
-  ChatMessagePromptTemplateBlockSerializer,
-  VariablePromptTemplateBlockSerializer,
-  RichTextPromptTemplateBlockSerializer,
-  FunctionDefinitionPromptTemplateBlockSerializer,
-]);
+const PromptTemplateBlockSerializer = unionSchema(
+  { parsedDiscriminant: "blockType", rawDiscriminant: "block_type" },
+  {
+    JINJA: JinjaPromptTemplateBlockSerializer,
+    CHAT_MESSAGE: ChatMessagePromptTemplateBlockSerializer,
+    VARIABLE: VariablePromptTemplateBlockSerializer,
+    RICH_TEXT: RichTextPromptTemplateBlockSerializer,
+    FUNCTION_DEFINITION: FunctionDefinitionPromptTemplateBlockSerializer,
+  }
+);
 
 export const NodeOutputPointerSerializer: ObjectSchema<
   NodeOutputPointerSerializer.Raw,
-  NodeOutputPointer
+  Omit<NodeOutputPointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("NODE_OUTPUT"),
   data: objectSchema({
     nodeId: propertySchema("node_id", stringSchema()),
     outputId: propertySchema("output_id", stringSchema()),
@@ -310,7 +318,6 @@ export const NodeOutputPointerSerializer: ObjectSchema<
 
 export declare namespace NodeOutputPointerSerializer {
   interface Raw {
-    type: "NODE_OUTPUT";
     data: {
       node_id: string;
     };
@@ -319,9 +326,8 @@ export declare namespace NodeOutputPointerSerializer {
 
 export const InputVariablePointerSerializer: ObjectSchema<
   InputVariablePointerSerializer.Raw,
-  InputVariablePointer
+  Omit<InputVariablePointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("INPUT_VARIABLE"),
   data: objectSchema({
     inputVariableId: propertySchema("input_variable_id", stringSchema()),
   }),
@@ -329,7 +335,6 @@ export const InputVariablePointerSerializer: ObjectSchema<
 
 export declare namespace InputVariablePointerSerializer {
   interface Raw {
-    type: "INPUT_VARIABLE";
     data: {
       input_variable_id: string;
     };
@@ -338,24 +343,21 @@ export declare namespace InputVariablePointerSerializer {
 
 export const ConstantValuePointerSerializer: ObjectSchema<
   ConstantValuePointerSerializer.Raw,
-  ConstantValuePointer
+  Omit<ConstantValuePointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("CONSTANT_VALUE"),
   data: VellumValueSerializer,
 });
 
 export declare namespace ConstantValuePointerSerializer {
   interface Raw {
-    type: "CONSTANT_VALUE";
     data: VellumValueSerializer.Raw;
   }
 }
 
 export const WorkspaceSecretPointerSerializer: ObjectSchema<
   WorkspaceSecretPointerSerializer.Raw,
-  WorkspaceSecretPointer
+  Omit<WorkspaceSecretPointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("WORKSPACE_SECRET"),
   data: objectSchema({
     type: stringLiteralSchema("STRING"),
     workspaceSecretId: propertySchema(
@@ -367,7 +369,6 @@ export const WorkspaceSecretPointerSerializer: ObjectSchema<
 
 export declare namespace WorkspaceSecretPointerSerializer {
   interface Raw {
-    type: "WORKSPACE_SECRET";
     data: {
       type: "STRING";
       workspace_secret_id?: string | null | undefined;
@@ -377,9 +378,8 @@ export declare namespace WorkspaceSecretPointerSerializer {
 
 export const ExecutionCounterPointerSerializer: ObjectSchema<
   ExecutionCounterPointerSerializer.Raw,
-  ExecutionCounterPointer
+  Omit<ExecutionCounterPointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("EXECUTION_COUNTER"),
   data: objectSchema({
     nodeId: propertySchema("node_id", stringSchema()),
   }),
@@ -387,7 +387,6 @@ export const ExecutionCounterPointerSerializer: ObjectSchema<
 
 export declare namespace ExecutionCounterPointerSerializer {
   interface Raw {
-    type: "EXECUTION_COUNTER";
     data: {
       node_id: string;
     };
@@ -397,13 +396,13 @@ export declare namespace ExecutionCounterPointerSerializer {
 export const NodeInputValuePointerRuleSerializer: Schema<
   NodeInputValuePointerRuleSerializer.Raw,
   NodeInputValuePointerRule
-> = undiscriminatedUnionSchema([
-  NodeOutputPointerSerializer,
-  InputVariablePointerSerializer,
-  ConstantValuePointerSerializer,
-  WorkspaceSecretPointerSerializer,
-  ExecutionCounterPointerSerializer,
-]);
+> = unionSchema("type", {
+  NODE_OUTPUT: NodeOutputPointerSerializer,
+  INPUT_VARIABLE: InputVariablePointerSerializer,
+  CONSTANT_VALUE: ConstantValuePointerSerializer,
+  WORKSPACE_SECRET: WorkspaceSecretPointerSerializer,
+  EXECUTION_COUNTER: ExecutionCounterPointerSerializer,
+});
 
 export declare namespace NodeInputValuePointerRuleSerializer {
   type Raw =
@@ -469,9 +468,17 @@ export declare namespace WorkflowNodeDefinitionSerializer {
   }
 }
 
-export const PromptTemplateBlockDataSerializer = objectSchema({
+export const PromptTemplateBlockDataSerializer: ObjectSchema<
+  PromptTemplateBlockDataSerializer.Raw,
+  PromptTemplateBlockData
+> = objectSchema({
   version: numberSchema(),
-  blocks: listSchema(PromptTemplateBlockSerializer),
+  blocks: listSchema(
+    PromptTemplateBlockSerializer as unknown as Schema<
+      PromptTemplateBlockSerializer.Raw,
+      PromptTemplateBlock
+    >
+  ),
 });
 
 export declare namespace PromptTemplateBlockDataSerializer {
@@ -570,7 +577,6 @@ export declare namespace NodeDisplayDataSerializer {
 
 export declare namespace BaseWorkflowNodeSerializer {
   interface Raw {
-    type: string;
     definition?: WorkflowNodeDefinitionSerializer.Raw | null;
   }
 }
@@ -585,10 +591,9 @@ export declare namespace BaseDisplayableWorkflowNodeSerializer {
 
 export const EntrypointNodeSerializer: ObjectSchema<
   EntrypointNodeSerializer.Raw,
-  EntrypointNode
+  Omit<EntrypointNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("ENTRYPOINT"),
   data: objectSchema({
     label: stringSchema(),
     sourceHandleId: propertySchema("source_handle_id", stringSchema()),
@@ -603,7 +608,6 @@ export const EntrypointNodeSerializer: ObjectSchema<
 
 export declare namespace EntrypointNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "ENTRYPOINT";
     data: {
       label: string;
       source_handle_id: string;
@@ -613,11 +617,11 @@ export declare namespace EntrypointNodeSerializer {
 
 export const InlineSubworkflowNodeDataSerializer: ObjectSchema<
   InlineSubworkflowNodeDataSerializer.Raw,
-  InlineSubworkflowNodeData
+  Omit<InlineSubworkflowNodeData, "variant">
 > = objectSchema({
   workflowRawData: propertySchema(
     "workflow_raw_data",
-    lazy(() => WorkflowRawDataSerializer)
+    lazySchema(() => WorkflowRawDataSerializer)
   ),
   inputVariables: propertySchema(
     "input_variables",
@@ -631,7 +635,6 @@ export const InlineSubworkflowNodeDataSerializer: ObjectSchema<
   sourceHandleId: propertySchema("source_handle_id", stringSchema()),
   targetHandleId: propertySchema("target_handle_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
-  variant: stringLiteralSchema("INLINE"),
 });
 
 export declare namespace InlineSubworkflowNodeDataSerializer {
@@ -643,19 +646,17 @@ export declare namespace InlineSubworkflowNodeDataSerializer {
     source_handle_id: string;
     target_handle_id: string;
     error_output_id?: string | null;
-    variant: "INLINE";
   }
 }
 
 export const DeploymentSubworkflowNodeDataSerializer: ObjectSchema<
   DeploymentSubworkflowNodeDataSerializer.Raw,
-  DeploymentSubworkflowNodeData
+  Omit<DeploymentSubworkflowNodeData, "variant">
 > = objectSchema({
   label: stringSchema(),
   sourceHandleId: propertySchema("source_handle_id", stringSchema()),
   targetHandleId: propertySchema("target_handle_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
-  variant: stringLiteralSchema("DEPLOYMENT"),
   workflowDeploymentId: propertySchema(
     "workflow_deployment_id",
     stringSchema()
@@ -669,16 +670,15 @@ export declare namespace DeploymentSubworkflowNodeDataSerializer {
     source_handle_id: string;
     target_handle_id: string;
     error_output_id?: string | null;
-    variant: "DEPLOYMENT";
     workflow_deployment_id: string;
     release_tag: string;
   }
 }
 
-export const SubworkflowNodeDataSerializer = undiscriminatedUnionSchema([
-  InlineSubworkflowNodeDataSerializer,
-  DeploymentSubworkflowNodeDataSerializer,
-]);
+export const SubworkflowNodeDataSerializer = unionSchema("variant", {
+  INLINE: InlineSubworkflowNodeDataSerializer,
+  DEPLOYMENT: DeploymentSubworkflowNodeDataSerializer,
+});
 
 export declare namespace SubworkflowNodeDataSerializer {
   type Raw =
@@ -688,10 +688,9 @@ export declare namespace SubworkflowNodeDataSerializer {
 
 export const SubworkflowNodeSerializer: ObjectSchema<
   SubworkflowNodeSerializer.Raw,
-  SubworkflowNode
+  Omit<SubworkflowNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("SUBWORKFLOW"),
   data: SubworkflowNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(
@@ -703,17 +702,15 @@ export const SubworkflowNodeSerializer: ObjectSchema<
 
 export declare namespace SubworkflowNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "SUBWORKFLOW";
     data: SubworkflowNodeDataSerializer.Raw;
   }
 }
 
 export const InlinePromptNodeDataSerializer: ObjectSchema<
   InlinePromptNodeDataSerializer.Raw,
-  InlinePromptNodeData
+  Omit<InlinePromptNodeData, "variant">
 > = objectSchema({
   label: stringSchema(),
-  variant: stringLiteralSchema("INLINE"),
   outputId: propertySchema("output_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
   arrayOutputId: propertySchema("array_output_id", stringSchema()),
@@ -731,7 +728,6 @@ export declare namespace InlinePromptNodeDataSerializer {
     array_output_id: string;
     source_handle_id: string;
     target_handle_id: string;
-    variant: "INLINE";
     exec_config: PromptVersionExecConfigSerializer.Raw;
     ml_model_name: string;
   }
@@ -739,10 +735,9 @@ export declare namespace InlinePromptNodeDataSerializer {
 
 export const DeploymentPromptNodeDataSerializer: ObjectSchema<
   DeploymentPromptNodeDataSerializer.Raw,
-  DeploymentPromptNodeData
+  Omit<DeploymentPromptNodeData, "variant">
 > = objectSchema({
   label: stringSchema(),
-  variant: stringLiteralSchema("DEPLOYMENT"),
   promptDeploymentId: propertySchema("prompt_deployment_id", stringSchema()),
   releaseTag: propertySchema("release_tag", stringSchema()),
   outputId: propertySchema("output_id", stringSchema()),
@@ -754,7 +749,6 @@ export const DeploymentPromptNodeDataSerializer: ObjectSchema<
 
 export declare namespace DeploymentPromptNodeDataSerializer {
   interface Raw {
-    variant: "DEPLOYMENT";
     prompt_deployment_id: string;
     release_tag: string;
     label: string;
@@ -839,10 +833,9 @@ export declare namespace PromptNodeDeploymentSerializer {
 
 export const LegacyPromptNodeDataSerializer: ObjectSchema<
   LegacyPromptNodeDataSerializer.Raw,
-  LegacyPromptNodeData
+  Omit<LegacyPromptNodeData, "variant">
 > = objectSchema({
   label: stringSchema(),
-  variant: stringLiteralSchema("LEGACY"),
   outputId: propertySchema("output_id", stringSchema()),
   errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
   arrayOutputId: propertySchema("array_output_id", stringSchema()),
@@ -862,7 +855,6 @@ export const LegacyPromptNodeDataSerializer: ObjectSchema<
 export declare namespace LegacyPromptNodeDataSerializer {
   interface Raw {
     label: string;
-    variant: "LEGACY";
     output_id: string;
     error_output_id?: string | null;
     array_output_id: string;
@@ -877,11 +869,11 @@ export declare namespace LegacyPromptNodeDataSerializer {
 export const PromptNodeDataSerializer: Schema<
   PromptNodeDataSerializer.Raw,
   PromptNodeData
-> = undiscriminatedUnionSchema([
-  InlinePromptNodeDataSerializer,
-  DeploymentPromptNodeDataSerializer,
-  LegacyPromptNodeDataSerializer,
-]);
+> = unionSchema("variant", {
+  INLINE: InlinePromptNodeDataSerializer,
+  DEPLOYMENT: DeploymentPromptNodeDataSerializer,
+  LEGACY: LegacyPromptNodeDataSerializer,
+});
 
 export declare namespace PromptNodeDataSerializer {
   type Raw =
@@ -892,10 +884,9 @@ export declare namespace PromptNodeDataSerializer {
 
 export const PromptNodeSerializer: ObjectSchema<
   PromptNodeSerializer.Raw,
-  PromptNode
+  Omit<PromptNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("PROMPT"),
   data: PromptNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(
@@ -907,16 +898,14 @@ export const PromptNodeSerializer: ObjectSchema<
 
 export declare namespace PromptNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "PROMPT";
     data: PromptNodeDataSerializer.Raw;
   }
 }
 
 export const DeploymentMapNodeDataSerializer: ObjectSchema<
   DeploymentMapNodeDataSerializer.Raw,
-  DeploymentMapNodeData
+  Omit<DeploymentMapNodeData, "variant">
 > = objectSchema({
-  variant: stringLiteralSchema("DEPLOYMENT"),
   concurrency: numberSchema().optional(),
   label: stringSchema(),
   sourceHandleId: propertySchema("source_handle_id", stringSchema()),
@@ -934,7 +923,6 @@ export const DeploymentMapNodeDataSerializer: ObjectSchema<
 
 export declare namespace DeploymentMapNodeDataSerializer {
   interface Raw {
-    variant: "DEPLOYMENT";
     concurrency?: number | null;
     label: string;
     source_handle_id: string;
@@ -950,12 +938,11 @@ export declare namespace DeploymentMapNodeDataSerializer {
 
 export const InlineMapNodeDataSerializer: ObjectSchema<
   InlineMapNodeDataSerializer.Raw,
-  InlineMapNodeData
+  Omit<InlineMapNodeData, "variant">
 > = objectSchema({
-  variant: stringLiteralSchema("INLINE"),
   workflowRawData: propertySchema(
     "workflow_raw_data",
-    lazy(() => WorkflowRawDataSerializer)
+    lazySchema(() => WorkflowRawDataSerializer)
   ),
   inputVariables: propertySchema(
     "input_variables",
@@ -977,7 +964,6 @@ export const InlineMapNodeDataSerializer: ObjectSchema<
 
 export declare namespace InlineMapNodeDataSerializer {
   interface Raw {
-    variant: "INLINE";
     workflow_raw_data: WorkflowRawDataSerializer.Raw;
     input_variables: VellumVariableSerializer.Raw[];
     output_variables: VellumVariableSerializer.Raw[];
@@ -995,10 +981,10 @@ export declare namespace InlineMapNodeDataSerializer {
 export const MapNodeDataSerializer: Schema<
   MapNodeDataSerializer.Raw,
   MapNodeData
-> = undiscriminatedUnionSchema([
-  InlineMapNodeDataSerializer,
-  DeploymentMapNodeDataSerializer,
-]);
+> = unionSchema("variant", {
+  INLINE: InlineMapNodeDataSerializer,
+  DEPLOYMENT: DeploymentMapNodeDataSerializer,
+});
 
 export declare namespace MapNodeDataSerializer {
   type Raw =
@@ -1006,32 +992,31 @@ export declare namespace MapNodeDataSerializer {
     | DeploymentMapNodeDataSerializer.Raw;
 }
 
-export const MapNodeSerializer: ObjectSchema<MapNodeSerializer.Raw, MapNode> =
-  objectSchema({
-    id: stringSchema(),
-    type: stringLiteralSchema("MAP"),
-    data: MapNodeDataSerializer,
-    inputs: listSchema(NodeInputSerializer),
-    displayData: propertySchema(
-      "display_data",
-      NodeDisplayDataSerializer.optional()
-    ),
-    definition: WorkflowNodeDefinitionSerializer.optional(),
-  });
+export const MapNodeSerializer: ObjectSchema<
+  MapNodeSerializer.Raw,
+  Omit<MapNode, "type">
+> = objectSchema({
+  id: stringSchema(),
+  data: MapNodeDataSerializer,
+  inputs: listSchema(NodeInputSerializer),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
+  definition: WorkflowNodeDefinitionSerializer.optional(),
+});
 
 export declare namespace MapNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "MAP";
     data: MapNodeDataSerializer.Raw;
   }
 }
 
 export const GuardrailNodeSerializer: ObjectSchema<
   GuardrailNodeSerializer.Raw,
-  GuardrailNode
+  Omit<GuardrailNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("METRIC"),
   data: objectSchema({
     label: stringSchema(),
     sourceHandleId: propertySchema("source_handle_id", stringSchema()),
@@ -1050,7 +1035,6 @@ export const GuardrailNodeSerializer: ObjectSchema<
 
 export declare namespace GuardrailNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "METRIC";
     data: {
       label: string;
       source_handle_id: string;
@@ -1113,10 +1097,9 @@ export declare namespace CodeExecutionNodeDataSerializer {
 
 export const CodeExecutionNodeSerializer: ObjectSchema<
   CodeExecutionNodeSerializer.Raw,
-  CodeExecutionNode
+  Omit<CodeExecutionNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("CODE_EXECUTION"),
   data: CodeExecutionNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema("display_data", anySchema().optional()),
@@ -1125,7 +1108,6 @@ export const CodeExecutionNodeSerializer: ObjectSchema<
 
 export declare namespace CodeExecutionNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "CODE_EXECUTION";
     data: CodeExecutionNodeDataSerializer.Raw;
   }
 }
@@ -1186,10 +1168,9 @@ export declare namespace SearchNodeDataSerializer {
 
 export const SearchNodeSerializer: ObjectSchema<
   SearchNodeSerializer.Raw,
-  SearchNode
+  Omit<SearchNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("SEARCH"),
   data: SearchNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(
@@ -1201,7 +1182,6 @@ export const SearchNodeSerializer: ObjectSchema<
 
 export declare namespace SearchNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "SEARCH";
     data: SearchNodeDataSerializer.Raw;
   }
 }
@@ -1211,7 +1191,7 @@ export const ConditionalRuleDataSerializer: ObjectSchema<
   ConditionalRuleData
 > = objectSchema({
   id: stringSchema(),
-  rules: listSchema(lazy(() => ConditionalRuleDataSerializer)).optional(),
+  rules: listSchema(lazySchema(() => ConditionalRuleDataSerializer)).optional(),
   combinator: stringSchema().optional(),
   negated: booleanSchema().optional(),
   fieldNodeInputId: propertySchema(
@@ -1277,10 +1257,9 @@ export declare namespace ConditionalNodeDataSerializer {
 
 export const ConditionalNodeSerializer: ObjectSchema<
   ConditionalNodeSerializer.Raw,
-  ConditionalNode
+  Omit<ConditionalNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("CONDITIONAL"),
   data: ConditionalNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(
@@ -1292,17 +1271,15 @@ export const ConditionalNodeSerializer: ObjectSchema<
 
 export declare namespace ConditionalNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "CONDITIONAL";
     data: ConditionalNodeDataSerializer.Raw;
   }
 }
 
 export const TemplatingNodeSerializer: ObjectSchema<
   TemplatingNodeSerializer.Raw,
-  TemplatingNode
+  Omit<TemplatingNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("TEMPLATING"),
   data: objectSchema({
     label: stringSchema(),
     outputId: propertySchema("output_id", stringSchema()),
@@ -1325,7 +1302,6 @@ export const TemplatingNodeSerializer: ObjectSchema<
 
 export declare namespace TemplatingNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "TEMPLATING";
     data: {
       label: string;
       output_id: string;
@@ -1340,10 +1316,9 @@ export declare namespace TemplatingNodeSerializer {
 
 export const FinalOutputNodeSerializer: ObjectSchema<
   FinalOutputNodeSerializer.Raw,
-  FinalOutputNode
+  Omit<FinalOutputNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("TERMINAL"),
   data: objectSchema({
     label: stringSchema(),
     name: stringSchema(),
@@ -1362,7 +1337,6 @@ export const FinalOutputNodeSerializer: ObjectSchema<
 
 export declare namespace FinalOutputNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "TERMINAL";
     data: {
       label: string;
       name: string;
@@ -1389,10 +1363,9 @@ export declare namespace MergeNodeTargetHandleSerializer {
 
 export const MergeNodeSerializer: ObjectSchema<
   MergeNodeSerializer.Raw,
-  MergeNode
+  Omit<MergeNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("MERGE"),
   data: objectSchema({
     label: stringSchema(),
     mergeStrategy: propertySchema(
@@ -1418,7 +1391,6 @@ export const MergeNodeSerializer: ObjectSchema<
 
 export declare namespace MergeNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "MERGE";
     data: {
       label: string;
       merge_strategy: "AWAIT_ALL" | "AWAIT_ANY";
@@ -1443,59 +1415,53 @@ export declare namespace ApiNodeAdditionalHeaderDataSerializer {
   }
 }
 
-export const ApiNodeSerializer: ObjectSchema<ApiNodeSerializer.Raw, ApiNode> =
-  objectSchema({
-    id: stringSchema(),
-    type: stringLiteralSchema("API"),
-    data: objectSchema({
-      label: stringSchema(),
-      methodInputId: propertySchema("method_input_id", stringSchema()),
-      urlInputId: propertySchema("url_input_id", stringSchema()),
-      bodyInputId: propertySchema("body_input_id", stringSchema()),
-      authorizationTypeInputId: propertySchema(
-        "authorization_type_input_id",
-        stringSchema().optional()
-      ),
-      bearerTokenValueInputId: propertySchema(
-        "bearer_token_value_input_id",
-        stringSchema().optional()
-      ),
-      apiKeyHeaderKeyInputId: propertySchema(
-        "api_key_header_key_input_id",
-        stringSchema().optional()
-      ),
-      apiKeyHeaderValueInputId: propertySchema(
-        "api_key_header_value_input_id",
-        stringSchema().optional()
-      ),
-      additionalHeaders: propertySchema(
-        "additional_headers",
-        listSchema(ApiNodeAdditionalHeaderDataSerializer).optional()
-      ),
-      textOutputId: propertySchema("text_output_id", stringSchema()),
-      jsonOutputId: propertySchema("json_output_id", stringSchema()),
-      statusCodeOutputId: propertySchema(
-        "status_code_output_id",
-        stringSchema()
-      ),
-      errorOutputId: propertySchema(
-        "error_output_id",
-        stringSchema().optional()
-      ),
-      targetHandleId: propertySchema("target_handle_id", stringSchema()),
-      sourceHandleId: propertySchema("source_handle_id", stringSchema()),
-    }),
-    inputs: listSchema(NodeInputSerializer),
-    displayData: propertySchema(
-      "display_data",
-      NodeDisplayDataSerializer.optional()
+export const ApiNodeSerializer: ObjectSchema<
+  ApiNodeSerializer.Raw,
+  Omit<ApiNode, "type">
+> = objectSchema({
+  id: stringSchema(),
+  data: objectSchema({
+    label: stringSchema(),
+    methodInputId: propertySchema("method_input_id", stringSchema()),
+    urlInputId: propertySchema("url_input_id", stringSchema()),
+    bodyInputId: propertySchema("body_input_id", stringSchema()),
+    authorizationTypeInputId: propertySchema(
+      "authorization_type_input_id",
+      stringSchema().optional()
     ),
-    definition: WorkflowNodeDefinitionSerializer.optional(),
-  });
+    bearerTokenValueInputId: propertySchema(
+      "bearer_token_value_input_id",
+      stringSchema().optional()
+    ),
+    apiKeyHeaderKeyInputId: propertySchema(
+      "api_key_header_key_input_id",
+      stringSchema().optional()
+    ),
+    apiKeyHeaderValueInputId: propertySchema(
+      "api_key_header_value_input_id",
+      stringSchema().optional()
+    ),
+    additionalHeaders: propertySchema(
+      "additional_headers",
+      listSchema(ApiNodeAdditionalHeaderDataSerializer).optional()
+    ),
+    textOutputId: propertySchema("text_output_id", stringSchema()),
+    jsonOutputId: propertySchema("json_output_id", stringSchema()),
+    statusCodeOutputId: propertySchema("status_code_output_id", stringSchema()),
+    errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
+    targetHandleId: propertySchema("target_handle_id", stringSchema()),
+    sourceHandleId: propertySchema("source_handle_id", stringSchema()),
+  }),
+  inputs: listSchema(NodeInputSerializer),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
+  definition: WorkflowNodeDefinitionSerializer.optional(),
+});
 
 export declare namespace ApiNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "API";
     data: {
       label: string;
       method_input_id: string;
@@ -1518,9 +1484,8 @@ export declare namespace ApiNodeSerializer {
 
 export const NoteNodeSerializer: ObjectSchema<
   NoteNodeSerializer.Raw,
-  NoteNode
+  Omit<NoteNode, "type">
 > = objectSchema({
-  type: stringLiteralSchema("NOTE"),
   id: stringSchema(),
   data: objectSchema({
     label: stringSchema(),
@@ -1537,7 +1502,6 @@ export const NoteNodeSerializer: ObjectSchema<
 
 export declare namespace NoteNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "NOTE";
     data: {
       label: string;
       text?: string | null | undefined;
@@ -1549,9 +1513,8 @@ export declare namespace NoteNodeSerializer {
 
 export const ErrorNodeSerializer: ObjectSchema<
   ErrorNodeSerializer.Raw,
-  ErrorNode
+  Omit<ErrorNode, "type">
 > = objectSchema({
-  type: stringLiteralSchema("ERROR"),
   id: stringSchema(),
   data: objectSchema({
     label: stringSchema(),
@@ -1571,7 +1534,6 @@ export const ErrorNodeSerializer: ObjectSchema<
 
 export declare namespace ErrorNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "ERROR";
     data: {
       label: string;
       name: string;
@@ -1597,9 +1559,8 @@ export declare namespace GenericNodeDisplayDataSerializer {
 
 export const GenericNodeSerializer: ObjectSchema<
   GenericNodeSerializer.Raw,
-  GenericNode
+  Omit<GenericNode, "type">
 > = objectSchema({
-  type: stringLiteralSchema("GENERIC"),
   displayData: propertySchema(
     "display_data",
     GenericNodeDisplayDataSerializer.optional()
@@ -1609,7 +1570,6 @@ export const GenericNodeSerializer: ObjectSchema<
 
 export declare namespace GenericNodeSerializer {
   interface Raw extends BaseWorkflowNodeSerializer.Raw {
-    type: "GENERIC";
     display_data?: {
       position?: {
         x: number;
@@ -1622,23 +1582,23 @@ export declare namespace GenericNodeSerializer {
 export const WorkflowNodeSerializer: Schema<
   WorkflowNodeSerializer.Raw,
   WorkflowNode
-> = undiscriminatedUnionSchema([
-  EntrypointNodeSerializer,
-  PromptNodeSerializer,
-  SearchNodeSerializer,
-  SubworkflowNodeSerializer,
-  MapNodeSerializer,
-  GuardrailNodeSerializer,
-  CodeExecutionNodeSerializer,
-  FinalOutputNodeSerializer,
-  MergeNodeSerializer,
-  TemplatingNodeSerializer,
-  ConditionalNodeSerializer,
-  ApiNodeSerializer,
-  NoteNodeSerializer,
-  ErrorNodeSerializer,
-  GenericNodeSerializer,
-]);
+> = unionSchema("type", {
+  ENTRYPOINT: EntrypointNodeSerializer,
+  PROMPT: PromptNodeSerializer,
+  SEARCH: SearchNodeSerializer,
+  SUBWORKFLOW: SubworkflowNodeSerializer,
+  MAP: MapNodeSerializer,
+  METRIC: GuardrailNodeSerializer,
+  CODE_EXECUTION: CodeExecutionNodeSerializer,
+  TERMINAL: FinalOutputNodeSerializer,
+  MERGE: MergeNodeSerializer,
+  TEMPLATING: TemplatingNodeSerializer,
+  CONDITIONAL: ConditionalNodeSerializer,
+  API: ApiNodeSerializer,
+  NOTE: NoteNodeSerializer,
+  ERROR: ErrorNodeSerializer,
+  GENERIC: GenericNodeSerializer,
+});
 
 export declare namespace WorkflowNodeSerializer {
   type Raw =

@@ -1,4 +1,4 @@
-import { PromptNodeSerializer } from "src/serializers/vellum";
+import { WorkflowNodeSerializer } from "src/serializers/vellum";
 
 describe("vellum", () => {
   describe("PromptNodeSerializer", () => {
@@ -203,7 +203,7 @@ describe("vellum", () => {
         definition: null,
       };
 
-      const parsedData = PromptNodeSerializer.parse(data);
+      const parsedData = WorkflowNodeSerializer.parse(data);
       expect(parsedData.ok).toBe(true);
     });
   });

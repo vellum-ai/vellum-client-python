@@ -18,24 +18,6 @@ class TestWorkflow(BaseWorkflow):
 "
 `;
 
-exports[`Workflow > write > graph > should be correct for a basic conditional node case 2`] = `
-"from vellum.workflows import BaseWorkflow
-from .nodes.conditional_node import ConditionalNode
-from .nodes.templating_node import TemplatingNode
-from .nodes.templating_node_2 import TemplatingNode2
-
-
-class TestWorkflow(BaseWorkflow):
-    graph = {
-        ConditionalNode.Ports.branch_1 >> TemplatingNode,
-        ConditionalNode.Ports.branch_2 >> TemplatingNode2,
-    }
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
-"
-`;
-
 exports[`Workflow > write > graph > should be correct for a basic merge node and an additional edge 1`] = `
 "from vellum.workflows import BaseWorkflow
 from .nodes.templating_node import TemplatingNode
@@ -95,37 +77,7 @@ class TestWorkflow(BaseWorkflow):
 "
 `;
 
-exports[`Workflow > write > graph > should be correct for a basic single edge case 2`] = `
-"from vellum.workflows import BaseWorkflow
-from .nodes.templating_node import TemplatingNode
-from .nodes.templating_node_2 import TemplatingNode2
-
-
-class TestWorkflow(BaseWorkflow):
-    graph = TemplatingNode >> TemplatingNode2
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
-"
-`;
-
 exports[`Workflow > write > graph > should be correct for a basic single node case 1`] = `
-"from vellum.workflows import BaseWorkflow
-from .inputs import Inputs
-from vellum.workflows.state import BaseState
-from .nodes.search_node import SearchNode
-from .nodes.final_output import FinalOutput
-
-
-class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
-    graph = SearchNode
-
-    class Outputs(BaseWorkflow.Outputs):
-        query = FinalOutput.Outputs.value
-"
-`;
-
-exports[`Workflow > write > graph > should be correct for a basic single node case 2`] = `
 "from vellum.workflows import BaseWorkflow
 from .inputs import Inputs
 from vellum.workflows.state import BaseState
@@ -156,37 +108,7 @@ class TestWorkflow(BaseWorkflow):
 "
 `;
 
-exports[`Workflow > write > graph > should be correct for a longer branch 2`] = `
-"from vellum.workflows import BaseWorkflow
-from .nodes.templating_node import TemplatingNode
-from .nodes.templating_node_2 import TemplatingNode2
-from .nodes.templating_node_3 import TemplatingNode3
-
-
-class TestWorkflow(BaseWorkflow):
-    graph = TemplatingNode >> TemplatingNode2 >> TemplatingNode3
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
-"
-`;
-
 exports[`Workflow > write > graph > should be correct for set a node to a set 1`] = `
-"from vellum.workflows import BaseWorkflow
-from .nodes.templating_node import TemplatingNode
-from .nodes.templating_node_2 import TemplatingNode2
-from .nodes.templating_node_3 import TemplatingNode3
-
-
-class TestWorkflow(BaseWorkflow):
-    graph = TemplatingNode >> {TemplatingNode2, TemplatingNode3}
-
-    class Outputs(BaseWorkflow.Outputs):
-        pass
-"
-`;
-
-exports[`Workflow > write > graph > should be correct for set a node to a set 2`] = `
 "from vellum.workflows import BaseWorkflow
 from .nodes.templating_node import TemplatingNode
 from .nodes.templating_node_2 import TemplatingNode2

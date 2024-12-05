@@ -43,7 +43,7 @@ class CodeResourceDefinition(UniversalBaseModel):
     module: List[str]
 
     @staticmethod
-    def encode(obj: type) -> Dict[str, Any]:
+    def encode(obj: type) -> "CodeResourceDefinition":
         return CodeResourceDefinition(**serialize_type_encoder(obj))
 
 

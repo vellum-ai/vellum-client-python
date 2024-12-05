@@ -1,5 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`ChatMessageContent > ARRAY > should write an array of content correctly 1`] = `
+"[
+    StringChatMessageContentRequest(value="First message"),
+    FunctionCallChatMessageContentRequest(
+        value=FunctionCallChatMessageContentValueRequest(
+            name="get_weather", arguments={"location": "Seattle"}
+        )
+    ),
+]
+"
+`;
+
 exports[`ChatMessageContent > AUDIO > should write an audio content correctly 1`] = `
 "AudioChatMessageContentRequest(
     src="https://example.com/audio.mp3", metadata={"key": "value"}

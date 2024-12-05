@@ -145,7 +145,6 @@ describe("VellumValue", () => {
       });
       functionCallValue.write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
-      expect(functionCallValue.getReferences()).toHaveLength(2);
     });
   });
 

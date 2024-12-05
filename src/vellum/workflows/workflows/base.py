@@ -115,10 +115,8 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
         emitters: Optional[List[BaseWorkflowEmitter]] = None,
         resolvers: Optional[List[BaseWorkflowResolver]] = None,
         context: Optional[WorkflowContext] = None,
-        parent_context: Optional[ParentContext] = None,
     ):
         self._parent_state = parent_state
-        self._parent_context = parent_context
         self.emitters = emitters or (self.emitters if hasattr(self, "emitters") else [])
         self.resolvers = resolvers or (
             self.resolvers if hasattr(self, "resolvers") else []
@@ -195,7 +193,7 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             entrypoint_nodes=entrypoint_nodes,
             external_inputs=external_inputs,
             cancel_signal=cancel_signal,
-            parent_context=self._parent_context,
+            parent_context=self._context.parent_context,
         ).stream()
         first_event: Optional[
             Union[WorkflowExecutionInitiatedEvent, WorkflowExecutionResumedEvent]
@@ -256,7 +254,9 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
 
     def stream(
         self,
-        event_filter: Optional[Callable[[Type["BaseWorkflow"], WorkflowEvent], bool]] = None,
+        event_filter: Optional[
+            Callable[[Type["BaseWorkflow"], WorkflowEvent], bool]
+        ] = None,
         inputs: Optional[WorkflowInputsType] = None,
         state: Optional[StateType] = None,
         entrypoint_nodes: Optional[RunFromNodeArg] = None,

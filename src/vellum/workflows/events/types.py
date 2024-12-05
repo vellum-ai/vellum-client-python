@@ -2,18 +2,13 @@ from datetime import datetime
 from enum import Enum
 import json
 from uuid import UUID, uuid4
-from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Type, Union
+from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 
-from pydantic import Field, field_serializer
+from pydantic import BeforeValidator, Field
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
 from vellum.workflows.state.encoder import DefaultStateEncoder
 from vellum.workflows.types.utils import datetime_now
-from vellum_ee.workflows.display.vellum import CodeResourceDefinition
-
-if TYPE_CHECKING:
-    from vellum.workflows.nodes.bases.base import BaseNode
-    from vellum.workflows.workflows.base import BaseWorkflow
 
 
 def default_datetime_factory() -> datetime:
@@ -43,9 +38,21 @@ def default_serializer(obj: Any) -> Any:
     )
 
 
+class CodeResourceDefinition(UniversalBaseModel):
+    name: str
+    module: List[str]
+
+
+VellumCodeResourceDefinition = Annotated[
+    CodeResourceDefinition,
+    BeforeValidator(lambda d: (d if type(d) is dict else serialize_type_encoder(d))),
+]
+
+
 class BaseParentContext(UniversalBaseModel):
     span_id: UUID
     parent: Optional["ParentContext"] = None
+    type: str
 
 
 class BaseDeploymentParentContext(BaseParentContext):
@@ -58,49 +65,41 @@ class BaseDeploymentParentContext(BaseParentContext):
 
 
 class WorkflowDeploymentParentContext(BaseDeploymentParentContext):
-    type: Literal["WORKFLOW_RELEASE_TAG"] = "WORKFLOW_RELEASE_TAG"
+    type: Literal["WORKFLOW_RELEASE_TAG"]
     workflow_version_id: UUID
 
 
 class PromptDeploymentParentContext(BaseDeploymentParentContext):
-    type: Literal["PROMPT_RELEASE_TAG"] = "PROMPT_RELEASE_TAG"
+    type: Literal["PROMPT_RELEASE_TAG"]
     prompt_version_id: UUID
 
 
 class NodeParentContext(BaseParentContext):
-    type: Literal["WORKFLOW_NODE"] = "WORKFLOW_NODE"
-    node_definition: Union[Type["BaseNode"], CodeResourceDefinition]
-
-    @field_serializer("node_definition")
-    def serialize_node_definition(
-        self, definition: Union[Type["BaseNode"], CodeResourceDefinition], _info: Any
-    ) -> Dict[str, Any]:
-        if isinstance(definition, type):
-            return serialize_type_encoder(definition)
-        else:
-            return definition.model_dump()
+    type: Literal["WORKFLOW_NODE"]
+    node_definition: VellumCodeResourceDefinition
 
 
 class WorkflowParentContext(BaseParentContext):
-    type: Literal["WORKFLOW"] = "WORKFLOW"
-    workflow_definition: Union[Type["BaseWorkflow"], CodeResourceDefinition]
-
-    @field_serializer("workflow_definition")
-    def serialize_workflow_definition(
-        self, definition: Union[Type["BaseWorkflow"], CodeResourceDefinition]
-    ) -> Dict[str, Any]:
-        if isinstance(definition, type):
-            return serialize_type_encoder(definition)
-        else:
-            return definition.model_dump()
+    type: Literal["WORKFLOW"]
+    workflow_definition: VellumCodeResourceDefinition
 
 
-ParentContext = Union[
-    NodeParentContext,
-    WorkflowParentContext,
-    PromptDeploymentParentContext,
-    WorkflowDeploymentParentContext,
+# Define the discriminated union
+ParentContextUnion = Annotated[
+    Union[
+        WorkflowParentContext,
+        NodeParentContext,
+        WorkflowDeploymentParentContext,
+        PromptDeploymentParentContext,
+    ],
+    Field(discriminator="type"),
 ]
+
+# Create the final type
+ParentContext = Optional[ParentContextUnion]
+
+# Update the forward references
+BaseParentContext.model_rebuild()
 
 
 class BaseEvent(UniversalBaseModel):

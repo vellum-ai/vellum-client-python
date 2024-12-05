@@ -1,14 +1,14 @@
-from copy import deepcopy
 from uuid import uuid4
-from typing import Any, Dict, cast
 
 from vellum.workflows import BaseWorkflow
-from vellum.workflows.events.types import NodeParentContext, ParentContext, WorkflowParentContext
-from vellum.workflows.events.utils import convert_json_to_parent_context
-from vellum.workflows.workflows.event_filters import root_workflow_event_filter
-from vellum_ee.workflows.display.vellum import CodeResourceDefinition
+from vellum.workflows.events import WorkflowEvent
+from vellum.workflows.events.types import CodeResourceDefinition, NodeParentContext
 
 from tests.workflows.basic_parent_context.basic_workflow import TrivialWorkflow
+
+
+def allow_all_events(_, __) -> bool:
+    return True
 
 
 def test_run_workflow__happy_path():
@@ -21,7 +21,7 @@ def test_run_workflow__happy_path():
 
 def test_stream_workflow__happy_path():
     workflow = TrivialWorkflow()
-    events = list(workflow.stream(event_filter=root_workflow_event_filter))
+    events = list(workflow.stream(event_filter=allow_all_events))
 
     assert len(events) == 4
 
@@ -57,17 +57,15 @@ def test_stream_workflow__happy_path_inital_context():
         "parent": None,
         "type": "WORKFLOW_NODE",
     }
-    initial_parent_context = convert_json_to_parent_context(
-        deepcopy(initial_parent_context_json)
-    )
+    initial_parent_context = NodeParentContext(**initial_parent_context_json)
     assert isinstance(initial_parent_context, NodeParentContext)
     assert initial_parent_context is not None
     assert initial_parent_context.parent is not None
     assert isinstance(initial_parent_context.node_definition, CodeResourceDefinition)
 
     workflow = TrivialWorkflow(parent_context=initial_parent_context)
-    events = list(workflow.stream(event_filter=root_workflow_event_filter))
 
+    events = list(workflow.stream(event_filter=allow_all_events))
 
     assert len(events) == 4
 

@@ -278,43 +278,55 @@ class AudioVellumValue extends AstNode {
 
 class FunctionCallVellumValue extends AstNode {
   private value: FunctionCall;
+  private astNode: python.AstNode;
 
   public constructor(value: FunctionCall) {
     super();
     this.value = value;
-    this.inheritReferences(new Json(this.value.arguments));
+
+    const jsonArguments = new Json(this.value.arguments);
+    console.log("JSON raw references:", jsonArguments.getReferences());
+
+    const functionCallRef = python.reference({
+      name: "FunctionCall",
+      modulePath: VELLUM_CLIENT_MODULE_PATH,
+    });
+    console.log(
+      "FunctionCall raw references:",
+      functionCallRef.getReferences()
+    );
+
+    const functionCallInstance = python.instantiateClass({
+      classReference: functionCallRef,
+      arguments_: [
+        python.methodArgument({
+          name: "arguments",
+          value: jsonArguments,
+        }),
+        python.methodArgument({
+          name: "name",
+          value: python.TypeInstantiation.str(this.value.name),
+        }),
+        ...(this.value.id != null
+          ? [
+              python.methodArgument({
+                name: "id",
+                value: python.TypeInstantiation.str(this.value.id),
+              }),
+            ]
+          : []),
+      ],
+    });
+
+    this.inheritReferences(jsonArguments);
+    this.inheritReferences(functionCallRef);
+    this.inheritReferences(functionCallInstance);
+
+    this.astNode = functionCallInstance;
   }
 
   public write(writer: Writer): void {
-    const arguments_ = [
-      python.methodArgument({
-        name: "arguments",
-        value: new Json(this.value.arguments),
-      }),
-      python.methodArgument({
-        name: "name",
-        value: python.TypeInstantiation.str(this.value.name),
-      }),
-    ];
-
-    if (!isNil(this.value.id)) {
-      arguments_.push(
-        python.methodArgument({
-          name: "id",
-          value: python.TypeInstantiation.str(this.value.id),
-        })
-      );
-    }
-
-    python
-      .instantiateClass({
-        classReference: python.reference({
-          name: "FunctionCall",
-          modulePath: VELLUM_CLIENT_MODULE_PATH,
-        }),
-        arguments_: arguments_,
-      })
-      .write(writer);
+    this.astNode.write(writer);
   }
 }
 
@@ -429,7 +441,12 @@ export class VellumValue extends AstNode {
         assertUnreachable(vellumValue);
     }
 
+    console.log(
+      "FunctionCallVellumValue references before inherit:",
+      this.astNode?.getReferences()
+    );
     this.inheritReferences(this.astNode);
+    console.log("VellumValue references after inherit:", this.getReferences());
   }
 
   public write(writer: Writer): void {

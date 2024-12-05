@@ -908,9 +908,8 @@ export declare namespace PromptNodeSerializer {
 
 export const DeploymentMapNodeDataSerializer: ObjectSchema<
   DeploymentMapNodeDataSerializer.Raw,
-  DeploymentMapNodeData
+  Omit<DeploymentMapNodeData, "variant">
 > = objectSchema({
-  variant: stringLiteralSchema("DEPLOYMENT"),
   concurrency: numberSchema().optional(),
   label: stringSchema(),
   sourceHandleId: propertySchema("source_handle_id", stringSchema()),
@@ -928,7 +927,6 @@ export const DeploymentMapNodeDataSerializer: ObjectSchema<
 
 export declare namespace DeploymentMapNodeDataSerializer {
   interface Raw {
-    variant: "DEPLOYMENT";
     concurrency?: number | null;
     label: string;
     source_handle_id: string;
@@ -944,9 +942,8 @@ export declare namespace DeploymentMapNodeDataSerializer {
 
 export const InlineMapNodeDataSerializer: ObjectSchema<
   InlineMapNodeDataSerializer.Raw,
-  InlineMapNodeData
+  Omit<InlineMapNodeData, "variant">
 > = objectSchema({
-  variant: stringLiteralSchema("INLINE"),
   workflowRawData: propertySchema(
     "workflow_raw_data",
     lazy(() => WorkflowRawDataSerializer)
@@ -971,7 +968,6 @@ export const InlineMapNodeDataSerializer: ObjectSchema<
 
 export declare namespace InlineMapNodeDataSerializer {
   interface Raw {
-    variant: "INLINE";
     workflow_raw_data: WorkflowRawDataSerializer.Raw;
     input_variables: VellumVariableSerializer.Raw[];
     output_variables: VellumVariableSerializer.Raw[];
@@ -989,10 +985,10 @@ export declare namespace InlineMapNodeDataSerializer {
 export const MapNodeDataSerializer: Schema<
   MapNodeDataSerializer.Raw,
   MapNodeData
-> = undiscriminatedUnionSchema([
-  InlineMapNodeDataSerializer,
-  DeploymentMapNodeDataSerializer,
-]);
+> = union("variant", {
+  INLINE: InlineMapNodeDataSerializer,
+  DEPLOYMENT: DeploymentMapNodeDataSerializer,
+});
 
 export declare namespace MapNodeDataSerializer {
   type Raw =

@@ -194,8 +194,10 @@ export class Workflow {
 
     this.addGraph(workflowClass);
 
-    const outputsClass = this.generateOutputsClass(baseWorkflowClassRef);
-    workflowClass.add(outputsClass);
+    if (this.workflowContext.workflowOutputContexts.length > 0) {
+      const outputsClass = this.generateOutputsClass(baseWorkflowClassRef);
+      workflowClass.add(outputsClass);
+    }
 
     return workflowClass;
   }

@@ -2,7 +2,6 @@ import { python } from "@fern-api/python-ast";
 import { Field } from "@fern-api/python-ast/Field";
 import { Reference } from "@fern-api/python-ast/Reference";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
-import { VellumValue } from "vellum-ai/api/types";
 
 import { PORTS_CLASS_NAME } from "src/constants";
 import { ConditionalNodeContext } from "src/context/node-context/conditional-node";
@@ -13,6 +12,7 @@ import {
   ConditionalNodeData,
   ConditionalRuleData,
 } from "src/types/vellum";
+import { isNilOrEmpty } from "src/utils/typing";
 
 export class ConditionalNode extends BaseSingleFileNode<
   ConditionalNodeType,
@@ -24,9 +24,13 @@ export class ConditionalNode extends BaseSingleFileNode<
   protected getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 
-    const inputVarIdsByRuleId = new Map<string, string>();
-    const constantValuesByRuleIds = new Map<string, VellumValue>();
-    this.constructMapsByRuleIds(inputVarIdsByRuleId, constantValuesByRuleIds);
+    const inputFieldKeysByRuleId = new Map<string, string>();
+    const valueInputKeysByRuleId = new Map<string, string>();
+    this.constructMapContextForAllConditions(
+      inputFieldKeysByRuleId,
+      valueInputKeysByRuleId,
+      this.nodeData.data
+    );
 
     const baseNodeClassRef = this.getNodeBaseClass();
 
@@ -44,7 +48,7 @@ export class ConditionalNode extends BaseSingleFileNode<
       extends_: [ref],
     });
     Array.from(this.workflowContext.portContextById.entries()).forEach(
-      ([portId, context], idx) => {
+      ([portId, context]) => {
         const conditionData = this.nodeData.data.conditions.find(
           (condition) => condition.sourceHandleId === portId
         );
@@ -53,16 +57,15 @@ export class ConditionalNode extends BaseSingleFileNode<
           return;
         }
 
-        const portName = `branch_${idx + 1}`;
-
         portsClass.addField(
           python.field({
-            name: portName,
+            name: context.portName,
             initializer: new ConditionalNodePort({
               portContext: context,
-              inputVarIdsByRuleId: inputVarIdsByRuleId,
-              constantValuesByRuleIds: constantValuesByRuleIds,
+              inputFieldKeysByRuleId: inputFieldKeysByRuleId,
+              valueInputKeysByRuleId: valueInputKeysByRuleId,
               conditionData: conditionData,
+              nodeInputsByKey: this.nodeInputsByKey,
             }),
           })
         );
@@ -255,31 +258,54 @@ export class ConditionalNode extends BaseSingleFileNode<
     });
   }
 
-  private constructMapsByRuleIds(
-    inputVarIdsByRuleId: Map<string, string>,
-    constantValuesByRuleIds: Map<string, unknown>
-  ) {
-    this.nodeData.inputs.forEach((input) => {
-      const fieldIdx = input.key.indexOf(".field");
-      const valueIdx = input.key.indexOf(".value");
-      if (fieldIdx !== -1) {
-        const ruleId = input.key.slice(0, fieldIdx);
-        input.value.rules.forEach((rule) => {
-          if (rule.type === "INPUT_VARIABLE") {
-            inputVarIdsByRuleId.set(ruleId, rule.data.inputVariableId);
-          }
-        });
-      } else if (valueIdx !== -1) {
-        const ruleId = input.key.slice(0, valueIdx);
-        input.value.rules.forEach((rule) => {
-          let value: string | unknown;
-          if (rule.type === "CONSTANT_VALUE") {
-            value = rule.data;
-          }
-          constantValuesByRuleIds.set(ruleId, value);
-        });
+  private constructMapContextForAllConditions(
+    inputFieldKeysByRuleId: Map<string, string>,
+    valueInputKeysByRuleId: Map<string, string>,
+    nodeData: ConditionalNodeData
+  ): void {
+    nodeData.conditions.forEach((condition) => {
+      if (condition.data) {
+        this.constructMapContextByRuleIds(
+          inputFieldKeysByRuleId,
+          valueInputKeysByRuleId,
+          condition.data
+        );
       }
     });
+  }
+
+  private constructMapContextByRuleIds(
+    inputFieldsByRuleId: Map<string, string>,
+    valueInputsByRuleIds: Map<string, string>,
+    ruleData: ConditionalRuleData
+  ): void {
+    if (!ruleData) {
+      return;
+    }
+    if (
+      isNilOrEmpty(ruleData.rules) &&
+      ruleData.fieldNodeInputId &&
+      ruleData.valueNodeInputId
+    ) {
+      this.nodeData.inputs.forEach((input) => {
+        if (input.id === ruleData.fieldNodeInputId) {
+          inputFieldsByRuleId.set(ruleData.id, input.key);
+        }
+        if (input.id === ruleData.valueNodeInputId) {
+          valueInputsByRuleIds.set(ruleData.id, input.key);
+        }
+      });
+    }
+
+    if (ruleData.rules) {
+      ruleData.rules.forEach((rule) => {
+        this.constructMapContextByRuleIds(
+          inputFieldsByRuleId,
+          valueInputsByRuleIds,
+          rule
+        );
+      });
+    }
   }
 
   protected getErrorOutputId(): undefined {
@@ -290,7 +316,7 @@ export class ConditionalNode extends BaseSingleFileNode<
     const portDisplayOverridesDict = new Map();
 
     Array.from(this.workflowContext.portContextById.entries()).forEach(
-      ([portId, _], idx) => {
+      ([portId, context]) => {
         const conditionData = this.nodeData.data.conditions.find(
           (condition) => condition.sourceHandleId === portId
         );
@@ -307,8 +333,6 @@ export class ConditionalNode extends BaseSingleFileNode<
           return;
         }
 
-        const portName = `branch_${idx + 1}`;
-
         const portDisplayOverrides = python.instantiateClass({
           classReference: python.reference({
             name: "PortDisplayOverrides",
@@ -324,7 +348,7 @@ export class ConditionalNode extends BaseSingleFileNode<
           ],
         });
 
-        portDisplayOverridesDict.set(portName, portDisplayOverrides);
+        portDisplayOverridesDict.set(context.portName, portDisplayOverrides);
       }
     );
     return python.field({

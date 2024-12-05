@@ -1,6 +1,7 @@
 import { MetricDefinitionHistoryItem } from "vellum-ai/api";
 import { MetricDefinitions as MetricDefinitionsClient } from "vellum-ai/api/resources/metricDefinitions/client/Client";
-import { MockInstance } from "vitest";
+import { WorkflowDeployments as WorkflowDeploymentsClient } from "vellum-ai/api/resources/workflowDeployments/client/Client";
+import { MockInstance, vi } from "vitest";
 
 export class SpyMocks {
   static createMetricDefinitionMock(): MockInstance {
@@ -22,5 +23,22 @@ export class SpyMocks {
           },
         ],
       } as MetricDefinitionHistoryItem);
+  }
+
+  static createWorkflowDeploymentsMock(): MockInstance {
+    return vi
+      .spyOn(
+        WorkflowDeploymentsClient.prototype,
+        "workflowDeploymentHistoryItemRetrieve"
+      )
+      .mockResolvedValue({
+        id: "mocked-workflow-deployment-history-item-id",
+        workflowDeploymentId: "mocked-workflow-deployment-id",
+        timestamp: new Date(),
+        label: "mocked-workflow-deployment-history-item-label",
+        name: "mocked-workflow-deployment-history-item-name",
+        inputVariables: [],
+        outputVariables: [],
+      });
   }
 }

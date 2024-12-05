@@ -31,6 +31,7 @@ describe("WorkflowProjectGenerator", () => {
     const ignoreContentsOfFilesAtPaths: RegExp[] = [];
     const fixtureMocks = {
       simple_guard_rail_node: SpyMocks.createMetricDefinitionMock(),
+      faa_q_and_a_bot: SpyMocks.createWorkflowDeploymentsMock(),
     };
 
     it.each(
@@ -46,6 +47,7 @@ describe("WorkflowProjectGenerator", () => {
           "simple_templating_node",
           "simple_error_node",
           "simple_merge_node",
+          "simple_api_node",
         ],
         fixtureMocks: fixtureMocks,
       })

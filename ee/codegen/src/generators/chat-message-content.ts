@@ -2,6 +2,7 @@ import { python } from "@fern-api/python-ast";
 import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
+import { isNil } from "lodash";
 import {
   ChatMessageContentRequest as ChatMessageContentRequestType,
   ChatMessageContent as ChatMessageContentType,
@@ -74,6 +75,13 @@ export class ChatMessageContent extends AstNode {
       name:
         "FunctionCallChatMessageContentValue" +
         (this.isRequestType ? "Request" : ""),
+      modulePath: VELLUM_CLIENT_MODULE_PATH,
+    });
+  }
+
+  private getImageChatMessageContentRef(): python.Reference {
+    return python.reference({
+      name: "ImageChatMessageContent" + (this.isRequestType ? "Request" : ""),
       modulePath: VELLUM_CLIENT_MODULE_PATH,
     });
   }
@@ -165,9 +173,36 @@ export class ChatMessageContent extends AstNode {
     }
 
     if (contentType === "IMAGE") {
-      // TODO: Implement image types
-      //    https://app.shortcut.com/vellum/story/4937/flesh-out-codegen-for-all-chat-message-content-types
-      throw new Error("Unhandled type: IMAGE");
+      const imageContentValue = this.chatMessageContent.value;
+
+      const imageChatMessageContentRequestRef =
+        this.getImageChatMessageContentRef();
+
+      const arguments_ = [
+        python.methodArgument({
+          name: "src",
+          value: python.TypeInstantiation.str(imageContentValue.src),
+        }),
+      ];
+
+      if (!isNil(imageContentValue.metadata)) {
+        const metadataJson = new Json(imageContentValue.metadata);
+        this.inheritReferences(metadataJson);
+        arguments_.push(
+          python.methodArgument({
+            name: "metadata",
+            value: metadataJson,
+          })
+        );
+      }
+
+      const instance = python.instantiateClass({
+        classReference: imageChatMessageContentRequestRef,
+        arguments_: arguments_,
+      });
+      this.inheritReferences(instance);
+      instance.write(writer);
+      return;
     }
 
     if (contentType === "AUDIO") {

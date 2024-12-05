@@ -8,7 +8,9 @@ from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.nodes.bases.base import BaseNodeMeta
 from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME
 from vellum.workflows.outputs.base import BaseOutput, BaseOutputs
+from vellum.workflows.state.context import WorkflowContext
 from vellum.workflows.types.generics import StateType
+from vellum.workflows.workflows.event_filters import all_workflow_event_filter
 
 if TYPE_CHECKING:
     from vellum.workflows import BaseWorkflow
@@ -48,7 +50,7 @@ class _TryNodeMeta(BaseNodeMeta):
         try:
             return super().__getattribute__(name)
         except AttributeError:
-            if name != "__wrapped_node__" and hasattr(cls, "__wrapped_node__"):
+            if name != "__wrapped_node__" and issubclass(cls, TryNode):
                 return getattr(cls.__wrapped_node__, name)
             raise
 
@@ -61,6 +63,7 @@ class TryNode(BaseNode[StateType], Generic[StateType], metaclass=_TryNodeMeta):
     subworkflow: Type["BaseWorkflow"] - The Subworkflow to execute
     """
 
+    __wrapped_node__: Optional[Type["BaseNode"]] = None
     on_error_code: Optional[VellumErrorCode] = None
     subworkflow: Type["BaseWorkflow"]
 
@@ -70,15 +73,20 @@ class TryNode(BaseNode[StateType], Generic[StateType], metaclass=_TryNodeMeta):
     def run(self) -> Iterator[BaseOutput]:
         subworkflow = self.subworkflow(
             parent_state=self.state,
-            context=self._context,
+            context=WorkflowContext(
+                _vellum_client=self._context._vellum_client,
+            ),
         )
-        subworkflow_stream = subworkflow.stream()
+        subworkflow_stream = subworkflow.stream(
+            event_filter=all_workflow_event_filter,
+        )
 
         outputs: Optional[BaseOutputs] = None
         exception: Optional[NodeException] = None
         fulfilled_output_names: Set[str] = set()
 
         for event in subworkflow_stream:
+            self._context._emit_subworkflow_event(event)
             if exception:
                 continue
 

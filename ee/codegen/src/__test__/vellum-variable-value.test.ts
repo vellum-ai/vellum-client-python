@@ -129,6 +129,25 @@ describe("VellumValue", () => {
     });
   });
 
+  describe("FUNCTION_CALL", () => {
+    it("should write a FUNCTION_CALL value correctly", async () => {
+      const functionCallValue = codegen.vellumValue({
+        vellumValue: {
+          type: "FUNCTION_CALL",
+          value: {
+            arguments: {
+              key: "value",
+            },
+            name: "test",
+            id: "123",
+          },
+        },
+      });
+      functionCallValue.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+  });
+
   describe("ARRAY", () => {
     it("should write a ARRAY value correctly", async () => {
       const arrayValue = codegen.vellumValue({

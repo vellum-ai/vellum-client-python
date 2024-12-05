@@ -1,11 +1,26 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`VellumValue > ARRAY > should write a ARRAY value correctly 1`] = `
+"["Hello, World!", 42, VellumAudio(src="https://example.com/audio.mp3")]
+"
+`;
+
+exports[`VellumValue > AUDIO > should write a AUDIO value correctly 1`] = `
+"VellumAudio(src="https://example.com/audio.mp3")
+"
+`;
+
 exports[`VellumValue > CHAT_HISTORY > should write a CHAT_HISTORY value with a string content 1`] = `"[ChatMessageRequest(role="USER", content=StringChatMessageContentRequest(value="Hello, AI!"))]"`;
 
 exports[`VellumValue > CHAT_HISTORY > should write a CHAT_HISTORY value with just text 1`] = `"[ChatMessageRequest(role="USER", text="Hello, AI!")]"`;
 
 exports[`VellumValue > ERROR > should write a ERROR value correctly 1`] = `
 "VellumError(message="This is an error!", code="INTERNAL_SERVER_ERROR")
+"
+`;
+
+exports[`VellumValue > IMAGE > should write a IMAGE value correctly 1`] = `
+"VellumImage(src="https://example.com/image.png")
 "
 `;
 
@@ -16,6 +31,18 @@ exports[`VellumValue > JSON > should write a JSON value correctly 1`] = `
 
 exports[`VellumValue > NUMBER > should write a NUMBER value correctly 1`] = `
 "42
+"
+`;
+
+exports[`VellumValue > SEARCH_RESULTS > should write a SEARCH_RESULTS value correctly 1`] = `
+"[
+    SearchResult(
+        text="Hello, World!", score=0.5, keywords=["hello", "world"], document=document
+    ),
+    SearchResult(
+        text="Hello, AI!", score=0.7, keywords=["hello", "ai"], document=document
+    ),
+]
 "
 `;
 

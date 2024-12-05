@@ -16,11 +16,6 @@ if TYPE_CHECKING:
     from vellum.workflows.workflows.base import BaseWorkflow
 
 
-class WorkflowEventType(Enum):
-    NODE = "NODE"
-    WORKFLOW = "WORKFLOW"
-
-
 def default_datetime_factory() -> datetime:
     """
     Makes it possible to mock the datetime factory for testing.

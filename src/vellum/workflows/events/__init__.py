@@ -5,7 +5,6 @@ from .node import (
     NodeExecutionRejectedEvent,
     NodeExecutionStreamingEvent,
 )
-from .types import WorkflowEventType
 from .workflow import (
     WorkflowEvent,
     WorkflowEventStream,
@@ -27,5 +26,4 @@ __all__ = [
     "WorkflowExecutionStreamingEvent",
     "WorkflowEvent",
     "WorkflowEventStream",
-    "WorkflowEventType",
 ]

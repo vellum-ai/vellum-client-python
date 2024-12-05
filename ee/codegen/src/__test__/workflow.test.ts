@@ -490,7 +490,12 @@ describe("Workflow", () => {
           moduleName,
           workflowContext,
           inputs,
-          nodes: [templatingNodeData1, templatingNodeData2, mergeNodeData],
+          nodes: [
+            templatingNodeData1,
+            templatingNodeData2,
+            mergeNodeData,
+            templatingNodeData3,
+          ],
           // This test case fails with the legacy graph generation algorithm
           // so we don't parameterize over it.
           breadthFirstGraphGeneration: true,

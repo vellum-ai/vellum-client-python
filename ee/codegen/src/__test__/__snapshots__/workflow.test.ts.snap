@@ -40,8 +40,8 @@ exports[`Workflow > write > graph > should be correct for a basic merge node and
 "from vellum.workflows import BaseWorkflow
 from .nodes.templating_node import TemplatingNode
 from .nodes.templating_node_2 import TemplatingNode2
-from .nodes.templating_node_3 import TemplatingNode3
 from .nodes.merge_node import MergeNode
+from .nodes.templating_node_3 import TemplatingNode3
 
 
 class TestWorkflow(BaseWorkflow):

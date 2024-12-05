@@ -800,7 +800,8 @@ export class Workflow {
       };
 
       const addEdgeToGraph = (
-        mutableAst: GraphMutableAst
+        mutableAst: GraphMutableAst,
+        graphSourceNode: BaseNodeContext<WorkflowDataNode> | null
       ): GraphMutableAst | undefined => {
         if (mutableAst.type === "empty") {
           return {
@@ -830,7 +831,7 @@ export class Workflow {
                 };
               }
             }
-          } else if (!sourceNode) {
+          } else if (sourceNode == graphSourceNode) {
             return {
               type: "set",
               values: [
@@ -841,20 +842,24 @@ export class Workflow {
           }
         } else if (mutableAst.type === "set") {
           const newSet = mutableAst.values.map((subAst) => {
-            const newSubAst = addEdgeToGraph(subAst);
+            const newSubAst = addEdgeToGraph(subAst, graphSourceNode);
             if (!newSubAst) {
               return { edgeAdded: false, value: subAst };
             }
             return { edgeAdded: true, value: newSubAst };
           });
           if (newSet.every(({ edgeAdded }) => !edgeAdded)) {
-            return {
-              type: "set",
-              values: [
-                mutableAst,
-                { type: "node_reference", reference: targetNode },
-              ],
-            };
+            if (sourceNode == graphSourceNode) {
+              return {
+                type: "set",
+                values: [
+                  mutableAst,
+                  { type: "node_reference", reference: targetNode },
+                ],
+              };
+            } else {
+              return;
+            }
           }
           const newSetAst: GraphSet = {
             type: "set",
@@ -882,7 +887,7 @@ export class Workflow {
 
           return newSetAst;
         } else if (mutableAst.type === "right_shift") {
-          const newLhs = addEdgeToGraph(mutableAst.lhs);
+          const newLhs = addEdgeToGraph(mutableAst.lhs, graphSourceNode);
           if (newLhs) {
             const newSetAst: GraphSet = {
               type: "set",
@@ -946,7 +951,7 @@ export class Workflow {
         return;
       };
 
-      const newMutableAst = addEdgeToGraph(graphMutableAst);
+      const newMutableAst = addEdgeToGraph(graphMutableAst, null);
       processedEdges.add(edge);
 
       if (!newMutableAst) {
@@ -957,7 +962,7 @@ export class Workflow {
       targetNode.portContextsById.forEach((portContext) => {
         const edges = this.edgesByPortId.get(portContext.portId);
         edges?.forEach((edge) => {
-          if (processedEdges.has(edge)) {
+          if (processedEdges.has(edge) || edgesQueue.includes(edge)) {
             return;
           }
           edgesQueue.push(edge);

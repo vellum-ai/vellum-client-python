@@ -1,5 +1,5 @@
 from vellum.workflows.constants import UNDEF
-from vellum.workflows.workflows.event_filters import all_workflow_event_filter
+from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
 from tests.workflows.basic_conditional_branch.workflow import (
     BasicConditionalBranchWorkflow,
@@ -54,7 +54,7 @@ def test_stream_workflow__verify_invoked_ports():
     # WHEN we stream the Workflow
     stream = workflow.stream(
         inputs=Inputs(value=True),
-        event_filter=all_workflow_event_filter,
+        event_filter=root_workflow_event_filter,
     )
     events = list(stream)
 

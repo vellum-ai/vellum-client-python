@@ -17,7 +17,7 @@ def test_run_workflow__happy_path():
 
 def test_stream_workflow__happy_path():
     workflow = TrivialWorkflow()
-    events = list(workflow.stream(event_filter=all_workflow_event_filter))
+    events = list(workflow.stream())
 
     assert len(events) == 4
 

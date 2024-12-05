@@ -1,6 +1,5 @@
-from vellum.workflows.events.types import CodeResourceDefinition, serialize_type_encoder
 from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME
-from vellum.workflows.workflows.event_filters import all_workflow_event_filter
+from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
 from tests.workflows.stream_try_node_annotation.workflow import InnerNode, Inputs, StreamingTryExample
 
@@ -17,7 +16,7 @@ def test_workflow_stream__happy_path():
     # WHEN we stream the events of the Workflow
     stream = workflow.stream(
         inputs=Inputs(items=["apple", "banana", "cherry"]),
-        event_filter=all_workflow_event_filter,
+        event_filter=root_workflow_event_filter,
     )
     events = list(stream)
 
@@ -56,17 +55,17 @@ def test_workflow_stream__happy_path():
     }
     assert node_initiated_events[0].parent is not None
     assert node_initiated_events[0].parent.type == "WORKFLOW"
-    assert node_initiated_events[
-        0
-    ].parent.workflow_definition == CodeResourceDefinition(
-        **serialize_type_encoder(StreamingTryExample)
+    assert (
+        node_initiated_events[0].parent.workflow_definition
+        == StreamingTryExample.to_encoded_value()
     )
     assert node_initiated_events[1].node_definition == WrappedNode
     assert node_initiated_events[1].parent is not None
     assert node_initiated_events[1].parent.type == "WORKFLOW"
-    assert node_initiated_events[
-        1
-    ].parent.workflow_definition == CodeResourceDefinition.encode(InnerWorkflow)
+    assert (
+        node_initiated_events[1].parent.workflow_definition
+        == InnerWorkflow.to_encoded_value()
+    )
     assert len(node_initiated_events) == 2
 
     # inner node streaming events

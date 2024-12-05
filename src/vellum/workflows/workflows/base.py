@@ -4,6 +4,7 @@ import importlib
 import inspect
 
 from vellum.plugins.utils import load_runtime_plugins
+from vellum.workflows.events.types import CodeResourceDefinition
 from vellum.workflows.workflows.event_filters import workflow_event_filter
 
 load_runtime_plugins()
@@ -390,6 +391,10 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             raise ValueError(f"Multiple workflows found in {module_path}")
 
         return workflows[0]
+
+    @classmethod
+    def to_encoded_value(cls):
+        return CodeResourceDefinition.encode(cls)
 
 
 WorkflowExecutionInitiatedBody.model_rebuild()

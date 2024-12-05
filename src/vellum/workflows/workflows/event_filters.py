@@ -5,7 +5,9 @@ if TYPE_CHECKING:
     from vellum.workflows.workflows.base import BaseWorkflow
 
 
-def workflow_event_filter(workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent") -> bool:
+def workflow_event_filter(
+    workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent"
+) -> bool:
     """
     Filters for only Workflow events that were emitted by the `workflow_definition` parameter.
     """
@@ -18,12 +20,14 @@ def workflow_event_filter(workflow_definition: Type["BaseWorkflow"], event: "Wor
         or event.name == "workflow.execution.paused"
         or event.name == "workflow.execution.streaming"
     ):
-        return event.workflow_definition == workflow_definition
+        return event.workflow_definition == workflow_definition.to_encoded_value()
 
     return False
 
 
-def root_workflow_event_filter(workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent") -> bool:
+def root_workflow_event_filter(
+    workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent"
+) -> bool:
     """
     Filters for Workflow and Node events that were emitted by the `workflow_definition` parameter.
     """
@@ -44,8 +48,10 @@ def root_workflow_event_filter(workflow_definition: Type["BaseWorkflow"], event:
     if event.parent.type != "WORKFLOW":
         return False
 
-    return event.parent.workflow_definition == workflow_definition
+    return event.parent.workflow_definition == workflow_definition.to_encoded_value()
 
 
-def all_workflow_event_filter(workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent") -> bool:
+def all_workflow_event_filter(
+    workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent"
+) -> bool:
     return True

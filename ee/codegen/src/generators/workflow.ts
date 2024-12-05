@@ -722,12 +722,28 @@ export class Workflow {
           reference: targetNode,
         };
       } else if (graphMutableAst.type === "node_reference") {
-        if (graphMutableAst.reference === sourceNode) {
-          graphMutableAst = {
-            type: "right_shift",
-            lhs: graphMutableAst,
-            rhs: { type: "node_reference", reference: targetNode },
-          };
+        if (sourceNode && graphMutableAst.reference === sourceNode) {
+          const sourceNodePortContext = sourceNode.portContextsById.get(
+            edge.sourceHandleId
+          );
+          if (sourceNodePortContext) {
+            if (sourceNodePortContext.isDefault) {
+              graphMutableAst = {
+                type: "right_shift",
+                lhs: graphMutableAst,
+                rhs: { type: "node_reference", reference: targetNode },
+              };
+            } else {
+              graphMutableAst = {
+                type: "right_shift",
+                lhs: {
+                  type: "port_reference",
+                  reference: sourceNodePortContext,
+                },
+                rhs: { type: "node_reference", reference: targetNode },
+              };
+            }
+          }
         } else {
           graphMutableAst = {
             type: "set",
@@ -758,6 +774,28 @@ export class Workflow {
             ],
           };
         }
+      } else if (graphMutableAst.type === "right_shift") {
+        if (graphMutableAst.lhs.type == "port_reference") {
+          const sourcePortContext = sourceNode?.portContextsById.get(
+            edge.sourceHandleId
+          );
+          if (sourcePortContext) {
+            graphMutableAst = {
+              type: "set",
+              values: [
+                graphMutableAst,
+                {
+                  type: "right_shift",
+                  lhs: {
+                    type: "port_reference",
+                    reference: sourcePortContext,
+                  },
+                  rhs: { type: "node_reference", reference: targetNode },
+                },
+              ],
+            };
+          }
+        }
       }
 
       targetNode.portContextsById.forEach((portContext) => {
@@ -784,6 +822,14 @@ export class Workflow {
         return python.reference({
           name: graphMutableAst.reference.nodeClassName,
           modulePath: graphMutableAst.reference.nodeModulePath,
+        });
+      }
+
+      if (graphMutableAst.type === "port_reference") {
+        return python.reference({
+          name: graphMutableAst.reference.nodeContext.nodeClassName,
+          modulePath: graphMutableAst.reference.nodeContext.nodeModulePath,
+          attribute: [PORTS_CLASS_NAME, graphMutableAst.reference.portName],
         });
       }
 

@@ -4,6 +4,7 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import { isNil } from "lodash";
 import {
   ChatMessageRequest,
+  FunctionCall,
   SearchResult,
   VellumAudio,
   VellumError,
@@ -275,6 +276,48 @@ class AudioVellumValue extends AstNode {
   }
 }
 
+class FunctionCallVellumValue extends AstNode {
+  private value: FunctionCall;
+
+  public constructor(value: FunctionCall) {
+    super();
+    this.value = value;
+    this.inheritReferences(new Json(this.value.arguments));
+  }
+
+  public write(writer: Writer): void {
+    const arguments_ = [
+      python.methodArgument({
+        name: "arguments",
+        value: new Json(this.value.arguments),
+      }),
+      python.methodArgument({
+        name: "name",
+        value: python.TypeInstantiation.str(this.value.name),
+      }),
+    ];
+
+    if (!isNil(this.value.id)) {
+      arguments_.push(
+        python.methodArgument({
+          name: "id",
+          value: python.TypeInstantiation.str(this.value.id),
+        })
+      );
+    }
+
+    python
+      .instantiateClass({
+        classReference: python.reference({
+          name: "FunctionCall",
+          modulePath: VELLUM_CLIENT_MODULE_PATH,
+        }),
+        arguments_: arguments_,
+      })
+      .write(writer);
+  }
+}
+
 class SearchResultsVellumValue extends AstNode {
   private value: SearchResult[];
 
@@ -379,10 +422,9 @@ export class VellumValue extends AstNode {
       case "SEARCH_RESULTS":
         this.astNode = new SearchResultsVellumValue(vellumValue.value);
         break;
-      // TODO: Handle other vellum variable types
-      // https://app.shortcut.com/vellum/story/5661
       case "FUNCTION_CALL":
-        throw new Error(`Unknown vellum value type: ${vellumValue.type}`);
+        this.astNode = new FunctionCallVellumValue(vellumValue.value);
+        break;
       default:
         assertUnreachable(vellumValue);
     }

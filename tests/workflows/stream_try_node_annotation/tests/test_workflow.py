@@ -66,9 +66,7 @@ def test_workflow_stream__happy_path():
     assert node_initiated_events[1].parent.type == "WORKFLOW"
     assert node_initiated_events[
         1
-    ].parent.workflow_definition == CodeResourceDefinition(
-        **serialize_type_encoder(InnerWorkflow)
-    )
+    ].parent.workflow_definition == CodeResourceDefinition.encode(InnerWorkflow)
     assert len(node_initiated_events) == 2
 
     # inner node streaming events

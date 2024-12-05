@@ -14,7 +14,7 @@ class WorkflowContext:
     def __init__(
         self,
         _vellum_client: Optional[Vellum] = None,
-        _parent_context: Optional["ParentContext"] = None,
+        _parent_context: Optional[ParentContext] = None,
     ):
         self._vellum_client = _vellum_client
         self._parent_context = _parent_context
@@ -28,7 +28,7 @@ class WorkflowContext:
         return create_vellum_client()
 
     @cached_property
-    def parent_context(self) -> Optional["ParentContext"]:
+    def parent_context(self) -> Optional[ParentContext]:
         if self._parent_context:
             return self._parent_context
         return None

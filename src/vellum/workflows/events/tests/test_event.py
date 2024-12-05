@@ -102,9 +102,7 @@ module_root = name_parts[: name_parts.index("events")]
                     parent=WorkflowParentContext(
                         workflow_definition=MockWorkflow,
                         span_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
-                        type="WORKFLOW",
                     ),
-                    type="WORKFLOW_NODE",
                 ),
             ),
             {

@@ -42,6 +42,10 @@ class CodeResourceDefinition(UniversalBaseModel):
     name: str
     module: List[str]
 
+    @staticmethod
+    def encode(obj: type) -> Dict[str, Any]:
+        return CodeResourceDefinition(**serialize_type_encoder(obj))
+
 
 VellumCodeResourceDefinition = Annotated[
     CodeResourceDefinition,

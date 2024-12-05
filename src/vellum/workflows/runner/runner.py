@@ -29,7 +29,6 @@ from vellum.workflows.events.node import (
     NodeExecutionStreamingBody,
 )
 from vellum.workflows.events.types import BaseEvent, ParentContext, WorkflowParentContext
-from vellum.workflows.events.utils import is_terminal_event
 from vellum.workflows.events.workflow import (
     WorkflowExecutionFulfilledBody,
     WorkflowExecutionInitiatedBody,
@@ -123,6 +122,7 @@ class WorkflowRunner(Generic[StateType]):
             "__snapshot_callback__",
             lambda s: self._snapshot_state(s),
         )
+        self.workflow.context._register_event_queue(self._workflow_event_queue)
 
     def _snapshot_state(self, state: StateType) -> StateType:
         self.workflow._store.append_state_snapshot(state)
@@ -588,6 +588,15 @@ class WorkflowRunner(Generic[StateType]):
             )
         )
 
+    def _is_terminal_event(self, event: WorkflowEvent) -> bool:
+        if (
+            event.name == "workflow.execution.fulfilled"
+            or event.name == "workflow.execution.rejected"
+            or event.name == "workflow.execution.paused"
+        ):
+            return event.workflow_definition == self.workflow.__class__
+        return False
+
     def stream(self) -> WorkflowEventStream:
         background_thread = Thread(
             target=self._run_background_thread, name=f"{self.workflow.__class__.__name__}.background_thread"
@@ -621,7 +630,7 @@ class WorkflowRunner(Generic[StateType]):
 
             yield self._emit_event(event)
 
-            if is_terminal_event(event):
+            if self._is_terminal_event(event):
                 break
 
         try:
@@ -630,7 +639,7 @@ class WorkflowRunner(Generic[StateType]):
         except Empty:
             pass
 
-        if not is_terminal_event(event):
+        if not self._is_terminal_event(event):
             yield self._reject_workflow_event(
                 VellumError(
                     code=VellumErrorCode.INTERNAL_ERROR,

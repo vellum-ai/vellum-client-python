@@ -14,6 +14,7 @@ import {
   Schema,
   record as recordSchema,
   unknown as unknownSchema,
+  union,
 } from "vellum-ai/core/schemas";
 import {
   ChatMessageRole as ChatMessageRoleSerializer,
@@ -570,7 +571,6 @@ export declare namespace NodeDisplayDataSerializer {
 
 export declare namespace BaseWorkflowNodeSerializer {
   interface Raw {
-    type: string;
     definition?: WorkflowNodeDefinitionSerializer.Raw | null;
   }
 }
@@ -585,10 +585,9 @@ export declare namespace BaseDisplayableWorkflowNodeSerializer {
 
 export const EntrypointNodeSerializer: ObjectSchema<
   EntrypointNodeSerializer.Raw,
-  EntrypointNode
+  Omit<EntrypointNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("ENTRYPOINT"),
   data: objectSchema({
     label: stringSchema(),
     sourceHandleId: propertySchema("source_handle_id", stringSchema()),
@@ -603,7 +602,6 @@ export const EntrypointNodeSerializer: ObjectSchema<
 
 export declare namespace EntrypointNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "ENTRYPOINT";
     data: {
       label: string;
       source_handle_id: string;
@@ -688,10 +686,9 @@ export declare namespace SubworkflowNodeDataSerializer {
 
 export const SubworkflowNodeSerializer: ObjectSchema<
   SubworkflowNodeSerializer.Raw,
-  SubworkflowNode
+  Omit<SubworkflowNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("SUBWORKFLOW"),
   data: SubworkflowNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(
@@ -703,7 +700,6 @@ export const SubworkflowNodeSerializer: ObjectSchema<
 
 export declare namespace SubworkflowNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "SUBWORKFLOW";
     data: SubworkflowNodeDataSerializer.Raw;
   }
 }
@@ -892,10 +888,9 @@ export declare namespace PromptNodeDataSerializer {
 
 export const PromptNodeSerializer: ObjectSchema<
   PromptNodeSerializer.Raw,
-  PromptNode
+  Omit<PromptNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("PROMPT"),
   data: PromptNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(
@@ -907,7 +902,6 @@ export const PromptNodeSerializer: ObjectSchema<
 
 export declare namespace PromptNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "PROMPT";
     data: PromptNodeDataSerializer.Raw;
   }
 }
@@ -1006,32 +1000,31 @@ export declare namespace MapNodeDataSerializer {
     | DeploymentMapNodeDataSerializer.Raw;
 }
 
-export const MapNodeSerializer: ObjectSchema<MapNodeSerializer.Raw, MapNode> =
-  objectSchema({
-    id: stringSchema(),
-    type: stringLiteralSchema("MAP"),
-    data: MapNodeDataSerializer,
-    inputs: listSchema(NodeInputSerializer),
-    displayData: propertySchema(
-      "display_data",
-      NodeDisplayDataSerializer.optional()
-    ),
-    definition: WorkflowNodeDefinitionSerializer.optional(),
-  });
+export const MapNodeSerializer: ObjectSchema<
+  MapNodeSerializer.Raw,
+  Omit<MapNode, "type">
+> = objectSchema({
+  id: stringSchema(),
+  data: MapNodeDataSerializer,
+  inputs: listSchema(NodeInputSerializer),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
+  definition: WorkflowNodeDefinitionSerializer.optional(),
+});
 
 export declare namespace MapNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "MAP";
     data: MapNodeDataSerializer.Raw;
   }
 }
 
 export const GuardrailNodeSerializer: ObjectSchema<
   GuardrailNodeSerializer.Raw,
-  GuardrailNode
+  Omit<GuardrailNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("METRIC"),
   data: objectSchema({
     label: stringSchema(),
     sourceHandleId: propertySchema("source_handle_id", stringSchema()),
@@ -1050,7 +1043,6 @@ export const GuardrailNodeSerializer: ObjectSchema<
 
 export declare namespace GuardrailNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "METRIC";
     data: {
       label: string;
       source_handle_id: string;
@@ -1113,10 +1105,9 @@ export declare namespace CodeExecutionNodeDataSerializer {
 
 export const CodeExecutionNodeSerializer: ObjectSchema<
   CodeExecutionNodeSerializer.Raw,
-  CodeExecutionNode
+  Omit<CodeExecutionNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("CODE_EXECUTION"),
   data: CodeExecutionNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema("display_data", anySchema().optional()),
@@ -1125,7 +1116,6 @@ export const CodeExecutionNodeSerializer: ObjectSchema<
 
 export declare namespace CodeExecutionNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "CODE_EXECUTION";
     data: CodeExecutionNodeDataSerializer.Raw;
   }
 }
@@ -1186,10 +1176,9 @@ export declare namespace SearchNodeDataSerializer {
 
 export const SearchNodeSerializer: ObjectSchema<
   SearchNodeSerializer.Raw,
-  SearchNode
+  Omit<SearchNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("SEARCH"),
   data: SearchNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(
@@ -1201,7 +1190,6 @@ export const SearchNodeSerializer: ObjectSchema<
 
 export declare namespace SearchNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "SEARCH";
     data: SearchNodeDataSerializer.Raw;
   }
 }
@@ -1277,10 +1265,9 @@ export declare namespace ConditionalNodeDataSerializer {
 
 export const ConditionalNodeSerializer: ObjectSchema<
   ConditionalNodeSerializer.Raw,
-  ConditionalNode
+  Omit<ConditionalNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("CONDITIONAL"),
   data: ConditionalNodeDataSerializer,
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(
@@ -1292,17 +1279,15 @@ export const ConditionalNodeSerializer: ObjectSchema<
 
 export declare namespace ConditionalNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "CONDITIONAL";
     data: ConditionalNodeDataSerializer.Raw;
   }
 }
 
 export const TemplatingNodeSerializer: ObjectSchema<
   TemplatingNodeSerializer.Raw,
-  TemplatingNode
+  Omit<TemplatingNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("TEMPLATING"),
   data: objectSchema({
     label: stringSchema(),
     outputId: propertySchema("output_id", stringSchema()),
@@ -1325,7 +1310,6 @@ export const TemplatingNodeSerializer: ObjectSchema<
 
 export declare namespace TemplatingNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "TEMPLATING";
     data: {
       label: string;
       output_id: string;
@@ -1340,10 +1324,9 @@ export declare namespace TemplatingNodeSerializer {
 
 export const FinalOutputNodeSerializer: ObjectSchema<
   FinalOutputNodeSerializer.Raw,
-  FinalOutputNode
+  Omit<FinalOutputNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("TERMINAL"),
   data: objectSchema({
     label: stringSchema(),
     name: stringSchema(),
@@ -1362,7 +1345,6 @@ export const FinalOutputNodeSerializer: ObjectSchema<
 
 export declare namespace FinalOutputNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "TERMINAL";
     data: {
       label: string;
       name: string;
@@ -1389,10 +1371,9 @@ export declare namespace MergeNodeTargetHandleSerializer {
 
 export const MergeNodeSerializer: ObjectSchema<
   MergeNodeSerializer.Raw,
-  MergeNode
+  Omit<MergeNode, "type">
 > = objectSchema({
   id: stringSchema(),
-  type: stringLiteralSchema("MERGE"),
   data: objectSchema({
     label: stringSchema(),
     mergeStrategy: propertySchema(
@@ -1418,7 +1399,6 @@ export const MergeNodeSerializer: ObjectSchema<
 
 export declare namespace MergeNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "MERGE";
     data: {
       label: string;
       merge_strategy: "AWAIT_ALL" | "AWAIT_ANY";
@@ -1443,59 +1423,53 @@ export declare namespace ApiNodeAdditionalHeaderDataSerializer {
   }
 }
 
-export const ApiNodeSerializer: ObjectSchema<ApiNodeSerializer.Raw, ApiNode> =
-  objectSchema({
-    id: stringSchema(),
-    type: stringLiteralSchema("API"),
-    data: objectSchema({
-      label: stringSchema(),
-      methodInputId: propertySchema("method_input_id", stringSchema()),
-      urlInputId: propertySchema("url_input_id", stringSchema()),
-      bodyInputId: propertySchema("body_input_id", stringSchema()),
-      authorizationTypeInputId: propertySchema(
-        "authorization_type_input_id",
-        stringSchema().optional()
-      ),
-      bearerTokenValueInputId: propertySchema(
-        "bearer_token_value_input_id",
-        stringSchema().optional()
-      ),
-      apiKeyHeaderKeyInputId: propertySchema(
-        "api_key_header_key_input_id",
-        stringSchema().optional()
-      ),
-      apiKeyHeaderValueInputId: propertySchema(
-        "api_key_header_value_input_id",
-        stringSchema().optional()
-      ),
-      additionalHeaders: propertySchema(
-        "additional_headers",
-        listSchema(ApiNodeAdditionalHeaderDataSerializer).optional()
-      ),
-      textOutputId: propertySchema("text_output_id", stringSchema()),
-      jsonOutputId: propertySchema("json_output_id", stringSchema()),
-      statusCodeOutputId: propertySchema(
-        "status_code_output_id",
-        stringSchema()
-      ),
-      errorOutputId: propertySchema(
-        "error_output_id",
-        stringSchema().optional()
-      ),
-      targetHandleId: propertySchema("target_handle_id", stringSchema()),
-      sourceHandleId: propertySchema("source_handle_id", stringSchema()),
-    }),
-    inputs: listSchema(NodeInputSerializer),
-    displayData: propertySchema(
-      "display_data",
-      NodeDisplayDataSerializer.optional()
+export const ApiNodeSerializer: ObjectSchema<
+  ApiNodeSerializer.Raw,
+  Omit<ApiNode, "type">
+> = objectSchema({
+  id: stringSchema(),
+  data: objectSchema({
+    label: stringSchema(),
+    methodInputId: propertySchema("method_input_id", stringSchema()),
+    urlInputId: propertySchema("url_input_id", stringSchema()),
+    bodyInputId: propertySchema("body_input_id", stringSchema()),
+    authorizationTypeInputId: propertySchema(
+      "authorization_type_input_id",
+      stringSchema().optional()
     ),
-    definition: WorkflowNodeDefinitionSerializer.optional(),
-  });
+    bearerTokenValueInputId: propertySchema(
+      "bearer_token_value_input_id",
+      stringSchema().optional()
+    ),
+    apiKeyHeaderKeyInputId: propertySchema(
+      "api_key_header_key_input_id",
+      stringSchema().optional()
+    ),
+    apiKeyHeaderValueInputId: propertySchema(
+      "api_key_header_value_input_id",
+      stringSchema().optional()
+    ),
+    additionalHeaders: propertySchema(
+      "additional_headers",
+      listSchema(ApiNodeAdditionalHeaderDataSerializer).optional()
+    ),
+    textOutputId: propertySchema("text_output_id", stringSchema()),
+    jsonOutputId: propertySchema("json_output_id", stringSchema()),
+    statusCodeOutputId: propertySchema("status_code_output_id", stringSchema()),
+    errorOutputId: propertySchema("error_output_id", stringSchema().optional()),
+    targetHandleId: propertySchema("target_handle_id", stringSchema()),
+    sourceHandleId: propertySchema("source_handle_id", stringSchema()),
+  }),
+  inputs: listSchema(NodeInputSerializer),
+  displayData: propertySchema(
+    "display_data",
+    NodeDisplayDataSerializer.optional()
+  ),
+  definition: WorkflowNodeDefinitionSerializer.optional(),
+});
 
 export declare namespace ApiNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "API";
     data: {
       label: string;
       method_input_id: string;
@@ -1518,9 +1492,8 @@ export declare namespace ApiNodeSerializer {
 
 export const NoteNodeSerializer: ObjectSchema<
   NoteNodeSerializer.Raw,
-  NoteNode
+  Omit<NoteNode, "type">
 > = objectSchema({
-  type: stringLiteralSchema("NOTE"),
   id: stringSchema(),
   data: objectSchema({
     label: stringSchema(),
@@ -1537,7 +1510,6 @@ export const NoteNodeSerializer: ObjectSchema<
 
 export declare namespace NoteNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "NOTE";
     data: {
       label: string;
       text?: string | null | undefined;
@@ -1549,9 +1521,8 @@ export declare namespace NoteNodeSerializer {
 
 export const ErrorNodeSerializer: ObjectSchema<
   ErrorNodeSerializer.Raw,
-  ErrorNode
+  Omit<ErrorNode, "type">
 > = objectSchema({
-  type: stringLiteralSchema("ERROR"),
   id: stringSchema(),
   data: objectSchema({
     label: stringSchema(),
@@ -1571,7 +1542,6 @@ export const ErrorNodeSerializer: ObjectSchema<
 
 export declare namespace ErrorNodeSerializer {
   interface Raw extends BaseDisplayableWorkflowNodeSerializer.Raw {
-    type: "ERROR";
     data: {
       label: string;
       name: string;
@@ -1597,9 +1567,8 @@ export declare namespace GenericNodeDisplayDataSerializer {
 
 export const GenericNodeSerializer: ObjectSchema<
   GenericNodeSerializer.Raw,
-  GenericNode
+  Omit<GenericNode, "type">
 > = objectSchema({
-  type: stringLiteralSchema("GENERIC"),
   displayData: propertySchema(
     "display_data",
     GenericNodeDisplayDataSerializer.optional()
@@ -1609,7 +1578,6 @@ export const GenericNodeSerializer: ObjectSchema<
 
 export declare namespace GenericNodeSerializer {
   interface Raw extends BaseWorkflowNodeSerializer.Raw {
-    type: "GENERIC";
     display_data?: {
       position?: {
         x: number;
@@ -1622,23 +1590,23 @@ export declare namespace GenericNodeSerializer {
 export const WorkflowNodeSerializer: Schema<
   WorkflowNodeSerializer.Raw,
   WorkflowNode
-> = undiscriminatedUnionSchema([
-  EntrypointNodeSerializer,
-  PromptNodeSerializer,
-  SearchNodeSerializer,
-  SubworkflowNodeSerializer,
-  MapNodeSerializer,
-  GuardrailNodeSerializer,
-  CodeExecutionNodeSerializer,
-  FinalOutputNodeSerializer,
-  MergeNodeSerializer,
-  TemplatingNodeSerializer,
-  ConditionalNodeSerializer,
-  ApiNodeSerializer,
-  NoteNodeSerializer,
-  ErrorNodeSerializer,
-  GenericNodeSerializer,
-]);
+> = union("type", {
+  ENTRYPOINT: EntrypointNodeSerializer,
+  PROMPT: PromptNodeSerializer,
+  SEARCH: SearchNodeSerializer,
+  SUBWORKFLOW: SubworkflowNodeSerializer,
+  MAP: MapNodeSerializer,
+  METRIC: GuardrailNodeSerializer,
+  CODE_EXECUTION: CodeExecutionNodeSerializer,
+  TERMINAL: FinalOutputNodeSerializer,
+  MERGE: MergeNodeSerializer,
+  TEMPLATING: TemplatingNodeSerializer,
+  CONDITIONAL: ConditionalNodeSerializer,
+  API: ApiNodeSerializer,
+  NOTE: NoteNodeSerializer,
+  ERROR: ErrorNodeSerializer,
+  GENERIC: GenericNodeSerializer,
+});
 
 export declare namespace WorkflowNodeSerializer {
   type Raw =

@@ -69,6 +69,7 @@ describe("ChatMessageContent", () => {
       });
       chatMessageContent.write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
+      expect(chatMessageContent.getReferences()).toHaveLength(2);
     });
   });
 });

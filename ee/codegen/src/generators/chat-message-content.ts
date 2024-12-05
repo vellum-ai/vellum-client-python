@@ -43,8 +43,6 @@ export class ChatMessageContent extends AstNode {
     } else if (this.chatMessageContent.type === "FUNCTION_CALL") {
       this.addReference(this.getFunctionCallChatMessageContentRef());
       this.addReference(this.getFunctionCallChatMessageContentValueRef());
-    } else if (this.chatMessageContent.type === "IMAGE") {
-      this.addReference(this.getImageChatMessageContentRef());
     }
   }
 
@@ -182,20 +180,22 @@ export class ChatMessageContent extends AstNode {
       ];
 
       if (!isNil(imageContentValue.metadata)) {
+        const metadataJson = new Json(imageContentValue.metadata);
+        this.inheritReferences(metadataJson);
         arguments_.push(
           python.methodArgument({
             name: "metadata",
-            value: new Json(imageContentValue.metadata),
+            value: metadataJson,
           })
         );
       }
 
-      python
-        .instantiateClass({
-          classReference: imageChatMessageContentRequestRef,
-          arguments_: arguments_,
-        })
-        .write(writer);
+      const instance = python.instantiateClass({
+        classReference: imageChatMessageContentRequestRef,
+        arguments_: arguments_,
+      });
+      this.inheritReferences(instance);
+      instance.write(writer);
       return;
     }
 

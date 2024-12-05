@@ -24,6 +24,8 @@ LogicalOperator = typing.Union[
         "notBetween",
         "blank",
         "notBlank",
+        "coalesce",
+        "accessField",
     ],
     typing.Any,
 ]

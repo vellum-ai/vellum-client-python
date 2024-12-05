@@ -1,17 +1,11 @@
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { isNil } from "lodash";
-import { VellumValue } from "vellum-ai/api/types";
 
 import { ApiNodeContext } from "src/context/node-context/api-node";
 import { NodeInput } from "src/generators";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
-import {
-  ApiNode as ApiNodeType,
-  ConstantValuePointer,
-  NodeInputValuePointer,
-  NodeInputValuePointerRule,
-} from "src/types/vellum";
+import { ApiNode as ApiNodeType, ConstantValuePointer } from "src/types/vellum";
 
 export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
   baseNodeClassName = "APINode";
@@ -42,23 +36,12 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
     const body = this.nodeInputsByKey.get("body");
 
     if (body) {
-      const bodyType = this.isTypeStringOrJson(body.nodeInputData.value);
-      if (bodyType && bodyType === "STRING") {
-        statements.push(
-          python.field({
-            name: "data",
-            initializer: body,
-          })
-        );
-      }
-      if (bodyType && bodyType === "JSON") {
-        statements.push(
-          python.field({
-            name: "json",
-            initializer: body,
-          })
-        );
-      }
+      statements.push(
+        python.field({
+          name: "json",
+          initializer: body,
+        })
+      );
     }
 
     if (this.nodeData.data.additionalHeaders) {
@@ -356,34 +339,6 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
 
   getErrorOutputId(): string | undefined {
     return this.nodeData.data.errorOutputId;
-  }
-
-  private isTypeStringOrJson(
-    value: NodeInputValuePointer
-  ): "STRING" | "JSON" | undefined {
-    const isConstantValuePointer = (
-      rule: NodeInputValuePointerRule
-    ): rule is ConstantValuePointer => {
-      return rule.type === "CONSTANT_VALUE";
-    };
-
-    const isVellumValue = (data: VellumValue) => {
-      return data.type === "JSON" || data.type === "STRING";
-    };
-
-    for (const rule of value.rules) {
-      if (isConstantValuePointer(rule) && rule.data) {
-        if (rule.data.type && isVellumValue(rule.data)) {
-          if (rule.data.type === "STRING") {
-            return "STRING";
-          }
-          if (rule.data.type === "JSON") {
-            return "JSON";
-          }
-        }
-      }
-    }
-    return undefined;
   }
 
   private convertMethodValueToEnum(): AstNode {

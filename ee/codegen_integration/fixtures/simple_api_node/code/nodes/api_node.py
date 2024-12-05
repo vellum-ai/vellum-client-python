@@ -6,7 +6,7 @@ from vellum.workflows.references import VellumSecretReference
 class ApiNode(APINode):
     url = "https://www.testing.com"
     method = APIRequestMethod.POST
-    data = '"hii"'
+    json = '"hii"'
     headers = {
         "test": VellumSecretReference("cecd16a2-4de5-444d-acff-37a5c400600c"),
         "nom": VellumSecretReference("cecd16a2-4de5-444d-acff-37a5c400600c"),

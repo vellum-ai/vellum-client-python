@@ -15,6 +15,7 @@ import {
   record as recordSchema,
   unknown as unknownSchema,
 } from "vellum-ai/core/schemas";
+import { union as unionSchema } from "vellum-ai/core/schemas/builders/union/union";
 import {
   ChatMessageRole as ChatMessageRoleSerializer,
   VellumVariable as VellumVariableSerializer,
@@ -212,10 +213,14 @@ export const RichTextPromptTemplateBlockSerializer: ObjectSchema<
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   blocks: listSchema(
-    undiscriminatedUnionSchema([
-      PlainTextPromptTemplateBlockSerializer,
-      VariablePromptTemplateBlockSerializer,
-    ])
+    unionSchema("blockType", {
+      PLAIN_TEXT: PlainTextPromptTemplateBlockSerializer,
+      VARIABLE: VariablePromptTemplateBlockSerializer,
+    })
+    // undiscriminatedUnionSchema([
+    //   PlainTextPromptTemplateBlockSerializer,
+    //   VariablePromptTemplateBlockSerializer,
+    // ])
   ),
 });
 

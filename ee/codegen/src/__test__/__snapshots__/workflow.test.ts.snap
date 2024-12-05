@@ -2,9 +2,9 @@
 
 exports[`Workflow > write > graph > should be correct for a basic conditional node case 1`] = `
 "from vellum.workflows import BaseWorkflow
-from .nodes.conditional_node import ConditionalNode
 from .nodes.templating_node import TemplatingNode
 from .nodes.templating_node_2 import TemplatingNode2
+from .nodes.conditional_node import ConditionalNode
 
 
 class TestWorkflow(BaseWorkflow):
@@ -92,9 +92,9 @@ class TestWorkflow(BaseWorkflow):
 
 exports[`Workflow > write > graph > should be correct for a node to a set 1`] = `
 "from vellum.workflows import BaseWorkflow
-from .nodes.templating_node import TemplatingNode
 from .nodes.templating_node_2 import TemplatingNode2
 from .nodes.templating_node_3 import TemplatingNode3
+from .nodes.templating_node import TemplatingNode
 
 
 class TestWorkflow(BaseWorkflow):

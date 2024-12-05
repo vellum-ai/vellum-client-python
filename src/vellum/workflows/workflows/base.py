@@ -86,8 +86,11 @@ class _BaseWorkflowMeta(type):
         return super().__new__(mcs, name, bases, dct)
 
 
+GraphAttribute = Union[Type[BaseNode], Graph, Set[Type[BaseNode]], Set[Graph]]
+
+
 class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkflowMeta):
-    graph: ClassVar[Union[Type[BaseNode], Graph, Set[Type[BaseNode]], Set[Graph]]]
+    graph: ClassVar[GraphAttribute]
     emitters: List[BaseWorkflowEmitter]
     resolvers: List[BaseWorkflowResolver]
 

@@ -89,6 +89,9 @@ import {
   RichTextPromptTemplateBlock,
   PlainTextPromptTemplateBlock,
   FunctionDefinitionPromptTemplateBlock,
+  PromptTemplateBlock,
+  RichTextChildPromptTemplateBlock,
+  PromptTemplateBlockData,
 } from "src/types/vellum";
 
 const CacheConfigSerializer = objectSchema({
@@ -97,10 +100,9 @@ const CacheConfigSerializer = objectSchema({
 
 export const JinjaPromptTemplateBlockSerializer: ObjectSchema<
   JinjaPromptTemplateBlockSerializer.Raw,
-  JinjaPromptTemplateBlock
+  Omit<JinjaPromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("JINJA")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   properties: objectSchema({
@@ -115,7 +117,6 @@ export const JinjaPromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace JinjaPromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "JINJA";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     properties: {
@@ -127,10 +128,9 @@ export declare namespace JinjaPromptTemplateBlockSerializer {
 
 export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
   ChatMessagePromptTemplateBlockSerializer.Raw,
-  ChatMessagePromptTemplateBlock
+  Omit<ChatMessagePromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("CHAT_MESSAGE")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   properties: objectSchema({
@@ -142,7 +142,14 @@ export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
     ),
     blocks: propertySchema(
       "blocks",
-      listSchema(lazy(() => PromptTemplateBlockSerializer))
+      listSchema(
+        lazy(() => {
+          return PromptTemplateBlockSerializer as unknown as Schema<
+            PromptTemplateBlockSerializer.Raw,
+            PromptTemplateBlock
+          >;
+        })
+      )
     ),
   }),
 });
@@ -150,7 +157,6 @@ export const ChatMessagePromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace ChatMessagePromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "CHAT_MESSAGE";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     properties: {
@@ -164,10 +170,9 @@ export declare namespace ChatMessagePromptTemplateBlockSerializer {
 
 export const VariablePromptTemplateBlockSerializer: ObjectSchema<
   VariablePromptTemplateBlockSerializer.Raw,
-  VariablePromptTemplateBlock
+  Omit<VariablePromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("VARIABLE")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   inputVariableId: propertySchema("input_variable_id", stringSchema()),
@@ -176,7 +181,6 @@ export const VariablePromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace VariablePromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "VARIABLE";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     input_variable_id: string;
@@ -185,10 +189,9 @@ export declare namespace VariablePromptTemplateBlockSerializer {
 
 export const PlainTextPromptTemplateBlockSerializer: ObjectSchema<
   PlainTextPromptTemplateBlockSerializer.Raw,
-  PlainTextPromptTemplateBlock
+  Omit<PlainTextPromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("PLAIN_TEXT")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   text: stringSchema(),
@@ -197,7 +200,6 @@ export const PlainTextPromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace PlainTextPromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "PLAIN_TEXT";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     text: string;
@@ -206,24 +208,32 @@ export declare namespace PlainTextPromptTemplateBlockSerializer {
 
 export const RichTextPromptTemplateBlockSerializer: ObjectSchema<
   RichTextPromptTemplateBlockSerializer.Raw,
-  RichTextPromptTemplateBlock
+  Omit<RichTextPromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema("block_type", stringLiteralSchema("RICH_TEXT")),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   blocks: listSchema(
-    undiscriminatedUnionSchema([
-      PlainTextPromptTemplateBlockSerializer,
-      VariablePromptTemplateBlockSerializer,
-    ])
+    union(
+      {
+        parsedDiscriminant: "blockType",
+        rawDiscriminant: "block_type",
+      },
+      {
+        PLAIN_TEXT: PlainTextPromptTemplateBlockSerializer,
+        VARIABLE: VariablePromptTemplateBlockSerializer,
+      }
+    ) as unknown as Schema<
+      | PlainTextPromptTemplateBlockSerializer.Raw
+      | VariablePromptTemplateBlockSerializer.Raw,
+      RichTextChildPromptTemplateBlock
+    >
   ),
 });
 
 export declare namespace RichTextPromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "RICH_TEXT";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     blocks: Array<
@@ -235,13 +245,9 @@ export declare namespace RichTextPromptTemplateBlockSerializer {
 
 export const FunctionDefinitionPromptTemplateBlockSerializer: ObjectSchema<
   FunctionDefinitionPromptTemplateBlockSerializer.Raw,
-  FunctionDefinitionPromptTemplateBlock
+  Omit<FunctionDefinitionPromptTemplateBlock, "blockType">
 > = objectSchema({
   id: stringSchema(),
-  blockType: propertySchema(
-    "block_type",
-    stringLiteralSchema("FUNCTION_DEFINITION")
-  ),
   state: propertySchema("state", PromptBlockStateSerializer),
   cacheConfig: propertySchema("cache_config", CacheConfigSerializer.optional()),
   properties: objectSchema({
@@ -268,7 +274,6 @@ export const FunctionDefinitionPromptTemplateBlockSerializer: ObjectSchema<
 export declare namespace FunctionDefinitionPromptTemplateBlockSerializer {
   interface Raw {
     id: string;
-    block_type: "FUNCTION_DEFINITION";
     state: PromptBlockState;
     cache_config?: { type: "EPHEMERAL" } | null;
     properties: {
@@ -290,13 +295,16 @@ export declare namespace PromptTemplateBlockSerializer {
     | FunctionDefinitionPromptTemplateBlockSerializer.Raw;
 }
 
-const PromptTemplateBlockSerializer = undiscriminatedUnionSchema([
-  JinjaPromptTemplateBlockSerializer,
-  ChatMessagePromptTemplateBlockSerializer,
-  VariablePromptTemplateBlockSerializer,
-  RichTextPromptTemplateBlockSerializer,
-  FunctionDefinitionPromptTemplateBlockSerializer,
-]);
+const PromptTemplateBlockSerializer = union(
+  { parsedDiscriminant: "blockType", rawDiscriminant: "block_type" },
+  {
+    JINJA: JinjaPromptTemplateBlockSerializer,
+    CHAT_MESSAGE: ChatMessagePromptTemplateBlockSerializer,
+    VARIABLE: VariablePromptTemplateBlockSerializer,
+    RICH_TEXT: RichTextPromptTemplateBlockSerializer,
+    FUNCTION_DEFINITION: FunctionDefinitionPromptTemplateBlockSerializer,
+  }
+);
 
 export const NodeOutputPointerSerializer: ObjectSchema<
   NodeOutputPointerSerializer.Raw,
@@ -460,9 +468,17 @@ export declare namespace WorkflowNodeDefinitionSerializer {
   }
 }
 
-export const PromptTemplateBlockDataSerializer = objectSchema({
+export const PromptTemplateBlockDataSerializer: ObjectSchema<
+  PromptTemplateBlockDataSerializer.Raw,
+  PromptTemplateBlockData
+> = objectSchema({
   version: numberSchema(),
-  blocks: listSchema(PromptTemplateBlockSerializer),
+  blocks: listSchema(
+    PromptTemplateBlockSerializer as unknown as Schema<
+      PromptTemplateBlockSerializer.Raw,
+      PromptTemplateBlock
+    >
+  ),
 });
 
 export declare namespace PromptTemplateBlockDataSerializer {

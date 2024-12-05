@@ -300,9 +300,8 @@ const PromptTemplateBlockSerializer = undiscriminatedUnionSchema([
 
 export const NodeOutputPointerSerializer: ObjectSchema<
   NodeOutputPointerSerializer.Raw,
-  NodeOutputPointer
+  Omit<NodeOutputPointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("NODE_OUTPUT"),
   data: objectSchema({
     nodeId: propertySchema("node_id", stringSchema()),
     outputId: propertySchema("output_id", stringSchema()),
@@ -311,7 +310,6 @@ export const NodeOutputPointerSerializer: ObjectSchema<
 
 export declare namespace NodeOutputPointerSerializer {
   interface Raw {
-    type: "NODE_OUTPUT";
     data: {
       node_id: string;
     };
@@ -320,9 +318,8 @@ export declare namespace NodeOutputPointerSerializer {
 
 export const InputVariablePointerSerializer: ObjectSchema<
   InputVariablePointerSerializer.Raw,
-  InputVariablePointer
+  Omit<InputVariablePointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("INPUT_VARIABLE"),
   data: objectSchema({
     inputVariableId: propertySchema("input_variable_id", stringSchema()),
   }),
@@ -330,7 +327,6 @@ export const InputVariablePointerSerializer: ObjectSchema<
 
 export declare namespace InputVariablePointerSerializer {
   interface Raw {
-    type: "INPUT_VARIABLE";
     data: {
       input_variable_id: string;
     };
@@ -339,24 +335,21 @@ export declare namespace InputVariablePointerSerializer {
 
 export const ConstantValuePointerSerializer: ObjectSchema<
   ConstantValuePointerSerializer.Raw,
-  ConstantValuePointer
+  Omit<ConstantValuePointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("CONSTANT_VALUE"),
   data: VellumValueSerializer,
 });
 
 export declare namespace ConstantValuePointerSerializer {
   interface Raw {
-    type: "CONSTANT_VALUE";
     data: VellumValueSerializer.Raw;
   }
 }
 
 export const WorkspaceSecretPointerSerializer: ObjectSchema<
   WorkspaceSecretPointerSerializer.Raw,
-  WorkspaceSecretPointer
+  Omit<WorkspaceSecretPointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("WORKSPACE_SECRET"),
   data: objectSchema({
     type: stringLiteralSchema("STRING"),
     workspaceSecretId: propertySchema(
@@ -368,7 +361,6 @@ export const WorkspaceSecretPointerSerializer: ObjectSchema<
 
 export declare namespace WorkspaceSecretPointerSerializer {
   interface Raw {
-    type: "WORKSPACE_SECRET";
     data: {
       type: "STRING";
       workspace_secret_id?: string | null | undefined;
@@ -378,9 +370,8 @@ export declare namespace WorkspaceSecretPointerSerializer {
 
 export const ExecutionCounterPointerSerializer: ObjectSchema<
   ExecutionCounterPointerSerializer.Raw,
-  ExecutionCounterPointer
+  Omit<ExecutionCounterPointer, "type">
 > = objectSchema({
-  type: stringLiteralSchema("EXECUTION_COUNTER"),
   data: objectSchema({
     nodeId: propertySchema("node_id", stringSchema()),
   }),
@@ -388,7 +379,6 @@ export const ExecutionCounterPointerSerializer: ObjectSchema<
 
 export declare namespace ExecutionCounterPointerSerializer {
   interface Raw {
-    type: "EXECUTION_COUNTER";
     data: {
       node_id: string;
     };
@@ -398,13 +388,13 @@ export declare namespace ExecutionCounterPointerSerializer {
 export const NodeInputValuePointerRuleSerializer: Schema<
   NodeInputValuePointerRuleSerializer.Raw,
   NodeInputValuePointerRule
-> = undiscriminatedUnionSchema([
-  NodeOutputPointerSerializer,
-  InputVariablePointerSerializer,
-  ConstantValuePointerSerializer,
-  WorkspaceSecretPointerSerializer,
-  ExecutionCounterPointerSerializer,
-]);
+> = union("type", {
+  NODE_OUTPUT: NodeOutputPointerSerializer,
+  INPUT_VARIABLE: InputVariablePointerSerializer,
+  CONSTANT_VALUE: ConstantValuePointerSerializer,
+  WORKSPACE_SECRET: WorkspaceSecretPointerSerializer,
+  EXECUTION_COUNTER: ExecutionCounterPointerSerializer,
+});
 
 export declare namespace NodeInputValuePointerRuleSerializer {
   type Raw =

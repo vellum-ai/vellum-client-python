@@ -1,6 +1,6 @@
 from vellum.workflows.events.types import CodeResourceDefinition
 from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME
-from vellum.workflows.workflows.event_filters import root_workflow_event_filter
+from vellum.workflows.workflows.event_filters import all_workflow_event_filter
 
 from tests.workflows.stream_try_node_annotation.workflow import InnerNode, Inputs, StreamingTryExample
 
@@ -17,7 +17,7 @@ def test_workflow_stream__happy_path():
     # WHEN we stream the events of the Workflow
     stream = workflow.stream(
         inputs=Inputs(items=["apple", "banana", "cherry"]),
-        event_filter=root_workflow_event_filter,
+        event_filter=all_workflow_event_filter,
     )
     events = list(stream)
 
@@ -31,14 +31,13 @@ def test_workflow_stream__happy_path():
     ]
     assert workflow_initiated_events[0].workflow_definition == StreamingTryExample
     assert workflow_initiated_events[0].parent is None
+    assert workflow_initiated_events[1].workflow_definition == InnerWorkflow
 
     # TODO: Try Node Parent Context - https://app.shortcut.com/vellum/story/5601
-    # filter will filter out any events without parent if it expects a parent
-    # assert workflow_initiated_events[1].workflow_definition == InnerWorkflow
     # assert workflow_initiated_events[1].parent is not None
     # assert workflow_initiated_events[1].parent.type == "WORKFLOW_NODE"
     # assert workflow_initiated_events[1].parent.node_definition == InnerNode
-    assert len(workflow_initiated_events) == 1
+    assert len(workflow_initiated_events) == 2
 
     # node initiated events
     node_initiated_events = [e for e in events if e.name == "node.execution.initiated"]

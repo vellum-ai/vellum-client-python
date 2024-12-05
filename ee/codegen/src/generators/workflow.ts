@@ -716,96 +716,174 @@ export class Workflow {
         continue;
       }
 
-      if (graphMutableAst.type === "empty") {
-        graphMutableAst = {
-          type: "node_reference",
-          reference: targetNode,
-        };
-      } else if (graphMutableAst.type === "node_reference") {
-        if (sourceNode && graphMutableAst.reference === sourceNode) {
-          const sourceNodePortContext = sourceNode.portContextsById.get(
-            edge.sourceHandleId
-          );
-          if (sourceNodePortContext) {
-            if (sourceNodePortContext.isDefault) {
-              graphMutableAst = {
+      const isPlural = (mutableAst: GraphMutableAst): boolean => {
+        return (
+          mutableAst.type === "right_shift" ||
+          (mutableAst.type === "set" && mutableAst.values.every(isPlural))
+        );
+      };
+
+      const getAstTerminals = (
+        mutableAst: GraphMutableAst
+      ): GraphNodeReference[] => {
+        if (mutableAst.type === "empty") {
+          return [];
+        } else if (mutableAst.type === "node_reference") {
+          return [mutableAst];
+        } else if (mutableAst.type === "set") {
+          return mutableAst.values.flatMap(getAstTerminals);
+        } else if (mutableAst.type === "right_shift") {
+          return getAstTerminals(mutableAst.rhs);
+        } else if (mutableAst.type == "port_reference") {
+          return [
+            {
+              type: "node_reference",
+              reference: mutableAst.reference.nodeContext,
+            },
+          ];
+        } else {
+          return [];
+        }
+      };
+
+      const popTerminals = (mutableAst: GraphMutableAst): GraphMutableAst => {
+        if (mutableAst.type === "set") {
+          return {
+            type: "set",
+            values: mutableAst.values.map(popTerminals),
+          };
+        } else if (mutableAst.type === "right_shift") {
+          return mutableAst.lhs;
+        } else {
+          return { type: "empty" };
+        }
+      };
+
+      const addEdgeToGraph = (
+        mutableAst: GraphMutableAst
+      ): GraphMutableAst | undefined => {
+        if (mutableAst.type === "empty") {
+          return {
+            type: "node_reference",
+            reference: targetNode,
+          };
+        } else if (mutableAst.type === "node_reference") {
+          if (sourceNode && mutableAst.reference === sourceNode) {
+            const sourceNodePortContext = sourceNode.portContextsById.get(
+              edge.sourceHandleId
+            );
+            if (sourceNodePortContext) {
+              if (sourceNodePortContext.isDefault) {
+                return {
+                  type: "right_shift",
+                  lhs: mutableAst,
+                  rhs: { type: "node_reference", reference: targetNode },
+                };
+              } else {
+                return {
+                  type: "right_shift",
+                  lhs: {
+                    type: "port_reference",
+                    reference: sourceNodePortContext,
+                  },
+                  rhs: { type: "node_reference", reference: targetNode },
+                };
+              }
+            }
+          } else if (!sourceNode) {
+            return {
+              type: "set",
+              values: [
+                mutableAst,
+                { type: "node_reference", reference: targetNode },
+              ],
+            };
+          }
+        } else if (mutableAst.type === "set") {
+          const newSet = mutableAst.values.map((subAst) => {
+            const newSubAst = addEdgeToGraph(subAst);
+            if (!newSubAst) {
+              return { edgeAdded: false, value: subAst };
+            }
+            return { edgeAdded: true, value: newSubAst };
+          });
+          if (newSet.every(({ edgeAdded }) => !edgeAdded)) {
+            return {
+              type: "set",
+              values: [
+                mutableAst,
+                { type: "node_reference", reference: targetNode },
+              ],
+            };
+          }
+          const newSetAst: GraphSet = {
+            type: "set",
+            values: newSet.map(({ value }) => value),
+          };
+
+          if (isPlural(newSetAst)) {
+            const newAstTerminals = newSetAst.values.flatMap((value) =>
+              getAstTerminals(value)
+            );
+
+            const uniqueAstTerminalIds = new Set(
+              newAstTerminals.map((terminal) => terminal.reference.getNodeId())
+            );
+            if (uniqueAstTerminalIds.size === 1 && newAstTerminals[0]) {
+              // If all the terminals are the same, we can simplify the graph into a
+              // right shift between the set and the target node.
+              return {
                 type: "right_shift",
-                lhs: graphMutableAst,
-                rhs: { type: "node_reference", reference: targetNode },
+                lhs: popTerminals(newSetAst),
+                rhs: newAstTerminals[0],
               };
-            } else {
-              graphMutableAst = {
+            }
+          }
+
+          return newSetAst;
+        } else if (mutableAst.type === "right_shift") {
+          if (mutableAst.lhs.type == "port_reference") {
+            const sourcePortContext = sourceNode?.portContextsById.get(
+              edge.sourceHandleId
+            );
+            if (sourcePortContext) {
+              return {
+                type: "set",
+                values: [
+                  mutableAst,
+                  {
+                    type: "right_shift",
+                    lhs: {
+                      type: "port_reference",
+                      reference: sourcePortContext,
+                    },
+                    rhs: { type: "node_reference", reference: targetNode },
+                  },
+                ],
+              };
+            }
+          } else if (mutableAst.rhs.type === "node_reference") {
+            if (sourceNode && mutableAst.rhs.reference === sourceNode) {
+              return {
                 type: "right_shift",
-                lhs: {
-                  type: "port_reference",
-                  reference: sourceNodePortContext,
-                },
+                lhs: mutableAst,
                 rhs: { type: "node_reference", reference: targetNode },
               };
             }
           }
-        } else {
-          graphMutableAst = {
-            type: "set",
-            values: [
-              graphMutableAst,
-              { type: "node_reference", reference: targetNode },
-            ],
-          };
         }
-      } else if (graphMutableAst.type === "set") {
-        if (
-          graphMutableAst.values.some(
-            (value) =>
-              value.type === "node_reference" && value.reference === sourceNode
-          )
-        ) {
-          graphMutableAst = {
-            type: "right_shift",
-            lhs: graphMutableAst,
-            rhs: { type: "node_reference", reference: targetNode },
-          };
-        } else {
-          graphMutableAst = {
-            type: "set",
-            values: [
-              graphMutableAst,
-              { type: "node_reference", reference: targetNode },
-            ],
-          };
-        }
-      } else if (graphMutableAst.type === "right_shift") {
-        if (graphMutableAst.lhs.type == "port_reference") {
-          const sourcePortContext = sourceNode?.portContextsById.get(
-            edge.sourceHandleId
-          );
-          if (sourcePortContext) {
-            graphMutableAst = {
-              type: "set",
-              values: [
-                graphMutableAst,
-                {
-                  type: "right_shift",
-                  lhs: {
-                    type: "port_reference",
-                    reference: sourcePortContext,
-                  },
-                  rhs: { type: "node_reference", reference: targetNode },
-                },
-              ],
-            };
-          }
-        } else if (graphMutableAst.rhs.type === "node_reference") {
-          if (sourceNode && graphMutableAst.rhs.reference === sourceNode) {
-            graphMutableAst = {
-              type: "right_shift",
-              lhs: graphMutableAst,
-              rhs: { type: "node_reference", reference: targetNode },
-            };
-          }
-        }
+
+        return;
+      };
+
+      const newMutableAst = addEdgeToGraph(graphMutableAst);
+      processedEdges.add(edge);
+
+      if (!newMutableAst) {
+        continue;
       }
 
+      graphMutableAst = newMutableAst;
       targetNode.portContextsById.forEach((portContext) => {
         const edges = this.edgesByPortId.get(portContext.portId);
         edges?.forEach((edge) => {
@@ -815,41 +893,37 @@ export class Workflow {
           edgesQueue.push(edge);
         });
       });
-
-      processedEdges.add(edge);
     }
 
-    const buildAstNode = (
-      graphMutableAst: GraphMutableAst
-    ): AstNode | undefined => {
-      if (graphMutableAst.type === "empty") {
+    const buildAstNode = (mutableAst: GraphMutableAst): AstNode | undefined => {
+      if (mutableAst.type === "empty") {
         return;
       }
 
-      if (graphMutableAst.type === "node_reference") {
+      if (mutableAst.type === "node_reference") {
         return python.reference({
-          name: graphMutableAst.reference.nodeClassName,
-          modulePath: graphMutableAst.reference.nodeModulePath,
+          name: mutableAst.reference.nodeClassName,
+          modulePath: mutableAst.reference.nodeModulePath,
         });
       }
 
-      if (graphMutableAst.type === "port_reference") {
+      if (mutableAst.type === "port_reference") {
         return python.reference({
-          name: graphMutableAst.reference.nodeContext.nodeClassName,
-          modulePath: graphMutableAst.reference.nodeContext.nodeModulePath,
-          attribute: [PORTS_CLASS_NAME, graphMutableAst.reference.portName],
+          name: mutableAst.reference.nodeContext.nodeClassName,
+          modulePath: mutableAst.reference.nodeContext.nodeModulePath,
+          attribute: [PORTS_CLASS_NAME, mutableAst.reference.portName],
         });
       }
 
-      if (graphMutableAst.type === "set") {
+      if (mutableAst.type === "set") {
         return python.TypeInstantiation.set(
-          graphMutableAst.values.map(buildAstNode).filter(isDefined)
+          mutableAst.values.map(buildAstNode).filter(isDefined)
         );
       }
 
-      if (graphMutableAst.type === "right_shift") {
-        const lhs = buildAstNode(graphMutableAst.lhs);
-        const rhs = buildAstNode(graphMutableAst.rhs);
+      if (mutableAst.type === "right_shift") {
+        const lhs = buildAstNode(mutableAst.lhs);
+        const rhs = buildAstNode(mutableAst.rhs);
         if (!lhs || !rhs) {
           return;
         }

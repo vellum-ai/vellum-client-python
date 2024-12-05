@@ -92,26 +92,15 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
       );
     }
 
-    if (this.nodeData.data.authorizationTypeInputId) {
-      const authInput = this.nodeData.inputs.find(
-        (input) => input.id === this.nodeData.data.authorizationTypeInputId
-      );
-      if (!authInput) {
-        throw new Error(
-          `No inputs have authorization type id of ${this.nodeData.data.authorizationTypeInputId}`
-        );
-      }
-      const value = this.nodeInputsByKey.get(authInput.key);
-      if (!value) {
-        throw new Error(`No inputs have key of ${authInput.key}`);
-      }
-      statements.push(
-        python.field({
-          name: "authorization_type",
-          initializer: value,
-        })
-      );
-    }
+    const authTypeEnum = this.convertAuthTypeValueToEnum();
+    statements.push(
+      python.field({
+        name: "authorization_type",
+        initializer: authTypeEnum
+          ? authTypeEnum
+          : python.TypeInstantiation.none(),
+      })
+    );
 
     if (this.nodeData.data.apiKeyHeaderValueInputId) {
       const valueInput = this.nodeData.inputs.find(
@@ -364,5 +353,34 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
       ],
       attribute: [methodEnum],
     });
+  }
+
+  private convertAuthTypeValueToEnum(): AstNode | undefined {
+    const authValue = this.nodeData.inputs
+      .find((input) => input.id === this.nodeData.data.authorizationTypeInputId)
+      ?.value.rules.find(
+        (value) => value.type === "CONSTANT_VALUE"
+      ) as ConstantValuePointer;
+
+    if (!authValue) {
+      throw new Error(
+        `No auth type input found for input id ${this.nodeData.data.authorizationTypeInputId} and of type "CONSTANT_VALUE"`
+      );
+    }
+
+    const authTypeEnum = authValue.data.value as string;
+
+    if (!authTypeEnum) {
+      return undefined;
+    } else {
+      return python.reference({
+        name: "AuthorizationType",
+        modulePath: [
+          ...this.workflowContext.sdkModulePathNames.WORKFLOWS_MODULE_PATH,
+          "constants",
+        ],
+        attribute: [authTypeEnum],
+      });
+    }
   }
 }

@@ -814,7 +814,7 @@ export function apiNodeFactory({
               type: "CONSTANT_VALUE",
               data: {
                 type: "STRING",
-                value: undefined,
+                value: "API_KEY",
               },
             },
           ],

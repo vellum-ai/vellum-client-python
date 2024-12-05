@@ -3,10 +3,11 @@ import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
 import { OperatorType } from "@fern-api/python-ast/OperatorType";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { Writer } from "@fern-api/python-ast/core/Writer";
-import { VellumValue as VellumValueType } from "vellum-ai/api/types";
+import { isNil } from "lodash";
 
 import { PortContext } from "src/context/port-context";
-import { VellumValue } from "src/generators/vellum-variable-value";
+import { Expression } from "src/generators/expression";
+import { NodeInput } from "src/generators/node-inputs";
 import {
   ConditionalNodeConditionData,
   ConditionalRuleData,
@@ -15,26 +16,29 @@ import {
 export declare namespace ConditionalNodePort {
   export interface Args {
     portContext: PortContext;
-    inputVarIdsByRuleId: Map<string, string>;
-    constantValuesByRuleIds: Map<string, VellumValueType>;
+    inputFieldKeysByRuleId: Map<string, string>;
+    valueInputKeysByRuleId: Map<string, string>;
     conditionData: ConditionalNodeConditionData;
+    nodeInputsByKey: Map<string, NodeInput>;
   }
 }
 
 export class ConditionalNodePort extends AstNode {
   private portContext: PortContext;
   private conditionalNodeData: ConditionalNodeConditionData;
-  private inputVarIdsByRuleId: Map<string, string>;
-  private constantValuesByRuleIds: Map<string, VellumValueType>;
+  private inputFieldKeysByRuleId: Map<string, string>;
+  private valueInputKeysByRuleId: Map<string, string>;
+  private nodeInputsByKey: Map<string, NodeInput>;
   private astNode: AstNode;
 
   public constructor(args: ConditionalNodePort.Args) {
     super();
 
     this.portContext = args.portContext;
-    this.inputVarIdsByRuleId = args.inputVarIdsByRuleId;
-    this.constantValuesByRuleIds = args.constantValuesByRuleIds;
+    this.inputFieldKeysByRuleId = args.inputFieldKeysByRuleId;
+    this.valueInputKeysByRuleId = args.valueInputKeysByRuleId;
     this.conditionalNodeData = args.conditionData;
+    this.nodeInputsByKey = args.nodeInputsByKey;
     this.astNode = this.constructPort();
     this.inheritReferences(this.astNode);
   }
@@ -124,33 +128,24 @@ export class ConditionalNodePort extends AstNode {
 
   private buildDescriptor(conditionData: ConditionalRuleData): AstNode {
     const ruleId = conditionData.id;
-    const inputId = this.inputVarIdsByRuleId.get(ruleId);
-    if (!inputId) {
-      throw new Error(`No input variable id found given ${ruleId}`);
+
+    const lhsKey = this.inputFieldKeysByRuleId.get(ruleId);
+    const rhsKey = this.valueInputKeysByRuleId.get(ruleId);
+    if (isNil(lhsKey) || isNil(rhsKey)) {
+      throw new Error(`Could not find input field key given rule id ${ruleId}`);
     }
-    const inputVariableContext =
-      this.portContext.workflowContext.getInputVariableContextById(inputId);
-    const field = inputVariableContext.getInputVariableData().key;
-    return python.invokeMethod({
-      methodReference: python.reference({
-        name: "Inputs",
-        modulePath: inputVariableContext.modulePath,
-        attribute: (() => {
-          return conditionData.operator
-            ? [field, this.convertOperatorToMethod(conditionData.operator)]
-            : [];
-        })(),
-      }),
-      arguments_: (() => {
-        const value = this.constantValuesByRuleIds.get(ruleId);
-        return value
-          ? [
-              new MethodArgument({
-                value: new VellumValue({ vellumValue: value }),
-              }),
-            ]
-          : [];
-      })(),
+    const lhs = this.nodeInputsByKey.get(lhsKey);
+    const rhs = this.nodeInputsByKey.get(rhsKey);
+    const expression = conditionData.operator
+      ? this.convertOperatorToMethod(conditionData.operator)
+      : undefined;
+    if (isNil(lhs) || isNil(expression)) {
+      throw new Error("Port conditions require a lhs and an expression");
+    }
+    return new Expression({
+      lhs: lhs,
+      expression: expression,
+      rhs: rhs,
     });
   }
 

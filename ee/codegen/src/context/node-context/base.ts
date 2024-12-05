@@ -29,6 +29,7 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
 
   private nodeOutputNamesById: Record<string, string> | undefined;
   public readonly portContextsById: Map<string, PortContext>;
+  public readonly defaultPortContext: PortContext | undefined;
 
   constructor(args: BaseNodeContext.Args<T>) {
     this.workflowContext = args.workflowContext;
@@ -60,6 +61,10 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
 
     this.portContextsById = new Map(
       portContexts.map((portContext) => [portContext.portId, portContext])
+    );
+
+    this.defaultPortContext = portContexts.find(
+      (portContext) => portContext.isDefault
     );
   }
 

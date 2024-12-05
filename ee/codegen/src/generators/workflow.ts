@@ -723,6 +723,33 @@ export class Workflow {
         );
       };
 
+      const getAstSources = (
+        mutableAst: GraphMutableAst
+      ): GraphPortReference[] => {
+        if (mutableAst.type === "empty") {
+          return [];
+        } else if (mutableAst.type === "node_reference") {
+          const defaultPort = mutableAst.reference.defaultPortContext;
+          if (defaultPort) {
+            return [
+              {
+                type: "port_reference",
+                reference: defaultPort,
+              },
+            ];
+          }
+          return [];
+        } else if (mutableAst.type === "set") {
+          return mutableAst.values.flatMap(getAstSources);
+        } else if (mutableAst.type === "right_shift") {
+          return getAstSources(mutableAst.lhs);
+        } else if (mutableAst.type == "port_reference") {
+          return [mutableAst];
+        } else {
+          return [];
+        }
+      };
+
       const getAstTerminals = (
         mutableAst: GraphMutableAst
       ): GraphNodeReference[] => {
@@ -743,6 +770,19 @@ export class Workflow {
           ];
         } else {
           return [];
+        }
+      };
+
+      const popSources = (mutableAst: GraphMutableAst): GraphMutableAst => {
+        if (mutableAst.type === "set") {
+          return {
+            type: "set",
+            values: mutableAst.values.map(popSources),
+          };
+        } else if (mutableAst.type === "right_shift") {
+          return mutableAst.rhs;
+        } else {
+          return { type: "empty" };
         }
       };
 
@@ -842,8 +882,38 @@ export class Workflow {
 
           return newSetAst;
         } else if (mutableAst.type === "right_shift") {
-          if (mutableAst.lhs.type == "port_reference") {
-            const sourcePortContext = sourceNode?.portContextsById.get(
+          const newLhs = addEdgeToGraph(mutableAst.lhs);
+          if (newLhs) {
+            const newSetAst: GraphSet = {
+              type: "set",
+              values: [mutableAst, newLhs],
+            };
+            if (isPlural(newSetAst)) {
+              const newAstSources = newSetAst.values.flatMap((value) =>
+                getAstSources(value)
+              );
+
+              const uniqueAstSourceIds = new Set(
+                newAstSources.map((source) => source.reference.portId)
+              );
+              if (uniqueAstSourceIds.size === 1 && newAstSources[0]) {
+                // If all the sources are the same, we can simplify the graph into a
+                // right shift between the source node and the set.
+                const portReference = newAstSources[0];
+                return {
+                  type: "right_shift",
+                  lhs: portReference,
+                  rhs: popSources(newSetAst),
+                };
+              }
+            }
+            return newSetAst;
+          } else if (
+            mutableAst.lhs.type == "port_reference" &&
+            sourceNode &&
+            mutableAst.lhs.reference.nodeContext == sourceNode
+          ) {
+            const sourcePortContext = sourceNode.portContextsById.get(
               edge.sourceHandleId
             );
             if (sourcePortContext) {
@@ -911,7 +981,9 @@ export class Workflow {
         return python.reference({
           name: mutableAst.reference.nodeContext.nodeClassName,
           modulePath: mutableAst.reference.nodeContext.nodeModulePath,
-          attribute: [PORTS_CLASS_NAME, mutableAst.reference.portName],
+          attribute: mutableAst.reference.isDefault
+            ? undefined
+            : [PORTS_CLASS_NAME, mutableAst.reference.portName],
         });
       }
 

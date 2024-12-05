@@ -1,10 +1,11 @@
-import { PromptNodeSerializer } from "src/serializers/vellum";
+import { WorkflowNodeSerializer } from "src/serializers/vellum";
 
 describe("vellum", () => {
   describe("PromptNodeSerializer", () => {
     it("should serialize legacy prompt nodes", () => {
       const data = {
         id: "aa81d132-9e77-4278-97c9-620dd66bec6d",
+        type: "PROMPT",
         data: {
           variant: "LEGACY",
           label: "Prompt Node",
@@ -202,7 +203,7 @@ describe("vellum", () => {
         definition: null,
       };
 
-      const parsedData = PromptNodeSerializer.parse(data);
+      const parsedData = WorkflowNodeSerializer.parse(data);
       expect(parsedData.ok).toBe(true);
     });
   });

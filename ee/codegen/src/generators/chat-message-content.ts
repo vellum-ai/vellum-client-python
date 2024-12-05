@@ -153,9 +153,15 @@ export class ChatMessageContent extends AstNode {
     }
 
     if (contentType === "ARRAY") {
-      // TODO: Implement array types and call this recursively
-      //    https://app.shortcut.com/vellum/story/4937/flesh-out-codegen-for-all-chat-message-content-types
-      throw new Error("Unhandled type: ARRAY");
+      const arrayValue = this.chatMessageContent.value as unknown[];
+      const arrayElements = arrayValue.map(
+        (element) =>
+          new ChatMessageContent({
+            chatMessageContent: element as ChatMessageContentRequestType,
+          })
+      );
+      python.TypeInstantiation.list(arrayElements).write(writer);
+      return;
     }
 
     if (contentType === "IMAGE") {

@@ -1,5 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`ChatMessageContent > ARRAY > should write an array of content correctly 1`] = `
+"[
+    StringChatMessageContentRequest(value="First message"),
+    FunctionCallChatMessageContentRequest(
+        value=FunctionCallChatMessageContentValueRequest(
+            name="get_weather", arguments={"location": "Seattle"}
+        )
+    ),
+]
+"
+`;
+
 exports[`ChatMessageContent > FUNCTION_CALL > should write a function call content with id correctly 1`] = `
 "FunctionCallChatMessageContentRequest(
     value=FunctionCallChatMessageContentValueRequest(

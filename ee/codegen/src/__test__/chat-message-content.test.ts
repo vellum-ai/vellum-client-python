@@ -55,4 +55,31 @@ describe("ChatMessageContent", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
   });
+  describe("ARRAY", () => {
+    it("should write an array of content correctly", async () => {
+      const chatMessageContent = new ChatMessageContent({
+        chatMessageContent: {
+          type: "ARRAY",
+          value: [
+            {
+              type: "STRING",
+              value: "First message",
+            },
+            {
+              type: "FUNCTION_CALL",
+              value: {
+                name: "get_weather",
+                arguments: {
+                  location: "Seattle",
+                },
+              },
+            },
+          ],
+        },
+      });
+      chatMessageContent.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+      expect(chatMessageContent.getReferences()).toHaveLength(1);
+    });
+  });
 });

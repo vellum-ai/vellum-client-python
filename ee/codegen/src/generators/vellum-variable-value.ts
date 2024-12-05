@@ -319,15 +319,15 @@ class FunctionCallVellumValue extends AstNode {
 }
 
 class SearchResultsVellumValue extends AstNode {
-  private value: SearchResult[];
+  private astNode: AstNode;
 
   public constructor(value: SearchResult[]) {
     super();
-    this.value = value;
+    this.astNode = this.generateAstNode(value);
   }
 
-  public write(writer: Writer): void {
-    const searchResults = this.value.map((result) => {
+  private generateAstNode(value: SearchResult[]): AstNode {
+    const searchResultItems = value.map((result) => {
       const arguments_ = [
         python.methodArgument({
           name: "text",
@@ -345,10 +345,28 @@ class SearchResultsVellumValue extends AstNode {
         }),
         python.methodArgument({
           name: "document",
-          value: python.reference({
-            name: "document", // Assuming document is already instantiated
-            modulePath: VELLUM_CLIENT_MODULE_PATH,
-          }),
+          value: (() => {
+            const document = python.instantiateClass({
+              classReference: python.reference({
+                name: "Document",
+                modulePath: VELLUM_CLIENT_MODULE_PATH,
+              }),
+              arguments_: [
+                python.methodArgument({
+                  name: "id",
+                  value: python.TypeInstantiation.str(result.document.id ?? ""),
+                }),
+                python.methodArgument({
+                  name: "label",
+                  value: python.TypeInstantiation.str(
+                    result.document.label ?? ""
+                  ),
+                }),
+              ],
+            });
+            this.inheritReferences(document);
+            return document;
+          })(),
         }),
       ];
 
@@ -370,7 +388,15 @@ class SearchResultsVellumValue extends AstNode {
       });
     });
 
-    python.TypeInstantiation.list(searchResults).write(writer);
+    const searchResults = python.TypeInstantiation.list(searchResultItems);
+
+    this.inheritReferences(searchResults);
+
+    return searchResults;
+  }
+
+  public write(writer: Writer): void {
+    this.astNode.write(writer);
   }
 }
 

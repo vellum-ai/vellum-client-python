@@ -3,6 +3,7 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import { workflowContextFactory } from "./helpers";
 import { inputVariableContextFactory } from "./helpers/input-variable-context-factory";
 import {
+  conditionalNodeFactory,
   entrypointNodeDataFactory,
   mergeNodeDataFactory,
   searchNodeDataFactory,
@@ -394,6 +395,89 @@ describe("Workflow", () => {
         workflow.getWorkflowFile().write(writer);
         expect(await writer.toStringFormatted()).toMatchSnapshot();
       });
+
+      it.each([[true], [false]])(
+        "should be correct for a basic conditional node case",
+        async (breadthFirstGraphGeneration) => {
+          const inputs = codegen.inputs({ workflowContext });
+
+          const templatingNodeData1 = templatingNodeFactory();
+          const templatingNodeContext1 = await createNodeContext({
+            workflowContext,
+            nodeData: templatingNodeData1,
+          });
+          workflowContext.addNodeContext(templatingNodeContext1);
+
+          const templatingNodeData2 = templatingNodeFactory({
+            id: "7e09927b-6d6f-4829-92c9-54e66bdcaf81",
+            label: "Templating Node 2",
+            sourceHandleId: "dd8397b1-5a41-4fa0-8c24-e5dffee4fb99",
+            targetHandleId: "3feb7e71-ec63-4d58-82ba-c3df829a2949",
+          });
+          const templatingNodeContext2 = await createNodeContext({
+            workflowContext,
+            nodeData: templatingNodeData2,
+          });
+          workflowContext.addNodeContext(templatingNodeContext2);
+
+          const conditionalNodeData = conditionalNodeFactory();
+          const conditionalNodeContext = await createNodeContext({
+            workflowContext,
+            nodeData: conditionalNodeData,
+          });
+          workflowContext.addNodeContext(conditionalNodeContext);
+          const conditionalSourceHandle1 =
+            conditionalNodeData.data.conditions[0]?.sourceHandleId;
+          const conditionalSourceHandle2 =
+            conditionalNodeData.data.conditions[1]?.sourceHandleId;
+          if (!conditionalSourceHandle1 || !conditionalSourceHandle2) {
+            throw new Error("Handle IDs are required");
+          }
+
+          const edges: WorkflowEdge[] = [
+            {
+              id: "edge-1",
+              type: "DEFAULT",
+              sourceNodeId: entrypointNode.id,
+              sourceHandleId: entrypointNode.data.sourceHandleId,
+              targetNodeId: conditionalNodeData.id,
+              targetHandleId: conditionalNodeData.data.targetHandleId,
+            },
+            {
+              id: "edge-3",
+              type: "DEFAULT",
+              sourceNodeId: conditionalNodeData.id,
+              sourceHandleId: conditionalSourceHandle1,
+              targetNodeId: templatingNodeData1.id,
+              targetHandleId: templatingNodeData1.data.targetHandleId,
+            },
+            {
+              id: "edge-3",
+              type: "DEFAULT",
+              sourceNodeId: conditionalNodeData.id,
+              sourceHandleId: conditionalSourceHandle2,
+              targetNodeId: templatingNodeData2.id,
+              targetHandleId: templatingNodeData2.data.targetHandleId,
+            },
+          ];
+          workflowContext.addWorkflowEdges(edges);
+
+          const workflow = codegen.workflow({
+            moduleName,
+            workflowContext,
+            inputs,
+            nodes: [
+              conditionalNodeData,
+              templatingNodeData1,
+              templatingNodeData2,
+            ],
+            breadthFirstGraphGeneration,
+          });
+
+          workflow.getWorkflowFile().write(writer);
+          expect(await writer.toStringFormatted()).toMatchSnapshot();
+        }
+      );
     });
   });
 });

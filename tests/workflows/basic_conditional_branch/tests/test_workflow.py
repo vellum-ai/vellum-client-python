@@ -1,5 +1,5 @@
 from vellum.workflows.constants import UNDEF
-from vellum.workflows.workflows.event_filters import root_workflow_event_filter
+from vellum.workflows.workflows.event_filters import all_workflow_event_filter
 
 from tests.workflows.basic_conditional_branch.workflow import (
     BasicConditionalBranchWorkflow,
@@ -54,12 +54,14 @@ def test_stream_workflow__verify_invoked_ports():
     # WHEN we stream the Workflow
     stream = workflow.stream(
         inputs=Inputs(value=True),
-        event_filter=root_workflow_event_filter,
+        event_filter=all_workflow_event_filter,
     )
     events = list(stream)
 
     # THEN we should see the invoked ports in the node events
-    node_fulfilled_events = [event for event in events if event.name == "node.execution.fulfilled"]
+    node_fulfilled_events = [
+        event for event in events if event.name == "node.execution.fulfilled"
+    ]
     assert len(node_fulfilled_events) == 2
     assert node_fulfilled_events[0].invoked_ports == {StartNode.Ports.branch_a}
     assert node_fulfilled_events[1].invoked_ports == {BranchANode.Ports.default}

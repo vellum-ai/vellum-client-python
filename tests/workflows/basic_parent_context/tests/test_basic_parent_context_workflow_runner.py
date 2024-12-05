@@ -1,15 +1,10 @@
 from uuid import uuid4
 
-from vellum.workflows import BaseWorkflow
-from vellum.workflows.events import WorkflowEvent
 from vellum.workflows.events.types import CodeResourceDefinition, NodeParentContext
 from vellum.workflows.state.context import WorkflowContext
+from vellum.workflows.workflows.event_filters import all_workflow_event_filter
 
 from tests.workflows.basic_parent_context.basic_workflow import TrivialWorkflow
-
-
-def allow_all_events(_, __) -> bool:
-    return True
 
 
 def test_run_workflow__happy_path():
@@ -22,7 +17,7 @@ def test_run_workflow__happy_path():
 
 def test_stream_workflow__happy_path():
     workflow = TrivialWorkflow()
-    events = list(workflow.stream(event_filter=allow_all_events))
+    events = list(workflow.stream(event_filter=all_workflow_event_filter))
 
     assert len(events) == 4
 
@@ -68,7 +63,7 @@ def test_stream_workflow__happy_path_inital_context():
         context=WorkflowContext(_parent_context=initial_parent_context)
     )
 
-    events = list(workflow.stream(event_filter=allow_all_events))
+    events = list(workflow.stream(event_filter=all_workflow_event_filter))
 
     assert len(events) == 4
 

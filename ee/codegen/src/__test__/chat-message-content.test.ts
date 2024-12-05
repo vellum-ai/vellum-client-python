@@ -63,11 +63,13 @@ describe("ChatMessageContent", () => {
           type: "AUDIO",
           value: {
             src: "https://example.com/audio.mp3",
+            metadata: { key: "value" },
           },
         },
       });
       chatMessageContent.write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
+      expect(chatMessageContent.getReferences()).toHaveLength(2);
     });
   });
 

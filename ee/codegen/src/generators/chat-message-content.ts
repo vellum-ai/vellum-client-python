@@ -43,8 +43,6 @@ export class ChatMessageContent extends AstNode {
     } else if (this.chatMessageContent.type === "FUNCTION_CALL") {
       this.addReference(this.getFunctionCallChatMessageContentRef());
       this.addReference(this.getFunctionCallChatMessageContentValueRef());
-    } else if (this.chatMessageContent.type === "AUDIO") {
-      this.addReference(this.getAudioChatMessageContentRef());
     }
   }
 
@@ -190,7 +188,6 @@ export class ChatMessageContent extends AstNode {
 
       if (!isNil(imageContentValue.metadata)) {
         const metadataJson = new Json(imageContentValue.metadata);
-        this.inheritReferences(metadataJson);
         arguments_.push(
           python.methodArgument({
             name: "metadata",
@@ -222,20 +219,21 @@ export class ChatMessageContent extends AstNode {
       ];
 
       if (!isNil(audioContentValue.metadata)) {
+        const metadataJson = new Json(audioContentValue.metadata);
         arguments_.push(
           python.methodArgument({
             name: "metadata",
-            value: new Json(audioContentValue.metadata),
+            value: metadataJson,
           })
         );
       }
 
-      python
-        .instantiateClass({
-          classReference: audioChatMessageContentRequestRef,
-          arguments_: arguments_,
-        })
-        .write(writer);
+      const instance = python.instantiateClass({
+        classReference: audioChatMessageContentRequestRef,
+        arguments_: arguments_,
+      });
+      this.inheritReferences(instance);
+      instance.write(writer);
       return;
     }
 

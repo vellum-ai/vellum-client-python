@@ -36,6 +36,22 @@ class TestWorkflow(BaseWorkflow):
 "
 `;
 
+exports[`Workflow > write > graph > should be correct for a basic merge node and an additional edge 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .nodes.templating_node import TemplatingNode
+from .nodes.templating_node_2 import TemplatingNode2
+from .nodes.templating_node_3 import TemplatingNode3
+from .nodes.merge_node import MergeNode
+
+
+class TestWorkflow(BaseWorkflow):
+    graph = {TemplatingNode, TemplatingNode2} >> MergeNode >> TemplatingNode3
+
+    class Outputs(BaseWorkflow.Outputs):
+        pass
+"
+`;
+
 exports[`Workflow > write > graph > should be correct for a basic merge node case 1`] = `
 "from vellum.workflows import BaseWorkflow
 from .nodes.templating_node import TemplatingNode

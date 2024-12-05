@@ -5,7 +5,6 @@ describe("vellum", () => {
     it("should serialize legacy prompt nodes", () => {
       const data = {
         id: "aa81d132-9e77-4278-97c9-620dd66bec6d",
-        type: "PROMPT",
         data: {
           variant: "LEGACY",
           label: "Prompt Node",

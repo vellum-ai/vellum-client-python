@@ -168,7 +168,9 @@ export class ChatMessageContent extends AstNode {
             chatMessageContent: element as ChatMessageContentRequestType,
           })
       );
-      python.TypeInstantiation.list(arrayElements).write(writer);
+      const instance = python.TypeInstantiation.list(arrayElements);
+      this.inheritReferences(instance);
+      instance.write(writer);
       return;
     }
 

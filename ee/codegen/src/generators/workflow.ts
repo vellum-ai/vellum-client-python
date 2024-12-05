@@ -39,13 +39,6 @@ export declare namespace Workflow {
     nodes: WorkflowDataNode[];
     /* The display data for the workflow */
     displayData?: WorkflowDisplayData;
-    /*
-    Whether to use the new graph generation algorithm
-
-    We are using this as a feature flag to build out the new graph generation algorithm
-    over the course of a few PRs, each with a new test to satisfy, instead of all at once.
-    */
-    breadthFirstGraphGeneration?: boolean;
   }
 }
 
@@ -57,15 +50,8 @@ export class Workflow {
   private readonly entrypointPortContexts: PortContext[];
   private readonly entrypointNodeEdges: WorkflowEdge[];
   private readonly displayData: WorkflowDisplayData | undefined;
-  private readonly breadthFirstGraphGeneration: boolean;
   private readonly entrypointNodeId: string;
-  constructor({
-    workflowContext,
-    inputs,
-    nodes,
-    displayData,
-    breadthFirstGraphGeneration,
-  }: Workflow.Args) {
+  constructor({ workflowContext, inputs, nodes, displayData }: Workflow.Args) {
     this.workflowContext = workflowContext;
     this.inputs = inputs;
     this.nodes = nodes;
@@ -82,7 +68,6 @@ export class Workflow {
     this.entrypointPortContexts = entrypointPortContexts;
     this.entrypointNodeEdges = entrypointNodeEdges;
     this.entrypointNodeId = entrypointNodeId;
-    this.breadthFirstGraphGeneration = breadthFirstGraphGeneration ?? false;
   }
 
   private getEdgesAndEntrypointNodeContexts({
@@ -562,114 +547,7 @@ export class Workflow {
     return Array.from(this.edgesByPortId.values()).flat();
   }
 
-  private buildGraphLegacy({
-    portContexts,
-  }: {
-    portContexts: PortContext | PortContext[];
-  }): AstNode | undefined {
-    if (Array.isArray(portContexts)) {
-      if (portContexts.length > 1) {
-        const graphItems = portContexts
-          .filter((portContext) => {
-            return this.edgesByPortId.has(portContext.portId);
-          })
-          .map((portContext) => this.buildGraphBranchLegacy({ portContext }))
-          .filter(isDefined);
-
-        if (graphItems.length > 1) {
-          return python.TypeInstantiation.set(graphItems);
-        } else {
-          return graphItems[0];
-        }
-      } else {
-        const portContext = portContexts[0];
-        if (!portContext) {
-          return;
-        }
-        return this.buildGraphBranchLegacy({ portContext });
-      }
-    } else {
-      return this.buildGraphBranchLegacy({ portContext: portContexts });
-    }
-  }
-
-  private buildGraphBranchLegacy({
-    portContext,
-  }: {
-    portContext: PortContext;
-  }): AstNode | undefined {
-    const edges = this.edgesByPortId.get(portContext.portId);
-    if (!edges) {
-      const terminalNodeRef = python.reference({
-        name: portContext.nodeContext.nodeClassName,
-        modulePath: portContext.nodeContext.nodeModulePath,
-        attribute: portContext.isDefault
-          ? undefined
-          : [PORTS_CLASS_NAME, portContext.portName],
-      });
-      return terminalNodeRef;
-    }
-
-    const targetNodeContexts = edges.map((edge) =>
-      this.workflowContext.getNodeContext(edge.targetNodeId)
-    );
-
-    if (targetNodeContexts.length === 0) {
-      const terminalNodeRef = python.reference({
-        name: portContext.nodeContext.nodeClassName,
-        modulePath: portContext.nodeContext.nodeModulePath,
-      });
-      return terminalNodeRef;
-    }
-
-    const subGraphs = targetNodeContexts
-      .map((targetNodeContext) => {
-        const portContexts = Array.from(
-          targetNodeContext.portContextsById.values()
-        );
-
-        if (portContexts.length === 0) {
-          return python.reference({
-            name: targetNodeContext.nodeClassName,
-            modulePath: targetNodeContext.nodeModulePath,
-          });
-        }
-
-        return this.buildGraphLegacy({ portContexts });
-      })
-      .filter(isDefined);
-
-    const lhs = python.reference({
-      name: portContext.nodeContext.nodeClassName,
-      modulePath: portContext.nodeContext.nodeModulePath,
-      attribute: portContext.isDefault
-        ? undefined
-        : [PORTS_CLASS_NAME, portContext.portName],
-    });
-
-    const subgraphFirstItem = subGraphs[0];
-    if (!subgraphFirstItem) {
-      return;
-    }
-    const rhs =
-      subGraphs.length > 1
-        ? python.TypeInstantiation.set(subGraphs)
-        : subgraphFirstItem;
-
-    return python.operator({
-      operator: OperatorType.RightShift,
-      lhs,
-      rhs,
-    });
-  }
-
   private buildGraphAttribute(): AstNode | undefined {
-    if (!this.breadthFirstGraphGeneration) {
-      return this.buildGraphLegacy({
-        portContexts: this.entrypointPortContexts,
-      });
-    }
-
     // This graph attribute generation is a breadth-first traversal of the WorkflowEdges
     // starting at the entrypoint port edges. We process each one sequentially and incrementally
     // build up the graph as we go.

@@ -49,49 +49,22 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
     assert events[0].span_id == workflow_span_id
     assert events[0].timestamp == frozen_datetime
 
-    assert events[1].name == "workflow.execution.snapshotted"
-    assert default_serializer(events[1].state) == {
+    assert events[1].name == "node.execution.initiated"
+    assert events[1].node_definition == StartNode
+
+    assert events[2].name == "workflow.execution.snapshotted"
+    assert default_serializer(events[2].state) == {
         "meta": {
             "id": str(state_id),
             "trace_id": str(trace_id),
             "span_id": str(workflow_span_id),
             "updated_ts": "2024-01-01T12:00:00",
-            "is_terminated": False,
-            "workflow_inputs": {},
-            "external_inputs": {},
-            "node_outputs": {},
-            "parent": None,
-            "node_execution_cache": {
-                "node_executions_fulfilled": {},
-                "node_executions_initiated": {},
-                "node_executions_queued": {},
-                "dependencies_invoked": {},
-            },
-        },
-        "score": 0,
-    }
-
-    assert events[2].name == "node.execution.initiated"
-    assert events[2].node_definition == StartNode
-
-    assert events[3].name == "node.execution.fulfilled"
-    assert events[3].node_definition == StartNode
-    assert events[3].outputs == {"final_value": "Hello, World!"}
-
-    assert events[4].name == "workflow.execution.snapshotted"
-    assert default_serializer(events[4].state) == {
-        "meta": {
-            "id": str(state_id),
-            "trace_id": str(trace_id),
-            "span_id": str(workflow_span_id),
-            "updated_ts": "2024-01-01T12:00:00",
-            "is_terminated": False,
             "workflow_inputs": {},
             "external_inputs": {},
             "node_outputs": {"StartNode.Outputs.final_value": "Hello, World!"},
             "parent": None,
             "node_execution_cache": {
-                "node_executions_fulfilled": {},
+                "node_executions_fulfilled": {f"{base_module}.workflow.StartNode": [str(start_node_span_id)]},
                 "node_executions_initiated": {f"{base_module}.workflow.StartNode": [str(start_node_span_id)]},
                 "node_executions_queued": {},
                 "dependencies_invoked": {},
@@ -100,8 +73,44 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
         "score": 0,
     }
 
-    assert events[5].name == "node.execution.initiated"
-    assert events[5].node_definition == NextNode
+    assert events[3].name == "node.execution.fulfilled"
+    assert events[3].node_definition == StartNode
+    assert events[3].outputs == {"final_value": "Hello, World!"}
+
+    assert events[4].name == "node.execution.initiated"
+    assert events[4].node_definition == NextNode
+
+    assert events[5].name == "workflow.execution.snapshotted"
+    assert default_serializer(events[5].state) == {
+        "meta": {
+            "id": str(state_id),
+            "trace_id": str(trace_id),
+            "span_id": str(workflow_span_id),
+            "updated_ts": "2024-01-01T12:00:00",
+            "workflow_inputs": {},
+            "external_inputs": {},
+            "node_outputs": {
+                "StartNode.Outputs.final_value": "Hello, World!",
+            },
+            "parent": None,
+            "node_execution_cache": {
+                "node_executions_fulfilled": {
+                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                },
+                "node_executions_initiated": {
+                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
+                },
+                "node_executions_queued": {
+                    f"{base_module}.workflow.NextNode": [],
+                },
+                "dependencies_invoked": {
+                    str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
+                },
+            },
+        },
+        "score": 13,
+    }
 
     assert events[6].name == "workflow.execution.snapshotted"
     assert default_serializer(events[6].state) == {
@@ -110,16 +119,16 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
             "trace_id": str(trace_id),
             "span_id": str(workflow_span_id),
             "updated_ts": "2024-01-01T12:00:00",
-            "is_terminated": False,
             "workflow_inputs": {},
             "external_inputs": {},
             "node_outputs": {
                 "StartNode.Outputs.final_value": "Hello, World!",
+                "NextNode.Outputs.final_value": "Score: 13",
             },
-            "parent": None,
             "node_execution_cache": {
                 "node_executions_fulfilled": {
                     f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
+                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
                 },
                 "node_executions_initiated": {
                     f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
@@ -132,6 +141,7 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
                     str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
                 },
             },
+            "parent": None,
         },
         "score": 13,
     }
@@ -140,80 +150,11 @@ def test_run_workflow__happy_path(mock_uuid4_generator, mock_datetime_now):
     assert events[7].node_definition == NextNode
     assert events[7].outputs == {"final_value": "Score: 13"}
 
-    assert events[8].name == "workflow.execution.snapshotted"
-    assert default_serializer(events[8].state) == {
-        "meta": {
-            "id": str(state_id),
-            "trace_id": str(trace_id),
-            "span_id": str(workflow_span_id),
-            "updated_ts": "2024-01-01T12:00:00",
-            "is_terminated": False,
-            "workflow_inputs": {},
-            "external_inputs": {},
-            "node_outputs": {
-                "StartNode.Outputs.final_value": "Hello, World!",
-                "NextNode.Outputs.final_value": "Score: 13",
-            },
-            "node_execution_cache": {
-                "node_executions_fulfilled": {
-                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                },
-                "node_executions_initiated": {
-                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
-                },
-                "node_executions_queued": {
-                    f"{base_module}.workflow.NextNode": [],
-                },
-                "dependencies_invoked": {
-                    str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
-                },
-            },
-            "parent": None,
-        },
-        "score": 13,
-    }
+    assert events[8].name == "workflow.execution.fulfilled"
+    assert events[8].outputs == {"final_value": "Score: 13"}
 
-    assert events[9].name == "workflow.execution.snapshotted"
-    assert default_serializer(events[9].state) == {
-        "meta": {
-            "id": str(state_id),
-            "trace_id": str(trace_id),
-            "span_id": str(workflow_span_id),
-            "updated_ts": "2024-01-01T12:00:00",
-            "is_terminated": True,
-            "workflow_inputs": {},
-            "external_inputs": {},
-            "node_outputs": {
-                "StartNode.Outputs.final_value": "Hello, World!",
-                "NextNode.Outputs.final_value": "Score: 13",
-            },
-            "node_execution_cache": {
-                "node_executions_fulfilled": {
-                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
-                },
-                "node_executions_initiated": {
-                    f"{base_module}.workflow.StartNode": [str(start_node_span_id)],
-                    f"{base_module}.workflow.NextNode": [str(next_node_span_id)],
-                },
-                "node_executions_queued": {
-                    f"{base_module}.workflow.NextNode": [],
-                },
-                "dependencies_invoked": {
-                    str(next_node_span_id): [f"{base_module}.workflow.StartNode"],
-                },
-            },
-            "parent": None,
-        },
-        "score": 13,
-    }
-
-    assert events[10].name == "workflow.execution.fulfilled"
-    assert events[10].outputs == {"final_value": "Score: 13"}
-
-    assert len(events) == 11, final_event
+    assert len(events) == 9, final_event
 
     # AND the emitter should have emitted all of the expected state snapshots
     state_snapshots = list(emitter.state_snapshots)
-    assert len(state_snapshots) == 5
+    assert len(state_snapshots) == 3

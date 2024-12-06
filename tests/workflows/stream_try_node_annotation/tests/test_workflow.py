@@ -26,9 +26,7 @@ def test_workflow_stream__happy_path():
     WrappedNode = InnerNode.__wrapped_node__
 
     # workflow initiated events
-    workflow_initiated_events = [
-        e for e in events if e.name == "workflow.execution.initiated"
-    ]
+    workflow_initiated_events = [e for e in events if e.name == "workflow.execution.initiated"]
     assert workflow_initiated_events[0].workflow_definition == StreamingTryExample
     assert workflow_initiated_events[0].parent is None
     assert workflow_initiated_events[1].workflow_definition == InnerWorkflow
@@ -42,9 +40,7 @@ def test_workflow_stream__happy_path():
     # node initiated events
     node_initiated_events = [e for e in events if e.name == "node.execution.initiated"]
     assert node_initiated_events[0].node_definition == InnerNode
-    assert node_initiated_events[0].model_dump(mode="json")["body"][
-        "node_definition"
-    ] == {
+    assert node_initiated_events[0].model_dump(mode="json")["body"]["node_definition"] == {
         "name": "TryNode",
         "module": [
             "tests",
@@ -57,22 +53,16 @@ def test_workflow_stream__happy_path():
     }
     assert node_initiated_events[0].parent is not None
     assert node_initiated_events[0].parent.type == "WORKFLOW"
-    assert node_initiated_events[
-        0
-    ].parent.workflow_definition == CodeResourceDefinition.encode(StreamingTryExample)
+    assert node_initiated_events[0].parent.workflow_definition == CodeResourceDefinition.encode(StreamingTryExample)
     assert node_initiated_events[1].node_definition == WrappedNode
     assert node_initiated_events[1].parent is not None
     assert node_initiated_events[1].parent.type == "WORKFLOW"
-    assert node_initiated_events[
-        1
-    ].parent.workflow_definition == CodeResourceDefinition.encode(InnerWorkflow)
+    assert node_initiated_events[1].parent.workflow_definition == CodeResourceDefinition.encode(InnerWorkflow)
     assert len(node_initiated_events) == 2
 
     # inner node streaming events
     inner_node_streaming_events = [
-        e
-        for e in events
-        if e.name == "node.execution.streaming" and e.node_definition == WrappedNode
+        e for e in events if e.name == "node.execution.streaming" and e.node_definition == WrappedNode
     ]
     assert inner_node_streaming_events[0].output.name == "processed"
     assert inner_node_streaming_events[0].output.is_initiated
@@ -88,10 +78,7 @@ def test_workflow_stream__happy_path():
 
     # inner workflow streaming events
     inner_workflow_streaming_events = [
-        e
-        for e in events
-        if e.name == "workflow.execution.streaming"
-        and e.workflow_definition == InnerWorkflow
+        e for e in events if e.name == "workflow.execution.streaming" and e.workflow_definition == InnerWorkflow
     ]
     assert inner_workflow_streaming_events[0].output.name == "processed"
     assert inner_workflow_streaming_events[0].output.is_initiated
@@ -107,9 +94,7 @@ def test_workflow_stream__happy_path():
 
     # outer node streaming events
     outer_node_streaming_events = [
-        e
-        for e in events
-        if e.name == "node.execution.streaming" and e.node_definition == InnerNode
+        e for e in events if e.name == "node.execution.streaming" and e.node_definition == InnerNode
     ]
     assert outer_node_streaming_events[0].output.name == "processed"
     assert outer_node_streaming_events[0].output.is_initiated
@@ -125,10 +110,7 @@ def test_workflow_stream__happy_path():
 
     # outer workflow streaming events
     outer_workflow_streaming_events = [
-        e
-        for e in events
-        if e.name == "workflow.execution.streaming"
-        and e.workflow_definition == StreamingTryExample
+        e for e in events if e.name == "workflow.execution.streaming" and e.workflow_definition == StreamingTryExample
     ]
     assert outer_workflow_streaming_events[0].output.name == "final_value"
     assert outer_workflow_streaming_events[0].output.is_initiated
@@ -159,13 +141,9 @@ def test_workflow_stream__happy_path():
     assert len(node_fulfilled_events) == 2
 
     # workflow fulfilled events
-    workflow_fulfilled_events = [
-        e for e in events if e.name == "workflow.execution.fulfilled"
-    ]
+    workflow_fulfilled_events = [e for e in events if e.name == "workflow.execution.fulfilled"]
     assert workflow_fulfilled_events[0].workflow_definition == InnerWorkflow
-    assert workflow_fulfilled_events[0].outputs == {
-        "processed": ["apple apple", "banana banana", "cherry cherry"]
-    }
+    assert workflow_fulfilled_events[0].outputs == {"processed": ["apple apple", "banana banana", "cherry cherry"]}
     assert workflow_fulfilled_events[1].workflow_definition == StreamingTryExample
     assert workflow_fulfilled_events[1].outputs.final_value == [
         "apple apple",
@@ -174,4 +152,9 @@ def test_workflow_stream__happy_path():
     ]
     assert len(workflow_fulfilled_events) == 2
 
-    assert len(events) == 28
+    # workflow snapshotted events
+    workflow_snapshotted_events = [e for e in events if e.name == "workflow.execution.snapshotted"]
+    assert len(workflow_snapshotted_events) == 4
+
+    # AND the total number of events is correct
+    assert len(events) == 32

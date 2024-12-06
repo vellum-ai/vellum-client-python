@@ -77,6 +77,7 @@ class WorkflowRunner(Generic[StateType]):
             raise ValueError("Can only run a Workflow providing one of state or external inputs, not both")
 
         self.workflow = workflow
+        self._is_resuming = False
         if entrypoint_nodes:
             if len(list(entrypoint_nodes)) > 1:
                 raise ValueError("Cannot resume from multiple nodes")
@@ -99,6 +100,7 @@ class WorkflowRunner(Generic[StateType]):
                 for ei in external_inputs
                 if issubclass(ei.inputs_class.__parent_class__, BaseNode)
             ]
+            self._is_resuming = True
         else:
             normalized_inputs = deepcopy(inputs) if inputs else self.workflow.get_default_inputs()
             if state:
@@ -133,7 +135,7 @@ class WorkflowRunner(Generic[StateType]):
         self.workflow.context._register_event_queue(self._workflow_event_inner_queue)
 
     def _snapshot_state(self, state: StateType) -> StateType:
-        self._workflow_event_queue.put(
+        self._workflow_event_inner_queue.put(
             WorkflowExecutionSnapshottedEvent(
                 trace_id=state.meta.trace_id,
                 span_id=state.meta.span_id,
@@ -272,6 +274,14 @@ class WorkflowRunner(Generic[StateType]):
             invoked_ports = ports(outputs, node.state)
             node.state.meta.node_execution_cache.fulfill_node_execution(node.__class__, span_id)
 
+            for descriptor, output_value in outputs:
+                if output_value is UNDEF:
+                    if descriptor in node.state.meta.node_outputs:
+                        del node.state.meta.node_outputs[descriptor]
+                    continue
+
+                node.state.meta.node_outputs[descriptor] = output_value
+
             self._workflow_event_inner_queue.put(
                 NodeExecutionFulfilledEvent(
                     trace_id=node.state.meta.trace_id,
@@ -288,14 +298,6 @@ class WorkflowRunner(Generic[StateType]):
                     ),
                 )
             )
-
-            for descriptor, output_value in outputs:
-                if output_value is UNDEF:
-                    if descriptor in node.state.meta.node_outputs:
-                        del node.state.meta.node_outputs[descriptor]
-                    continue
-
-                node.state.meta.node_outputs[descriptor] = output_value
         except NodeException as e:
             self._workflow_event_inner_queue.put(
                 NodeExecutionRejectedEvent(
@@ -558,7 +560,6 @@ class WorkflowRunner(Generic[StateType]):
             )
             return
 
-        final_state.meta.is_terminated = True
         if rejection_error:
             self._workflow_event_outer_queue.put(self._reject_workflow_event(rejection_error))
             return
@@ -628,13 +629,12 @@ class WorkflowRunner(Generic[StateType]):
             cancel_thread.start()
 
         event: WorkflowEvent
-        if self._initial_state.meta.is_terminated or self._initial_state.meta.is_terminated is None:
-            event = self._initiate_workflow_event()
-        else:
+        if self._is_resuming:
             event = self._resume_workflow_event()
+        else:
+            event = self._initiate_workflow_event()
 
         yield self._emit_event(event)
-        self._initial_state.meta.is_terminated = False
 
         # The extra level of indirection prevents the runner from waiting on the caller to consume the event stream
         stream_thread = Thread(

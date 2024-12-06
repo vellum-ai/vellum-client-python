@@ -368,7 +368,8 @@ class WorkflowRunner(Generic[StateType]):
             worker_thread.start()
 
     def _handle_work_item_event(self, event: WorkflowEvent) -> Optional[VellumError]:
-        if event.name == "node.execution.initiated":
+        node = self._active_nodes_by_execution_id.get(event.span_id)
+        if not node:
             return None
 
         if event.name == "node.execution.rejected":
@@ -395,18 +396,17 @@ class WorkflowRunner(Generic[StateType]):
                     )
                 )
 
-            node = self._active_nodes_by_execution_id[event.span_id]
             self._handle_invoked_ports(node.state, event.invoked_ports)
 
             return None
 
         if event.name == "node.execution.fulfilled":
-            node = self._active_nodes_by_execution_id.pop(event.span_id)
+            self._active_nodes_by_execution_id.pop(event.span_id)
             self._handle_invoked_ports(node.state, event.invoked_ports)
 
             return None
 
-        raise ValueError(f"Invalid event name: {event.name}")
+        return None
 
     def _initiate_workflow_event(self) -> WorkflowExecutionInitiatedEvent:
         return WorkflowExecutionInitiatedEvent(

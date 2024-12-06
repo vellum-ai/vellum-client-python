@@ -292,7 +292,9 @@ export class GraphAttribute extends AstNode {
               }
             }
             return newSetAst;
-          } else if (
+          }
+
+          if (
             mutableAst.lhs.type == "port_reference" &&
             sourceNode &&
             mutableAst.lhs.reference.nodeContext == sourceNode
@@ -316,14 +318,27 @@ export class GraphAttribute extends AstNode {
                 ],
               };
             }
-          } else if (mutableAst.rhs.type === "node_reference") {
-            if (sourceNode && mutableAst.rhs.reference === sourceNode) {
-              return {
-                type: "right_shift",
-                lhs: mutableAst,
-                rhs: { type: "node_reference", reference: targetNode },
-              };
+            return;
+          }
+
+          const lhsTerminals = getAstTerminals(mutableAst.lhs);
+          const lhsTerminal = lhsTerminals[0];
+          if (!lhsTerminal) {
+            return;
+          }
+
+          const newRhs = addEdgeToGraph(mutableAst.rhs, lhsTerminal.reference);
+          if (newRhs) {
+            if (lhsTerminals.length > 1 && newRhs.type === "set") {
+              throw new Error(
+                "Adding an edge between two sets is not supported"
+              );
             }
+            return {
+              type: "right_shift",
+              lhs: mutableAst.lhs,
+              rhs: newRhs,
+            };
           }
         }
 

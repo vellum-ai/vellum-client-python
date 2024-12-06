@@ -135,13 +135,16 @@ class Inputs(BaseInputs):
 exports[`Inputs > write > should generate correct code when default is a 'SEARCH_RESULTS' 1`] = `
 "from vellum.workflows.inputs import BaseInputs
 from typing import List
-from vellum import SearchResult
+from vellum import SearchResult, Document
 
 
 class Inputs(BaseInputs):
     search_results_input: List[SearchResult] = [
         SearchResult(
-            text="Hello, World!", score=1, keywords=["foo", "bar"], document=document
+            text="Hello, World!",
+            score=1,
+            keywords=["foo", "bar"],
+            document=Document(id="", label="Example Document"),
         )
     ]
 "

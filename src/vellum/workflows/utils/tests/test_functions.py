@@ -1,3 +1,5 @@
+from typing import Union
+
 from vellum.client.types.function_definition import FunctionDefinition
 from vellum.workflows.utils.functions import compile_function_definition
 
@@ -39,5 +41,26 @@ def test_compile_function_definition__all_args():
                 "f": {"type": "object"},
             },
             "required": ["a", "b", "c", "d", "e", "f"],
+        },
+    )
+
+
+def test_compile_function_definition__unions():
+    # GIVEN a function with a union arg
+    def my_function(a: Union[str, int]):
+        pass
+
+    # WHEN compiling the function
+    compiled_function = compile_function_definition(my_function)
+
+    # THEN it should return the compiled function definition
+    assert compiled_function == FunctionDefinition(
+        name="my_function",
+        parameters={
+            "type": "object",
+            "properties": {
+                "a": {"anyOf": [{"type": "string"}, {"type": "integer"}]},
+            },
+            "required": ["a"],
         },
     )

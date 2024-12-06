@@ -7,6 +7,7 @@ import { PortContext } from "src/context/port-context";
 import { generateSdkModulePaths } from "src/context/workflow-context/sdk-module-paths";
 import { SDK_MODULE_PATHS } from "src/context/workflow-context/types";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
+import { NodeNotFoundError } from "src/generators/errors";
 import { BaseNode } from "src/generators/nodes/bases";
 import {
   EntrypointNode,
@@ -208,7 +209,7 @@ export class WorkflowContext {
     const nodeContext = this.nodeContextsByNodeId.get(nodeId);
 
     if (!nodeContext) {
-      throw new Error(`Node context not found for node ID: ${nodeId}`);
+      throw new NodeNotFoundError(`Failed to find node with id '${nodeId}'`);
     }
 
     return nodeContext as BaseNodeContext<T>;
@@ -235,8 +236,9 @@ export class WorkflowContext {
   }
 
   public async getMLModelNameById(mlModelId: string): Promise<string> {
-    if (this.mlModelNamesById[mlModelId]) {
-      return this.mlModelNamesById[mlModelId];
+    const mlModelName = this.mlModelNamesById[mlModelId];
+    if (mlModelName) {
+      return mlModelName;
     }
 
     const mlModel = await new MlModels({ apiKey: this.vellumApiKey }).retrieve(

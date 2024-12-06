@@ -15,6 +15,7 @@ import {
   SubworkflowNode,
   NoteNode,
   ErrorNode,
+  NodeInputValuePointerRule,
   PromptTemplateBlock,
 } from "src/types/vellum";
 
@@ -565,12 +566,14 @@ export function templatingNodeFactory({
   sourceHandleId,
   targetHandleId,
   errorOutputId,
+  inputRules,
 }: {
   id?: string;
   label?: string;
   sourceHandleId?: string;
   targetHandleId?: string;
   errorOutputId?: string;
+  inputRules?: NodeInputValuePointerRule[];
 } = {}): TemplatingNode {
   const nodeData: TemplatingNode = {
     id: id ?? "7e09927b-6d6f-4829-92c9-54e66bdcaf80",
@@ -589,7 +592,7 @@ export function templatingNodeFactory({
         id: "7b8af68b-cf60-4fca-9c57-868042b5b616",
         key: "text",
         value: {
-          rules: [
+          rules: inputRules ?? [
             {
               type: "CONSTANT_VALUE",
               data: {

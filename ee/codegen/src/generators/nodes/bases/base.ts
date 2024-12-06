@@ -5,6 +5,10 @@ import * as codegen from "src/codegen";
 import { PORTS_CLASS_NAME } from "src/constants";
 import { WorkflowContext } from "src/context";
 import { BaseNodeContext } from "src/context/node-context/base";
+import {
+  BaseCodegenError,
+  NodeAttributeGenerationError,
+} from "src/generators/errors";
 import { NodeDisplayData } from "src/generators/node-display-data";
 import { NodeInput } from "src/generators/node-inputs/node-input";
 import { WorkflowProjectGenerator } from "src/project";
@@ -140,12 +144,21 @@ export abstract class BaseNode<
     }
 
     this.nodeData.inputs.forEach((nodeInputData) => {
-      const nodeInput = codegen.nodeInput({
-        workflowContext: this.workflowContext,
-        nodeInputData,
-      });
+      try {
+        const nodeInput = codegen.nodeInput({
+          workflowContext: this.workflowContext,
+          nodeInputData,
+        });
 
-      generatedNodeInputs.set(nodeInputData.key, nodeInput);
+        generatedNodeInputs.set(nodeInputData.key, nodeInput);
+      } catch (error) {
+        if (error instanceof BaseCodegenError) {
+          throw new NodeAttributeGenerationError(
+            `Failed to generate attribute '${this.nodeContext.nodeClassName}.inputs.${nodeInputData.key}': ${error.message}`
+          );
+        }
+        throw error;
+      }
     });
 
     return generatedNodeInputs;

@@ -13,9 +13,7 @@ class BaseNoteNodeDisplay(BaseNodeVellumDisplay[_NoteNodeType], Generic[_NoteNod
     text: ClassVar[str] = ""
     style: ClassVar[Union[Dict[str, Any], None]] = None
 
-    def serialize(
-        self, display_context: WorkflowDisplayContext, **kwargs: Any
-    ) -> JsonObject:
+    def serialize(self, display_context: WorkflowDisplayContext, **kwargs: Any) -> JsonObject:
         node_id = self.node_id
 
         return {

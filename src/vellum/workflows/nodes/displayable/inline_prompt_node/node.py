@@ -26,6 +26,7 @@ class InlinePromptNode(BaseInlinePromptNode[StateType]):
 
         text: str - The result of the Prompt Execution
         """
+
         text: str
 
     def run(self) -> Iterator[BaseOutput]:

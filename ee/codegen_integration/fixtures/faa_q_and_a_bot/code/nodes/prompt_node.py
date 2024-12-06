@@ -43,11 +43,7 @@ class PromptNode(InlinePromptNode):
                 RichTextPromptBlock(
                     state="ENABLED",
                     cache_config=None,
-                    blocks=[
-                        VariablePromptBlock(
-                            state="ENABLED", cache_config=None, input_variable="var_1"
-                        )
-                    ],
+                    blocks=[VariablePromptBlock(state="ENABLED", cache_config=None, input_variable="var_1")],
                 )
             ],
         ),
@@ -68,9 +64,7 @@ class PromptNode(InlinePromptNode):
                 "schema": {
                     "type": "object",
                     "required": ["classification"],
-                    "properties": {
-                        "classification": {"type": "string", "description": ""}
-                    },
+                    "properties": {"classification": {"type": "string", "description": ""}},
                 },
             },
         },

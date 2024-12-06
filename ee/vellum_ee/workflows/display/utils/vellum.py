@@ -4,9 +4,7 @@ import typing
 from typing import Any, List, Union, cast
 
 from vellum import ChatMessage, SearchResult, SearchResultRequest, VellumVariableType
-from vellum.client.types.array_vellum_value import ArrayVellumValue
 from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.nodes.core.map_node.node import MapNodeItemType
 from vellum.workflows.references import OutputReference, WorkflowInputReference
 from vellum.workflows.references.execution_count import ExecutionCountReference
 from vellum.workflows.references.node import NodeReference
@@ -48,7 +46,7 @@ def infer_vellum_variable_type(value: Any) -> VellumVariableType:
                     f"Expected NodeReference {descriptor.name} to have an instance pointing to a descriptor"
                 )
             descriptor = descriptor.instance
-        
+
         inferred_type = primitive_type_to_vellum_variable_type(descriptor)
     else:
         vellum_variable_value = primitive_to_vellum_value(value)
@@ -68,9 +66,7 @@ def create_node_input_value_pointer_rule(
         )
     if isinstance(value, WorkflowInputReference):
         workflow_input_display = display_context.workflow_input_displays[value]
-        return InputVariablePointer(
-            data=InputVariableData(input_variable_id=str(workflow_input_display.id))
-        )
+        return InputVariablePointer(data=InputVariableData(input_variable_id=str(workflow_input_display.id)))
     if isinstance(value, VellumSecretReference):
         # TODO: Pass through the name instead of retrieving the ID
         # https://app.shortcut.com/vellum/story/5072

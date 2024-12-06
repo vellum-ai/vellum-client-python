@@ -58,7 +58,13 @@ pytest = "^7.4.0"
 pytest-asyncio = "^0.23.5"
 python-dateutil = "^2.9.0"
 types-python-dateutil = "^2.9.0.20240316"
+black = "24.8.0"
 deepdiff = "8.0.1"
+flake8 = "7.1.1"
+flake8-breakpoint = "1.1.0"
+flake8-isort = "6.1.1"
+flake8-print = "5.0.0"
+flake8-pyproject = "1.2.3"
 ipdb = "0.13.13"
 ipython = "8.12.3"
 isort = "5.13.2"
@@ -102,6 +108,7 @@ build-backend = "poetry.core.masonry.api"
 vellum = "vellum_cli:main"
 
 [tool.isort]
+skip = ["src/vellum/client", "tests/client", ".venv", "src/vellum/__init__.py"]
 multi_line_output = 3
 force_grid_wrap = 0
 line_length = 120
@@ -115,3 +122,16 @@ known_vellum = ["vellum", "vellum_cli", "vellum_ee"]
 default_section = "THIRDPARTY"
 sections = ["FUTURE", "TESTING", "STDLIB", "TYPING", "THIRDPARTY", "VELLUM", "FIRSTPARTY", "LOCALFOLDER"]
 no_lines_before = ["STDLIB", "TYPING"]
+
+[tool.black]
+line-length = 120
+target-version = [
+    "py38",
+]
+include = ".*\\.py$"
+exclude = "(.git|venv|src/vellum/client|tests/client|scripts)"
+
+[tool.flake8]
+max-line-length = 120
+exclude = ".git,.venv,ee/codegen/node_modules,ee/codegen_integration/fixtures,scripts,src/vellum/__init__.py,src/vellum/client,src/vellum/core,src/vellum/environment.py,src/vellum/errors,src/vellum/resources,src/vellum/types,tests/client"
+ignore = "E203, W503, E704"

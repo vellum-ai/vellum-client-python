@@ -30,9 +30,7 @@ def test_try_node__on_error_code__successfully_caught():
     assert len(outputs) == 2
     assert set(outputs) == {
         BaseOutput(name="value"),
-        BaseOutput(
-            name="error", value=VellumError(message="This will be caught", code=VellumErrorCode.PROVIDER_ERROR)
-        ),
+        BaseOutput(name="error", value=VellumError(message="This will be caught", code=VellumErrorCode.PROVIDER_ERROR)),
     }
 
 

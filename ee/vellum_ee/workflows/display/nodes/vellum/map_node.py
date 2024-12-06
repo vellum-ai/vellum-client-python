@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Collection, Dict, Generic, List, Optional, TypeVar, cast
+from typing import Dict, Generic, List, Optional, TypeVar, cast
 
 from vellum.workflows.nodes import MapNode
 from vellum.workflows.types.core import JsonObject
@@ -39,15 +39,21 @@ class BaseMapNodeDisplay(BaseNodeVellumDisplay[_MapNodeType], Generic[_MapNodeTy
         renamed_input_variables = []
         for input_variable in cast(List[Dict[str, str]], serialized_subworkflow["input_variables"]):
             if input_variable["key"] == "all_items":
-                renamed_item = { **input_variable, "key": "items" }
+                renamed_item = {**input_variable, "key": "items"}
                 renamed_input_variables.append(renamed_item)
             else:
                 renamed_input_variables.append(input_variable)
 
         # Note: This must match the items input ID for the map node's node input
-        items_workflow_input_id = next(input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "items")
-        item_workflow_input_id = next(input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "item")
-        index_workflow_input_id = next(input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "index")
+        items_workflow_input_id = next(
+            input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "items"
+        )
+        item_workflow_input_id = next(
+            input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "item"
+        )
+        index_workflow_input_id = next(
+            input_variable["id"] for input_variable in renamed_input_variables if input_variable["key"] == "index"
+        )
 
         return {
             "id": str(node_id),

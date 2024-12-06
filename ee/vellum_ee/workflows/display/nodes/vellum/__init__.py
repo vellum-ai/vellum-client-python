@@ -32,5 +32,5 @@ __all__ = [
     "BaseSearchNodeDisplay",
     "BaseSubworkflowDeploymentNodeDisplay",
     "BaseTemplatingNodeDisplay",
-    "BaseTryNodeDisplay"
+    "BaseTryNodeDisplay",
 ]

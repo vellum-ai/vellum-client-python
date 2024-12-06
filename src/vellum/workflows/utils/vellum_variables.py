@@ -40,8 +40,8 @@ def primitive_type_to_vellum_variable_type(type_: Union[Type, BaseDescriptor]) -
                 int,
                 float,
                 str,
-                typing.List[typing.ForwardRef('Json')],  # type: ignore [misc]
-                typing.Dict[str, typing.ForwardRef('Json')],  # type: ignore [misc]
+                typing.List[typing.ForwardRef("Json")],  # type: ignore [misc]
+                typing.Dict[str, typing.ForwardRef("Json")],  # type: ignore [misc]
             ]:
                 return "JSON"
             raise ValueError(f"Expected Descriptor to only have one type, got {types}")

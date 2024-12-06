@@ -20,10 +20,6 @@ class TemplatingNode15Display(BaseTemplatingNodeDisplay[TemplatingNode15]):
         "arrival_airport": UUID("b2aef5a8-526a-4b48-8f35-6984077c48df"),
     }
     port_displays = {
-        TemplatingNode15.Ports.default: PortDisplayOverrides(
-            id=UUID("8eaafb2e-a666-4dc9-96c3-52839df75632")
-        )
+        TemplatingNode15.Ports.default: PortDisplayOverrides(id=UUID("8eaafb2e-a666-4dc9-96c3-52839df75632"))
     }
-    display_data = NodeDisplayData(
-        position=NodeDisplayPosition(x=3304, y=1043), width=461, height=327
-    )
+    display_data = NodeDisplayData(position=NodeDisplayPosition(x=3304, y=1043), width=461, height=327)

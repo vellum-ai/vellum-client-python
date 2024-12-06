@@ -14,7 +14,6 @@ from vellum import (
     PromptRequestStringInput,
     VellumVariable,
 )
-
 from vellum.workflows.constants import OMIT
 from vellum.workflows.errors import VellumErrorCode
 from vellum.workflows.exceptions import NodeException

@@ -15,6 +15,12 @@ jobs:
         run: make setup-poetry
       - name: Install dependencies
         run: poetry install
+      - name: Format
+        run: poetry run black --check .
+      - name: Order Imports
+        run: poetry run isort --check .
+      - name: Lint
+        run: poetry run flake8
       - name: Compile
         run: poetry run mypy .
   test:

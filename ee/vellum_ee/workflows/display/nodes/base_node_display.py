@@ -100,8 +100,9 @@ class BaseNodeDisplay(Generic[NodeType]):
             if origin is dict and isinstance(node_display_attribute, dict):
                 if len(args) == 2:
                     key_type, value_type = args
-                    if all(isinstance(k, key_type) and isinstance(v, value_type) for k, v in
-                           node_display_attribute.items()):
+                    if all(
+                        isinstance(k, key_type) and isinstance(v, value_type) for k, v in node_display_attribute.items()
+                    ):
                         return cast(_NodeDisplayAttrType, node_display_attribute)
                 raise ValueError(f"Node {cls.__name__} must define an explicit {attribute} of type {attribute_type}.")
 

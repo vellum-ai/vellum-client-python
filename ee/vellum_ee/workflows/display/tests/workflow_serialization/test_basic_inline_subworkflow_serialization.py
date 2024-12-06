@@ -40,7 +40,7 @@ def test_serialize_workflow():
                 "type": "STRING",
                 "required": True,
                 "default": None,
-                "extensions": { "color": None },
+                "extensions": {"color": None},
             },
             {
                 "id": "aba1e6e0-dfa7-4c15-a4e6-aec6feebfaca",
@@ -48,7 +48,7 @@ def test_serialize_workflow():
                 "type": "STRING",
                 "required": True,
                 "default": None,
-                "extensions": { "color": None },
+                "extensions": {"color": None},
             },
         ],
         input_variables,
@@ -339,9 +339,13 @@ def test_serialize_workflow():
         ignore_order=True,
     )
 
-    temperature_terminal_node = next(node for node in workflow_raw_data["nodes"][2:] if node['data']['name'] == 'temperature')
-    reasoning_terminal_node = next(node for node in workflow_raw_data["nodes"][2:] if node['data']['name'] == 'reasoning')
-    
+    temperature_terminal_node = next(
+        node for node in workflow_raw_data["nodes"][2:] if node["data"]["name"] == "temperature"
+    )
+    reasoning_terminal_node = next(
+        node for node in workflow_raw_data["nodes"][2:] if node["data"]["name"] == "reasoning"
+    )
+
     assert not DeepDiff(
         {
             "id": "31b74695-3f1c-47cf-8be8-a4d86cc589e8",
@@ -402,70 +406,70 @@ def test_serialize_workflow():
         ignore_order=True,
         # TODO: Make sure this output ID matches the workflow output ID of the subworkflow node's workflow
         # https://app.shortcut.com/vellum/story/5660/fix-output-id-in-subworkflow-nodes
-        exclude_regex_paths=r"root\['inputs'\]\[0\]\['value'\]\['rules'\]\[0\]\['data'\]\['output_id'\]"
+        exclude_regex_paths=r"root\['inputs'\]\[0\]\['value'\]\['rules'\]\[0\]\['data'\]\['output_id'\]",
     )
 
     assert not DeepDiff(
         {
-                "id": "0779b232-82ab-4dbe-a340-6a85e6ab3368",
-                "type": "TERMINAL",
-                "definition": {
-                    "bases": [
-                        {
-                            "bases": [],
-                            "module": [
-                                "vellum",
-                                "workflows",
-                                "nodes",
-                                "bases",
-                                "base",
-                            ],
-                            "name": "BaseNode",
-                        },
-                    ],
-                    "module": [
-                        "vellum",
-                        "workflows",
-                        "nodes",
-                        "displayable",
-                        "final_output_node",
-                        "node",
-                    ],
-                    "name": "FinalOutputNode",
-                },
-                "data": {
-                    "label": "Final Output",
-                    "name": "temperature",
-                    "target_handle_id": "9e077063-c394-4c7b-b0c6-e6686df67984",
-                    "output_id": "99afb757-2782-465d-ab55-80ccf50552b9",
-                    "output_type": "NUMBER",
-                    "node_input_id": "df0d7e0c-2b37-4059-91c1-0419f950b7fe",
-                },
-                "inputs": [
+            "id": "0779b232-82ab-4dbe-a340-6a85e6ab3368",
+            "type": "TERMINAL",
+            "definition": {
+                "bases": [
                     {
-                        "id": "df0d7e0c-2b37-4059-91c1-0419f950b7fe",
-                        "key": "node_input",
-                        "value": {
-                            "rules": [
-                                {
-                                    "type": "NODE_OUTPUT",
-                                    "data": {
-                                        "node_id": "080e4343-c7ce-4f82-b9dd-e94c8cc92239",
-                                        "output_id": "2fc57139-7420-49e5-96a6-dcbb3ff5d622",
-                                    },
-                                }
-                            ],
-                            "combinator": "OR",
-                        },
-                    }
+                        "bases": [],
+                        "module": [
+                            "vellum",
+                            "workflows",
+                            "nodes",
+                            "bases",
+                            "base",
+                        ],
+                        "name": "BaseNode",
+                    },
                 ],
-                "display_data": {"position": {"x": 0.0, "y": 0.0}},
+                "module": [
+                    "vellum",
+                    "workflows",
+                    "nodes",
+                    "displayable",
+                    "final_output_node",
+                    "node",
+                ],
+                "name": "FinalOutputNode",
             },
+            "data": {
+                "label": "Final Output",
+                "name": "temperature",
+                "target_handle_id": "9e077063-c394-4c7b-b0c6-e6686df67984",
+                "output_id": "99afb757-2782-465d-ab55-80ccf50552b9",
+                "output_type": "NUMBER",
+                "node_input_id": "df0d7e0c-2b37-4059-91c1-0419f950b7fe",
+            },
+            "inputs": [
+                {
+                    "id": "df0d7e0c-2b37-4059-91c1-0419f950b7fe",
+                    "key": "node_input",
+                    "value": {
+                        "rules": [
+                            {
+                                "type": "NODE_OUTPUT",
+                                "data": {
+                                    "node_id": "080e4343-c7ce-4f82-b9dd-e94c8cc92239",
+                                    "output_id": "2fc57139-7420-49e5-96a6-dcbb3ff5d622",
+                                },
+                            }
+                        ],
+                        "combinator": "OR",
+                    },
+                }
+            ],
+            "display_data": {"position": {"x": 0.0, "y": 0.0}},
+        },
         temperature_terminal_node,
         ignore_order=True,
         # TODO: Make sure this output ID matches the workflow output ID of the subworkflow node's workflow
         # https://app.shortcut.com/vellum/story/5660/fix-output-id-in-subworkflow-nodes
-        exclude_regex_paths=r"root\['inputs'\]\[0\]\['value'\]\['rules'\]\[0\]\['data'\]\['output_id'\]"
+        exclude_regex_paths=r"root\['inputs'\]\[0\]\['value'\]\['rules'\]\[0\]\['data'\]\['output_id'\]",
     )
 
     # AND each edge should be serialized correctly

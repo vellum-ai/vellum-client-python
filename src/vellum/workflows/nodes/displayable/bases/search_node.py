@@ -12,7 +12,6 @@ from vellum import (
     SearchWeightsRequest,
 )
 from vellum.core import ApiError, RequestOptions
-
 from vellum.workflows.errors import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode

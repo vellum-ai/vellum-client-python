@@ -2,8 +2,9 @@ import pytest
 
 from pytest_mock import MockerFixture
 
-from tests.workflows.basic_try_node_annotation.workflow import SimpleTryExample
 from vellum.workflows.errors.types import VellumError, VellumErrorCode
+
+from tests.workflows.basic_try_node_annotation.workflow import SimpleTryExample
 
 
 @pytest.fixture

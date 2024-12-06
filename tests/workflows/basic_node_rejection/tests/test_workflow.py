@@ -1,5 +1,6 @@
-from tests.workflows.basic_node_rejection.workflow import BasicRejectedWorkflow
 from vellum.workflows.errors import VellumErrorCode
+
+from tests.workflows.basic_node_rejection.workflow import BasicRejectedWorkflow
 
 
 def test_run_workflow__happy_path():

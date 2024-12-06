@@ -2,8 +2,9 @@ from unittest import mock
 
 import requests_mock.mocker
 
-from tests.workflows.basic_vellum_api_node.workflow import SimpleAPIWorkflow
 from vellum.workflows.references.vellum_secret import VellumSecretReference
+
+from tests.workflows.basic_vellum_api_node.workflow import SimpleAPIWorkflow
 
 
 def test_run_workflow__happy_path(requests_mock: requests_mock.mocker.Mocker):

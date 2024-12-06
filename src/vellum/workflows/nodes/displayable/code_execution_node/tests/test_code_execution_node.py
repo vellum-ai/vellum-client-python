@@ -1,7 +1,6 @@
 import os
 
 from vellum import CodeExecutorResponse, NumberVellumValue, StringInput
-
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.displayable.code_execution_node import CodeExecutionNode
 from vellum.workflows.references.vellum_secret import VellumSecretReference

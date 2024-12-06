@@ -43,7 +43,7 @@ def test_serialize_workflow__missing_final_output_node():
                 "type": "STRING",
                 "required": True,
                 "default": None,
-                "extensions": { "color": None },
+                "extensions": {"color": None},
             },
             {
                 "id": "a8b6c5d4-a0e9-4457-834b-46b633c466a6",
@@ -51,7 +51,7 @@ def test_serialize_workflow__missing_final_output_node():
                 "type": "STRING",
                 "required": True,
                 "default": None,
-                "extensions": { "color": None },
+                "extensions": {"color": None},
             },
         ],
         input_variables,

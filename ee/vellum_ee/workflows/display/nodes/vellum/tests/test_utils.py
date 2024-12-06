@@ -2,6 +2,11 @@ import pytest
 from uuid import UUID, uuid4
 from typing import List, cast
 
+from vellum.workflows.descriptors.base import BaseDescriptor
+from vellum.workflows.inputs import BaseInputs
+from vellum.workflows.nodes.bases import BaseNode
+from vellum.workflows.outputs import BaseOutputs
+from vellum.workflows.references import OutputReference, WorkflowInputReference
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.types import NodeOutputDisplay
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input_value_pointer_rules
@@ -19,11 +24,6 @@ from vellum_ee.workflows.display.vellum import (
     WorkflowMetaVellumDisplay,
 )
 from vellum_ee.workflows.display.workflows.vellum_workflow_display import VellumWorkflowDisplay
-from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.inputs import BaseInputs
-from vellum.workflows.nodes.bases import BaseNode
-from vellum.workflows.outputs import BaseOutputs
-from vellum.workflows.references import OutputReference, WorkflowInputReference
 
 
 class Inputs(BaseInputs):

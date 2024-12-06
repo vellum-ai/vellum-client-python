@@ -87,6 +87,7 @@ class TemplatingNode(BaseNode[StateType], Generic[StateType, _OutputType], metac
 
         result: _OutputType - The result of the template rendering
         """
+
         # We use our mypy plugin to override the _OutputType with the actual output type
         # for downstream references to this output.
         result: _OutputType  # type: ignore[valid-type]

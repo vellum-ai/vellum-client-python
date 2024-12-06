@@ -8,7 +8,7 @@ from vellum.workflows.errors.types import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs import BaseOutputs
-from vellum.workflows.types.core import Json, JsonObject, VellumSecret
+from vellum.workflows.types.core import Json, VellumSecret
 from vellum.workflows.types.generics import StateType
 
 

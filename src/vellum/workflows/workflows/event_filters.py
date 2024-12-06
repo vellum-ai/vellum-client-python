@@ -7,9 +7,7 @@ if TYPE_CHECKING:
     from vellum.workflows.workflows.base import BaseWorkflow
 
 
-def workflow_event_filter(
-    workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent"
-) -> bool:
+def workflow_event_filter(workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent") -> bool:
     """
     Filters for only Workflow events that were emitted by the `workflow_definition` parameter.
     """
@@ -27,9 +25,7 @@ def workflow_event_filter(
     return False
 
 
-def root_workflow_event_filter(
-    workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent"
-) -> bool:
+def root_workflow_event_filter(workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent") -> bool:
     """
     Filters for Workflow and Node events that were emitted by the `workflow_definition` parameter.
     """
@@ -50,12 +46,8 @@ def root_workflow_event_filter(
     if event.parent.type != "WORKFLOW":
         return False
 
-    return event.parent.workflow_definition == CodeResourceDefinition.encode(
-        workflow_definition
-    )
+    return event.parent.workflow_definition == CodeResourceDefinition.encode(workflow_definition)
 
 
-def all_workflow_event_filter(
-    workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent"
-) -> bool:
+def all_workflow_event_filter(workflow_definition: Type["BaseWorkflow"], event: "WorkflowEvent") -> bool:
     return True

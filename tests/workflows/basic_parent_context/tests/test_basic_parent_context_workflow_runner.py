@@ -12,7 +12,7 @@ def test_run_workflow__happy_path():
     terminal_event = workflow.run()
 
     assert terminal_event.name == "workflow.execution.fulfilled"
-    assert terminal_event.parent == None
+    assert terminal_event.parent is None
 
 
 def test_stream_workflow__happy_path():
@@ -59,9 +59,7 @@ def test_stream_workflow__happy_path_inital_context():
     assert initial_parent_context.parent is not None
     assert isinstance(initial_parent_context.node_definition, CodeResourceDefinition)
 
-    workflow = TrivialWorkflow(
-        context=WorkflowContext(_parent_context=initial_parent_context)
-    )
+    workflow = TrivialWorkflow(context=WorkflowContext(_parent_context=initial_parent_context))
 
     events = list(workflow.stream(event_filter=root_workflow_event_filter))
 

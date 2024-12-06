@@ -12,9 +12,9 @@ from vellum import (
     StringInputRequest,
     StringVellumValue,
 )
+from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
 
 from tests.workflows.basic_prompt_deployment.workflow import BasicPromptDeploymentWorkflow, Inputs
-from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
 
 
 def test_run_workflow__happy_path(vellum_client):

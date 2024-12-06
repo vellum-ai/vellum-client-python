@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Any, ClassVar, Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union, cast
+from typing import ClassVar, Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union, cast
 
 from vellum import PromptBlock, RichTextChildBlock, VellumVariable
 from vellum.workflows.nodes import InlinePromptNode

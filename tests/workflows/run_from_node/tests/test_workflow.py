@@ -1,5 +1,6 @@
-from tests.workflows.run_from_node.workflow import NextNode, RunFromNodeWorkflow, StartNode
 from vellum.workflows.state.base import BaseState, StateMeta
+
+from tests.workflows.run_from_node.workflow import NextNode, RunFromNodeWorkflow, StartNode
 
 
 def test_run_workflow__happy_path():

@@ -6,7 +6,7 @@ from vellum.workflows.references import VellumSecretReference
 
 
 class APINode(BaseAPINode):
-    url = TemplatingNode.Outputs.result  #type: ignore
+    url = TemplatingNode.Outputs.result  # type: ignore
     method = APIRequestMethod.GET
     json = None
     headers = {}

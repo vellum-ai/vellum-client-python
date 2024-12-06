@@ -36,26 +36,18 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
     workflow_display = WorkflowMetaVellumDisplayOverrides(
         entrypoint_node_id=UUID("81ec43d2-49ec-47ce-b953-faaec3a22c63"),
         entrypoint_node_source_handle_id=UUID("6888c8eb-9dba-42b4-94d4-52900edcfeea"),
-        entrypoint_node_display=NodeDisplayData(
-            position=NodeDisplayPosition(x=0, y=388.75), width=124, height=48
-        ),
+        entrypoint_node_display=NodeDisplayData(position=NodeDisplayPosition(x=0, y=388.75), width=124, height=48),
         display_data=WorkflowDisplayData(
-            viewport=WorkflowDisplayDataViewport(
-                x=-3043.2099511931765, y=-458.8278903628302, zoom=0.9343894537129058
-            )
+            viewport=WorkflowDisplayDataViewport(x=-3043.2099511931765, y=-458.8278903628302, zoom=0.9343894537129058)
         ),
     )
     inputs_display = {
-        Inputs.chat_history: WorkflowInputsVellumDisplayOverrides(
-            id=UUID("d4663e15-8871-42d8-8ef7-59baff2cd436")
-        )
+        Inputs.chat_history: WorkflowInputsVellumDisplayOverrides(id=UUID("d4663e15-8871-42d8-8ef7-59baff2cd436"))
     }
     entrypoint_displays = {
         MostRecentMessage: EntrypointVellumDisplayOverrides(
             id=UUID("81ec43d2-49ec-47ce-b953-faaec3a22c63"),
-            edge_display=EdgeVellumDisplayOverrides(
-                id=UUID("2ea073be-8a97-431d-8878-27309f0ac8c0")
-            ),
+            edge_display=EdgeVellumDisplayOverrides(id=UUID("2ea073be-8a97-431d-8878-27309f0ac8c0")),
         )
     }
     edge_displays = {
@@ -120,9 +112,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
             name="answer",
             label="Final Output 2",
             target_handle_id=UUID("87d73dc6-cafd-4f8b-b2fd-8367baba5d61"),
-            display_data=NodeDisplayData(
-                position=NodeDisplayPosition(x=5134, y=443), width=480, height=271
-            ),
+            display_data=NodeDisplayData(position=NodeDisplayPosition(x=5134, y=443), width=480, height=271),
             edge_id=UUID("9e19ee9e-24a6-47e7-8b10-44781a53018f"),
         )
     }

@@ -92,7 +92,8 @@ def pull_command(
 
     if include_json:
         logger.warning(
-            "The pulled JSON representation of the Workflow should be used for debugging purposely only. Its schema should be considered unstable and subject to change at any time."
+            """The pulled JSON representation of the Workflow should be used for debugging purposely only. \
+Its schema should be considered unstable and subject to change at any time."""
         )
 
     if save_lock_file:

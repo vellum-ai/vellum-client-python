@@ -1,7 +1,7 @@
 from typing import Optional, Type
 
-from vellum_ee.workflows.display.types import NodeDisplayType
 from vellum.workflows.types.generics import NodeType
+from vellum_ee.workflows.display.types import NodeDisplayType
 
 
 def get_node_display_class(

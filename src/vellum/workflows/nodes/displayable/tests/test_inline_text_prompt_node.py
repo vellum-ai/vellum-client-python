@@ -138,10 +138,13 @@ def test_inline_text_prompt_node__catch_provider_error(vellum_adhoc_prompt_clien
     outputs = list(node.run())
 
     # THEN the node should have produced the outputs we expect
-    assert BaseOutput(
-        name="error",
-        value=SdkVellumError(
-            message="OpenAI failed",
-            code=VellumErrorCode.PROVIDER_ERROR,
-        ),
-    ) in outputs
+    assert (
+        BaseOutput(
+            name="error",
+            value=SdkVellumError(
+                message="OpenAI failed",
+                code=VellumErrorCode.PROVIDER_ERROR,
+            ),
+        )
+        in outputs
+    )

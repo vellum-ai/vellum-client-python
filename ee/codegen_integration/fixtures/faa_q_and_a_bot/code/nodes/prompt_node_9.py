@@ -40,9 +40,7 @@ class PromptNode9(InlinePromptNode):
                             cache_config=None,
                             text="\n\nPolicy Quotes:\n-----------------------\n",
                         ),
-                        VariablePromptBlock(
-                            state="ENABLED", cache_config=None, input_variable="context"
-                        ),
+                        VariablePromptBlock(state="ENABLED", cache_config=None, input_variable="context"),
                     ],
                 ),
                 RichTextPromptBlock(

@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import Callable, Generator, Generic, List, TypeVar, Union
 
-
 Result = TypeVar("Result")
 
 

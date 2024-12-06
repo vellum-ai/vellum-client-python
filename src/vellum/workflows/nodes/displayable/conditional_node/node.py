@@ -15,7 +15,7 @@ class ConditionalNode(BaseNode):
     """
 
     class Ports(NodePorts):
-        def __call__(self, outputs: BaseOutputs, state: BaseState) -> Set[Port]:    
+        def __call__(self, outputs: BaseOutputs, state: BaseState) -> Set[Port]:
             all_ports = [port for port in self.__class__]
             enforce_single_invoked_port = validate_ports(all_ports)
 

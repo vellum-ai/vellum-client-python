@@ -21,25 +21,37 @@ repos:
       - id: pyupgrade
         args: [--keep-runtime-typing]
 
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+
   - repo: local
     hooks:
-        - id: forbid-future-annotations
-          name: Forbid `from __future__ import annotations`
-          entry: |
-            bash -c "
-            if grep -r 'from __future__ import annotations' workflows/ examples/ codegen/; then
-            echo 'Error: from __future__ import annotations is not allowed in workflows/, examples/, or codegen/ directories.';
-            exit 1;
-            else
-            exit 0;
-            fi"
-          language: system
-          types: [ python ]
+      - id: forbid-future-annotations
+        name: Forbid `from __future__ import annotations`
+        entry: |
+          bash -c "
+          if grep -r 'from __future__ import annotations' workflows/ examples/ codegen/; then
+          echo 'Error: from __future__ import annotations is not allowed in workflows/, examples/, or codegen/ directories.';
+          exit 1;
+          else
+          exit 0;
+          fi"
+        language: system
+        types: [python]
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.2
     hooks:
       - id: isort
+
+  - repo: local
+    hooks:
+      - id: flake8
+        name: flake8
+        entry: bash -c "poetry run flake8"
+        language: system
 
   - repo: local
     hooks:

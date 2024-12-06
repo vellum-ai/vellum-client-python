@@ -63,11 +63,11 @@ class AwaitAnyWithConditionalLoopsWorkflow(BaseWorkflow):
               TopNode                       StartNode
              /       \                     /
     StartNode         MergeNode >> LoopNode
-            \       /                      \ 
+            \       /                      \
             BottomNode                      ExitNode
-                     \ 
+                     \
                     BottomDeadEndNode
-    
+
     On the first iteration, the TopNode will complete and invoke the MergeNode, the BottomNode will deadend.
     On the second iteration, the BottomNode will complete and invoke the MergeNode, the TopNode will deadend.
 

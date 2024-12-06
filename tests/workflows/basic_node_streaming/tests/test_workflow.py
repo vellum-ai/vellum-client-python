@@ -9,9 +9,7 @@ def test_run_workflow__happy_path():
 
     # WHEN the workflow is run
     inputs = Inputs(foo="Hello")
-    events = list(
-        workflow.stream(event_filter=all_workflow_event_filter, inputs=inputs)
-    )
+    events = list(workflow.stream(event_filter=all_workflow_event_filter, inputs=inputs))
 
     # THEN the workflow should have emitted 14 events
     #

@@ -109,7 +109,7 @@ class WorkflowRunner(Generic[StateType]):
         # This queue is responsible for sending events from WorkflowRunner to the outside world
         self._workflow_event_outer_queue: Queue[WorkflowEvent] = Queue()
 
-        # This queue is responsible for sending events from WorkflowRunner to the inner worker threads
+        # This queue is responsible for sending events from the inner worker threads to WorkflowRunner
         self._workflow_event_inner_queue: Queue[WorkflowEvent] = Queue()
 
         # This queue is responsible for sending events from WorkflowRunner to the background thread
@@ -128,7 +128,7 @@ class WorkflowRunner(Generic[StateType]):
             "__snapshot_callback__",
             lambda s: self._snapshot_state(s),
         )
-        self.workflow.context._register_event_queue(self._workflow_event_outer_queue)
+        self.workflow.context._register_event_queue(self._workflow_event_inner_queue)
 
     def _snapshot_state(self, state: StateType) -> StateType:
         self.workflow._store.append_state_snapshot(state)

@@ -1,5 +1,6 @@
-from tests.workflows.basic_error_node.workflow import BasicErrorNodeWorkflow, Inputs
 from vellum.workflows.errors.types import VellumErrorCode
+
+from tests.workflows.basic_error_node.workflow import BasicErrorNodeWorkflow, Inputs
 
 
 def test_workflow__error_node_rejects():

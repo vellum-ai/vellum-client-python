@@ -33,9 +33,7 @@ class PromptNode14(InlinePromptNode):
                 )
             ],
         ),
-        VariablePromptBlock(
-            state="ENABLED", cache_config=None, input_variable="chat_history"
-        ),
+        VariablePromptBlock(state="ENABLED", cache_config=None, input_variable="chat_history"),
     ]
     parameters = PromptParameters(
         stop=None,

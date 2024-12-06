@@ -154,7 +154,9 @@ class VellumMypyPlugin(Plugin):
     def _base_class_hook(self, ctx: ClassDefContext) -> None:
         if _is_subclass(ctx.cls.info, "vellum.workflows.nodes.core.templating_node.node.TemplatingNode"):
             self._dynamic_output_node_class_hook(ctx, "result")
-        elif _is_subclass(ctx.cls.info, "vellum.workflows.nodes.displayable.code_execution_node.node.CodeExecutionNode"):
+        elif _is_subclass(
+            ctx.cls.info, "vellum.workflows.nodes.displayable.code_execution_node.node.CodeExecutionNode"
+        ):
             self._dynamic_output_node_class_hook(ctx, "result")
         elif _is_subclass(ctx.cls.info, "vellum.workflows.nodes.displayable.final_output_node.node.FinalOutputNode"):
             self._dynamic_output_node_class_hook(ctx, "value")

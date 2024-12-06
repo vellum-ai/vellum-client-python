@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Any, ClassVar, Dict, Generic, List, Optional, Tuple, Type, TypeVar, cast
+from typing import ClassVar, Dict, Generic, List, Optional, Tuple, Type, TypeVar, cast
 
 from vellum import VellumVariable
 from vellum.workflows.nodes import InlineSubworkflowNode
@@ -90,7 +90,9 @@ class BaseInlineSubworkflowNodeDisplay(
     ) -> List[VellumVariable]:
         workflow_outputs: List[VellumVariable] = []
         for output_descriptor in raise_if_descriptor(node.subworkflow).Outputs:  # type: ignore[union-attr]
-            workflow_output_display = cast(WorkflowOutputVellumDisplay, display_context.workflow_output_displays[output_descriptor])
+            workflow_output_display = cast(
+                WorkflowOutputVellumDisplay, display_context.workflow_output_displays[output_descriptor]
+            )
             output_type = infer_vellum_variable_type(output_descriptor)
             workflow_outputs.append(
                 VellumVariable(id=str(workflow_output_display.id), key=workflow_output_display.name, type=output_type)

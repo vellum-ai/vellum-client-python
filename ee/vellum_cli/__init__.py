@@ -45,13 +45,15 @@ def push(
 @click.option(
     "--include-json",
     is_flag=True,
-    help="Include the JSON representation of the Workflow in the pull response. Should only be used for debugging purposes.",
+    help="""Include the JSON representation of the Workflow in the pull response. \
+Should only be used for debugging purposes.""",
 )
 @click.option("--workflow-sandbox-id", type=str, help="Pull the Workflow from a specific Sandbox ID")
 @click.option(
     "--exclude-code",
     is_flag=True,
-    help="Exclude the code definition of the Workflow from the pull response. Should only be used for debugging purposes.",
+    help="""Exclude the code definition of the Workflow from the pull response. \
+Should only be used for debugging purposes.""",
 )
 def pull(
     module: Optional[str],

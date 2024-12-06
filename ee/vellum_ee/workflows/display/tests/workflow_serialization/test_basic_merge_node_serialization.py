@@ -2,10 +2,11 @@ from unittest import mock
 
 from deepdiff import DeepDiff
 
-from tests.workflows.basic_merge_node.await_all_workflow import AwaitAllPassingWorkflow
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.workflows import VellumWorkflowDisplay
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
+
+from tests.workflows.basic_merge_node.await_all_workflow import AwaitAllPassingWorkflow
 
 
 def test_serialize_workflow__await_all():

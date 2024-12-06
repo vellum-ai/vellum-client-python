@@ -1,5 +1,6 @@
-from tests.workflows.invalid_node_outputs.workflow import InvalidNodeWorkflow
 from vellum.workflows.errors.types import VellumErrorCode
+
+from tests.workflows.invalid_node_outputs.workflow import InvalidNodeWorkflow
 
 
 def test_run_workflow__happy_path():

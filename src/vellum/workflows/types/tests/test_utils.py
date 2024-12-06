@@ -33,6 +33,7 @@ class ExampleGenericClass(Generic[T]):
 class ExampleInheritedClass(ExampleClass):
     theta: int
 
+
 @TryNode.wrap()
 class ExampleNode(BaseNode):
     class Outputs(BaseNode.Outputs):

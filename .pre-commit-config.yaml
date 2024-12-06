@@ -46,12 +46,12 @@ repos:
     hooks:
       - id: isort
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.1.1
+  - repo: local
     hooks:
       - id: flake8
-        additional_dependencies:
-          [flake8-isort, flake8-breakpoint, flake8-print, flake8-pyproject]
+        name: flake8
+        entry: bash -c "poetry run flake8"
+        language: system
 
   - repo: local
     hooks:

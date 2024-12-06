@@ -85,6 +85,7 @@ class MergeBehavior(Enum):
     AWAIT_ANY = "AWAIT_ANY"
     AWAIT_ATTRIBUTES = "AWAIT_ATTRIBUTES"
 
+
 class ConditionType(Enum):
     IF = "IF"
     ELIF = "ELIF"

@@ -22,18 +22,10 @@ class PromptNode9Display(BaseInlinePromptNodeDisplay[PromptNode9]):
         "context": UUID("ded72461-3d6a-4633-a45e-e7cc9189941b"),
     }
     output_display = {
-        PromptNode9.Outputs.text: NodeOutputDisplay(
-            id=UUID("e9c9ddb8-4057-4755-bbbd-6ca0291aac9a"), name="text"
-        ),
-        PromptNode9.Outputs.results: NodeOutputDisplay(
-            id=UUID("3e174b5c-2e40-4bda-ba0c-eae3e617c988"), name="results"
-        ),
+        PromptNode9.Outputs.text: NodeOutputDisplay(id=UUID("e9c9ddb8-4057-4755-bbbd-6ca0291aac9a"), name="text"),
+        PromptNode9.Outputs.results: NodeOutputDisplay(id=UUID("3e174b5c-2e40-4bda-ba0c-eae3e617c988"), name="results"),
     }
-    port_displays = {
-        PromptNode9.Ports.default: PortDisplayOverrides(
-            id=UUID("ce8e3d37-4c41-4dce-aede-a343d2e1108a")
-        )
-    }
+    port_displays = {PromptNode9.Ports.default: PortDisplayOverrides(id=UUID("ce8e3d37-4c41-4dce-aede-a343d2e1108a"))}
     display_data = NodeDisplayData(
         position=NodeDisplayPosition(x=4528.058075069296, y=-39.95100525832629),
         width=480,

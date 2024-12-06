@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from uuid import UUID
-from typing import Any, Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union, cast
+from typing import Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union, cast
 
 from vellum import (
     MetadataFilterConfigRequest,

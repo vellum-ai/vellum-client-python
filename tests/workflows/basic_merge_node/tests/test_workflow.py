@@ -1,6 +1,7 @@
+from vellum.workflows.constants import UNDEF
+
 from tests.workflows.basic_merge_node.await_all_workflow import AwaitAllFailingWorkflow, AwaitAllPassingWorkflow
 from tests.workflows.basic_merge_node.await_any_workflow import AwaitAnyPassingWorkflow
-from vellum.workflows.constants import UNDEF
 
 
 def test_run_workflow__await_all__passing():

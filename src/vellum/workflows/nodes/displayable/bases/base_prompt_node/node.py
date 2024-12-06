@@ -3,7 +3,6 @@ from typing import ClassVar, Generator, Generic, Iterator, List, Optional, Union
 
 from vellum import AdHocExecutePromptEvent, ExecutePromptEvent, PromptOutput
 from vellum.core import RequestOptions
-
 from vellum.workflows.errors.types import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode

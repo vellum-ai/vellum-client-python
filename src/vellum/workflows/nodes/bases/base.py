@@ -7,9 +7,7 @@ from typing import Any, Dict, Generic, Iterator, Optional, Set, Tuple, Type, Typ
 from vellum.workflows.constants import UNDEF
 from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.descriptors.utils import is_unresolved, resolve_value
-from vellum.workflows.edges.edge import Edge
 from vellum.workflows.errors.types import VellumErrorCode
-from vellum.workflows.events.types import ParentContext
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.graph import Graph
 from vellum.workflows.graph.graph import GraphTarget
@@ -32,15 +30,9 @@ def is_nested_class(nested: Any, parent: Type) -> bool:
         inspect.isclass(nested)
         # If a class is defined within a function, we don't consider it nested in the class defining that function
         # The example of this is a Subworkflow defined within TryNode.wrap()
-        and (
-            len(nested.__qualname__.split(".")) < 2
-            or nested.__qualname__.split(".")[-2] != "<locals>"
-        )
+        and (len(nested.__qualname__.split(".")) < 2 or nested.__qualname__.split(".")[-2] != "<locals>")
         and nested.__module__ == parent.__module__
-        and (
-            nested.__qualname__.startswith(parent.__name__)
-            or nested.__qualname__.startswith(parent.__qualname__)
-        )
+        and (nested.__qualname__.startswith(parent.__name__) or nested.__qualname__.startswith(parent.__qualname__))
     ) or any(is_nested_class(nested, base) for base in parent.__bases__)
 
 
@@ -92,9 +84,7 @@ class BaseNodeMeta(type):
                         **base.Trigger.__dict__,
                         "__module__": dct["__module__"],
                     }
-                    dct["Trigger"] = type(
-                        f"{name}.Trigger", (base.Trigger,), trigger_dct
-                    )
+                    dct["Trigger"] = type(f"{name}.Trigger", (base.Trigger,), trigger_dct)
                     break
 
         cls = super().__new__(mcs, name, bases, dct)
@@ -139,9 +129,7 @@ class BaseNodeMeta(type):
 
     def __rshift__(cls, other_cls: GraphTarget) -> Graph:
         if not issubclass(cls, BaseNode):
-            raise ValueError(
-                "BaseNodeMeta can only be extended from subclasses of BaseNode"
-            )
+            raise ValueError("BaseNodeMeta can only be extended from subclasses of BaseNode")
 
         if not cls.Ports._default_port:
             raise ValueError("No default port found on node")
@@ -153,9 +141,7 @@ class BaseNodeMeta(type):
 
     def __rrshift__(cls, other_cls: GraphTarget) -> Graph:
         if not issubclass(cls, BaseNode):
-            raise ValueError(
-                "BaseNodeMeta can only be extended from subclasses of BaseNode"
-            )
+            raise ValueError("BaseNodeMeta can only be extended from subclasses of BaseNode")
 
         if not isinstance(other_cls, set):
             other_cls = {other_cls}
@@ -193,18 +179,13 @@ class _BaseNodeTriggerMeta(type):
         if not isinstance(other, _BaseNodeTriggerMeta):
             return False
 
-        if not self.__name__.endswith(".Trigger") or not other.__name__.endswith(
-            ".Trigger"
-        ):
+        if not self.__name__.endswith(".Trigger") or not other.__name__.endswith(".Trigger"):
             return super().__eq__(other)
 
         self_trigger_class = cast(Type["BaseNode.Trigger"], self)
         other_trigger_class = cast(Type["BaseNode.Trigger"], other)
 
-        return (
-            self_trigger_class.node_class.__name__
-            == other_trigger_class.node_class.__name__
-        )
+        return self_trigger_class.node_class.__name__ == other_trigger_class.node_class.__name__
 
 
 class _BaseNodeExecutionMeta(type):
@@ -222,18 +203,13 @@ class _BaseNodeExecutionMeta(type):
         if not isinstance(other, _BaseNodeExecutionMeta):
             return False
 
-        if not self.__name__.endswith(".Execution") or not other.__name__.endswith(
-            ".Execution"
-        ):
+        if not self.__name__.endswith(".Execution") or not other.__name__.endswith(".Execution"):
             return super().__eq__(other)
 
         self_execution_class = cast(Type["BaseNode.Execution"], self)
         other_execution_class = cast(Type["BaseNode.Execution"], other)
 
-        return (
-            self_execution_class.node_class.__name__
-            == other_execution_class.node_class.__name__
-        )
+        return self_execution_class.node_class.__name__ == other_execution_class.node_class.__name__
 
 
 class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
@@ -271,9 +247,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
             """
 
             if cls.merge_behavior == MergeBehavior.AWAIT_ATTRIBUTES:
-                if state.meta.node_execution_cache.is_node_execution_initiated(
-                    cls.node_class, node_span_id
-                ):
+                if state.meta.node_execution_cache.is_node_execution_initiated(cls.node_class, node_span_id):
                     return False
 
                 is_ready = True
@@ -281,9 +255,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
                     if not descriptor.instance:
                         continue
 
-                    resolved_value = resolve_value(
-                        descriptor.instance, state, path=descriptor.name
-                    )
+                    resolved_value = resolve_value(descriptor.instance, state, path=descriptor.name)
                     if is_unresolved(resolved_value):
                         is_ready = False
                         break
@@ -291,29 +263,22 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
                 return is_ready
 
             if cls.merge_behavior == MergeBehavior.AWAIT_ANY:
-                if state.meta.node_execution_cache.is_node_execution_initiated(
-                    cls.node_class, node_span_id
-                ):
+                if state.meta.node_execution_cache.is_node_execution_initiated(cls.node_class, node_span_id):
                     return False
 
                 return True
 
             if cls.merge_behavior == MergeBehavior.AWAIT_ALL:
-                if state.meta.node_execution_cache.is_node_execution_initiated(
-                    cls.node_class, node_span_id
-                ):
+                if state.meta.node_execution_cache.is_node_execution_initiated(cls.node_class, node_span_id):
                     return False
 
                 """
                 A node utilizing an AWAIT_ALL merge strategy will only be considered ready for the Nth time
                 when all of its dependencies have been executed N times.
                 """
-                current_node_execution_count = (
-                    state.meta.node_execution_cache.get_execution_count(cls.node_class)
-                )
+                current_node_execution_count = state.meta.node_execution_cache.get_execution_count(cls.node_class)
                 return all(
-                    state.meta.node_execution_cache.get_execution_count(dep)
-                    == current_node_execution_count + 1
+                    state.meta.node_execution_cache.get_execution_count(dep) == current_node_execution_count + 1
                     for dep in dependencies
                 )
 
@@ -353,9 +318,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
             if not descriptor.instance:
                 continue
 
-            resolved_value = resolve_value(
-                descriptor.instance, self.state, path=descriptor.name, memo=inputs
-            )
+            resolved_value = resolve_value(descriptor.instance, self.state, path=descriptor.name, memo=inputs)
             setattr(self, descriptor.name, resolved_value)
 
         # Resolve descriptors set as defaults to the outputs class
@@ -379,9 +342,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
         for key, value in inputs.items():
             path_parts = key.split(".")
             node_attribute_discriptor = getattr(self.__class__, path_parts[0])
-            inputs_key = reduce(
-                lambda acc, part: acc[part], path_parts[1:], node_attribute_discriptor
-            )
+            inputs_key = reduce(lambda acc, part: acc[part], path_parts[1:], node_attribute_discriptor)
             all_inputs[inputs_key] = value
 
         self._inputs = MappingProxyType(all_inputs)

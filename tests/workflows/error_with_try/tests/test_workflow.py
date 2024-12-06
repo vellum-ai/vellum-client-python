@@ -1,5 +1,6 @@
-from tests.workflows.error_with_try.workflow import ErrorWithTryWorkflow, Inputs
 from vellum.workflows.errors.types import VellumErrorCode
+
+from tests.workflows.error_with_try.workflow import ErrorWithTryWorkflow, Inputs
 
 
 def test_workflow__error_node_rejects():

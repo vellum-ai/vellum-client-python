@@ -48,7 +48,7 @@ def test_serialize_workflow(vellum_client):
                 "type": "STRING",
                 "required": True,
                 "default": None,
-                "extensions": { "color": None },
+                "extensions": {"color": None},
             },
             {
                 "id": "19a78824-9a98-4ae8-a1fc-61f81a422a17",
@@ -56,7 +56,7 @@ def test_serialize_workflow(vellum_client):
                 "type": "STRING",
                 "required": True,
                 "default": None,
-                "extensions": { "color": None },
+                "extensions": {"color": None},
             },
         ],
         input_variables,

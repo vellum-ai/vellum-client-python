@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterable, Iterator, Optional, Set, Tuple, Type
+from typing import Any, Dict, Iterator, Optional, Set, Tuple, Type
 
 from vellum.workflows.outputs.base import BaseOutput, BaseOutputs
 from vellum.workflows.ports.port import Port

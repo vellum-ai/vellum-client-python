@@ -1,5 +1,4 @@
 from vellum import ChatMessagePromptBlock, FunctionDefinition, JinjaPromptBlock
-
 from vellum.workflows import BaseWorkflow
 from vellum.workflows.inputs import BaseInputs
 from vellum.workflows.nodes.displayable.bases.inline_prompt_node import BaseInlinePromptNode

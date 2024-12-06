@@ -10,14 +10,13 @@ from dotenv import load_dotenv
 
 from vellum.resources.workflows.client import OMIT
 from vellum.types import WorkflowPushDeploymentConfigRequest
-
+from vellum.workflows.utils.names import snake_to_title_case
+from vellum.workflows.vellum_client import create_vellum_client
+from vellum.workflows.workflows.base import BaseWorkflow
 from vellum_cli.config import WorkflowDeploymentConfig, load_vellum_cli_config
 from vellum_cli.logger import load_cli_logger
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 from vellum_ee.workflows.display.workflows.vellum_workflow_display import VellumWorkflowDisplay
-from vellum.workflows.utils.names import snake_to_title_case
-from vellum.workflows.vellum_client import create_vellum_client
-from vellum.workflows.workflows.base import BaseWorkflow
 
 
 def push_command(

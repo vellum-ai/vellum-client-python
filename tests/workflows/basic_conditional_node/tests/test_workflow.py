@@ -1,5 +1,6 @@
-from tests.workflows.basic_conditional_node.workflow import CategoryWorkflow, Inputs
 from vellum.workflows.constants import UNDEF
+
+from tests.workflows.basic_conditional_node.workflow import CategoryWorkflow, Inputs
 
 
 def test_run_workflow__question():

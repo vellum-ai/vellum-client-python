@@ -32,9 +32,7 @@ from tests.workflows.basic_conditional_node.workflow_with_only_one_conditional_n
 def test_serialize_workflow():
     # GIVEN a Workflow that uses a ConditionalNode
     # WHEN we serialize it
-    workflow_display = get_workflow_display(
-        base_display_class=VellumWorkflowDisplay, workflow_class=CategoryWorkflow
-    )
+    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=CategoryWorkflow)
 
     # TODO: Support serialization of BaseNode
     # https://app.shortcut.com/vellum/story/4871/support-serialization-of-base-node
@@ -147,9 +145,7 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {
-                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
-                                },
+                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
                             }
                         ],
                         "combinator": "OR",
@@ -175,9 +171,7 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {
-                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
-                                },
+                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
                             }
                         ],
                         "combinator": "OR",
@@ -203,9 +197,7 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {
-                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
-                                },
+                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
                             }
                         ],
                         "combinator": "OR",
@@ -231,9 +223,7 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {
-                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
-                                },
+                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
                             }
                         ],
                         "combinator": "OR",
@@ -259,9 +249,7 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {
-                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
-                                },
+                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
                             }
                         ],
                         "combinator": "OR",
@@ -287,9 +275,7 @@ def test_serialize_workflow():
                         "rules": [
                             {
                                 "type": "INPUT_VARIABLE",
-                                "data": {
-                                    "input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"
-                                },
+                                "data": {"input_variable_id": "eece050a-432e-4a2c-8c87-9480397e4cbf"},
                             }
                         ],
                         "combinator": "OR",
@@ -926,15 +912,11 @@ def descriptors_with_value_and_start_and_end():
 
 
 @pytest.mark.parametrize("descriptor, operator", descriptors_with_lhs_and_rhs())
-def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(
-    descriptor, operator
-):
+def test_conditional_node_serialize_all_operators_with_lhs_and_rhs(descriptor, operator):
     # GIVEN a simple workflow with one conditional node
     workflow_cls = create_simple_workflow(descriptor)
 
-    workflow_display = get_workflow_display(
-        base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls
-    )
+    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls)
 
     # TODO: Support serialization of BaseNode
     # https://app.shortcut.com/vellum/story/4871/support-serialization-of-base-node
@@ -1058,9 +1040,7 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
     # GIVEN a simple workflow with one conditional node
     workflow_cls = create_simple_workflow(descriptor)
 
-    workflow_display = get_workflow_display(
-        base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls
-    )
+    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls)
 
     # TODO: Support serialization of BaseNode
     # https://app.shortcut.com/vellum/story/4871/support-serialization-of-base-node
@@ -1166,18 +1146,12 @@ def test_conditional_node_serialize_all_operators_with_expression(descriptor, op
     )
 
 
-@pytest.mark.parametrize(
-    "descriptor, operator", descriptors_with_value_and_start_and_end()
-)
-def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(
-    descriptor, operator
-):
+@pytest.mark.parametrize("descriptor, operator", descriptors_with_value_and_start_and_end())
+def test_conditional_node_serialize_all_operators_with_value_and_start_and_end(descriptor, operator):
     # GIVEN a simple workflow with one conditional node
     workflow_cls = create_simple_workflow(descriptor)
 
-    workflow_display = get_workflow_display(
-        base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls
-    )
+    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=workflow_cls)
 
     # TODO: Support serialization of BaseNode
     # https://app.shortcut.com/vellum/story/4871/support-serialization-of-base-node

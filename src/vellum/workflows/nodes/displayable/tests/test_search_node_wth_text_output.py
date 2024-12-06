@@ -11,7 +11,6 @@ from vellum import (
     SearchResultMergingRequest,
     SearchWeightsRequest,
 )
-
 from vellum.workflows.inputs import BaseInputs
 from vellum.workflows.nodes.displayable.search_node import SearchNode as BaseSearchNode
 from vellum.workflows.state import BaseState

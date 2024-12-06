@@ -30,7 +30,7 @@ def test_code_to_display_data(code_to_display_fixture_paths, mock_open_code_exec
         actual_serialized_workflow,
         significant_digits=6,
         # This is for the input_variables order being out of order sometimes.
-        ignore_order=True
+        ignore_order=True,
     )
 
 
@@ -39,26 +39,28 @@ def _process_position_hook(key, value) -> None:
     Private hook to ensure 'position' keys 'x' and 'y' are floats instead of ints.
     x and y in json is int so json library parses to int even though we have it as float in our serializers
     """
-    if key == 'position' and isinstance(value, dict):
-        if 'x' in value and isinstance(value['x'], int):
-            value['x'] = float(value['x'])
-        if 'y' in value and isinstance(value['y'], int):
-            value['y'] = float(value['y'])
+    if key == "position" and isinstance(value, dict):
+        if "x" in value and isinstance(value["x"], int):
+            value["x"] = float(value["x"])
+        if "y" in value and isinstance(value["y"], int):
+            value["y"] = float(value["y"])
+
 
 def _process_negated_hook(key, value, current_json_obj) -> None:
     """
     Private hook to replace the 'negated' key's None value with False.
     negated can be sent as null in the raw payload, but we expect serialization to produce boolean values
     """
-    if key == 'negated' and value is None:
+    if key == "negated" and value is None:
         current_json_obj[key] = False
+
 
 def _custom_obj_hook(json_dict) -> Dict[str, Any]:
     """
     Private hook to convert some raw json items to values we expect.
     """
     for key, value in list(json_dict.items()):
-        _process_position_hook(key,value)
+        _process_position_hook(key, value)
         _process_negated_hook(key, value, json_dict)
     return json_dict
 
@@ -66,15 +68,16 @@ def _custom_obj_hook(json_dict) -> Dict[str, Any]:
 # Save the original `open`
 builtin_open = open
 
+
 # Fixture that mocks open for code execution nodes
 @pytest.fixture
 def mock_open_code_execution_file():
-    def _mock_open(file_path, mode='r'):
+    def _mock_open(file_path, mode="r"):
         # This is for code execution file reads
         if not file_path.endswith(".json"):
             mock_file = mock.mock_open(read_data="def main(arg: str) -> str:\n    return arg\n    ")
             return mock_file()
         return builtin_open(file_path, mode)
 
-    with mock.patch("builtins.open", _mock_open),  mock.patch("os.path.exists", return_value=True):
+    with mock.patch("builtins.open", _mock_open), mock.patch("os.path.exists", return_value=True):
         yield _mock_open

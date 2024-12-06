@@ -2,7 +2,6 @@ import pytest
 from typing import List, Optional
 
 from vellum import ChatMessage, SearchResult
-
 from vellum.workflows.utils.vellum_variables import primitive_type_to_vellum_variable_type
 
 

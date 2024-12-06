@@ -25,6 +25,7 @@ class SearchNode(BaseSearchNode[StateType]):
         results: List[SearchResult] - The raw search results
         text: str - The text of the search results joined by the chunk_separator
         """
+
         text: str
 
     def run(self) -> Outputs:

@@ -1,8 +1,8 @@
 import pytest
 from uuid import UUID
 
-from vellum_ee.workflows.display.nodes.base_node_display import BaseNodeDisplay
 from vellum.workflows.nodes.bases import BaseNode
+from vellum_ee.workflows.display.nodes.base_node_display import BaseNodeDisplay
 
 
 @pytest.fixture

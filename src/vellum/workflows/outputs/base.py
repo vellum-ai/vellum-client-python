@@ -90,7 +90,7 @@ class BaseOutput(Generic[_Delta, _Accumulated]):
             return False
 
         return self.name == other.name and self.value == other.value and self.delta == other.delta
-    
+
     def __hash__(self) -> int:
         return hash((self._name, self._value, self._value))
 
@@ -193,9 +193,7 @@ class BaseOutputs(metaclass=_BaseOutputsMeta):
         if not isinstance(other, dict):
             return super().__eq__(other)
 
-        outputs = {
-            name: value for name, value in vars(self).items() if not name.startswith("_") and value is not UNDEF
-        }
+        outputs = {name: value for name, value in vars(self).items() if not name.startswith("_") and value is not UNDEF}
         return outputs == other
 
     def __repr__(self) -> str:

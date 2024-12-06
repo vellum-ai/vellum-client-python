@@ -1,7 +1,6 @@
 from typing import Optional
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
-
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.bases.base import BaseNode
 from vellum.workflows.state.base import BaseState, StateMeta

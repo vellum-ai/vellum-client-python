@@ -1,8 +1,9 @@
 from threading import Event as ThreadingEvent, Thread
 import time
 
-from tests.workflows.basic_cancellable_workflow.workflow import BasicCancellableWorkflow
 from vellum.workflows.errors.types import VellumErrorCode
+
+from tests.workflows.basic_cancellable_workflow.workflow import BasicCancellableWorkflow
 
 
 def test_workflow__cancel_run():

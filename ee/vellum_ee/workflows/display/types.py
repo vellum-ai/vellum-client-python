@@ -1,6 +1,10 @@
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, Generic, Tuple, Type, TypeVar
 
+from vellum.workflows.descriptors.base import BaseDescriptor
+from vellum.workflows.nodes import BaseNode
+from vellum.workflows.ports import Port
+from vellum.workflows.references import OutputReference, WorkflowInputReference
 from vellum_ee.workflows.display.base import (
     EdgeDisplayType,
     EntrypointDisplayType,
@@ -9,10 +13,6 @@ from vellum_ee.workflows.display.base import (
     WorkflowOutputDisplayType,
 )
 from vellum_ee.workflows.display.nodes.types import NodeOutputDisplay, PortDisplay
-from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.nodes import BaseNode
-from vellum.workflows.ports import Port
-from vellum.workflows.references import OutputReference, WorkflowInputReference
 
 if TYPE_CHECKING:
     from vellum_ee.workflows.display.nodes.base_node_display import BaseNodeDisplay

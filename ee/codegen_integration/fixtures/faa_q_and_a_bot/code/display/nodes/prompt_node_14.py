@@ -13,25 +13,13 @@ class PromptNode14Display(BaseInlinePromptNodeDisplay[PromptNode14]):
     output_id = UUID("8e2d57c3-85a3-4acb-b4d3-998c6906e389")
     array_output_id = UUID("43cd2bcf-4c99-4f7a-ace7-e27d986dd041")
     target_handle_id = UUID("3485b3fb-e4ee-47c9-b567-c5eab60c01f9")
-    prompt_input_ids_by_name = {
-        "chat_history": UUID("b6524b5f-7697-4923-8b87-f85baadb505a")
-    }
-    node_input_ids_by_name = {
-        "chat_history": UUID("b6524b5f-7697-4923-8b87-f85baadb505a")
-    }
+    prompt_input_ids_by_name = {"chat_history": UUID("b6524b5f-7697-4923-8b87-f85baadb505a")}
+    node_input_ids_by_name = {"chat_history": UUID("b6524b5f-7697-4923-8b87-f85baadb505a")}
     output_display = {
-        PromptNode14.Outputs.text: NodeOutputDisplay(
-            id=UUID("8e2d57c3-85a3-4acb-b4d3-998c6906e389"), name="text"
-        ),
+        PromptNode14.Outputs.text: NodeOutputDisplay(id=UUID("8e2d57c3-85a3-4acb-b4d3-998c6906e389"), name="text"),
         PromptNode14.Outputs.results: NodeOutputDisplay(
             id=UUID("43cd2bcf-4c99-4f7a-ace7-e27d986dd041"), name="results"
         ),
     }
-    port_displays = {
-        PromptNode14.Ports.default: PortDisplayOverrides(
-            id=UUID("23556dd8-b9f8-4cf7-9c24-291f9d0a223a")
-        )
-    }
-    display_data = NodeDisplayData(
-        position=NodeDisplayPosition(x=4524, y=631), width=480, height=168
-    )
+    port_displays = {PromptNode14.Ports.default: PortDisplayOverrides(id=UUID("23556dd8-b9f8-4cf7-9c24-291f9d0a223a"))}
+    display_data = NodeDisplayData(position=NodeDisplayPosition(x=4524, y=631), width=480, height=168)

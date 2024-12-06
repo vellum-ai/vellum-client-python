@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Any, ClassVar, Dict, Generic, Optional, TypeVar, cast
+from typing import ClassVar, Dict, Generic, Optional, TypeVar, cast
 
 from vellum.workflows.nodes.displayable.prompt_deployment_node import PromptDeploymentNode
 from vellum.workflows.references import OutputReference

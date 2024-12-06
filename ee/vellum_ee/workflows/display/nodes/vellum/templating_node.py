@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Any, ClassVar, Dict, Generic, Optional, TypeVar
+from typing import ClassVar, Dict, Generic, Optional, TypeVar
 
 from vellum.workflows.nodes.core.templating_node import TemplatingNode
 from vellum.workflows.types.core import JsonObject

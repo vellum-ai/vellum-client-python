@@ -1,5 +1,6 @@
-from tests.workflows.missing_workflow_inputs.workflow import Inputs, MissingInputsWorkflow
 from vellum.workflows.errors.types import VellumErrorCode
+
+from tests.workflows.missing_workflow_inputs.workflow import Inputs, MissingInputsWorkflow
 
 
 def test_run_workflow__happy_path():

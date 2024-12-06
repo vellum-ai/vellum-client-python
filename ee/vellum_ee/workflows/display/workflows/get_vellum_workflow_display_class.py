@@ -24,4 +24,7 @@ def get_workflow_display(
         except IndexError:
             return base_display_class(workflow_class)
 
-    return workflow_display_class(workflow_class, parent_display_context=parent_display_context) # type: ignore[return-value]
+    return workflow_display_class(  # type: ignore[return-value]
+        workflow_class,
+        parent_display_context=parent_display_context,
+    )

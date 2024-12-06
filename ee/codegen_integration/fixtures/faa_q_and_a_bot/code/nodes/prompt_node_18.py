@@ -29,9 +29,7 @@ class PromptNode18(InlinePromptNode):
                             cache_config=None,
                             text="Based on the below JSON response from an airline flight status tracker API, which flights are on the ground? And which airports are they going from and to? Where are they right now?\n\n",
                         ),
-                        VariablePromptBlock(
-                            state="ENABLED", cache_config=None, input_variable="text"
-                        ),
+                        VariablePromptBlock(state="ENABLED", cache_config=None, input_variable="text"),
                     ],
                 )
             ],

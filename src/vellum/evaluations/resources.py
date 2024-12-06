@@ -1,17 +1,14 @@
 from __future__ import annotations
 
+from functools import cached_property
 import logging
 import time
-from functools import cached_property
-from typing import Callable, Generator, List, cast, Iterable
 from uuid import UUID
+from typing import Callable, Generator, Iterable, List, cast
 
-from vellum import TestSuiteRunRead, TestSuiteRunMetricNumberOutput
-from vellum.client import Vellum, OMIT
-from vellum.evaluations.constants import (
-    DEFAULT_MAX_POLLING_DURATION_MS,
-    DEFAULT_POLLING_INTERVAL_MS,
-)
+from vellum import TestSuiteRunMetricNumberOutput, TestSuiteRunRead
+from vellum.client import OMIT, Vellum
+from vellum.evaluations.constants import DEFAULT_MAX_POLLING_DURATION_MS, DEFAULT_POLLING_INTERVAL_MS
 from vellum.evaluations.exceptions import TestSuiteRunResultsException
 from vellum.evaluations.utils.env import get_api_key
 from vellum.evaluations.utils.paginator import PaginatedResults, get_all_results
@@ -21,9 +18,9 @@ from vellum.types import (
     ExternalTestCaseExecutionRequest,
     NamedTestCaseVariableValueRequest,
     TestCaseVariableValue,
-    TestSuiteRunExternalExecConfigRequest,
     TestSuiteRunExecution,
     TestSuiteRunExternalExecConfigDataRequest,
+    TestSuiteRunExternalExecConfigRequest,
     TestSuiteRunMetricOutput,
     TestSuiteRunState,
 )
@@ -161,9 +158,7 @@ class VellumTestSuiteRunResults:
 
         metric_outputs: list[TestSuiteRunMetricNumberOutput] = []
 
-        for output in self.get_metric_outputs(
-            metric_identifier=metric_identifier, output_identifier=output_identifier
-        ):
+        for output in self.get_metric_outputs(metric_identifier=metric_identifier, output_identifier=output_identifier):
             if output.type != "NUMBER":
                 raise TestSuiteRunResultsException(
                     f"Expected a numeric metric output, but got a {output.type} output instead."

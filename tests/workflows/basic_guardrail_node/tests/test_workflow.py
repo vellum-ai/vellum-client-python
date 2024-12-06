@@ -2,9 +2,9 @@ from typing import List
 
 from vellum import StringInput, TestSuiteRunMetricNumberOutput, TestSuiteRunMetricOutput
 from vellum.core import UniversalBaseModel
+from vellum.workflows.constants import LATEST_RELEASE_TAG
 
 from tests.workflows.basic_guardrail_node.workflow import BasicGuardrailNodeWorkflow, Inputs
-from vellum.workflows.constants import LATEST_RELEASE_TAG
 
 
 class MetricExecution(UniversalBaseModel):

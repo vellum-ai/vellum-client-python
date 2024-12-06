@@ -27,8 +27,9 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
     subworkflow_inputs: EntityInputsInterface - The inputs for the Subworkflow
     deployment: Union[UUID, str] - Either the Workflow Deployment's UUID or its name.
     release_tag: str = LATEST_RELEASE_TAG - The release tag to use for the Workflow Execution
-    external_id: Optional[str] = OMIT - Optionally include a unique identifier for tracking purposes. Must be unique within a given Workflow Deployment.
-    expand_meta: Optional[WorkflowExpandMetaRequest] = OMIT - Expandable execution fields to include in the respownse
+    external_id: Optional[str] = OMIT - Optionally include a unique identifier for tracking purposes.
+        Must be unique within a given Workflow Deployment.
+    expand_meta: Optional[WorkflowExpandMetaRequest] = OMIT - Expandable execution fields to include in the response
     metadata: Optional[Dict[str, Optional[Any]]] = OMIT - The metadata to use for the Workflow Execution
     request_options: Optional[RequestOptions] = None - The request options to use for the Workflow Execution
     """

@@ -29,7 +29,7 @@ def test_serialize_workflow():
             "type": "STRING",
             "required": True,
             "default": None,
-            "extensions": { "color": None },
+            "extensions": {"color": None},
         }
     ]
 

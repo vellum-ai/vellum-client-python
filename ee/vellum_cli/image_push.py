@@ -7,8 +7,8 @@ import docker
 from docker import DockerClient
 from dotenv import load_dotenv
 
-from vellum_cli.logger import load_cli_logger
 from vellum.workflows.vellum_client import create_vellum_client
+from vellum_cli.logger import load_cli_logger
 
 _SUPPORTED_ARCHITECTURE = "amd64"
 

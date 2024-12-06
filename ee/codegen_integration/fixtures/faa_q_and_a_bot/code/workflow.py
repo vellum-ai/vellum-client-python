@@ -25,24 +25,17 @@ class Workflow(BaseWorkflow[Inputs, BaseState]):
         >> PromptNode
         >> TemplatingNode
         >> {
-            ConditionalNode.Ports.branch_1
-            >> SubworkflowNode
-            >> PromptNode14
-            >> FinalOutput2,
+            ConditionalNode.Ports.branch_1 >> SubworkflowNode >> PromptNode14 >> FinalOutput2,
             ConditionalNode.Ports.branch_2
             >> PromptNode16
             >> TemplatingNode15
             >> APINode
             >> PromptNode18
             >> FinalOutput2,
-            ConditionalNode.Ports.branch_3
-            >> FAADocumentStore
-            >> FormattedSearchResults
-            >> PromptNode9
-            >> FinalOutput2,
+            ConditionalNode.Ports.branch_3 >> FAADocumentStore >> FormattedSearchResults >> PromptNode9 >> FinalOutput2,
             ConditionalNode.Ports.branch_4 >> PromptNode19 >> FinalOutput2,
         }
     )
 
     class Outputs(BaseWorkflow.Outputs):
-        answer = FinalOutput2.Outputs.value  #type: ignore
+        answer = FinalOutput2.Outputs.value  # type: ignore

@@ -1,5 +1,5 @@
 import time
-from typing import Iterable, Iterator, List, Set
+from typing import Iterator, List, Set
 
 from vellum.workflows.inputs import BaseInputs
 from vellum.workflows.nodes import BaseNode

@@ -23,6 +23,10 @@ def _compile_annotation(annotation: Any) -> dict:
         _, value_type = get_args(annotation)
         return {"type": "object", "additionalProperties": _compile_annotation(value_type)}
 
+    if get_origin(annotation) is list:
+        item_type = get_args(annotation)[0]
+        return {"type": "array", "items": _compile_annotation(item_type)}
+
     return {"type": type_map[annotation]}
 
 

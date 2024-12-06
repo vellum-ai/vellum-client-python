@@ -2,12 +2,13 @@ import pytest
 from unittest.mock import patch
 from uuid import uuid4
 
-from tests.workflows.workflow_stream_fails.workflow import AlwaysFailsWorkflow
 from vellum.workflows.errors.types import VellumErrorCode
 from vellum.workflows.events.node import NodeExecutionFulfilledBody, NodeExecutionFulfilledEvent
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs import BaseOutputs
 from vellum.workflows.runner.runner import WorkflowRunner
+
+from tests.workflows.workflow_stream_fails.workflow import AlwaysFailsWorkflow
 
 
 @pytest.fixture
@@ -37,7 +38,7 @@ def test_run_workflow__stream_fails__last_event_is_not_workflow_event():
 
     # AND the failure happens after a NODE FULFILLED event
     def mock_stream_side_effect(self):
-        self._workflow_event_queue.put(
+        self._workflow_event_outer_queue.put(
             NodeExecutionFulfilledEvent(
                 trace_id=uuid4(),
                 span_id=uuid4(),

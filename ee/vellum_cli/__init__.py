@@ -14,14 +14,36 @@ def main() -> None:
     pass
 
 
-@main.command()
+class PushGroup(ClickAliasedGroup):
+    def get_command(self, ctx, cmd_name):
+        # First try to get the command normally
+        cmd = super().get_command(ctx, cmd_name)
+        if cmd is not None:
+            return cmd
+
+        # If no command found, treat the command name as a module
+        return push_module
+
+
+@main.group(name="push", invoke_without_command=True, cls=PushGroup)
+@click.pass_context
+def push_group(
+    ctx: click.Context,
+) -> None:
+    """Push to Vellum"""
+
+    if ctx.invoked_subcommand is None:
+        push_command()
+
+
+@push_group.command(name="workflow")
 @click.argument("module", required=False)
 @click.option("--deploy", is_flag=True, help="Deploy the workflow after pushing it to Vellum")
 @click.option("--deployment-label", type=str, help="Label to use for the deployment")
 @click.option("--deployment-name", type=str, help="Unique name for the deployment")
 @click.option("--deployment-description", type=str, help="Description for the deployment")
 @click.option("--release-tag", type=list, help="Release tag for the deployment", multiple=True)
-def push(
+def push_workflow(
     module: Optional[str],
     deploy: Optional[bool],
     deployment_label: Optional[str],
@@ -29,9 +51,34 @@ def push(
     deployment_description: Optional[str],
     release_tag: Optional[List[str]],
 ) -> None:
-    """Push Workflow to Vellum"""
     push_command(
         module=module,
+        deploy=deploy,
+        deployment_label=deployment_label,
+        deployment_name=deployment_name,
+        deployment_description=deployment_description,
+        release_tags=release_tag,
+    )
+
+
+@push_group.command(name="*", hidden=True)
+@click.pass_context
+@click.option("--deploy", is_flag=True, help="Deploy the workflow after pushing it to Vellum")
+@click.option("--deployment-label", type=str, help="Label to use for the deployment")
+@click.option("--deployment-name", type=str, help="Unique name for the deployment")
+@click.option("--deployment-description", type=str, help="Description for the deployment")
+@click.option("--release-tag", type=list, help="Release tag for the deployment", multiple=True)
+def push_module(
+    ctx: click.Context,
+    deploy: Optional[bool],
+    deployment_label: Optional[str],
+    deployment_name: Optional[str],
+    deployment_description: Optional[str],
+    release_tag: Optional[List[str]],
+) -> None:
+    """Push any arbitrary module defined locally to Vellum"""
+    push_command(
+        module=ctx.invoked_subcommand,
         deploy=deploy,
         deployment_label=deployment_label,
         deployment_name=deployment_name,

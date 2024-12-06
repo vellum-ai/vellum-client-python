@@ -94,7 +94,7 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
 
     # WHEN the user runs the pull command with the workflow sandbox id and no module
     runner = CliRunner()
-    result = runner.invoke(cli_main, ["pull", "--workflow-sandbox-id", workflow_sandbox_id])
+    result = runner.invoke(cli_main, ["pull", "workflows", "--workflow-sandbox-id", workflow_sandbox_id])
     os.chdir(current_dir)
 
     # THEN the command returns successfully

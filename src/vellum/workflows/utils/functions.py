@@ -1,22 +1,30 @@
 import inspect
-from typing import Callable
+from typing import Any, Callable, Union, get_args, get_origin
 
 from vellum.client.types.function_definition import FunctionDefinition
+
+type_map = {
+    str: "string",
+    int: "integer",
+    float: "number",
+    bool: "boolean",
+    list: "array",
+    dict: "object",
+    type(None): "null",
+}
+
+
+def _compile_annotation(annotation: Any) -> dict:
+    if get_origin(annotation) is Union:
+        return {"anyOf": [_compile_annotation(a) for a in get_args(annotation)]}
+
+    return {"type": type_map[annotation]}
 
 
 def compile_function_definition(function: Callable) -> FunctionDefinition:
     """
     Converts a Python function into our Vellum-native FunctionDefinition type.
     """
-    type_map = {
-        str: "string",
-        int: "integer",
-        float: "number",
-        bool: "boolean",
-        list: "array",
-        dict: "object",
-        type(None): "null",
-    }
 
     try:
         signature = inspect.signature(function)
@@ -25,8 +33,7 @@ def compile_function_definition(function: Callable) -> FunctionDefinition:
 
     properties = {}
     for param in signature.parameters.values():
-        property_type = type_map[param.annotation]
-        properties[param.name] = {"type": property_type}
+        properties[param.name] = _compile_annotation(param.annotation)
 
     required = [param.name for param in signature.parameters.values() if param.default is inspect.Parameter.empty]
 

@@ -19,6 +19,10 @@ def _compile_annotation(annotation: Any) -> dict:
     if get_origin(annotation) is Union:
         return {"anyOf": [_compile_annotation(a) for a in get_args(annotation)]}
 
+    if get_origin(annotation) is dict:
+        _, value_type = get_args(annotation)
+        return {"type": "object", "additionalProperties": _compile_annotation(value_type)}
+
     return {"type": type_map[annotation]}
 
 

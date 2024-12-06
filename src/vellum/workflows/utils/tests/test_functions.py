@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 from vellum.client.types.function_definition import FunctionDefinition
 from vellum.workflows.utils.functions import compile_function_definition
@@ -93,5 +93,26 @@ def test_compile_function_definition__optionals():
                 "e": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": None},
             },
             "required": ["a", "b", "c"],
+        },
+    )
+
+
+def test_compile_function_definition__parameterized_dicts():
+    # GIVEN a function with a parameterized dict
+    def my_function(a: Dict[str, int]):
+        pass
+
+    # WHEN compiling the function
+    compiled_function = compile_function_definition(my_function)
+
+    # THEN it should return the compiled function definition
+    assert compiled_function == FunctionDefinition(
+        name="my_function",
+        parameters={
+            "type": "object",
+            "properties": {
+                "a": {"type": "object", "additionalProperties": {"type": "integer"}},
+            },
+            "required": ["a"],
         },
     )

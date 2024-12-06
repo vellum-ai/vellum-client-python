@@ -329,6 +329,11 @@ export class GraphAttribute extends AstNode {
 
           const newRhs = addEdgeToGraph(mutableAst.rhs, lhsTerminal.reference);
           if (newRhs) {
+            if (lhsTerminals.length > 1 && newRhs.type === "set") {
+              throw new Error(
+                "Adding an edge between two sets is not supported"
+              );
+            }
             return {
               type: "right_shift",
               lhs: mutableAst.lhs,

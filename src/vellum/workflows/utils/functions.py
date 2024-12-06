@@ -10,6 +10,7 @@ type_map = {
     bool: "boolean",
     list: "array",
     dict: "object",
+    None: "null",
     type(None): "null",
 }
 
@@ -32,10 +33,13 @@ def compile_function_definition(function: Callable) -> FunctionDefinition:
         raise ValueError(f"Failed to get signature for function {function.__name__}: {str(e)}")
 
     properties = {}
+    required = []
     for param in signature.parameters.values():
         properties[param.name] = _compile_annotation(param.annotation)
-
-    required = [param.name for param in signature.parameters.values() if param.default is inspect.Parameter.empty]
+        if param.default is inspect.Parameter.empty:
+            required.append(param.name)
+        else:
+            properties[param.name]["default"] = param.default
 
     return FunctionDefinition(
         name=function.__name__,

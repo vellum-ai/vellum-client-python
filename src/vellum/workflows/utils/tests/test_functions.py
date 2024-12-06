@@ -67,7 +67,7 @@ def test_compile_function_definition__unions():
 
 
 def test_compile_function_definition__optionals():
-    # GIVEN a function with a union arg
+    # GIVEN a function with various ways to specify optionals
     def my_function(
         a: str,
         b: Optional[str],

@@ -4,7 +4,6 @@ import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { TemplatingNodeContext } from "src/context/node-context/templating-node";
 import { BaseState } from "src/generators/base-state";
-import { NodeInputValuePointer } from "src/generators/node-inputs/node-input-value-pointer";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
 import { TemplatingNode as TemplatingNodeType } from "src/types/vellum";
 import { getVellumVariablePrimitiveType } from "src/utils/vellum-variables";
@@ -31,8 +30,9 @@ export class TemplatingNode extends BaseSingleFileNode<
   protected getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 
-    const otherInputs = this.nodeData.inputs.filter(
-      (input) => input.id !== this.nodeData.data.templateNodeInputId
+    const otherInputs = Array.from(this.nodeInputsByKey.values()).filter(
+      (nodeInput) =>
+        nodeInput.nodeInputData.id !== this.nodeData.data.templateNodeInputId
     );
 
     statements.push(
@@ -46,12 +46,9 @@ export class TemplatingNode extends BaseSingleFileNode<
       python.field({
         name: "inputs",
         initializer: python.TypeInstantiation.dict(
-          otherInputs.map((input) => ({
-            key: python.TypeInstantiation.str(input.key),
-            value: new NodeInputValuePointer({
-              workflowContext: this.workflowContext,
-              nodeInputValuePointerData: input.value,
-            }),
+          otherInputs.map((codeInput) => ({
+            key: python.TypeInstantiation.str(codeInput.nodeInputData.key),
+            value: codeInput,
           }))
         ),
       })

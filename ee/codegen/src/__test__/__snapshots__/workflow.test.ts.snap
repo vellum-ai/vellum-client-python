@@ -102,6 +102,19 @@ class TestWorkflow(BaseWorkflow):
 "
 `;
 
+exports[`Workflow > write > graph > should be correct for a node to a set to a node 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .nodes.templating_node import TemplatingNode
+from .nodes.templating_node_2 import TemplatingNode2
+from .nodes.templating_node_3 import TemplatingNode3
+from .nodes.templating_node_4 import TemplatingNode4
+
+
+class TestWorkflow(BaseWorkflow):
+    graph = TemplatingNode >> {TemplatingNode2, TemplatingNode3} >> TemplatingNode4
+"
+`;
+
 exports[`Workflow > write > graph > should be correct for set of a branch and a node 1`] = `
 "from vellum.workflows import BaseWorkflow
 from .nodes.templating_node import TemplatingNode

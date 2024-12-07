@@ -192,7 +192,6 @@ class StateMeta(UniversalBaseModel):
     node_outputs: Dict[OutputReference, Any] = field(default_factory=dict)
     node_execution_cache: NodeExecutionCache = field(default_factory=NodeExecutionCache)
     parent: Optional["BaseState"] = None
-    is_terminated: Optional[bool] = None
     __snapshot_callback__: Optional[Callable[[], None]] = field(init=False, default=None)
 
     def model_post_init(self, context: Any) -> None:
@@ -286,7 +285,6 @@ class BaseState(metaclass=_BaseStateMeta):
 {values}
     meta:
         id={self.meta.id}
-        is_terminated={self.meta.is_terminated}
         updated_ts={self.meta.updated_ts}
         node_outputs:{' Empty' if not node_outputs else ''}
 {node_outputs}

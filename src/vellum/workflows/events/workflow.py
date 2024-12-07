@@ -6,7 +6,7 @@ from vellum.core.pydantic_utilities import UniversalBaseModel
 from vellum.workflows.errors import VellumError
 from vellum.workflows.outputs.base import BaseOutput
 from vellum.workflows.references import ExternalInputReference
-from vellum.workflows.types.generics import OutputsType, WorkflowInputsType
+from vellum.workflows.types.generics import OutputsType, StateType, WorkflowInputsType
 
 from .node import (
     NodeExecutionFulfilledEvent,
@@ -124,6 +124,23 @@ class WorkflowExecutionResumedEvent(_BaseWorkflowEvent):
     body: WorkflowExecutionResumedBody
 
 
+class WorkflowExecutionSnapshottedBody(_BaseWorkflowExecutionBody, Generic[StateType]):
+    state: StateType
+
+    @field_serializer("state")
+    def serialize_state(self, state: StateType, _info: Any) -> Dict[str, Any]:
+        return default_serializer(state)
+
+
+class WorkflowExecutionSnapshottedEvent(_BaseWorkflowEvent, Generic[StateType]):
+    name: Literal["workflow.execution.snapshotted"] = "workflow.execution.snapshotted"
+    body: WorkflowExecutionSnapshottedBody[StateType]
+
+    @property
+    def state(self) -> StateType:
+        return self.body.state
+
+
 GenericWorkflowEvent = Union[
     WorkflowExecutionStreamingEvent,
     WorkflowExecutionRejectedEvent,
@@ -141,6 +158,7 @@ WorkflowEvent = Union[
     GenericWorkflowEvent,
     WorkflowExecutionInitiatedEvent,
     WorkflowExecutionFulfilledEvent,
+    WorkflowExecutionSnapshottedEvent,
 ]
 
 WorkflowEventStream = Generator[WorkflowEvent, None, None]

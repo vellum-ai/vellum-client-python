@@ -62,6 +62,8 @@ from vellum.workflows.events.workflow import (
     WorkflowExecutionRejectedEvent,
     WorkflowExecutionResumedBody,
     WorkflowExecutionResumedEvent,
+    WorkflowExecutionSnapshottedBody,
+    WorkflowExecutionSnapshottedEvent,
     WorkflowExecutionStreamingBody,
     WorkflowExecutionStreamingEvent,
 )
@@ -102,6 +104,7 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
         GenericWorkflowEvent,
         WorkflowExecutionInitiatedEvent[WorkflowInputsType],  # type: ignore[valid-type]
         WorkflowExecutionFulfilledEvent[Outputs],
+        WorkflowExecutionSnapshottedEvent[StateType],  # type: ignore[valid-type]
     ]
 
     TerminalWorkflowEvent = Union[
@@ -432,6 +435,7 @@ WorkflowExecutionRejectedBody.model_rebuild()
 WorkflowExecutionPausedBody.model_rebuild()
 WorkflowExecutionResumedBody.model_rebuild()
 WorkflowExecutionStreamingBody.model_rebuild()
+WorkflowExecutionSnapshottedBody.model_rebuild()
 
 NodeExecutionInitiatedBody.model_rebuild()
 NodeExecutionFulfilledBody.model_rebuild()
@@ -446,6 +450,7 @@ WorkflowExecutionRejectedEvent.model_rebuild()
 WorkflowExecutionPausedEvent.model_rebuild()
 WorkflowExecutionResumedEvent.model_rebuild()
 WorkflowExecutionStreamingEvent.model_rebuild()
+WorkflowExecutionSnapshottedEvent.model_rebuild()
 
 NodeExecutionInitiatedEvent.model_rebuild()
 NodeExecutionFulfilledEvent.model_rebuild()

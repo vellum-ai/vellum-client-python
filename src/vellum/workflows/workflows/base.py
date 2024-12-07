@@ -4,7 +4,6 @@ import importlib
 import inspect
 
 from vellum.plugins.utils import load_runtime_plugins
-from vellum.workflows.events.types import CodeResourceDefinition
 from vellum.workflows.workflows.event_filters import workflow_event_filter
 
 load_runtime_plugins()
@@ -84,7 +83,7 @@ from vellum.workflows.types.utils import get_original_base
 class _BaseWorkflowMeta(type):
     def __new__(mcs, name: str, bases: Tuple[Type, ...], dct: Dict[str, Any]) -> Any:
         if "graph" not in dct:
-            dct["graph"] = []
+            dct["graph"] = set()
 
         return super().__new__(mcs, name, bases, dct)
 
@@ -412,6 +411,9 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
 
         workflows: List[Type[BaseWorkflow]] = []
         for name in dir(module):
+            if name.startswith("__"):
+                continue
+
             attr = getattr(module, name)
             if (
                 inspect.isclass(attr)

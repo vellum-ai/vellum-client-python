@@ -1,11 +1,10 @@
-from typing import Any, Dict, Generic, List, Literal, Optional, Set, Type, Union
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Literal, Optional, Set, Type, Union
 
 from pydantic import SerializerFunctionWrapHandler, field_serializer, model_serializer
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
 from vellum.workflows.errors import VellumError
 from vellum.workflows.expressions.accessor import AccessorExpression
-from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs.base import BaseOutput
 from vellum.workflows.ports.port import Port
 from vellum.workflows.references.node import NodeReference
@@ -13,9 +12,12 @@ from vellum.workflows.types.generics import OutputsType
 
 from .types import BaseEvent, default_serializer, serialize_type_encoder
 
+if TYPE_CHECKING:
+    from vellum.workflows.nodes.bases import BaseNode
+
 
 class _BaseNodeExecutionBody(UniversalBaseModel):
-    node_definition: Type[BaseNode]
+    node_definition: Type["BaseNode"]
 
     @field_serializer("node_definition")
     def serialize_node_definition(self, node_definition: Type, _info: Any) -> Dict[str, Any]:
@@ -35,7 +37,7 @@ class _BaseNodeEvent(BaseEvent):
     body: _BaseNodeExecutionBody
 
     @property
-    def node_definition(self) -> Type[BaseNode]:
+    def node_definition(self) -> Type["BaseNode"]:
         return self.body.node_definition
 
 

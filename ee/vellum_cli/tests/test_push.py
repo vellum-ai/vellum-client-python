@@ -21,7 +21,7 @@ def _extract_tar_gz(tar_gz_bytes: bytes) -> dict[str, str]:
             if content is None:
                 continue
 
-            files[member.name] = content.read()  # .decode()
+            files[member.name] = content.read().decode("latin-1")
 
     return files
 
@@ -112,4 +112,45 @@ class ExampleWorkflow(BaseWorkflow):
     assert "deplyment_config" not in call_args
 
     extracted_files = _extract_tar_gz(call_args["artifact"].read())
-    assert extracted_files["workflow.py"] == workflow_py_file_content.encode()
+    assert extracted_files["workflow.py"] == workflow_py_file_content
+
+
+def test_push__deployment(mock_module, vellum_client):
+    # GIVEN a single workflow configured
+    temp_dir, module, _ = mock_module
+
+    # AND a workflow exists in the module successfully
+    base_dir = os.path.join(temp_dir, *module.split("."))
+    os.makedirs(base_dir, exist_ok=True)
+    workflow_py_file_content = """\
+from vellum.workflows import BaseWorkflow
+
+class ExampleWorkflow(BaseWorkflow):
+    pass
+"""
+    with open(os.path.join(temp_dir, *module.split("."), "workflow.py"), "w") as f:
+        f.write(workflow_py_file_content)
+
+    # AND the push API call returns successfully
+    vellum_client.workflows.push.return_value = WorkflowPushResponse(
+        workflow_sandbox_id=str(uuid4()),
+    )
+
+    # WHEN calling `vellum push`
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["push", module, "--deploy"])
+
+    # THEN it should succeed
+    assert result.exit_code == 0
+
+    # AND we should have called the push API with the correct args
+    vellum_client.workflows.push.assert_called_once()
+    call_args = vellum_client.workflows.push.call_args.kwargs
+    assert json.loads(call_args["exec_config"])["workflow_raw_data"]["definition"]["name"] == "ExampleWorkflow"
+    assert call_args["label"] == "Mock"
+    assert is_valid_uuid(call_args["workflow_sandbox_id"])
+    assert call_args["artifact"].name == "examples__mock.tar.gz"
+    assert call_args["deployment_config"] == "{}"
+
+    extracted_files = _extract_tar_gz(call_args["artifact"].read())
+    assert extracted_files["workflow.py"] == workflow_py_file_content

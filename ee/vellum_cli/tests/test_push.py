@@ -34,3 +34,18 @@ def test_push__multiple_workflows_configured__no_module_specified(mock_module):
         str(result.exception)
         == "Multiple workflows found in project to push. Pushing only a single workflow is supported."
     )
+
+
+def test_push__multiple_workflows_configured__not_found_module(mock_module):
+    # GIVEN multiple workflows configured
+    _, module, set_pyproject_toml = mock_module
+    set_pyproject_toml({"workflows": [{"module": "examples.mock2"}, {"module": "examples.mock3"}]})
+
+    # WHEN calling `vellum push` with a module that doesn't exist
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["push", module])
+
+    # THEN it should fail
+    assert result.exit_code == 1
+    assert result.exception
+    assert str(result.exception) == f"No workflow config for '{module}' found in project to push."

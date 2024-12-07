@@ -111,20 +111,3 @@ def wrapper_execution_context(*wrapper_args: Any, **wrapper_kwargs: Any) -> Call
         return wrap
 
     return wrapper
-
-
-def wrap_execution_context_class(cls: Type) -> Type:
-    """Class decorator to wrap methods with execution context at class definition time."""
-    # Wrap eligible methods
-    for attr_name, attr_value in cls.__dict__.items():
-        if (
-            callable(attr_value)
-            and not attr_name.startswith("__")
-            and not isinstance(attr_value, property)
-            and not hasattr(attr_value, "__get__")
-            and not isinstance(attr_value, type)
-        ):
-
-            setattr(cls, attr_name, wrapper_execution_context()(attr_value))
-
-    return cls

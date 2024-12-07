@@ -25,9 +25,9 @@ class PushGroup(ClickAliasedGroup):
         return push_module
 
 
-@main.group(name="push", invoke_without_command=True, cls=PushGroup)
+@main.group(invoke_without_command=True, cls=PushGroup)
 @click.pass_context
-def push_group(
+def push(
     ctx: click.Context,
 ) -> None:
     """Push to Vellum"""
@@ -36,7 +36,7 @@ def push_group(
         push_command()
 
 
-@push_group.command(name="workflow")
+@push.command(name="workflows")
 @click.argument("module", required=False)
 @click.option("--deploy", is_flag=True, help="Deploy the workflow after pushing it to Vellum")
 @click.option("--deployment-label", type=str, help="Label to use for the deployment")
@@ -61,7 +61,7 @@ def push_workflow(
     )
 
 
-@push_group.command(name="*", hidden=True)
+@push.command(name="*", hidden=True)
 @click.pass_context
 @click.option("--deploy", is_flag=True, help="Deploy the workflow after pushing it to Vellum")
 @click.option("--deployment-label", type=str, help="Label to use for the deployment")
@@ -77,14 +77,15 @@ def push_module(
     release_tag: Optional[List[str]],
 ) -> None:
     """Push any arbitrary module defined locally to Vellum"""
-    push_command(
-        module=ctx.invoked_subcommand,
-        deploy=deploy,
-        deployment_label=deployment_label,
-        deployment_name=deployment_name,
-        deployment_description=deployment_description,
-        release_tags=release_tag,
-    )
+    if ctx.parent:
+        push_command(
+            module=ctx.parent.invoked_subcommand,
+            deploy=deploy,
+            deployment_label=deployment_label,
+            deployment_name=deployment_name,
+            deployment_description=deployment_description,
+            release_tags=release_tag,
+        )
 
 
 class PullGroup(ClickAliasedGroup):

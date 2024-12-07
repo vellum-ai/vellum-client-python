@@ -40,7 +40,46 @@ def push(
     )
 
 
-@main.command()
+class PullGroup(ClickAliasedGroup):
+    def get_command(self, ctx, cmd_name):
+        # First try to get the command normally
+        cmd = super().get_command(ctx, cmd_name)
+        if cmd is not None:
+            return cmd
+
+        # If no command found, call our catch-all
+        return pull_module
+
+
+@main.group(invoke_without_command=True, cls=PullGroup)
+@click.pass_context
+@click.option(
+    "--include-json",
+    is_flag=True,
+    help="""Include the JSON representation of each Resource in the pull response. \
+Should only be used for debugging purposes.""",
+)
+@click.option(
+    "--exclude-code",
+    is_flag=True,
+    help="""Exclude the code definition of each Resource from the pull response. \
+Should only be used for debugging purposes.""",
+)
+def pull(
+    ctx: click.Context,
+    include_json: Optional[bool],
+    exclude_code: Optional[bool],
+) -> None:
+    """Pull the first configured Resource from Vellum"""
+
+    if ctx.invoked_subcommand is None:
+        pull_command(
+            include_json=include_json,
+            exclude_code=exclude_code,
+        )
+
+
+@pull.command(name="workflows")
 @click.argument("module", required=False)
 @click.option(
     "--include-json",
@@ -55,19 +94,52 @@ Should only be used for debugging purposes.""",
     help="""Exclude the code definition of the Workflow from the pull response. \
 Should only be used for debugging purposes.""",
 )
-def pull(
+def pull_workflows(
     module: Optional[str],
     include_json: Optional[bool],
     workflow_sandbox_id: Optional[str],
     exclude_code: Optional[bool],
 ) -> None:
-    """Pull Workflow from Vellum"""
+    """
+    Pull Workflows from Vellum. If a module is provided, only the Workflow for that module will be pulled.
+    If no module is provided, the first configured Workflow will be pulled.
+    """
+
     pull_command(
         module=module,
         include_json=include_json,
         workflow_sandbox_id=workflow_sandbox_id,
         exclude_code=exclude_code,
     )
+
+
+@pull.command(name="*")
+@click.pass_context
+@click.option(
+    "--include-json",
+    is_flag=True,
+    help="""Include the JSON representation of the Resource in the pull response. \
+Should only be used for debugging purposes.""",
+)
+@click.option(
+    "--exclude-code",
+    is_flag=True,
+    help="""Exclude the code definition of the Resource from the pull response. \
+Should only be used for debugging purposes.""",
+)
+def pull_module(
+    ctx: click.Context,
+    include_json: Optional[bool],
+    exclude_code: Optional[bool],
+) -> None:
+    """Pull a specific module from Vellum"""
+
+    if ctx.parent:
+        pull_command(
+            module=ctx.parent.invoked_subcommand,
+            include_json=include_json,
+            exclude_code=exclude_code,
+        )
 
 
 @main.group(aliases=["images", "image"])

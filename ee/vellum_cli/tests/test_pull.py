@@ -5,7 +5,7 @@ import shutil
 import tempfile
 from uuid import uuid4
 import zipfile
-from typing import Generator, Tuple
+from typing import Any, Callable, Dict, Generator, Tuple
 
 from click.testing import CliRunner
 import tomli_w
@@ -30,30 +30,32 @@ def zip_file_map(file_map: dict[str, str]) -> bytes:
 
 
 @pytest.fixture
-def mock_module() -> Generator[Tuple[str, str], None, None]:
+def mock_module() -> Generator[Tuple[str, str, Callable[[Dict[str, Any]], None]], None, None]:
     current_dir = os.getcwd()
     temp_dir = tempfile.mkdtemp()
     os.chdir(temp_dir)
     module = "examples.mock"
 
-    with open(os.path.join(temp_dir, "pyproject.toml"), "wb") as f:
-        tomli_w.dump(
-            {
-                "tool": {
-                    "vellum": {
-                        "workflows": [
-                            {
-                                "module": module,
-                                "workflow_sandbox_id": str(uuid4()),
-                            }
-                        ]
-                    }
-                }
-            },
-            f,
-        )
+    def set_pyproject_toml(vellum_config: Dict[str, Any]) -> None:
+        pyproject_toml_path = os.path.join(temp_dir, "pyproject.toml")
+        with open(pyproject_toml_path, "wb") as f:
+            tomli_w.dump(
+                {"tool": {"vellum": vellum_config}},
+                f,
+            )
 
-    yield temp_dir, module
+    set_pyproject_toml(
+        {
+            "workflows": [
+                {
+                    "module": module,
+                    "workflow_sandbox_id": str(uuid4()),
+                }
+            ]
+        }
+    )
+
+    yield temp_dir, module, set_pyproject_toml
 
     os.chdir(current_dir)
     shutil.rmtree(temp_dir)
@@ -61,10 +63,41 @@ def mock_module() -> Generator[Tuple[str, str], None, None]:
 
 def test_pull(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    temp_dir, module = mock_module
+    temp_dir, module, _ = mock_module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter([zip_file_map({"workflow.py": "print('hello')"})])
+
+    # WHEN the user runs the pull command
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["pull", module])
+
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the workflow.py file is written to the module directory
+    workflow_py = os.path.join(temp_dir, *module.split("."), "workflow.py")
+    assert os.path.exists(workflow_py)
+    with open(workflow_py) as f:
+        assert f.read() == "print('hello')"
+
+
+def test_pull__second_module(vellum_client, mock_module):
+    # GIVEN a module on the user's filesystem
+    temp_dir, module, set_pyproject_toml = mock_module
+
+    # AND the workflow pull API call returns a zip file
+    vellum_client.workflows.pull.return_value = iter([zip_file_map({"workflow.py": "print('hello')"})])
+
+    # AND the module we're about to pull is configured second
+    set_pyproject_toml(
+        {
+            "workflows": [
+                {"module": "another.module", "workflow_sandbox_id": str(uuid4())},
+                {"module": module, "workflow_sandbox_id": str(uuid4())},
+            ]
+        }
+    )
 
     # WHEN the user runs the pull command
     runner = CliRunner()
@@ -94,7 +127,7 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
 
     # WHEN the user runs the pull command with the workflow sandbox id and no module
     runner = CliRunner()
-    result = runner.invoke(cli_main, ["pull", "--workflow-sandbox-id", workflow_sandbox_id])
+    result = runner.invoke(cli_main, ["pull", "workflows", "--workflow-sandbox-id", workflow_sandbox_id])
     os.chdir(current_dir)
 
     # THEN the command returns successfully
@@ -110,7 +143,7 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
 
 def test_pull__remove_missing_files(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    temp_dir, module = mock_module
+    temp_dir, module, _ = mock_module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter([zip_file_map({"workflow.py": "print('hello')"})])
@@ -139,7 +172,7 @@ def test_pull__remove_missing_files(vellum_client, mock_module):
 
 def test_pull__remove_missing_files__ignore_pattern(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    temp_dir, module = mock_module
+    temp_dir, module, set_pyproject_toml = mock_module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter([zip_file_map({"workflow.py": "print('hello')"})])
@@ -157,23 +190,17 @@ def test_pull__remove_missing_files__ignore_pattern(vellum_client, mock_module):
         f.write("print('hello')")
 
     # AND the ignore pattern is set to tests
-    with open(os.path.join(temp_dir, "pyproject.toml"), "wb") as f:
-        tomli_w.dump(
-            {
-                "tool": {
-                    "vellum": {
-                        "workflows": [
-                            {
-                                "module": module,
-                                "workflow_sandbox_id": str(uuid4()),
-                                "ignore": "tests/*",
-                            }
-                        ]
-                    }
+    set_pyproject_toml(
+        {
+            "workflows": [
+                {
+                    "module": module,
+                    "workflow_sandbox_id": str(uuid4()),
+                    "ignore": "tests/*",
                 }
-            },
-            f,
-        )
+            ]
+        }
+    )
 
     # WHEN the user runs the pull command
     runner = CliRunner()
@@ -196,7 +223,7 @@ def test_pull__remove_missing_files__ignore_pattern(vellum_client, mock_module):
 
 def test_pull__include_json(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    _, module = mock_module
+    _, module, __ = mock_module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter(
@@ -218,7 +245,7 @@ def test_pull__include_json(vellum_client, mock_module):
 
 def test_pull__exclude_code(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    _, module = mock_module
+    _, module, __ = mock_module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter(

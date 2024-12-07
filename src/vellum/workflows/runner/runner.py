@@ -7,6 +7,12 @@ from uuid import UUID
 from typing import TYPE_CHECKING, Any, Dict, Generic, Iterable, Iterator, Optional, Sequence, Set, Type, Union
 
 from vellum.workflows.constants import UNDEF
+from vellum.workflows.context import (
+    ExecutionContextMixin,
+    get_execution_context,
+    get_parent_context,
+    wrapper_execution_context,
+)
 from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.edges.edge import Edge
 from vellum.workflows.errors import VellumError, VellumErrorCode
@@ -58,7 +64,10 @@ ExternalInputsArg = Dict[ExternalInputReference, Any]
 BackgroundThreadItem = Union[BaseState, WorkflowEvent, None]
 
 
-class WorkflowRunner(Generic[StateType]):
+class WorkflowRunner(
+    ExecutionContextMixin,
+    Generic[StateType],
+):
     _entrypoints: Iterable[Type[BaseNode]]
 
     def __init__(
@@ -69,8 +78,8 @@ class WorkflowRunner(Generic[StateType]):
         entrypoint_nodes: Optional[RunFromNodeArg] = None,
         external_inputs: Optional[ExternalInputsArg] = None,
         cancel_signal: Optional[ThreadingEvent] = None,
-        parent_context: Optional[ParentContext] = None,
     ):
+
         if state and external_inputs:
             raise ValueError("Can only run a Workflow providing one of state or external inputs, not both")
 
@@ -121,7 +130,6 @@ class WorkflowRunner(Generic[StateType]):
 
         self._active_nodes_by_execution_id: Dict[UUID, BaseNode[StateType]] = {}
         self._cancel_signal = cancel_signal
-        self._parent_context = parent_context
 
         setattr(
             self._initial_state,
@@ -141,6 +149,7 @@ class WorkflowRunner(Generic[StateType]):
         return event
 
     def _run_work_item(self, node: BaseNode[StateType], span_id: UUID) -> None:
+        parent = get_execution_context().get("parent_context")
         self._workflow_event_inner_queue.put(
             NodeExecutionInitiatedEvent(
                 trace_id=node.state.meta.trace_id,
@@ -149,12 +158,7 @@ class WorkflowRunner(Generic[StateType]):
                     node_definition=node.__class__,
                     inputs=node._inputs,
                 ),
-                parent=WorkflowParentContext(
-                    span_id=span_id,
-                    workflow_definition=self.workflow.__class__,
-                    parent=self._parent_context,
-                    type="WORKFLOW",
-                ),
+                parent=parent,
             )
         )
 
@@ -201,11 +205,7 @@ class WorkflowRunner(Generic[StateType]):
                                 output=initiated_output,
                                 invoked_ports=initiated_ports,
                             ),
-                            parent=WorkflowParentContext(
-                                span_id=span_id,
-                                workflow_definition=self.workflow.__class__,
-                                parent=self._parent_context,
-                            ),
+                            parent=parent,
                         ),
                     )
 
@@ -227,11 +227,7 @@ class WorkflowRunner(Generic[StateType]):
                                     output=output,
                                     invoked_ports=invoked_ports,
                                 ),
-                                parent=WorkflowParentContext(
-                                    span_id=span_id,
-                                    workflow_definition=self.workflow.__class__,
-                                    parent=self._parent_context,
-                                ),
+                                parent=parent,
                             ),
                         )
                     elif output.is_fulfilled:
@@ -248,11 +244,7 @@ class WorkflowRunner(Generic[StateType]):
                                     output=output,
                                     invoked_ports=invoked_ports,
                                 ),
-                                parent=WorkflowParentContext(
-                                    span_id=span_id,
-                                    workflow_definition=self.workflow.__class__,
-                                    parent=self._parent_context,
-                                ),
+                                parent=parent,
                             )
                         )
 
@@ -276,11 +268,7 @@ class WorkflowRunner(Generic[StateType]):
                         outputs=outputs,
                         invoked_ports=invoked_ports,
                     ),
-                    parent=WorkflowParentContext(
-                        span_id=span_id,
-                        workflow_definition=self.workflow.__class__,
-                        parent=self._parent_context,
-                    ),
+                    parent=parent,
                 )
             )
         except NodeException as e:
@@ -292,11 +280,7 @@ class WorkflowRunner(Generic[StateType]):
                         node_definition=node.__class__,
                         error=e.error,
                     ),
-                    parent=WorkflowParentContext(
-                        span_id=span_id,
-                        workflow_definition=self.workflow.__class__,
-                        parent=self._parent_context,
-                    ),
+                    parent=parent,
                 )
             )
         except Exception as e:
@@ -313,11 +297,7 @@ class WorkflowRunner(Generic[StateType]):
                             code=VellumErrorCode.INTERNAL_ERROR,
                         ),
                     ),
-                    parent=WorkflowParentContext(
-                        span_id=span_id,
-                        workflow_definition=self.workflow.__class__,
-                        parent=self._parent_context,
-                    ),
+                    parent=parent,
                 ),
             )
 
@@ -337,6 +317,7 @@ class WorkflowRunner(Generic[StateType]):
 
                 self._run_node_if_ready(next_state, edge.to_node, edge)
 
+    @wrapper_execution_context()
     def _run_node_if_ready(
         self,
         state: StateType,
@@ -363,7 +344,7 @@ class WorkflowRunner(Generic[StateType]):
 
             worker_thread = Thread(
                 target=self._run_work_item,
-                kwargs={"node": node, "span_id": node_span_id},
+                kwargs={"node": node, "span_id": node_span_id, "parent_context": get_parent_context()},
             )
             worker_thread.start()
 
@@ -409,6 +390,7 @@ class WorkflowRunner(Generic[StateType]):
         return None
 
     def _initiate_workflow_event(self) -> WorkflowExecutionInitiatedEvent:
+        parent = get_execution_context().get("parent_context")
         return WorkflowExecutionInitiatedEvent(
             trace_id=self._initial_state.meta.trace_id,
             span_id=self._initial_state.meta.span_id,
@@ -416,10 +398,11 @@ class WorkflowRunner(Generic[StateType]):
                 workflow_definition=self.workflow.__class__,
                 inputs=self._initial_state.meta.workflow_inputs,
             ),
-            parent=self._parent_context,
+            parent=parent,
         )
 
     def _stream_workflow_event(self, output: BaseOutput) -> WorkflowExecutionStreamingEvent:
+        parent = get_execution_context().get("parent_context")
         return WorkflowExecutionStreamingEvent(
             trace_id=self._initial_state.meta.trace_id,
             span_id=self._initial_state.meta.span_id,
@@ -427,10 +410,11 @@ class WorkflowRunner(Generic[StateType]):
                 workflow_definition=self.workflow.__class__,
                 output=output,
             ),
-            parent=self._parent_context,
+            parent=parent,
         )
 
     def _fulfill_workflow_event(self, outputs: OutputsType) -> WorkflowExecutionFulfilledEvent:
+        parent = get_execution_context().get("parent_context")
         return WorkflowExecutionFulfilledEvent(
             trace_id=self._initial_state.meta.trace_id,
             span_id=self._initial_state.meta.span_id,
@@ -438,10 +422,11 @@ class WorkflowRunner(Generic[StateType]):
                 workflow_definition=self.workflow.__class__,
                 outputs=outputs,
             ),
-            parent=self._parent_context,
+            parent=parent,
         )
 
     def _reject_workflow_event(self, error: VellumError) -> WorkflowExecutionRejectedEvent:
+        parent = get_execution_context().get("parent_context")
         return WorkflowExecutionRejectedEvent(
             trace_id=self._initial_state.meta.trace_id,
             span_id=self._initial_state.meta.span_id,
@@ -449,19 +434,22 @@ class WorkflowRunner(Generic[StateType]):
                 workflow_definition=self.workflow.__class__,
                 error=error,
             ),
-            parent=self._parent_context,
+            parent=parent,
         )
 
     def _resume_workflow_event(self) -> WorkflowExecutionResumedEvent:
+        parent = get_execution_context().get("parent_context")
         return WorkflowExecutionResumedEvent(
             trace_id=self._initial_state.meta.trace_id,
             span_id=self._initial_state.meta.span_id,
             body=WorkflowExecutionResumedBody(
                 workflow_definition=self.workflow.__class__,
             ),
+            parent=parent,
         )
 
     def _pause_workflow_event(self, external_inputs: Iterable[ExternalInputReference]) -> WorkflowExecutionPausedEvent:
+        parent = get_execution_context().get("parent_context")
         return WorkflowExecutionPausedEvent(
             trace_id=self._initial_state.meta.trace_id,
             span_id=self._initial_state.meta.span_id,
@@ -469,11 +457,16 @@ class WorkflowRunner(Generic[StateType]):
                 workflow_definition=self.workflow.__class__,
                 external_inputs=external_inputs,
             ),
-            parent=self._parent_context,
+            parent=parent,
         )
 
     def _stream(self) -> None:
         # TODO: We should likely handle this during initialization
+        parent = get_parent_context()
+        current_parent_context = WorkflowParentContext(
+            workflow_definition=self.workflow.__class__, span_id=self._initial_state.meta.span_id, parent=parent
+        )
+
         # https://app.shortcut.com/vellum/story/4327
         if not self._entrypoints:
             self._workflow_event_outer_queue.put(
@@ -491,7 +484,7 @@ class WorkflowRunner(Generic[StateType]):
 
         for node_cls in self._entrypoints:
             try:
-                self._run_node_if_ready(self._initial_state, node_cls)
+                self._run_node_if_ready(self._initial_state, node_cls, parent_context=current_parent_context)
             except NodeException as e:
                 self._workflow_event_outer_queue.put(self._reject_workflow_event(e.error))
                 return
@@ -600,7 +593,8 @@ class WorkflowRunner(Generic[StateType]):
             return event.workflow_definition == self.workflow.__class__
         return False
 
-    def stream(self) -> WorkflowEventStream:
+    def stream(self, **kwargs):
+        parent = get_parent_context()
         background_thread = Thread(
             target=self._run_background_thread,
             name=f"{self.workflow.__class__.__name__}.background_thread",
@@ -626,6 +620,7 @@ class WorkflowRunner(Generic[StateType]):
         # The extra level of indirection prevents the runner from waiting on the caller to consume the event stream
         stream_thread = Thread(
             target=self._stream,
+            kwargs={"parent_context": get_parent_context()},
             name=f"{self.workflow.__class__.__name__}.stream_thread",
         )
         stream_thread.start()

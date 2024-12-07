@@ -21,7 +21,7 @@ class PushGroup(ClickAliasedGroup):
         if cmd is not None:
             return cmd
 
-        # If no command found, treat the command name as a module
+        # If no command found, call our catch-all
         return push_module
 
 
@@ -30,7 +30,7 @@ class PushGroup(ClickAliasedGroup):
 def push(
     ctx: click.Context,
 ) -> None:
-    """Push to Vellum"""
+    """Push Resources to Vellum"""
 
     if ctx.invoked_subcommand is None:
         push_command()
@@ -38,12 +38,12 @@ def push(
 
 @push.command(name="workflows")
 @click.argument("module", required=False)
-@click.option("--deploy", is_flag=True, help="Deploy the workflow after pushing it to Vellum")
-@click.option("--deployment-label", type=str, help="Label to use for the deployment")
-@click.option("--deployment-name", type=str, help="Unique name for the deployment")
-@click.option("--deployment-description", type=str, help="Description for the deployment")
-@click.option("--release-tag", type=list, help="Release tag for the deployment", multiple=True)
-def push_workflow(
+@click.option("--deploy", is_flag=True, help="Deploy the Workflow after pushing it to Vellum")
+@click.option("--deployment-label", type=str, help="Label to use for the Deployment")
+@click.option("--deployment-name", type=str, help="Unique name for the Deployment")
+@click.option("--deployment-description", type=str, help="Description for the Deployment")
+@click.option("--release-tag", type=list, help="Release Tag for the Deployment", multiple=True)
+def push_workflows(
     module: Optional[str],
     deploy: Optional[bool],
     deployment_label: Optional[str],
@@ -51,6 +51,11 @@ def push_workflow(
     deployment_description: Optional[str],
     release_tag: Optional[List[str]],
 ) -> None:
+    """
+    Push Workflows to Vellum. If a module is provided, only the Workflow for that module will be pushed.
+    If no module is provided, the first configured Workflow will be pushed.
+    """
+
     push_command(
         module=module,
         deploy=deploy,
@@ -63,11 +68,11 @@ def push_workflow(
 
 @push.command(name="*", hidden=True)
 @click.pass_context
-@click.option("--deploy", is_flag=True, help="Deploy the workflow after pushing it to Vellum")
-@click.option("--deployment-label", type=str, help="Label to use for the deployment")
-@click.option("--deployment-name", type=str, help="Unique name for the deployment")
-@click.option("--deployment-description", type=str, help="Description for the deployment")
-@click.option("--release-tag", type=list, help="Release tag for the deployment", multiple=True)
+@click.option("--deploy", is_flag=True, help="Deploy the Resource after pushing it to Vellum")
+@click.option("--deployment-label", type=str, help="Label to use for the Deployment")
+@click.option("--deployment-name", type=str, help="Unique name for the Deployment")
+@click.option("--deployment-description", type=str, help="Description for the Deployment")
+@click.option("--release-tag", type=list, help="Release Tag for the Deployment", multiple=True)
 def push_module(
     ctx: click.Context,
     deploy: Optional[bool],
@@ -76,7 +81,8 @@ def push_module(
     deployment_description: Optional[str],
     release_tag: Optional[List[str]],
 ) -> None:
-    """Push any arbitrary module defined locally to Vellum"""
+    """Push a specific module to Vellum"""
+
     if ctx.parent:
         push_command(
             module=ctx.parent.invoked_subcommand,
@@ -118,7 +124,7 @@ def pull(
     include_json: Optional[bool],
     exclude_code: Optional[bool],
 ) -> None:
-    """Pull the first configured Resource from Vellum"""
+    """Pull Resources from Vellum"""
 
     if ctx.invoked_subcommand is None:
         pull_command(

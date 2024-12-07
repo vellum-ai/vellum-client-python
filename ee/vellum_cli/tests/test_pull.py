@@ -7,9 +7,10 @@ from uuid import uuid4
 import zipfile
 from typing import Generator, Tuple
 
+from click.testing import CliRunner
 import tomli_w
 
-from vellum_cli.pull import pull_command
+from vellum_cli import main as cli_main
 
 
 def zip_file_map(file_map: dict[str, str]) -> bytes:
@@ -66,9 +67,13 @@ def test_pull(vellum_client, mock_module):
     vellum_client.workflows.pull.return_value = iter([zip_file_map({"workflow.py": "print('hello')"})])
 
     # WHEN the user runs the pull command
-    pull_command(module)
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["pull", module])
 
-    # THEN the workflow.py file is written to the module directory
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the workflow.py file is written to the module directory
     workflow_py = os.path.join(temp_dir, *module.split("."), "workflow.py")
     assert os.path.exists(workflow_py)
     with open(workflow_py) as f:
@@ -88,10 +93,14 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
     os.chdir(temp_dir)
 
     # WHEN the user runs the pull command with the workflow sandbox id and no module
-    pull_command(workflow_sandbox_id=workflow_sandbox_id)
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["pull", "--workflow-sandbox-id", workflow_sandbox_id])
     os.chdir(current_dir)
 
-    # THEN the pull api is called with exclude_code=True
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the pull api is called with exclude_code=True
     vellum_client.workflows.pull.assert_called_once()
     workflow_py = os.path.join(temp_dir, "workflow_87654321", "workflow.py")
     assert os.path.exists(workflow_py)
@@ -113,9 +122,13 @@ def test_pull__remove_missing_files(vellum_client, mock_module):
         f.write("print('hello')")
 
     # WHEN the user runs the pull command
-    pull_command(module)
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["pull", module])
 
-    # THEN the workflow.py file is written to the module directory
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the workflow.py file is written to the module directory
     assert os.path.exists(os.path.join(temp_dir, *module.split("."), "workflow.py"))
     with open(os.path.join(temp_dir, *module.split("."), "workflow.py")) as f:
         assert f.read() == "print('hello')"
@@ -163,9 +176,13 @@ def test_pull__remove_missing_files__ignore_pattern(vellum_client, mock_module):
         )
 
     # WHEN the user runs the pull command
-    pull_command(module)
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["pull", module])
 
-    # THEN the workflow.py file is written to the module directory
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the workflow.py file is written to the module directory
     assert os.path.exists(os.path.join(temp_dir, *module.split("."), "workflow.py"))
     with open(os.path.join(temp_dir, *module.split("."), "workflow.py")) as f:
         assert f.read() == "print('hello')"
@@ -187,9 +204,13 @@ def test_pull__include_json(vellum_client, mock_module):
     )
 
     # WHEN the user runs the pull command
-    pull_command(module, include_json=True)
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["pull", module, "--include-json"])
 
-    # THEN the pull api is called with include_json=True
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the pull api is called with include_json=True
     vellum_client.workflows.pull.assert_called_once()
     call_args = vellum_client.workflows.pull.call_args.kwargs
     assert call_args["request_options"]["additional_query_parameters"] == {"include_json": True}
@@ -205,9 +226,13 @@ def test_pull__exclude_code(vellum_client, mock_module):
     )
 
     # WHEN the user runs the pull command
-    pull_command(module, exclude_code=True)
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["pull", module, "--exclude-code"])
 
-    # THEN the pull api is called with exclude_code=True
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the pull api is called with exclude_code=True
     vellum_client.workflows.pull.assert_called_once()
     call_args = vellum_client.workflows.pull.call_args.kwargs
     assert call_args["request_options"]["additional_query_parameters"] == {"exclude_code": True}

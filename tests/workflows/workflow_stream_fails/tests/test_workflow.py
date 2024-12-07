@@ -37,7 +37,7 @@ def test_run_workflow__stream_fails__last_event_is_not_workflow_event():
     workflow = AlwaysFailsWorkflow()
 
     # AND the failure happens after a NODE FULFILLED event
-    def mock_stream_side_effect(self):
+    def mock_stream_side_effect(self, **kwargs):
         self._workflow_event_outer_queue.put(
             NodeExecutionFulfilledEvent(
                 trace_id=uuid4(),

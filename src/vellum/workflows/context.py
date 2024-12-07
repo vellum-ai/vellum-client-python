@@ -7,6 +7,7 @@ from typing import (
     Any,
     Callable,
     Dict,
+    Generator,
     Iterator,
     List,
     Optional,
@@ -24,6 +25,8 @@ ExecutionContext = Dict[str, Any]
 _CONTEXT_KEY = "_execution_context"
 
 local = threading.local()
+
+_context_lock = threading.Lock()
 
 F = TypeVar("F", bound=Callable[..., Any])
 T = TypeVar("T")
@@ -47,16 +50,18 @@ def get_parent_context() -> ParentContext:
 @contextmanager
 def execution_context(**kwargs: Any) -> Iterator[None]:
     """Context manager for handling execution context."""
-    prev_context = get_execution_context()
+    with _context_lock:
+        prev_context = get_execution_context()
+        new_context = {**prev_context, **kwargs}
+        set_execution_context(new_context)
     try:
-        set_execution_context({**prev_context, **kwargs})
         yield
     finally:
         set_execution_context(prev_context)
 
 
 # Defined set of keywords that should be extracted for the wrapper
-EXECUTION_CONTEXT_ONLY_KEYWORDS: List[str] = ["context", "parent_context", "execution_id"]
+EXECUTION_CONTEXT_ONLY_KEYWORDS: List[str] = ["parent_context"]
 EXECUTION_PASSTHROUGH_KEYWORDS: List[str] = []
 
 
@@ -72,26 +77,30 @@ def wrapper_execution_context(*wrapper_args: Any, **wrapper_kwargs: Any) -> Call
         @wraps(fn)
         def wrap(*args: Any, **kwds: Any) -> Any:
             # Extract all wrapper-specific arguments from kwds
-            wrapper_specific_kwargs = {}
-            fn_kwargs = kwds.copy()
+            with _context_lock:
+                wrapper_specific_kwargs = {}
+                fn_kwargs = kwds.copy()
 
-            # Move all wrapper-specific keywords to wrapper_specific_kwargs
-            for key in EXECUTION_CONTEXT_ONLY_KEYWORDS:
-                if key in fn_kwargs:
-                    wrapper_specific_kwargs[key] = fn_kwargs.pop(key)
+                # Move all wrapper-specific keywords to wrapper_specific_kwargs
+                for key in EXECUTION_CONTEXT_ONLY_KEYWORDS:
+                    if key in fn_kwargs:
+                        wrapper_specific_kwargs[key] = fn_kwargs.pop(key)
 
-            parent_context = get_parent_context()
-            if wrapper_specific_kwargs.get("parent_context") or wrapper_kwargs.get("parent_context"):
                 temp = wrapper_specific_kwargs.pop("parent_context", None) or wrapper_kwargs.pop("parent_context", None)
-                if temp:
-                    parent_context = temp
+                parent_context = temp or get_parent_context()
 
-            # Combine all wrapper context
-            context = {
-                **wrapper_kwargs,  # Context from decorator
-                **wrapper_specific_kwargs,  # Context from function call
-                "parent_context": parent_context,
-            }
+                # Combine all wrapper context
+                context = {
+                    "parent_context": parent_context,
+                }
+
+                if inspect.isgeneratorfunction(fn):
+
+                    def wrapped_generator(*args: Any, **kwds: Any) -> Generator:
+                        with execution_context(**context):
+                            yield from fn(*args, **kwds)
+
+                    return wrapped_generator(*args, **kwds)
 
             # Execute with the combined context
             with execution_context(**context):
@@ -104,22 +113,18 @@ def wrapper_execution_context(*wrapper_args: Any, **wrapper_kwargs: Any) -> Call
     return wrapper
 
 
-class ExecutionContextMixin:
-    def _wrap_method(self, method: Callable[..., Any]) -> Callable[..., Any]:
-        """Wrap a method with execution context."""
+def wrap_execution_context_class(cls: Type) -> Type:
+    """Class decorator to wrap methods with execution context at class definition time."""
+    # Wrap eligible methods
+    for attr_name, attr_value in cls.__dict__.items():
+        if (
+            callable(attr_value)
+            and not attr_name.startswith("__")
+            and not isinstance(attr_value, property)
+            and not hasattr(attr_value, "__get__")
+            and not isinstance(attr_value, type)
+        ):
 
-        # Get the parent context from the current execution context
-        prev_context = get_execution_context()
+            setattr(cls, attr_name, wrapper_execution_context()(attr_value))
 
-        # Use your existing wrapper with the parent context
-        wrapped = wrapper_execution_context(**prev_context)(method)
-
-        return wrapped
-
-    def __getattribute__(self, name: str) -> Any:
-        """Wrap methods with execution context when they're accessed."""
-        attr = object.__getattribute__(self, name)
-        if callable(attr) and not name.startswith("__"):  # Debug
-            wrap_method = object.__getattribute__(self, "_wrap_method")
-            return wrap_method(attr)
-        return attr
+    return cls

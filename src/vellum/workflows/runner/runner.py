@@ -8,9 +8,9 @@ from typing import TYPE_CHECKING, Any, Dict, Generic, Iterable, Iterator, Option
 
 from vellum.workflows.constants import UNDEF
 from vellum.workflows.context import (
-    ExecutionContextMixin,
     get_execution_context,
     get_parent_context,
+    wrap_execution_context_class,
     wrapper_execution_context,
 )
 from vellum.workflows.descriptors.base import BaseDescriptor
@@ -65,7 +65,6 @@ BackgroundThreadItem = Union[BaseState, WorkflowEvent, None]
 
 
 class WorkflowRunner(
-    ExecutionContextMixin,
     Generic[StateType],
 ):
     _entrypoints: Iterable[Type[BaseNode]]
@@ -148,6 +147,7 @@ class WorkflowRunner(
         self._background_thread_queue.put(event)
         return event
 
+    @wrapper_execution_context()
     def _run_work_item(self, node: BaseNode[StateType], span_id: UUID) -> None:
         parent = get_execution_context().get("parent_context")
         self._workflow_event_inner_queue.put(
@@ -307,6 +307,7 @@ class WorkflowRunner(
         if not ports:
             return
 
+        current_context = get_execution_context()
         for port in ports:
             for edge in port.edges:
                 if port.fork_state:
@@ -315,7 +316,11 @@ class WorkflowRunner(
                 else:
                     next_state = state
 
-                self._run_node_if_ready(next_state, edge.to_node, edge)
+                self._run_node_if_ready(
+                    next_state,
+                    edge.to_node,
+                    edge,
+                )
 
     @wrapper_execution_context()
     def _run_node_if_ready(
@@ -325,6 +330,10 @@ class WorkflowRunner(
         invoked_by: Optional[Edge] = None,
     ) -> None:
         with state.__lock__:
+            parent = get_parent_context()
+            current_parent_context = WorkflowParentContext(
+                workflow_definition=self.workflow.__class__, span_id=self._initial_state.meta.span_id, parent=parent
+            )
             for descriptor in node_class.ExternalInputs:
                 if not isinstance(descriptor, ExternalInputReference):
                     continue
@@ -344,7 +353,11 @@ class WorkflowRunner(
 
             worker_thread = Thread(
                 target=self._run_work_item,
-                kwargs={"node": node, "span_id": node_span_id, "parent_context": get_parent_context()},
+                kwargs={
+                    "node": node,
+                    "span_id": node_span_id,
+                    "parent_context": current_parent_context,
+                },
             )
             worker_thread.start()
 
@@ -460,12 +473,9 @@ class WorkflowRunner(
             parent=parent,
         )
 
+    @wrapper_execution_context()
     def _stream(self) -> None:
         # TODO: We should likely handle this during initialization
-        parent = get_parent_context()
-        current_parent_context = WorkflowParentContext(
-            workflow_definition=self.workflow.__class__, span_id=self._initial_state.meta.span_id, parent=parent
-        )
 
         # https://app.shortcut.com/vellum/story/4327
         if not self._entrypoints:
@@ -484,7 +494,7 @@ class WorkflowRunner(
 
         for node_cls in self._entrypoints:
             try:
-                self._run_node_if_ready(self._initial_state, node_cls, parent_context=current_parent_context)
+                self._run_node_if_ready(self._initial_state, node_cls)
             except NodeException as e:
                 self._workflow_event_outer_queue.put(self._reject_workflow_event(e.error))
                 return

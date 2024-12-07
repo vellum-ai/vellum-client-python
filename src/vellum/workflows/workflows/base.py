@@ -5,10 +5,10 @@ import inspect
 
 from vellum.plugins.utils import load_runtime_plugins
 from vellum.workflows.context import (
-    ExecutionContextMixin,
     get_execution_context,
     get_parent_context,
     set_execution_context,
+    wrap_execution_context_class,
     wrapper_execution_context,
 )
 from vellum.workflows.workflows.event_filters import workflow_event_filter
@@ -96,7 +96,7 @@ class _BaseWorkflowMeta(type):
 GraphAttribute = Union[Type[BaseNode], Graph, Set[Type[BaseNode]], Set[Graph]]
 
 
-class BaseWorkflow(Generic[WorkflowInputsType, StateType], ExecutionContextMixin, metaclass=_BaseWorkflowMeta):
+class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkflowMeta):
     graph: ClassVar[GraphAttribute]
     emitters: List[BaseWorkflowEmitter]
     resolvers: List[BaseWorkflowResolver]
@@ -200,7 +200,7 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], ExecutionContextMixin
             entrypoint_nodes=entrypoint_nodes,
             external_inputs=external_inputs,
             cancel_signal=cancel_signal,
-        ).stream(parent_context=parent)
+        ).stream()
         first_event: Optional[Union[WorkflowExecutionInitiatedEvent, WorkflowExecutionResumedEvent]] = None
         last_event = None
         for event in events:

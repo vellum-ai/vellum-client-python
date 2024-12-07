@@ -1,7 +1,7 @@
 from threading import Thread
 from uuid import uuid4
 
-from vellum.workflows.context import get_execution_context, wrapper_execution_context
+from vellum.workflows.context import get_execution_context, get_parent_context, wrapper_execution_context
 from vellum.workflows.events.types import NodeParentContext
 
 from tests.workflows.basic_parent_context.basic_workflow import StartNode
@@ -18,7 +18,11 @@ class A:
         parent_context=NodeParentContext(node_definition=StartNode.__class__, span_id=constant_span)
     )
     def test(self):
-        self.inner_test(parent_context=NodeParentContext(node_definition=StartNode.__class__, span_id=self._span_id))
+        self.inner_test(
+            parent_context=NodeParentContext(
+                node_definition=StartNode.__class__, span_id=self._span_id, parent=get_parent_context()
+            )
+        )
 
     @wrapper_execution_context()
     def inner_test(self):

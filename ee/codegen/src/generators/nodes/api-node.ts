@@ -7,7 +7,6 @@ import { ApiNodeContext } from "src/context/node-context/api-node";
 import { NodeInput } from "src/generators";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
 import { ApiNode as ApiNodeType, ConstantValuePointer } from "src/types/vellum";
-import {OUTPUTS_CLASS_NAME} from "src/constants";
 
 export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
   baseNodeClassName = "APINode";

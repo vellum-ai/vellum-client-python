@@ -133,7 +133,10 @@ def test_serialize_workflow(vellum_client):
                         "rules": [
                             {
                                 "type": "WORKSPACE_SECRET",
-                                "data": {"type": "STRING", "workspace_secret_id": workspace_secret.id},
+                                "data": {
+                                    "type": "STRING",
+                                    "workspace_secret_id": "261730c0-b7e9-40c0-b39c-d9c1251bb058",
+                                },
                             }
                         ],
                         "combinator": "OR",
@@ -154,8 +157,8 @@ def test_serialize_workflow(vellum_client):
                 "api_key_header_value_input_id": "d794bb51-a419-4fd8-be63-dfaf4166e831",
                 "additional_headers": [
                     {
-                        "header_key_input_id": "cff297b8-8ef9-46ab-9ef4-1f1eb43a2298",
-                        "header_value_input_id": "0d41f210-f428-4849-9c21-0cde2cf54657",
+                        "header_key_input_id": "57c31247-998a-430d-bb62-bf50eca7df35",
+                        "header_value_input_id": "47b32274-f19b-4c15-b788-55c069c311c5",
                     }
                 ],
                 "text_output_id": "17342c21-12bb-49ab-88ce-f144e0376b32",
@@ -164,26 +167,11 @@ def test_serialize_workflow(vellum_client):
             },
             "display_data": {"position": {"x": 0.0, "y": 0.0}},
             "definition": {
-                "bases": [
-                    {
-                        "module": [
-                            "vellum",
-                            "workflows",
-                            "nodes",
-                            "displayable",
-                            "api_node",
-                            "node",
-                        ],
-                        "name": "APINode",
-                    }
-                ],
-                "module": [
-                    "tests",
-                    "workflows",
-                    "basic_vellum_api_node",
-                    "workflow",
-                ],
                 "name": "SimpleAPINode",
+                "module": ["tests", "workflows", "basic_vellum_api_node", "workflow"],
+                "bases": [
+                    {"name": "APINode", "module": ["vellum", "workflows", "nodes", "displayable", "api_node", "node"]}
+                ],
             },
         },
         api_node,

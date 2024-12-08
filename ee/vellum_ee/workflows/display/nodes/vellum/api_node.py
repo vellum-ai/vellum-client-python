@@ -8,6 +8,7 @@ from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeV
 from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
+from vellum_ee.workflows.display.vellum import ConstantValuePointer, StringVellumValue
 
 _APINodeType = TypeVar("_APINodeType", bound=APINode)
 
@@ -64,6 +65,7 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
 
         headers = raise_if_descriptor(node.headers)
         api_key_header_key = raise_if_descriptor(node.api_key_header_key)
+        api_key_header_value = raise_if_descriptor(node.api_key_header_value)
         authorization_type = raise_if_descriptor(node.authorization_type)
         bearer_token_value = raise_if_descriptor(node.bearer_token_value)
 
@@ -108,7 +110,7 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
                 display_context=display_context,
                 input_id=self.api_key_header_value_input_id,
             )
-            if headers and api_key_header_key
+            if headers and api_key_header_key and api_key_header_value
             else None
         )
 
@@ -119,7 +121,7 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
                 {
                     "header_key_input_id": create_node_input(
                         node_id=node_id,
-                        input_name=f"additional_header_key_{key}",
+                        input_name="additional_header_key",
                         value=key,
                         display_context=display_context,
                         input_id=(
@@ -130,7 +132,7 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
                     ).id,
                     "header_value_input_id": create_node_input(
                         node_id=node_id,
-                        input_name=f"additional_header_value_{key}",
+                        input_name="additional_header_value",
                         value=value,
                         display_context=display_context,
                         input_id=(

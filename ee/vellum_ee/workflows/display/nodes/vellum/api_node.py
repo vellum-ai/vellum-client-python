@@ -22,10 +22,6 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
     api_key_header_key_input_id: ClassVar[Optional[UUID]] = None
     api_key_header_value_input_id: ClassVar[Optional[UUID]] = None
 
-    text_output_id: ClassVar[Optional[UUID]] = None
-    json_output_id: ClassVar[Optional[UUID]] = None
-    status_code_output_id: ClassVar[Optional[UUID]] = None
-
     # A mapping between node input keys and their ids for inputs representing additional header keys
     additional_header_key_input_ids: ClassVar[Optional[Dict[str, UUID]]] = None
 

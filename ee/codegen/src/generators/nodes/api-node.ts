@@ -73,8 +73,8 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
               });
 
               return {
-                key: key,
-                value: value,
+                key,
+                value,
               };
             })
           ),
@@ -249,7 +249,7 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
               });
 
               return {
-                key: key,
+                key,
                 value: python.TypeInstantiation.uuid(nodeInput.id),
               };
             })
@@ -279,8 +279,8 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
               });
 
               return {
-                key: key,
-                value: python.TypeInstantiation.str(header.headerValueInputId),
+                key,
+                value: python.TypeInstantiation.uuid(header.headerValueInputId),
               };
             })
           ),

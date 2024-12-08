@@ -20,8 +20,8 @@ class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
         "nom": UUID("4e7557f4-16ec-4fec-97a6-fe221eae1ee5"),
     }
     additional_header_value_input_ids = {
-        "test": "a7a796b5-ac5b-471d-af20-b45c66b699ce",
-        "nom": "58099189-1676-4d89-a01d-9c1d79ba833a",
+        "test": UUID("a7a796b5-ac5b-471d-af20-b45c66b699ce"),
+        "nom": UUID("58099189-1676-4d89-a01d-9c1d79ba833a"),
     }
     node_input_ids_by_name = {
         "method": UUID("4bc3ec8f-f889-45c2-bad0-5498f28cc8af"),

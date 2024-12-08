@@ -25,9 +25,9 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         "baz": UUID("13c2dd5e-cdd0-431b-aa91-46ad8da1cb51"),
     }
     additional_header_value_input_ids = {
-        "foo": "36865dca-40b4-432c-bab4-1e11bb9f4083",
-        "bar": "00baaee1-b785-403d-b391-f68b3aea334f",
-        "baz": "408c2b3d-7c30-4e01-a2e3-276753beadbc",
+        "foo": UUID("36865dca-40b4-432c-bab4-1e11bb9f4083"),
+        "bar": UUID("00baaee1-b785-403d-b391-f68b3aea334f"),
+        "baz": UUID("408c2b3d-7c30-4e01-a2e3-276753beadbc"),
     }
     node_input_ids_by_name = {
         "method": UUID("9bf086d4-feed-47ff-9736-a5a6aa3a11cc"),
@@ -119,9 +119,9 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         "baz": UUID("13c2dd5e-cdd0-431b-aa91-46ad8da1cb51"),
     }
     additional_header_value_input_ids = {
-        "foo": "36865dca-40b4-432c-bab4-1e11bb9f4083",
-        "bar": "00baaee1-b785-403d-b391-f68b3aea334f",
-        "baz": "408c2b3d-7c30-4e01-a2e3-276753beadbc",
+        "foo": UUID("36865dca-40b4-432c-bab4-1e11bb9f4083"),
+        "bar": UUID("00baaee1-b785-403d-b391-f68b3aea334f"),
+        "baz": UUID("408c2b3d-7c30-4e01-a2e3-276753beadbc"),
     }
     node_input_ids_by_name = {
         "method": UUID("9bf086d4-feed-47ff-9736-a5a6aa3a11cc"),

@@ -13,8 +13,9 @@ from tests.workflows.basic_vellum_api_node.workflow import SimpleAPIWorkflow
 def test_serialize_workflow(vellum_client):
     # GIVEN a Workflow that uses a vellum API node
     # AND stubbed out API calls
+    workspace_secret_id = str(uuid4())
     workspace_secret = WorkspaceSecretRead(
-        id=str(uuid4()),
+        id=workspace_secret_id,
         modified=datetime.now(),
         name="MY_SECRET",
         label="My Secret",
@@ -135,7 +136,7 @@ def test_serialize_workflow(vellum_client):
                                 "type": "WORKSPACE_SECRET",
                                 "data": {
                                     "type": "STRING",
-                                    "workspace_secret_id": "261730c0-b7e9-40c0-b39c-d9c1251bb058",
+                                    "workspace_secret_id": f"{workspace_secret_id}",
                                 },
                             }
                         ],

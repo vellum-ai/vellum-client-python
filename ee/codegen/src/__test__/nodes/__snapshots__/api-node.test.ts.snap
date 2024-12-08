@@ -4,7 +4,10 @@ exports[`ApiNode > basic > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseAPINodeDisplay
 from ...nodes.api_node import APINode
 from uuid import UUID
-from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
+from vellum_ee.workflows.display.nodes.types import (
+    NodeOutputDisplay,
+    PortDisplayOverrides,
+)
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
 
@@ -16,9 +19,6 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
     bearer_token_value_input_id = UUID("931502c1-23a5-4e2a-a75e-80736c42f3c9")
     api_key_header_key_input_id = UUID("96c8343d-cc94-4df0-9001-eb2905a00be7")
     api_key_header_value_input_id = UUID("bfc2e790-66fd-42fd-acf7-3b2c785c1a0a")
-    text_output_id = UUID("81b270c0-4deb-4db3-aae5-138f79531b2b")
-    json_output_id = UUID("af576eaa-d39d-4c19-8992-1f01a65a709a")
-    status_code_output_id = UUID("69250713-617d-42a4-9326-456c70d0ef20")
     additional_header_key_input_ids = {
         "additional_header_value_1": UUID("36865dca-40b4-432c-bab4-1e11bb9f4083"),
         "additional_header_value_2": UUID("00baaee1-b785-403d-b391-f68b3aea334f"),
@@ -44,7 +44,17 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         "additional_header_key_3": UUID("13c2dd5e-cdd0-431b-aa91-46ad8da1cb51"),
         "additional_header_value_3": UUID("408c2b3d-7c30-4e01-a2e3-276753beadbc"),
     }
-    output_display = {}
+    output_display = {
+        APINode.Outputs.json: NodeOutputDisplay(
+            id=UUID("af576eaa-d39d-4c19-8992-1f01a65a709a"), name="json"
+        ),
+        APINode.Outputs.status_cde: NodeOutputDisplay(
+            id=UUID("69250713-617d-42a4-9326-456c70d0ef20"), name="status_code"
+        ),
+        APINode.Outputs.text: NodeOutputDisplay(
+            id=UUID("81b270c0-4deb-4db3-aae5-138f79531b2b"), name="text"
+        ),
+    }
     port_displays = {
         APINode.Ports.default: PortDisplayOverrides(
             id=UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e")
@@ -84,7 +94,10 @@ exports[`ApiNode > reject on error enabled > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseTryNodeDisplay, BaseAPINodeDisplay
 from uuid import UUID
 from ...nodes.api_node import APINode
-from vellum_ee.workflows.display.nodes.types import PortDisplayOverrides
+from vellum_ee.workflows.display.nodes.types import (
+    NodeOutputDisplay,
+    PortDisplayOverrides,
+)
 from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
 
 
@@ -100,9 +113,6 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
     bearer_token_value_input_id = UUID("931502c1-23a5-4e2a-a75e-80736c42f3c9")
     api_key_header_key_input_id = UUID("96c8343d-cc94-4df0-9001-eb2905a00be7")
     api_key_header_value_input_id = UUID("bfc2e790-66fd-42fd-acf7-3b2c785c1a0a")
-    text_output_id = UUID("81b270c0-4deb-4db3-aae5-138f79531b2b")
-    json_output_id = UUID("af576eaa-d39d-4c19-8992-1f01a65a709a")
-    status_code_output_id = UUID("69250713-617d-42a4-9326-456c70d0ef20")
     additional_header_key_input_ids = {
         "additional_header_value_1": UUID("36865dca-40b4-432c-bab4-1e11bb9f4083"),
         "additional_header_value_2": UUID("00baaee1-b785-403d-b391-f68b3aea334f"),
@@ -128,7 +138,17 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         "additional_header_key_3": UUID("13c2dd5e-cdd0-431b-aa91-46ad8da1cb51"),
         "additional_header_value_3": UUID("408c2b3d-7c30-4e01-a2e3-276753beadbc"),
     }
-    output_display = {}
+    output_display = {
+        APINode.Outputs.json: NodeOutputDisplay(
+            id=UUID("af576eaa-d39d-4c19-8992-1f01a65a709a"), name="json"
+        ),
+        APINode.Outputs.status_cde: NodeOutputDisplay(
+            id=UUID("69250713-617d-42a4-9326-456c70d0ef20"), name="status_code"
+        ),
+        APINode.Outputs.text: NodeOutputDisplay(
+            id=UUID("81b270c0-4deb-4db3-aae5-138f79531b2b"), name="text"
+        ),
+    }
     port_displays = {
         APINode.Ports.default: PortDisplayOverrides(
             id=UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e")

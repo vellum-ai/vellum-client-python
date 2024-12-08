@@ -73,8 +73,8 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
               });
 
               return {
-                key: key,
-                value: value,
+                key,
+                value,
               };
             })
           ),
@@ -235,17 +235,21 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
           initializer: python.TypeInstantiation.dict(
             this.nodeData.data.additionalHeaders.map((header) => {
               const nodeInput = this.nodeData.inputs.find(
-                (nodeInput) => nodeInput.id === header.headerValueInputId
+                (nodeInput) => nodeInput.id === header.headerKeyInputId
               );
 
               if (!nodeInput) {
                 throw new Error(
-                  `Node input with ID ${header.headerValueInputId} not found`
+                  `Node input with ID ${header.headerKeyInputId} not found`
                 );
               }
+              const key = new NodeInput({
+                workflowContext: this.workflowContext,
+                nodeInputData: nodeInput,
+              });
 
               return {
-                key: python.TypeInstantiation.str(nodeInput.key),
+                key,
                 value: python.TypeInstantiation.uuid(nodeInput.id),
               };
             })
@@ -261,18 +265,22 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
           initializer: python.TypeInstantiation.dict(
             this.nodeData.data.additionalHeaders.map((header) => {
               const nodeInput = this.nodeData.inputs.find(
-                (nodeInput) => nodeInput.id === header.headerValueInputId
+                (nodeInput) => nodeInput.id === header.headerKeyInputId
               );
 
               if (!nodeInput) {
                 throw new Error(
-                  `Node input with ID ${header.headerValueInputId} not found`
+                  `Node input with ID ${header.headerKeyInputId} not found`
                 );
               }
+              const key = new NodeInput({
+                workflowContext: this.workflowContext,
+                nodeInputData: nodeInput,
+              });
 
               return {
-                key: python.TypeInstantiation.str(nodeInput.key),
-                value: python.TypeInstantiation.uuid(nodeInput.id),
+                key,
+                value: python.TypeInstantiation.uuid(header.headerValueInputId),
               };
             })
           ),

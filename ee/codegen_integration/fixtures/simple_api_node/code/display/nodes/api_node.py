@@ -16,12 +16,12 @@ class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
     api_key_header_key_input_id = UUID("908e1fb5-bcba-4388-ae1d-a53d256eda97")
     api_key_header_value_input_id = UUID("efefc4f7-6c95-4561-b7a0-b48533e0c68f")
     additional_header_key_input_ids = {
-        "additional_header_value": UUID("a7a796b5-ac5b-471d-af20-b45c66b699ce"),
-        "additional_header_value": UUID("58099189-1676-4d89-a01d-9c1d79ba833a"),
+        "test": UUID("7dbd1729-ec2e-4be5-a868-e542ba421115"),
+        "nom": UUID("4e7557f4-16ec-4fec-97a6-fe221eae1ee5"),
     }
     additional_header_value_input_ids = {
-        "additional_header_value": UUID("a7a796b5-ac5b-471d-af20-b45c66b699ce"),
-        "additional_header_value": UUID("58099189-1676-4d89-a01d-9c1d79ba833a"),
+        "test": UUID("a7a796b5-ac5b-471d-af20-b45c66b699ce"),
+        "nom": UUID("58099189-1676-4d89-a01d-9c1d79ba833a"),
     }
     node_input_ids_by_name = {
         "method": UUID("4bc3ec8f-f889-45c2-bad0-5498f28cc8af"),

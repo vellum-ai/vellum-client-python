@@ -48,7 +48,7 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         APINode.Outputs.json: NodeOutputDisplay(
             id=UUID("af576eaa-d39d-4c19-8992-1f01a65a709a"), name="json"
         ),
-        APINode.Outputs.status_cde: NodeOutputDisplay(
+        APINode.Outputs.status_code: NodeOutputDisplay(
             id=UUID("69250713-617d-42a4-9326-456c70d0ef20"), name="status_code"
         ),
         APINode.Outputs.text: NodeOutputDisplay(
@@ -142,7 +142,7 @@ class APINodeDisplay(BaseAPINodeDisplay[APINode]):
         APINode.Outputs.json: NodeOutputDisplay(
             id=UUID("af576eaa-d39d-4c19-8992-1f01a65a709a"), name="json"
         ),
-        APINode.Outputs.status_cde: NodeOutputDisplay(
+        APINode.Outputs.status_code: NodeOutputDisplay(
             id=UUID("69250713-617d-42a4-9326-456c70d0ef20"), name="status_code"
         ),
         APINode.Outputs.text: NodeOutputDisplay(

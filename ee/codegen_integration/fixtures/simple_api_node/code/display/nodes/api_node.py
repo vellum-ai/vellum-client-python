@@ -36,7 +36,7 @@ class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
     }
     output_display = {
         ApiNode.Outputs.json: NodeOutputDisplay(id=UUID("f6f469ae-3f50-4276-a294-43d8d0fcf477"), name="json"),
-        ApiNode.Outputs.status_cde: NodeOutputDisplay(
+        ApiNode.Outputs.status_code: NodeOutputDisplay(
             id=UUID("6ab9d555-7007-43e1-9f90-d2ca21ea99cf"), name="status_code"
         ),
         ApiNode.Outputs.text: NodeOutputDisplay(id=UUID("6a3c1704-7020-411d-a440-84b2a481691e"), name="text"),

@@ -318,7 +318,7 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
           key: python.reference({
             name: this.nodeContext.nodeClassName,
             modulePath: this.nodeContext.nodeModulePath,
-            attribute: [OUTPUTS_CLASS_NAME, "status_cde"],
+            attribute: [OUTPUTS_CLASS_NAME, "status_code"],
           }),
           value: python.instantiateClass({
             classReference: python.reference({

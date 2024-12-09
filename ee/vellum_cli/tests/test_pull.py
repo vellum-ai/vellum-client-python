@@ -106,8 +106,37 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
     # THEN the command returns successfully
     assert result.exit_code == 0
 
-    # AND the pull api is called with exclude_code=True
+    # AND the pull api is called with the workflow sandbox id
     vellum_client.workflows.pull.assert_called_once()
+    workflow_py = os.path.join(temp_dir, "workflow_87654321", "workflow.py")
+    assert os.path.exists(workflow_py)
+    with open(workflow_py) as f:
+        assert f.read() == "print('hello')"
+
+
+def test_pull__sandbox_id_with_other_workflow_configured(vellum_client, mock_module):
+    # GIVEN a pyproject.toml with a workflow configured
+    temp_dir, _, _ = mock_module
+
+    # AND a different workflow sandbox id
+    workflow_sandbox_id = "87654321-0000-0000-0000-000000000000"
+
+    # AND the workflow pull API call returns a zip file
+    vellum_client.workflows.pull.return_value = iter([_zip_file_map({"workflow.py": "print('hello')"})])
+
+    # WHEN the user runs the pull command with the new workflow sandbox id
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["pull", "workflows", "--workflow-sandbox-id", workflow_sandbox_id])
+
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the pull api is called with the new workflow sandbox id
+    vellum_client.workflows.pull.assert_called_once()
+    call_args = vellum_client.workflows.pull.call_args.args
+    assert call_args[0] == workflow_sandbox_id
+
+    # AND the workflow.py file is written to the module directory
     workflow_py = os.path.join(temp_dir, "workflow_87654321", "workflow.py")
     assert os.path.exists(workflow_py)
     with open(workflow_py) as f:

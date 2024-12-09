@@ -41,7 +41,7 @@ def test_map_node_parent_context() -> None:
     assert workflow_initiated_events[0].workflow_definition == SimpleMapExample
     assert workflow_initiated_events[0].parent is None
 
-    # Subworkflow initiated events should have MapNode as parent
+    # Subworkflow initiated events should have Workflow as parent
     subworkflow_events = [cast(NodeEvent, e) for e in events if e.name.startswith("node")]
     for event in subworkflow_events:
 

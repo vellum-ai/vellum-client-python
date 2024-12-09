@@ -80,15 +80,13 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
             if authorization_type
             else None
         )
-        bearer_token_value_node_input = (
-            create_node_input(
-                node_id=node_id,
-                input_name="bearer_token_value",
-                value=bearer_token_value,
-                display_context=display_context,
-                input_id=self.bearer_token_value_input_id,
-                pointer_type=WorkspaceSecretPointer
-            )
+        bearer_token_value_node_input = create_node_input(
+            node_id=node_id,
+            input_name="bearer_token_value",
+            value=bearer_token_value,
+            display_context=display_context,
+            input_id=self.bearer_token_value_input_id,
+            pointer_type=WorkspaceSecretPointer,
         )
         api_key_header_key_node_input = (
             create_node_input(
@@ -101,15 +99,13 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
             if api_key_header_key
             else None
         )
-        api_key_header_value_node_input = (
-            create_node_input(
-                node_id=node_id,
-                input_name="api_key_header_value",
-                value=api_key_header_value,
-                display_context=display_context,
-                input_id=self.api_key_header_value_input_id,
-                pointer_type=WorkspaceSecretPointer
-            )
+        api_key_header_value_node_input = create_node_input(
+            node_id=node_id,
+            input_name="api_key_header_value",
+            value=api_key_header_value,
+            display_context=display_context,
+            input_id=self.api_key_header_value_input_id,
+            pointer_type=WorkspaceSecretPointer,
         )
 
         additional_header_inputs = []
@@ -126,9 +122,7 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
                     value=key,
                     display_context=display_context,
                     input_id=(
-                        self.additional_header_key_input_ids.get(key)
-                        if self.additional_header_key_input_ids
-                        else None
+                        self.additional_header_key_input_ids.get(key) if self.additional_header_key_input_ids else None
                     ),
                 )
                 header_value_input = create_node_input(
@@ -145,10 +139,12 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
 
                 additional_header_inputs.extend([header_key_input, header_value_input])
 
-                additional_headers.append({
-                    "header_key_input_id": header_key_input.id,
-                    "header_value_input_id": header_value_input.id,
-                })
+                additional_headers.append(
+                    {
+                        "header_key_input_id": header_key_input.id,
+                        "header_value_input_id": header_value_input.id,
+                    }
+                )
 
         inputs = [
             input

@@ -2,7 +2,6 @@ import pytest
 from datetime import datetime
 import glob
 import os
-import uuid
 from typing import List, Optional, Set, Tuple
 
 from vellum import WorkspaceSecretRead
@@ -34,7 +33,6 @@ _fixture_paths = _get_fixtures(
     # TODO: Remove exclusions on all of these fixtures
     # https://app.shortcut.com/vellum/story/4649/remove-fixture-exclusions-for-serialization
     exclude_fixtures={"simple_merge_node", "faa_q_and_a_bot"},
-    include_fixtures={"simple_api_node"},
 )
 _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
 
@@ -46,6 +44,7 @@ _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
 def code_to_display_fixture_paths(request) -> Tuple[str, str]:
     root = request.param
     return _get_fixture_paths(root)
+
 
 @pytest.fixture
 def workspace_secret_client(vellum_client):

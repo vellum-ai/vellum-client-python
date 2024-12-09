@@ -18,7 +18,8 @@ class APINode(BaseAPINode):
 
     authorization_type: Optional[AuthorizationType] = None - The type of authorization to use for the API call.
     api_key_header_key: Optional[str] = None - The header key to use for the API key authorization.
-    bearer_token_value: Optional[Union[str, VellumSecretReference]] = None - The bearer token value to use for the bearer token authorization.
+    bearer_token_value: Optional[Union[str, VellumSecretReference]] = None - The bearer token value to use
+    for the bearer token authorization.
     """
 
     authorization_type: Optional[AuthorizationType] = None

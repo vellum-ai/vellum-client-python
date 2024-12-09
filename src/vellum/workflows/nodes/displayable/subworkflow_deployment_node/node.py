@@ -90,8 +90,8 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
         return compiled_inputs
 
     def run(self) -> Iterator[BaseOutput]:
-        parent_context = get_parent_context()
-        parent_context = parent_context.model_dump_json() if parent_context else None
+        current_parent_context = get_parent_context()
+        parent_context = current_parent_context.model_dump_json() if current_parent_context else None
         subworkflow_stream = self._context.vellum_client.execute_workflow_stream(
             inputs=self._compile_subworkflow_inputs(),
             workflow_deployment_id=str(self.deployment) if isinstance(self.deployment, UUID) else None,
@@ -103,6 +103,7 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
             request_options=self.request_options,
             execution_context={"parent_context": parent_context},
         )
+        # for some reason execution context isn't showing as an option? ^ failing mypy
 
         outputs: Optional[List[WorkflowOutput]] = None
         fulfilled_output_names: Set[str] = set()

@@ -241,12 +241,14 @@ def test_stream_workflow__happy_path(vellum_client):
     vellum_client.execute_workflow_stream.side_effect = generate_subworkflow_events
 
     # WHEN we run the workflow
-    result = workflow.stream(
-        event_filter=root_workflow_event_filter,
-        inputs=Inputs(
-            city="San Francisco",
-            date="2024-01-01",
-        ),
+    result = list(
+        workflow.stream(
+            event_filter=root_workflow_event_filter,
+            inputs=Inputs(
+                city="San Francisco",
+                date="2024-01-01",
+            ),
+        )
     )
     events = list(event for event in result if event.name.startswith("workflow."))
     node_events = list(event for event in result if event.name.startswith("node."))

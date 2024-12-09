@@ -15,7 +15,6 @@ from vellum import (
     VellumVariable,
 )
 from vellum.workflows.constants import OMIT
-from vellum.workflows.context import get_parent_context
 from vellum.workflows.errors import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.displayable.bases.base_prompt_node import BasePromptNode
@@ -49,7 +48,6 @@ class BaseInlinePromptNode(BasePromptNode, Generic[StateType]):
 
     def _get_prompt_event_stream(self) -> Iterator[AdHocExecutePromptEvent]:
         input_variables, input_values = self._compile_prompt_inputs()
-        parent_context = get_parent_context() or self._context.parent_context
 
         return self._context.vellum_client.ad_hoc.adhoc_execute_prompt_stream(
             ml_model=self.ml_model,
@@ -60,7 +58,6 @@ class BaseInlinePromptNode(BasePromptNode, Generic[StateType]):
             functions=self.functions,
             expand_meta=self.expand_meta,
             request_options=self.request_options,
-            execution_context={"parent_context": parent_context.model_dump() if parent_context else None},
         )
 
     def _compile_prompt_inputs(self) -> Tuple[List[VellumVariable], List[PromptRequestInput]]:

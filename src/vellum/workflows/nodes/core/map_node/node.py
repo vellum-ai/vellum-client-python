@@ -55,12 +55,13 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
         fulfilled_iterations: List[bool] = []
         for index, item in enumerate(self.items):
             fulfilled_iterations.append(False)
+            parent_context = get_parent_context() or self._context.parent_context
             thread = Thread(
                 target=self._context_run_subworkflow,
                 kwargs={
                     "item": item,
                     "index": index,
-                    "parent_context": get_parent_context() or self._context.parent_context,
+                    "parent_context": parent_context,
                 },
             )
             thread.start()

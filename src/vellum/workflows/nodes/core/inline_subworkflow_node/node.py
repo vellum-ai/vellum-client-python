@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Generic, Iterator, Optional, Set, Type, TypeVar
 
+from vellum.workflows.context import execution_context, get_parent_context
 from vellum.workflows.errors.types import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases.base_subworkflow_node import BaseSubworkflowNode
@@ -24,13 +25,14 @@ class InlineSubworkflowNode(BaseSubworkflowNode[StateType], Generic[StateType, W
     subworkflow: Type["BaseWorkflow[WorkflowInputsType, InnerStateType]"]
 
     def run(self) -> Iterator[BaseOutput]:
-        subworkflow = self.subworkflow(
-            parent_state=self.state,
-            context=self._context,
-        )
-        subworkflow_stream = subworkflow.stream(
-            inputs=self._compile_subworkflow_inputs(),
-        )
+        with execution_context(parent_context=get_parent_context() or self._context.parent_context):
+            subworkflow = self.subworkflow(
+                parent_state=self.state,
+                context=self._context,
+            )
+            subworkflow_stream = subworkflow.stream(
+                inputs=self._compile_subworkflow_inputs(),
+            )
 
         outputs: Optional[BaseOutputs] = None
         fulfilled_output_names: Set[str] = set()

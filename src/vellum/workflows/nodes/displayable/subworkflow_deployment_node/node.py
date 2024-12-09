@@ -13,6 +13,7 @@ from vellum import (
 )
 from vellum.core import RequestOptions
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
+from vellum.workflows.context import get_parent_context
 from vellum.workflows.errors import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases.base_subworkflow_node.node import BaseSubworkflowNode
@@ -89,6 +90,8 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
         return compiled_inputs
 
     def run(self) -> Iterator[BaseOutput]:
+        parent_context = get_parent_context()
+        parent_context = parent_context.model_dump_json() if parent_context else None
         subworkflow_stream = self._context.vellum_client.execute_workflow_stream(
             inputs=self._compile_subworkflow_inputs(),
             workflow_deployment_id=str(self.deployment) if isinstance(self.deployment, UUID) else None,
@@ -98,6 +101,7 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
             event_types=["WORKFLOW"],
             metadata=self.metadata,
             request_options=self.request_options,
+            execution_context={"parent_context": parent_context},
         )
 
         outputs: Optional[List[WorkflowOutput]] = None

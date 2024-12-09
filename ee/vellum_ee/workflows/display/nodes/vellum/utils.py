@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Any, List, Optional, cast
+from typing import Any, List, Optional, Type, cast
 
 from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.expressions.coalesce_expression import CoalesceExpression
@@ -13,6 +13,9 @@ from vellum_ee.workflows.display.vellum import (
     NodeInput,
     NodeInputValuePointer,
     NodeInputValuePointerRule,
+    VellumValue,
+    WorkspaceSecretData,
+    WorkspaceSecretPointer,
 )
 
 
@@ -22,6 +25,7 @@ def create_node_input(
     value: Any,
     display_context: WorkflowDisplayContext,
     input_id: Optional[UUID],
+    pointer_type: Optional[Type[NodeInputValuePointerRule]] = ConstantValuePointer
 ) -> NodeInput:
     input_id = input_id or uuid4_from_hash(f"{node_id}|{input_name}")
     if (
@@ -33,7 +37,7 @@ def create_node_input(
         if wrapped_node._is_wrapped_node:
             value = getattr(wrapped_node.Outputs, value.name)
 
-    rules = create_node_input_value_pointer_rules(value, display_context)
+    rules = create_node_input_value_pointer_rules(value, display_context, pointer_type=pointer_type)
     return NodeInput(
         id=str(input_id),
         key=input_name,
@@ -48,6 +52,7 @@ def create_node_input_value_pointer_rules(
     value: Any,
     display_context: WorkflowDisplayContext,
     existing_rules: Optional[List[NodeInputValuePointerRule]] = None,
+        pointer_type: Optional[Type[NodeInputValuePointerRule]] = None
 ) -> List[NodeInputValuePointerRule]:
     node_input_value_pointer_rules: List[NodeInputValuePointerRule] = existing_rules or []
 
@@ -59,18 +64,30 @@ def create_node_input_value_pointer_rules(
 
         if isinstance(value, CoalesceExpression):
             # Recursively handle the left-hand side
-            lhs_rules = create_node_input_value_pointer_rules(value.lhs, display_context, [])
+            lhs_rules = create_node_input_value_pointer_rules(value.lhs, display_context, [], pointer_type=pointer_type)
             node_input_value_pointer_rules.extend(lhs_rules)
 
             # Handle the right-hand side
             if not isinstance(value.rhs, CoalesceExpression):
-                rhs_rules = create_node_input_value_pointer_rules(value.rhs, display_context, [])
+                rhs_rules = create_node_input_value_pointer_rules(value.rhs, display_context, [], pointer_type=pointer_type)
                 node_input_value_pointer_rules.extend(rhs_rules)
         else:
             # Non-CoalesceExpression case
             node_input_value_pointer_rules.append(create_node_input_value_pointer_rule(value, display_context))
     else:
-        vellum_variable_value = primitive_to_vellum_value(value)
-        node_input_value_pointer_rules.append(ConstantValuePointer(type="CONSTANT_VALUE", data=vellum_variable_value))
+        pointer = create_pointer(value, pointer_type)
+        node_input_value_pointer_rules.append(pointer)
 
     return node_input_value_pointer_rules
+
+
+def create_pointer(
+        value: Any,
+        pointer_type: Optional[Type[NodeInputValuePointerRule]] = None,
+) -> NodeInputValuePointerRule:
+    if value is None:
+        if pointer_type is WorkspaceSecretPointer:
+            return WorkspaceSecretPointer(type="WORKSPACE_SECRET", data=WorkspaceSecretData(type="STRING", workspace_secret_id=None))
+
+    vellum_variable_value = primitive_to_vellum_value(value)
+    return ConstantValuePointer(type="CONSTANT_VALUE", data=vellum_variable_value)

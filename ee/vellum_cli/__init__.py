@@ -36,14 +36,20 @@ def push(
         push_command()
 
 
-@push.command(name="workflows")
+@main.group()
+def workflows():
+    """Operations related to Vellum Workflows"""
+    pass
+
+
+@workflows.command(name="push")
 @click.argument("module", required=False)
 @click.option("--deploy", is_flag=True, help="Deploy the Workflow after pushing it to Vellum")
 @click.option("--deployment-label", type=str, help="Label to use for the Deployment")
 @click.option("--deployment-name", type=str, help="Unique name for the Deployment")
 @click.option("--deployment-description", type=str, help="Description for the Deployment")
 @click.option("--release-tag", type=list, help="Release Tag for the Deployment", multiple=True)
-def push_workflows(
+def workflows_push(
     module: Optional[str],
     deploy: Optional[bool],
     deployment_label: Optional[str],
@@ -133,7 +139,7 @@ def pull(
         )
 
 
-@pull.command(name="workflows")
+@workflows.command(name="pull")
 @click.argument("module", required=False)
 @click.option(
     "--include-json",
@@ -148,7 +154,7 @@ Should only be used for debugging purposes.""",
     help="""Exclude the code definition of the Workflow from the pull response. \
 Should only be used for debugging purposes.""",
 )
-def pull_workflows(
+def workflows_pull(
     module: Optional[str],
     include_json: Optional[bool],
     workflow_sandbox_id: Optional[str],

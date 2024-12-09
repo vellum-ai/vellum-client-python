@@ -14,11 +14,20 @@
             "x": 1545.0,
             "y": 330.0
           },
-          "comment": null,
           "width": 124.0,
           "height": 48.0
         },
-        "definition": null
+        "definition": {
+          "bases": [],
+          "module": [
+            "vellum",
+            "workflows",
+            "nodes",
+            "bases",
+            "base"
+          ],
+          "name": "BaseNode"
+        }
       },
       {
         "id": "743aec59-2aa9-402c-963a-d9b86a80a1c2",
@@ -107,7 +116,7 @@
                   "type": "CONSTANT_VALUE",
                   "data": {
                     "type": "STRING",
-                    "value": null
+                    "value": "API_KEY"
                   }
                 }
               ],
@@ -139,7 +148,7 @@
                   "type": "CONSTANT_VALUE",
                   "data": {
                     "type": "STRING",
-                    "value": null
+                    "value": "nice-key"
                   }
                 }
               ],
@@ -232,9 +241,8 @@
             "x": 1889.865705614568,
             "y": 236.61265174506826
           },
-          "comment": null,
-          "width": 467.0,
-          "height": 288.0
+          "width": 467,
+          "height": 288
         },
         "definition": {
           "bases": [
@@ -247,7 +255,7 @@
                 "api_node",
                 "node"
               ],
-              "name": "ApiNode"
+              "name": "APINode"
             }
           ],
           "module": [
@@ -277,7 +285,15 @@
             "id": "bc3e4cad-e6b6-4f3d-b0d8-ee7099fe6352",
             "key": "node_input",
             "value": {
-              "rules": [],
+              "rules": [
+                {
+                  "type": "NODE_OUTPUT",
+                  "data": {
+                    "node_id": "743aec59-2aa9-402c-963a-d9b86a80a1c2",
+                    "output_id": "6a3c1704-7020-411d-a440-84b2a481691e"
+                  }
+                }
+              ],
               "combinator": "OR"
             }
           }
@@ -287,17 +303,39 @@
             "x": 2750.0,
             "y": 210.0
           },
-          "comment": null,
           "width": 467.0,
           "height": 234.0
         },
-        "definition": null
+        "definition": {
+          "name": "FinalOutput",
+          "module": [
+            "codegen_integration",
+            "fixtures",
+            "simple_api_node",
+            "code",
+            "nodes",
+            "final_output"
+          ],
+          "bases": [
+            {
+              "name": "FinalOutputNode",
+              "module": [
+                "vellum",
+                "workflows",
+                "nodes",
+                "displayable",
+                "final_output_node",
+                "node"
+              ]
+            }
+          ]
+        }
       }
     ],
     "edges": [
       {
         "type": "DEFAULT",
-        "id": "eaa80dca-eb90-48bb-9903-bedbe51f5a2e",
+        "id": "8fbc728e-7408-4456-a932-001423ae8efa",
         "source_node_id": "c4ef480d-635a-49c8-900f-6583c4b79fb5",
         "source_handle_id": "0465edea-e797-4558-aabb-65bce040e095",
         "target_node_id": "743aec59-2aa9-402c-963a-d9b86a80a1c2",
@@ -335,10 +373,18 @@
       "id": "c6f392da-bd3a-40ba-8fdd-75fc36b18fd8",
       "key": "foo",
       "type": "STRING",
-      "required": null,
+      "required": true,
       "default": null,
-      "extensions": null
+      "extensions": {
+        "color": null
+      }
     }
   ],
-  "output_variables": []
+  "output_variables": [
+    {
+      "id": "e53bdfb1-f74d-43f0-a3fc-24c7a5162a62",
+      "key": "final-output",
+      "type": "STRING"
+    }
+  ]
 }

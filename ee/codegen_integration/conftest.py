@@ -1,7 +1,10 @@
 import pytest
+from datetime import datetime
 import glob
 import os
 from typing import List, Optional, Set, Tuple
+
+from vellum import WorkspaceSecretRead
 
 current_file_path = os.path.abspath(__file__)
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -29,8 +32,7 @@ def _get_fixture_paths(root: str) -> Tuple[str, str]:
 _fixture_paths = _get_fixtures(
     # TODO: Remove exclusions on all of these fixtures
     # https://app.shortcut.com/vellum/story/4649/remove-fixture-exclusions-for-serialization
-    exclude_fixtures={"simple_merge_node"},
-    include_fixtures={"simple_error_node"},
+    exclude_fixtures={"simple_merge_node", "faa_q_and_a_bot"},
 )
 _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
 
@@ -42,3 +44,15 @@ _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
 def code_to_display_fixture_paths(request) -> Tuple[str, str]:
     root = request.param
     return _get_fixture_paths(root)
+
+
+@pytest.fixture
+def workspace_secret_client(vellum_client):
+    workspace_secret = WorkspaceSecretRead(
+        id="cecd16a2-4de5-444d-acff-37a5c400600c",
+        modified=datetime.now(),
+        name="MY_SECRET",
+        label="My Secret",
+        secret_type="USER_DEFINED",
+    )
+    vellum_client.workspace_secrets.retrieve.return_value = workspace_secret

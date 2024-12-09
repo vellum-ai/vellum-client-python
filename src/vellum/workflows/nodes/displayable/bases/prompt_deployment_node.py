@@ -12,6 +12,7 @@ from vellum import (
     StringInputRequest,
 )
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
+from vellum.workflows.context import get_parent_context
 from vellum.workflows.errors import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.displayable.bases.base_prompt_node import BasePromptNode
@@ -46,6 +47,8 @@ class BasePromptDeploymentNode(BasePromptNode, Generic[StateType]):
     metadata: Optional[Dict[str, Optional[Any]]] = OMIT
 
     def _get_prompt_event_stream(self) -> Iterator[ExecutePromptEvent]:
+        parent_context = get_parent_context()
+        parent_context = parent_context.model_dump() if parent_context else None
         return self._context.vellum_client.execute_prompt_stream(
             inputs=self._compile_prompt_inputs(),
             prompt_deployment_id=str(self.deployment) if isinstance(self.deployment, UUID) else None,
@@ -57,6 +60,7 @@ class BasePromptDeploymentNode(BasePromptNode, Generic[StateType]):
             expand_raw=self.expand_raw,
             metadata=self.metadata,
             request_options=self.request_options,
+            execution_context={"parent_context": parent_context},
         )
 
     def _compile_prompt_inputs(self) -> List[PromptDeploymentInputRequest]:

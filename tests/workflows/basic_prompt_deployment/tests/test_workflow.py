@@ -1,3 +1,4 @@
+from unittest.mock import ANY
 from uuid import uuid4
 from typing import Any, Iterator, List
 
@@ -13,6 +14,8 @@ from vellum import (
     StringVellumValue,
 )
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
+from vellum.workflows.events.types import CodeResourceDefinition, WorkflowParentContext
+from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
 from tests.workflows.basic_prompt_deployment.workflow import BasicPromptDeploymentWorkflow, Inputs
 
@@ -71,7 +74,12 @@ def test_run_workflow__happy_path(vellum_client):
         expand_raw=OMIT,
         metadata=OMIT,
         request_options=None,
+        execution_context=ANY,
     )
+
+    call_kwargs = vellum_client.execute_prompt_stream.call_args.kwargs
+    parent_context = call_kwargs["execution_context"].get("parent_context")
+    assert parent_context["workflow_definition"] == CodeResourceDefinition.encode(workflow.__class__).model_dump()
 
 
 def test_stream_workflow__happy_path(vellum_client):
@@ -109,12 +117,16 @@ def test_stream_workflow__happy_path(vellum_client):
 
     # WHEN we run the workflow
     result = workflow.stream(
+        event_filter=root_workflow_event_filter,
         inputs=Inputs(
             city="San Francisco",
             date="2024-01-01",
-        )
+        ),
     )
-    events = list(result)
+
+    result = list(result)
+    events = list(event for event in result if event.name.startswith("workflow."))
+    node_events = list(event for event in result if event.name.startswith("node."))
 
     # THEN the workflow should have completed successfully with 8 events
     assert len(events) == 8
@@ -156,3 +168,11 @@ def test_stream_workflow__happy_path(vellum_client):
         "results": expected_outputs,
         "text": "It was hot",
     }
+
+    assert node_events[0].name == "node.execution.initiated"
+    assert (
+        node_events[0].parent.workflow_definition.model_dump()
+        == WorkflowParentContext(
+            workflow_definition=workflow.__class__, span_id=uuid4()
+        ).workflow_definition.model_dump()
+    )

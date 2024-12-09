@@ -1,3 +1,4 @@
+from unittest.mock import ANY
 from uuid import uuid4
 from typing import Any, Iterator, List
 
@@ -14,6 +15,7 @@ from vellum import (
     VellumVariable,
 )
 from vellum.workflows.constants import OMIT
+from vellum.workflows.events.types import CodeResourceDefinition
 from vellum.workflows.nodes.displayable.bases.inline_prompt_node.constants import DEFAULT_PROMPT_PARAMETERS
 
 from tests.workflows.basic_inline_prompt_node.workflow import BasicInlinePromptWorkflow, WorkflowInputs
@@ -89,7 +91,12 @@ def test_run_workflow__happy_path(vellum_adhoc_prompt_client, mock_uuid4_generat
         expand_meta=OMIT,
         functions=OMIT,
         request_options=None,
+        execution_context=ANY,
     )
+
+    call_args = vellum_adhoc_prompt_client.adhoc_execute_prompt_stream.call_args.kwargs
+    parent_context = call_args["execution_context"]["parent_context"]
+    assert parent_context["workflow_definition"] == CodeResourceDefinition.encode(workflow.__class__).model_dump()
 
 
 def test_stream_workflow__happy_path(vellum_adhoc_prompt_client):

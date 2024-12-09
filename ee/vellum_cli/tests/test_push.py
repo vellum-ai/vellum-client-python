@@ -79,9 +79,9 @@ def test_push__multiple_workflows_configured__not_found_module(mock_module):
     "base_command",
     [
         ["push"],
-        ["push", "workflows"],
+        ["workflows", "push"],
     ],
-    ids=["push", "push_workflows"],
+    ids=["push", "workflows_push"],
 )
 def test_push__happy_path(mock_module, vellum_client, base_command):
     # GIVEN a single workflow configured
@@ -128,9 +128,9 @@ class ExampleWorkflow(BaseWorkflow):
     "base_command",
     [
         ["push"],
-        ["push", "workflows"],
+        ["workflows", "push"],
     ],
-    ids=["push", "push_workflows"],
+    ids=["push", "workflows_push"],
 )
 def test_push__deployment(mock_module, vellum_client, base_command):
     # GIVEN a single workflow configured

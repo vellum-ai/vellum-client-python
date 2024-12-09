@@ -30,9 +30,9 @@ def _zip_file_map(file_map: dict[str, str]) -> bytes:
     "base_command",
     [
         ["pull"],
-        ["pull", "workflows"],
+        ["workflows", "pull"],
     ],
-    ids=["pull", "pull_workflows"],
+    ids=["pull", "workflows_pull"],
 )
 def test_pull(vellum_client, mock_module, base_command):
     # GIVEN a module on the user's filesystem
@@ -100,7 +100,7 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
 
     # WHEN the user runs the pull command with the workflow sandbox id and no module
     runner = CliRunner()
-    result = runner.invoke(cli_main, ["pull", "workflows", "--workflow-sandbox-id", workflow_sandbox_id])
+    result = runner.invoke(cli_main, ["workflows", "pull", "--workflow-sandbox-id", workflow_sandbox_id])
     os.chdir(current_dir)
 
     # THEN the command returns successfully
@@ -126,7 +126,7 @@ def test_pull__sandbox_id_with_other_workflow_configured(vellum_client, mock_mod
 
     # WHEN the user runs the pull command with the new workflow sandbox id
     runner = CliRunner()
-    result = runner.invoke(cli_main, ["pull", "workflows", "--workflow-sandbox-id", workflow_sandbox_id])
+    result = runner.invoke(cli_main, ["workflows", "pull", "--workflow-sandbox-id", workflow_sandbox_id])
 
     # THEN the command returns successfully
     assert result.exit_code == 0

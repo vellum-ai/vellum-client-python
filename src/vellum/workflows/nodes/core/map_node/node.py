@@ -3,8 +3,10 @@ from queue import Empty, Queue
 from threading import Thread
 from typing import TYPE_CHECKING, Callable, Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union, overload
 
+from vellum.workflows.context import execution_context, get_parent_context
 from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.events.types import ParentContext
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.bases import BaseNode
@@ -53,7 +55,14 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
         fulfilled_iterations: List[bool] = []
         for index, item in enumerate(self.items):
             fulfilled_iterations.append(False)
-            thread = Thread(target=self._run_subworkflow, kwargs={"item": item, "index": index})
+            thread = Thread(
+                target=self._context_run_subworkflow,
+                kwargs={
+                    "item": item,
+                    "index": index,
+                    "parent_context": get_parent_context() or self._context.parent_context,
+                },
+            )
             thread.start()
 
         try:
@@ -87,6 +96,13 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
             pass
 
         return self.Outputs(**mapped_items)
+
+    def _context_run_subworkflow(
+        self, *, item: MapNodeItemType, index: int, parent_context: Optional[ParentContext] = None
+    ) -> None:
+        parent_context = parent_context or self._context.parent_context
+        with execution_context(parent_context=parent_context):
+            self._run_subworkflow(item=item, index=index)
 
     def _run_subworkflow(self, *, item: MapNodeItemType, index: int) -> None:
         subworkflow = self.subworkflow(parent_state=self.state, context=self._context)

@@ -248,7 +248,6 @@ def test_stream_workflow__happy_path(vellum_client):
             date="2024-01-01",
         ),
     )
-    result = list(result)
     events = list(event for event in result if event.name.startswith("workflow."))
     node_events = list(event for event in result if event.name.startswith("node."))
 

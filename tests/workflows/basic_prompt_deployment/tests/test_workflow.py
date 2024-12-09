@@ -1,6 +1,6 @@
 from unittest.mock import ANY
 from uuid import uuid4
-from typing import Any, Iterator, List
+from typing import Any, Iterator, List, cast
 
 from vellum import (
     ExecutePromptEvent,
@@ -116,15 +116,16 @@ def test_stream_workflow__happy_path(vellum_client):
     vellum_client.execute_prompt_stream.side_effect = generate_prompt_events
 
     # WHEN we run the workflow
-    result = workflow.stream(
-        event_filter=root_workflow_event_filter,
-        inputs=Inputs(
-            city="San Francisco",
-            date="2024-01-01",
-        ),
+    result = list(
+        workflow.stream(
+            event_filter=root_workflow_event_filter,
+            inputs=Inputs(
+                city="San Francisco",
+                date="2024-01-01",
+            ),
+        )
     )
 
-    result = list(result)
     events = list(event for event in result if event.name.startswith("workflow."))
     node_events = list(event for event in result if event.name.startswith("node."))
 
@@ -171,7 +172,7 @@ def test_stream_workflow__happy_path(vellum_client):
 
     assert node_events[0].name == "node.execution.initiated"
     assert (
-        node_events[0].parent.workflow_definition.model_dump()
+        cast(WorkflowParentContext, node_events[0].parent).workflow_definition.model_dump()
         == WorkflowParentContext(
             workflow_definition=workflow.__class__, span_id=uuid4()
         ).workflow_definition.model_dump()

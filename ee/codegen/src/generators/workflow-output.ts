@@ -12,6 +12,7 @@ export declare namespace WorkflowOutput {
   export interface Args {
     workflowContext: WorkflowContext;
     workflowOutputContext: WorkflowOutputContext;
+    outputNamesById: Map<string, string>;
   }
 }
 

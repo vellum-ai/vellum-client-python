@@ -145,16 +145,17 @@ exports[`Workflow > write > graph > should be correct for set of a branch and a 
 from .nodes.templating_node import TemplatingNode
 from .nodes.templating_node_3 import TemplatingNode3
 from .nodes.templating_node_4 import TemplatingNode4
-from .nodes.merge_node import MergeNode
 from .nodes.templating_node_2 import TemplatingNode2
+from .nodes.merge_node import MergeNode
 from .nodes.templating_node_5 import TemplatingNode5
 
 
 class TestWorkflow(BaseWorkflow):
-    graph = {
-        TemplatingNode >> TemplatingNode3 >> TemplatingNode4,
-        TemplatingNode2,
-    } >> MergeNode >> TemplatingNode5
+    graph = (
+        {TemplatingNode >> TemplatingNode3 >> TemplatingNode4, TemplatingNode2}
+        >> MergeNode
+        >> TemplatingNode5
+    )
 "
 `;
 

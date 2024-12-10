@@ -11,6 +11,7 @@ from vellum import (
     RawPromptExecutionOverridesRequest,
     StringInputRequest,
 )
+from vellum.client import RequestOptions
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
 from vellum.workflows.context import get_parent_context
 from vellum.workflows.errors import VellumErrorCode
@@ -48,7 +49,12 @@ class BasePromptDeploymentNode(BasePromptNode, Generic[StateType]):
 
     def _get_prompt_event_stream(self) -> Iterator[ExecutePromptEvent]:
         current_parent_context = get_parent_context()
-        parent_context = current_parent_context.model_dump() if current_parent_context else None
+        parent_context = current_parent_context.model_dump_json() if current_parent_context else None
+        request_options = self.request_options or RequestOptions()
+        request_options["additional_body_parameters"] = {
+            "execution_context": {"parent_context": parent_context},
+            **request_options.get("additional_body_parameters", {}),
+        }
         return self._context.vellum_client.execute_prompt_stream(
             inputs=self._compile_prompt_inputs(),
             prompt_deployment_id=str(self.deployment) if isinstance(self.deployment, UUID) else None,
@@ -60,7 +66,6 @@ class BasePromptDeploymentNode(BasePromptNode, Generic[StateType]):
             expand_raw=self.expand_raw,
             metadata=self.metadata,
             request_options=self.request_options,
-            execution_context={"parent_context": parent_context},
         )
 
     def _compile_prompt_inputs(self) -> List[PromptDeploymentInputRequest]:

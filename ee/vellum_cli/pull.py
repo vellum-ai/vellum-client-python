@@ -19,10 +19,12 @@ def resolve_workflow_config(
     if module:
         return next((w for w in config.workflows if w.module == module), None)
     elif workflow_sandbox_id:
-        return WorkflowConfig(
+        workflow_config = WorkflowConfig(
             workflow_sandbox_id=workflow_sandbox_id,
             module=f"workflow_{workflow_sandbox_id.split('-')[0]}",
         )
+        config.workflows.append(workflow_config)
+        return workflow_config
     elif config.workflows:
         return config.workflows[0]
 

@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 import threading
-from typing import Any, Callable, Iterator, Optional, TypeVar, cast
+from typing import Iterator, Optional, cast
 
 from vellum.client.core import UniversalBaseModel
 from vellum.workflows.events.types import ParentContext
@@ -13,12 +13,6 @@ class ExecutionContext(UniversalBaseModel):
 _CONTEXT_KEY = "_execution_context"
 
 local = threading.local()
-
-_context_lock = threading.Lock()
-
-F = TypeVar("F", bound=Callable[..., Any])
-T = TypeVar("T")
-P = TypeVar("P", bound=ParentContext)
 
 
 def get_execution_context() -> ExecutionContext:

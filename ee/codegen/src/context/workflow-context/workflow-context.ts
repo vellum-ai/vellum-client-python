@@ -267,7 +267,7 @@ export class WorkflowContext {
     this.outputNamesById.set(terminalNodeId, outputName);
   }
 
-  public generateUniqueFinalOutputName(
+  private generateUniqueFinalOutputName(
     workflowOutputContext: WorkflowOutputContext
   ): string {
     const node: FinalOutputNode =
@@ -276,15 +276,15 @@ export class WorkflowContext {
     if (value !== undefined) {
       return value;
     } else {
-      let counter = 2;
+      let counter = 1;
       const names = new Set(this.outputNamesById.values());
 
-      const originalName = node.data.name;
-      let uniqueName = originalName;
+      const originalName = `${node.data.name}-`;
+      let uniqueName = `${originalName}${counter}`;
 
       while (names.has(uniqueName)) {
-        uniqueName = `${originalName}-${counter}`;
         counter++;
+        uniqueName = `${originalName}${counter}`;
       }
       this.addOutputName(node.id, uniqueName);
       return uniqueName;

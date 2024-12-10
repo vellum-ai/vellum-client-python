@@ -2,6 +2,7 @@ import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 import { isNil } from "lodash";
 
+import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { ApiNodeContext } from "src/context/node-context/api-node";
 import { NodeInput } from "src/generators";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
@@ -72,8 +73,8 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
               });
 
               return {
-                key: key,
-                value: value,
+                key,
+                value,
               };
             })
           ),
@@ -227,39 +228,6 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
       );
     }
 
-    if (!isNil(this.nodeData.data.textOutputId)) {
-      statements.push(
-        python.field({
-          name: "text_output_id",
-          initializer: python.TypeInstantiation.uuid(
-            this.nodeData.data.textOutputId
-          ),
-        })
-      );
-    }
-
-    if (!isNil(this.nodeData.data.jsonOutputId)) {
-      statements.push(
-        python.field({
-          name: "json_output_id",
-          initializer: python.TypeInstantiation.uuid(
-            this.nodeData.data.jsonOutputId
-          ),
-        })
-      );
-    }
-
-    if (!isNil(this.nodeData.data.statusCodeOutputId)) {
-      statements.push(
-        python.field({
-          name: "status_code_output_id",
-          initializer: python.TypeInstantiation.uuid(
-            this.nodeData.data.statusCodeOutputId
-          ),
-        })
-      );
-    }
-
     if (!isNil(this.nodeData.data.additionalHeaders)) {
       statements.push(
         python.field({
@@ -267,17 +235,21 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
           initializer: python.TypeInstantiation.dict(
             this.nodeData.data.additionalHeaders.map((header) => {
               const nodeInput = this.nodeData.inputs.find(
-                (nodeInput) => nodeInput.id === header.headerValueInputId
+                (nodeInput) => nodeInput.id === header.headerKeyInputId
               );
 
               if (!nodeInput) {
                 throw new Error(
-                  `Node input with ID ${header.headerValueInputId} not found`
+                  `Node input with ID ${header.headerKeyInputId} not found`
                 );
               }
+              const key = new NodeInput({
+                workflowContext: this.workflowContext,
+                nodeInputData: nodeInput,
+              });
 
               return {
-                key: python.TypeInstantiation.str(nodeInput.key),
+                key,
                 value: python.TypeInstantiation.uuid(nodeInput.id),
               };
             })
@@ -293,18 +265,22 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
           initializer: python.TypeInstantiation.dict(
             this.nodeData.data.additionalHeaders.map((header) => {
               const nodeInput = this.nodeData.inputs.find(
-                (nodeInput) => nodeInput.id === header.headerValueInputId
+                (nodeInput) => nodeInput.id === header.headerKeyInputId
               );
 
               if (!nodeInput) {
                 throw new Error(
-                  `Node input with ID ${header.headerValueInputId} not found`
+                  `Node input with ID ${header.headerKeyInputId} not found`
                 );
               }
+              const key = new NodeInput({
+                workflowContext: this.workflowContext,
+                nodeInputData: nodeInput,
+              });
 
               return {
-                key: python.TypeInstantiation.str(nodeInput.key),
-                value: python.TypeInstantiation.uuid(nodeInput.id),
+                key,
+                value: python.TypeInstantiation.uuid(header.headerValueInputId),
               };
             })
           ),
@@ -318,11 +294,89 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
   protected getOutputDisplay(): python.Field {
     return python.field({
       name: "output_display",
-      initializer: python.TypeInstantiation.dict(
-        // TODO: Specify output displays
-        //    https://app.shortcut.com/vellum/story/5640
-        []
-      ),
+      initializer: python.TypeInstantiation.dict([
+        {
+          key: python.reference({
+            name: this.nodeContext.nodeClassName,
+            modulePath: this.nodeContext.nodeModulePath,
+            attribute: [OUTPUTS_CLASS_NAME, "json"],
+          }),
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "NodeOutputDisplay",
+              modulePath:
+                this.workflowContext.sdkModulePathNames
+                  .NODE_DISPLAY_TYPES_MODULE_PATH,
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "id",
+                value: python.TypeInstantiation.uuid(
+                  this.nodeData.data.jsonOutputId
+                ),
+              }),
+              python.methodArgument({
+                name: "name",
+                value: python.TypeInstantiation.str("json"),
+              }),
+            ],
+          }),
+        },
+        {
+          key: python.reference({
+            name: this.nodeContext.nodeClassName,
+            modulePath: this.nodeContext.nodeModulePath,
+            attribute: [OUTPUTS_CLASS_NAME, "status_code"],
+          }),
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "NodeOutputDisplay",
+              modulePath:
+                this.workflowContext.sdkModulePathNames
+                  .NODE_DISPLAY_TYPES_MODULE_PATH,
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "id",
+                value: python.TypeInstantiation.uuid(
+                  this.nodeData.data.statusCodeOutputId
+                ),
+              }),
+              python.methodArgument({
+                name: "name",
+                value: python.TypeInstantiation.str("status_code"),
+              }),
+            ],
+          }),
+        },
+        {
+          key: python.reference({
+            name: this.nodeContext.nodeClassName,
+            modulePath: this.nodeContext.nodeModulePath,
+            attribute: [OUTPUTS_CLASS_NAME, "text"],
+          }),
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "NodeOutputDisplay",
+              modulePath:
+                this.workflowContext.sdkModulePathNames
+                  .NODE_DISPLAY_TYPES_MODULE_PATH,
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "id",
+                value: python.TypeInstantiation.uuid(
+                  this.nodeData.data.textOutputId
+                ),
+              }),
+              python.methodArgument({
+                name: "name",
+                value: python.TypeInstantiation.str("text"),
+              }),
+            ],
+          }),
+        },
+      ]),
     });
   }
 

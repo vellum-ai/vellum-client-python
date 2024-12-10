@@ -14,14 +14,42 @@ def main() -> None:
     pass
 
 
-@main.command()
-@click.argument("module", required=False)
-@click.option("--deploy", is_flag=True, help="Deploy the workflow after pushing it to Vellum")
-@click.option("--deployment-label", type=str, help="Label to use for the deployment")
-@click.option("--deployment-name", type=str, help="Unique name for the deployment")
-@click.option("--deployment-description", type=str, help="Description for the deployment")
-@click.option("--release-tag", type=list, help="Release tag for the deployment", multiple=True)
+class PushGroup(ClickAliasedGroup):
+    def get_command(self, ctx, cmd_name):
+        # First try to get the command normally
+        cmd = super().get_command(ctx, cmd_name)
+        if cmd is not None:
+            return cmd
+
+        # If no command found, call our catch-all
+        return push_module
+
+
+@main.group(invoke_without_command=True, cls=PushGroup)
+@click.pass_context
 def push(
+    ctx: click.Context,
+) -> None:
+    """Push Resources to Vellum"""
+
+    if ctx.invoked_subcommand is None:
+        push_command()
+
+
+@main.group()
+def workflows():
+    """Operations related to Vellum Workflows"""
+    pass
+
+
+@workflows.command(name="push")
+@click.argument("module", required=False)
+@click.option("--deploy", is_flag=True, help="Deploy the Workflow after pushing it to Vellum")
+@click.option("--deployment-label", type=str, help="Label to use for the Deployment")
+@click.option("--deployment-name", type=str, help="Unique name for the Deployment")
+@click.option("--deployment-description", type=str, help="Description for the Deployment")
+@click.option("--release-tag", type=list, help="Release Tag for the Deployment", multiple=True)
+def workflows_push(
     module: Optional[str],
     deploy: Optional[bool],
     deployment_label: Optional[str],
@@ -29,7 +57,11 @@ def push(
     deployment_description: Optional[str],
     release_tag: Optional[List[str]],
 ) -> None:
-    """Push Workflow to Vellum"""
+    """
+    Push Workflows to Vellum. If a module is provided, only the Workflow for that module will be pushed.
+    If no module is provided, the first configured Workflow will be pushed.
+    """
+
     push_command(
         module=module,
         deploy=deploy,
@@ -38,6 +70,34 @@ def push(
         deployment_description=deployment_description,
         release_tags=release_tag,
     )
+
+
+@push.command(name="*", hidden=True)
+@click.pass_context
+@click.option("--deploy", is_flag=True, help="Deploy the Resource after pushing it to Vellum")
+@click.option("--deployment-label", type=str, help="Label to use for the Deployment")
+@click.option("--deployment-name", type=str, help="Unique name for the Deployment")
+@click.option("--deployment-description", type=str, help="Description for the Deployment")
+@click.option("--release-tag", type=list, help="Release Tag for the Deployment", multiple=True)
+def push_module(
+    ctx: click.Context,
+    deploy: Optional[bool],
+    deployment_label: Optional[str],
+    deployment_name: Optional[str],
+    deployment_description: Optional[str],
+    release_tag: Optional[List[str]],
+) -> None:
+    """Push a specific module to Vellum"""
+
+    if ctx.parent:
+        push_command(
+            module=ctx.parent.invoked_subcommand,
+            deploy=deploy,
+            deployment_label=deployment_label,
+            deployment_name=deployment_name,
+            deployment_description=deployment_description,
+            release_tags=release_tag,
+        )
 
 
 class PullGroup(ClickAliasedGroup):
@@ -70,7 +130,7 @@ def pull(
     include_json: Optional[bool],
     exclude_code: Optional[bool],
 ) -> None:
-    """Pull the first configured Resource from Vellum"""
+    """Pull Resources from Vellum"""
 
     if ctx.invoked_subcommand is None:
         pull_command(
@@ -79,7 +139,7 @@ def pull(
         )
 
 
-@pull.command(name="workflows")
+@workflows.command(name="pull")
 @click.argument("module", required=False)
 @click.option(
     "--include-json",
@@ -94,7 +154,7 @@ Should only be used for debugging purposes.""",
     help="""Exclude the code definition of the Workflow from the pull response. \
 Should only be used for debugging purposes.""",
 )
-def pull_workflows(
+def workflows_pull(
     module: Optional[str],
     include_json: Optional[bool],
     workflow_sandbox_id: Optional[str],

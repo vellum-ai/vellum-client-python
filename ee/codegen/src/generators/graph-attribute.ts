@@ -159,7 +159,15 @@ export class GraphAttribute extends AstNode {
             values: mutableAst.values.map(popSources),
           };
         } else if (mutableAst.type === "right_shift") {
-          return mutableAst.rhs;
+          const newLhs = popSources(mutableAst.lhs);
+          if (newLhs.type === "empty") {
+            return mutableAst.rhs;
+          }
+          return {
+            type: "right_shift",
+            lhs: newLhs,
+            rhs: mutableAst.rhs,
+          };
         } else {
           return { type: "empty" };
         }
@@ -172,7 +180,15 @@ export class GraphAttribute extends AstNode {
             values: mutableAst.values.map(popTerminals),
           };
         } else if (mutableAst.type === "right_shift") {
-          return mutableAst.lhs;
+          const newRhs = popTerminals(mutableAst.rhs);
+          if (newRhs.type === "empty") {
+            return mutableAst.lhs;
+          }
+          return {
+            type: "right_shift",
+            lhs: mutableAst.lhs,
+            rhs: newRhs,
+          };
         } else {
           return { type: "empty" };
         }

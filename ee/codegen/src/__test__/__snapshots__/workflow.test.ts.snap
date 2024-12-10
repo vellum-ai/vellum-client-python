@@ -183,7 +183,7 @@ class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
 
     class Outputs(BaseWorkflow.Outputs):
         query = FinalOutput.Outputs.value
-        query_1 = FinalOutput.Outputs.value
+        query_2 = FinalOutput.Outputs.value
 "
 `;
 

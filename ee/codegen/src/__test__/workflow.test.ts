@@ -160,8 +160,9 @@ describe("Workflow", () => {
         })
       );
 
-      const anotherTerminalNodeData =
-        terminalNodeDataFactory("terminal-node-2");
+      const anotherTerminalNodeData = terminalNodeDataFactory({
+        id: "terminal-node-2",
+      });
 
       workflowContext.addNodeContext(
         await createNodeContext({

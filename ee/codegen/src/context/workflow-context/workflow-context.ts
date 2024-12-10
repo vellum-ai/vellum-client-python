@@ -11,6 +11,7 @@ import { NodeNotFoundError } from "src/generators/errors";
 import { BaseNode } from "src/generators/nodes/bases";
 import {
   EntrypointNode,
+  FinalOutputNode,
   WorkflowDataNode,
   WorkflowEdge,
 } from "src/types/vellum";
@@ -76,6 +77,7 @@ export class WorkflowContext {
 
   public readonly workflowRawEdges: WorkflowEdge[];
 
+  // This is used to track the final output names for the workflow keyed by terminal node id
   public readonly outputNamesById: Map<string, string>;
 
   constructor({
@@ -192,6 +194,7 @@ export class WorkflowContext {
   public addWorkflowOutputContext(
     workflowOutputContext: WorkflowOutputContext
   ): void {
+    this.generateUniqueFinalOutputName(workflowOutputContext);
     this.workflowOutputContexts.push(workflowOutputContext);
   }
 
@@ -262,5 +265,29 @@ export class WorkflowContext {
 
   public addOutputName(terminalNodeId: string, outputName: string): void {
     this.outputNamesById.set(terminalNodeId, outputName);
+  }
+
+  public generateUniqueFinalOutputName(
+    workflowOutputContext: WorkflowOutputContext
+  ): string {
+    const node: FinalOutputNode =
+      workflowOutputContext.getFinalOutputNodeData();
+    const value = this.getOutputName(node.id);
+    if (value !== undefined) {
+      return value;
+    } else {
+      let counter = 2;
+      const names = new Set(this.outputNamesById.values());
+
+      const originalName = node.data.name;
+      let uniqueName = originalName;
+
+      while (names.has(uniqueName)) {
+        uniqueName = `${originalName}-${counter}`;
+        counter++;
+      }
+      this.addOutputName(node.id, uniqueName);
+      return uniqueName;
+    }
   }
 }

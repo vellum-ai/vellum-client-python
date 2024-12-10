@@ -20,14 +20,12 @@ export class WorkflowOutput extends AstNode {
   private workflowContext: WorkflowContext;
   private workflowOutputContext: WorkflowOutputContext;
   private workflowOutput: Field;
-  private outputNamesById: Map<string, string>;
 
   public constructor(args: WorkflowOutput.Args) {
     super();
 
     this.workflowContext = args.workflowContext;
     this.workflowOutputContext = args.workflowOutputContext;
-    this.outputNamesById = args.outputNamesById;
 
     this.workflowOutput = this.generateWorkflowOutput();
   }

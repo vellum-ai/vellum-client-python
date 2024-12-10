@@ -30,27 +30,12 @@ export class WorkflowOutputContext {
   }
 
   public getOutputName(): string {
-    const name = this.generateUniqueFinalOutputName();
-    return toSnakeCase(name);
-  }
-
-  private generateUniqueFinalOutputName(): string {
-    const value = this.workflowContext.getOutputName(this.terminalNodeData.id);
-    if (value !== undefined) {
-      return value;
-    } else {
-      let counter = 1;
-      const names = new Set(this.workflowContext.outputNamesById.values());
-
-      const originalName = this.terminalNodeData.data.name;
-      let uniqueName = originalName;
-
-      while (names.has(uniqueName)) {
-        uniqueName = `${originalName}-${counter}`;
-        counter++;
-      }
-      this.workflowContext.addOutputName(this.terminalNodeData.id, uniqueName);
-      return uniqueName;
+    const name = this.workflowContext.getOutputName(this.terminalNodeData.id);
+    if (!name) {
+      throw new Error(
+        `No final output name found for output names in workflow context given id ${this.terminalNodeData.id}`
+      );
     }
+    return toSnakeCase(name);
   }
 }

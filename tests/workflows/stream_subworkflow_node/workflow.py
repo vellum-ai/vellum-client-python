@@ -35,8 +35,8 @@ class InnerWorkflow(BaseWorkflow[Inputs, BaseState]):
         processed = InnerNode.Outputs.processed
 
 
-class SubworkflowNode(InlineSubworkflowNode):
-    subworkflow_inputs = {"items": Inputs.items}
+class SubworkflowNode(InlineSubworkflowNode[BaseState, Inputs, BaseState]):
+    subworkflow_inputs = {"items": Inputs.items}  # type: ignore[dict-item]
     subworkflow = InnerWorkflow
 
     class Outputs(InlineSubworkflowNode.Outputs):

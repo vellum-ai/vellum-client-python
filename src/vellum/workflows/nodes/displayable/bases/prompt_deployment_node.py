@@ -11,7 +11,9 @@ from vellum import (
     RawPromptExecutionOverridesRequest,
     StringInputRequest,
 )
+from vellum.client import RequestOptions
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
+from vellum.workflows.context import get_parent_context
 from vellum.workflows.errors import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.displayable.bases.base_prompt_node import BasePromptNode
@@ -46,6 +48,13 @@ class BasePromptDeploymentNode(BasePromptNode, Generic[StateType]):
     metadata: Optional[Dict[str, Optional[Any]]] = OMIT
 
     def _get_prompt_event_stream(self) -> Iterator[ExecutePromptEvent]:
+        current_parent_context = get_parent_context()
+        parent_context = current_parent_context.model_dump_json() if current_parent_context else None
+        request_options = self.request_options or RequestOptions()
+        request_options["additional_body_parameters"] = {
+            "execution_context": {"parent_context": parent_context},
+            **request_options.get("additional_body_parameters", {}),
+        }
         return self._context.vellum_client.execute_prompt_stream(
             inputs=self._compile_prompt_inputs(),
             prompt_deployment_id=str(self.deployment) if isinstance(self.deployment, UUID) else None,

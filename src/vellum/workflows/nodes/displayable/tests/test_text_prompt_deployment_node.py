@@ -76,4 +76,5 @@ def test_text_prompt_deployment_node__basic(vellum_client):
         raw_overrides=OMIT,
         release_tag="LATEST",
         request_options=None,
+        execution_context={"parent_context": None},
     )

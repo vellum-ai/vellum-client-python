@@ -305,14 +305,14 @@ export class Workflow {
               );
               const required =
                 inputVariableContext.getInputVariableData().required;
-              if (!isNil(required)) {
-                overrideArgs.push(
-                  python.methodArgument({
-                    name: "required",
-                    value: python.TypeInstantiation.bool(required),
-                  })
-                );
-              }
+              overrideArgs.push(
+                python.methodArgument({
+                  name: "required",
+                  value: required
+                    ? python.TypeInstantiation.bool(required)
+                    : python.TypeInstantiation.bool(false),
+                })
+              );
               const extensions =
                 inputVariableContext.getInputVariableData().extensions?.color;
               if (!isNil(extensions)) {

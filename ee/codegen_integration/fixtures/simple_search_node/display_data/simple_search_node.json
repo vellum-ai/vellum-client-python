@@ -315,7 +315,7 @@
         "type": "STRING",
         "value": "Search node query default"
       },
-      "required": true,
+      "required": false,
       "extensions": { "color": "someColor" }
     }
   ],

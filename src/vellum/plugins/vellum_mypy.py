@@ -4,7 +4,9 @@ from typing import Callable, Dict, List, Optional, Set, Type
 from mypy.nodes import (
     AssignmentStmt,
     CallExpr,
+    Context,
     Decorator,
+    DictExpr,
     MemberExpr,
     NameExpr,
     OverloadedFuncDef,
@@ -14,8 +16,19 @@ from mypy.nodes import (
     Var,
 )
 from mypy.options import Options
-from mypy.plugin import AttributeContext, ClassDefContext, FunctionSigContext, MethodContext, Plugin
-from mypy.types import AnyType, CallableType, FunctionLike, Instance, Type as MypyType, TypeAliasType, UnionType
+from mypy.plugin import AnalyzeTypeContext, AttributeContext, ClassDefContext, FunctionSigContext, MethodContext, Plugin
+from mypy.types import (
+    AnyType,
+    CallableType,
+    FunctionLike,
+    Instance,
+    Type as MypyType,
+    TypeAliasType,
+    TypedDictType,
+    TypeOfAny,
+    UnboundType,
+    UnionType,
+)
 
 TypeResolver = Callable[[str, List[MypyType]], MypyType]
 
@@ -643,6 +656,24 @@ class VellumMypyPlugin(Plugin):
                         sym.node.type = args[0]
 
         return new_type_info
+
+    def get_type_analyze_hook(self, fullname: str) -> Optional[Callable[[AttributeContext], MypyType]]:
+        if fullname == "builtins.dict":
+            return self._analyze_mapping_type
+        return None
+
+    def _analyze_mapping_type(self, ctx: AnalyzeTypeContext) -> MypyType:
+        """This callback function modifies how `dict` types are analyzed."""
+        typ = ctx.type
+        if isinstance(typ, UnboundType):
+            # Check if it's a dict with Generics for both key and value
+            if typ.name == "dict":
+                if isinstance(typ.args[0], UnboundType) and isinstance(typ.args[1], UnboundType):
+                    # Return the modified type for dict[Any, Any]
+                    info = self.lookup_fully_qualified("builtins.dict")
+                    if info and isinstance(info.node, TypeInfo):
+                        return Instance(info.node, [AnyType(TypeOfAny.explicit), AnyType(TypeOfAny.explicit)])
+        return ctx.type
 
 
 def plugin(version: str) -> Type[VellumMypyPlugin]:

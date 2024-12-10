@@ -92,6 +92,11 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
     def run(self) -> Iterator[BaseOutput]:
         current_parent_context = get_parent_context()
         parent_context = current_parent_context.model_dump_json() if current_parent_context else None
+        request_options = self.request_options or RequestOptions()
+        request_options["additional_body_parameters"] = {
+            "execution_context": {"parent_context": parent_context},
+            **request_options.get("additional_body_parameters", {}),
+        }
         subworkflow_stream = self._context.vellum_client.execute_workflow_stream(
             inputs=self._compile_subworkflow_inputs(),
             workflow_deployment_id=str(self.deployment) if isinstance(self.deployment, UUID) else None,
@@ -101,7 +106,6 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
             event_types=["WORKFLOW"],
             metadata=self.metadata,
             request_options=self.request_options,
-            execution_context={"parent_context": parent_context},
         )
         # for some reason execution context isn't showing as an option? ^ failing mypy
 

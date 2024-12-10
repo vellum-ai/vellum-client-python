@@ -38,6 +38,7 @@ class InlineSubworkflowNode(BaseSubworkflowNode[StateType], Generic[StateType, W
         fulfilled_output_names: Set[str] = set()
 
         for event in subworkflow_stream:
+            self._context._emit_subworkflow_event(event=event)
             if event.name == "workflow.execution.streaming":
                 if event.output.is_fulfilled:
                     fulfilled_output_names.add(event.output.name)

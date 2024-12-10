@@ -126,6 +126,10 @@ def test_stream_workflow__happy_path(vellum_client):
                 id=str(uuid4()),
                 state="INITIATED",
                 ts=datetime.now(),
+                inputs=[
+                    {"name": "city", "type": "STRING", "value": "San Francisco", "id": str(uuid4())},
+                    {"name": "date", "type": "STRING", "value": "2024-01-01", "id": str(uuid4())},
+                ],
             ),
         ),
         WorkflowExecutionWorkflowResultEvent(

@@ -18,7 +18,11 @@ from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
 from vellum.workflows.events.types import CodeResourceDefinition, WorkflowParentContext
 from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
-from tests.workflows.basic_subworkflow_deployment.workflow import BasicSubworkflowDeploymentWorkflow, Inputs
+from tests.workflows.basic_subworkflow_deployment.workflow import (
+    BasicSubworkflowDeploymentWorkflow,
+    ExampleSubworkflowDeploymentNode,
+    Inputs,
+)
 
 
 def test_run_workflow__happy_path(vellum_client):
@@ -78,8 +82,6 @@ def test_run_workflow__happy_path(vellum_client):
         "reasoning": "I went to weather.com and looked at today's forecast.",
     }
 
-    parent_context = WorkflowParentContext(workflow_definition=workflow.__class__, span_id=uuid4()).model_dump()
-
     # AND we should have invoked the Workflow Deployment with the expected inputs
     vellum_client.execute_workflow_stream.assert_called_once_with(
         inputs=[
@@ -97,7 +99,10 @@ def test_run_workflow__happy_path(vellum_client):
 
     call_args = vellum_client.execute_workflow_stream.call_args.kwargs
     parent_context = call_args["request_options"]["additional_body_parameters"]["execution_context"]["parent_context"]
-    assert parent_context["workflow_definition"] == CodeResourceDefinition.encode(workflow.__class__).model_dump()
+    assert (
+        parent_context["node_definition"]
+        == CodeResourceDefinition.encode(ExampleSubworkflowDeploymentNode).model_dump()
+    )
 
 
 def test_stream_workflow__happy_path(vellum_client):

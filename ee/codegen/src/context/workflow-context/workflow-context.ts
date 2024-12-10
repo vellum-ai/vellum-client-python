@@ -80,6 +80,9 @@ export class WorkflowContext {
 
   public readonly workflowRawEdges: WorkflowEdge[];
 
+  // This is used to track the workflow input variable names for the workflow keyed by input variable id
+  public readonly inputNamesById: Map<string, string>;
+
   constructor({
     absolutePathToOutputDirectory,
     moduleName,
@@ -116,6 +119,7 @@ export class WorkflowContext {
 
     this.sdkModulePathNames = generateSdkModulePaths(workflowsSdkModulePath);
     this.workflowRawEdges = workflowRawEdges;
+    this.inputNamesById = new Map<string, string>();
   }
 
   /* Create a new workflow context for a nested workflow from its parent */
@@ -167,6 +171,8 @@ export class WorkflowContext {
         `Input variable context already exists for input variable ID: ${inputVariableId}`
       );
     }
+
+    this.generateUniqueInputName(inputVariableContext);
 
     this.inputVariableContextsById.set(inputVariableId, inputVariableContext);
     this.globalInputVariableContextsById.set(
@@ -264,5 +270,40 @@ export class WorkflowContext {
 
   public addWorkflowEdges(edges: WorkflowEdge[]): void {
     this.workflowRawEdges.push(...edges);
+  }
+
+  public getInputName(inputVariableId: string): string | undefined {
+    return this.inputNamesById.get(inputVariableId);
+  }
+
+  public addInputName(inputVariableId: string, inputName: string): void {
+    this.inputNamesById.set(inputVariableId, inputName);
+  }
+
+  private generateUniqueInputName(
+    inputVariableContext: InputVariableContext
+  ): string {
+    const inputVariable = inputVariableContext.getInputVariableData();
+    const value = this.getInputName(inputVariable.id);
+    if (value !== undefined) {
+      return value;
+    } else {
+      let counter = 1;
+      const names = new Set(this.inputNamesById.values());
+      const defaultName = "var-1";
+
+      const originalName =
+        !isNil(inputVariable.key) && !isEmpty(inputVariable.key)
+          ? `${inputVariable.key}`
+          : defaultName;
+      let uniqueName = originalName;
+
+      while (names.has(uniqueName)) {
+        uniqueName = `${originalName}-${String(counter).padStart(2, "0")}`;
+        counter++;
+      }
+      this.addInputName(inputVariable.id, uniqueName);
+      return uniqueName;
+    }
   }
 }

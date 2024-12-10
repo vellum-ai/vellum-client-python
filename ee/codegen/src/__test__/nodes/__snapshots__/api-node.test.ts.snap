@@ -105,8 +105,8 @@ class APINode(BaseAPINode):
     json = {}
     headers = {
         "foo": Inputs.additional_header_value,
-        "bar": Inputs.additional_header_value,
-        "baz": Inputs.additional_header_value,
+        "bar": Inputs.additional_header_value_01,
+        "baz": Inputs.additional_header_value_01,
     }
     api_key_header_key = None
     authorization_type = AuthorizationType.API_KEY
@@ -204,8 +204,8 @@ class APINode(BaseAPINode):
     json = {}
     headers = {
         "foo": Inputs.additional_header_value,
-        "bar": Inputs.additional_header_value,
-        "baz": Inputs.additional_header_value,
+        "bar": Inputs.additional_header_value_01,
+        "baz": Inputs.additional_header_value_01,
     }
     api_key_header_key = None
     authorization_type = AuthorizationType.API_KEY

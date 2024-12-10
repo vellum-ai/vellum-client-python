@@ -6,6 +6,7 @@ from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases.base_subworkflow_node import BaseSubworkflowNode
 from vellum.workflows.outputs.base import BaseOutput, BaseOutputs
 from vellum.workflows.state.base import BaseState
+from vellum.workflows.state.context import WorkflowContext
 from vellum.workflows.types.generics import StateType, WorkflowInputsType
 
 if TYPE_CHECKING:
@@ -28,7 +29,9 @@ class InlineSubworkflowNode(BaseSubworkflowNode[StateType], Generic[StateType, W
         with execution_context(parent_context=get_parent_context() or self._context.parent_context):
             subworkflow = self.subworkflow(
                 parent_state=self.state,
-                context=self._context,
+                context=WorkflowContext(
+                    _vellum_client=self._context._vellum_client,
+                ),
             )
             subworkflow_stream = subworkflow.stream(
                 inputs=self._compile_subworkflow_inputs(),
@@ -38,6 +41,7 @@ class InlineSubworkflowNode(BaseSubworkflowNode[StateType], Generic[StateType, W
         fulfilled_output_names: Set[str] = set()
 
         for event in subworkflow_stream:
+            self._context._emit_subworkflow_event(event)
             if event.name == "workflow.execution.streaming":
                 if event.output.is_fulfilled:
                     fulfilled_output_names.add(event.output.name)

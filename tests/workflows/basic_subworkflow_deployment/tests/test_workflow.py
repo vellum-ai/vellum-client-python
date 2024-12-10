@@ -1,5 +1,4 @@
 from datetime import datetime
-import json
 from unittest.mock import ANY
 from uuid import uuid4
 from typing import Any, Iterator, List
@@ -93,12 +92,11 @@ def test_run_workflow__happy_path(vellum_client):
         release_tag=LATEST_RELEASE_TAG,
         external_id=OMIT,
         metadata=OMIT,
-        request_options=None,
-        execution_context=ANY,
+        request_options=ANY,
     )
 
     call_args = vellum_client.execute_workflow_stream.call_args.kwargs
-    parent_context = json.loads(call_args["execution_context"]["parent_context"])
+    parent_context = call_args["request_options"]["additional_body_parameters"]["execution_context"]["parent_context"]
     assert parent_context["workflow_definition"] == CodeResourceDefinition.encode(workflow.__class__).model_dump()
 
 

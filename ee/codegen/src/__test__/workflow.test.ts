@@ -1009,6 +1009,154 @@ describe("Workflow", () => {
         workflow.getWorkflowFile().write(writer);
         expect(await writer.toStringFormatted()).toMatchSnapshot();
       });
+
+      it("should be correct for set of a branch and a node to a node", async () => {
+        const inputs = codegen.inputs({ workflowContext });
+
+        const templatingNodeData1 = templatingNodeFactory();
+        const templatingNodeContext1 = await createNodeContext({
+          workflowContext,
+          nodeData: templatingNodeData1,
+        });
+        workflowContext.addNodeContext(templatingNodeContext1);
+
+        const templatingNodeData2 = templatingNodeFactory({
+          id: "7e09927b-6d6f-4829-92c9-54e66bdcaf81",
+          label: "Templating Node 2",
+          sourceHandleId: "dd8397b1-5a41-4fa0-8c24-e5dffee4fb99",
+          targetHandleId: "3feb7e71-ec63-4d58-82ba-c3df829a2949",
+        });
+        const templatingNodeContext2 = await createNodeContext({
+          workflowContext,
+          nodeData: templatingNodeData2,
+        });
+        workflowContext.addNodeContext(templatingNodeContext2);
+
+        const templatingNodeData3 = templatingNodeFactory({
+          id: "7e09927b-6d6f-4829-92c9-54e66bdcaf82",
+          label: "Templating Node 3",
+          sourceHandleId: "dd8397b1-5a41-4fa0-8c24-e5dffee4fb9a",
+          targetHandleId: "3feb7e71-ec63-4d58-82ba-c3df829a294a",
+        });
+        const templatingNodeContext3 = await createNodeContext({
+          workflowContext,
+          nodeData: templatingNodeData3,
+        });
+        workflowContext.addNodeContext(templatingNodeContext3);
+
+        const templatingNodeData4 = templatingNodeFactory({
+          id: "7e09927b-6d6f-4829-92c9-54e66bdcaf83",
+          label: "Templating Node 4",
+          sourceHandleId: "dd8397b1-5a41-4fa0-8c24-e5dffee4fb9b",
+          targetHandleId: "3feb7e71-ec63-4d58-82ba-c3df829a294b",
+        });
+        const templatingNodeContext4 = await createNodeContext({
+          workflowContext,
+          nodeData: templatingNodeData4,
+        });
+        workflowContext.addNodeContext(templatingNodeContext4);
+
+        const templatingNodeData5 = templatingNodeFactory({
+          id: "7e09927b-6d6f-4829-92c9-54e66bdcaf84",
+          label: "Templating Node 5",
+          sourceHandleId: "dd8397b1-5a41-4fa0-8c24-e5dffee4fb9c",
+          targetHandleId: "3feb7e71-ec63-4d58-82ba-c3df829a294c",
+        });
+        const templatingNodeContext5 = await createNodeContext({
+          workflowContext,
+          nodeData: templatingNodeData5,
+        });
+        workflowContext.addNodeContext(templatingNodeContext5);
+
+        const mergeNodeData = mergeNodeDataFactory();
+        const mergeNodeContext = await createNodeContext({
+          workflowContext,
+          nodeData: mergeNodeData,
+        });
+        workflowContext.addNodeContext(mergeNodeContext);
+        const mergeTargetHandle1 = mergeNodeData.data.targetHandles[0]?.id;
+        const mergeTargetHandle2 = mergeNodeData.data.targetHandles[1]?.id;
+        if (!mergeTargetHandle1 || !mergeTargetHandle2) {
+          throw new Error("Handle IDs are required");
+        }
+
+        const edges: WorkflowEdge[] = [
+          {
+            id: "edge-1",
+            type: "DEFAULT",
+            sourceNodeId: entrypointNode.id,
+            sourceHandleId: entrypointNode.data.sourceHandleId,
+            targetNodeId: templatingNodeData1.id,
+            targetHandleId: templatingNodeData1.data.targetHandleId,
+          },
+          {
+            id: "edge-2",
+            type: "DEFAULT",
+            sourceNodeId: entrypointNode.id,
+            sourceHandleId: entrypointNode.data.sourceHandleId,
+            targetNodeId: templatingNodeData2.id,
+            targetHandleId: templatingNodeData2.data.targetHandleId,
+          },
+          {
+            id: "edge-3",
+            type: "DEFAULT",
+            sourceNodeId: templatingNodeData1.id,
+            sourceHandleId: templatingNodeData1.data.sourceHandleId,
+            targetNodeId: templatingNodeData3.id,
+            targetHandleId: templatingNodeData3.data.targetHandleId,
+          },
+          {
+            id: "edge-4",
+            type: "DEFAULT",
+            sourceNodeId: templatingNodeData3.id,
+            sourceHandleId: templatingNodeData3.data.sourceHandleId,
+            targetNodeId: templatingNodeData4.id,
+            targetHandleId: templatingNodeData4.data.targetHandleId,
+          },
+          {
+            id: "edge-5",
+            type: "DEFAULT",
+            sourceNodeId: templatingNodeData4.id,
+            sourceHandleId: templatingNodeData4.data.sourceHandleId,
+            targetNodeId: mergeNodeData.id,
+            targetHandleId: mergeTargetHandle1,
+          },
+          {
+            id: "edge-6",
+            type: "DEFAULT",
+            sourceNodeId: templatingNodeData2.id,
+            sourceHandleId: templatingNodeData2.data.sourceHandleId,
+            targetNodeId: mergeNodeData.id,
+            targetHandleId: mergeTargetHandle2,
+          },
+          {
+            id: "edge-7",
+            type: "DEFAULT",
+            sourceNodeId: mergeNodeData.id,
+            sourceHandleId: mergeNodeData.data.sourceHandleId,
+            targetNodeId: templatingNodeData5.id,
+            targetHandleId: templatingNodeData5.data.targetHandleId,
+          },
+        ];
+        workflowContext.addWorkflowEdges(edges);
+
+        const workflow = codegen.workflow({
+          moduleName,
+          workflowContext,
+          inputs,
+          nodes: [
+            templatingNodeData1,
+            templatingNodeData2,
+            templatingNodeData3,
+            templatingNodeData4,
+            templatingNodeData5,
+            mergeNodeData,
+          ],
+        });
+
+        workflow.getWorkflowFile().write(writer);
+        expect(await writer.toStringFormatted()).toMatchSnapshot();
+      });
     });
   });
 });

@@ -120,12 +120,15 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
     with open(vellum_lock_json) as f:
         lock_data = json.loads(f.read())
         assert lock_data == {
+            "version": "1.0",
             "workflows": [
                 {
                     "module": "workflow_87654321",
                     "workflow_sandbox_id": "87654321-0000-0000-0000-000000000000",
+                    "ignore": None,
+                    "deployments": [],
                 }
-            ]
+            ],
         }
 
 

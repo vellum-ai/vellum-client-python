@@ -76,6 +76,8 @@ export class WorkflowContext {
 
   public readonly workflowRawEdges: WorkflowEdge[];
 
+  public readonly outputNamesById: Map<string, string>;
+
   constructor({
     absolutePathToOutputDirectory,
     moduleName,
@@ -112,6 +114,7 @@ export class WorkflowContext {
 
     this.sdkModulePathNames = generateSdkModulePaths(workflowsSdkModulePath);
     this.workflowRawEdges = workflowRawEdges;
+    this.outputNamesById = new Map<string, string>();
   }
 
   /* Create a new workflow context for a nested workflow from its parent */
@@ -251,5 +254,13 @@ export class WorkflowContext {
 
   public addWorkflowEdges(edges: WorkflowEdge[]): void {
     this.workflowRawEdges.push(...edges);
+  }
+
+  public getOutputName(terminalNodeId: string): string | undefined {
+    return this.outputNamesById.get(terminalNodeId);
+  }
+
+  public addOutputName(terminalNodeId: string, outputName: string): void {
+    this.outputNamesById.set(terminalNodeId, outputName);
   }
 }

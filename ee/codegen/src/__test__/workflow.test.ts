@@ -21,6 +21,7 @@ describe("Workflow", () => {
   let writer: Writer;
   const moduleName = "test";
   const entrypointNode = entrypointNodeDataFactory();
+  const nodeData = terminalNodeDataFactory();
 
   beforeEach(async () => {
     workflowContext = workflowContextFactory({
@@ -28,7 +29,6 @@ describe("Workflow", () => {
     });
     workflowContext.addEntrypointNode(entrypointNode);
 
-    const nodeData = terminalNodeDataFactory();
     workflowContext.addNodeContext(
       await createNodeContext({
         workflowContext: workflowContext,
@@ -80,7 +80,9 @@ describe("Workflow", () => {
 
       const inputs = codegen.inputs({ workflowContext });
 
-      workflowContext.addWorkflowOutputContext(workflowOutputContextFactory());
+      workflowContext.addWorkflowOutputContext(
+        workflowOutputContextFactory({ workflowContext })
+      );
 
       const workflow = codegen.workflow({
         moduleName,
@@ -146,6 +148,52 @@ describe("Workflow", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
 
+    it("should generate correct code with multiple terminal nodes with the same name", async () => {
+      workflowContext.addInputVariableContext(
+        inputVariableContextFactory({
+          inputVariableData: {
+            id: "input-variable-id",
+            key: "query",
+            type: "STRING",
+          },
+          workflowContext,
+        })
+      );
+
+      const anotherTerminalNodeData =
+        terminalNodeDataFactory("terminal-node-2");
+
+      workflowContext.addNodeContext(
+        await createNodeContext({
+          workflowContext: workflowContext,
+          nodeData: anotherTerminalNodeData,
+        })
+      );
+      workflowContext.addWorkflowOutputContext(
+        workflowOutputContextFactory({
+          workflowContext,
+        })
+      );
+
+      workflowContext.addWorkflowOutputContext(
+        workflowOutputContextFactory({
+          terminalNodeData: anotherTerminalNodeData,
+          workflowContext,
+        })
+      );
+
+      const inputs = codegen.inputs({ workflowContext });
+      const workflow = codegen.workflow({
+        moduleName,
+        workflowContext,
+        inputs,
+        nodes: [nodeData, anotherTerminalNodeData],
+      });
+
+      workflow.getWorkflowFile().write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+
     describe("graph", () => {
       it("should be correct for a basic single node case", async () => {
         workflowContext.addInputVariableContext(
@@ -162,7 +210,7 @@ describe("Workflow", () => {
         const inputs = codegen.inputs({ workflowContext });
 
         workflowContext.addWorkflowOutputContext(
-          workflowOutputContextFactory()
+          workflowOutputContextFactory({ workflowContext })
         );
 
         const searchNodeData = searchNodeDataFactory();

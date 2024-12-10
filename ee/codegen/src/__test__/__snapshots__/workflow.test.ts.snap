@@ -171,6 +171,22 @@ class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
 "
 `;
 
+exports[`Workflow > write > should generate correct code with multiple terminal nodes with the same name 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .inputs import Inputs
+from vellum.workflows.state import BaseState
+from .nodes.final_output import FinalOutput
+
+
+class TestWorkflow(BaseWorkflow[Inputs, BaseState]):
+    graph = None
+
+    class Outputs(BaseWorkflow.Outputs):
+        query = FinalOutput.Outputs.value
+        query_1 = FinalOutput.Outputs.value
+"
+`;
+
 exports[`Workflow > write > should handle edges pointing to non-existent nodes 1`] = `
 "from vellum.workflows import BaseWorkflow
 from .inputs import Inputs

@@ -15,22 +15,10 @@ from vellum.core import RequestOptions
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
 from vellum.workflows.context import get_parent_context
 from vellum.workflows.errors import VellumErrorCode
-from vellum.workflows.errors.types import VellumError
-from vellum.workflows.events import WorkflowExecutionInitiatedEvent
-from vellum.workflows.events.workflow import (
-    WorkflowExecutionFulfilledBody,
-    WorkflowExecutionFulfilledEvent,
-    WorkflowExecutionInitiatedBody,
-    WorkflowExecutionRejectedBody,
-    WorkflowExecutionRejectedEvent,
-    WorkflowExecutionStreamingBody,
-    WorkflowExecutionStreamingEvent,
-)
 from vellum.workflows.exceptions import NodeException
-from vellum.workflows.inputs import BaseInputs
 from vellum.workflows.nodes.bases.base_subworkflow_node.node import BaseSubworkflowNode
 from vellum.workflows.outputs.base import BaseOutput
-from vellum.workflows.types.generics import StateType, WorkflowType
+from vellum.workflows.types.generics import StateType
 
 
 class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateType]):
@@ -104,11 +92,6 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
     def run(self) -> Iterator[BaseOutput]:
         current_parent_context = get_parent_context()
         parent_context = current_parent_context.model_dump_json() if current_parent_context else None
-        request_options = self.request_options or RequestOptions()
-        request_options["additional_body_parameters"] = {
-            "execution_context": {"parent_context": parent_context},
-            **request_options.get("additional_body_parameters", {}),
-        }
         subworkflow_stream = self._context.vellum_client.execute_workflow_stream(
             inputs=self._compile_subworkflow_inputs(),
             workflow_deployment_id=str(self.deployment) if isinstance(self.deployment, UUID) else None,
@@ -118,118 +101,49 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
             event_types=["WORKFLOW"],
             metadata=self.metadata,
             request_options=self.request_options,
+            execution_context={"parent_context": parent_context},
         )
+        # for some reason execution context isn't showing as an option? ^ failing mypy
 
         outputs: Optional[List[WorkflowOutput]] = None
         fulfilled_output_names: Set[str] = set()
         for event in subworkflow_stream:
             if event.type != "WORKFLOW":
                 continue
-            # Always emit the appropriate workflow event
             if event.data.state == "INITIATED":
-                self._context._emit_subworkflow_event(
-                    WorkflowExecutionInitiatedEvent(
-                        span_id=event.execution_id,
-                        trace_id=event.run_id,
-                        name="workflow.execution.initiated",
-                        body=WorkflowExecutionInitiatedBody(
-                            inputs=BaseInputs(
-                                **{value.name: cast(value.type, value.value) for value in event.data.inputs}
-                            ),
-                            # We need the workflow definition, or we make this an optional field
-                            workflow_definition=WorkflowType.__class__,
-                        ),
-                        parent=event.data.parent,
-                    )
-                )
-
+                continue
             elif event.data.state == "STREAMING":
                 if event.data.output:
-
-                    # Yield the output
                     if event.data.output.state == "STREAMING":
-                        output = BaseOutput(
+                        yield BaseOutput(
                             name=event.data.output.name,
                             delta=event.data.output.delta,
                         )
-                        self._context._emit_subworkflow_event(
-                            WorkflowExecutionStreamingEvent(
-                                name="workflow.execution.streaming",
-                                body=WorkflowExecutionStreamingBody(
-                                    output=output,
-                                    # We need the workflow definition, or we make this an optional field
-                                    workflow_definition=WorkflowType.__class__,
-                                ),
-                            )
-                        )
                     elif event.data.output.state == "FULFILLED":
-                        output = BaseOutput(
+                        yield BaseOutput(
                             name=event.data.output.name,
                             value=event.data.output.value,
                         )
-                        self._context._emit_subworkflow_event(
-                            WorkflowExecutionStreamingEvent(
-                                name="workflow.execution.streaming",
-                                body=WorkflowExecutionStreamingBody(
-                                    output=output,
-                                    workflow_definition=WorkflowType.__class__,
-                                ),
-                            )
-                        )
                         fulfilled_output_names.add(event.data.output.name)
-
             elif event.data.state == "FULFILLED":
                 outputs = event.data.outputs
-                self._context._emit_subworkflow_event(
-                    WorkflowExecutionFulfilledEvent(
-                        name="workflow.execution.fulfilled",
-                        body=WorkflowExecutionFulfilledBody(
-                            outputs=[BaseOutput(name=output.name, value=output.value) for output in event.data.outputs],
-                            workflow_definition=WorkflowType.__class__,
-                        ),
-                    )
-                )
-
             elif event.data.state == "REJECTED":
                 error = event.data.error
                 if not error:
-                    error = VellumError(
+                    raise NodeException(
                         message="Expected to receive an error from REJECTED event",
                         code=VellumErrorCode.INTERNAL_ERROR,
                     )
                 elif error.code in VellumErrorCode._value2member_map_:
-                    error = VellumError(
+                    raise NodeException(
                         message=error.message,
                         code=VellumErrorCode(error.code),
                     )
                 else:
-                    error = VellumError(
+                    raise NodeException(
                         message=error.message,
                         code=VellumErrorCode.INTERNAL_ERROR,
                     )
-
-                self._context._emit_subworkflow_event(
-                    WorkflowExecutionRejectedEvent(
-                        name="workflow.execution.rejected",
-                        body=WorkflowExecutionRejectedBody(
-                            error=error,
-                            workflow_definition=WorkflowType.__class__,
-                        ),
-                    )
-                )
-                raise NodeException(
-                    message=error.message,
-                    code=(
-                        VellumErrorCode(error.code)
-                        if error.code in VellumErrorCode._value2member_map_
-                        else VellumErrorCode.INTERNAL_ERROR
-                    ),
-                )
-            else:
-                raise NodeException(
-                    message=f"Unexpected workflow event state: {event.data.state}",
-                    code=VellumErrorCode.INTERNAL_ERROR,
-                )
 
         if outputs is None:
             raise NodeException(

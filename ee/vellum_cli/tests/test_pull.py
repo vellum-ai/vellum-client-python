@@ -1,5 +1,6 @@
 import pytest
 import io
+import json
 import os
 import tempfile
 from uuid import uuid4
@@ -112,6 +113,20 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
     assert os.path.exists(workflow_py)
     with open(workflow_py) as f:
         assert f.read() == "print('hello')"
+
+    # AND the vellum.lock.json file is created
+    vellum_lock_json = os.path.join(temp_dir, "vellum.lock.json")
+    assert os.path.exists(vellum_lock_json)
+    with open(vellum_lock_json) as f:
+        lock_data = json.loads(f.read())
+        assert lock_data == {
+            "workflows": [
+                {
+                    "module": "workflow_87654321",
+                    "workflow_sandbox_id": "87654321-0000-0000-0000-000000000000",
+                }
+            ]
+        }
 
 
 def test_pull__sandbox_id_with_other_workflow_configured(vellum_client, mock_module):

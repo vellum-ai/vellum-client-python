@@ -120,16 +120,6 @@ def test_serialize_workflow(vellum_client):
                     },
                 },
                 {
-                    "id": "fee5e3c9-442a-4922-ba80-5ee07361cea7",
-                    "key": "bearer_token_value",
-                    "value": {
-                        "rules": [
-                            {"type": "WORKSPACE_SECRET", "data": {"type": "STRING", "workspace_secret_id": None}}
-                        ],
-                        "combinator": "OR",
-                    },
-                },
-                {
                     "id": "2fcdfbc3-8095-4277-bb4a-a201fd326b54",
                     "key": "api_key_header_key",
                     "value": {
@@ -153,24 +143,6 @@ def test_serialize_workflow(vellum_client):
                         "combinator": "OR",
                     },
                 },
-                {
-                    "id": "57c31247-998a-430d-bb62-bf50eca7df35",
-                    "key": "additional_header_key",
-                    "value": {
-                        "rules": [{"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "additional_header"}}],
-                        "combinator": "OR",
-                    },
-                },
-                {
-                    "id": "47b32274-f19b-4c15-b788-55c069c311c5",
-                    "key": "additional_header_value",
-                    "value": {
-                        "rules": [
-                            {"type": "CONSTANT_VALUE", "data": {"type": "STRING", "value": "additional header value"}}
-                        ],
-                        "combinator": "OR",
-                    },
-                },
             ],
             "data": {
                 "label": "Simple A P I Node",
@@ -181,7 +153,7 @@ def test_serialize_workflow(vellum_client):
                 "method_input_id": "fd61b5ac-39f9-4cfe-a839-f8ce78c202df",
                 "body_input_id": "c3a17ceb-e201-4025-b18a-9162aac7705e",
                 "authorization_type_input_id": "3092bf23-3202-4f3e-874c-9a33ccc73459",
-                "bearer_token_value_input_id": "fee5e3c9-442a-4922-ba80-5ee07361cea7",
+                "bearer_token_value_input_id": None,
                 "api_key_header_key_input_id": "2fcdfbc3-8095-4277-bb4a-a201fd326b54",
                 "api_key_header_value_input_id": "d794bb51-a419-4fd8-be63-dfaf4166e831",
                 "additional_headers": [

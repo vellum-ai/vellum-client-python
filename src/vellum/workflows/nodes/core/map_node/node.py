@@ -1,5 +1,4 @@
 from collections import defaultdict
-import logging
 from queue import Empty, Queue
 from threading import Thread
 from typing import TYPE_CHECKING, Callable, Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union, overload
@@ -16,8 +15,6 @@ from vellum.workflows.state.base import BaseState
 from vellum.workflows.state.context import WorkflowContext
 from vellum.workflows.types.generics import NodeType, StateType
 from vellum.workflows.workflows.event_filters import all_workflow_event_filter
-
-logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from vellum.workflows import BaseWorkflow
@@ -111,12 +108,7 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
             self._run_subworkflow(item=item, index=index)
 
     def _run_subworkflow(self, *, item: MapNodeItemType, index: int) -> None:
-        context = WorkflowContext(
-            _vellum_client=self._context._vellum_client, _parent_context=self._context.parent_context
-        )
-        if self._context._event_queue:
-            context._register_event_queue(self._context._event_queue)
-
+        context = WorkflowContext(_vellum_client=self._context._vellum_client)
         subworkflow = self.subworkflow(parent_state=self.state, context=context)
         events = subworkflow.stream(
             inputs=self.SubworkflowInputs(index=index, item=item, all_items=self.items),

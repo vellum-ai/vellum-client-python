@@ -224,44 +224,45 @@ class WorkflowRunner(Generic[StateType]):
                         ),
                     )
 
-                for output in node_run_response:
-                    invoked_ports = output > ports
-                    if output.is_initiated:
-                        initiate_node_streaming_output(output)
-                    elif output.is_streaming:
-                        if output.name not in streaming_output_queues:
+                with execution_context(parent_context=updated_parent_context):
+                    for output in node_run_response:
+                        invoked_ports = output > ports
+                        if output.is_initiated:
                             initiate_node_streaming_output(output)
+                        elif output.is_streaming:
+                            if output.name not in streaming_output_queues:
+                                initiate_node_streaming_output(output)
 
-                        streaming_output_queues[output.name].put(output.delta)
-                        self._workflow_event_inner_queue.put(
-                            NodeExecutionStreamingEvent(
-                                trace_id=node.state.meta.trace_id,
-                                span_id=span_id,
-                                body=NodeExecutionStreamingBody(
-                                    node_definition=node.__class__,
-                                    output=output,
-                                    invoked_ports=invoked_ports,
+                            streaming_output_queues[output.name].put(output.delta)
+                            self._workflow_event_inner_queue.put(
+                                NodeExecutionStreamingEvent(
+                                    trace_id=node.state.meta.trace_id,
+                                    span_id=span_id,
+                                    body=NodeExecutionStreamingBody(
+                                        node_definition=node.__class__,
+                                        output=output,
+                                        invoked_ports=invoked_ports,
+                                    ),
+                                    parent=parent_context,
                                 ),
-                                parent=parent_context,
-                            ),
-                        )
-                    elif output.is_fulfilled:
-                        if output.name in streaming_output_queues:
-                            streaming_output_queues[output.name].put(UNDEF)
-
-                        setattr(outputs, output.name, output.value)
-                        self._workflow_event_inner_queue.put(
-                            NodeExecutionStreamingEvent(
-                                trace_id=node.state.meta.trace_id,
-                                span_id=span_id,
-                                body=NodeExecutionStreamingBody(
-                                    node_definition=node.__class__,
-                                    output=output,
-                                    invoked_ports=invoked_ports,
-                                ),
-                                parent=parent_context,
                             )
-                        )
+                        elif output.is_fulfilled:
+                            if output.name in streaming_output_queues:
+                                streaming_output_queues[output.name].put(UNDEF)
+
+                            setattr(outputs, output.name, output.value)
+                            self._workflow_event_inner_queue.put(
+                                NodeExecutionStreamingEvent(
+                                    trace_id=node.state.meta.trace_id,
+                                    span_id=span_id,
+                                    body=NodeExecutionStreamingBody(
+                                        node_definition=node.__class__,
+                                        output=output,
+                                        invoked_ports=invoked_ports,
+                                    ),
+                                    parent=parent_context,
+                                )
+                            )
 
             invoked_ports = ports(outputs, node.state)
             node.state.meta.node_execution_cache.fulfill_node_execution(node.__class__, span_id)

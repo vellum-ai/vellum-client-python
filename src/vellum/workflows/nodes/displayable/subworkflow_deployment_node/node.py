@@ -13,6 +13,7 @@ from vellum import (
 )
 from vellum.core import RequestOptions
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
+from vellum.workflows.context import get_parent_context
 from vellum.workflows.errors import VellumErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases.base_subworkflow_node.node import BaseSubworkflowNode
@@ -89,6 +90,13 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
         return compiled_inputs
 
     def run(self) -> Iterator[BaseOutput]:
+        current_parent_context = get_parent_context()
+        parent_context = current_parent_context.model_dump(mode="json") if current_parent_context else None
+        request_options = self.request_options or RequestOptions()
+        request_options["additional_body_parameters"] = {
+            "execution_context": {"parent_context": parent_context},
+            **request_options.get("additional_body_parameters", {}),
+        }
         subworkflow_stream = self._context.vellum_client.execute_workflow_stream(
             inputs=self._compile_subworkflow_inputs(),
             workflow_deployment_id=str(self.deployment) if isinstance(self.deployment, UUID) else None,
@@ -97,8 +105,9 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
             external_id=self.external_id,
             event_types=["WORKFLOW"],
             metadata=self.metadata,
-            request_options=self.request_options,
+            request_options=request_options,
         )
+        # for some reason execution context isn't showing as an option? ^ failing mypy
 
         outputs: Optional[List[WorkflowOutput]] = None
         fulfilled_output_names: Set[str] = set()

@@ -1,4 +1,5 @@
 from datetime import datetime
+from unittest.mock import ANY
 from uuid import uuid4
 from typing import Any, Iterator, List
 
@@ -14,8 +15,14 @@ from vellum import (
     WorkflowStreamEvent,
 )
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
+from vellum.workflows.events.types import CodeResourceDefinition, WorkflowParentContext
+from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
-from tests.workflows.basic_subworkflow_deployment.workflow import BasicSubworkflowDeploymentWorkflow, Inputs
+from tests.workflows.basic_subworkflow_deployment.workflow import (
+    BasicSubworkflowDeploymentWorkflow,
+    ExampleSubworkflowDeploymentNode,
+    Inputs,
+)
 
 
 def test_run_workflow__happy_path(vellum_client):
@@ -87,7 +94,14 @@ def test_run_workflow__happy_path(vellum_client):
         release_tag=LATEST_RELEASE_TAG,
         external_id=OMIT,
         metadata=OMIT,
-        request_options=None,
+        request_options=ANY,
+    )
+
+    call_args = vellum_client.execute_workflow_stream.call_args.kwargs
+    parent_context = call_args["request_options"]["additional_body_parameters"]["execution_context"]["parent_context"]
+    assert (
+        parent_context["node_definition"]
+        == CodeResourceDefinition.encode(ExampleSubworkflowDeploymentNode).model_dump()
     )
 
 
@@ -230,19 +244,24 @@ def test_stream_workflow__happy_path(vellum_client):
     vellum_client.execute_workflow_stream.side_effect = generate_subworkflow_events
 
     # WHEN we run the workflow
-    result = workflow.stream(
-        inputs=Inputs(
-            city="San Francisco",
-            date="2024-01-01",
+    result = list(
+        workflow.stream(
+            event_filter=root_workflow_event_filter,
+            inputs=Inputs(
+                city="San Francisco",
+                date="2024-01-01",
+            ),
         )
     )
-    events = list(result)
+    events = list(event for event in result if event.name.startswith("workflow."))
+    node_events = list(event for event in result if event.name.startswith("node."))
 
     # THEN the workflow should have completed successfully with 8 events
     assert len(events) == 8
 
     # AND the outputs should be as expected
     assert events[0].name == "workflow.execution.initiated"
+    assert events[0].parent is None
 
     assert events[1].name == "workflow.execution.streaming"
     assert events[1].output.is_initiated
@@ -277,3 +296,12 @@ def test_stream_workflow__happy_path(vellum_client):
         "temperature": 70,
         "reasoning": "Went to weather.com",
     }
+
+    assert node_events[0].name == "node.execution.initiated"
+    assert isinstance(node_events[0].parent, WorkflowParentContext)
+    assert (
+        node_events[0].parent.workflow_definition.model_dump()
+        == WorkflowParentContext(
+            workflow_definition=workflow.__class__, span_id=uuid4()
+        ).workflow_definition.model_dump()
+    )

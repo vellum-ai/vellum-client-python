@@ -173,27 +173,6 @@ export class GraphAttribute extends AstNode {
         }
       };
 
-      const popTerminals = (mutableAst: GraphMutableAst): GraphMutableAst => {
-        if (mutableAst.type === "set") {
-          return {
-            type: "set",
-            values: mutableAst.values.map(popTerminals),
-          };
-        } else if (mutableAst.type === "right_shift") {
-          const newRhs = popTerminals(mutableAst.rhs);
-          if (newRhs.type === "empty") {
-            return mutableAst.lhs;
-          }
-          return {
-            type: "right_shift",
-            lhs: mutableAst.lhs,
-            rhs: newRhs,
-          };
-        } else {
-          return { type: "empty" };
-        }
-      };
-
       const addEdgeToGraph = (
         mutableAst: GraphMutableAst,
         graphSourceNode: BaseNodeContext<WorkflowDataNode> | null
@@ -261,26 +240,7 @@ export class GraphAttribute extends AstNode {
             values: newSet.map(({ value }) => value),
           };
 
-          if (isPlural(newSetAst)) {
-            const newAstTerminals = newSetAst.values.flatMap((value) =>
-              getAstTerminals(value)
-            );
-
-            const uniqueAstTerminalIds = new Set(
-              newAstTerminals.map((terminal) => terminal.reference.getNodeId())
-            );
-            if (uniqueAstTerminalIds.size === 1 && newAstTerminals[0]) {
-              // If all the terminals are the same, we can simplify the graph into a
-              // right shift between the set and the target node.
-              return {
-                type: "right_shift",
-                lhs: popTerminals(newSetAst),
-                rhs: newAstTerminals[0],
-              };
-            }
-          }
-
-          return newSetAst;
+          return this.optimizeSetThroughCommonTarget(newSetAst, targetNode);
         } else if (mutableAst.type === "right_shift") {
           const newLhs = addEdgeToGraph(mutableAst.lhs, graphSourceNode);
           if (newLhs) {
@@ -381,6 +341,207 @@ export class GraphAttribute extends AstNode {
     }
 
     return graphMutableAst;
+  }
+
+  /**
+   * Optimizes the set by seeing if there's a common node across all branches
+   * that could be used as a target node for the set. The base case example is:
+   *
+   * ```
+   * {
+   *   A >> C,
+   *   B >> C,
+   * }
+   * ```
+   *
+   * This could be optimized to:
+   *
+   * ```
+   * { A, B } >> C
+   * ```
+   */
+  private optimizeSetThroughCommonTarget(
+    newSetAst: GraphSet,
+    targetNode: BaseNodeContext<WorkflowDataNode>
+  ): GraphMutableAst | undefined {
+    const isCommon = newSetAst.values.every((value) =>
+      this.getNodesInBranch(value).includes(targetNode)
+    );
+
+    if (isCommon) {
+      const newLhs: GraphSet = {
+        type: "set",
+        values: [],
+      };
+      let longestRhs: GraphMutableAst = { type: "empty" };
+      for (const branch of newSetAst.values) {
+        const { lhs, rhs } = this.splitBranchByTargetNode(targetNode, branch);
+        if (this.getBranchSize(rhs) > this.getBranchSize(longestRhs)) {
+          longestRhs = rhs;
+        }
+        newLhs.values.push(lhs);
+      }
+      return {
+        type: "right_shift",
+        lhs: newLhs,
+        rhs: longestRhs,
+      };
+    }
+
+    return newSetAst;
+  }
+
+  /**
+   * Checks if targetNode is in the branch
+   */
+  private isNodeInBranch(
+    targetNode: BaseNodeContext<WorkflowDataNode>,
+    mutableAst: GraphMutableAst
+  ): boolean {
+    if (
+      mutableAst.type === "node_reference" &&
+      mutableAst.reference === targetNode
+    ) {
+      return true;
+    } else if (mutableAst.type === "set") {
+      return mutableAst.values.every((value) =>
+        this.isNodeInBranch(targetNode, value)
+      );
+    } else if (mutableAst.type === "right_shift") {
+      return (
+        this.isNodeInBranch(targetNode, mutableAst.lhs) ||
+        this.isNodeInBranch(targetNode, mutableAst.rhs)
+      );
+    } else if (mutableAst.type === "port_reference") {
+      return mutableAst.reference.nodeContext === targetNode;
+    }
+    return false;
+  }
+
+  /**
+   * Gets the size of the branch
+   */
+  private getBranchSize(mutableAst: GraphMutableAst): number {
+    if (mutableAst.type === "empty") {
+      return 0;
+    } else if (
+      mutableAst.type === "node_reference" ||
+      mutableAst.type === "port_reference" ||
+      mutableAst.type === "set"
+    ) {
+      return 1;
+    } else if (mutableAst.type === "right_shift") {
+      return (
+        this.getBranchSize(mutableAst.lhs) + this.getBranchSize(mutableAst.rhs)
+      );
+    }
+    return 0;
+  }
+
+  /**
+   * Gets the nodes in the branch
+   */
+  private getNodesInBranch(
+    mutableAst: GraphMutableAst
+  ): BaseNodeContext<WorkflowDataNode>[] {
+    if (mutableAst.type === "node_reference") {
+      return [mutableAst.reference];
+    } else if (mutableAst.type === "set") {
+      return mutableAst.values.flatMap((value) => this.getNodesInBranch(value));
+    } else if (mutableAst.type === "right_shift") {
+      return [
+        ...this.getNodesInBranch(mutableAst.lhs),
+        ...this.getNodesInBranch(mutableAst.rhs),
+      ];
+    } else if (mutableAst.type === "port_reference") {
+      return [mutableAst.reference.nodeContext];
+    } else {
+      return [];
+    }
+  }
+
+  /**
+   * Splits the branch by the target node into two ASTs.
+   */
+  private splitBranchByTargetNode(
+    targetNode: BaseNodeContext<WorkflowDataNode>,
+    mutableAst: GraphMutableAst
+  ): { lhs: GraphMutableAst; rhs: GraphMutableAst } {
+    if (mutableAst.type === "empty") {
+      return { lhs: { type: "empty" }, rhs: { type: "empty" } };
+    } else if (
+      mutableAst.type === "node_reference" &&
+      mutableAst.reference === targetNode
+    ) {
+      return { lhs: { type: "empty" }, rhs: mutableAst };
+    } else if (
+      mutableAst.type === "node_reference" &&
+      mutableAst.reference != targetNode
+    ) {
+      return { lhs: mutableAst, rhs: { type: "empty" } };
+    } else if (
+      mutableAst.type === "port_reference" &&
+      mutableAst.reference.nodeContext === targetNode
+    ) {
+      return { lhs: { type: "empty" }, rhs: mutableAst };
+    } else if (
+      mutableAst.type === "port_reference" &&
+      mutableAst.reference.nodeContext != targetNode
+    ) {
+      return { lhs: mutableAst, rhs: { type: "empty" } };
+    } else if (mutableAst.type === "set") {
+      return { lhs: mutableAst, rhs: { type: "empty" } };
+    } else if (mutableAst.type === "right_shift") {
+      if (this.isNodeInBranch(targetNode, mutableAst.lhs)) {
+        const splitLhs = this.splitBranchByTargetNode(
+          targetNode,
+          mutableAst.lhs
+        );
+        return {
+          lhs: splitLhs.lhs,
+          rhs: this.optimizeRightShift({
+            type: "right_shift",
+            lhs: splitLhs.rhs,
+            rhs: mutableAst.rhs,
+          }),
+        };
+      } else if (this.isNodeInBranch(targetNode, mutableAst.rhs)) {
+        const splitRhs = this.splitBranchByTargetNode(
+          targetNode,
+          mutableAst.rhs
+        );
+        return {
+          lhs: this.optimizeRightShift({
+            type: "right_shift",
+            lhs: mutableAst.lhs,
+            rhs: splitRhs.lhs,
+          }),
+          rhs: splitRhs.rhs,
+        };
+      }
+    }
+
+    return { lhs: { type: "empty" }, rhs: { type: "empty" } };
+  }
+
+  /**
+   * Optimizes a right shift node by pruning the empty from either side.
+   */
+  private optimizeRightShift(mutableAst: GraphRightShift): GraphMutableAst {
+    if (mutableAst.lhs.type === "empty" && mutableAst.rhs.type !== "empty") {
+      return mutableAst.rhs;
+    } else if (
+      mutableAst.rhs.type === "empty" &&
+      mutableAst.lhs.type !== "empty"
+    ) {
+      return mutableAst.lhs;
+    } else if (
+      mutableAst.lhs.type === "empty" &&
+      mutableAst.rhs.type === "empty"
+    ) {
+      return { type: "empty" };
+    }
+    return mutableAst;
   }
 
   /**

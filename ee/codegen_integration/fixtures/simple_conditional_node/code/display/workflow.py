@@ -29,8 +29,12 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         ),
     )
     inputs_display = {
-        Inputs.foobar: WorkflowInputsVellumDisplayOverrides(id=UUID("5f64210f-ec43-48ce-ae40-40a9ba4c4c11")),
-        Inputs.bazbaz: WorkflowInputsVellumDisplayOverrides(id=UUID("b81c5c88-9528-47d0-8106-14a75520ed47")),
+        Inputs.foobar: WorkflowInputsVellumDisplayOverrides(
+            id=UUID("5f64210f-ec43-48ce-ae40-40a9ba4c4c11"), required=True
+        ),
+        Inputs.bazbaz: WorkflowInputsVellumDisplayOverrides(
+            id=UUID("b81c5c88-9528-47d0-8106-14a75520ed47"), required=True
+        ),
     }
     entrypoint_displays = {
         ConditionalNode: EntrypointVellumDisplayOverrides(
@@ -44,7 +48,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         )
     }
     output_displays = {
-        Workflow.Outputs.final_output: WorkflowOutputVellumDisplayOverrides(
+        Workflow.Outputs.final_output_1: WorkflowOutputVellumDisplayOverrides(
             id=UUID("d8381526-1225-4843-8c22-eec7747445e4"),
             node_id=UUID("b0d2bd58-fa00-4eea-98fb-bc09ee1427dd"),
             node_input_id=UUID("8a2dbefa-0722-4989-8cb7-f2eb526b3247"),

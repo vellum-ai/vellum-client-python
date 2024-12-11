@@ -1,7 +1,9 @@
 import { python } from "@fern-api/python-ast";
+import { MethodArgument } from "@fern-api/python-ast/MethodArgument";
 import { Reference } from "@fern-api/python-ast/Reference";
 import { Type } from "@fern-api/python-ast/Type";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
+import { isNil } from "lodash";
 
 import { BasePersistedFile } from "./base-persisted-file";
 import { GraphAttribute } from "./graph-attribute";
@@ -48,6 +50,7 @@ export class Workflow {
   private readonly entrypointNodeEdges: WorkflowEdge[];
   private readonly displayData: WorkflowDisplayData | undefined;
   private readonly entrypointNodeId: string;
+
   constructor({ workflowContext, inputs, nodes, displayData }: Workflow.Args) {
     this.workflowContext = workflowContext;
     this.inputs = inputs;
@@ -152,6 +155,7 @@ export class Workflow {
           new WorkflowOutput({
             workflowContext: this.workflowContext,
             workflowOutputContext,
+            outputNamesById: this.workflowContext.outputNamesById,
           })
         );
       }
@@ -291,6 +295,36 @@ export class Workflow {
                 return;
               }
 
+              const overrideArgs: MethodArgument[] = [];
+
+              overrideArgs.push(
+                python.methodArgument({
+                  name: "id",
+                  value: python.TypeInstantiation.uuid(
+                    inputVariableContext.getInputVariableId()
+                  ),
+                })
+              );
+              const required =
+                inputVariableContext.getInputVariableData().required;
+              overrideArgs.push(
+                python.methodArgument({
+                  name: "required",
+                  value: required
+                    ? python.TypeInstantiation.bool(required)
+                    : python.TypeInstantiation.bool(false),
+                })
+              );
+              const extensions =
+                inputVariableContext.getInputVariableData().extensions?.color;
+              if (!isNil(extensions)) {
+                overrideArgs.push(
+                  python.methodArgument({
+                    name: "color",
+                    value: python.TypeInstantiation.str(extensions),
+                  })
+                );
+              }
               return {
                 key: python.reference({
                   name: inputsClass.name,
@@ -304,14 +338,7 @@ export class Workflow {
                       this.workflowContext.sdkModulePathNames
                         .VELLUM_TYPES_MODULE_PATH,
                   }),
-                  arguments_: [
-                    python.methodArgument({
-                      name: "id",
-                      value: python.TypeInstantiation.uuid(
-                        inputVariableContext.getInputVariableId()
-                      ),
-                    }),
-                  ],
+                  arguments_: overrideArgs,
                 }),
               };
             })

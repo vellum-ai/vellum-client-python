@@ -110,7 +110,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -202,7 +202,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -303,7 +303,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -387,7 +387,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
     functions = [
         FunctionDefinition(name="functionTest", description="This is a test function")
     ]
@@ -452,7 +452,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
     functions = [
         FunctionDefinition(name="functionTest", description="This is a test function")
     ]
@@ -526,7 +526,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
     functions = [
         FunctionDefinition(name="functionTest", description="This is a test function")
     ]
@@ -619,7 +619,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -687,7 +687,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -764,7 +764,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -858,7 +858,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -930,7 +930,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -1011,7 +1011,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -1097,7 +1097,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -1161,7 +1161,7 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;
 
@@ -1234,6 +1234,6 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters={},
     )
-    prompt_inputs = {"text": Inputs.text}
+    prompt_inputs = {"text": Inputs.text_1}
 "
 `;

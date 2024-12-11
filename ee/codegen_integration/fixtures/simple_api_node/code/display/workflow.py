@@ -29,7 +29,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         ),
     )
     inputs_display = {
-        Inputs.foo: WorkflowInputsVellumDisplayOverrides(id=UUID("c6f392da-bd3a-40ba-8fdd-75fc36b18fd8"), required=True)
+        Inputs.foo_1: WorkflowInputsVellumDisplayOverrides(id=UUID("c6f392da-bd3a-40ba-8fdd-75fc36b18fd8"), required=True)
     }
     entrypoint_displays = {
         ApiNode: EntrypointVellumDisplayOverrides(

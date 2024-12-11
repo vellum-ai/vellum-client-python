@@ -4,4 +4,4 @@ from vellum.workflows.inputs import BaseInputs
 
 
 class Inputs(BaseInputs):
-    items: Any
+    items_1: Any

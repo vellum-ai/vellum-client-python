@@ -290,17 +290,17 @@ export class WorkflowContext {
     } else {
       let counter = 1;
       const names = new Set(this.inputNamesById.values());
-      const defaultName = "var-1";
+      const defaultName = "var";
 
       const originalName =
         !isNil(inputVariable.key) && !isEmpty(inputVariable.key)
           ? `${inputVariable.key}`
           : defaultName;
-      let uniqueName = originalName;
+      let uniqueName = `${originalName}-${counter}`;
 
       while (names.has(uniqueName)) {
-        uniqueName = `${originalName}-${String(counter).padStart(2, "0")}`;
         counter++;
+        uniqueName = `${originalName}-${counter}`;
       }
       this.addInputName(inputVariable.id, uniqueName);
       return uniqueName;

@@ -8,6 +8,9 @@ from ...nodes.api_node import ApiNode
 
 
 class ApiNodeDisplay(BaseAPINodeDisplay[ApiNode]):
+    label = "API Node"
+    node_id = UUID("743aec59-2aa9-402c-963a-d9b86a80a1c2")
+    target_handle_id = UUID("fd10e0db-0130-4fdc-8fc7-146eafe1b470")
     url_input_id = UUID("d2f4547b-eaa3-4b9a-a0f7-0da0975d4e11")
     method_input_id = UUID("4bc3ec8f-f889-45c2-bad0-5498f28cc8af")
     body_input_id = UUID("65dbcf74-183a-49e0-b553-2a3d25ad741d")

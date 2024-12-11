@@ -49,7 +49,7 @@ class BasePromptDeploymentNode(BasePromptNode, Generic[StateType]):
 
     def _get_prompt_event_stream(self) -> Iterator[ExecutePromptEvent]:
         current_parent_context = get_parent_context()
-        parent_context = current_parent_context.model_dump_json() if current_parent_context else None
+        parent_context = current_parent_context.model_dump() if current_parent_context else None
         request_options = self.request_options or RequestOptions()
         request_options["additional_body_parameters"] = {
             "execution_context": {"parent_context": parent_context},
@@ -65,7 +65,7 @@ class BasePromptDeploymentNode(BasePromptNode, Generic[StateType]):
             raw_overrides=self.raw_overrides,
             expand_raw=self.expand_raw,
             metadata=self.metadata,
-            request_options=self.request_options,
+            request_options=request_options,
         )
 
     def _compile_prompt_inputs(self) -> List[PromptDeploymentInputRequest]:

@@ -75,6 +75,5 @@ def test_text_prompt_deployment_node__basic(vellum_client):
         prompt_deployment_name="my-deployment",
         raw_overrides=OMIT,
         release_tag="LATEST",
-        request_options=None,
-        execution_context={"parent_context": None},
+        request_options={"additional_body_parameters": {"execution_context": {"parent_context": None}}},
     )

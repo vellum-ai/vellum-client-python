@@ -17,7 +17,11 @@ from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
 from vellum.workflows.events.types import CodeResourceDefinition, WorkflowParentContext
 from vellum.workflows.workflows.event_filters import root_workflow_event_filter
 
-from tests.workflows.basic_prompt_deployment.workflow import BasicPromptDeploymentWorkflow, Inputs
+from tests.workflows.basic_prompt_deployment.workflow import (
+    BasicPromptDeploymentWorkflow,
+    ExamplePromptDeploymentNode,
+    Inputs,
+)
 
 
 def test_run_workflow__happy_path(vellum_client):
@@ -73,13 +77,14 @@ def test_run_workflow__happy_path(vellum_client):
         raw_overrides=OMIT,
         expand_raw=OMIT,
         metadata=OMIT,
-        request_options=None,
-        execution_context=ANY,
+        request_options=ANY,
     )
 
     call_kwargs = vellum_client.execute_prompt_stream.call_args.kwargs
-    parent_context = call_kwargs["execution_context"].get("parent_context")
-    assert parent_context["workflow_definition"] == CodeResourceDefinition.encode(workflow.__class__).model_dump()
+    parent_context = call_kwargs["request_options"]["additional_body_parameters"]["execution_context"].get(
+        "parent_context"
+    )
+    assert parent_context["node_definition"] == CodeResourceDefinition.encode(ExamplePromptDeploymentNode).model_dump()
 
 
 def test_stream_workflow__happy_path(vellum_client):

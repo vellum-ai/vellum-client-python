@@ -1,4 +1,5 @@
 from collections import defaultdict
+import logging
 from queue import Empty, Queue
 from threading import Thread
 from typing import TYPE_CHECKING, Callable, Dict, Generic, List, Optional, Tuple, Type, TypeVar, Union, overload
@@ -12,7 +13,11 @@ from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs import BaseOutputs
 from vellum.workflows.state.base import BaseState
+from vellum.workflows.state.context import WorkflowContext
 from vellum.workflows.types.generics import NodeType, StateType
+from vellum.workflows.workflows.event_filters import all_workflow_event_filter
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from vellum.workflows import BaseWorkflow
@@ -72,6 +77,7 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
             while map_node_event := self._event_queue.get():
                 index = map_node_event[0]
                 terminal_event = map_node_event[1]
+                self._context._emit_subworkflow_event(terminal_event)
 
                 if terminal_event.name == "workflow.execution.fulfilled":
                     workflow_output_vars = vars(terminal_event.outputs)
@@ -95,7 +101,6 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
                     )
         except Empty:
             pass
-
         return self.Outputs(**mapped_items)
 
     def _context_run_subworkflow(
@@ -106,8 +111,16 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
             self._run_subworkflow(item=item, index=index)
 
     def _run_subworkflow(self, *, item: MapNodeItemType, index: int) -> None:
-        subworkflow = self.subworkflow(parent_state=self.state, context=self._context)
-        events = subworkflow.stream(inputs=self.SubworkflowInputs(index=index, item=item, all_items=self.items))
+        context = WorkflowContext(
+            _vellum_client=self._context._vellum_client, _parent_context=self._context.parent_context
+        )
+        context._register_event_queue(self._context._event_queue)
+
+        subworkflow = self.subworkflow(parent_state=self.state, context=context)
+        events = subworkflow.stream(
+            inputs=self.SubworkflowInputs(index=index, item=item, all_items=self.items),
+            event_filter=all_workflow_event_filter,
+        )
 
         for event in events:
             self._event_queue.put((index, event))

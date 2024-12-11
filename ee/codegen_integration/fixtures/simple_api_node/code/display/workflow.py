@@ -36,7 +36,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
     entrypoint_displays = {
         ApiNode: EntrypointVellumDisplayOverrides(
             id=UUID("c4ef480d-635a-49c8-900f-6583c4b79fb5"),
-            edge_display=EdgeVellumDisplayOverrides(id=UUID("8fbc728e-7408-4456-a932-001423ae8efa")),
+            edge_display=EdgeVellumDisplayOverrides(id=UUID("eaa80dca-eb90-48bb-9903-bedbe51f5a2e")),
         )
     }
     edge_displays = {

@@ -12,9 +12,6 @@ from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosit
 
 
 class APINodeDisplay(BaseAPINodeDisplay[APINode]):
-    label = "API Node"
-    node_id = UUID("2cd960a3-cb8a-43ed-9e3f-f003fc480951")
-    target_handle_id = UUID("06573a05-e6f0-48b9-bc6e-07e06d0bc1b1")
     url_input_id = UUID("480a4c12-22d6-4223-a38a-85db5eda118c")
     method_input_id = UUID("9bf086d4-feed-47ff-9736-a5a6aa3a11cc")
     body_input_id = UUID("74865eb7-cdaf-4d40-a499-0a6505e72680")
@@ -86,7 +83,7 @@ class APINode(BaseAPINode):
         "bar": Inputs.additional_header_value,
         "baz": Inputs.additional_header_value,
     }
-    api_key_header_key = None
+    api_key_header_key = "96c8343d-cc94-4df0-9001-eb2905a00be7"
     authorization_type = AuthorizationType.API_KEY
     api_key_header_value = "<my-bearer-token>"
     bearer_token_value = "<my-bearer-token>"
@@ -109,9 +106,6 @@ class TryNodeDisplay(BaseTryNodeDisplay):
 
 
 class APINodeDisplay(BaseAPINodeDisplay[APINode]):
-    label = "API Node"
-    node_id = UUID("2cd960a3-cb8a-43ed-9e3f-f003fc480951")
-    target_handle_id = UUID("06573a05-e6f0-48b9-bc6e-07e06d0bc1b1")
     url_input_id = UUID("480a4c12-22d6-4223-a38a-85db5eda118c")
     method_input_id = UUID("9bf086d4-feed-47ff-9736-a5a6aa3a11cc")
     body_input_id = UUID("74865eb7-cdaf-4d40-a499-0a6505e72680")
@@ -185,7 +179,7 @@ class APINode(BaseAPINode):
         "bar": Inputs.additional_header_value,
         "baz": Inputs.additional_header_value,
     }
-    api_key_header_key = None
+    api_key_header_key = "96c8343d-cc94-4df0-9001-eb2905a00be7"
     authorization_type = AuthorizationType.API_KEY
     api_key_header_value = "<my-bearer-token>"
     bearer_token_value = "<my-bearer-token>"

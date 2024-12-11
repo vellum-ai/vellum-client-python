@@ -83,22 +83,12 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
     }
 
     if (this.nodeData.data.apiKeyHeaderKeyInputId) {
-      const keyInput = this.nodeData.inputs.find(
-        (input) => input.id === this.nodeData.data.apiKeyHeaderKeyInputId
-      );
-      if (!keyInput) {
-        throw new Error(
-          `No inputs have api header key id of ${this.nodeData.data.apiKeyHeaderKeyInputId}`
-        );
-      }
-      const key = this.nodeInputsByKey.get(keyInput.key);
-      if (!key) {
-        throw new Error(`No inputs have key of ${keyInput.key}`);
-      }
       statements.push(
         python.field({
           name: "api_key_header_key",
-          initializer: key,
+          initializer: python.TypeInstantiation.str(
+            this.nodeData.data.apiKeyHeaderKeyInputId
+          ),
         })
       );
     }
@@ -160,29 +150,6 @@ export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
 
   getNodeDisplayClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
-
-    statements.push(
-      python.field({
-        name: "label",
-        initializer: python.TypeInstantiation.str(this.nodeData.data.label),
-      })
-    );
-
-    statements.push(
-      python.field({
-        name: "node_id",
-        initializer: python.TypeInstantiation.uuid(this.nodeData.id),
-      })
-    );
-
-    statements.push(
-      python.field({
-        name: "target_handle_id",
-        initializer: python.TypeInstantiation.uuid(
-          this.nodeData.data.targetHandleId
-        ),
-      })
-    );
 
     if (!isNil(this.nodeData.data.urlInputId)) {
       statements.push(

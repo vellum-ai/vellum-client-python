@@ -8,7 +8,6 @@ from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeV
 from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
-from vellum_ee.workflows.display.vellum import WorkspaceSecretPointer
 
 _APINodeType = TypeVar("_APINodeType", bound=APINode)
 
@@ -80,13 +79,16 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
             if authorization_type
             else None
         )
-        bearer_token_value_node_input = create_node_input(
-            node_id=node_id,
-            input_name="bearer_token_value",
-            value=bearer_token_value,
-            display_context=display_context,
-            input_id=self.bearer_token_value_input_id,
-            pointer_type=WorkspaceSecretPointer,
+        bearer_token_value_node_input = (
+            create_node_input(
+                node_id=node_id,
+                input_name="bearer_token_value",
+                value=bearer_token_value,
+                display_context=display_context,
+                input_id=self.bearer_token_value_input_id,
+            )
+            if bearer_token_value
+            else None
         )
         api_key_header_key_node_input = (
             create_node_input(
@@ -99,52 +101,52 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
             if api_key_header_key
             else None
         )
-        api_key_header_value_node_input = create_node_input(
-            node_id=node_id,
-            input_name="api_key_header_value",
-            value=api_key_header_value,
-            display_context=display_context,
-            input_id=self.api_key_header_value_input_id,
-            pointer_type=WorkspaceSecretPointer,
+        api_key_header_value_node_input = (
+            create_node_input(
+                node_id=node_id,
+                input_name="api_key_header_value",
+                value=node.api_key_header_value,
+                display_context=display_context,
+                input_id=self.api_key_header_value_input_id,
+            )
+            if headers and api_key_header_key and api_key_header_value
+            else None
         )
 
-        additional_header_inputs = []
-
-        additional_headers: JsonArray = []
-        if headers:
-            for key, value in headers.items():
-                if key in {api_key_header_key, "Authorization"}:
-                    continue
-
-                header_key_input = create_node_input(
-                    node_id=node_id,
-                    input_name="additional_header_key",
-                    value=key,
-                    display_context=display_context,
-                    input_id=(
-                        self.additional_header_key_input_ids.get(key) if self.additional_header_key_input_ids else None
-                    ),
-                )
-                header_value_input = create_node_input(
-                    node_id=node_id,
-                    input_name="additional_header_value",
-                    value=value,
-                    display_context=display_context,
-                    input_id=(
-                        self.additional_header_value_input_ids.get(key)
-                        if self.additional_header_value_input_ids
-                        else None
-                    ),
-                )
-
-                additional_header_inputs.extend([header_key_input, header_value_input])
-
-                additional_headers.append(
-                    {
-                        "header_key_input_id": header_key_input.id,
-                        "header_value_input_id": header_value_input.id,
-                    }
-                )
+        # TODO: Add stable IDs for additional headers
+        # https://app.shortcut.com/vellum/story/5083
+        additional_headers: JsonArray = (
+            [
+                {
+                    "header_key_input_id": create_node_input(
+                        node_id=node_id,
+                        input_name="additional_header_key",
+                        value=key,
+                        display_context=display_context,
+                        input_id=(
+                            self.additional_header_key_input_ids.get(key)
+                            if self.additional_header_key_input_ids
+                            else None
+                        ),
+                    ).id,
+                    "header_value_input_id": create_node_input(
+                        node_id=node_id,
+                        input_name="additional_header_value",
+                        value=value,
+                        display_context=display_context,
+                        input_id=(
+                            self.additional_header_value_input_ids.get(key)
+                            if self.additional_header_value_input_ids
+                            else None
+                        ),
+                    ).id,
+                }
+                for key, value in headers.items()
+                if key not in {api_key_header_key, "Authorization"}
+            ]
+            if headers
+            else []
+        )
 
         inputs = [
             input
@@ -159,7 +161,6 @@ class BaseAPINodeDisplay(BaseNodeVellumDisplay[_APINodeType], Generic[_APINodeTy
             ]
             if input is not None
         ]
-        inputs.extend(additional_header_inputs)
 
         _, text_output_display = display_context.node_output_displays[cast(OutputReference, node.Outputs.text)]
         _, json_output_display = display_context.node_output_displays[cast(OutputReference, node.Outputs.json)]

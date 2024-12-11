@@ -202,7 +202,7 @@ class InputVariablePointer(UniversalBaseModel):
 
 class WorkspaceSecretData(UniversalBaseModel):
     type: VellumVariableType
-    workspace_secret_id: Optional[str] = None
+    workspace_secret_id: str
 
 
 class WorkspaceSecretPointer(UniversalBaseModel):

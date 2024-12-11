@@ -1,3 +1,4 @@
+import { isEmpty, isNil } from "lodash";
 import { MlModels } from "vellum-ai/api/resources/mlModels/client/Client";
 
 import { GENERATED_WORKFLOW_MODULE_NAME } from "src/constants";
@@ -80,6 +81,9 @@ export class WorkflowContext {
   // This is used to track the final output names for the workflow keyed by terminal node id
   public readonly outputNamesById: Map<string, string>;
 
+  // This is used to track the workflow input variable names for the workflow keyed by input variable id
+  public readonly inputNamesById: Map<string, string>;
+
   constructor({
     absolutePathToOutputDirectory,
     moduleName,
@@ -117,6 +121,7 @@ export class WorkflowContext {
     this.sdkModulePathNames = generateSdkModulePaths(workflowsSdkModulePath);
     this.workflowRawEdges = workflowRawEdges;
     this.outputNamesById = new Map<string, string>();
+    this.inputNamesById = new Map<string, string>();
   }
 
   /* Create a new workflow context for a nested workflow from its parent */
@@ -168,6 +173,8 @@ export class WorkflowContext {
         `Input variable context already exists for input variable ID: ${inputVariableId}`
       );
     }
+
+    this.generateUniqueInputName(inputVariableContext);
 
     this.inputVariableContextsById.set(inputVariableId, inputVariableContext);
     this.globalInputVariableContextsById.set(
@@ -259,12 +266,47 @@ export class WorkflowContext {
     this.workflowRawEdges.push(...edges);
   }
 
+  public getInputName(inputVariableId: string): string | undefined {
+    return this.inputNamesById.get(inputVariableId);
+  }
+
+  public addInputName(inputVariableId: string, inputName: string): void {
+    this.inputNamesById.set(inputVariableId, inputName);
+  }
+
   public getOutputName(terminalNodeId: string): string | undefined {
     return this.outputNamesById.get(terminalNodeId);
   }
 
   public addOutputName(terminalNodeId: string, outputName: string): void {
     this.outputNamesById.set(terminalNodeId, outputName);
+  }
+
+  private generateUniqueInputName(
+    inputVariableContext: InputVariableContext
+  ): string {
+    const inputVariable = inputVariableContext.getInputVariableData();
+    const value = this.getInputName(inputVariable.id);
+    if (value !== undefined) {
+      return value;
+    } else {
+      let counter = 1;
+      const names = new Set(this.inputNamesById.values());
+      const defaultName = "var-1";
+
+      const originalName =
+        !isNil(inputVariable.key) && !isEmpty(inputVariable.key)
+          ? `${inputVariable.key}`
+          : defaultName;
+      let uniqueName = originalName;
+
+      while (names.has(uniqueName)) {
+        uniqueName = `${originalName}-${String(counter).padStart(2, "0")}`;
+        counter++;
+      }
+      this.addInputName(inputVariable.id, uniqueName);
+      return uniqueName;
+    }
   }
 
   private generateUniqueFinalOutputName(

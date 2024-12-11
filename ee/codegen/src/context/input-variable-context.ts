@@ -30,7 +30,13 @@ export class InputVariableContext {
   }
 
   public getInputVariableName(): string {
-    return toSnakeCase(this.inputVariableData.key);
+    const name = this.workflowContext.getInputName(this.inputVariableData.id);
+    if (!name) {
+      throw new Error(
+        `No input variable key found for input names in workflow context given id ${this.inputVariableData.id}`
+      );
+    }
+    return toSnakeCase(name);
   }
 
   public getInputVariableData(): VellumVariable {

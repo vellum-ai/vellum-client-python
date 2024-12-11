@@ -45,6 +45,26 @@ class Inputs(BaseInputs):
 "
 `;
 
+exports[`Inputs > write > should generate correct code when Inputs has variables with duplicate keys 1`] = `
+"from vellum.workflows.inputs import BaseInputs
+
+
+class Inputs(BaseInputs):
+    key_1: str
+    key_1_01: str
+"
+`;
+
+exports[`Inputs > write > should generate correct code when Inputs has variables with empty keys 1`] = `
+"from vellum.workflows.inputs import BaseInputs
+
+
+class Inputs(BaseInputs):
+    var_1: str
+    var_1_01: str
+"
+`;
+
 exports[`Inputs > write > should generate correct code when default is a 'ARRAY' 1`] = `
 "from vellum.workflows.inputs import BaseInputs
 from typing import List

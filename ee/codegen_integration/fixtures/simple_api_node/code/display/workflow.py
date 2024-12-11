@@ -29,14 +29,12 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         ),
     )
     inputs_display = {
-        Inputs.foo: WorkflowInputsVellumDisplayOverrides(
-            id=UUID("c6f392da-bd3a-40ba-8fdd-75fc36b18fd8"), required=False
-        )
+        Inputs.foo: WorkflowInputsVellumDisplayOverrides(id=UUID("c6f392da-bd3a-40ba-8fdd-75fc36b18fd8"), required=True)
     }
     entrypoint_displays = {
         ApiNode: EntrypointVellumDisplayOverrides(
             id=UUID("c4ef480d-635a-49c8-900f-6583c4b79fb5"),
-            edge_display=EdgeVellumDisplayOverrides(id=UUID("eaa80dca-eb90-48bb-9903-bedbe51f5a2e")),
+            edge_display=EdgeVellumDisplayOverrides(id=UUID("8fbc728e-7408-4456-a932-001423ae8efa")),
         )
     }
     edge_displays = {

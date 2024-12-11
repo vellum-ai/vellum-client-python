@@ -195,6 +195,7 @@ exports[`Workflow > write > should generate correct code with multiple terminal 
 from .inputs import Inputs
 from vellum.workflows.state import BaseState
 from .nodes.final_output import FinalOutput
+from .nodes.final_output_1 import FinalOutput
 
 
 class TestWorkflow(BaseWorkflow[Inputs, BaseState]):

@@ -29,7 +29,9 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         ),
     )
     inputs_display = {
-        Inputs.input: WorkflowInputsVellumDisplayOverrides(id=UUID("f55ef1d6-1d95-464c-adb1-11e3a19c2ed2"))
+        Inputs.input: WorkflowInputsVellumDisplayOverrides(
+            id=UUID("f55ef1d6-1d95-464c-adb1-11e3a19c2ed2"), required=True
+        )
     }
     entrypoint_displays = {
         CodeExecutionNode: EntrypointVellumDisplayOverrides(
@@ -43,7 +45,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
         )
     }
     output_displays = {
-        Workflow.Outputs.final_output: WorkflowOutputVellumDisplayOverrides(
+        Workflow.Outputs.final_output_1: WorkflowOutputVellumDisplayOverrides(
             id=UUID("87760362-25b9-4dcb-8034-b49dc9e033ab"),
             node_id=UUID("5bb10d67-efc7-4bd4-9452-4ec2ffbc031d"),
             node_input_id=UUID("d3b9060a-40b5-492c-a628-f2d3c912cf44"),

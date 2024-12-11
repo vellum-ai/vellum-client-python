@@ -305,6 +305,7 @@ ${errors.slice(0, 3).map((err) => {
             this.workflowContext.addWorkflowOutputContext(
               new WorkflowOutputContext({
                 terminalNodeData: nodeData,
+                workflowContext: this.workflowContext,
               })
             );
           } else if (nodeData.type === "ENTRYPOINT") {

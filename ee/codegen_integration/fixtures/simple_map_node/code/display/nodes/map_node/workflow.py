@@ -29,9 +29,15 @@ class MapNodeWorkflowDisplay(VellumWorkflowDisplay[MapNodeWorkflow]):
         ),
     )
     inputs_display = {
-        Inputs.items: WorkflowInputsVellumDisplayOverrides(id=UUID("b8d66997-444e-4409-b315-5bef0c06192a")),
-        Inputs.item: WorkflowInputsVellumDisplayOverrides(id=UUID("2619e147-870f-40ec-8f21-f3e131fcd65a")),
-        Inputs.index: WorkflowInputsVellumDisplayOverrides(id=UUID("edecf894-c35b-485a-998f-118833a4b045")),
+        Inputs.items: WorkflowInputsVellumDisplayOverrides(
+            id=UUID("b8d66997-444e-4409-b315-5bef0c06192a"), required=True
+        ),
+        Inputs.item: WorkflowInputsVellumDisplayOverrides(
+            id=UUID("2619e147-870f-40ec-8f21-f3e131fcd65a"), required=True
+        ),
+        Inputs.index: WorkflowInputsVellumDisplayOverrides(
+            id=UUID("edecf894-c35b-485a-998f-118833a4b045"), required=True
+        ),
     }
     entrypoint_displays = {
         SearchNode: EntrypointVellumDisplayOverrides(
@@ -45,7 +51,7 @@ class MapNodeWorkflowDisplay(VellumWorkflowDisplay[MapNodeWorkflow]):
         )
     }
     output_displays = {
-        MapNodeWorkflow.Outputs.final_output: WorkflowOutputVellumDisplayOverrides(
+        MapNodeWorkflow.Outputs.final_output_1: WorkflowOutputVellumDisplayOverrides(
             id=UUID("bffc4749-00b8-44db-90ee-db655cbc7e62"),
             node_id=UUID("d9d29911-dd45-45d5-9ac8-1a06bb596c2f"),
             node_input_id=UUID("18dddbce-025b-461c-aa7a-ab2561739521"),

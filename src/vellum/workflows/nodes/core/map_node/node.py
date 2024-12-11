@@ -114,7 +114,8 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
         context = WorkflowContext(
             _vellum_client=self._context._vellum_client, _parent_context=self._context.parent_context
         )
-        context._register_event_queue(self._context._event_queue)
+        if self._context._event_queue:
+            context._register_event_queue(self._context._event_queue)
 
         subworkflow = self.subworkflow(parent_state=self.state, context=context)
         events = subworkflow.stream(

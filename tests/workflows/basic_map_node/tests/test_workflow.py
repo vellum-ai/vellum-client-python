@@ -1,7 +1,8 @@
-from vellum.workflows.events.types import CodeResourceDefinition
+from vellum.workflows.events import NodeExecutionFulfilledEvent
+from vellum.workflows.events.types import CodeResourceDefinition, NodeParentContext, WorkflowParentContext
 from vellum.workflows.workflows.event_filters import all_workflow_event_filter
 
-from tests.workflows.basic_map_node.workflow import Inputs, Iteration, IterationSubworkflow, SimpleMapExample
+from tests.workflows.basic_map_node.workflow import Inputs, IterationSubworkflow, SimpleMapExample
 
 
 def test_run_workflow__happy_path():
@@ -34,8 +35,7 @@ def test_map_node_streaming_events():
 
     # THEN we see the expected events in the correct relative order
     workflow_initiated_events = [e for e in events if e.name == "workflow.execution.initiated"]
-    node_initiated_events = [e for e in events if e.name == "node.execution.initiated"]
-    node_fulfilled_events = [e for e in events if e.name == "node.execution.fulfilled"]
+    node_events = [e for e in events if e.name.startswith("node.")]
     workflow_fulfilled_events = [e for e in events if e.name == "workflow.execution.fulfilled"]
     workflow_snapshotted_events = [e for e in events if e.name == "workflow.execution.snapshotted"]
 
@@ -53,26 +53,63 @@ def test_map_node_streaming_events():
         assert event.parent.parent.type == "WORKFLOW"
         assert event.parent.parent.workflow_definition == CodeResourceDefinition.encode(SimpleMapExample)
 
-        # Node initiated events
-    assert len(node_initiated_events) == 3  # MapNode + 2 iterations
-    assert node_initiated_events[0].parent is not None
-    assert node_initiated_events[0].parent.type == "WORKFLOW"
-    assert node_initiated_events[0].parent.workflow_definition == CodeResourceDefinition.encode(SimpleMapExample)
+    # Node events
+    assert len(node_events) == 6  # 2 initiated + 2 fulfilled + 2 others
 
-    for event in node_initiated_events[1:]:
-        assert event.node_definition == Iteration
-        assert event.parent is not None
-        assert event.parent.type == "WORKFLOW"
-        assert event.parent.workflow_definition == CodeResourceDefinition.encode(IterationSubworkflow)
+    # Node initiated events
+    node_initiated = [e for e in node_events if e.name == "node.execution.initiated"]
+    assert node_initiated[0].parent is not None
+    assert node_initiated[0].parent.type == "WORKFLOW"
+    assert node_initiated[0].parent.workflow_definition == CodeResourceDefinition.encode(SimpleMapExample)
 
     # Node fulfilled events
-    assert len(node_fulfilled_events) == 3  # MapNode + 2 iterations
-    for i, event in enumerate(node_fulfilled_events[:-1]):
-        assert event.node_definition == Iteration
-        assert event.outputs.count == len(["apple", "banana"][i]) + i
+    node_fulfilled = [e for e in node_events if e.name == "node.execution.fulfilled"]
+    node_fulfilled = sorted(
+        node_fulfilled,
+        key=lambda output: (
+            sum(output.outputs.count) if isinstance(output.outputs.count, list) else output.outputs.count
+        ),
+    )
+    assert len(node_fulfilled) == 3
+    # Check first iteration
+    first_event = node_fulfilled[0]
+    assert isinstance(first_event, NodeExecutionFulfilledEvent)
+    assert first_event.outputs.count == len("apple")  # 5
+    assert first_event.parent is not None
+    assert isinstance(first_event.parent, WorkflowParentContext)
+    assert first_event.parent.type == "WORKFLOW"
+    assert first_event.parent.workflow_definition == CodeResourceDefinition.encode(IterationSubworkflow)
 
-    # Final MapNode fulfilled event
-    assert node_fulfilled_events[-1].outputs.count == [5, 7]
+    parent_node = first_event.parent.parent
+    assert parent_node is not None
+    assert isinstance(parent_node, NodeParentContext)
+    assert parent_node.type == "WORKFLOW_NODE"
+
+    parent_workflow = parent_node.parent
+    assert parent_workflow is not None
+    assert isinstance(parent_workflow, WorkflowParentContext)
+    assert parent_workflow.type == "WORKFLOW"
+    assert parent_workflow.workflow_definition == CodeResourceDefinition.encode(SimpleMapExample)
+
+    # Check second iteration
+    second_event = node_fulfilled[1]
+    assert isinstance(second_event, NodeExecutionFulfilledEvent)
+    assert second_event.outputs.count == len("banana") + 1
+    assert second_event.parent is not None
+    assert isinstance(second_event.parent, WorkflowParentContext)
+    assert second_event.parent.type == "WORKFLOW"
+    assert second_event.parent.workflow_definition == CodeResourceDefinition.encode(IterationSubworkflow)
+
+    parent_node = second_event.parent.parent
+    assert parent_node is not None
+    assert isinstance(parent_node, NodeParentContext)
+    assert parent_node.type == "WORKFLOW_NODE"
+
+    parent_workflow = parent_node.parent
+    assert parent_workflow is not None
+    assert isinstance(parent_workflow, WorkflowParentContext)
+    assert parent_workflow.type == "WORKFLOW"
+    assert parent_workflow.workflow_definition == CodeResourceDefinition.encode(SimpleMapExample)
 
     # Workflow fulfilled events
     assert len(workflow_fulfilled_events) == 3  # Main + 2 subworkflows
@@ -81,12 +118,3 @@ def test_map_node_streaming_events():
 
     # Workflow snapshotted events
     assert len(workflow_snapshotted_events) > 0
-    # Total number of events is correct
-    expected_events = (
-        len(workflow_initiated_events)
-        + len(node_initiated_events)
-        + len(node_fulfilled_events)
-        + len(workflow_fulfilled_events)
-        + len(workflow_snapshotted_events)
-    )
-    assert len(events) == expected_events

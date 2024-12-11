@@ -51,7 +51,7 @@ export function getGeneratedNodeModuleInfo({
   const modulePathLeaf =
     nodeDefinition?.module?.[nodeDefinition.module.length - 1];
 
-  let moduleName: string;
+  let rawModuleName: string;
   let nodeClassName: string;
 
   // In the case of adorned Nodes, we need to traverse the Adornment Node's definition to get
@@ -59,7 +59,7 @@ export function getGeneratedNodeModuleInfo({
   // TODO: Handle case where there's multiple adornments on the same Node
   //  https://app.shortcut.com/vellum/story/5699
   if (modulePathLeaf && modulePathLeaf === "<adornment>") {
-    moduleName =
+    rawModuleName =
       nodeDefinition?.module?.[nodeDefinition.module.length - 3] ??
       toSnakeCase(nodeLabel);
 
@@ -67,9 +67,17 @@ export function getGeneratedNodeModuleInfo({
       nodeDefinition?.module?.[nodeDefinition.module.length - 2] ??
       createPythonClassName(nodeLabel);
   } else {
-    moduleName = modulePathLeaf ?? toSnakeCase(nodeLabel);
+    rawModuleName = modulePathLeaf ?? toSnakeCase(nodeLabel);
 
     nodeClassName = nodeDefinition?.name ?? createPythonClassName(nodeLabel);
+  }
+
+  // Deduplicate the module name if it's already in use
+  let moduleName = rawModuleName;
+  let numRenameAttempts = 0;
+  while (workflowContext.isNodeModuleNameUsed(moduleName)) {
+    moduleName = `${rawModuleName}_${numRenameAttempts + 1}`;
+    numRenameAttempts += 1;
   }
 
   const modulePath = [

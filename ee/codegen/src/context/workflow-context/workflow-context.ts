@@ -55,6 +55,10 @@ export class WorkflowContext {
   public readonly nodeContextsByNodeId: NodeContextsByNodeId;
   public readonly globalNodeContextsByNodeId: NodeContextsByNodeId;
 
+  // Track what node module names are used within this workflow so that we can ensure name uniqueness when adding
+  // new nodes.
+  public readonly nodeModuleNames: Set<string> = new Set();
+
   // A list of all outputs this workflow produces
   public readonly workflowOutputContexts: WorkflowOutputContext[] = [];
 
@@ -198,6 +202,14 @@ export class WorkflowContext {
     this.workflowOutputContexts.push(workflowOutputContext);
   }
 
+  public isNodeModuleNameUsed(nodeModuleName: string): boolean {
+    return this.nodeModuleNames.has(nodeModuleName);
+  }
+
+  private addUsedNodeModuleName(nodeModuleName: string): void {
+    this.nodeModuleNames.add(nodeModuleName);
+  }
+
   public addNodeContext(nodeContext: BaseNodeContext<WorkflowDataNode>): void {
     const nodeId = nodeContext.getNodeId();
 
@@ -207,6 +219,7 @@ export class WorkflowContext {
 
     this.nodeContextsByNodeId.set(nodeId, nodeContext);
     this.globalNodeContextsByNodeId.set(nodeId, nodeContext);
+    this.addUsedNodeModuleName(nodeContext.nodeModuleName);
   }
 
   public getNodeContext<T extends WorkflowDataNode>(

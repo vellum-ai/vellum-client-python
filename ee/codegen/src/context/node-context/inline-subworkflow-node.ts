@@ -6,6 +6,7 @@ import { SubworkflowNode as SubworkflowNodeType } from "src/types/vellum";
 export class InlineSubworkflowNodeContext extends BaseNodeContext<SubworkflowNodeType> {
   baseNodeClassName = "InlineSubworkflowNode";
   baseNodeDisplayClassName = "BaseInlineSubworkflowNodeDisplay";
+  isCore = true;
 
   getNodeOutputNamesById(): Record<string, string> {
     const subworkflowNodeData = this.nodeData.data;

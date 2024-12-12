@@ -6,6 +6,7 @@ import { ErrorNode } from "src/types/vellum";
 export class ErrorNodeContext extends BaseNodeContext<ErrorNode> {
   baseNodeClassName = "ErrorNode";
   baseNodeDisplayClassName = "BaseErrorNodeDisplay";
+  isCore = true;
 
   getNodeOutputNamesById(): Record<string, string> {
     return {

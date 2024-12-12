@@ -3,6 +3,9 @@ import { PortContext } from "src/context/port-context";
 import { ApiNode as ApiNodeType } from "src/types/vellum";
 
 export class ApiNodeContext extends BaseNodeContext<ApiNodeType> {
+  baseNodeClassName = "APINode";
+  baseNodeDisplayClassName = "BaseAPINodeDisplay";
+
   getNodeOutputNamesById(): Record<string, string> {
     return {
       [this.nodeData.data.jsonOutputId]: "json",

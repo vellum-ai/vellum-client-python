@@ -3,6 +3,9 @@ import { PortContext } from "src/context/port-context";
 import { InlinePromptNode as InlinePromptNodeType } from "src/types/vellum";
 
 export class InlinePromptNodeContext extends BaseNodeContext<InlinePromptNodeType> {
+  baseNodeClassName = "InlinePromptNode";
+  baseNodeDisplayClassName = "BaseInlinePromptNodeDisplay";
+
   protected getNodeOutputNamesById(): Record<string, string> {
     return {
       [this.nodeData.data.outputId]: "text",

@@ -3,6 +3,9 @@ import { PortContext } from "src/context/port-context";
 import { ConditionalNode } from "src/types/vellum";
 
 export class ConditionalNodeContext extends BaseNodeContext<ConditionalNode> {
+  baseNodeClassName = "ConditionalNode";
+  baseNodeDisplayClassName = "BaseConditionalNodeDisplay";
+
   protected getNodeOutputNamesById(): Record<string, string> {
     return {};
   }

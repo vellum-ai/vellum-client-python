@@ -10,9 +10,6 @@ export class MergeNode extends BaseSingleFileNode<
   MergeNodeType,
   MergeNodeContext
 > {
-  baseNodeClassName = "MergeNode";
-  baseNodeDisplayClassName = "BaseMergeNodeDisplay";
-
   getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 

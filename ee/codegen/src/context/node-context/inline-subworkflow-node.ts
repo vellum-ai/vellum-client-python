@@ -4,6 +4,9 @@ import { PortContext } from "src/context/port-context";
 import { SubworkflowNode as SubworkflowNodeType } from "src/types/vellum";
 
 export class InlineSubworkflowNodeContext extends BaseNodeContext<SubworkflowNodeType> {
+  baseNodeClassName = "InlineSubworkflowNode";
+  baseNodeDisplayClassName = "BaseInlineSubworkflowNodeDisplay";
+
   getNodeOutputNamesById(): Record<string, string> {
     const subworkflowNodeData = this.nodeData.data;
     if (subworkflowNodeData.variant !== "INLINE") {

@@ -88,7 +88,7 @@ export declare namespace WorkflowProjectGenerator {
 
 export class WorkflowProjectGenerator {
   public readonly workflowVersionExecConfig: WorkflowVersionExecConfig;
-  private readonly workflowContext: WorkflowContext;
+  public readonly workflowContext: WorkflowContext;
 
   constructor({ moduleName, ...rest }: WorkflowProjectGenerator.Args) {
     if ("workflowContext" in rest) {

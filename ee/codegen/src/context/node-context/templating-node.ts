@@ -3,6 +3,9 @@ import { PortContext } from "src/context/port-context";
 import { TemplatingNode } from "src/types/vellum";
 
 export class TemplatingNodeContext extends BaseNodeContext<TemplatingNode> {
+  baseNodeClassName = "TemplatingNode";
+  baseNodeDisplayClassName = "BaseTemplatingNodeDisplay";
+
   protected getNodeOutputNamesById(): Record<string, string> {
     return {
       [this.nodeData.data.outputId]: "result",

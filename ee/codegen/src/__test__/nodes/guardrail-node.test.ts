@@ -13,7 +13,6 @@ import { GuardrailNode } from "src/generators/nodes/guardrail-node";
 describe("GuardrailNode", () => {
   let workflowContext: WorkflowContext;
   let writer: Writer;
-  let node: GuardrailNode;
 
   beforeEach(() => {
     workflowContext = workflowContextFactory();
@@ -53,44 +52,46 @@ describe("GuardrailNode", () => {
     );
   });
 
-  describe("basic", () => {
-    const mockMetricDefinition = (
-      outputVariables: { id: string; key: string; type: string }[]
-    ) => ({
-      id: "mocked-metric-output-id",
-      label: "mocked-metric-output-label",
-      name: "mocked-metric-output-name",
-      description: "mocked-metric-output-description",
-      outputVariables,
+  const mockMetricDefinition = (
+    outputVariables: { id: string; key: string; type: string }[]
+  ) => ({
+    id: "mocked-metric-output-id",
+    label: "mocked-metric-output-label",
+    name: "mocked-metric-output-name",
+    description: "mocked-metric-output-description",
+    outputVariables,
+  });
+
+  const createNode = async ({
+    errorOutputId,
+    outputVariables,
+  }: {
+    errorOutputId?: string;
+    outputVariables: { id: string; key: string; type: string }[];
+  }) => {
+    vi.spyOn(
+      MetricDefinitionsClient.prototype,
+      "metricDefinitionHistoryItemRetrieve"
+    ).mockResolvedValue(
+      mockMetricDefinition(
+        outputVariables
+      ) as unknown as MetricDefinitionHistoryItem
+    );
+    const nodeData = guardrailNodeDataFactory({ errorOutputId });
+
+    const nodeContext = (await createNodeContext({
+      workflowContext,
+      nodeData,
+    })) as GuardrailNodeContext;
+    workflowContext.addNodeContext(nodeContext);
+
+    return new GuardrailNode({
+      workflowContext: workflowContext,
+      nodeContext,
     });
+  };
 
-    const createNode = async (
-      outputVariables: { id: string; key: string; type: string }[]
-    ) => {
-      vi.spyOn(
-        MetricDefinitionsClient.prototype,
-        "metricDefinitionHistoryItemRetrieve"
-      ).mockResolvedValue(
-        mockMetricDefinition(
-          outputVariables
-        ) as unknown as MetricDefinitionHistoryItem
-      );
-      const nodeData = guardrailNodeDataFactory();
-
-      const nodeContext = (await createNodeContext({
-        workflowContext,
-        nodeData,
-      })) as GuardrailNodeContext;
-      workflowContext.addNodeContext(nodeContext);
-
-      return new GuardrailNode({
-        workflowContext: workflowContext,
-        nodeContext,
-      });
-    };
-
-    beforeEach(async () => {});
-
+  describe("basic", () => {
     it.each([
       [
         "single output variable",
@@ -104,7 +105,7 @@ describe("GuardrailNode", () => {
         ],
       ],
     ])("getNodeFile - %s", async (_, outputVariables) => {
-      const node = await createNode(outputVariables);
+      const node = await createNode({ outputVariables });
 
       node.getNodeFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
@@ -123,37 +124,42 @@ describe("GuardrailNode", () => {
         ],
       ],
     ])("getNodeDisplayFile - %s", async (_, outputVariables) => {
-      const node = await createNode(outputVariables);
+      const node = await createNode({ outputVariables });
 
       node.getNodeDisplayFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
+
+    it("getNodeDefinition", async () => {
+      const node = await createNode({ outputVariables: [] });
+
+      expect(node.nodeContext.getNodeDefinition()).toMatchSnapshot();
+    });
   });
 
   describe("reject on error enabled", () => {
-    beforeEach(async () => {
-      const nodeData = guardrailNodeDataFactory({
-        errorOutputId: "38361ff1-c826-49b8-aa8d-28179c3684cc",
-      });
-
-      const nodeContext = (await createNodeContext({
-        workflowContext,
-        nodeData,
-      })) as GuardrailNodeContext;
-      workflowContext.addNodeContext(nodeContext);
-
-      node = new GuardrailNode({
-        workflowContext: workflowContext,
-        nodeContext,
-      });
-    });
-
     it("getNodeFile", async () => {
+      const node = await createNode({
+        errorOutputId: "38361ff1-c826-49b8-aa8d-28179c3684cc",
+        outputVariables: [
+          { id: "mocked-input-id-1", key: "score1", type: "NUMBER" },
+          { id: "mocked-input-id-2", key: "score2", type: "NUMBER" },
+        ],
+      });
+
       node.getNodeFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
 
     it("getNodeDisplayFile", async () => {
+      const node = await createNode({
+        errorOutputId: "38361ff1-c826-49b8-aa8d-28179c3684cc",
+        outputVariables: [
+          { id: "mocked-input-id-1", key: "score1", type: "NUMBER" },
+          { id: "mocked-input-id-2", key: "score2", type: "NUMBER" },
+        ],
+      });
+
       node.getNodeDisplayFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });

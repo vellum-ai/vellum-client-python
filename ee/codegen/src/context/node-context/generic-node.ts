@@ -3,6 +3,9 @@ import { PortContext } from "src/context/port-context";
 import { GenericNode as GenericNodeType } from "src/types/vellum";
 
 export class GenericNodeContext extends BaseNodeContext<GenericNodeType> {
+  baseNodeClassName = "BaseNode";
+  baseNodeDisplayClassName = "BaseNodeDisplay";
+
   getNodeOutputNamesById(): Record<string, string> {
     return {};
   }

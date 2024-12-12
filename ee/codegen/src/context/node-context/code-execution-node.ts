@@ -4,6 +4,9 @@ import { PortContext } from "src/context/port-context";
 import { CodeExecutionNode as CodeExecutionNodeType } from "src/types/vellum";
 
 export class CodeExecutionContext extends BaseNodeContext<CodeExecutionNodeType> {
+  baseNodeClassName = "CodeExecutionNode";
+  baseNodeDisplayClassName = "BaseCodeExecutionNodeDisplay";
+
   public readonly filepath: string;
 
   constructor(args: BaseNodeContext.Args<CodeExecutionNodeType>) {

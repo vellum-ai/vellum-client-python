@@ -10,9 +10,6 @@ export class PromptDeploymentNode extends BaseSingleFileNode<
   PromptNode,
   PromptDeploymentNodeContext
 > {
-  baseNodeClassName = "PromptDeploymentNode";
-  baseNodeDisplayClassName = "BasePromptDeploymentNodeDisplay";
-
   protected getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 

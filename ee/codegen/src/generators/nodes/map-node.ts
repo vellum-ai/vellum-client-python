@@ -16,9 +16,6 @@ export class MapNode extends BaseNestedWorkflowNode<
   MapNodeType,
   MapNodeContext
 > {
-  baseNodeClassName = "MapNode";
-  baseNodeDisplayClassName = "BaseMapNodeDisplay";
-
   getInnerWorkflowData(): WorkflowRawData {
     if (this.nodeData.data.variant !== "INLINE") {
       throw new Error(

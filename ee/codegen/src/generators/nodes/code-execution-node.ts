@@ -18,9 +18,6 @@ export class CodeExecutionNode extends BaseSingleFileNode<
 > {
   public declare readonly nodeContext: CodeExecutionContext;
 
-  baseNodeClassName = "CodeExecutionNode";
-  baseNodeDisplayClassName = "BaseCodeExecutionNodeDisplay";
-
   // Override
   public async persist(): Promise<void> {
     const nodeInitFile = new InitFile({

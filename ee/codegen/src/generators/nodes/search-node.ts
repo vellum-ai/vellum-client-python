@@ -11,9 +11,6 @@ export class SearchNode extends BaseSingleFileNode<
   SearchNodeType,
   TextSearchNodeContext
 > {
-  baseNodeClassName = "SearchNode";
-  baseNodeDisplayClassName = "BaseSearchNodeDisplay";
-
   getNodeClassBodyStatements(): AstNode[] {
     const bodyStatements: AstNode[] = [];
 

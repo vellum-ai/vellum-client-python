@@ -12,9 +12,6 @@ export class TemplatingNode extends BaseSingleFileNode<
   TemplatingNodeType,
   TemplatingNodeContext
 > {
-  baseNodeClassName = "TemplatingNode";
-  baseNodeDisplayClassName = "BaseTemplatingNodeDisplay";
-
   protected getNodeBaseGenericTypes(): AstNode[] {
     const baseStateClassReference = new BaseState({
       workflowContext: this.workflowContext,

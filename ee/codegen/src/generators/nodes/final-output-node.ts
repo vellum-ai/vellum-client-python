@@ -12,9 +12,6 @@ export class FinalOutputNode extends BaseSingleFileNode<
   FinalOutputNodeType,
   FinalOutputNodeContext
 > {
-  baseNodeClassName = "FinalOutputNode";
-  baseNodeDisplayClassName = "BaseFinalOutputNodeDisplay";
-
   protected getNodeBaseGenericTypes(): AstNode[] {
     const baseStateClassReference = new BaseState({
       workflowContext: this.workflowContext,

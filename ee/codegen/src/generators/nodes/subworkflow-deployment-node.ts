@@ -11,9 +11,6 @@ export class SubworkflowDeploymentNode extends BaseSingleFileNode<
   SubworkflowNodeType,
   SubworkflowDeploymentNodeContext
 > {
-  baseNodeClassName = "SubworkflowDeploymentNode";
-  baseNodeDisplayClassName = "BaseSubworkflowDeploymentNodeDisplay";
-
   getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 

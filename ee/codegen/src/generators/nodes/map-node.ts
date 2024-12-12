@@ -114,7 +114,7 @@ export class MapNode extends BaseNestedWorkflowNode<
     );
 
     nestedWorkflowContext.workflowOutputContexts.forEach((outputContext) => {
-      const outputName = outputContext.getOutputName();
+      const outputName = outputContext.name;
       const outputField = python.field({
         name: outputName,
         initializer: python.reference({

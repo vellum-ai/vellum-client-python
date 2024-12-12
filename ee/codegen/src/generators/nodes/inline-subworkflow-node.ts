@@ -99,7 +99,7 @@ export class InlineSubworkflowNode extends BaseNestedWorkflowNode<
     );
 
     nestedWorkflowContext.workflowOutputContexts.forEach((outputContext) => {
-      const outputName = outputContext.getOutputName();
+      const outputName = outputContext.name;
       const outputField = python.field({
         name: outputName,
         initializer: python.reference({
@@ -124,7 +124,7 @@ export class InlineSubworkflowNode extends BaseNestedWorkflowNode<
       name: "output_display",
       initializer: python.TypeInstantiation.dict(
         nestedWorkflowContext.workflowOutputContexts.map((outputContext) => {
-          const outputName = outputContext.getOutputName();
+          const outputName = outputContext.name;
           const terminalNodeData = outputContext.getFinalOutputNodeData().data;
 
           return {

@@ -304,6 +304,7 @@ ${errors.slice(0, 3).map((err) => {
           if (nodeData.type === "TERMINAL") {
             this.workflowContext.addWorkflowOutputContext(
               new WorkflowOutputContext({
+                workflowContext: this.workflowContext,
                 terminalNodeData: nodeData,
               })
             );

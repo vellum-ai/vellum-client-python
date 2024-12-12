@@ -491,10 +491,7 @@ export class Workflow {
                 key: python.reference({
                   name: this.workflowContext.workflowClassName,
                   modulePath: this.workflowContext.modulePath,
-                  attribute: [
-                    OUTPUTS_CLASS_NAME,
-                    workflowOutputContext.getOutputName(),
-                  ],
+                  attribute: [OUTPUTS_CLASS_NAME, workflowOutputContext.name],
                 }),
                 value: python.instantiateClass({
                   classReference: python.reference({

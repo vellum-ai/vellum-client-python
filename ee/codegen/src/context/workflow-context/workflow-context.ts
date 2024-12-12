@@ -65,6 +65,10 @@ export class WorkflowContext {
   // A list of all outputs this workflow produces
   public readonly workflowOutputContexts: WorkflowOutputContext[] = [];
 
+  // Track what output variables names are used within this workflow so that we can ensure name uniqueness when adding
+  // new output variables.
+  private readonly outputVariableNames: Set<string> = new Set();
+
   // If this workflow is a nested workflow belonging to a node, track that node's context here.
   public readonly parentNode?: BaseNode<
     WorkflowDataNode,
@@ -203,10 +207,19 @@ export class WorkflowContext {
     return inputVariableContext;
   }
 
+  public isOutputVariableNameUsed(outputVariableName: string): boolean {
+    return this.outputVariableNames.has(outputVariableName);
+  }
+
+  private addUsedOutputVariableName(outputVariableName: string): void {
+    this.outputVariableNames.add(outputVariableName);
+  }
+
   public addWorkflowOutputContext(
     workflowOutputContext: WorkflowOutputContext
   ): void {
     this.workflowOutputContexts.push(workflowOutputContext);
+    this.addUsedOutputVariableName(workflowOutputContext.name);
   }
 
   public isNodeModuleNameUsed(nodeModuleName: string): boolean {

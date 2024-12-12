@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Any, ClassVar, Generic, List, Optional, TypeVar
+from typing import Any, ClassVar, Generic, List, Optional, Type, TypeVar
 
 from vellum.workflows.nodes.displayable import MergeNode
 from vellum.workflows.types.core import JsonObject
@@ -13,6 +13,10 @@ _MergeNodeType = TypeVar("_MergeNodeType", bound=MergeNode)
 
 class BaseMergeNodeDisplay(BaseNodeVellumDisplay[_MergeNodeType], Generic[_MergeNodeType]):
     target_handle_ids: ClassVar[List[UUID]]
+
+    def __init__(self, node: Type[_MergeNodeType]):
+        super().__init__(node)
+        self._target_handle_iterator = 0
 
     def serialize(self, display_context: WorkflowDisplayContext, **kwargs: Any) -> JsonObject:
         node = self._node
@@ -46,3 +50,13 @@ class BaseMergeNodeDisplay(BaseNodeVellumDisplay[_MergeNodeType], Generic[_Merge
 
     def get_target_handle_ids(self) -> Optional[List[UUID]]:
         return self._get_explicit_node_display_attr("target_handle_ids", List[UUID])
+
+    def get_target_handle_id(self) -> UUID:
+        # Edges call this method to know which handle to connect to
+        # We use the order of the edges to determine the handle id. This is quite brittle to the order of the
+        # edges, and we should look into a longer term solution, or cutover Merge Nodes to Generic Nodes soon
+        target_handle_id = self.target_handle_ids[self._target_handle_iterator]
+        self._target_handle_iterator += 1
+        if self._target_handle_iterator >= len(self.target_handle_ids):
+            self._target_handle_iterator = 0
+        return target_handle_id

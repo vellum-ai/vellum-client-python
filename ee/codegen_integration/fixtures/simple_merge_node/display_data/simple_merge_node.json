@@ -19,13 +19,7 @@
         },
         "definition": {
           "bases": [],
-          "module": [
-            "vellum",
-            "workflows",
-            "nodes",
-            "bases",
-            "base"
-          ],
+          "module": ["vellum", "workflows", "nodes", "bases", "base"],
           "name": "BaseNode"
         }
       },
@@ -100,10 +94,10 @@
           "merge_strategy": "AWAIT_ALL",
           "target_handles": [
             {
-              "id": "cf6974a6-1676-43ed-99a0-66bd3eac235f"
+              "id": "dee0633e-0221-40c7-b179-aae1cf67de87"
             },
             {
-              "id": "dee0633e-0221-40c7-b179-aae1cf67de87"
+              "id": "cf6974a6-1676-43ed-99a0-66bd3eac235f"
             }
           ],
           "source_handle_id": "e0e666c4-a90b-4a95-928e-144bab251356"

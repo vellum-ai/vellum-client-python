@@ -51,11 +51,16 @@ class BaseMergeNodeDisplay(BaseNodeVellumDisplay[_MergeNodeType], Generic[_Merge
     def get_target_handle_ids(self) -> Optional[List[UUID]]:
         return self._get_explicit_node_display_attr("target_handle_ids", List[UUID])
 
-    def get_target_handle_id(self) -> UUID:
+    def get_target_handle_id_by_source_node_id(self, source_node_id: UUID) -> UUID:
+        target_handle_ids = self.get_target_handle_ids()
+        if target_handle_ids is None:
+            return uuid4_from_hash(f"{self.node_id}|target_handle|{source_node_id}")
+
         # Edges call this method to know which handle to connect to
         # We use the order of the edges to determine the handle id. This is quite brittle to the order of the
-        # edges, and we should look into a longer term solution, or cutover Merge Nodes to Generic Nodes soon
-        target_handle_id = self.target_handle_ids[self._target_handle_iterator]
+        # edges matching the order of the Merge Node's data.target_handles attribute. We should look into a
+        # longer term solution, or cutover Merge Nodes to Generic Nodes soon
+        target_handle_id = target_handle_ids[self._target_handle_iterator]
         self._target_handle_iterator += 1
         if self._target_handle_iterator >= len(self.target_handle_ids):
             self._target_handle_iterator = 0

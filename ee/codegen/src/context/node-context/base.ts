@@ -89,10 +89,6 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
     return getNodeLabel(this.nodeData);
   }
 
-  public getNodeDefinition() {
-    return {};
-  }
-
   public getNodeOutputNameById(outputId: string): string {
     // Lazily load node output names
     if (!this.nodeOutputNamesById) {

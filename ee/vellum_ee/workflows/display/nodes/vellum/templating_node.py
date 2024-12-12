@@ -27,7 +27,11 @@ class BaseTemplatingNodeDisplay(BaseNodeVellumDisplay[_TemplatingNodeType], Gene
             input_name="template",
             value=node.template,
             display_context=display_context,
-            input_id=self.template_input_id,
+            input_id=self.template_input_id
+            or next(
+                (input_id for input_name, input_id in self.node_input_ids_by_name.items() if input_name == "template"),
+                None,
+            ),
         )
         template_node_inputs = raise_if_descriptor(node.inputs)
         template_inputs = [
@@ -36,9 +40,10 @@ class BaseTemplatingNodeDisplay(BaseNodeVellumDisplay[_TemplatingNodeType], Gene
                 input_name=variable_name,
                 value=variable_value,
                 display_context=display_context,
-                input_id=self.input_ids_by_name.get("template"),
+                input_id=self.input_ids_by_name.get(variable_name) or self.node_input_ids_by_name.get(variable_name),
             )
             for variable_name, variable_value in template_node_inputs.items()
+            if variable_name != "template"
         ]
         node_inputs = [template_node_input, *template_inputs]
 

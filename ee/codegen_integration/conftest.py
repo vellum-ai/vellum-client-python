@@ -33,13 +33,11 @@ _fixture_paths = _get_fixtures(
     # TODO: Remove exclusions on all of these fixtures
     # https://app.shortcut.com/vellum/story/4649/remove-fixture-exclusions-for-serialization
     exclude_fixtures={
-        "simple_merge_node",
         "faa_q_and_a_bot",
         # TODO: Remove the bottom three in fast follows
         "simple_inline_subworkflow_node",
         "simple_map_node",
     },
-    include_fixtures={"simple_search_node"},
 )
 _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
 

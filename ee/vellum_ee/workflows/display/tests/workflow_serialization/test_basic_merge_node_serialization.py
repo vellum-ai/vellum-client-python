@@ -218,7 +218,7 @@ def test_serialize_workflow__await_all():
                 "source_node_id": "59243c65-053f-4ea6-9157-3f3edb1477bf",
                 "source_handle_id": "b9c5f52b-b714-46e8-a09c-38b4e770dd36",
                 "target_node_id": "37c10e8a-771b-432b-a767-31f5007851f0",
-                "target_handle_id": "0efd256f-f5f6-45fe-9adb-651780f5e63d",
+                "target_handle_id": "42eeb66c-9792-4609-8c71-3a56f668f4dc",
                 "type": "DEFAULT",
             },
             {
@@ -226,7 +226,7 @@ def test_serialize_workflow__await_all():
                 "source_node_id": "127ef456-91bc-43c6-bd8b-1772db5e3cb5",
                 "source_handle_id": "b0bd17f3-4ce6-4232-9666-ec8afa161bf2",
                 "target_node_id": "37c10e8a-771b-432b-a767-31f5007851f0",
-                "target_handle_id": "0efd256f-f5f6-45fe-9adb-651780f5e63d",
+                "target_handle_id": "f40ff7fb-de1b-4aa4-ba3c-7630f7357cbf",
                 "type": "DEFAULT",
             },
             {

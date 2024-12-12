@@ -8,7 +8,7 @@ from ...nodes.merge_node import MergeNode
 
 
 class MergeNodeDisplay(BaseMergeNodeDisplay[MergeNode]):
-    target_handle_ids = [UUID("cf6974a6-1676-43ed-99a0-66bd3eac235f"), UUID("dee0633e-0221-40c7-b179-aae1cf67de87")]
+    target_handle_ids = [UUID("dee0633e-0221-40c7-b179-aae1cf67de87"), UUID("cf6974a6-1676-43ed-99a0-66bd3eac235f")]
     node_input_ids_by_name = {}
     port_displays = {MergeNode.Ports.default: PortDisplayOverrides(id=UUID("e0e666c4-a90b-4a95-928e-144bab251356"))}
     display_data = NodeDisplayData(

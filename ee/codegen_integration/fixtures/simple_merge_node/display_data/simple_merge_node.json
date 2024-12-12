@@ -19,13 +19,7 @@
         },
         "definition": {
           "bases": [],
-          "module": [
-            "vellum",
-            "workflows",
-            "nodes",
-            "bases",
-            "base"
-          ],
+          "module": ["vellum", "workflows", "nodes", "bases", "base"],
           "name": "BaseNode"
         }
       },
@@ -93,17 +87,17 @@
         }
       },
       {
-        "id": "f2f5e81f-6ffe-4b0b-9116-a39f24001483",
+        "id": "7426f273-a43d-4448-a2d2-76d0ee0d069c",
         "type": "MERGE",
         "data": {
           "label": "Merge Node",
           "merge_strategy": "AWAIT_ALL",
           "target_handles": [
             {
-              "id": "cf6974a6-1676-43ed-99a0-66bd3eac235f"
+              "id": "dee0633e-0221-40c7-b179-aae1cf67de87"
             },
             {
-              "id": "dee0633e-0221-40c7-b179-aae1cf67de87"
+              "id": "cf6974a6-1676-43ed-99a0-66bd3eac235f"
             }
           ],
           "source_handle_id": "e0e666c4-a90b-4a95-928e-144bab251356"
@@ -384,13 +378,13 @@
         "id": "114b1eab-ad2a-4612-b590-35f6ebdd87bc",
         "source_node_id": "5b7d7b3f-e10d-4334-a217-9099dececd8d",
         "source_handle_id": "a5ae5a5c-ad8a-4a19-a726-f3b8ed1fbb1b",
-        "target_node_id": "f2f5e81f-6ffe-4b0b-9116-a39f24001483",
+        "target_node_id": "7426f273-a43d-4448-a2d2-76d0ee0d069c",
         "target_handle_id": "dee0633e-0221-40c7-b179-aae1cf67de87",
         "type": "DEFAULT"
       },
       {
         "id": "fba82107-15bc-4033-9b38-6a8b0094aa7f",
-        "source_node_id": "f2f5e81f-6ffe-4b0b-9116-a39f24001483",
+        "source_node_id": "7426f273-a43d-4448-a2d2-76d0ee0d069c",
         "source_handle_id": "e0e666c4-a90b-4a95-928e-144bab251356",
         "target_node_id": "7f7823e9-b97a-4bbe-bfcf-40aed8db24c9",
         "target_handle_id": "2c1e39e0-ce3e-4c2d-8baf-c5d93b244997",
@@ -408,7 +402,7 @@
         "id": "20c8d251-bcf1-497e-8d37-668e661ccabc",
         "source_node_id": "6c5017d1-9aa3-4f34-9a6a-fbe2f7029473",
         "source_handle_id": "e900aa36-b59e-4d13-bb66-21967eb02214",
-        "target_node_id": "f2f5e81f-6ffe-4b0b-9116-a39f24001483",
+        "target_node_id": "7426f273-a43d-4448-a2d2-76d0ee0d069c",
         "target_handle_id": "cf6974a6-1676-43ed-99a0-66bd3eac235f",
         "type": "DEFAULT"
       }

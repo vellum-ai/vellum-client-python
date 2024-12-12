@@ -327,7 +327,7 @@ export class Workflow {
                 key: python.reference({
                   name: inputsClass.name,
                   modulePath: this.inputs.getModulePath(),
-                  attribute: [inputVariableContext.getInputVariableName()],
+                  attribute: [inputVariableContext.name],
                 }),
                 value: python.instantiateClass({
                   classReference: python.reference({

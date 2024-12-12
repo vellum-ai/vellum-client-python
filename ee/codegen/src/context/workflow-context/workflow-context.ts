@@ -51,7 +51,7 @@ export class WorkflowContext {
 
   // Track what input variables names are used within this workflow so that we can ensure name uniqueness when adding
   // new input variables.
-  public readonly inputVariableNames: Set<string> = new Set();
+  private readonly inputVariableNames: Set<string> = new Set();
 
   // Maps node IDs to a mapping of output IDs to output names.
   // Tracks local and global contexts in the case of nested workflows.
@@ -60,10 +60,14 @@ export class WorkflowContext {
 
   // Track what node module names are used within this workflow so that we can ensure name uniqueness when adding
   // new nodes.
-  public readonly nodeModuleNames: Set<string> = new Set();
+  private readonly nodeModuleNames: Set<string> = new Set();
 
   // A list of all outputs this workflow produces
   public readonly workflowOutputContexts: WorkflowOutputContext[] = [];
+
+  // Track what output variables names are used within this workflow so that we can ensure name uniqueness when adding
+  // new output variables.
+  private readonly outputVariableNames: Set<string> = new Set();
 
   // If this workflow is a nested workflow belonging to a node, track that node's context here.
   public readonly parentNode?: BaseNode<
@@ -83,12 +87,6 @@ export class WorkflowContext {
   private readonly mlModelNamesById: Record<string, string> = {};
 
   public readonly workflowRawEdges: WorkflowEdge[];
-
-  // This is used to track the workflow input variable names for the workflow keyed by input variable id
-  public readonly inputNamesById: Map<string, string>;
-
-  // This is used to track the original input names before being sanitized
-  public readonly sanitizedInputNamesMapping: Map<string, string>;
 
   constructor({
     absolutePathToOutputDirectory,
@@ -126,8 +124,6 @@ export class WorkflowContext {
 
     this.sdkModulePathNames = generateSdkModulePaths(workflowsSdkModulePath);
     this.workflowRawEdges = workflowRawEdges;
-    this.inputNamesById = new Map<string, string>();
-    this.sanitizedInputNamesMapping = new Map<string, string>();
   }
 
   /* Create a new workflow context for a nested workflow from its parent */
@@ -211,10 +207,19 @@ export class WorkflowContext {
     return inputVariableContext;
   }
 
+  public isOutputVariableNameUsed(outputVariableName: string): boolean {
+    return this.outputVariableNames.has(outputVariableName);
+  }
+
+  private addUsedOutputVariableName(outputVariableName: string): void {
+    this.outputVariableNames.add(outputVariableName);
+  }
+
   public addWorkflowOutputContext(
     workflowOutputContext: WorkflowOutputContext
   ): void {
     this.workflowOutputContexts.push(workflowOutputContext);
+    this.addUsedOutputVariableName(workflowOutputContext.name);
   }
 
   public isNodeModuleNameUsed(nodeModuleName: string): boolean {

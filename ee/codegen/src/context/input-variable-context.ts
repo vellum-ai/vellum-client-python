@@ -44,10 +44,10 @@ export class InputVariableContext {
 
     const initialInputVariableName =
       !isNil(rawInputVariableName) && !isEmpty(rawInputVariableName)
-        ? toSnakeCase(this.inputVariableData.key)
+        ? toSnakeCase(rawInputVariableName)
         : defaultName;
 
-    // Deduplicate the module name if it's already in use
+    // Deduplicate the input variable name if it's already in use
     let sanitizedName = initialInputVariableName;
     let numRenameAttempts = 0;
     while (this.workflowContext.isInputVariableNameUsed(sanitizedName)) {

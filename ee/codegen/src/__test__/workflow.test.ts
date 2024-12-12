@@ -80,7 +80,9 @@ describe("Workflow", () => {
 
       const inputs = codegen.inputs({ workflowContext });
 
-      workflowContext.addWorkflowOutputContext(workflowOutputContextFactory());
+      workflowContext.addWorkflowOutputContext(
+        workflowOutputContextFactory({ workflowContext })
+      );
 
       const workflow = codegen.workflow({
         moduleName,
@@ -162,7 +164,7 @@ describe("Workflow", () => {
         const inputs = codegen.inputs({ workflowContext });
 
         workflowContext.addWorkflowOutputContext(
-          workflowOutputContextFactory()
+          workflowOutputContextFactory({ workflowContext })
         );
 
         const searchNodeData = searchNodeDataFactory();

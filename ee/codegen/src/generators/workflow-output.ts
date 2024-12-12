@@ -6,7 +6,6 @@ import { Writer } from "@fern-api/python-ast/core/Writer";
 import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { WorkflowContext } from "src/context";
 import { WorkflowOutputContext } from "src/context/workflow-output-context";
-import { toSnakeCase } from "src/utils/casing";
 
 export declare namespace WorkflowOutput {
   export interface Args {
@@ -35,7 +34,7 @@ export class WorkflowOutput extends AstNode {
       this.workflowContext.getNodeContext(terminalNodeId);
 
     const workflowOutput = python.field({
-      name: toSnakeCase(this.workflowOutputContext.getOutputName()),
+      name: this.workflowOutputContext.name,
       initializer: python.reference({
         name: terminalNodeContext.nodeClassName,
         modulePath: terminalNodeContext.nodeModulePath,

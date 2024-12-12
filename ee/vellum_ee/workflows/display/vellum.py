@@ -117,8 +117,6 @@ class WorkflowOutputVellumDisplayOverrides(WorkflowOutputDisplay, WorkflowOutput
     target_handle_id: UUID
     display_data: NodeDisplayData
     edge_id: UUID
-    # source_node_id: Optional[UUID]
-    # source_handle_id: Optional[UUID]
 
 
 @dataclass

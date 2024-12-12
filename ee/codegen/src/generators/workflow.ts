@@ -308,7 +308,9 @@ export class Workflow {
                 python.methodArgument({
                   name: "name",
                   value: python.TypeInstantiation.str(
-                    inputVariableContext.name
+                    // Intentionally use the raw name from the input variable data
+                    // rather than the sanitized name from the input variable context
+                    inputVariableContext.getInputVariableData().key
                   ),
                 })
               );
@@ -521,6 +523,8 @@ export class Workflow {
                     python.methodArgument({
                       name: "name",
                       value: python.TypeInstantiation.str(
+                        // Intentionally use the raw name from the terminal node
+                        // Rather than the sanitized name from the output context
                         terminalNodeData.data.name
                       ),
                     }),

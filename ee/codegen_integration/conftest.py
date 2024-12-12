@@ -38,7 +38,8 @@ _fixture_paths = _get_fixtures(
         # TODO: Remove the bottom three in fast follows
         "simple_inline_subworkflow_node",
         "simple_map_node",
-    }
+    },
+    include_fixtures={"simple_search_node"},
 )
 _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
 

@@ -6,6 +6,6 @@ from ..inputs import Inputs
 
 class ConditionalNode(BaseConditionalNode):
     class Ports(BaseConditionalNode.Ports):
-        branch_1 = Port.on_if(Inputs.foobar.equals("Hello World!"))
-        branch_2 = Port.on_elif(Inputs.bazbaz.equals("testing"))
+        branch_1 = Port.on_if(Inputs.foobar_1.equals("Hello World!"))
+        branch_2 = Port.on_elif(Inputs.bazbaz_1.equals("testing"))
         branch_3 = Port.on_else()

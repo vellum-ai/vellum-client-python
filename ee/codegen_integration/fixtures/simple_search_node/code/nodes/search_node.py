@@ -5,7 +5,7 @@ from ..inputs import Inputs
 
 
 class SearchNode(BaseSearchNode):
-    query = Inputs.query
+    query = Inputs.query_1
     document_index = "d5beca61-aacb-4b22-a70c-776a1e025aa4"
     options = SearchRequestOptionsRequest(
         limit=8,

@@ -38,6 +38,7 @@ class SubworkflowNodeWorkflowDisplay(VellumWorkflowDisplay[SubworkflowNodeWorkfl
             id=UUID("39582ae7-0a7b-4063-8d67-0e2e8ad45a1e")
         )
     }
+    sanitized_input_names_mapping = {}
     output_displays = {
         SubworkflowNodeWorkflow.Outputs.final_output: WorkflowOutputVellumDisplayOverrides(
             id=UUID("6ab3665f-881d-488b-9124-a6da40136c68"),

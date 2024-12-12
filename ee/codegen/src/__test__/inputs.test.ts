@@ -45,6 +45,44 @@ describe("Inputs", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
 
+    it("should generate correct code when Inputs has variables with empty keys", async () => {
+      const inputVariables: VellumVariable[] = [
+        { id: "input1", key: "", type: "STRING" },
+        { id: "input2", key: "", type: "STRING" },
+      ];
+      inputVariables.forEach((inputVariableData) => {
+        workflowContext.addInputVariableContext(
+          inputVariableContextFactory({
+            inputVariableData: inputVariableData,
+            workflowContext,
+          })
+        );
+      });
+      const inputs = codegen.inputs({ workflowContext });
+
+      inputs.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+
+    it("should generate correct code when Inputs has variables with duplicate keys", async () => {
+      const inputVariables: VellumVariable[] = [
+        { id: "input1", key: "key-1", type: "STRING" },
+        { id: "input2", key: "key-1", type: "STRING" },
+      ];
+      inputVariables.forEach((inputVariableData) => {
+        workflowContext.addInputVariableContext(
+          inputVariableContextFactory({
+            inputVariableData: inputVariableData,
+            workflowContext,
+          })
+        );
+      });
+      const inputs = codegen.inputs({ workflowContext });
+
+      inputs.write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    });
+
     it("should generate correct code when Inputs has a custom name", async () => {
       const inputVariables: VellumVariable[] = [
         { id: "input1", key: "input1", type: "STRING" },

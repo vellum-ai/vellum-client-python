@@ -2,5 +2,5 @@ from vellum.workflows.inputs import BaseInputs
 
 
 class Inputs(BaseInputs):
-    expected: str
-    actual: str
+    expected_1: str
+    actual_1: str

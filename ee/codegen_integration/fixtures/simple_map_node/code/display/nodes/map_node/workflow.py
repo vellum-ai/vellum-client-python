@@ -29,13 +29,13 @@ class MapNodeWorkflowDisplay(VellumWorkflowDisplay[MapNodeWorkflow]):
         ),
     )
     inputs_display = {
-        Inputs.items: WorkflowInputsVellumDisplayOverrides(
+        Inputs.items_1: WorkflowInputsVellumDisplayOverrides(
             id=UUID("b8d66997-444e-4409-b315-5bef0c06192a"), required=True
         ),
-        Inputs.item: WorkflowInputsVellumDisplayOverrides(
+        Inputs.item_1: WorkflowInputsVellumDisplayOverrides(
             id=UUID("2619e147-870f-40ec-8f21-f3e131fcd65a"), required=True
         ),
-        Inputs.index: WorkflowInputsVellumDisplayOverrides(
+        Inputs.index_1: WorkflowInputsVellumDisplayOverrides(
             id=UUID("edecf894-c35b-485a-998f-118833a4b045"), required=True
         ),
     }
@@ -50,6 +50,7 @@ class MapNodeWorkflowDisplay(VellumWorkflowDisplay[MapNodeWorkflow]):
             id=UUID("d9cc06ea-07fb-413e-b11d-619e29dfbf84")
         )
     }
+    sanitized_input_names_mapping = {"items_1": "items", "item_1": "item", "index_1": "index"}
     output_displays = {
         MapNodeWorkflow.Outputs.final_output: WorkflowOutputVellumDisplayOverrides(
             id=UUID("bffc4749-00b8-44db-90ee-db655cbc7e62"),

@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import ClassVar, Dict, Generic, Optional, TypeVar
+from typing import ClassVar, Generic, Optional, TypeVar
 
 from vellum.workflows.nodes.core.templating_node import TemplatingNode
 from vellum.workflows.types.core import JsonObject
@@ -11,10 +11,11 @@ from vellum_ee.workflows.display.types import WorkflowDisplayContext
 
 _TemplatingNodeType = TypeVar("_TemplatingNodeType", bound=TemplatingNode)
 
+TEMPLATE_INPUT_NAME = "template"
+
 
 class BaseTemplatingNodeDisplay(BaseNodeVellumDisplay[_TemplatingNodeType], Generic[_TemplatingNodeType]):
     template_input_id: ClassVar[Optional[UUID]] = None
-    input_ids_by_name: ClassVar[Dict[str, UUID]] = {}
 
     def serialize(
         self, display_context: WorkflowDisplayContext, error_output_id: Optional[UUID] = None, **kwargs
@@ -22,16 +23,21 @@ class BaseTemplatingNodeDisplay(BaseNodeVellumDisplay[_TemplatingNodeType], Gene
         node = self._node
         node_id = self.node_id
 
+        template_input_id = self.template_input_id or next(
+            (
+                input_id
+                for input_name, input_id in self.node_input_ids_by_name.items()
+                if input_name == TEMPLATE_INPUT_NAME
+            ),
+            None,
+        )
+
         template_node_input = create_node_input(
             node_id=node_id,
             input_name="template",
             value=node.template,
             display_context=display_context,
-            input_id=self.template_input_id
-            or next(
-                (input_id for input_name, input_id in self.node_input_ids_by_name.items() if input_name == "template"),
-                None,
-            ),
+            input_id=template_input_id,
         )
         template_node_inputs = raise_if_descriptor(node.inputs)
         template_inputs = [
@@ -40,10 +46,10 @@ class BaseTemplatingNodeDisplay(BaseNodeVellumDisplay[_TemplatingNodeType], Gene
                 input_name=variable_name,
                 value=variable_value,
                 display_context=display_context,
-                input_id=self.input_ids_by_name.get(variable_name) or self.node_input_ids_by_name.get(variable_name),
+                input_id=self.node_input_ids_by_name.get(variable_name),
             )
             for variable_name, variable_value in template_node_inputs.items()
-            if variable_name != "template"
+            if variable_name != TEMPLATE_INPUT_NAME
         ]
         node_inputs = [template_node_input, *template_inputs]
 

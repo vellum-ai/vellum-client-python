@@ -14,9 +14,6 @@ export class InlineSubworkflowNode extends BaseNestedWorkflowNode<
   SubworkflowNodeType,
   InlineSubworkflowNodeContext
 > {
-  baseNodeClassName = "InlineSubworkflowNode";
-  baseNodeDisplayClassName = "BaseInlineSubworkflowNodeDisplay";
-
   getInnerWorkflowData(): WorkflowRawData {
     if (this.nodeData.data.variant !== "INLINE") {
       throw new Error(

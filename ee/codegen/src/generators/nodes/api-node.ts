@@ -9,9 +9,6 @@ import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base"
 import { ApiNode as ApiNodeType, ConstantValuePointer } from "src/types/vellum";
 
 export class ApiNode extends BaseSingleFileNode<ApiNodeType, ApiNodeContext> {
-  baseNodeClassName = "APINode";
-  baseNodeDisplayClassName = "BaseAPINodeDisplay";
-
   getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 

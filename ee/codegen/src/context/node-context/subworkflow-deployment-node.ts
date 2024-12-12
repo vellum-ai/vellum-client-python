@@ -13,6 +13,9 @@ export declare namespace SubworkflowDeploymentNodeContext {
 }
 
 export class SubworkflowDeploymentNodeContext extends BaseNodeContext<SubworkflowNodeType> {
+  baseNodeClassName = "SubworkflowDeploymentNode";
+  baseNodeDisplayClassName = "BaseSubworkflowDeploymentNodeDisplay";
+
   public workflowDeploymentHistoryItem: WorkflowDeploymentHistoryItem;
 
   constructor(args: SubworkflowDeploymentNodeContext.Args) {

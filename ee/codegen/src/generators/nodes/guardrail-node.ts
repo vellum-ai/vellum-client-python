@@ -10,9 +10,6 @@ export class GuardrailNode extends BaseSingleFileNode<
   GuardrailNodeType,
   GuardrailNodeContext
 > {
-  baseNodeClassName = "GuardrailNode";
-  baseNodeDisplayClassName = "BaseGuardrailNodeDisplay";
-
   getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 

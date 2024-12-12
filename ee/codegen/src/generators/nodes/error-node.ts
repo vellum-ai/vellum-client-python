@@ -10,9 +10,6 @@ export class ErrorNode extends BaseSingleFileNode<
   ErrorNodeType,
   ErrorNodeContext
 > {
-  baseNodeClassName = "ErrorNode";
-  baseNodeDisplayClassName = "BaseErrorNodeDisplay";
-
   getNodeClassBodyStatements(): AstNode[] {
     const bodyStatements: AstNode[] = [];
     bodyStatements.push(

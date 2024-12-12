@@ -18,9 +18,6 @@ export class ConditionalNode extends BaseSingleFileNode<
   ConditionalNodeType,
   ConditionalNodeContext
 > {
-  baseNodeClassName = "ConditionalNode";
-  baseNodeDisplayClassName = "BaseConditionalNodeDisplay";
-
   protected getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 

@@ -9,9 +9,6 @@ export class GenericNode extends BaseSingleFileNode<
   GenericNodeType,
   GenericNodeContext
 > {
-  baseNodeClassName = "BaseNode";
-  baseNodeDisplayClassName = "BaseNodeDisplay";
-
   getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
     return statements;

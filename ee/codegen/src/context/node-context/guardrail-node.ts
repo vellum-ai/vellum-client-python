@@ -12,6 +12,9 @@ export declare namespace GuardrailNodeContext {
 }
 
 export class GuardrailNodeContext extends BaseNodeContext<GuardrailNodeType> {
+  baseNodeClassName = "GuardrailNode";
+  baseNodeDisplayClassName = "BaseGuardrailNodeDisplay";
+
   public readonly metricDefinitionsHistoryItem: MetricDefinitionHistoryItem;
 
   constructor(args: GuardrailNodeContext.Args) {

@@ -11,9 +11,6 @@ export class NoteNode extends BaseSingleFileNode<
   NoteNodeType,
   NoteNodeContext
 > {
-  baseNodeClassName = "NoteNode";
-  baseNodeDisplayClassName = "BaseNoteNodeDisplay";
-
   getNodeClassBodyStatements(): AstNode[] {
     // Note Nodes intentionally have no body statements.
     return [];

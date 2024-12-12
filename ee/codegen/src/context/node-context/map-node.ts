@@ -4,6 +4,8 @@ import { PortContext } from "src/context/port-context";
 import { MapNode as MapNodeType } from "src/types/vellum";
 
 export class MapNodeContext extends BaseNodeContext<MapNodeType> {
+  baseNodeClassName = "MapNode";
+  baseNodeDisplayClassName = "BaseMapNodeDisplay";
   getNodeOutputNamesById(): Record<string, string> {
     const subworkflowNodeData = this.nodeData.data;
     if (subworkflowNodeData.variant !== "INLINE") {

@@ -3,6 +3,9 @@ import { PortContext } from "src/context/port-context";
 import { PromptNode } from "src/types/vellum";
 
 export class PromptDeploymentNodeContext extends BaseNodeContext<PromptNode> {
+  baseNodeClassName = "PromptDeploymentNode";
+  baseNodeDisplayClassName = "BasePromptDeploymentNodeDisplay";
+
   protected getNodeOutputNamesById(): Record<string, string> {
     return {
       [this.nodeData.data.outputId]: "text",

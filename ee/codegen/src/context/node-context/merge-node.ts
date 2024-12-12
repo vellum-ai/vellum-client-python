@@ -4,6 +4,9 @@ import { PortContext } from "src/context/port-context";
 import { MergeNode } from "src/types/vellum";
 
 export class MergeNodeContext extends BaseNodeContext<MergeNode> {
+  baseNodeClassName = "MergeNode";
+  baseNodeDisplayClassName = "BaseMergeNodeDisplay";
+
   getNodeOutputNamesById(): Record<string, string> {
     return {};
   }

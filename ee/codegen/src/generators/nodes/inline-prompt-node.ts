@@ -18,9 +18,6 @@ export class InlinePromptNode extends BaseSingleFileNode<
   InlinePromptNodeType,
   InlinePromptNodeContext
 > {
-  baseNodeClassName = "InlinePromptNode";
-  baseNodeDisplayClassName = "BaseInlinePromptNodeDisplay";
-
   protected getNodeClassBodyStatements(): AstNode[] {
     const statements: AstNode[] = [];
 

@@ -31,8 +31,6 @@ export abstract class BaseNode<
 
   protected readonly nodeInputsByKey: Map<string, NodeInput>;
 
-  protected abstract readonly baseNodeClassName: string;
-  protected abstract readonly baseNodeDisplayClassName: string;
   private readonly errorOutputId: string | undefined;
 
   constructor({ workflowContext, nodeContext }: BaseNode.Args<T, V>) {
@@ -65,16 +63,15 @@ export abstract class BaseNode<
 
   protected getNodeBaseClass(): python.Reference {
     const baseNodeClassNameAlias =
-      this.baseNodeClassName === this.nodeContext.nodeClassName
-        ? `Base${this.baseNodeClassName}`
+      this.nodeContext.baseNodeClassName === this.nodeContext.nodeClassName
+        ? `Base${this.nodeContext.baseNodeClassName}`
         : undefined;
 
     const baseNodeGenericTypes = this.getNodeBaseGenericTypes();
 
     return python.reference({
-      name: this.baseNodeClassName,
-      modulePath:
-        this.workflowContext.sdkModulePathNames.DISPLAYABLE_NODES_MODULE_PATH,
+      name: this.nodeContext.baseNodeClassName,
+      modulePath: this.nodeContext.baseNodeClassModulePath,
       genericTypes: baseNodeGenericTypes,
       alias: baseNodeClassNameAlias,
     });
@@ -82,9 +79,8 @@ export abstract class BaseNode<
 
   protected getNodeDisplayBaseClass(): python.Reference {
     return python.reference({
-      name: this.baseNodeDisplayClassName,
-      modulePath:
-        this.workflowContext.sdkModulePathNames.NODE_DISPLAY_MODULE_PATH,
+      name: this.nodeContext.baseNodeDisplayClassName,
+      modulePath: this.nodeContext.baseNodeDisplayClassModulePath,
       genericTypes: [
         python.reference({
           name: this.nodeContext.nodeClassName,

@@ -4,6 +4,9 @@ import { PortContext } from "src/context/port-context";
 import { SearchNode } from "src/types/vellum";
 
 export class TextSearchNodeContext extends BaseNodeContext<SearchNode> {
+  baseNodeClassName = "SearchNode";
+  baseNodeDisplayClassName = "BaseSearchNodeDisplay";
+
   getNodeOutputNamesById(): Record<string, string> {
     return {
       [this.nodeData.data.resultsOutputId]: "results",

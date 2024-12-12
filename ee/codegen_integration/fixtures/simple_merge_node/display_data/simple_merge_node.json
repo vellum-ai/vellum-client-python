@@ -27,7 +27,7 @@
         "id": "5b7d7b3f-e10d-4334-a217-9099dececd8d",
         "type": "TEMPLATING",
         "data": {
-          "label": "Templating Node 2",
+          "label": "Templating Node",
           "output_id": "b96fcdbd-7bd1-4cd1-b91a-49bb50ded865",
           "error_output_id": null,
           "source_handle_id": "a5ae5a5c-ad8a-4a19-a726-f3b8ed1fbb1b",
@@ -140,7 +140,7 @@
         "id": "7f7823e9-b97a-4bbe-bfcf-40aed8db24c9",
         "type": "TEMPLATING",
         "data": {
-          "label": "Templating Node 3",
+          "label": "Templating Node",
           "output_id": "a18fbec8-4530-4ca9-a265-e9323dc45fc4",
           "error_output_id": null,
           "source_handle_id": "e51cd1b6-6c1f-4436-aaed-36cb38e7615d",
@@ -297,7 +297,7 @@
         "id": "6c5017d1-9aa3-4f34-9a6a-fbe2f7029473",
         "type": "TEMPLATING",
         "data": {
-          "label": "Templating Node 1",
+          "label": "Templating Node",
           "output_id": "6a903b23-d66c-413b-996d-109f6a483056",
           "error_output_id": null,
           "source_handle_id": "e900aa36-b59e-4d13-bb66-21967eb02214",

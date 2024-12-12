@@ -29,6 +29,7 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
   public abstract readonly baseNodeClassName: string;
   public abstract readonly baseNodeDisplayClassName: string;
 
+  protected isCore = false;
   public readonly baseNodeClassModulePath: readonly string[];
   public readonly baseNodeDisplayClassModulePath: readonly string[];
 
@@ -96,7 +97,12 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
       bases: [
         {
           name: this.baseNodeClassName,
-          module: [...this.baseNodeClassModulePath],
+          module: [
+            ...(this.isCore
+              ? this.workflowContext.sdkModulePathNames.CORE_NODES_MODULE_PATH
+              : this.workflowContext.sdkModulePathNames
+                  .DISPLAYABLE_NODES_MODULE_PATH),
+          ],
         },
       ],
     };

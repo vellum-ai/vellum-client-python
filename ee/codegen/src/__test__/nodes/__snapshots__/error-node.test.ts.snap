@@ -8,7 +8,7 @@ exports[`ErrorNode > basic > getNodeDefinition 1`] = `
         "vellum",
         "workflows",
         "nodes",
-        "displayable",
+        "core",
       ],
       "name": "ErrorNode",
     },

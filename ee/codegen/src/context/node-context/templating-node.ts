@@ -5,6 +5,7 @@ import { TemplatingNode } from "src/types/vellum";
 export class TemplatingNodeContext extends BaseNodeContext<TemplatingNode> {
   baseNodeClassName = "TemplatingNode";
   baseNodeDisplayClassName = "BaseTemplatingNodeDisplay";
+  isCore = true;
 
   protected getNodeOutputNamesById(): Record<string, string> {
     return {

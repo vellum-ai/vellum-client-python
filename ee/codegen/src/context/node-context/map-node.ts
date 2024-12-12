@@ -6,6 +6,8 @@ import { MapNode as MapNodeType } from "src/types/vellum";
 export class MapNodeContext extends BaseNodeContext<MapNodeType> {
   baseNodeClassName = "MapNode";
   baseNodeDisplayClassName = "BaseMapNodeDisplay";
+  isCore = true;
+
   getNodeOutputNamesById(): Record<string, string> {
     const subworkflowNodeData = this.nodeData.data;
     if (subworkflowNodeData.variant !== "INLINE") {

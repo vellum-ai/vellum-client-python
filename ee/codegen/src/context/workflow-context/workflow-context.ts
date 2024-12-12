@@ -15,7 +15,7 @@ import {
   WorkflowDataNode,
   WorkflowEdge,
 } from "src/types/vellum";
-import {toSnakeCase} from "src/utils/casing";
+import { toSnakeCase } from "src/utils/casing";
 
 type InputVariableContextsById = Map<string, InputVariableContext>;
 

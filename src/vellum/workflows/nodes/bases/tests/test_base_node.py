@@ -25,7 +25,7 @@ def test_base_node__node_resolution__unset_pydantic_fields():
     assert node.data.dict() == my_data.dict()
 
 
-def test_base_node__node_resolution__descriptor_in_dict():
+def test_base_node__node_resolution__descriptors_in_dict():
     # GIVEN an Input and State class
     class Inputs(BaseInputs):
         hello: str

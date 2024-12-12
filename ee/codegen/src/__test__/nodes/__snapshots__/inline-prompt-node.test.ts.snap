@@ -1,5 +1,27 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`InlinePromptNode > CHAT_MESSAGE block type > basic > getNodeDefinition 1`] = `
+{
+  "bases": [
+    {
+      "module": [
+        "vellum",
+        "workflows",
+        "nodes",
+        "displayable",
+      ],
+      "name": "InlinePromptNode",
+    },
+  ],
+  "module": [
+    "code",
+    "nodes",
+    "prompt_node",
+  ],
+  "name": "PromptNode",
+}
+`;
+
 exports[`InlinePromptNode > CHAT_MESSAGE block type > basic > getNodeDisplayFile for CHAT_MESSAGE block type 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseInlinePromptNodeDisplay
 from ...nodes.prompt_node import PromptNode
@@ -285,6 +307,28 @@ class PromptNode(InlinePromptNode):
 "
 `;
 
+exports[`InlinePromptNode > FUNCTION_DEFINITION block type > basic > getNodeDefinition 1`] = `
+{
+  "bases": [
+    {
+      "module": [
+        "vellum",
+        "workflows",
+        "nodes",
+        "displayable",
+      ],
+      "name": "InlinePromptNode",
+    },
+  ],
+  "module": [
+    "code",
+    "nodes",
+    "prompt_node",
+  ],
+  "name": "PromptNode",
+}
+`;
+
 exports[`InlinePromptNode > FUNCTION_DEFINITION block type > basic > getNodeDisplayFile for FUNCTION_DEFINITION block type 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseInlinePromptNodeDisplay
 from ...nodes.prompt_node import PromptNode
@@ -487,6 +531,28 @@ class PromptNode(InlinePromptNode):
         FunctionDefinition(name="functionTest", description="This is a test function")
     ]
 "
+`;
+
+exports[`InlinePromptNode > JINJA block type > basic > getNodeDefinition 1`] = `
+{
+  "bases": [
+    {
+      "module": [
+        "vellum",
+        "workflows",
+        "nodes",
+        "displayable",
+      ],
+      "name": "InlinePromptNode",
+    },
+  ],
+  "module": [
+    "code",
+    "nodes",
+    "prompt_node",
+  ],
+  "name": "PromptNode",
+}
 `;
 
 exports[`InlinePromptNode > JINJA block type > basic > getNodeDisplayFile for JINJA block type 1`] = `
@@ -700,6 +766,28 @@ class PromptNode(InlinePromptNode):
     )
     prompt_inputs = {"text": Inputs.text}
 "
+`;
+
+exports[`InlinePromptNode > RICH_TEXT block type > basic > getNodeDefinition 1`] = `
+{
+  "bases": [
+    {
+      "module": [
+        "vellum",
+        "workflows",
+        "nodes",
+        "displayable",
+      ],
+      "name": "InlinePromptNode",
+    },
+  ],
+  "module": [
+    "code",
+    "nodes",
+    "prompt_node",
+  ],
+  "name": "PromptNode",
+}
 `;
 
 exports[`InlinePromptNode > RICH_TEXT block type > basic > getNodeDisplayFile for RICH_TEXT block type 1`] = `
@@ -925,6 +1013,28 @@ class PromptNode(InlinePromptNode):
     )
     prompt_inputs = {"text": Inputs.text}
 "
+`;
+
+exports[`InlinePromptNode > VARIABLE block type > basic > getNodeDefinition 1`] = `
+{
+  "bases": [
+    {
+      "module": [
+        "vellum",
+        "workflows",
+        "nodes",
+        "displayable",
+      ],
+      "name": "InlinePromptNode",
+    },
+  ],
+  "module": [
+    "code",
+    "nodes",
+    "prompt_node",
+  ],
+  "name": "PromptNode",
+}
 `;
 
 exports[`InlinePromptNode > VARIABLE block type > basic > getNodeDisplayFile for VARIABLE block type 1`] = `

@@ -64,6 +64,10 @@ describe("ApiNode", () => {
       node.getNodeDisplayFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
+
+    it("getNodeDefinition", () => {
+      expect(node.nodeContext.getNodeDefinition()).toMatchSnapshot();
+    });
   });
 
   describe("reject on error enabled", () => {

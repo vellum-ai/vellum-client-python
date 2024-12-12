@@ -1,5 +1,27 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`TextSearchNode > basic > getNodeDefinition 1`] = `
+{
+  "bases": [
+    {
+      "module": [
+        "vellum",
+        "workflows",
+        "nodes",
+        "displayable",
+      ],
+      "name": "SearchNode",
+    },
+  ],
+  "module": [
+    "code",
+    "nodes",
+    "search_node",
+  ],
+  "name": "SearchNode",
+}
+`;
+
 exports[`TextSearchNode > basic > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseSearchNodeDisplay
 from ...nodes.search_node import SearchNode

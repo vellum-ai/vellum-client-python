@@ -1,5 +1,27 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`ConditionalNode > getNodeDefinition 1`] = `
+{
+  "bases": [
+    {
+      "module": [
+        "vellum",
+        "workflows",
+        "nodes",
+        "displayable",
+      ],
+      "name": "ConditionalNode",
+    },
+  ],
+  "module": [
+    "code",
+    "nodes",
+    "conditional_node",
+  ],
+  "name": "ConditionalNode",
+}
+`;
+
 exports[`ConditionalNode > getNodeDisplayFile 1`] = `
 "from vellum_ee.workflows.display.nodes import BaseConditionalNodeDisplay
 from ...nodes.conditional_node import ConditionalNode

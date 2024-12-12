@@ -128,6 +128,12 @@ describe("GuardrailNode", () => {
       node.getNodeDisplayFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
+
+    it("getNodeDefinition", async () => {
+      const node = await createNode([]);
+
+      expect(node.nodeContext.getNodeDefinition()).toMatchSnapshot();
+    });
   });
 
   describe("reject on error enabled", () => {

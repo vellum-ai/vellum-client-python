@@ -1,6 +1,6 @@
 import { WorkflowContext } from "src/context";
 import { PortContext } from "src/context/port-context";
-import { WorkflowDataNode } from "src/types/vellum";
+import { WorkflowDataNode, WorkflowNodeDefinition } from "src/types/vellum";
 import { getNodeId, getNodeLabel } from "src/utils/nodes";
 import {
   getGeneratedNodeDisplayModulePath,
@@ -87,6 +87,19 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
 
   public getNodeLabel(): string {
     return getNodeLabel(this.nodeData);
+  }
+
+  public getNodeDefinition(): WorkflowNodeDefinition {
+    return {
+      name: this.nodeClassName,
+      module: this.nodeModulePath,
+      bases: [
+        {
+          name: this.baseNodeClassName,
+          module: [...this.baseNodeClassModulePath],
+        },
+      ],
+    };
   }
 
   public getNodeOutputNameById(outputId: string): string {

@@ -42,5 +42,9 @@ describe("FinalOutputNode", () => {
       node.getNodeDisplayFile().write(writer);
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
+
+    it("getNodeDefinition", () => {
+      expect(node.nodeContext.getNodeDefinition()).toMatchSnapshot();
+    });
   });
 });

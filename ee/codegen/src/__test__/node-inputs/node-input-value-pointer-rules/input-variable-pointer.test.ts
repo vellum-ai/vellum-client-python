@@ -1,7 +1,7 @@
 import { Writer } from "@fern-api/python-ast/core/Writer";
 
 import { workflowContextFactory } from "src/__test__/helpers";
-import { InputVariableContext } from "src/context/input-variable-context";
+import { inputVariableContextFactory } from "src/__test__/helpers/input-variable-context-factory";
 import { InputVariablePointerRule } from "src/generators/node-inputs";
 
 describe("InputVariablePointer", () => {
@@ -17,12 +17,15 @@ describe("InputVariablePointer", () => {
 
   it("should generate correct Python code", async () => {
     const workflowContext = workflowContextFactory();
-    const mockInputVariable = {
-      getInputVariableName: vi.fn().mockReturnValue("test_variable"),
-      modulePath: [],
-    };
-    vi.spyOn(workflowContext, "getInputVariableContextById").mockReturnValue(
-      mockInputVariable as unknown as InputVariableContext
+    workflowContext.addInputVariableContext(
+      inputVariableContextFactory({
+        inputVariableData: {
+          id: "test-input-id",
+          key: "testVariable",
+          type: "STRING",
+        },
+        workflowContext,
+      })
     );
 
     const inputVariablePointer = new InputVariablePointerRule({

@@ -5,7 +5,7 @@ import {
 } from "src/constants";
 import { WorkflowContext } from "src/context";
 import { WorkflowNodeDefinition } from "src/types/vellum";
-import { createPythonClassName, toSnakeCase } from "src/utils/casing";
+import { createPythonClassName, toPythonSafeSnakeCase } from "src/utils/casing";
 
 export function getGeneratedInputsModulePath(
   workflowContext: WorkflowContext
@@ -61,13 +61,13 @@ export function getGeneratedNodeModuleInfo({
   if (modulePathLeaf && modulePathLeaf === "<adornment>") {
     rawModuleName =
       nodeDefinition?.module?.[nodeDefinition.module.length - 3] ??
-      toSnakeCase(nodeLabel);
+      toPythonSafeSnakeCase(nodeLabel);
 
     nodeClassName =
       nodeDefinition?.module?.[nodeDefinition.module.length - 2] ??
       createPythonClassName(nodeLabel);
   } else {
-    rawModuleName = modulePathLeaf ?? toSnakeCase(nodeLabel);
+    rawModuleName = modulePathLeaf ?? toPythonSafeSnakeCase(nodeLabel);
 
     nodeClassName = nodeDefinition?.name ?? createPythonClassName(nodeLabel);
   }

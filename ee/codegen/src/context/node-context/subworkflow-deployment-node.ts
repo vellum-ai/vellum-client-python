@@ -4,7 +4,7 @@ import { BaseNodeContext } from "./base";
 
 import { PortContext } from "src/context/port-context";
 import { SubworkflowNode as SubworkflowNodeType } from "src/types/vellum";
-import { toSnakeCase } from "src/utils/casing";
+import { toPythonSafeSnakeCase } from "src/utils/casing";
 
 export declare namespace SubworkflowDeploymentNodeContext {
   interface Args extends BaseNodeContext.Args<SubworkflowNodeType> {
@@ -28,7 +28,7 @@ export class SubworkflowDeploymentNodeContext extends BaseNodeContext<Subworkflo
     return this.workflowDeploymentHistoryItem.outputVariables.reduce<
       Record<string, string>
     >((acc, output) => {
-      acc[output.id] = toSnakeCase(output.key);
+      acc[output.id] = toPythonSafeSnakeCase(output.key);
       return acc;
     }, {});
   }

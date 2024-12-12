@@ -1,7 +1,7 @@
 import {
   createPythonClassName,
   toKebabCase,
-  toSnakeCase,
+  toPythonSafeSnakeCase,
 } from "src/utils/casing";
 
 describe("Casing utility functions", () => {
@@ -54,19 +54,55 @@ describe("Casing utility functions", () => {
     );
   });
 
-  describe("toSnakeCase", () => {
+  describe("toPythonSafeSnakeCase", () => {
     const testCases = [
-      { input: "hello-world", expected: "hello_world" },
-      { input: "HelloWorld", expected: "hello_world" },
-      { input: "hello world", expected: "hello_world" },
-      { input: "Hello-World_Example 123", expected: "hello_world_example_123" },
-      { input: "$hello*World", expected: "hello_world" },
+      {
+        input: "hello-world",
+        safetyPrefix: undefined,
+        expected: "hello_world",
+      },
+      { input: "HelloWorld", safetyPrefix: undefined, expected: "hello_world" },
+      {
+        input: "hello world",
+        safetyPrefix: undefined,
+        expected: "hello_world",
+      },
+      {
+        input: "Hello-World_Example 123",
+        safetyPrefix: undefined,
+        expected: "hello_world_example_123",
+      },
+      {
+        input: "$hello*World",
+        safetyPrefix: undefined,
+        expected: "hello_world",
+      },
+      {
+        input: "$1hello*World",
+        safetyPrefix: undefined,
+        expected: "_1hello_world",
+      },
+      {
+        input: "$1hello*World",
+        safetyPrefix: "module",
+        expected: "module_1hello_world",
+      },
+      {
+        input: "$1hello*World",
+        safetyPrefix: "attr",
+        expected: "attr_1hello_world",
+      },
+      {
+        input: "$1hello*World",
+        safetyPrefix: "attr_",
+        expected: "attr_1hello_world",
+      },
     ];
 
     it.each(testCases)(
       "should convert '$input' to '$expected'",
-      ({ input, expected }) => {
-        expect(toSnakeCase(input)).toBe(expected);
+      ({ input, safetyPrefix, expected }) => {
+        expect(toPythonSafeSnakeCase(input, safetyPrefix)).toBe(expected);
       }
     );
   });

@@ -64,11 +64,26 @@ export function createPythonClassName(input: string): string {
     .join("");
 }
 
-export function toSnakeCase(str: string): string {
-  return str
-    .replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, "") // Remove leading/trailing non-alphanumeric characters first
+export function toPythonSafeSnakeCase(
+  str: string,
+  safetyPrefix: string = "_"
+): string {
+  // Strip special characters from start of string
+  const cleanedStr = str.replace(/^[^a-zA-Z0-9_]+/, "");
+
+  // Check if cleaned string starts with a number
+  const startsWithUnsafe = /^\d/.test(cleanedStr);
+
+  const snakeCase = cleanedStr
     .replace(/([a-z])([A-Z])/g, "$1_$2") // Insert underscore between lower and upper case
     .replace(/[^a-zA-Z0-9]+/g, "_") // Replace any non-alphanumeric characters with underscore
     .replace(/^_+|_+$/g, "") // Remove any leading/trailing underscores
     .toLowerCase(); // Convert to lowercase
+
+  // Add underscore prefix if cleaned string started with unsafe chars
+  const cleanedSafetyPrefix =
+    safetyPrefix === "_"
+      ? "_"
+      : `${safetyPrefix}${safetyPrefix.endsWith("_") ? "" : "_"}`;
+  return startsWithUnsafe ? cleanedSafetyPrefix + snakeCase : snakeCase;
 }

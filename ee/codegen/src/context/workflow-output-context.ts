@@ -2,7 +2,7 @@ import { isEmpty, isNil } from "lodash";
 
 import { WorkflowContext } from "src/context/workflow-context";
 import { FinalOutputNode as FinalOutputNodeType } from "src/types/vellum";
-import { toSnakeCase } from "src/utils/casing";
+import { toPythonSafeSnakeCase } from "src/utils/casing";
 
 export declare namespace WorkflowOutputContext {
   export type Args = {
@@ -39,7 +39,7 @@ export class WorkflowOutputContext {
 
     const initialOutputVariableName =
       !isNil(rawOutputVariableName) && !isEmpty(rawOutputVariableName)
-        ? toSnakeCase(rawOutputVariableName)
+        ? toPythonSafeSnakeCase(rawOutputVariableName)
         : defaultName;
 
     // Deduplicate the output variable name if it's already in use

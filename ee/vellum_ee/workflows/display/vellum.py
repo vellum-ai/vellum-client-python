@@ -74,6 +74,7 @@ class WorkflowMetaVellumDisplay(WorkflowMetaVellumDisplayOverrides):
 
 @dataclass
 class WorkflowInputsVellumDisplayOverrides(WorkflowInputsDisplay, WorkflowInputsDisplayOverrides):
+    name: Optional[str] = None
     required: Optional[bool] = None
     color: Optional[str] = None
 

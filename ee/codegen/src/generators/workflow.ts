@@ -303,6 +303,16 @@ export class Workflow {
                   ),
                 })
               );
+
+              overrideArgs.push(
+                python.methodArgument({
+                  name: "name",
+                  value: python.TypeInstantiation.str(
+                    inputVariableContext.name
+                  ),
+                })
+              );
+
               const required =
                 inputVariableContext.getInputVariableData().required;
               overrideArgs.push(

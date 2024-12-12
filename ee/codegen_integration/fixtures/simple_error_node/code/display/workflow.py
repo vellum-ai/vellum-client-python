@@ -28,7 +28,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
     )
     inputs_display = {
         Inputs.custom_error: WorkflowInputsVellumDisplayOverrides(
-            id=UUID("a6ef8809-346e-469c-beed-2e5c4e9844c5"), required=True
+            id=UUID("a6ef8809-346e-469c-beed-2e5c4e9844c5"), name="custom_error", required=True
         )
     }
     entrypoint_displays = {

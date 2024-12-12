@@ -30,13 +30,13 @@ class MapNodeWorkflowDisplay(VellumWorkflowDisplay[MapNodeWorkflow]):
     )
     inputs_display = {
         Inputs.items: WorkflowInputsVellumDisplayOverrides(
-            id=UUID("b8d66997-444e-4409-b315-5bef0c06192a"), required=True
+            id=UUID("b8d66997-444e-4409-b315-5bef0c06192a"), name="items", required=True
         ),
         Inputs.item: WorkflowInputsVellumDisplayOverrides(
-            id=UUID("2619e147-870f-40ec-8f21-f3e131fcd65a"), required=True
+            id=UUID("2619e147-870f-40ec-8f21-f3e131fcd65a"), name="item", required=True
         ),
         Inputs.index: WorkflowInputsVellumDisplayOverrides(
-            id=UUID("edecf894-c35b-485a-998f-118833a4b045"), required=True
+            id=UUID("edecf894-c35b-485a-998f-118833a4b045"), name="index", required=True
         ),
     }
     entrypoint_displays = {

@@ -50,6 +50,7 @@ class MapNodeWorkflowDisplay(VellumWorkflowDisplay[MapNodeWorkflow]):
             id=UUID("d9cc06ea-07fb-413e-b11d-619e29dfbf84")
         )
     }
+    sanitized_input_names_mapping = {"items_1": "items", "item_1": "item", "index_1": "index"}
     output_displays = {
         MapNodeWorkflow.Outputs.final_output: WorkflowOutputVellumDisplayOverrides(
             id=UUID("bffc4749-00b8-44db-90ee-db655cbc7e62"),

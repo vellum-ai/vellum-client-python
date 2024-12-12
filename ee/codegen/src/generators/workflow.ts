@@ -452,6 +452,19 @@ export class Workflow {
         })
       );
     }
+    workflowDisplayClass.add(
+      python.field({
+        name: "sanitized_input_names_mapping",
+        initializer: python.TypeInstantiation.dict(
+          Array.from(
+            this.workflowContext.sanitizedInputNamesMapping.entries()
+          ).map(([key, value]) => ({
+            key: python.TypeInstantiation.str(key),
+            value: python.TypeInstantiation.str(value),
+          }))
+        ),
+      })
+    );
 
     workflowDisplayClass.add(
       python.field({

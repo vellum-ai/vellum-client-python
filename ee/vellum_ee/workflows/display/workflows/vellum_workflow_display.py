@@ -66,7 +66,7 @@ class VellumWorkflowDisplay(
             input_variables.append(
                 {
                     "id": str(workflow_input_display.id),
-                    "key": workflow_input.name,
+                    "key": self.sanitized_input_names_mapping.get(workflow_input.name, workflow_input.name),
                     "type": infer_vellum_variable_type(workflow_input),
                     "default": default.dict() if default else None,
                     "required": required,

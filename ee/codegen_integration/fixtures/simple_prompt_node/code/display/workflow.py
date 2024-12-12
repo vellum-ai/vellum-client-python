@@ -44,6 +44,7 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
             id=UUID("6afd37dc-47f1-4b99-b1cc-47ff6128247b")
         )
     }
+    sanitized_input_names_mapping = {"text_1": "text"}
     output_displays = {
         Workflow.Outputs.final_output: WorkflowOutputVellumDisplayOverrides(
             id=UUID("aed7279d-59cd-4c15-b82c-21de48129ba3"),

@@ -1,3 +1,4 @@
+import { isEmpty, isNil } from "lodash";
 import { MlModels } from "vellum-ai/api/resources/mlModels/client/Client";
 
 import { GENERATED_WORKFLOW_MODULE_NAME } from "src/constants";
@@ -14,6 +15,7 @@ import {
   WorkflowDataNode,
   WorkflowEdge,
 } from "src/types/vellum";
+import {toSnakeCase} from "src/utils/casing";
 
 type InputVariableContextsById = Map<string, InputVariableContext>;
 
@@ -83,6 +85,9 @@ export class WorkflowContext {
   // This is used to track the workflow input variable names for the workflow keyed by input variable id
   public readonly inputNamesById: Map<string, string>;
 
+  // This is used to track the original input names before being sanitized
+  public readonly sanitizedInputNamesMapping: Map<string, string>;
+
   constructor({
     absolutePathToOutputDirectory,
     moduleName,
@@ -120,6 +125,7 @@ export class WorkflowContext {
     this.sdkModulePathNames = generateSdkModulePaths(workflowsSdkModulePath);
     this.workflowRawEdges = workflowRawEdges;
     this.inputNamesById = new Map<string, string>();
+    this.sanitizedInputNamesMapping = new Map<string, string>();
   }
 
   /* Create a new workflow context for a nested workflow from its parent */
@@ -280,6 +286,10 @@ export class WorkflowContext {
     this.inputNamesById.set(inputVariableId, inputName);
   }
 
+  public addSanitizedInputName(uniqueName: string, originalName: string): void {
+    this.sanitizedInputNamesMapping.set(uniqueName, originalName);
+  }
+
   private generateUniqueInputName(
     inputVariableContext: InputVariableContext
   ): string {
@@ -303,6 +313,7 @@ export class WorkflowContext {
         uniqueName = `${originalName}-${counter}`;
       }
       this.addInputName(inputVariable.id, uniqueName);
+      this.addSanitizedInputName(toSnakeCase(uniqueName), originalName);
       return uniqueName;
     }
   }

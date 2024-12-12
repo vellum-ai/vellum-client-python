@@ -37,4 +37,5 @@ class WorkflowDisplay(VellumWorkflowDisplay[Workflow]):
             edge_display=EdgeVellumDisplayOverrides(id=UUID("bcd998c4-0df4-4f59-8b15-ed1f64c5c157")),
         )
     }
+    sanitized_input_names_mapping = {"custom_error_1": "custom_error"}
     output_displays = {}

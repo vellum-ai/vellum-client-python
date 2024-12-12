@@ -104,9 +104,9 @@ class APINode(BaseAPINode):
     method = APIRequestMethod.POST
     json = {}
     headers = {
-        "foo": Inputs.additional_header_value_1,
-        "bar": Inputs.additional_header_value_2,
-        "baz": Inputs.additional_header_value_2,
+        "foo": Inputs.additional_header_value,
+        "bar": Inputs.additional_header_value_1,
+        "baz": Inputs.additional_header_value_1,
     }
     api_key_header_key = None
     authorization_type = AuthorizationType.API_KEY
@@ -203,9 +203,9 @@ class APINode(BaseAPINode):
     method = APIRequestMethod.POST
     json = {}
     headers = {
-        "foo": Inputs.additional_header_value_1,
-        "bar": Inputs.additional_header_value_2,
-        "baz": Inputs.additional_header_value_2,
+        "foo": Inputs.additional_header_value,
+        "bar": Inputs.additional_header_value_1,
+        "baz": Inputs.additional_header_value_1,
     }
     api_key_header_key = None
     authorization_type = AuthorizationType.API_KEY

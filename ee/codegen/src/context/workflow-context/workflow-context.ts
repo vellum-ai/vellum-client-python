@@ -1,4 +1,3 @@
-import { isEmpty, isNil } from "lodash";
 import { MlModels } from "vellum-ai/api/resources/mlModels/client/Client";
 
 import { GENERATED_WORKFLOW_MODULE_NAME } from "src/constants";
@@ -15,7 +14,6 @@ import {
   WorkflowDataNode,
   WorkflowEdge,
 } from "src/types/vellum";
-import { toSnakeCase } from "src/utils/casing";
 
 type InputVariableContextsById = Map<string, InputVariableContext>;
 
@@ -50,6 +48,10 @@ export class WorkflowContext {
   // Tracks local and global contexts in the case of nested workflows.
   public readonly inputVariableContextsById: InputVariableContextsById;
   public readonly globalInputVariableContextsById: InputVariableContextsById;
+
+  // Track what input variables names are used within this workflow so that we can ensure name uniqueness when adding
+  // new input variables.
+  public readonly inputVariableNames: Set<string> = new Set();
 
   // Maps node IDs to a mapping of output IDs to output names.
   // Tracks local and global contexts in the case of nested workflows.
@@ -167,6 +169,14 @@ export class WorkflowContext {
     return this.entrypointNode;
   }
 
+  public isInputVariableNameUsed(inputVariableName: string): boolean {
+    return this.inputVariableNames.has(inputVariableName);
+  }
+
+  private addUsedInputVariableName(inputVariableName: string): void {
+    this.inputVariableNames.add(inputVariableName);
+  }
+
   public addInputVariableContext(
     inputVariableContext: InputVariableContext
   ): void {
@@ -178,13 +188,12 @@ export class WorkflowContext {
       );
     }
 
-    this.generateUniqueInputName(inputVariableContext);
-
     this.inputVariableContextsById.set(inputVariableId, inputVariableContext);
     this.globalInputVariableContextsById.set(
       inputVariableId,
       inputVariableContext
     );
+    this.addUsedInputVariableName(inputVariableContext.name);
   }
 
   public getInputVariableContextById(
@@ -276,45 +285,5 @@ export class WorkflowContext {
 
   public addWorkflowEdges(edges: WorkflowEdge[]): void {
     this.workflowRawEdges.push(...edges);
-  }
-
-  public getInputName(inputVariableId: string): string | undefined {
-    return this.inputNamesById.get(inputVariableId);
-  }
-
-  public addInputName(inputVariableId: string, inputName: string): void {
-    this.inputNamesById.set(inputVariableId, inputName);
-  }
-
-  public addSanitizedInputName(uniqueName: string, originalName: string): void {
-    this.sanitizedInputNamesMapping.set(uniqueName, originalName);
-  }
-
-  private generateUniqueInputName(
-    inputVariableContext: InputVariableContext
-  ): string {
-    const inputVariable = inputVariableContext.getInputVariableData();
-    const value = this.getInputName(inputVariable.id);
-    if (value !== undefined) {
-      return value;
-    } else {
-      let counter = 1;
-      const names = new Set(this.inputNamesById.values());
-      const defaultName = "var";
-
-      const originalName =
-        !isNil(inputVariable.key) && !isEmpty(inputVariable.key)
-          ? `${inputVariable.key}`
-          : defaultName;
-      let uniqueName = `${originalName}-${counter}`;
-
-      while (names.has(uniqueName)) {
-        counter++;
-        uniqueName = `${originalName}-${counter}`;
-      }
-      this.addInputName(inputVariable.id, uniqueName);
-      this.addSanitizedInputName(toSnakeCase(uniqueName), originalName);
-      return uniqueName;
-    }
   }
 }

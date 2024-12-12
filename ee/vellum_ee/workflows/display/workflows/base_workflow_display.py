@@ -71,9 +71,6 @@ class BaseWorkflowDisplay(
     # Used to store the mapping between workflows and their display classes
     _workflow_display_registry: Dict[Type[WorkflowType], Type["BaseWorkflowDisplay"]] = {}
 
-    # Used to keep track of what the original input name is
-    sanitized_input_names_mapping: Dict[str, str] = {}
-
     def __init__(
         self,
         workflow: Type[WorkflowType],

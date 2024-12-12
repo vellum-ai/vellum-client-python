@@ -6,4 +6,4 @@ from ..inputs import Inputs
 
 class FinalOutput(FinalOutputNode[BaseState, str]):
     class Outputs(FinalOutputNode.Outputs):
-        value = Inputs.foobar_1
+        value = Inputs.foobar

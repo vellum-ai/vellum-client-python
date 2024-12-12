@@ -1,8 +1,8 @@
 import { Writer } from "@fern-api/python-ast/core/Writer";
 
 import { workflowContextFactory } from "src/__test__/helpers";
+import { inputVariableContextFactory } from "src/__test__/helpers/input-variable-context-factory";
 import { WorkflowContext } from "src/context";
-import { InputVariableContext } from "src/context/input-variable-context";
 import { BaseNodeContext } from "src/context/node-context/base";
 import { NodeInputValuePointerRule } from "src/generators/node-inputs/node-input-value-pointer-rules/node-input-value-pointer-rule";
 import {
@@ -62,18 +62,21 @@ describe("NodeInputValuePointerRule", () => {
   });
 
   it("should generate correct AST for INPUT_VARIABLE pointer", async () => {
-    const mockInputVariable = {
-      getInputVariableName: vi.fn().mockReturnValue("test_variable"),
-      modulePath: [],
-    };
-    vi.spyOn(workflowContext, "getInputVariableContextById").mockReturnValue(
-      mockInputVariable as unknown as InputVariableContext
+    workflowContext.addInputVariableContext(
+      inputVariableContextFactory({
+        inputVariableData: {
+          id: "test-input-id",
+          key: "testVariable",
+          type: "STRING",
+        },
+        workflowContext,
+      })
     );
 
     const inputVariablePointer: NodeInputValuePointerRuleType = {
       type: "INPUT_VARIABLE",
       data: {
-        inputVariableId: "testInputVariableId",
+        inputVariableId: "test-input-id",
       },
     };
 

@@ -146,6 +146,65 @@ describe("Workflow", () => {
       expect(await writer.toStringFormatted()).toMatchSnapshot();
     });
 
+    it("should handle the case of multiple nodes with the same label", async () => {
+      const templatingNodeData1 = templatingNodeFactory({
+        id: "7e09927b-6d6f-4829-92c9-54e66bdcaf80",
+        label: "Templating Node",
+        sourceHandleId: "dd8397b1-5a41-4fa0-8c24-e5dffee4fb98",
+        targetHandleId: "3feb7e71-ec63-4d58-82ba-c3df829a2948",
+      });
+      workflowContext.addNodeContext(
+        await createNodeContext({
+          workflowContext: workflowContext,
+          nodeData: templatingNodeData1,
+        })
+      );
+
+      const templatingNodeData2 = templatingNodeFactory({
+        id: "7e09927b-6d6f-4829-92c9-54e66bdcaf81",
+        label: "Templating Node",
+        sourceHandleId: "dd8397b1-5a41-4fa0-8c24-e5dffee4fb99",
+        targetHandleId: "3feb7e71-ec63-4d58-82ba-c3df829a2949",
+      });
+      workflowContext.addNodeContext(
+        await createNodeContext({
+          workflowContext: workflowContext,
+          nodeData: templatingNodeData2,
+        })
+      );
+
+      const edges: WorkflowEdge[] = [
+        {
+          id: "edge-1",
+          type: "DEFAULT",
+          sourceNodeId: entrypointNode.id,
+          sourceHandleId: entrypointNode.data.sourceHandleId,
+          targetNodeId: templatingNodeData1.id,
+          targetHandleId: templatingNodeData1.data.targetHandleId,
+        },
+        {
+          id: "edge-2",
+          type: "DEFAULT",
+          sourceNodeId: templatingNodeData1.id,
+          sourceHandleId: templatingNodeData1.data.sourceHandleId,
+          targetNodeId: templatingNodeData2.id,
+          targetHandleId: templatingNodeData2.data.targetHandleId,
+        },
+      ];
+      workflowContext.addWorkflowEdges(edges);
+
+      const inputs = codegen.inputs({ workflowContext });
+      const workflow = codegen.workflow({
+        moduleName,
+        workflowContext,
+        inputs,
+        nodes: [templatingNodeData1, templatingNodeData2],
+      });
+
+      workflow.getWorkflowFile().write(writer);
+      expect(await writer.toStringFormatted()).toMatchSnapshot();
+    }, 1000000);
+
     describe("graph", () => {
       it("should be correct for a basic single node case", async () => {
         workflowContext.addInputVariableContext(

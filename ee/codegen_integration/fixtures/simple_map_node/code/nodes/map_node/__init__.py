@@ -5,7 +5,7 @@ from .workflow import MapNodeWorkflow
 
 
 class MapNode(BaseMapNode):
-    items = Inputs.items_1
+    items = Inputs.items
     subworkflow = MapNodeWorkflow
     concurrency = 4
 

@@ -44,4 +44,4 @@ class PromptNode(InlinePromptNode):
         logit_bias={},
         custom_parameters=None,
     )
-    prompt_inputs = {"text": Inputs.text_1}
+    prompt_inputs = {"text": Inputs.text}

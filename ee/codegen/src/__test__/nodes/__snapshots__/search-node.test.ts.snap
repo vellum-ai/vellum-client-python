@@ -78,7 +78,7 @@ from vellum import (
 
 
 class SearchNode(BaseSearchNode):
-    query = Inputs.query_1
+    query = Inputs.query
     document_index = "d5beca61-aacb-4b22-a70c-776a1e025aa4"
     options = SearchRequestOptionsRequest(
         limit=8,
@@ -152,7 +152,7 @@ from vellum import (
 
 @TryNode.wrap()
 class SearchNode(BaseSearchNode):
-    query = Inputs.query_1
+    query = Inputs.query
     document_index = "d5beca61-aacb-4b22-a70c-776a1e025aa4"
     options = SearchRequestOptionsRequest(
         limit=8,

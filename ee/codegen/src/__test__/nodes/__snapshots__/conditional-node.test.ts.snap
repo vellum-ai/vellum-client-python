@@ -90,7 +90,7 @@ from ..inputs import Inputs
 
 class ConditionalNode(BaseConditionalNode):
     class Ports(BaseConditionalNode.Ports):
-        branch_1 = Port.on_if(Inputs.field_1.equals("testtest"))
+        branch_1 = Port.on_if(Inputs.field.equals("testtest"))
         branch_2 = Port.on_else()
 "
 `;

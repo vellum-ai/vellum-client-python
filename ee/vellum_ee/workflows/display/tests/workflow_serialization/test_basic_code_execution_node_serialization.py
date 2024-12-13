@@ -584,7 +584,7 @@ def test_serialize_workflow__try_wrapped():
         ],
         "data": {
             "label": "Simple Code Execution Node",
-            "error_output_id": "7236b0f4-b6bb-4103-a993-a8908d597dc3",
+            "error_output_id": "42823c15-2ba6-4c85-a0d7-74a4e0541a42",
             "source_handle_id": "832f81ec-427b-42a8-825c-e62c43c1f961",
             "target_handle_id": "e02a2701-22c0-4533-8b00-175998e7350a",
             "code_input_id": "f2e8a4fa-b54e-41e9-b314-0e5443519ac7",

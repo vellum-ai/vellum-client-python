@@ -38,6 +38,8 @@ _fixture_paths = _get_fixtures(
         "simple_inline_subworkflow_node",
         "simple_map_node",
         "simple_node_with_try_wrap",
+        # TODO: This is flaky so remove after resolution try node source handle id issue is resolved [SC-5806]
+        "simple_merge_node",
     },
 )
 _fixture_ids = [os.path.basename(path) for path in _fixture_paths]

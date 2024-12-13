@@ -8,7 +8,7 @@ from ...nodes.templating_node_3 import TemplatingNode3
 
 
 class TemplatingNode3Display(BaseTemplatingNodeDisplay[TemplatingNode3]):
-    label = "Templating Node 3"
+    label = "Templating Node"
     node_id = UUID("7f7823e9-b97a-4bbe-bfcf-40aed8db24c9")
     target_handle_id = UUID("2c1e39e0-ce3e-4c2d-8baf-c5d93b244997")
     template_input_id = UUID("c1cc89c9-7cb7-498d-9dda-e9e5f36fe556")

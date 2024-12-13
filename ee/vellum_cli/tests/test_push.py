@@ -29,8 +29,7 @@ def _extract_tar_gz(tar_gz_bytes: bytes) -> dict[str, str]:
 
 def test_push__no_config(mock_module):
     # GIVEN no config file set
-    _, _, set_pyproject_toml = mock_module
-    set_pyproject_toml({"workflows": []})
+    mock_module.set_pyproject_toml({"workflows": []})
 
     # WHEN calling `vellum push`
     runner = CliRunner()
@@ -44,8 +43,7 @@ def test_push__no_config(mock_module):
 
 def test_push__multiple_workflows_configured__no_module_specified(mock_module):
     # GIVEN multiple workflows configured
-    _, _, set_pyproject_toml = mock_module
-    set_pyproject_toml({"workflows": [{"module": "examples.mock"}, {"module": "examples.mock2"}]})
+    mock_module.set_pyproject_toml({"workflows": [{"module": "examples.mock"}, {"module": "examples.mock2"}]})
 
     # WHEN calling `vellum push` without a module specified
     runner = CliRunner()
@@ -62,8 +60,8 @@ def test_push__multiple_workflows_configured__no_module_specified(mock_module):
 
 def test_push__multiple_workflows_configured__not_found_module(mock_module):
     # GIVEN multiple workflows configured
-    _, module, set_pyproject_toml = mock_module
-    set_pyproject_toml({"workflows": [{"module": "examples.mock2"}, {"module": "examples.mock3"}]})
+    module = mock_module.module
+    mock_module.set_pyproject_toml({"workflows": [{"module": "examples.mock2"}, {"module": "examples.mock3"}]})
 
     # WHEN calling `vellum push` with a module that doesn't exist
     runner = CliRunner()
@@ -85,7 +83,8 @@ def test_push__multiple_workflows_configured__not_found_module(mock_module):
 )
 def test_push__happy_path(mock_module, vellum_client, base_command):
     # GIVEN a single workflow configured
-    temp_dir, module, _ = mock_module
+    temp_dir = mock_module.temp_dir
+    module = mock_module.module
 
     # AND a workflow exists in the module successfully
     base_dir = os.path.join(temp_dir, *module.split("."))
@@ -134,7 +133,8 @@ class ExampleWorkflow(BaseWorkflow):
 )
 def test_push__deployment(mock_module, vellum_client, base_command):
     # GIVEN a single workflow configured
-    temp_dir, module, _ = mock_module
+    temp_dir = mock_module.temp_dir
+    module = mock_module.module
 
     # AND a workflow exists in the module successfully
     base_dir = os.path.join(temp_dir, *module.split("."))

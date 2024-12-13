@@ -20,6 +20,15 @@ class WorkflowDeploymentConfig(UniversalBaseModel):
     description: Optional[str] = None
     release_tags: Optional[List[str]] = None
 
+    def merge(self, other: "WorkflowDeploymentConfig") -> "WorkflowDeploymentConfig":
+        return WorkflowDeploymentConfig(
+            id=self.id or other.id,
+            label=self.label or other.label,
+            name=self.name or other.name,
+            description=self.description or other.description,
+            release_tags=self.release_tags or other.release_tags,
+        )
+
 
 class WorkflowConfig(UniversalBaseModel):
     module: str
@@ -28,10 +37,37 @@ class WorkflowConfig(UniversalBaseModel):
     deployments: List[WorkflowDeploymentConfig] = field(default_factory=list)
 
     def merge(self, other: "WorkflowConfig") -> "WorkflowConfig":
+        self_deployment_by_id = {
+            deployment.id: deployment for deployment in self.deployments if deployment.id is not None
+        }
+        other_deployment_by_id = {
+            deployment.id: deployment for deployment in other.deployments if deployment.id is not None
+        }
+        all_ids = sorted(set(self_deployment_by_id.keys()).union(set(other_deployment_by_id.keys())))
+        merged_deployments = []
+        for id in all_ids:
+            self_deployment = self_deployment_by_id.get(id)
+            other_deployment = other_deployment_by_id.get(id)
+            if self_deployment and other_deployment:
+                merged_deployments.append(self_deployment.merge(other_deployment))
+            elif self_deployment:
+                merged_deployments.append(self_deployment)
+            elif other_deployment:
+                merged_deployments.append(other_deployment)
+
+        for deployment in self.deployments:
+            if deployment.id is None:
+                merged_deployments.append(deployment)
+
+        for deployment in other.deployments:
+            if deployment.id is None:
+                merged_deployments.append(deployment)
+
         return WorkflowConfig(
             module=self.module,
             workflow_sandbox_id=self.workflow_sandbox_id or other.workflow_sandbox_id,
             ignore=self.ignore or other.ignore,
+            deployments=merged_deployments,
         )
 
 

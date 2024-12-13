@@ -37,7 +37,8 @@ def _zip_file_map(file_map: dict[str, str]) -> bytes:
 )
 def test_pull(vellum_client, mock_module, base_command):
     # GIVEN a module on the user's filesystem
-    temp_dir, module, _ = mock_module
+    temp_dir = mock_module.temp_dir
+    module = mock_module.module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter([_zip_file_map({"workflow.py": "print('hello')"})])
@@ -58,7 +59,9 @@ def test_pull(vellum_client, mock_module, base_command):
 
 def test_pull__second_module(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    temp_dir, module, set_pyproject_toml = mock_module
+    temp_dir = mock_module.temp_dir
+    module = mock_module.module
+    set_pyproject_toml = mock_module.set_pyproject_toml
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter([_zip_file_map({"workflow.py": "print('hello')"})])
@@ -134,7 +137,7 @@ def test_pull__sandbox_id_with_no_config(vellum_client):
 
 def test_pull__sandbox_id_with_other_workflow_configured(vellum_client, mock_module):
     # GIVEN a pyproject.toml with a workflow configured
-    temp_dir, _, _ = mock_module
+    temp_dir = mock_module.temp_dir
 
     # AND a different workflow sandbox id
     workflow_sandbox_id = "87654321-0000-0000-0000-000000000000"
@@ -163,7 +166,8 @@ def test_pull__sandbox_id_with_other_workflow_configured(vellum_client, mock_mod
 
 def test_pull__remove_missing_files(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    temp_dir, module, _ = mock_module
+    temp_dir = mock_module.temp_dir
+    module = mock_module.module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter([_zip_file_map({"workflow.py": "print('hello')"})])
@@ -192,7 +196,9 @@ def test_pull__remove_missing_files(vellum_client, mock_module):
 
 def test_pull__remove_missing_files__ignore_pattern(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    temp_dir, module, set_pyproject_toml = mock_module
+    temp_dir = mock_module.temp_dir
+    module = mock_module.module
+    set_pyproject_toml = mock_module.set_pyproject_toml
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter([_zip_file_map({"workflow.py": "print('hello')"})])
@@ -243,7 +249,7 @@ def test_pull__remove_missing_files__ignore_pattern(vellum_client, mock_module):
 
 def test_pull__include_json(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    _, module, __ = mock_module
+    module = mock_module.module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter(
@@ -265,7 +271,7 @@ def test_pull__include_json(vellum_client, mock_module):
 
 def test_pull__exclude_code(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
-    _, module, __ = mock_module
+    module = mock_module.module
 
     # AND the workflow pull API call returns a zip file
     vellum_client.workflows.pull.return_value = iter(
@@ -283,3 +289,75 @@ def test_pull__exclude_code(vellum_client, mock_module):
     vellum_client.workflows.pull.assert_called_once()
     call_args = vellum_client.workflows.pull.call_args.kwargs
     assert call_args["request_options"]["additional_query_parameters"] == {"exclude_code": True}
+
+
+def test_pull__sandbox_id_with_other_workflow_deployment_in_lock(vellum_client, mock_module):
+    # GIVEN a pyproject.toml with a workflow configured
+    temp_dir = mock_module.temp_dir
+    module = mock_module.module
+    workflow_sandbox_id = mock_module.workflow_sandbox_id
+
+    # AND there's a workflow deployment in the lock file
+    vellum_lock_json = os.path.join(temp_dir, "vellum.lock.json")
+    with open(vellum_lock_json, "w") as f:
+        json.dump(
+            {
+                "version": "1.0",
+                "workflows": [
+                    {
+                        "module": module,
+                        "workflow_sandbox_id": "0edc07cd-45b9-43e8-99bc-1f181972a857",
+                        "ignore": "tests/*",
+                        "deployments": [
+                            {
+                                "id": "7e5a7610-4c46-4bc9-b06e-0fc6a9e28959",
+                                "label": None,
+                                "name": None,
+                                "description": None,
+                                "release_tags": None,
+                            }
+                        ],
+                    }
+                ],
+            },
+            f,
+        )
+
+    # AND a different workflow sandbox id
+    new_workflow_sandbox_id = "87654321-0000-0000-0000-000000000000"
+
+    # AND the workflow pull API call returns a zip file
+    vellum_client.workflows.pull.return_value = iter([_zip_file_map({"workflow.py": "print('hello')"})])
+
+    # WHEN the user runs the pull command with the new workflow sandbox id
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["workflows", "pull", "--workflow-sandbox-id", new_workflow_sandbox_id])
+
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the lock file is updated to preserve the deployment and include the new workflow
+    with open(vellum_lock_json) as f:
+        lock_data = json.load(f)
+        assert lock_data["workflows"] == [
+            {
+                "module": module,
+                "workflow_sandbox_id": workflow_sandbox_id,
+                "ignore": "tests/*",
+                "deployments": [
+                    {
+                        "id": "7e5a7610-4c46-4bc9-b06e-0fc6a9e28959",
+                        "label": None,
+                        "name": None,
+                        "description": None,
+                        "release_tags": None,
+                    },
+                ],
+            },
+            {
+                "module": "workflow_87654321",
+                "workflow_sandbox_id": new_workflow_sandbox_id,
+                "ignore": None,
+                "deployments": [],
+            },
+        ]

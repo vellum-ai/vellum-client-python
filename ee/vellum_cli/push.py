@@ -1,9 +1,9 @@
+from importlib import metadata
 import io
 import json
 import os
 import sys
 import tarfile
-from importlib import metadata
 from uuid import UUID
 from typing import List, Optional
 

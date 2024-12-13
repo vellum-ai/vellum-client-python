@@ -66,7 +66,12 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
         "original_file_url": "original_file_url",
         "processed_file_url": "processed_file_url",
         "document_to_document_indexes": [
-            {"id": "id", "document_index_id": "document_index_id", "indexing_state": "AWAITING_PROCESSING"}
+            {
+                "id": "id",
+                "document_index_id": "document_index_id",
+                "indexing_state": "AWAITING_PROCESSING",
+                "extracted_text_file_url": "extracted_text_file_url",
+            }
         ],
         "metadata": {"key": "value"},
     }
@@ -79,7 +84,10 @@ async def test_retrieve(client: Vellum, async_client: AsyncVellum) -> None:
         "status": None,
         "original_file_url": None,
         "processed_file_url": None,
-        "document_to_document_indexes": ("list", {0: {"id": None, "document_index_id": None, "indexing_state": None}}),
+        "document_to_document_indexes": (
+            "list",
+            {0: {"id": None, "document_index_id": None, "indexing_state": None, "extracted_text_file_url": None}},
+        ),
         "metadata": ("dict", {0: (None, None)}),
     }
     response = client.documents.retrieve(id="id")
@@ -113,7 +121,12 @@ async def test_partial_update(client: Vellum, async_client: AsyncVellum) -> None
         "original_file_url": "original_file_url",
         "processed_file_url": "processed_file_url",
         "document_to_document_indexes": [
-            {"id": "id", "document_index_id": "document_index_id", "indexing_state": "AWAITING_PROCESSING"}
+            {
+                "id": "id",
+                "document_index_id": "document_index_id",
+                "indexing_state": "AWAITING_PROCESSING",
+                "extracted_text_file_url": "extracted_text_file_url",
+            }
         ],
         "metadata": {"key": "value"},
     }
@@ -126,7 +139,10 @@ async def test_partial_update(client: Vellum, async_client: AsyncVellum) -> None
         "status": None,
         "original_file_url": None,
         "processed_file_url": None,
-        "document_to_document_indexes": ("list", {0: {"id": None, "document_index_id": None, "indexing_state": None}}),
+        "document_to_document_indexes": (
+            "list",
+            {0: {"id": None, "document_index_id": None, "indexing_state": None, "extracted_text_file_url": None}},
+        ),
         "metadata": ("dict", {0: (None, None)}),
     }
     response = client.documents.partial_update(id="id")

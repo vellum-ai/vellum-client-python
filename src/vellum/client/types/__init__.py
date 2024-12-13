@@ -330,6 +330,7 @@ from .sentence_chunking import SentenceChunking
 from .sentence_chunking_request import SentenceChunkingRequest
 from .slim_deployment_read import SlimDeploymentRead
 from .slim_document import SlimDocument
+from .slim_document_document_to_document_index import SlimDocumentDocumentToDocumentIndex
 from .slim_workflow_deployment import SlimWorkflowDeployment
 from .streaming_ad_hoc_execute_prompt_event import StreamingAdHocExecutePromptEvent
 from .streaming_execute_prompt_event import StreamingExecutePromptEvent
@@ -839,6 +840,7 @@ __all__ = [
     "SentenceChunkingRequest",
     "SlimDeploymentRead",
     "SlimDocument",
+    "SlimDocumentDocumentToDocumentIndex",
     "SlimWorkflowDeployment",
     "StreamingAdHocExecutePromptEvent",
     "StreamingExecutePromptEvent",

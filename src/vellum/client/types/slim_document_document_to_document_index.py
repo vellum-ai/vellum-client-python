@@ -7,9 +7,9 @@ from .indexing_state_enum import IndexingStateEnum
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
-class DocumentDocumentToDocumentIndex(UniversalBaseModel):
+class SlimDocumentDocumentToDocumentIndex(UniversalBaseModel):
     """
-    A detailed representation of the link between a Document and a Document Index it's a member of.
+    A slim representation of the link between a Document and a Document Index it's a member of.
     """
 
     id: str = pydantic.Field()
@@ -32,8 +32,6 @@ class DocumentDocumentToDocumentIndex(UniversalBaseModel):
     - `INDEXED` - Indexed
     - `FAILED` - Failed
     """
-
-    extracted_text_file_url: typing.Optional[str] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

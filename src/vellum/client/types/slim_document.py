@@ -7,7 +7,7 @@ import datetime as dt
 from .document_processing_state import DocumentProcessingState
 from .processing_failure_reason_enum import ProcessingFailureReasonEnum
 from .document_status import DocumentStatus
-from .document_document_to_document_index import DocumentDocumentToDocumentIndex
+from .slim_document_document_to_document_index import SlimDocumentDocumentToDocumentIndex
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 
 
@@ -58,7 +58,7 @@ class SlimDocument(UniversalBaseModel):
     A previously supplied JSON object containing metadata that can be filtered on when searching.
     """
 
-    document_to_document_indexes: typing.List[DocumentDocumentToDocumentIndex]
+    document_to_document_indexes: typing.List[SlimDocumentDocumentToDocumentIndex]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

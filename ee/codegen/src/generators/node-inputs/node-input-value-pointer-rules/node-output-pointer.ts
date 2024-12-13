@@ -4,7 +4,6 @@ import { BaseNodeInputValuePointerRule } from "./base";
 
 import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { NodeOutputPointer } from "src/types/vellum";
-import { toSnakeCase } from "src/utils/casing";
 
 export class NodeOutputPointerRule extends BaseNodeInputValuePointerRule<NodeOutputPointer> {
   getAstNode(): python.Reference {
@@ -27,7 +26,7 @@ export class NodeOutputPointerRule extends BaseNodeInputValuePointerRule<NodeOut
     return python.reference({
       name: nodeContext.nodeClassName,
       modulePath: nodeContext.nodeModulePath,
-      attribute: [OUTPUTS_CLASS_NAME, toSnakeCase(nodeOutputName)],
+      attribute: [OUTPUTS_CLASS_NAME, nodeOutputName],
     });
   }
 }

@@ -2,7 +2,7 @@ import { isEmpty, isNil } from "lodash";
 import { VellumVariable } from "vellum-ai/api/types";
 
 import { WorkflowContext } from "src/context/workflow-context";
-import { toSnakeCase } from "src/utils/casing";
+import { toPythonSafeSnakeCase } from "src/utils/casing";
 import { getGeneratedInputsModulePath } from "src/utils/paths";
 
 export declare namespace InputVariableContext {
@@ -44,7 +44,7 @@ export class InputVariableContext {
 
     const initialInputVariableName =
       !isNil(rawInputVariableName) && !isEmpty(rawInputVariableName)
-        ? toSnakeCase(rawInputVariableName)
+        ? toPythonSafeSnakeCase(rawInputVariableName, "input")
         : defaultName;
 
     // Deduplicate the input variable name if it's already in use

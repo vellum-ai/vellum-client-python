@@ -41,7 +41,7 @@ describe("NodeInputValuePointerRule", () => {
     vi.spyOn(workflowContext, "getNodeContext").mockReturnValue({
       nodeClassName: "TestNode",
       path: ["nodes", "test-node-path"],
-      getNodeOutputNameById: vi.fn().mockReturnValue("my-output"),
+      getNodeOutputNameById: vi.fn().mockReturnValue("my_output"),
     } as unknown as BaseNodeContext<WorkflowDataNode>);
 
     const nodeOutputPointer: NodeInputValuePointerRuleType = {

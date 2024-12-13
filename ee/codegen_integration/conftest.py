@@ -37,6 +37,7 @@ _fixture_paths = _get_fixtures(
         # TODO: Remove the bottom three in fast follows
         "simple_inline_subworkflow_node",
         "simple_map_node",
+        "simple_node_with_try_wrap",
     },
 )
 _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
@@ -46,9 +47,15 @@ _fixture_ids = [os.path.basename(path) for path in _fixture_paths]
     params=_fixture_paths,
     ids=_fixture_ids,
 )
-def code_to_display_fixture_paths(request) -> Tuple[str, str]:
-    root = request.param
+def code_to_display_fixture_paths(request, custom_fixture_paths=None) -> Tuple[str, str]:
+    paths_to_use = custom_fixture_paths if custom_fixture_paths else _fixture_paths
+
+    root = request.param if isinstance(paths_to_use, list) else paths_to_use
     return _get_fixture_paths(root)
+
+
+# These are paths to fixtures with known failures when serialized and can be removed once fixed
+failure_fixture_paths = _get_fixtures(include_fixtures={"simple_node_with_try_wrap"})
 
 
 @pytest.fixture

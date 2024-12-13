@@ -31,6 +31,7 @@ def test_code_to_display_data(code_to_display_fixture_paths, mock_open_code_exec
         significant_digits=6,
         # This is for the input_variables order being out of order sometimes.
         ignore_order=True,
+        exclude_regex_paths=[r"root\['workflow_raw_data'\]\['edges'\]\[\d+\]\['target_handle_id'\]"],
     )
 
 

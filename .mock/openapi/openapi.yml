@@ -3709,6 +3709,8 @@ components:
       - repository
     DocumentDocumentToDocumentIndex:
       type: object
+      description: A detailed representation of the link between a Document and a
+        Document Index it's a member of.
       properties:
         id:
           type: string
@@ -3732,8 +3734,13 @@ components:
             * `INDEXING` - Indexing
             * `INDEXED` - Indexed
             * `FAILED` - Failed
+        extracted_text_file_url:
+          type: string
+          nullable: true
+          readOnly: true
       required:
       - document_index_id
+      - extracted_text_file_url
       - id
     DocumentIndexChunking:
       oneOf:
@@ -8518,13 +8525,43 @@ components:
         document_to_document_indexes:
           type: array
           items:
-            $ref: '#/components/schemas/DocumentDocumentToDocumentIndex'
+            $ref: '#/components/schemas/SlimDocumentDocumentToDocumentIndex'
       required:
       - document_to_document_indexes
       - id
       - label
       - last_uploaded_at
       - processing_state
+    SlimDocumentDocumentToDocumentIndex:
+      type: object
+      description: A slim representation of the link between a Document and a Document
+        Index it's a member of.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Vellum-generated ID that uniquely identifies this link.
+        document_index_id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Vellum-generated ID that uniquely identifies the index this
+            document is included in.
+        indexing_state:
+          allOf:
+          - $ref: '#/components/schemas/IndexingStateEnum'
+          description: |-
+            An enum value representing where this document is along its indexing lifecycle for this index.
+
+            * `AWAITING_PROCESSING` - Awaiting Processing
+            * `QUEUED` - Queued
+            * `INDEXING` - Indexing
+            * `INDEXED` - Indexed
+            * `FAILED` - Failed
+      required:
+      - document_index_id
+      - id
     SlimWorkflowDeployment:
       type: object
       properties:

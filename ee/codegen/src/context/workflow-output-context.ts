@@ -39,7 +39,7 @@ export class WorkflowOutputContext {
 
     const initialOutputVariableName =
       !isNil(rawOutputVariableName) && !isEmpty(rawOutputVariableName)
-        ? toPythonSafeSnakeCase(rawOutputVariableName)
+        ? toPythonSafeSnakeCase(rawOutputVariableName, "output")
         : defaultName;
 
     // Deduplicate the output variable name if it's already in use

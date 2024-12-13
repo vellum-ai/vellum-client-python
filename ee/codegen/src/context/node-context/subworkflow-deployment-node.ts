@@ -28,7 +28,7 @@ export class SubworkflowDeploymentNodeContext extends BaseNodeContext<Subworkflo
     return this.workflowDeploymentHistoryItem.outputVariables.reduce<
       Record<string, string>
     >((acc, output) => {
-      acc[output.id] = toPythonSafeSnakeCase(output.key);
+      acc[output.id] = toPythonSafeSnakeCase(output.key, "output");
       return acc;
     }, {});
   }

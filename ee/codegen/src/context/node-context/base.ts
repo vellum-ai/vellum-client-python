@@ -1,6 +1,7 @@
 import { WorkflowContext } from "src/context";
 import { PortContext } from "src/context/port-context";
 import { WorkflowDataNode, WorkflowNodeDefinition } from "src/types/vellum";
+import { toPythonSafeSnakeCase } from "src/utils/casing";
 import { getNodeId, getNodeLabel } from "src/utils/nodes";
 import {
   getGeneratedNodeDisplayModulePath,
@@ -120,6 +121,6 @@ export abstract class BaseNodeContext<T extends WorkflowDataNode> {
       throw new Error(`Node output name not found for output ID: ${outputId}`);
     }
 
-    return nodeOutputName;
+    return toPythonSafeSnakeCase(nodeOutputName, "output");
   }
 }

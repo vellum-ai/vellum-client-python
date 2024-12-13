@@ -61,13 +61,13 @@ export function getGeneratedNodeModuleInfo({
   if (modulePathLeaf && modulePathLeaf === "<adornment>") {
     rawModuleName =
       nodeDefinition?.module?.[nodeDefinition.module.length - 3] ??
-      toPythonSafeSnakeCase(nodeLabel);
+      toPythonSafeSnakeCase(nodeLabel, "node");
 
     nodeClassName =
       nodeDefinition?.module?.[nodeDefinition.module.length - 2] ??
       createPythonClassName(nodeLabel);
   } else {
-    rawModuleName = modulePathLeaf ?? toPythonSafeSnakeCase(nodeLabel);
+    rawModuleName = modulePathLeaf ?? toPythonSafeSnakeCase(nodeLabel, "node");
 
     nodeClassName = nodeDefinition?.name ?? createPythonClassName(nodeLabel);
   }

@@ -44,7 +44,7 @@ export class InputVariableContext {
 
     const initialInputVariableName =
       !isNil(rawInputVariableName) && !isEmpty(rawInputVariableName)
-        ? toPythonSafeSnakeCase(rawInputVariableName)
+        ? toPythonSafeSnakeCase(rawInputVariableName, "input")
         : defaultName;
 
     // Deduplicate the input variable name if it's already in use

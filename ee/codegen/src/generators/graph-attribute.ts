@@ -216,6 +216,11 @@ export class GraphAttribute extends AstNode {
           }
         } else if (mutableAst.type === "set") {
           const newSet = mutableAst.values.map((subAst) => {
+            const canBeAdded = this.isNodeInBranch(sourceNode, subAst);
+            if (!canBeAdded) {
+              return { edgeAdded: false, value: subAst };
+            }
+
             const newSubAst = addEdgeToGraph(subAst, graphSourceNode);
             if (!newSubAst) {
               return { edgeAdded: false, value: subAst };
@@ -227,7 +232,7 @@ export class GraphAttribute extends AstNode {
               return {
                 type: "set",
                 values: [
-                  mutableAst,
+                  ...mutableAst.values,
                   { type: "node_reference", reference: targetNode },
                 ],
               };
@@ -395,9 +400,12 @@ export class GraphAttribute extends AstNode {
    * Checks if targetNode is in the branch
    */
   private isNodeInBranch(
-    targetNode: BaseNodeContext<WorkflowDataNode>,
+    targetNode: BaseNodeContext<WorkflowDataNode> | null,
     mutableAst: GraphMutableAst
   ): boolean {
+    if (targetNode == null) {
+      return false;
+    }
     if (
       mutableAst.type === "node_reference" &&
       mutableAst.reference === targetNode

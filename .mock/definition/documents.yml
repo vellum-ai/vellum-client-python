@@ -94,6 +94,7 @@ service:
                 - id: id
                   document_index_id: document_index_id
                   indexing_state: AWAITING_PROCESSING
+                  extracted_text_file_url: extracted_text_file_url
               metadata:
                 key: value
       audiences:
@@ -178,6 +179,7 @@ service:
                 - id: id
                   document_index_id: document_index_id
                   indexing_state: AWAITING_PROCESSING
+                  extracted_text_file_url: extracted_text_file_url
               metadata:
                 key: value
       audiences:

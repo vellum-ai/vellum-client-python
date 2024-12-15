@@ -11,7 +11,7 @@
     "node": ">=18.0.0"
   },
   "publishConfig": {
-    "registry": "https://us-central1-npm.pkg.dev/vocify-prod/vellum-private-npm"
+    "registry": "https://us-central1-npm.pkg.dev/vocify-prod/vellum-private-npm/"
   },
   "scripts": {
     "gar-login": "npx google-artifactregistry-auth",

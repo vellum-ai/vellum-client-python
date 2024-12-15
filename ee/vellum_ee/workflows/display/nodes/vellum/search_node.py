@@ -14,6 +14,7 @@ from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeV
 from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
+from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.vellum import InputVariablePointer, NodeInput
 
 _SearchNodeType = TypeVar("_SearchNodeType", bound=SearchNode)
@@ -150,10 +151,18 @@ class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_Sea
                 variables,
             )
         elif isinstance(logical_expression, VellumValueLogicalConditionRequest):
-            lhs_variable_id = logical_expression.lhs_variable.value
-            rhs_variable_id = logical_expression.rhs_variable.value
-            lhs_query_input_id = self.input_variable_ids_by_logical_id[lhs_variable_id]
-            rhs_query_input_id = self.input_variable_ids_by_logical_id[rhs_variable_id]
+            lhs_variable_id = str(logical_expression.lhs_variable.value)
+            rhs_variable_id = str(logical_expression.rhs_variable.value)
+            lhs_query_input_id = (
+                self.input_variable_ids_by_logical_id[lhs_variable_id]
+                if self.input_variable_ids_by_logical_id
+                else uuid4_from_hash(f"{self.node_id}|{hash(path)}")
+            )
+            rhs_query_input_id = (
+                self.input_variable_ids_by_logical_id[rhs_variable_id]
+                if self.input_variable_ids_by_logical_id
+                else uuid4_from_hash(f"{self.node_id}|{hash(path)}")
+            )
 
             return (
                 {
@@ -168,7 +177,7 @@ class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_Sea
                         f"vellum-query-builder-variable-{lhs_variable_id}",
                         lhs_query_input_id,
                         display_context,
-                        input_id=lhs_variable_id,
+                        input_id=UUID(lhs_variable_id),
                         pointer_type=InputVariablePointer,
                     ),
                     create_node_input(
@@ -176,7 +185,7 @@ class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_Sea
                         f"vellum-query-builder-variable-{rhs_variable_id}",
                         rhs_query_input_id,
                         display_context,
-                        input_id=rhs_variable_id,
+                        input_id=UUID(rhs_variable_id),
                         pointer_type=InputVariablePointer,
                     ),
                 ],

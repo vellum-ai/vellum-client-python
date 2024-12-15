@@ -435,3 +435,28 @@ def test_graph__set_to_node():
 
     # AND two edges
     assert len(list(graph.edges)) == 2
+
+
+def test_graph__node_to_port():
+    # GIVEN two nodes, one with a port
+    class SourceNode(BaseNode):
+        pass
+
+    class MiddleNode(BaseNode):
+        class Ports(BaseNode.Ports):
+            custom = Port.on_else()
+
+    class TargetNode(BaseNode):
+        pass
+
+    # WHEN we create a graph from the source node to the target node
+    graph = SourceNode >> MiddleNode.Ports.custom >> TargetNode
+
+    # THEN the graph has the source node as the entrypoint
+    assert set(graph.entrypoints) == {SourceNode}
+
+    # AND three nodes
+    assert len(list(graph.nodes)) == 3
+
+    # AND two edges
+    assert len(list(graph.edges)) == 2

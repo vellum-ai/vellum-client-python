@@ -1,9 +1,6 @@
 name: ci-codegen
 
-on:
-  push:
-    branches:
-      - vargas/fix-codegen-publish
+on: [push]
 
 jobs:
   compile:
@@ -63,7 +60,7 @@ jobs:
       id-token: "write"
 
     needs: [compile, test]
-    # if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repo

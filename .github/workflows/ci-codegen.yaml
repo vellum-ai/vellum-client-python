@@ -1,6 +1,9 @@
 name: ci-codegen
 
-on: [push]
+on:
+  push:
+    branches:
+      - vargas/fix-codegen-publish
 
 jobs:
   compile:
@@ -60,7 +63,7 @@ jobs:
       id-token: "write"
 
     needs: [compile, test]
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    # if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repo
@@ -92,7 +95,7 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
         run: |
-          npm config set @vellum-ai:registry https://us-central1-npm.pkg.dev/vocify-prod/vellum-private-npm
+          npm config set @vellum-ai:registry https://us-central1-npm.pkg.dev/vocify-prod/vellum-private-npm/
           npm run gar-login
           npm publish
         working-directory: ee/codegen

@@ -52,6 +52,9 @@ class Port:
         if isinstance(other, set) or isinstance(other, Graph):
             return Graph.from_port(self) >> other
 
+        if isinstance(other, Port):
+            return Graph.from_port(self) >> Graph.from_port(other)
+
         edge = Edge(from_port=self, to_node=other)
         if edge not in self._edges:
             self._edges.append(edge)

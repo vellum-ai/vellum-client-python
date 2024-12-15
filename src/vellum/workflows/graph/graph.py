@@ -12,11 +12,13 @@ if TYPE_CHECKING:
 GraphTargetOfSets = Union[
     Set[NodeType],
     Set["Graph"],
-    Set[Union[Type["BaseNode"], "Graph"]],
+    Set["Port"],
+    Set[Union[Type["BaseNode"], "Graph", "Port"]],
 ]
 
 GraphTarget = Union[
     Type["BaseNode"],
+    "Port",
     "Graph",
     GraphTargetOfSets,
 ]
@@ -53,9 +55,13 @@ class Graph:
                 entrypoints.update(target._entrypoints)
                 edges.update(target._edges)
                 terminals.update(target._terminals)
-            else:
+            elif hasattr(target, "Ports"):
                 entrypoints.update({port for port in target.Ports})
                 terminals.update({port for port in target.Ports})
+            else:
+                # target is a Port
+                entrypoints.update({target})
+                terminals.update({target})
 
         return Graph(entrypoints=entrypoints, edges=list(edges), terminals=terminals)
 
@@ -77,11 +83,16 @@ class Graph:
                         self._extend_edges(elem.edges)
                         for other_terminal in elem._terminals:
                             new_terminals.add(other_terminal)
-                    else:
+                    elif hasattr(elem, "Ports"):
                         midgraph = final_output_node >> elem
                         self._extend_edges(midgraph.edges)
                         for other_terminal in elem.Ports:
                             new_terminals.add(other_terminal)
+                    else:
+                        # elem is a Port
+                        midgraph = final_output_node >> elem
+                        self._extend_edges(midgraph.edges)
+                        new_terminals.add(elem)
             self._terminals = new_terminals
             return self
 
@@ -93,10 +104,18 @@ class Graph:
             self._terminals = other._terminals
             return self
 
+        if hasattr(other, "Ports"):
+            for final_output_node in self._terminals:
+                subgraph = final_output_node >> other
+                self._extend_edges(subgraph.edges)
+            self._terminals = {port for port in other.Ports}
+            return self
+
+        # other is a Port
         for final_output_node in self._terminals:
             subgraph = final_output_node >> other
             self._extend_edges(subgraph.edges)
-        self._terminals = {port for port in other.Ports}
+        self._terminals = {other}
         return self
 
     @property

@@ -27,6 +27,17 @@ describe("TextSearchNode", () => {
         workflowContext,
       })
     );
+
+    workflowContext.addInputVariableContext(
+      inputVariableContextFactory({
+        inputVariableData: {
+          id: "c95cccdc-8881-4528-bc63-97d9df6e1d87",
+          key: "var1",
+          type: "STRING",
+        },
+        workflowContext,
+      })
+    );
   });
 
   describe("basic", () => {

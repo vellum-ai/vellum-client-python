@@ -17,6 +17,7 @@ import {
   ErrorNode,
   NodeInputValuePointerRule,
   PromptTemplateBlock,
+  VellumLogicalConditionGroup,
 } from "src/types/vellum";
 
 export function entrypointNodeDataFactory(): EntrypointNode {
@@ -80,6 +81,27 @@ export function mergeNodeDataFactory(): MergeNode {
     },
   };
 }
+
+const generateLogicalExpression: VellumLogicalConditionGroup = {
+  type: "LOGICAL_CONDITION_GROUP",
+  negated: false,
+  combinator: "AND",
+  conditions: [
+    {
+      type: "LOGICAL_CONDITION_GROUP",
+      negated: false,
+      combinator: "AND",
+      conditions: [
+        {
+          type: "LOGICAL_CONDITION",
+          operator: "=",
+          lhsVariableId: "a6322ca2-8b65-4d26-b3a1-f926dcada0fa",
+          rhsVariableId: "c539a2e2-0873-43b0-ae21-81790bb1c4cb",
+        },
+      ],
+    },
+  ],
+};
 
 export function searchNodeDataFactory({
   errorOutputId,
@@ -229,7 +251,37 @@ export function searchNodeDataFactory({
               type: "CONSTANT_VALUE",
               data: {
                 type: "JSON",
-                value: null,
+                value: generateLogicalExpression,
+              },
+            },
+          ],
+          combinator: "OR",
+        },
+      },
+      {
+        id: "a6322ca2-8b65-4d26-b3a1-f926dcada0fa",
+        key: "vellum-query-builder-variable-a6322ca2-8b65-4d26-b3a1-f926dcada0fa",
+        value: {
+          rules: [
+            {
+              type: "INPUT_VARIABLE",
+              data: {
+                inputVariableId: "c95cccdc-8881-4528-bc63-97d9df6e1d87",
+              },
+            },
+          ],
+          combinator: "OR",
+        },
+      },
+      {
+        id: "c539a2e2-0873-43b0-ae21-81790bb1c4cb",
+        key: "vellum-query-builder-variable-c539a2e2-0873-43b0-ae21-81790bb1c4cb",
+        value: {
+          rules: [
+            {
+              type: "INPUT_VARIABLE",
+              data: {
+                inputVariableId: "c95cccdc-8881-4528-bc63-97d9df6e1d87",
               },
             },
           ],

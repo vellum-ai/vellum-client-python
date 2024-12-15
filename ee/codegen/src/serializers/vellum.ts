@@ -15,15 +15,18 @@ import {
   record as recordSchema,
   unknown as unknownSchema,
   union as unionSchema,
+  boolean,
 } from "vellum-ai/core/schemas";
 import {
   ChatMessageRole as ChatMessageRoleSerializer,
+  LogicalOperator as LogicalOperatorSerializer,
   VellumVariable as VellumVariableSerializer,
   VellumVariableType as VellumVariableTypeSerializer,
   PromptBlockState as PromptBlockStateSerializer,
   PromptParameters as PromptParametersSerializer,
   VellumValue as VellumValueSerializer,
 } from "vellum-ai/serialization";
+import { ConditionCombinator as ConditionCombinatorSerializer } from "vellum-ai/serialization/types/ConditionCombinator";
 
 import {
   ApiNode,
@@ -92,6 +95,9 @@ import {
   PromptTemplateBlock,
   RichTextChildPromptTemplateBlock,
   PromptTemplateBlockData,
+  VellumLogicalExpression,
+  VellumLogicalCondition,
+  VellumLogicalConditionGroup,
 } from "src/types/vellum";
 
 const CacheConfigSerializer = objectSchema({
@@ -353,6 +359,56 @@ export declare namespace ConstantValuePointerSerializer {
     data: VellumValueSerializer.Raw;
   }
 }
+
+export declare namespace VellumValueLogicalConditionSerializer {
+  interface Raw {
+    lhs_variable_id: string;
+    operator: LogicalOperatorSerializer.Raw;
+    rhs_variable_id: string;
+  }
+}
+
+export const VellumValueLogicalConditionSerializer: ObjectSchema<
+  VellumValueLogicalConditionSerializer.Raw,
+  Omit<VellumLogicalCondition, "type">
+> = objectSchema({
+  lhsVariableId: propertySchema("lhs_variable_id", stringSchema()),
+  operator: LogicalOperatorSerializer,
+  rhsVariableId: propertySchema("rhs_variable_id", stringSchema()),
+});
+
+export declare namespace VellumValueLogicalConditionGroupSerializer {
+  interface Raw {
+    conditions: VellumValueLogicalExpressionSerializer.Raw[];
+    combinator: ConditionCombinatorSerializer.Raw;
+    negated: boolean;
+  }
+}
+
+export const VellumValueLogicalConditionGroupSerializer: ObjectSchema<
+  VellumValueLogicalConditionGroupSerializer.Raw,
+  Omit<VellumLogicalConditionGroup, "type">
+> = objectSchema({
+  conditions: listSchema(
+    lazySchema(() => VellumValueLogicalExpressionSerializer)
+  ),
+  combinator: ConditionCombinatorSerializer,
+  negated: boolean(),
+});
+
+export declare namespace VellumValueLogicalExpressionSerializer {
+  type Raw =
+    | VellumValueLogicalConditionSerializer.Raw
+    | VellumValueLogicalConditionGroupSerializer.Raw;
+}
+
+export const VellumValueLogicalExpressionSerializer: Schema<
+  VellumValueLogicalExpressionSerializer.Raw,
+  VellumLogicalExpression
+> = unionSchema("type", {
+  LOGICAL_CONDITION_GROUP: VellumValueLogicalConditionGroupSerializer,
+  LOGICAL_CONDITION: VellumValueLogicalConditionSerializer,
+});
 
 export const WorkspaceSecretPointerSerializer: ObjectSchema<
   WorkspaceSecretPointerSerializer.Raw,

@@ -52,7 +52,9 @@ export class CodeExecutionNode extends BaseSingleFileNode<
     statements.push(
       python.field({
         name: "filepath",
-        initializer: python.TypeInstantiation.str(this.nodeContext.filepath),
+        initializer: python.TypeInstantiation.str(
+          `${this.nodeContext.nodeModuleName}${this.nodeContext.filepath}`
+        ),
       })
     );
 

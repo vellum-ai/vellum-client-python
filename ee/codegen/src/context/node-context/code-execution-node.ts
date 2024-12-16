@@ -64,7 +64,7 @@ export class CodeExecutionContext extends BaseNodeContext<CodeExecutionNodeType>
       } else {
         throw new Error(`Unsupported runtime: ${runtime}`);
       }
-      filePath = `./script.${filetype}`;
+      filePath = `/script.${filetype}`;
     }
 
     return filePath;

@@ -10,7 +10,13 @@
         },
         "definition": {
           "bases": [],
-          "module": ["vellum", "workflows", "nodes", "bases", "base"],
+          "module": [
+            "vellum",
+            "workflows",
+            "nodes",
+            "bases",
+            "base"
+          ],
           "name": "BaseNode"
         },
         "inputs": [],
@@ -40,7 +46,7 @@
           "separator_node_input_id": "4eddefc0-90d5-422a-aec2-bc94c8f1d83c",
           "result_merging_enabled_node_input_id": "dc9f880b-81bc-4644-b025-8f7d5db23a48",
           "external_id_filters_node_input_id": "61933e79-b0c2-4e3c-bf07-e2d93b9d9c54",
-          "metadata_filters_node_input_id": "7c43b315-d1f2-4727-9540-6cc3fd4641f3"
+          "metadata_filters_node_input_id": "fdc7256f-88ed-4a43-9b85-41c2961a1ac2"
         },
         "inputs": [
           {
@@ -158,7 +164,7 @@
             }
           },
           {
-            "id": "7c43b315-d1f2-4727-9540-6cc3fd4641f3",
+            "id": "fdc7256f-88ed-4a43-9b85-41c2961a1ac2",
             "key": "metadata_filters",
             "value": {
               "rules": [
@@ -166,7 +172,85 @@
                   "type": "CONSTANT_VALUE",
                   "data": {
                     "type": "JSON",
-                    "value": null
+                    "value": {
+                      "type": "LOGICAL_CONDITION_GROUP",
+                      "negated": false,
+                      "combinator": "AND",
+                      "conditions": [
+                        {
+                          "type": "LOGICAL_CONDITION",
+                          "operator": "=",
+                          "lhs_variable_id": "a6322ca2-8b65-4d26-b3a1-f926dcada0fa",
+                          "rhs_variable_id": "c539a2e2-0873-43b0-ae21-81790bb1c4cb"
+                        },
+                        {
+                          "type": "LOGICAL_CONDITION",
+                          "operator": "=",
+                          "lhs_variable_id": "a89483b6-6850-4105-8c4e-ec0fd197cd43",
+                          "rhs_variable_id": "847b8ee0-2c37-4e41-9dea-b4ba3579e2c1"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "a6322ca2-8b65-4d26-b3a1-f926dcada0fa",
+            "key": "vellum-query-builder-variable-a6322ca2-8b65-4d26-b3a1-f926dcada0fa",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "c95cccdc-8881-4528-bc63-97d9df6e1d87"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "c539a2e2-0873-43b0-ae21-81790bb1c4cb",
+            "key": "vellum-query-builder-variable-c539a2e2-0873-43b0-ae21-81790bb1c4cb",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "c95cccdc-8881-4528-bc63-97d9df6e1d87"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "a89483b6-6850-4105-8c4e-ec0fd197cd43",
+            "key": "vellum-query-builder-variable-a89483b6-6850-4105-8c4e-ec0fd197cd43",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "c95cccdc-8881-4528-bc63-97d9df6e1d87"
+                  }
+                }
+              ],
+              "combinator": "OR"
+            }
+          },
+          {
+            "id": "847b8ee0-2c37-4e41-9dea-b4ba3579e2c1",
+            "key": "vellum-query-builder-variable-847b8ee0-2c37-4e41-9dea-b4ba3579e2c1",
+            "value": {
+              "rules": [
+                {
+                  "type": "INPUT_VARIABLE",
+                  "data": {
+                    "input_variable_id": "c95cccdc-8881-4528-bc63-97d9df6e1d87"
                   }
                 }
               ],
@@ -316,7 +400,19 @@
         "value": "Search node query default"
       },
       "required": false,
-      "extensions": { "color": "someColor" }
+      "extensions": {
+        "color": "someColor"
+      }
+    },
+    {
+      "id": "c95cccdc-8881-4528-bc63-97d9df6e1d87",
+      "key": "var1",
+      "type": "STRING",
+      "required": false,
+      "default": null,
+      "extensions": {
+        "color": "someColor"
+      }
     }
   ],
   "output_variables": [

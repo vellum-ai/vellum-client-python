@@ -1,4 +1,8 @@
-import { ChatMessage } from "vellum-ai/api";
+import {
+  ChatMessage,
+  ConditionCombinator,
+  LogicalOperator,
+} from "vellum-ai/api";
 import {
   ChatMessageRequest,
   ChatMessageRole,
@@ -63,6 +67,24 @@ export interface JsonVellumValue {
 export interface ConstantValuePointer {
   type: "CONSTANT_VALUE";
   data: VellumValue;
+}
+
+export type VellumLogicalExpression =
+  | VellumLogicalCondition
+  | VellumLogicalConditionGroup;
+
+export interface VellumLogicalCondition {
+  type: "LOGICAL_CONDITION";
+  lhsVariableId: string;
+  operator: LogicalOperator;
+  rhsVariableId: string;
+}
+
+export interface VellumLogicalConditionGroup {
+  type: "LOGICAL_CONDITION_GROUP";
+  conditions: VellumLogicalExpression[];
+  combinator: ConditionCombinator;
+  negated: boolean;
 }
 
 export interface NodeOutputData {

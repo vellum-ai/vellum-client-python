@@ -10,6 +10,8 @@ from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.utils.vellum import create_node_input_value_pointer_rule, primitive_to_vellum_value
 from vellum_ee.workflows.display.vellum import (
     ConstantValuePointer,
+    InputVariableData,
+    InputVariablePointer,
     NodeInput,
     NodeInputValuePointer,
     NodeInputValuePointerRule,
@@ -93,4 +95,7 @@ def create_pointer(
             )
 
     vellum_variable_value = primitive_to_vellum_value(value)
-    return ConstantValuePointer(type="CONSTANT_VALUE", data=vellum_variable_value)
+    if pointer_type is InputVariablePointer:
+        return InputVariablePointer(type="INPUT_VARIABLE", data=InputVariableData(input_variable_id=value))
+    else:
+        return ConstantValuePointer(type="CONSTANT_VALUE", data=vellum_variable_value)

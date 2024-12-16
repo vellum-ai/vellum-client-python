@@ -1,11 +1,22 @@
 import { python } from "@fern-api/python-ast";
 import { ClassInstantiation } from "@fern-api/python-ast/ClassInstantiation";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
+import { Writer } from "@fern-api/python-ast/core/Writer";
 
 import { OUTPUTS_CLASS_NAME, VELLUM_CLIENT_MODULE_PATH } from "src/constants";
 import { TextSearchNodeContext } from "src/context/node-context/text-search-node";
+import { NodeInput } from "src/generators";
 import { BaseSingleFileNode } from "src/generators/nodes/bases/single-file-base";
-import { SearchNode as SearchNodeType } from "src/types/vellum";
+import { VellumValueLogicalExpressionSerializer } from "src/serializers/vellum";
+import {
+  ConstantValuePointer,
+  InputVariablePointer,
+  SearchNode as SearchNodeType,
+  VellumLogicalCondition as VellumLogicalConditionType,
+  VellumLogicalConditionGroup as VellumLogicalConditionGroupType,
+  VellumLogicalExpression as VellumLogicalExpressionType,
+  VellumLogicalExpression,
+} from "src/types/vellum";
 
 export class SearchNode extends BaseSingleFileNode<
   SearchNodeType,
@@ -141,6 +152,12 @@ export class SearchNode extends BaseSingleFileNode<
   }
 
   private searchFiltersConfig(): ClassInstantiation {
+    let rawMetadata;
+    const metadataNodeInput = this.nodeInputsByKey.get("metadata_filters");
+    if (metadataNodeInput) {
+      rawMetadata = this.convertNodeInputToMetadata(metadataNodeInput);
+    }
+
     return python.instantiateClass({
       classReference: python.reference({
         name: "SearchFiltersRequest",
@@ -153,17 +170,41 @@ export class SearchNode extends BaseSingleFileNode<
             this.findNodeInputByName("external_id_filters") ??
             python.TypeInstantiation.none(),
         }),
-        // TODO: Add support for our new style metadata filtering where there might be dynamic node inputs on
-        //  either side of an operator.
-        //  https://app.shortcut.com/vellum/story/5150
         python.methodArgument({
           name: "metadata",
-          value:
-            this.findNodeInputByName("metadata_filters") ??
-            python.TypeInstantiation.none(),
+          value: rawMetadata
+            ? new SearchNodeMetadataFilters({
+                metadata: rawMetadata,
+              })
+            : python.TypeInstantiation.none(),
         }),
       ],
     });
+  }
+
+  private convertNodeInputToMetadata(
+    nodeInput: NodeInput
+  ): VellumLogicalExpression | undefined {
+    const rules = nodeInput.nodeInputData.value.rules;
+
+    const nodeInputValuePointer = rules.find(
+      (rule): rule is ConstantValuePointer =>
+        rule.type === "CONSTANT_VALUE" && rule.data.type === "JSON"
+    );
+
+    if (nodeInputValuePointer) {
+      const rawData = nodeInputValuePointer.data;
+
+      const metadataFilter = rawData.value;
+
+      const parsedData =
+        VellumValueLogicalExpressionSerializer.parse(metadataFilter);
+
+      if (parsedData.ok) {
+        return parsedData.value;
+      }
+    }
+    return undefined;
   }
 
   getNodeDisplayClassBodyStatements(): AstNode[] {
@@ -192,7 +233,75 @@ export class SearchNode extends BaseSingleFileNode<
       })
     );
 
+    let rawMetadata;
+    const metadataNodeInput = this.nodeInputsByKey.get("metadata_filters");
+    if (metadataNodeInput) {
+      rawMetadata = this.convertNodeInputToMetadata(metadataNodeInput);
+      if (rawMetadata) {
+        const inputVariableIdsByLogicalIdMap =
+          this.generateInputVariableIdsByLogicalIdMap(rawMetadata);
+        statements.push(
+          python.field({
+            name: "input_variable_ids_by_logical_id",
+            initializer: python.TypeInstantiation.dict(
+              Array.from(inputVariableIdsByLogicalIdMap.entries()).map(
+                ([key, value]) => ({
+                  key: python.TypeInstantiation.str(key),
+                  value: python.TypeInstantiation.str(value),
+                })
+              )
+            ),
+          })
+        );
+      }
+    }
+
     return statements;
+  }
+
+  private generateInputVariableIdsByLogicalIdMap(
+    rawData: VellumLogicalExpression
+  ): Map<string, string> {
+    const result = new Map<string, string>();
+    const prefix = "vellum-query-builder-variable-";
+
+    const traverse = (logicalExpression: VellumLogicalExpression) => {
+      if (logicalExpression.type === "LOGICAL_CONDITION") {
+        const lhsQueryInput = this.nodeInputsByKey.get(
+          `${prefix}${logicalExpression.lhsVariableId}`
+        )?.nodeInputData?.value.rules[0] as InputVariablePointer;
+        const rhsQueryInput = this.nodeInputsByKey.get(
+          `${prefix}${logicalExpression.rhsVariableId}`
+        )?.nodeInputData?.value.rules[0] as InputVariablePointer;
+        if (!lhsQueryInput) {
+          throw new Error(
+            `Could not find node input for key ${prefix}${logicalExpression.lhsVariableId}}`
+          );
+        }
+        if (!rhsQueryInput) {
+          throw new Error(
+            `Could not find node input for key ${prefix}${logicalExpression.rhsVariableId}}`
+          );
+        }
+
+        result.set(
+          logicalExpression.lhsVariableId,
+          rhsQueryInput.data.inputVariableId
+        );
+        result.set(
+          logicalExpression.rhsVariableId,
+          rhsQueryInput.data.inputVariableId
+        );
+      } else if (logicalExpression.type === "LOGICAL_CONDITION_GROUP") {
+        logicalExpression.conditions.forEach((condition) =>
+          traverse(condition)
+        );
+      }
+    };
+
+    traverse(rawData);
+
+    return result;
   }
 
   protected getOutputDisplay(): python.Field {
@@ -259,5 +368,143 @@ export class SearchNode extends BaseSingleFileNode<
 
   protected getErrorOutputId(): string | undefined {
     return this.nodeData.data.errorOutputId;
+  }
+}
+
+export declare namespace SearchNodeMetadataFilters {
+  export interface Args {
+    metadata: VellumLogicalExpressionType;
+  }
+}
+
+export class SearchNodeMetadataFilters extends AstNode {
+  private metadata: VellumLogicalExpressionType;
+  private astNode: AstNode;
+
+  public constructor(args: SearchNodeMetadataFilters.Args) {
+    super();
+
+    this.metadata = args.metadata;
+    this.astNode = this.generateAstNode();
+    this.inheritReferences(this.astNode);
+  }
+
+  private generateAstNode(): AstNode {
+    switch (this.metadata.type) {
+      case "LOGICAL_CONDITION":
+        return this.generateLogicalConditionArguments(this.metadata);
+      case "LOGICAL_CONDITION_GROUP":
+        return this.generateLogicalConditionGroupArguments(this.metadata);
+    }
+  }
+
+  private generateLogicalConditionGroupArguments(
+    data: VellumLogicalConditionGroupType
+  ): python.ClassInstantiation {
+    const processCondition = (
+      condition: VellumLogicalExpressionType
+    ): AstNode => {
+      if (condition.type === "LOGICAL_CONDITION") {
+        return this.generateLogicalConditionArguments(condition);
+      } else {
+        return this.generateLogicalConditionGroupArguments(condition);
+      }
+    };
+
+    const processedConditions: AstNode[] = data.conditions.map((condition) =>
+      processCondition(condition)
+    );
+
+    return python.instantiateClass({
+      classReference: python.reference({
+        name: "VellumValueLogicalConditionGroupRequest",
+        modulePath: [...VELLUM_CLIENT_MODULE_PATH, "types"],
+      }),
+      arguments_: [
+        python.methodArgument({
+          name: "type",
+          value: python.TypeInstantiation.str("LOGICAL_CONDITION_GROUP"),
+        }),
+        python.methodArgument({
+          name: "combinator",
+          value: python.TypeInstantiation.str(data.combinator),
+        }),
+        python.methodArgument({
+          name: "negated",
+          value: python.TypeInstantiation.bool(data.negated),
+        }),
+        python.methodArgument({
+          name: "conditions",
+          value: python.TypeInstantiation.list(processedConditions),
+        }),
+      ],
+    });
+  }
+
+  private generateLogicalConditionArguments(
+    data: VellumLogicalConditionType
+  ): python.ClassInstantiation {
+    const lhsId = data.lhsVariableId;
+
+    const rhsId = data.rhsVariableId;
+
+    return python.instantiateClass({
+      classReference: python.reference({
+        name: "VellumValueLogicalConditionRequest",
+        modulePath: [...VELLUM_CLIENT_MODULE_PATH, "types"],
+      }),
+      arguments_: [
+        python.methodArgument({
+          name: "type",
+          value: python.TypeInstantiation.str("LOGICAL_CONDITION"),
+        }),
+        python.methodArgument({
+          name: "lhs_variable",
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "StringVellumValueRequest",
+              modulePath: [...VELLUM_CLIENT_MODULE_PATH, "types"],
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "type",
+                value: python.TypeInstantiation.str("STRING"),
+              }),
+              python.methodArgument({
+                name: "value",
+                value: python.TypeInstantiation.str(lhsId),
+              }),
+            ],
+          }),
+        }),
+        python.methodArgument({
+          name: "operator",
+          value: python.TypeInstantiation.str(data.operator),
+        }),
+        python.methodArgument({
+          name: "rhs_variable",
+          value: python.instantiateClass({
+            classReference: python.reference({
+              name: "StringVellumValueRequest",
+              modulePath: [...VELLUM_CLIENT_MODULE_PATH, "types"],
+            }),
+            arguments_: [
+              python.methodArgument({
+                name: "type",
+                value: python.TypeInstantiation.str("STRING"),
+              }),
+              python.methodArgument({
+                name: "value",
+                value: python.TypeInstantiation.str(rhsId),
+              }),
+            ],
+          }),
+        }),
+      ],
+    });
+  }
+
+  public write(writer: Writer): void {
+    this.astNode.write(writer);
   }
 }

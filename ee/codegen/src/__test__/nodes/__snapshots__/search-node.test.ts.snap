@@ -46,6 +46,12 @@ class SearchNodeDisplay(BaseSearchNodeDisplay[SearchNode]):
         "result_merging_enabled": UUID("dc9f880b-81bc-4644-b025-8f7d5db23a48"),
         "external_id_filters": UUID("61933e79-b0c2-4e3c-bf07-e2d93b9d9c54"),
         "metadata_filters": UUID("7c43b315-d1f2-4727-9540-6cc3fd4641f3"),
+        "vellum-query-builder-variable-a6322ca2-8b65-4d26-b3a1-f926dcada0fa": UUID(
+            "a6322ca2-8b65-4d26-b3a1-f926dcada0fa"
+        ),
+        "vellum-query-builder-variable-c539a2e2-0873-43b0-ae21-81790bb1c4cb": UUID(
+            "c539a2e2-0873-43b0-ae21-81790bb1c4cb"
+        ),
     }
     output_display = {
         SearchNode.Outputs.results: NodeOutputDisplay(
@@ -118,6 +124,12 @@ class SearchNodeDisplay(BaseSearchNodeDisplay[SearchNode]):
         "result_merging_enabled": UUID("dc9f880b-81bc-4644-b025-8f7d5db23a48"),
         "external_id_filters": UUID("61933e79-b0c2-4e3c-bf07-e2d93b9d9c54"),
         "metadata_filters": UUID("7c43b315-d1f2-4727-9540-6cc3fd4641f3"),
+        "vellum-query-builder-variable-a6322ca2-8b65-4d26-b3a1-f926dcada0fa": UUID(
+            "a6322ca2-8b65-4d26-b3a1-f926dcada0fa"
+        ),
+        "vellum-query-builder-variable-c539a2e2-0873-43b0-ae21-81790bb1c4cb": UUID(
+            "c539a2e2-0873-43b0-ae21-81790bb1c4cb"
+        ),
     }
     output_display = {
         SearchNode.Outputs.results: NodeOutputDisplay(

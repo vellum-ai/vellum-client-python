@@ -87,6 +87,13 @@ class WorkflowParentContext(BaseParentContext):
     workflow_definition: VellumCodeResourceDefinition
 
 
+class WorkflowSandboxParentContext(BaseParentContext):
+    type: Literal["WORKFLOW_SANDBOX"] = "WORKFLOW_SANDBOX"
+    sandbox_id: UUID
+    sandbox_history_item_id: UUID
+    scenario_id: UUID
+
+
 # Define the discriminated union
 ParentContext = Annotated[
     Union[
@@ -94,6 +101,7 @@ ParentContext = Annotated[
         NodeParentContext,
         WorkflowDeploymentParentContext,
         PromptDeploymentParentContext,
+        WorkflowSandboxParentContext,
     ],
     Field(discriminator="type"),
 ]

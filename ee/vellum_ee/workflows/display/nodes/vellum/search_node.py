@@ -28,7 +28,6 @@ class VariableIdMap:
 
 
 class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_SearchNodeType]):
-    variable_ids: Optional[VariableIdMap] = None
     input_variable_ids_by_logical_id: Optional[Dict[str, str]] = None
 
     def serialize(
@@ -129,7 +128,6 @@ class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_Sea
         logical_expression: Union[VellumValueLogicalConditionGroupRequest, VellumValueLogicalConditionRequest],
         display_context: WorkflowDisplayContext,
         path: List[int] = [],
-        variable_id_map: Optional[VariableIdMap] = None,
     ) -> Tuple[JsonObject, List[NodeInput]]:
         if isinstance(logical_expression, VellumValueLogicalConditionGroupRequest):
             conditions: JsonArray = []

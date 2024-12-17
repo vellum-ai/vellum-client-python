@@ -1,3 +1,4 @@
+import inspect
 from uuid import UUID
 from typing import ClassVar, Dict, Generic, Optional, TypeVar
 
@@ -28,7 +29,8 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
         node = self._node
         node_id = self.node_id
 
-        code = read_file_from_path(raise_if_descriptor(node.filepath))
+        node_file_path = inspect.getfile(node)
+        code = read_file_from_path(node_filepath=node_file_path, script_filepath=(raise_if_descriptor(node.filepath)))
         code_inputs = raise_if_descriptor(node.code_inputs)
 
         inputs = [

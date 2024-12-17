@@ -6,7 +6,7 @@ base_module = __name__.split(".")[:-1]
 
 
 class SimpleCodeExecutionNode(CodeExecutionNode[BaseState, int]):
-    filepath = "/".join(base_module + ["tests", "code.py"])
+    filepath = "./tests/code.py"
     code_inputs = {}
 
 

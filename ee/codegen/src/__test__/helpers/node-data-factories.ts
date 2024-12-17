@@ -1041,7 +1041,6 @@ export function errorNodeDataFactory(): ErrorNode {
       targetHandleId: "370d712d-3369-424e-bcf7-f4da1aef3928",
       errorSourceInputId: errorSourceInputId,
       errorOutputId: "69250713-617d-42a4-9326-456c70d0ef20",
-      sourceHandleId: "e4dedb66-0638-4f0c-9941-6420bfe353b2",
     },
     inputs: [
       {

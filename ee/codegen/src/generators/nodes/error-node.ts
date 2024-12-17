@@ -56,15 +56,6 @@ export class ErrorNode extends BaseSingleFileNode<
 
     statements.push(
       python.field({
-        name: "source_handle_id",
-        initializer: python.TypeInstantiation.uuid(
-          this.nodeData.data.sourceHandleId
-        ),
-      })
-    );
-
-    statements.push(
-      python.field({
         name: "target_handle_id",
         initializer: python.TypeInstantiation.uuid(
           this.nodeData.data.targetHandleId

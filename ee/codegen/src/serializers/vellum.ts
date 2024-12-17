@@ -1578,7 +1578,6 @@ export const ErrorNodeSerializer: ObjectSchema<
     targetHandleId: propertySchema("target_handle_id", stringSchema()),
     errorSourceInputId: propertySchema("error_source_input_id", stringSchema()),
     errorOutputId: propertySchema("error_output_id", stringSchema()),
-    sourceHandleId: propertySchema("source_handle_id", stringSchema()),
   }),
   inputs: listSchema(NodeInputSerializer),
   displayData: propertySchema(

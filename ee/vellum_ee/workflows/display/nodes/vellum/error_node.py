@@ -39,7 +39,6 @@ class BaseErrorNodeDisplay(BaseNodeVellumDisplay[_ErrorNodeType], Generic[_Error
             "data": {
                 "name": self.name,
                 "label": self.label,
-                "source_handle_id": str(self.get_source_handle_id(display_context.port_displays)),
                 "target_handle_id": str(self.get_target_handle_id()),
                 "error_source_input_id": str(error_source_input_id),
                 "error_output_id": str(self.error_output_id),

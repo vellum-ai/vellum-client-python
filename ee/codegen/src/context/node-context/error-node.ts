@@ -15,12 +15,6 @@ export class ErrorNodeContext extends BaseNodeContext<ErrorNode> {
   }
 
   createPortContexts(): PortContext[] {
-    return [
-      new PortContext({
-        workflowContext: this.workflowContext,
-        nodeContext: this,
-        portId: this.nodeData.data.sourceHandleId,
-      }),
-    ];
+    return [];
   }
 }

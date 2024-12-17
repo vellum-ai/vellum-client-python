@@ -236,19 +236,43 @@ export class GraphAttribute extends AstNode {
             };
           }
         } else if (mutableAst.type === "set") {
+          // debugger;
           const newSet = mutableAst.values.map((subAst) => {
             const canBeAdded = this.isNodeInBranch(sourceNode, subAst);
             if (!canBeAdded) {
-              return { edgeAdded: false, value: subAst };
+              return { edgeAddedPriority: 0, original: subAst, value: subAst };
             }
 
             const newSubAst = addEdgeToGraph(subAst, graphSourceNode);
             if (!newSubAst) {
-              return { edgeAdded: false, value: subAst };
+              return { edgeAddedPriority: 0, original: subAst, value: subAst };
             }
-            return { edgeAdded: true, value: newSubAst };
+
+            if (subAst.type !== "set" && newSubAst.type === "set") {
+              return {
+                edgeAddedPriority: 1,
+                original: subAst,
+                value: newSubAst,
+              };
+            }
+
+            if (
+              subAst.type === "set" &&
+              newSubAst.type === "set" &&
+              newSubAst.values.length > subAst.values.length
+            ) {
+              return {
+                edgeAddedPriority: 1,
+                original: subAst,
+                value: newSubAst,
+              };
+            }
+
+            return { edgeAddedPriority: 2, original: subAst, value: newSubAst };
           });
-          if (newSet.every(({ edgeAdded }) => !edgeAdded)) {
+          if (
+            newSet.every(({ edgeAddedPriority }) => edgeAddedPriority === 0)
+          ) {
             if (sourceNode == graphSourceNode) {
               return {
                 type: "set",
@@ -261,12 +285,36 @@ export class GraphAttribute extends AstNode {
               return;
             }
           }
+
+          // We only want to add the edge to _one_ of the set members.
+          // So we need to pick the one with the highest priority,
+          // tie breaking by earliest index.
+          const { index: maxPriorityIndex } = newSet.reduce(
+            (prev, curr, index) => {
+              if (curr.edgeAddedPriority > prev.priority) {
+                return { index, priority: curr.edgeAddedPriority };
+              }
+              return prev;
+            },
+            {
+              index: -1,
+              priority: -1,
+            }
+          );
+
           const newSetAst: GraphSet = {
             type: "set",
-            values: newSet.map(({ value }) => value),
+            values: newSet.map(({ value, original }, index) =>
+              index == maxPriorityIndex ? value : original
+            ),
           };
 
-          return this.optimizeSetThroughCommonTarget(newSetAst, targetNode);
+          const flattenedNewSetAst = this.flattenSet(newSetAst);
+
+          return this.optimizeSetThroughCommonTarget(
+            flattenedNewSetAst,
+            targetNode
+          );
         } else if (mutableAst.type === "right_shift") {
           const newLhs = addEdgeToGraph(mutableAst.lhs, graphSourceNode);
           if (newLhs) {
@@ -415,6 +463,18 @@ export class GraphAttribute extends AstNode {
     }
 
     return newSetAst;
+  }
+
+  private flattenSet(setAst: GraphSet): GraphSet {
+    return {
+      type: "set",
+      values: setAst.values.flatMap((value) => {
+        if (value.type === "set") {
+          return this.flattenSet(value).values;
+        }
+        return [value];
+      }),
+    };
   }
 
   /**

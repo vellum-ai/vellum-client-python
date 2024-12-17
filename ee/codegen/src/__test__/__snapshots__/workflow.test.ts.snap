@@ -141,6 +141,18 @@ class TestWorkflow(BaseWorkflow):
 "
 `;
 
+exports[`Workflow > write > graph > should be correct for a single port pointing to a set 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .nodes.conditional_node import ConditionalNode
+from .nodes.templating_node import TemplatingNode
+from .nodes.templating_node_2 import TemplatingNode2
+
+
+class TestWorkflow(BaseWorkflow):
+    graph = ConditionalNode.Ports.branch_1 >> {TemplatingNode, TemplatingNode2}
+"
+`;
+
 exports[`Workflow > write > graph > should be correct for set of a branch and a node 1`] = `
 "from vellum.workflows import BaseWorkflow
 from .nodes.templating_node import TemplatingNode

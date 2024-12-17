@@ -214,6 +214,27 @@ export class GraphAttribute extends AstNode {
               ],
             };
           }
+        } else if (mutableAst.type === "port_reference") {
+          if (sourceNode) {
+            const sourceNodePortContext = sourceNode.portContextsById.get(
+              edge.sourceHandleId
+            );
+            if (sourceNodePortContext === mutableAst.reference) {
+              return {
+                type: "right_shift",
+                lhs: mutableAst,
+                rhs: { type: "node_reference", reference: targetNode },
+              };
+            }
+          } else if (sourceNode == graphSourceNode) {
+            return {
+              type: "set",
+              values: [
+                mutableAst,
+                { type: "node_reference", reference: targetNode },
+              ],
+            };
+          }
         } else if (mutableAst.type === "set") {
           const newSet = mutableAst.values.map((subAst) => {
             const canBeAdded = this.isNodeInBranch(sourceNode, subAst);

@@ -236,7 +236,6 @@ export class GraphAttribute extends AstNode {
             };
           }
         } else if (mutableAst.type === "set") {
-          // debugger;
           const newSet = mutableAst.values.map((subAst) => {
             const canBeAdded = this.isNodeInBranch(sourceNode, subAst);
             if (!canBeAdded) {
@@ -317,6 +316,7 @@ export class GraphAttribute extends AstNode {
           );
         } else if (mutableAst.type === "right_shift") {
           const newLhs = addEdgeToGraph(mutableAst.lhs, graphSourceNode);
+
           if (newLhs) {
             const newSetAst: GraphSet = {
               type: "set",
@@ -493,7 +493,7 @@ export class GraphAttribute extends AstNode {
     ) {
       return true;
     } else if (mutableAst.type === "set") {
-      return mutableAst.values.every((value) =>
+      return mutableAst.values.some((value) =>
         this.isNodeInBranch(targetNode, value)
       );
     } else if (mutableAst.type === "right_shift") {

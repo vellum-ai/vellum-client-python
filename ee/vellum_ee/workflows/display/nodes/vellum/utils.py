@@ -105,5 +105,7 @@ def create_pointer(
         )
     elif pointer_type is ExecutionCounterPointer:
         return ExecutionCounterPointer(type="EXECUTION_COUNTER", data=ExecutionCounterData(node_id=value))
-    else:
+    elif pointer_type is ConstantValuePointer or pointer_type is None:
         return ConstantValuePointer(type="CONSTANT_VALUE", data=vellum_variable_value)
+    else:
+        raise ValueError(f"Pointer type {pointer_type} not supported")

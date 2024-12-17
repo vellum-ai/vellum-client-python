@@ -37,3 +37,13 @@ test:
 
 test-raw:
 	poetry run pytest -rEf -s -vv $(file)
+
+
+################################
+# Linting
+################################
+
+format:
+	poetry run black . \
+	&& poetry run isort .
+

@@ -1,3 +1,4 @@
+import inspect
 from typing import Any, ClassVar, Dict, Generic, List, Optional, Sequence, Tuple, Type, TypeVar, cast, get_args
 
 from vellum import (
@@ -189,7 +190,8 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
         return compiled_inputs
 
     def _resolve_code(self) -> str:
-        code = read_file_from_path(self.filepath)
+        root = inspect.getfile(self.__class__)
+        code = read_file_from_path(node_filepath=root, script_filepath=self.filepath)
         if not code:
             raise NodeException(
                 message=f"Filepath '{self.filepath}' does not exist",

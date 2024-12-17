@@ -8,7 +8,7 @@ base_module = __name__.split(".")[:-1]
 
 @TryNode.wrap()
 class SimpleCodeExecutionNode(CodeExecutionNode[BaseState, int]):
-    filepath = "/".join(base_module + ["tests", "code.py"])
+    filepath = "tests/code.py"
     code_inputs = {}
 
     class Outputs(CodeExecutionNode.Outputs):

@@ -6,7 +6,7 @@ from ...inputs import Inputs
 
 
 class CodeExecutionNode(BaseCodeExecutionNode[BaseState, str]):
-    filepath = "code_execution_node/script.py"
+    filepath = "./script.py"
     code_inputs = {"arg": Inputs.input}
     output_type = "STRING"
     runtime = "PYTHON_3_11_6"

@@ -694,18 +694,31 @@ export function subworkflowDeploymentNodeDataFactory(): SubworkflowNode {
   };
 }
 
-export function conditionalNodeFactory(): ConditionalNode {
+export function conditionalNodeFactory({
+  id,
+  label,
+  targetHandleId,
+  ifSourceHandleId,
+  elseSourceHandleId,
+}: {
+  id?: string;
+  label?: string;
+  targetHandleId?: string;
+  ifSourceHandleId?: string;
+  elseSourceHandleId?: string;
+} = {}): ConditionalNode {
   const nodeData: ConditionalNode = {
-    id: "b81a4453-7b80-41ea-bd55-c62df8878fd3",
+    id: id ?? "b81a4453-7b80-41ea-bd55-c62df8878fd3",
     type: WorkflowNodeType.CONDITIONAL,
     data: {
-      label: "Conditional Node",
-      targetHandleId: "842b9dda-7977-47ad-a322-eb15b4c7069d",
+      label: label ?? "Conditional Node",
+      targetHandleId: targetHandleId ?? "842b9dda-7977-47ad-a322-eb15b4c7069d",
       conditions: [
         {
           id: "8d0d8b56-6c17-4684-9f16-45dd6ce23060",
           type: "IF",
-          sourceHandleId: "63345ab5-1a4d-48a1-ad33-91bec41f92a5",
+          sourceHandleId:
+            ifSourceHandleId ?? "63345ab5-1a4d-48a1-ad33-91bec41f92a5",
           data: {
             id: "fa50fb0c-8d62-40e3-bd88-080b52efd4b2",
             rules: [
@@ -723,7 +736,8 @@ export function conditionalNodeFactory(): ConditionalNode {
         {
           id: "ea63ccd5-3fe3-4371-ba3c-6d3ec7ca2b60",
           type: "ELSE",
-          sourceHandleId: "14a8b603-6039-4491-92d4-868a4dae4c15",
+          sourceHandleId:
+            elseSourceHandleId ?? "14a8b603-6039-4491-92d4-868a4dae4c15",
         },
       ],
       version: "2",

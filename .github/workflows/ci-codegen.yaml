@@ -96,3 +96,7 @@ jobs:
           npm run gar-login
           npm publish
         working-directory: ee/codegen
+
+      - name: Bump codegen-service
+        run: npm run upgrade-codegen-service
+        working-directory: ee/codegen

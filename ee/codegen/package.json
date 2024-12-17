@@ -27,7 +27,8 @@
     "test:debug": "vitest --run --inspect-brk --no-file-parallelism",
     "types": "tsc --noEmit",
     "start": "node --loader ts-node/esm --experimental-specifier-resolution=node src/index.ts",
-    "version:codegen": "node scripts/version.js"
+    "version:codegen": "node scripts/version.js",
+    "upgrade-codegen-service": "node scripts/upgrade-codegen-service.js"
   },
   "dependencies": {
     "@fern-api/python-ast": "^0.0.18",

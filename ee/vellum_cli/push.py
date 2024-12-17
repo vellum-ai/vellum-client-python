@@ -20,13 +20,10 @@ from vellum_cli.logger import load_cli_logger
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 from vellum_ee.workflows.display.workflows.vellum_workflow_display import VellumWorkflowDisplay
 
-_IGNORE_DIRECTORIES = [
-    r".*__pycache__"
-]
+_IGNORE_DIRECTORIES = [r".*__pycache__"]
 
-_IGNORE_FILES = [
-    r"\.DS_Store"
-]
+_IGNORE_FILES = [r"\.DS_Store"]
+
 
 def push_command(
     module: Optional[str] = None,

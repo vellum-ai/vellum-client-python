@@ -1,3 +1,4 @@
+import re
 from importlib import metadata
 import io
 import json
@@ -19,6 +20,13 @@ from vellum_cli.logger import load_cli_logger
 from vellum_ee.workflows.display.workflows.get_vellum_workflow_display_class import get_workflow_display
 from vellum_ee.workflows.display.workflows.vellum_workflow_display import VellumWorkflowDisplay
 
+_IGNORE_DIRECTORIES = [
+    r".*__pycache__"
+]
+
+_IGNORE_FILES = [
+    r"\.DS_Store"
+]
 
 def push_command(
     module: Optional[str] = None,
@@ -79,7 +87,13 @@ def push_command(
     with tarfile.open(fileobj=artifact, mode="w:gz") as tar:
         module_dir = workflow_config.module.replace(".", os.path.sep)
         for root, _, files in os.walk(module_dir):
+            if _is_match(root, _IGNORE_DIRECTORIES):
+                continue
+
             for filename in files:
+                if _is_match(filename, _IGNORE_FILES):
+                    continue
+
                 file_path = os.path.join(root, filename)
                 # Get path relative to module_dir for tar archive
                 relative_path = os.path.relpath(file_path, module_dir)
@@ -122,3 +136,12 @@ Visit at: https://app.vellum.ai/workflow-sandboxes/{response.workflow_sandbox_id
     if requires_save:
         config.save()
         logger.info("Updated vellum.lock file.")
+
+
+def _is_match(path: str, patterns: list[str]) -> bool:
+    for regex in patterns:
+        matches = re.findall(regex, path)
+        if matches:
+            return True
+
+    return False

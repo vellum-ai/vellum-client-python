@@ -154,12 +154,12 @@ class BaseSearchNodeDisplay(BaseNodeVellumDisplay[_SearchNodeType], Generic[_Sea
             lhs_query_input_id = (
                 self.input_variable_ids_by_logical_id[lhs_variable_id]
                 if self.input_variable_ids_by_logical_id
-                else uuid4_from_hash(f"{self.node_id}|{hash(path)}")
+                else uuid4_from_hash(f"{self.node_id}|{hash(tuple(path))}")
             )
             rhs_query_input_id = (
                 self.input_variable_ids_by_logical_id[rhs_variable_id]
                 if self.input_variable_ids_by_logical_id
-                else uuid4_from_hash(f"{self.node_id}|{hash(path)}")
+                else uuid4_from_hash(f"{self.node_id}|{hash(tuple(path))}")
             )
 
             return (

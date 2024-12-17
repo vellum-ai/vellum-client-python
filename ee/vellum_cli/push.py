@@ -1,8 +1,8 @@
-import re
 from importlib import metadata
 import io
 import json
 import os
+import re
 import sys
 import tarfile
 from uuid import UUID

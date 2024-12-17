@@ -160,6 +160,7 @@ Message: {event.error.message}""",
                     "__module__": dynamic_module,
                     "on_error_code": _on_error_code,
                     "subworkflow": Subworkflow,
+                    "Ports": type("Ports", (TryNode.Ports,), {port.name: port.copy() for port in inner_cls.Ports}),
                 },
             )
             return WrappedNode

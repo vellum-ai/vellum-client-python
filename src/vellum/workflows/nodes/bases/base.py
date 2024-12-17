@@ -57,7 +57,7 @@ class BaseNodeMeta(type):
             dct["Ports"] = type(
                 f"{name}.Ports",
                 (NodePorts,),
-                dict(dct["Ports"].__dict__),
+                {**dct["Ports"].__dict__, "__module__": dct["__module__"]},
             )
         else:
             for base in reversed(bases):

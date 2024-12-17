@@ -40,6 +40,14 @@ class Port:
     def __repr__(self) -> str:
         return f"{self.node_class}.Ports.{self.name}"
 
+    def copy(self) -> "Port":
+        return Port(
+            default=self.default,
+            fork_state=self._fork_state,
+            condition=self._condition,
+            condition_type=self._condition_type,
+        )
+
     @property
     def fork_state(self) -> bool:
         return self._fork_state

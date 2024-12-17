@@ -264,7 +264,6 @@ class WorkflowRunner(Generic[StateType]):
                                 )
                             )
 
-            invoked_ports = ports(outputs, node.state)
             node.state.meta.node_execution_cache.fulfill_node_execution(node.__class__, span_id)
 
             for descriptor, output_value in outputs:
@@ -275,6 +274,7 @@ class WorkflowRunner(Generic[StateType]):
 
                 node.state.meta.node_outputs[descriptor] = output_value
 
+            invoked_ports = ports(outputs, node.state)
             self._workflow_event_inner_queue.put(
                 NodeExecutionFulfilledEvent(
                     trace_id=node.state.meta.trace_id,

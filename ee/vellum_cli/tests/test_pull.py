@@ -164,6 +164,50 @@ def test_pull__sandbox_id_with_other_workflow_configured(vellum_client, mock_mod
         assert f.read() == "print('hello')"
 
 
+def test_pull__workflow_deployment_with_no_config(vellum_client):
+    # GIVEN a workflow deployment
+    workflow_deployment = "my-deployment"
+
+    # AND the workflow pull API call returns a zip file
+    vellum_client.workflows.pull.return_value = iter([_zip_file_map({"workflow.py": "print('hello')"})])
+
+    # AND we are currently in a new directory
+    current_dir = os.getcwd()
+    temp_dir = tempfile.mkdtemp()
+    os.chdir(temp_dir)
+
+    # WHEN the user runs the pull command with the workflow deployment
+    runner = CliRunner()
+    result = runner.invoke(cli_main, ["workflows", "pull", "--workflow-deployment", workflow_deployment])
+    os.chdir(current_dir)
+
+    # THEN the command returns successfully
+    assert result.exit_code == 0
+
+    # AND the pull api is called with the workflow deployment
+    vellum_client.workflows.pull.assert_called_once()
+    workflow_py = os.path.join(temp_dir, "my_deployment", "workflow.py")
+    assert os.path.exists(workflow_py)
+    with open(workflow_py) as f:
+        assert f.read() == "print('hello')"
+
+    # AND the vellum.lock.json file is created
+    vellum_lock_json = os.path.join(temp_dir, "vellum.lock.json")
+    assert os.path.exists(vellum_lock_json)
+    with open(vellum_lock_json) as f:
+        lock_data = json.loads(f.read())
+        assert lock_data == {
+            "version": "1.0",
+            "workflows": [
+                {
+                    "module": "my_deployment",
+                    "ignore": None,
+                    "deployments": [],
+                }
+            ],
+        }
+
+
 def test_pull__remove_missing_files(vellum_client, mock_module):
     # GIVEN a module on the user's filesystem
     temp_dir = mock_module.temp_dir

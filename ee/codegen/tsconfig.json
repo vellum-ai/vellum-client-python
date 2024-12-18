@@ -24,7 +24,11 @@
     "declaration": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
-    "types": ["node", "vitest/globals"]
+    "types": ["node", "vitest/globals"],
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }

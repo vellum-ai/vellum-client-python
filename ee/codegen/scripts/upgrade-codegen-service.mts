@@ -1,10 +1,10 @@
-const packageJson = require("../package.json");
-const { createAppAuth } = require("@octokit/auth-app");
-const path = require("path");
-const os = require("os");
-const { execSync } = require("child_process");
+import { createAppAuth } from "@octokit/auth-app";
+import path from "path";
+import os from "os";
+import { execSync } from "child_process";
+import packageJson from "../package.json" assert { type: "json" };
 
-export const getGithubToken = async () => {
+const getGithubToken = async () => {
   const appId = process.env.VELLUM_AUTOMATION_APP_ID;
   const privateKey = process.env.VELLUM_AUTOMATION_PRIVATE_KEY;
   const installationId = process.env.VELLUM_AUTOMATION_INSTALLATION_ID;
@@ -30,7 +30,7 @@ const main = async () => {
   console.log("Upgrading codegen service to version", version);
 
   const githubToken = await getGithubToken();
-  const targetDir = path.join(os.tmpdir(), `codegen-service-${id}`);
+  const targetDir = path.join(os.tmpdir(), `codegen-service-${version}`);
 
   const repoUrl = `https://x-access-token:${githubToken}@github.com/vellum-ai/codegen-service.git`;
   execSync(`git clone ${repoUrl} ${targetDir}`, { stdio: "inherit" });
@@ -55,6 +55,7 @@ const main = async () => {
   });
   execSync(`git push origin ${branchName}`, { stdio: "inherit" });
   console.log("Successfully pushed branch", branchName);
+  process.exit(0);
 };
 
 main();

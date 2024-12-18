@@ -4,6 +4,8 @@ import * as path from "path";
 import { python } from "@fern-api/python-ast";
 import { AstNode } from "@fern-api/python-ast/core/AstNode";
 
+import { BaseNode } from "./bases/base";
+
 import { OUTPUTS_CLASS_NAME } from "src/constants";
 import { CodeExecutionContext } from "src/context/node-context/code-execution-node";
 import { InitFile } from "src/generators";
@@ -17,6 +19,15 @@ export class CodeExecutionNode extends BaseSingleFileNode<
   CodeExecutionContext
 > {
   public declare readonly nodeContext: CodeExecutionContext;
+  private readonly scriptFileContents: string;
+
+  constructor({
+    workflowContext,
+    nodeContext,
+  }: BaseNode.Args<CodeExecutionNodeType, CodeExecutionContext>) {
+    super({ workflowContext, nodeContext });
+    this.scriptFileContents = this.generateScriptFileContents();
+  }
 
   // Override
   public async persist(): Promise<void> {
@@ -182,9 +193,7 @@ export class CodeExecutionNode extends BaseSingleFileNode<
     return this.nodeData.data.errorOutputId;
   }
 
-  private async persistScriptFile(): Promise<void> {
-    const filepath = this.nodeData.data.filepath ?? "./script.py";
-
+  private generateScriptFileContents(): string {
     const codeInputId = this.nodeData.data.codeInputId;
     const codeInput = this.nodeData.inputs.find(
       (nodeInput) => nodeInput.id === codeInputId
@@ -200,6 +209,11 @@ export class CodeExecutionNode extends BaseSingleFileNode<
     }
 
     const scriptFileContents = codeInputRule.data.value ?? "";
+    return scriptFileContents;
+  }
+
+  private async persistScriptFile(): Promise<void> {
+    const filepath = this.nodeData.data.filepath ?? "./script.py";
 
     const absolutPathToNodeDirectory = `${
       this.workflowContext.absolutePathToOutputDirectory
@@ -216,7 +230,7 @@ export class CodeExecutionNode extends BaseSingleFileNode<
       );
     }
     await mkdir(path.dirname(absolutePathToScriptFile), { recursive: true });
-    await writeFile(absolutePathToScriptFile, scriptFileContents);
+    await writeFile(absolutePathToScriptFile, this.scriptFileContents);
     return;
   }
 

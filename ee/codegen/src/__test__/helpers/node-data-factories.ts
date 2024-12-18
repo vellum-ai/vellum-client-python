@@ -2,6 +2,7 @@ import { VellumVariableType } from "vellum-ai/api";
 
 import {
   EntrypointNode,
+  CodeExecutionNode,
   GuardrailNode,
   SearchNode,
   FinalOutputNode,
@@ -1028,6 +1029,71 @@ export function apiNodeFactory({
             },
           ],
           combinator: "OR",
+        },
+      },
+    ],
+    displayData: {
+      width: 462,
+      height: 288,
+      position: {
+        x: 2075.7067885117494,
+        y: 234.65663468515768,
+      },
+    },
+  };
+  return nodeData;
+}
+
+export function codeExecutionNodeFactory({
+  codeInputValueRule,
+}: {
+  codeInputValueRule?: NodeInputValuePointerRule;
+} = {}): CodeExecutionNode {
+  const nodeData: CodeExecutionNode = {
+    id: "2cd960a3-cb8a-43ed-9e3f-f003fc480951",
+    type: "CODE_EXECUTION",
+    data: {
+      label: "Code Execution Node",
+      codeInputId: "9bf086d4-feed-47ff-9736-a5a6aa3a11cc",
+      outputId: "81b270c0-4deb-4db3-aae5-138f79531b2b",
+      outputType: "STRING",
+      runtimeInputId: "c38a71f6-3ffb-45fa-9eea-93c6984a9e3e",
+      targetHandleId: "06573a05-e6f0-48b9-bc6e-07e06d0bc1b1",
+      sourceHandleId: "c38a71f6-3ffb-45fa-9eea-93c6984a9e3e",
+    },
+    inputs: [
+      {
+        id: "9bf086d4-feed-47ff-9736-a5a6aa3a11cc",
+        key: "code",
+        value: {
+          combinator: "OR",
+          rules: codeInputValueRule
+            ? [codeInputValueRule]
+            : [
+                {
+                  type: "CONSTANT_VALUE",
+                  data: {
+                    type: "STRING",
+                    value: "print('Hello, World!')",
+                  },
+                },
+              ],
+        },
+      },
+      {
+        id: "c38a71f6-3ffb-45fa-9eea-93c6984a9e3e",
+        key: "runtime",
+        value: {
+          combinator: "OR",
+          rules: [
+            {
+              type: "CONSTANT_VALUE",
+              data: {
+                type: "STRING",
+                value: "PYTHON_3_11",
+              },
+            },
+          ],
         },
       },
     ],

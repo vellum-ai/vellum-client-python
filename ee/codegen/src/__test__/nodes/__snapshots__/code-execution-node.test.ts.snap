@@ -1,0 +1,81 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CodeExecutionNode > basic > getNodeDefinition 1`] = `
+{
+  "bases": [
+    {
+      "module": [
+        "vellum",
+        "workflows",
+        "nodes",
+        "displayable",
+      ],
+      "name": "CodeExecutionNode",
+    },
+  ],
+  "module": [
+    "code",
+    "nodes",
+    "code_execution_node",
+  ],
+  "name": "CodeExecutionNode",
+}
+`;
+
+exports[`CodeExecutionNode > basic > getNodeDisplayFile 1`] = `
+"from vellum_ee.workflows.display.nodes import BaseCodeExecutionNodeDisplay
+from ...nodes.code_execution_node import CodeExecutionNode
+from uuid import UUID
+from vellum_ee.workflows.display.nodes.types import (
+    NodeOutputDisplay,
+    PortDisplayOverrides,
+)
+from vellum_ee.workflows.display.vellum import NodeDisplayData, NodeDisplayPosition
+
+
+class CodeExecutionNodeDisplay(BaseCodeExecutionNodeDisplay[CodeExecutionNode]):
+    label = "Code Execution Node"
+    node_id = UUID("2cd960a3-cb8a-43ed-9e3f-f003fc480951")
+    target_handle_id = UUID("06573a05-e6f0-48b9-bc6e-07e06d0bc1b1")
+    code_input_id = UUID("9bf086d4-feed-47ff-9736-a5a6aa3a11cc")
+    runtime_input_id = UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e")
+    output_id = UUID("81b270c0-4deb-4db3-aae5-138f79531b2b")
+    log_output_id = None
+    node_input_ids_by_name = {
+        "code": UUID("9bf086d4-feed-47ff-9736-a5a6aa3a11cc"),
+        "runtime": UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e"),
+    }
+    output_display = {
+        CodeExecutionNode.Outputs.result: NodeOutputDisplay(
+            id=UUID("81b270c0-4deb-4db3-aae5-138f79531b2b"), name="result"
+        ),
+        CodeExecutionNode.Outputs.log: NodeOutputDisplay(id=None, name="log"),
+    }
+    port_displays = {
+        CodeExecutionNode.Ports.default: PortDisplayOverrides(
+            id=UUID("c38a71f6-3ffb-45fa-9eea-93c6984a9e3e")
+        )
+    }
+    display_data = NodeDisplayData(
+        position=NodeDisplayPosition(x=2075.7067885117494, y=234.65663468515768),
+        width=462,
+        height=288,
+    )
+"
+`;
+
+exports[`CodeExecutionNode > basic > getNodeFile 1`] = `
+"from vellum.workflows.nodes.displayable import (
+    CodeExecutionNode as BaseCodeExecutionNode,
+)
+from vellum.workflows.state import BaseState
+
+
+class CodeExecutionNode(BaseCodeExecutionNode[BaseState, str]):
+    filepath = "./script.py"
+    code_inputs = {}
+    output_type = "STRING"
+    runtime = "PYTHON_3_11"
+    packages = None
+"
+`;

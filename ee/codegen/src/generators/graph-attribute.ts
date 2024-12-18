@@ -400,9 +400,6 @@ export class GraphAttribute extends AstNode {
         return;
       };
 
-      if (edge.id === "edge-5") {
-        debugger;
-      }
       const newMutableAst = addEdgeToGraph(graphMutableAst, null);
       processedEdges.add(edge);
 

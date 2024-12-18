@@ -9,6 +9,9 @@ export class InlinePromptNodeContext extends BaseNodeContext<InlinePromptNodeTyp
   protected getNodeOutputNamesById(): Record<string, string> {
     return {
       [this.nodeData.data.outputId]: "text",
+      ...(this.nodeData.data.errorOutputId
+        ? { [this.nodeData.data.errorOutputId]: "error" }
+        : {}),
     };
   }
 

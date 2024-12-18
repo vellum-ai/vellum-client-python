@@ -201,11 +201,47 @@ def test_pull__workflow_deployment_with_no_config(vellum_client):
             "workflows": [
                 {
                     "module": "my_deployment",
+                    "workflow_sandbox_id": None,
                     "ignore": None,
                     "deployments": [],
                 }
             ],
         }
+
+
+def test_pull__both_workflow_sandbox_id_and_deployment(vellum_client):
+    # GIVEN a workflow sandbox id
+    workflow_sandbox_id = "87654321-0000-0000-0000-000000000000"
+
+    # AND a workflow deployment
+    workflow_deployment = "my-deployment"
+
+    # AND the workflow pull API call returns a zip file
+    vellum_client.workflows.pull.return_value = iter([_zip_file_map({"workflow.py": "print('hello')"})])
+
+    # AND we are currently in a new directory
+    current_dir = os.getcwd()
+    temp_dir = tempfile.mkdtemp()
+    os.chdir(temp_dir)
+
+    # WHEN the user runs the pull command with the workflow deployment
+    runner = CliRunner()
+    result = runner.invoke(
+        cli_main,
+        [
+            "workflows",
+            "pull",
+            "--workflow-sandbox-id",
+            workflow_sandbox_id,
+            "--workflow-deployment",
+            workflow_deployment,
+        ],
+    )
+    os.chdir(current_dir)
+
+    # THEN the command returns successfully
+    assert result.exit_code == 1
+    assert "Cannot specify both workflow_sandbox_id and workflow_deployment" == str(result.exception)
 
 
 def test_pull__remove_missing_files(vellum_client, mock_module):

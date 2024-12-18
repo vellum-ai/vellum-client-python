@@ -149,6 +149,11 @@ Should only be used for debugging purposes.""",
 )
 @click.option("--workflow-sandbox-id", type=str, help="Pull the Workflow from a specific Sandbox ID")
 @click.option(
+    "--workflow-deployment",
+    type=str,
+    help="""Pull the Workflow from a specific Deployment. Can use the name or the ID of the Deployment.""",
+)
+@click.option(
     "--exclude-code",
     is_flag=True,
     help="""Exclude the code definition of the Workflow from the pull response. \
@@ -158,6 +163,7 @@ def workflows_pull(
     module: Optional[str],
     include_json: Optional[bool],
     workflow_sandbox_id: Optional[str],
+    workflow_deployment: Optional[str],
     exclude_code: Optional[bool],
 ) -> None:
     """
@@ -169,6 +175,7 @@ def workflows_pull(
         module=module,
         include_json=include_json,
         workflow_sandbox_id=workflow_sandbox_id,
+        workflow_deployment=workflow_deployment,
         exclude_code=exclude_code,
     )
 

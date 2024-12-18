@@ -1,12 +1,12 @@
 from vellum import CodeExecutorResponse, NumberVellumValue
 
 from tests.workflows.basic_code_execution_node.try_workflow import TrySimpleCodeExecutionWorkflow
-from tests.workflows.basic_code_execution_node.workflow import SimpleCodeExecutionWorkflow
+from tests.workflows.basic_code_execution_node.workflow import SimpleCodeExecutionWithFilepathWorkflow
 
 
 def test_run_workflow__happy_path(vellum_client):
     # GIVEN a workflow that references a Code Execution example
-    workflow = SimpleCodeExecutionWorkflow()
+    workflow = SimpleCodeExecutionWithFilepathWorkflow()
 
     # AND we know what the Code Execution Node will respond with
     mock_code_execution = CodeExecutorResponse(

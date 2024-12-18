@@ -6,11 +6,11 @@ base_module = __name__.split(".")[:-1]
 
 
 class SimpleCodeExecutionNode(CodeExecutionNode[BaseState, int]):
-    filepath = "./tests/code.py"
+    code = 'def main() -> str:\n    return "Hello, World!"\n'
     code_inputs = {}
 
 
-class SimpleCodeExecutionWithFilepathWorkflow(BaseWorkflow):
+class SimpleCodeExecutionWithCodeWorkflow(BaseWorkflow):
     graph = SimpleCodeExecutionNode
 
     class Outputs(BaseWorkflow.Outputs):

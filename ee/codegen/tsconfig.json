@@ -24,7 +24,7 @@
     "declaration": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
-    "types": ["node", "vitest/globals"],
+    "types": ["node", "vitest/globals"]
   },
   "include": ["./src/**/*"],
   "ts-node": {

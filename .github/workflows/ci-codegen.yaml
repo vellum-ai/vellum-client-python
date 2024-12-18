@@ -98,5 +98,9 @@ jobs:
         working-directory: ee/codegen
 
       - name: Bump codegen-service
+        env:
+          VELLUM_AUTOMATION_APP_ID: ${{ secrets.VELLUM_AUTOMATION_APP_ID }}
+          VELLUM_AUTOMATION_PRIVATE_KEY: ${{ secrets.VELLUM_AUTOMATION_PRIVATE_KEY }}
+          VELLUM_AUTOMATION_INSTALLATION_ID: ${{ secrets.VELLUM_AUTOMATION_INSTALLATION_ID }}
         run: npm run upgrade-codegen-service
         working-directory: ee/codegen

@@ -30,6 +30,9 @@ class BaseNodeVellumDisplay(BaseNodeDisplay[NodeType]):
     def get_target_handle_id(self) -> UUID:
         return self._get_node_display_uuid("target_handle_id")
 
+    def get_target_handle_id_by_source_node_id(self, source_node_id: UUID) -> UUID:
+        return self.get_target_handle_id()
+
     def get_source_handle_id(self, port_displays: Dict[Port, PortDisplay]) -> UUID:
         default_port = self._node.Ports.default
         default_port_display = port_displays[default_port]

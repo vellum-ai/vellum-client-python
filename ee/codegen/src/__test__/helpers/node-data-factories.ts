@@ -19,6 +19,7 @@ import {
   NodeInputValuePointerRule,
   PromptTemplateBlock,
   VellumLogicalConditionGroup,
+  ConditionalNodeConditionData,
 } from "src/types/vellum";
 
 export function entrypointNodeDataFactory(): EntrypointNode {
@@ -703,6 +704,7 @@ export function conditionalNodeFactory({
   elseSourceHandleId,
   inputReferenceId,
   inputReferenceNodeId,
+  includeElif = false,
 }: {
   id?: string;
   label?: string;
@@ -711,40 +713,59 @@ export function conditionalNodeFactory({
   elseSourceHandleId?: string;
   inputReferenceId?: string;
   inputReferenceNodeId?: string;
+  includeElif?: boolean;
 } = {}): ConditionalNode {
+  const conditions: ConditionalNodeConditionData[] = [];
+  conditions.push({
+    id: "8d0d8b56-6c17-4684-9f16-45dd6ce23060",
+    type: "IF",
+    sourceHandleId: ifSourceHandleId ?? "63345ab5-1a4d-48a1-ad33-91bec41f92a5",
+    data: {
+      id: "fa50fb0c-8d62-40e3-bd88-080b52efd4b2",
+      rules: [
+        {
+          id: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc",
+          rules: [],
+          fieldNodeInputId: "2cb6582e-c329-4952-8598-097830b766c7",
+          operator: "=",
+          valueNodeInputId: "cf63d0ad-5e52-4031-a29f-922e7004cdd8",
+        },
+      ],
+      combinator: "AND",
+    },
+  });
+  if (includeElif) {
+    conditions.push({
+      id: "e63c3933-ef86-451f-88bc-d7ea7dce4310",
+      type: "ELIF",
+      sourceHandleId: "2c03f27f-ea64-42fc-8a6c-383550c58ae4",
+      data: {
+        id: "fa50fb0c-8d62-40e3-bd88-080b52efd4b2",
+        rules: [
+          {
+            id: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc",
+            rules: [],
+            fieldNodeInputId: "2cb6582e-c329-4952-8598-097830b766c7",
+            operator: "notNull",
+          },
+        ],
+        combinator: "AND",
+      },
+    });
+  }
+  conditions.push({
+    id: "ea63ccd5-3fe3-4371-ba3c-6d3ec7ca2b60",
+    type: "ELSE",
+    sourceHandleId:
+      elseSourceHandleId ?? "14a8b603-6039-4491-92d4-868a4dae4c15",
+  });
   const nodeData: ConditionalNode = {
     id: id ?? "b81a4453-7b80-41ea-bd55-c62df8878fd3",
     type: WorkflowNodeType.CONDITIONAL,
     data: {
       label: label ?? "Conditional Node",
       targetHandleId: targetHandleId ?? "842b9dda-7977-47ad-a322-eb15b4c7069d",
-      conditions: [
-        {
-          id: "8d0d8b56-6c17-4684-9f16-45dd6ce23060",
-          type: "IF",
-          sourceHandleId:
-            ifSourceHandleId ?? "63345ab5-1a4d-48a1-ad33-91bec41f92a5",
-          data: {
-            id: "fa50fb0c-8d62-40e3-bd88-080b52efd4b2",
-            rules: [
-              {
-                id: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc",
-                rules: [],
-                fieldNodeInputId: "2cb6582e-c329-4952-8598-097830b766c7",
-                operator: "=",
-                valueNodeInputId: "cf63d0ad-5e52-4031-a29f-922e7004cdd8",
-              },
-            ],
-            combinator: "AND",
-          },
-        },
-        {
-          id: "ea63ccd5-3fe3-4371-ba3c-6d3ec7ca2b60",
-          type: "ELSE",
-          sourceHandleId:
-            elseSourceHandleId ?? "14a8b603-6039-4491-92d4-868a4dae4c15",
-        },
-      ],
+      conditions: conditions,
       version: "2",
     },
     inputs:

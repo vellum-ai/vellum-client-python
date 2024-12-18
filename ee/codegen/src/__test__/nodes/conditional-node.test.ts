@@ -17,7 +17,7 @@ describe("ConditionalNode", () => {
     workflowContext = workflowContextFactory();
     writer = new Writer();
 
-    const nodeData = conditionalNodeFactory();
+    const nodeData = conditionalNodeFactory({ includeElif: true });
 
     workflowContext.addInputVariableContext(
       inputVariableContextFactory({

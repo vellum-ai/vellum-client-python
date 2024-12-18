@@ -31,6 +31,12 @@ class BaseNodeVellumDisplay(BaseNodeDisplay[NodeType]):
         return self._get_node_display_uuid("target_handle_id")
 
     def get_target_handle_id_by_source_node_id(self, source_node_id: UUID) -> UUID:
+        """
+        In the vast majority of cases, nodes will only have a single target handle and can be retrieved independently
+        of the source node. However, in rare cases (such as legacy Merge nodes), this method can be overridden to
+        account for the case of retrieving one amongst multiple target handles on a node.
+        """
+
         return self.get_target_handle_id()
 
     def get_source_handle_id(self, port_displays: Dict[Port, PortDisplay]) -> UUID:

@@ -234,6 +234,27 @@ class TestWorkflow(BaseWorkflow):
 "
 `;
 
+exports[`Workflow > write > graph > should be correct for two branches merging from sets 1`] = `
+"from vellum.workflows import BaseWorkflow
+from .nodes.conditional_node import ConditionalNode
+from .nodes.templating_node import TemplatingNode
+from .nodes.templating_node_3 import TemplatingNode3
+from .nodes.templating_node_5 import TemplatingNode5
+from .nodes.templating_node_2 import TemplatingNode2
+from .nodes.templating_node_4 import TemplatingNode4
+
+class TestWorkflow(BaseWorkflow):
+    graph = {
+        ConditionalNode.Ports.branch_1
+        >> TemplatingNode
+        >> {TemplatingNode3 >> TemplatingNode4, TemplatingNode5},
+        ConditionalNode.Ports.branch_2
+        >> TemplatingNode2
+        >> {TemplatingNode3 >> TemplatingNode4, TemplatingNode6},
+    }
+"
+`;
+
 exports[`Workflow > write > should generate correct code when there are input variables 1`] = `
 "from vellum.workflows import BaseWorkflow
 

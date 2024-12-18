@@ -28,12 +28,19 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
     ) -> JsonObject:
         node = self._node
         node_id = self.node_id
+        raw_code = raise_if_descriptor(node.code)
+        code_value = None
 
-        node_file_path = inspect.getfile(node)
-        code = read_file_from_path(
-            node_filepath=node_file_path,
-            script_filepath=(raise_if_descriptor(node.filepath)),  # type: ignore
-        )
+        if raw_code:
+            code_value = raw_code
+        else:
+            node_file_path = inspect.getfile(node)
+            file_code = read_file_from_path(
+                node_filepath=node_file_path,
+                script_filepath=(raise_if_descriptor(node.filepath)),  # type: ignore
+            )
+            code_value = file_code
+
         code_inputs = raise_if_descriptor(node.code_inputs)
 
         inputs = [
@@ -50,7 +57,7 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
         code_node_input = create_node_input(
             node_id=node_id,
             input_name="code",
-            value=code,
+            value=code_value,
             display_context=display_context,
             input_id=self.code_input_id,
         )

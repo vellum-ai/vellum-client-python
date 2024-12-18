@@ -12,7 +12,6 @@ from vellum.workflows.references import WorkflowInputReference
 from vellum.workflows.references.output import OutputReference
 from vellum.workflows.types.core import JsonArray, JsonObject
 from vellum.workflows.types.generics import WorkflowType
-from vellum_ee.workflows.display.nodes import BaseMergeNodeDisplay
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.types import PortDisplay
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
@@ -369,10 +368,7 @@ class VellumWorkflowDisplay(
         target_node_id = target_node_display.node_id
 
         target_handle_id: UUID
-        if isinstance(target_node_display, BaseMergeNodeDisplay):
-            target_handle_id = target_node_display.get_target_handle_id_by_source_node_id(source_node_id)
-        else:
-            target_handle_id = target_node_display.get_target_handle_id()
+        target_handle_id = target_node_display.get_target_handle_id_by_source_node_id(source_node_id)
 
         return self._generate_edge_display_from_source(
             source_node_id, source_handle_id, target_node_id, target_handle_id, overrides

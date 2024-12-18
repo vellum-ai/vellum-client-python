@@ -62,6 +62,63 @@ def main(word: str) -> int:
     )
 
 
+def test_run_workflow__code_attribute(vellum_client):
+    """Confirm that CodeExecutionNodes can use the `code` attribute to specify the code to execute."""
+
+    # GIVEN a node that subclasses CodeExecutionNode
+    class Inputs(BaseInputs):
+        word: str
+
+    class State(BaseState):
+        pass
+
+    class ExampleCodeExecutionNode(CodeExecutionNode[State, int]):
+        code = """\
+def main(word: str) -> int:
+    print(word)  # noqa: T201
+    return len(word)
+"""
+        runtime = "PYTHON_3_11_6"
+
+        code_inputs = {
+            "word": Inputs.word,
+        }
+
+    # AND we know what the Code Execution Node will respond with
+    mock_code_execution = CodeExecutorResponse(
+        log="hello",
+        output=NumberVellumValue(value=5),
+    )
+    vellum_client.execute_code.return_value = mock_code_execution
+
+    # WHEN we run the node
+    node = ExampleCodeExecutionNode(
+        state=State(
+            meta=StateMeta(workflow_inputs=Inputs(word="hello")),
+        )
+    )
+    outputs = node.run()
+
+    # THEN the node should have produced the outputs we expect
+    assert outputs == {"result": 5, "log": "hello"}
+
+    # AND we should have invoked the Code with the expected inputs
+    vellum_client.execute_code.assert_called_once_with(
+        input_values=[
+            StringInput(name="word", value="hello"),
+        ],
+        code="""\
+def main(word: str) -> int:
+    print(word)  # noqa: T201
+    return len(word)
+""",
+        runtime="PYTHON_3_11_6",
+        output_type="NUMBER",
+        packages=[],
+        request_options=None,
+    )
+
+
 def test_run_workflow__vellum_secret(vellum_client):
     """Confirm that CodeExecutionNodes can use Vellum Secrets"""
 

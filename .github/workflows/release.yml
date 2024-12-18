@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "versions.yaml"
+      - ".github/workflows/release.yml"
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Bootstrap poetry
+        run: make setup-poetry
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Create release
+        env:
+          VELLUM_AUTOMATION_APP_ID: ${{ secrets.VELLUM_AUTOMATION_APP_ID }}
+          VELLUM_AUTOMATION_PRIVATE_KEY: ${{ secrets.VELLUM_AUTOMATION_PRIVATE_KEY }}
+          VELLUM_AUTOMATION_INSTALLATION_ID: ${{ secrets.VELLUM_AUTOMATION_INSTALLATION_ID }}
+        run: poetry run scripts.create_release

@@ -1,5 +1,6 @@
 # Specify files that shouldn't be modified by Fern
 .github/workflows/ci-codegen.yaml
+.github/workflows/release.yml
 .pre-commit-config.yaml
 CONTRIBUTING.md
 ee

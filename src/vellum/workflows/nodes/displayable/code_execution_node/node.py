@@ -73,7 +73,8 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
     request_options: Optional[RequestOptions] = None - The request options to use for the custom script.
     """
 
-    filepath: ClassVar[str]
+    filepath: ClassVar[Optional[str]] = None
+    code: ClassVar[Optional[str]] = None
 
     code_inputs: ClassVar[EntityInputsInterface]
     runtime: CodeExecutionRuntime = "PYTHON_3_11_6"
@@ -190,6 +191,21 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
         return compiled_inputs
 
     def _resolve_code(self) -> str:
+        if self.code and self.filepath:
+            raise NodeException(
+                message="Cannot specify both `code` and `filepath` for a CodeExecutionNode",
+                code=VellumErrorCode.INVALID_INPUTS,
+            )
+
+        if self.code:
+            return self.code
+
+        if not self.filepath:
+            raise NodeException(
+                message="Must specify either `code` or `filepath` for a CodeExecutionNode",
+                code=VellumErrorCode.INVALID_INPUTS,
+            )
+
         root = inspect.getfile(self.__class__)
         code = read_file_from_path(node_filepath=root, script_filepath=self.filepath)
         if not code:

@@ -30,7 +30,10 @@ class BaseCodeExecutionNodeDisplay(BaseNodeVellumDisplay[_CodeExecutionNodeType]
         node_id = self.node_id
 
         node_file_path = inspect.getfile(node)
-        code = read_file_from_path(node_filepath=node_file_path, script_filepath=(raise_if_descriptor(node.filepath)))
+        code = read_file_from_path(
+            node_filepath=node_file_path,
+            script_filepath=(raise_if_descriptor(node.filepath)),  # type: ignore
+        )
         code_inputs = raise_if_descriptor(node.code_inputs)
 
         inputs = [

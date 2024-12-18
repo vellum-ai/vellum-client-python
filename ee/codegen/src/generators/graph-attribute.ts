@@ -336,7 +336,12 @@ export class GraphAttribute extends AstNode {
                 const portReference = newAstSources[0];
                 return {
                   type: "right_shift",
-                  lhs: portReference,
+                  lhs: portReference.reference.isDefault
+                    ? {
+                        type: "node_reference",
+                        reference: portReference.reference.nodeContext,
+                      }
+                    : portReference,
                   rhs: popSources(newSetAst),
                 };
               }
@@ -438,11 +443,7 @@ export class GraphAttribute extends AstNode {
     newSetAst: GraphSet,
     targetNode: BaseNodeContext<WorkflowDataNode>
   ): GraphMutableAst | undefined {
-    const isCommon = newSetAst.values.every((value) =>
-      this.getNodesInBranch(value).includes(targetNode)
-    );
-
-    if (isCommon) {
+    if (this.canBranchBeSplitByTargetNode(targetNode, newSetAst)) {
       const newLhs: GraphSet = {
         type: "set",
         values: [],
@@ -502,6 +503,41 @@ export class GraphAttribute extends AstNode {
         this.isNodeInBranch(targetNode, mutableAst.rhs)
       );
     } else if (mutableAst.type === "port_reference") {
+      return mutableAst.reference.nodeContext === targetNode;
+    }
+    return false;
+  }
+
+  /**
+   * Checks to see if the branch can be split by the target node. This is similar
+   * to `isNodeInBranch`, but for sets requires that the target node is splittable
+   * across all members
+   */
+  private canBranchBeSplitByTargetNode(
+    targetNode: BaseNodeContext<WorkflowDataNode> | null,
+    mutableAst: GraphMutableAst
+  ): boolean {
+    if (targetNode == null) {
+      return false;
+    }
+    if (mutableAst.type === "set") {
+      return mutableAst.values.every((value) =>
+        this.canBranchBeSplitByTargetNode(targetNode, value)
+      );
+    }
+    if (
+      mutableAst.type === "node_reference" &&
+      mutableAst.reference === targetNode
+    ) {
+      return true;
+    }
+    if (mutableAst.type === "right_shift") {
+      return (
+        this.canBranchBeSplitByTargetNode(targetNode, mutableAst.lhs) ||
+        this.canBranchBeSplitByTargetNode(targetNode, mutableAst.rhs)
+      );
+    }
+    if (mutableAst.type === "port_reference") {
       return mutableAst.reference.nodeContext === targetNode;
     }
     return false;
@@ -689,5 +725,31 @@ export class GraphAttribute extends AstNode {
 
   public write(writer: Writer): void {
     this.astNode.write(writer);
+  }
+
+  private debug(mutableAst: GraphMutableAst): string {
+    if (mutableAst.type === "right_shift") {
+      return `${this.debug(mutableAst.lhs)} >> ${this.debug(mutableAst.rhs)}`;
+    }
+
+    if (mutableAst.type === "node_reference") {
+      return mutableAst.reference.nodeClassName;
+    }
+
+    if (mutableAst.type === "port_reference") {
+      return `${mutableAst.reference.nodeContext.nodeClassName}.Ports.${mutableAst.reference.portName}`;
+    }
+
+    if (mutableAst.type === "set") {
+      return `{${mutableAst.values
+        .map((value) => this.debug(value))
+        .join(", ")}}`;
+    }
+
+    if (mutableAst.type === "empty") {
+      return "NULL";
+    }
+
+    return "";
   }
 }

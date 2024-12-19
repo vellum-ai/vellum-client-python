@@ -12,10 +12,10 @@ from vellum.workflows.references import WorkflowInputReference
 from vellum.workflows.references.output import OutputReference
 from vellum.workflows.types.core import JsonArray, JsonObject
 from vellum.workflows.types.generics import WorkflowType
+from vellum.workflows.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.types import PortDisplay
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.utils.vellum import infer_vellum_variable_type, primitive_to_vellum_value
 from vellum_ee.workflows.display.vellum import (
     EdgeVellumDisplay,

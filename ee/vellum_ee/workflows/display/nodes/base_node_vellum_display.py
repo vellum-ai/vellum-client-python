@@ -3,9 +3,9 @@ from typing import ClassVar, Dict, Optional
 
 from vellum.workflows.ports import Port
 from vellum.workflows.types.generics import NodeType
+from vellum.workflows.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.nodes.base_node_display import BaseNodeDisplay
 from vellum_ee.workflows.display.nodes.types import PortDisplay
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.vellum import NodeDisplayData
 
 

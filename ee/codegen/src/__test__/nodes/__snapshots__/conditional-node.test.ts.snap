@@ -109,7 +109,7 @@ from ..inputs import Inputs
 class ConditionalNode(BaseConditionalNode):
     class Ports(BaseConditionalNode.Ports):
         branch_1 = Port.on_if(Inputs.field.equals("testtest"))
-        branch_2 = Port.on_elif(Inputs.field.is_not_none)
+        branch_2 = Port.on_elif(Inputs.field.is_not_null())
         branch_3 = Port.on_else()
 "
 `;

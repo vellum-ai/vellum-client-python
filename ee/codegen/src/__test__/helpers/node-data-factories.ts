@@ -701,12 +701,16 @@ export function conditionalNodeFactory({
   targetHandleId,
   ifSourceHandleId,
   elseSourceHandleId,
+  inputReferenceId,
+  inputReferenceNodeId,
 }: {
   id?: string;
   label?: string;
   targetHandleId?: string;
   ifSourceHandleId?: string;
   elseSourceHandleId?: string;
+  inputReferenceId?: string;
+  inputReferenceNodeId?: string;
 } = {}): ConditionalNode {
   const nodeData: ConditionalNode = {
     id: id ?? "b81a4453-7b80-41ea-bd55-c62df8878fd3",
@@ -743,39 +747,75 @@ export function conditionalNodeFactory({
       ],
       version: "2",
     },
-    inputs: [
-      {
-        id: "2cb6582e-c329-4952-8598-097830b766c7",
-        key: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc.field",
-        value: {
-          rules: [
+    inputs:
+      inputReferenceId && inputReferenceNodeId
+        ? [
             {
-              type: "INPUT_VARIABLE",
-              data: {
-                inputVariableId: "d2287fee-98fb-421c-9464-e54d8f70f046",
+              id: "2cb6582e-c329-4952-8598-097830b766c7",
+              key: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc.field",
+              value: {
+                rules: [
+                  {
+                    type: "NODE_OUTPUT",
+                    data: {
+                      nodeId: inputReferenceNodeId,
+                      outputId: inputReferenceId,
+                    },
+                  },
+                ],
+                combinator: "OR",
+              },
+            },
+            {
+              id: "cf63d0ad-5e52-4031-a29f-922e7004cdd8",
+              key: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc.value",
+              value: {
+                rules: [
+                  {
+                    type: "CONSTANT_VALUE",
+                    data: {
+                      type: "STRING",
+                      value: "testtest",
+                    },
+                  },
+                ],
+                combinator: "OR",
+              },
+            },
+          ]
+        : [
+            {
+              id: "2cb6582e-c329-4952-8598-097830b766c7",
+              key: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc.field",
+              value: {
+                rules: [
+                  {
+                    type: "INPUT_VARIABLE",
+                    data: {
+                      inputVariableId: "d2287fee-98fb-421c-9464-e54d8f70f046",
+                    },
+                  },
+                ],
+                combinator: "OR",
+              },
+            },
+            {
+              id: "cf63d0ad-5e52-4031-a29f-922e7004cdd8",
+              key: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc.value",
+              value: {
+                rules: [
+                  {
+                    type: "CONSTANT_VALUE",
+                    data: {
+                      type: "STRING",
+                      value: "testtest",
+                    },
+                  },
+                ],
+                combinator: "OR",
               },
             },
           ],
-          combinator: "OR",
-        },
-      },
-      {
-        id: "cf63d0ad-5e52-4031-a29f-922e7004cdd8",
-        key: "ad6bcb67-f21b-4af9-8d4b-ac8d3ba297cc.value",
-        value: {
-          rules: [
-            {
-              type: "CONSTANT_VALUE",
-              data: {
-                type: "STRING",
-                value: "testtest",
-              },
-            },
-          ],
-          combinator: "OR",
-        },
-      },
-    ],
     displayData: {
       width: 480,
       height: 180,

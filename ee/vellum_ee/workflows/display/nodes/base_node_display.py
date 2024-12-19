@@ -37,8 +37,9 @@ class BaseNodeDisplayMeta(type):
     def __new__(mcs, name: str, bases: Tuple[Type, ...], dct: Dict[str, Any]) -> Any:
         cls = super().__new__(mcs, name, bases, dct)
         if isinstance(dct.get("node_id"), UUID):
-            original_base = get_original_base(cls)
-            node_class = get_args(original_base)[0]
+            # Display classes are able to override the id of the node class it's parameterized by
+            base_node_display_class = cast(Type["BaseNodeDisplay"], cls)
+            node_class = base_node_display_class.infer_node_class()
             node_class.__id__ = dct["node_id"]
         return cls
 

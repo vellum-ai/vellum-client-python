@@ -1,7 +1,20 @@
 from functools import cached_property
 import inspect
 from uuid import UUID
-from typing import TYPE_CHECKING, Any, Dict, ForwardRef, Generic, Optional, Type, TypeVar, cast, get_args, get_origin
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Dict,
+    ForwardRef,
+    Generic,
+    Optional,
+    Tuple,
+    Type,
+    TypeVar,
+    cast,
+    get_args,
+    get_origin,
+)
 
 from vellum.workflows.nodes.bases.base import BaseNode
 from vellum.workflows.ports import Port
@@ -10,8 +23,8 @@ from vellum.workflows.types.core import JsonObject
 from vellum.workflows.types.generics import NodeType
 from vellum.workflows.types.utils import get_original_base
 from vellum.workflows.utils.names import pascal_to_title_case
+from vellum.workflows.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.nodes.types import NodeOutputDisplay, PortDisplay, PortDisplayOverrides
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.vellum import CodeResourceDefinition, NodeDefinition
 
 if TYPE_CHECKING:
@@ -20,7 +33,18 @@ if TYPE_CHECKING:
 _NodeDisplayAttrType = TypeVar("_NodeDisplayAttrType")
 
 
-class BaseNodeDisplay(Generic[NodeType]):
+class BaseNodeDisplayMeta(type):
+    def __new__(mcs, name: str, bases: Tuple[Type, ...], dct: Dict[str, Any]) -> Any:
+        cls = super().__new__(mcs, name, bases, dct)
+        if isinstance(dct.get("node_id"), UUID):
+            # Display classes are able to override the id of the node class it's parameterized by
+            base_node_display_class = cast(Type["BaseNodeDisplay"], cls)
+            node_class = base_node_display_class.infer_node_class()
+            node_class.__id__ = dct["node_id"]
+        return cls
+
+
+class BaseNodeDisplay(Generic[NodeType], metaclass=BaseNodeDisplayMeta):
     output_display: Dict[OutputReference, NodeOutputDisplay] = {}
     port_displays: Dict[Port, PortDisplayOverrides] = {}
 

@@ -23,6 +23,7 @@ from vellum.workflows.state.context import WorkflowContext
 from vellum.workflows.types.core import MergeBehavior
 from vellum.workflows.types.generics import StateType
 from vellum.workflows.types.utils import get_class_attr_names, get_original_base, infer_types
+from vellum.workflows.utils.uuids import uuid4_from_hash
 
 
 def is_nested_class(nested: Any, parent: Type) -> bool:
@@ -99,6 +100,7 @@ class BaseNodeMeta(type):
         node_class.Execution.node_class = node_class
         node_class.Trigger.node_class = node_class
         node_class.ExternalInputs.__parent_class__ = node_class
+        node_class.__id__ = uuid4_from_hash(node_class.__qualname__)
         return node_class
 
     @property
@@ -213,6 +215,7 @@ class _BaseNodeExecutionMeta(type):
 
 
 class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
+    __id__: UUID = uuid4_from_hash(__qualname__)
     state: StateType
     _context: WorkflowContext
     _inputs: MappingProxyType[NodeReference, Any]
@@ -352,3 +355,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
 
     def __repr__(self) -> str:
         return str(self.__class__)
+
+
+class MyNode2(BaseNode):
+    pass

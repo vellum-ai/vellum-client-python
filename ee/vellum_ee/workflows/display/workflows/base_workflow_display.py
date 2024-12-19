@@ -14,6 +14,7 @@ from vellum.workflows.ports import Port
 from vellum.workflows.references import OutputReference, WorkflowInputReference
 from vellum.workflows.types.core import JsonObject
 from vellum.workflows.types.generics import WorkflowType
+from vellum.workflows.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.base import (
     EdgeDisplayOverridesType,
     EdgeDisplayType,
@@ -29,7 +30,6 @@ from vellum_ee.workflows.display.base import (
 from vellum_ee.workflows.display.nodes.get_node_display_class import get_node_display_class
 from vellum_ee.workflows.display.nodes.types import NodeOutputDisplay, PortDisplay, PortDisplayOverrides
 from vellum_ee.workflows.display.types import NodeDisplayType, WorkflowDisplayContext
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 
 logger = logging.getLogger(__name__)
 

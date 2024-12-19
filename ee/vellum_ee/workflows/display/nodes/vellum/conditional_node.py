@@ -25,10 +25,10 @@ from vellum.workflows.expressions.not_in import NotInExpression
 from vellum.workflows.expressions.or_ import OrExpression
 from vellum.workflows.nodes.displayable import ConditionalNode
 from vellum.workflows.types.core import ConditionType, JsonObject
+from vellum.workflows.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.vellum import NodeInput
 
 _ConditionalNodeType = TypeVar("_ConditionalNodeType", bound=ConditionalNode)

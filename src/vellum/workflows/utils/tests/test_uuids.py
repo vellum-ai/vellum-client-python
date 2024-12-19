@@ -1,7 +1,7 @@
 import pytest
 from uuid import UUID
 
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
+from vellum.workflows.utils.uuids import uuid4_from_hash
 
 
 @pytest.mark.parametrize(

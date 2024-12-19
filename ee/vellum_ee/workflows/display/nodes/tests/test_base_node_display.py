@@ -45,3 +45,4 @@ def test_get_id(node_info):
     node, node_display, expected_id = node_info
 
     assert node_display(node).node_id == expected_id
+    assert node.__id__ == expected_id

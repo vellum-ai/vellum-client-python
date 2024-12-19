@@ -5,8 +5,8 @@ from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.expressions.coalesce_expression import CoalesceExpression
 from vellum.workflows.nodes.utils import get_wrapped_node, has_wrapped_node
 from vellum.workflows.references import NodeReference, OutputReference
+from vellum.workflows.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.utils.vellum import create_node_input_value_pointer_rule, primitive_to_vellum_value
 from vellum_ee.workflows.display.vellum import (
     ConstantValuePointer,

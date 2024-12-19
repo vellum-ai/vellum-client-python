@@ -142,12 +142,4 @@ class BaseNodeDisplay(Generic[NodeType]):
         super().__init_subclass__(**kwargs)
 
         node_class = cls.infer_node_class()
-        # if "SimpleCode" in node_class.__module__:
-        #     breakpoint()
-        # if has_wrapped_node(node_class):
-        #     wrapped_node = get_wrapped_node(node_class)
-        #     if wrapped_node._is_wrapped_node:
-        #         cls._node_display_registry[wrapped_node] = cls
-        #         return
-
         cls._node_display_registry[node_class] = cls

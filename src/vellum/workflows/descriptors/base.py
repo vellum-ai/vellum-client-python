@@ -258,12 +258,12 @@ class BaseDescriptor(Generic[_T]):
 
         return DoesNotEndWithExpression(lhs=self, rhs=other)
 
-    def is_none(self) -> "IsNullExpression":
+    def is_null(self) -> "IsNullExpression":
         from vellum.workflows.expressions.is_null import IsNullExpression
 
         return IsNullExpression(expression=self)
 
-    def is_not_none(self) -> "IsNotNullExpression":
+    def is_not_null(self) -> "IsNotNullExpression":
         from vellum.workflows.expressions.is_not_null import IsNotNullExpression
 
         return IsNotNullExpression(expression=self)

@@ -46,11 +46,11 @@ export class ConditionalNode extends BaseSingleFileNode<
     });
     Array.from(this.workflowContext.portContextById.entries()).forEach(
       ([portId, context]) => {
-        const conditionData = this.nodeData.data.conditions.find(
-          (condition) => condition.sourceHandleId === portId
-        );
+        const conditionDataWithIndex = [
+          ...this.nodeData.data.conditions.entries(),
+        ].find(([_, condition]) => condition.sourceHandleId === portId);
 
-        if (!conditionData) {
+        if (!conditionDataWithIndex) {
           return;
         }
 
@@ -61,8 +61,9 @@ export class ConditionalNode extends BaseSingleFileNode<
               portContext: context,
               inputFieldKeysByRuleId: inputFieldKeysByRuleId,
               valueInputKeysByRuleId: valueInputKeysByRuleId,
-              conditionData: conditionData,
+              conditionDataWithIndex: conditionDataWithIndex,
               nodeInputsByKey: this.nodeInputsByKey,
+              nodeLabel: this.nodeData.data.label,
             }),
           })
         );

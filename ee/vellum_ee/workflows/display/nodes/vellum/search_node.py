@@ -10,11 +10,11 @@ from vellum import (
 from vellum.workflows.nodes.displayable.search_node import SearchNode
 from vellum.workflows.references import OutputReference
 from vellum.workflows.types.core import JsonArray, JsonObject
+from vellum.workflows.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
 from vellum_ee.workflows.display.nodes.vellum.utils import create_node_input
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
-from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 from vellum_ee.workflows.display.vellum import InputVariablePointer, NodeInput
 
 _SearchNodeType = TypeVar("_SearchNodeType", bound=SearchNode)

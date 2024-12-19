@@ -1,3 +1,4 @@
+from uuid import UUID
 from typing import Optional
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
@@ -122,3 +123,15 @@ def test_base_node__node_resolution__coalesce_constants():
 
     # THEN the node is initialized with the correct data
     assert node.value == "world"
+
+
+def test_base_node__default_id():
+    # GIVEN a node
+    class MyNode(BaseNode):
+        pass
+
+    # WHEN the node is accessed
+    my_id = MyNode.__id__
+
+    # THEN it should equal the hash of `test_base_node__default_id.<locals>.MyNode`
+    assert my_id == UUID("8e71bea7-ce68-492f-9abe-477c788e6273")

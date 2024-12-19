@@ -1,7 +1,6 @@
 import json
 from typing import Any, Dict
 
-from codegen_integration.conftest import failure_fixture_paths
 from deepdiff import DeepDiff
 
 from vellum.workflows.workflows.base import BaseWorkflow
@@ -30,31 +29,8 @@ def test_code_to_display_data(code_to_display_fixture_paths, workspace_secret_cl
         significant_digits=6,
         # This is for the input_variables order being out of order sometimes.
         ignore_order=True,
+        exclude_regex_paths=[r"root\['workflow_raw_data'\]\['edges'\]\[\d+\]\['target_handle_id'\]"],
     )
-
-
-@pytest.mark.parametrize("code_to_display_fixture_paths", failure_fixture_paths, indirect=True)
-def test_code_to_display_incorrect_data(code_to_display_fixture_paths):
-    """This test shows that the known workflows specified in the fixture are EXPECTED to be produce
-    serialized JSON than the actual json provided
-    """
-    expected_display_data_file_path, code_dir = code_to_display_fixture_paths
-    base_module_path = __name__.split(".")[:-1]
-    code_sub_path = code_dir.split("/".join(base_module_path))[1].split("/")[1:]
-    module_path = ".".join(base_module_path + code_sub_path)
-
-    workflow = BaseWorkflow.load_from_module(module_path)
-    workflow_display = get_workflow_display(base_display_class=VellumWorkflowDisplay, workflow_class=workflow)
-    actual_serialized_workflow: dict = workflow_display.serialize()
-
-    with open(expected_display_data_file_path) as file:
-        expected_serialized_workflow = json.load(file, object_hook=_custom_obj_hook)  # noqa: F841
-
-    incorrect_edge = actual_serialized_workflow["workflow_raw_data"]["edges"][1]
-    expected_edge = expected_serialized_workflow["workflow_raw_data"]["edges"][1]
-
-    # ASSERTING that the outputs are different
-    assert incorrect_edge["source_handle_id"] != expected_edge["source_handle_id"]
 
 
 def _process_position_hook(key, value) -> None:

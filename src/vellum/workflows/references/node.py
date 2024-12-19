@@ -4,7 +4,7 @@ from pydantic import GetCoreSchemaHandler
 from pydantic_core import core_schema
 
 from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 
 if TYPE_CHECKING:
@@ -30,7 +30,7 @@ class NodeReference(BaseDescriptor[_T]):
     def resolve(self, state: "BaseState") -> _T:
         raise NodeException(
             f"NodeDescriptors cannot be resolved during runtime. Got: {self._name}",
-            code=VellumErrorCode.INTERNAL_ERROR,
+            code=WorkflowErrorCode.INTERNAL_ERROR,
         )
 
     def __repr__(self) -> str:

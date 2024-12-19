@@ -1,4 +1,4 @@
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 
 from tests.workflows.invalid_node_outputs.workflow import InvalidNodeWorkflow
 
@@ -14,5 +14,5 @@ def test_run_workflow__happy_path():
     assert terminal_event.name == "workflow.execution.rejected", terminal_event
 
     # AND the outputs should be defaulted correctly
-    assert terminal_event.error.code == VellumErrorCode.INVALID_OUTPUTS, terminal_event.error.message
+    assert terminal_event.error.code == WorkflowErrorCode.INVALID_OUTPUTS, terminal_event.error.message
     assert terminal_event.error.message == "Node InvalidNode did not return a valid node run response"

@@ -10,7 +10,7 @@ from vellum.workflows.constants import UNDEF
 from vellum.workflows.context import execution_context, get_parent_context
 from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.edges.edge import Edge
-from vellum.workflows.errors import VellumError, VellumErrorCode
+from vellum.workflows.errors import WorkflowError, WorkflowErrorCode
 from vellum.workflows.events import (
     NodeExecutionFulfilledEvent,
     NodeExecutionInitiatedEvent,
@@ -184,14 +184,14 @@ class WorkflowRunner(Generic[StateType]):
             if not isinstance(node_run_response, (BaseOutputs, Iterator)):
                 raise NodeException(
                     message=f"Node {node.__class__.__name__} did not return a valid node run response",
-                    code=VellumErrorCode.INVALID_OUTPUTS,
+                    code=WorkflowErrorCode.INVALID_OUTPUTS,
                 )
 
             if isinstance(node_run_response, BaseOutputs):
                 if not isinstance(node_run_response, node.Outputs):
                     raise NodeException(
                         message=f"Node {node.__class__.__name__} did not return a valid outputs object",
-                        code=VellumErrorCode.INVALID_OUTPUTS,
+                        code=WorkflowErrorCode.INVALID_OUTPUTS,
                     )
 
                 outputs = node_run_response
@@ -312,9 +312,9 @@ class WorkflowRunner(Generic[StateType]):
                     span_id=span_id,
                     body=NodeExecutionRejectedBody(
                         node_definition=node.__class__,
-                        error=VellumError(
+                        error=WorkflowError(
                             message=str(e),
-                            code=VellumErrorCode.INTERNAL_ERROR,
+                            code=WorkflowErrorCode.INTERNAL_ERROR,
                         ),
                     ),
                     parent=parent_context,
@@ -375,7 +375,7 @@ class WorkflowRunner(Generic[StateType]):
             )
             worker_thread.start()
 
-    def _handle_work_item_event(self, event: WorkflowEvent) -> Optional[VellumError]:
+    def _handle_work_item_event(self, event: WorkflowEvent) -> Optional[WorkflowError]:
         node = self._active_nodes_by_execution_id.get(event.span_id)
         if not node:
             return None
@@ -449,7 +449,7 @@ class WorkflowRunner(Generic[StateType]):
             parent=self._parent_context,
         )
 
-    def _reject_workflow_event(self, error: VellumError) -> WorkflowExecutionRejectedEvent:
+    def _reject_workflow_event(self, error: WorkflowError) -> WorkflowExecutionRejectedEvent:
         return WorkflowExecutionRejectedEvent(
             trace_id=self._initial_state.meta.trace_id,
             span_id=self._initial_state.meta.span_id,
@@ -486,9 +486,9 @@ class WorkflowRunner(Generic[StateType]):
         if not self._entrypoints:
             self._workflow_event_outer_queue.put(
                 self._reject_workflow_event(
-                    VellumError(
+                    WorkflowError(
                         message="No entrypoints defined",
-                        code=VellumErrorCode.INVALID_WORKFLOW,
+                        code=WorkflowErrorCode.INVALID_WORKFLOW,
                     )
                 )
             )
@@ -515,12 +515,12 @@ class WorkflowRunner(Generic[StateType]):
                 logger.exception(err_message)
                 self._workflow_event_outer_queue.put(
                     self._reject_workflow_event(
-                        VellumError(code=VellumErrorCode.INTERNAL_ERROR, message=err_message),
+                        WorkflowError(code=WorkflowErrorCode.INTERNAL_ERROR, message=err_message),
                     )
                 )
                 return
 
-        rejection_error: Optional[VellumError] = None
+        rejection_error: Optional[WorkflowError] = None
 
         while True:
             if not self._active_nodes_by_execution_id:
@@ -602,8 +602,8 @@ class WorkflowRunner(Generic[StateType]):
         self._cancel_signal.wait()
         self._workflow_event_outer_queue.put(
             self._reject_workflow_event(
-                VellumError(
-                    code=VellumErrorCode.WORKFLOW_CANCELLED,
+                WorkflowError(
+                    code=WorkflowErrorCode.WORKFLOW_CANCELLED,
                     message="Workflow run cancelled",
                 )
             )
@@ -666,8 +666,8 @@ class WorkflowRunner(Generic[StateType]):
 
         if not self._is_terminal_event(event):
             yield self._reject_workflow_event(
-                VellumError(
-                    code=VellumErrorCode.INTERNAL_ERROR,
+                WorkflowError(
+                    code=WorkflowErrorCode.INTERNAL_ERROR,
                     message="An unexpected error occurred while streaming Workflow events",
                 )
             )

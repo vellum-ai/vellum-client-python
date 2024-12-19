@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, TypeVar, cast
 
 from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 
 if TYPE_CHECKING:
@@ -20,4 +20,4 @@ class StateValueReference(BaseDescriptor[_T]):
         if state.meta.parent:
             return self.resolve(state.meta.parent)
 
-        raise NodeException(f"Missing required Workflow state: {self._name}", code=VellumErrorCode.INVALID_STATE)
+        raise NodeException(f"Missing required Workflow state: {self._name}", code=WorkflowErrorCode.INVALID_STATE)

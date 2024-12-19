@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, Generic, List, Literal, Optional, S
 from pydantic import SerializerFunctionWrapHandler, field_serializer, model_serializer
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
-from vellum.workflows.errors import VellumError
+from vellum.workflows.errors import WorkflowError
 from vellum.workflows.expressions.accessor import AccessorExpression
 from vellum.workflows.outputs.base import BaseOutput
 from vellum.workflows.ports.port import Port
@@ -119,7 +119,7 @@ class NodeExecutionFulfilledEvent(_BaseNodeEvent, Generic[OutputsType]):
 
 
 class NodeExecutionRejectedBody(_BaseNodeExecutionBody):
-    error: VellumError
+    error: WorkflowError
 
 
 class NodeExecutionRejectedEvent(_BaseNodeEvent):
@@ -127,7 +127,7 @@ class NodeExecutionRejectedEvent(_BaseNodeEvent):
     body: NodeExecutionRejectedBody
 
     @property
-    def error(self) -> VellumError:
+    def error(self) -> WorkflowError:
         return self.body.error
 
 

@@ -20,7 +20,7 @@ from vellum import (
     VellumValue,
 )
 from vellum.core import RequestOptions
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.nodes.bases.base import BaseNodeMeta
@@ -102,7 +102,7 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
 
         if code_execution.output.type != expected_output_type:
             raise NodeException(
-                code=VellumErrorCode.INVALID_OUTPUTS,
+                code=WorkflowErrorCode.INVALID_OUTPUTS,
                 message=f"Expected an output of type '{expected_output_type}', received '{code_execution.output.type}'",
             )
 
@@ -185,7 +185,7 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
             else:
                 raise NodeException(
                     message=f"Unrecognized input type for input '{input_name}'",
-                    code=VellumErrorCode.INVALID_INPUTS,
+                    code=WorkflowErrorCode.INVALID_INPUTS,
                 )
 
         return compiled_inputs
@@ -194,7 +194,7 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
         if self.code and self.filepath:
             raise NodeException(
                 message="Cannot specify both `code` and `filepath` for a CodeExecutionNode",
-                code=VellumErrorCode.INVALID_INPUTS,
+                code=WorkflowErrorCode.INVALID_INPUTS,
             )
 
         if self.code:
@@ -203,7 +203,7 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
         if not self.filepath:
             raise NodeException(
                 message="Must specify either `code` or `filepath` for a CodeExecutionNode",
-                code=VellumErrorCode.INVALID_INPUTS,
+                code=WorkflowErrorCode.INVALID_INPUTS,
             )
 
         root = inspect.getfile(self.__class__)
@@ -211,7 +211,7 @@ class CodeExecutionNode(BaseNode[StateType], Generic[StateType, _OutputType], me
         if not code:
             raise NodeException(
                 message=f"Filepath '{self.filepath}' does not exist",
-                code=VellumErrorCode.INVALID_INPUTS,
+                code=WorkflowErrorCode.INVALID_INPUTS,
             )
 
         return code

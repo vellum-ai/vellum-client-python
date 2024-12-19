@@ -1,4 +1,4 @@
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.bases.base import BaseNode
@@ -22,7 +22,7 @@ class StartNode(BaseNode):
 
     def run(self) -> Outputs:
         if self.arg < 5:
-            raise NodeException(message="This is a flaky node", code=VellumErrorCode.INVALID_OUTPUTS)
+            raise NodeException(message="This is a flaky node", code=WorkflowErrorCode.INVALID_OUTPUTS)
         return self.Outputs(value=self.arg)
 
 

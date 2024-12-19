@@ -1,6 +1,6 @@
 import pytest
 
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.bases import BaseNode
@@ -11,7 +11,7 @@ from vellum.workflows.state.base import BaseState, StateMeta
 
 def test_retry_node__retry_on_error_code__successfully_retried():
     # GIVEN a retry node that is configured to retry on PROVIDER_ERROR
-    @RetryNode.wrap(max_attempts=3, retry_on_error_code=VellumErrorCode.PROVIDER_ERROR)
+    @RetryNode.wrap(max_attempts=3, retry_on_error_code=WorkflowErrorCode.PROVIDER_ERROR)
     class TestNode(BaseNode):
         attempt_number = RetryNode.SubworkflowInputs.attempt_number
 
@@ -20,7 +20,7 @@ def test_retry_node__retry_on_error_code__successfully_retried():
 
         def run(self) -> Outputs:
             if self.attempt_number < 3:
-                raise NodeException(message="This will be retried", code=VellumErrorCode.PROVIDER_ERROR)
+                raise NodeException(message="This will be retried", code=WorkflowErrorCode.PROVIDER_ERROR)
 
             return self.Outputs(execution_count=self.attempt_number)
 
@@ -34,7 +34,7 @@ def test_retry_node__retry_on_error_code__successfully_retried():
 
 def test_retry_node__retry_on_error_code__missed():
     # GIVEN a retry node that is configured to retry on PROVIDER_ERROR
-    @RetryNode.wrap(max_attempts=3, retry_on_error_code=VellumErrorCode.PROVIDER_ERROR)
+    @RetryNode.wrap(max_attempts=3, retry_on_error_code=WorkflowErrorCode.PROVIDER_ERROR)
     class TestNode(BaseNode):
         attempt_number = RetryNode.SubworkflowInputs.attempt_number
 
@@ -57,7 +57,7 @@ def test_retry_node__retry_on_error_code__missed():
         exc_info.value.message
         == "Unexpected rejection on attempt 1: INTERNAL_ERROR.\nMessage: This will not be retried"
     )
-    assert exc_info.value.code == VellumErrorCode.INVALID_OUTPUTS
+    assert exc_info.value.code == WorkflowErrorCode.INVALID_OUTPUTS
 
 
 def test_retry_node__use_parent_inputs_and_state():
@@ -69,7 +69,7 @@ def test_retry_node__use_parent_inputs_and_state():
         bar: str
 
     # AND a retry node that uses the parent's inputs and state
-    @RetryNode.wrap(max_attempts=3, retry_on_error_code=VellumErrorCode.PROVIDER_ERROR)
+    @RetryNode.wrap(max_attempts=3, retry_on_error_code=WorkflowErrorCode.PROVIDER_ERROR)
     class TestNode(BaseNode):
         foo = Inputs.foo
         bar = State.bar

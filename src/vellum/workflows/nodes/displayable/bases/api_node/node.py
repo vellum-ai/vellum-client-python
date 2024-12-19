@@ -4,7 +4,7 @@ from requests import Request, RequestException, Session
 from requests.exceptions import JSONDecodeError
 
 from vellum.workflows.constants import APIRequestMethod
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs import BaseOutputs
@@ -49,13 +49,13 @@ class BaseAPINode(BaseNode, Generic[StateType]):
         try:
             prepped = Request(method=method.value, url=url, data=data, json=json, headers=headers).prepare()
         except Exception as e:
-            raise NodeException(f"Failed to prepare HTTP request: {e}", code=VellumErrorCode.PROVIDER_ERROR)
+            raise NodeException(f"Failed to prepare HTTP request: {e}", code=WorkflowErrorCode.PROVIDER_ERROR)
 
         try:
             with Session() as session:
                 response = session.send(prepped)
         except RequestException as e:
-            raise NodeException(f"HTTP request failed: {e}", code=VellumErrorCode.PROVIDER_ERROR)
+            raise NodeException(f"HTTP request failed: {e}", code=WorkflowErrorCode.PROVIDER_ERROR)
 
         try:
             json = response.json()

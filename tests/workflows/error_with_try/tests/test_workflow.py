@@ -1,4 +1,4 @@
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 
 from tests.workflows.error_with_try.workflow import ErrorWithTryWorkflow, Inputs
 
@@ -20,4 +20,4 @@ def test_workflow__error_node_rejects():
 
     # AND the error message will be the one defined in the error node
     assert terminal_event.error.message == "This is a flaky node"
-    assert terminal_event.error.code == VellumErrorCode.INVALID_OUTPUTS
+    assert terminal_event.error.code == WorkflowErrorCode.INVALID_OUTPUTS

@@ -34,7 +34,7 @@ from typing import (
 
 from vellum.workflows.edges import Edge
 from vellum.workflows.emitters.base import BaseWorkflowEmitter
-from vellum.workflows.errors import VellumError, VellumErrorCode
+from vellum.workflows.errors import WorkflowError, WorkflowErrorCode
 from vellum.workflows.events.node import (
     NodeExecutionFulfilledBody,
     NodeExecutionFulfilledEvent,
@@ -234,8 +234,8 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
                 trace_id=uuid4(),
                 span_id=uuid4(),
                 body=WorkflowExecutionRejectedBody(
-                    error=VellumError(
-                        code=VellumErrorCode.INTERNAL_ERROR,
+                    error=WorkflowError(
+                        code=WorkflowErrorCode.INTERNAL_ERROR,
                         message="No events were emitted",
                     ),
                     workflow_definition=self.__class__,
@@ -247,8 +247,8 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
                 trace_id=uuid4(),
                 span_id=uuid4(),
                 body=WorkflowExecutionRejectedBody(
-                    error=VellumError(
-                        code=VellumErrorCode.INTERNAL_ERROR,
+                    error=WorkflowError(
+                        code=WorkflowErrorCode.INTERNAL_ERROR,
                         message="Initiated event was never emitted",
                     ),
                     workflow_definition=self.__class__,
@@ -267,8 +267,8 @@ class BaseWorkflow(Generic[WorkflowInputsType, StateType], metaclass=_BaseWorkfl
             span_id=first_event.span_id,
             body=WorkflowExecutionRejectedBody(
                 workflow_definition=self.__class__,
-                error=VellumError(
-                    code=VellumErrorCode.INTERNAL_ERROR,
+                error=WorkflowError(
+                    code=WorkflowErrorCode.INTERNAL_ERROR,
                     message=f"Unexpected last event name found: {last_event.name}",
                 ),
             ),

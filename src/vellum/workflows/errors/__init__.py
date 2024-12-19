@@ -1,6 +1,6 @@
-from .types import VellumError, VellumErrorCode
+from .types import WorkflowError, WorkflowErrorCode
 
 __all__ = [
-    "VellumError",
-    "VellumErrorCode",
+    "WorkflowError",
+    "WorkflowErrorCode",
 ]

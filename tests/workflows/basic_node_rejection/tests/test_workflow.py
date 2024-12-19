@@ -1,4 +1,4 @@
-from vellum.workflows.errors import VellumErrorCode
+from vellum.workflows.errors import WorkflowErrorCode
 
 from tests.workflows.basic_node_rejection.workflow import BasicRejectedWorkflow
 
@@ -14,5 +14,5 @@ def test_run_workflow__happy_path():
     assert terminal_event.name == "workflow.execution.rejected", terminal_event
 
     # AND the output error message should be as expected
-    assert terminal_event.error.code == VellumErrorCode.USER_DEFINED_ERROR
+    assert terminal_event.error.code == WorkflowErrorCode.USER_DEFINED_ERROR
     assert terminal_event.error.message == "Node was rejected"

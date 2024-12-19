@@ -7,7 +7,7 @@ from typing import Any, Dict, Generic, Iterator, Optional, Set, Tuple, Type, Typ
 from vellum.workflows.constants import UNDEF
 from vellum.workflows.descriptors.base import BaseDescriptor
 from vellum.workflows.descriptors.utils import is_unresolved, resolve_value
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.graph import Graph
 from vellum.workflows.graph.graph import GraphTarget
@@ -284,7 +284,7 @@ class BaseNode(Generic[StateType], metaclass=BaseNodeMeta):
 
             raise NodeException(
                 message="Invalid Trigger Node Specification",
-                code=VellumErrorCode.INVALID_INPUTS,
+                code=WorkflowErrorCode.INVALID_INPUTS,
             )
 
     class Execution(metaclass=_BaseNodeExecutionMeta):

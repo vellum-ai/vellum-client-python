@@ -4,7 +4,7 @@ from uuid import UUID
 
 from deepdiff import DeepDiff
 
-from vellum.workflows.errors.types import VellumError, VellumErrorCode
+from vellum.workflows.errors.types import WorkflowError, WorkflowErrorCode
 from vellum.workflows.events.node import (
     NodeExecutionFulfilledBody,
     NodeExecutionFulfilledEvent,
@@ -213,9 +213,9 @@ module_root = name_parts[: name_parts.index("events")]
                 span_id=UUID("123e4567-e89b-12d3-a456-426614174000"),
                 body=WorkflowExecutionRejectedBody(
                     workflow_definition=MockWorkflow,
-                    error=VellumError(
+                    error=WorkflowError(
                         message="Workflow failed",
-                        code=VellumErrorCode.USER_DEFINED_ERROR,
+                        code=WorkflowErrorCode.USER_DEFINED_ERROR,
                     ),
                 ),
             ),

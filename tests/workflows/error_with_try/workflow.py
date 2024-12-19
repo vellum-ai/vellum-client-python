@@ -28,7 +28,7 @@ class StartNode(BaseNode):
 
 class RouterNode(BaseNode):
     class Ports(BaseNode.Ports):
-        success = Port.on_if(StartNode.Outputs.error.is_none())
+        success = Port.on_if(StartNode.Outputs.error.is_null())
         fail = Port.on_else()
 
 

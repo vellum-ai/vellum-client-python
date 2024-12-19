@@ -11,7 +11,7 @@ class StartNode(BaseNode):
         value: str
 
     class Ports(BaseNode.Ports):
-        first = Port.on_if(LazyReference(lambda: StartNode.Outputs.value.is_none()))
+        first = Port.on_if(LazyReference(lambda: StartNode.Outputs.value.is_null()))
         second = Port.on_else()
 
 

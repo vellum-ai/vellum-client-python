@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Any, ClassVar, Generic, List, Optional, Type, TypeVar
+from typing import Any, ClassVar, Generic, List, Optional, TypeVar
 
 from vellum.workflows.nodes.displayable import MergeNode
 from vellum.workflows.types.core import JsonObject
@@ -14,8 +14,8 @@ _MergeNodeType = TypeVar("_MergeNodeType", bound=MergeNode)
 class BaseMergeNodeDisplay(BaseNodeVellumDisplay[_MergeNodeType], Generic[_MergeNodeType]):
     target_handle_ids: ClassVar[List[UUID]]
 
-    def __init__(self, node: Type[_MergeNodeType]):
-        super().__init__(node)
+    def __init__(self):
+        super().__init__()
         self._target_handle_iterator = 0
 
     def serialize(self, display_context: WorkflowDisplayContext, **kwargs: Any) -> JsonObject:

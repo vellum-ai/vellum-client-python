@@ -154,7 +154,7 @@ class BaseWorkflowDisplay(
 
     def _get_node_display(self, node: Type[BaseNode]) -> NodeDisplayType:
         node_display_class = get_node_display_class(self.node_display_base_class, node)
-        node_display = node_display_class(node)
+        node_display = node_display_class()
 
         if not isinstance(node_display, self.node_display_base_class):
             raise ValueError(f"{node.__name__} must be a subclass of {self.node_display_base_class.__name__}")

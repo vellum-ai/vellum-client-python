@@ -1,10 +1,9 @@
 from functools import cached_property
 import inspect
 from uuid import UUID
-from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Type, TypeVar, cast, get_args, get_origin
+from typing import TYPE_CHECKING, Any, Dict, ForwardRef, Generic, Optional, Type, TypeVar, cast, get_args, get_origin
 
 from vellum.workflows.nodes.bases.base import BaseNode
-from vellum.workflows.nodes.utils import get_wrapped_node, has_wrapped_node
 from vellum.workflows.ports import Port
 from vellum.workflows.references import OutputReference
 from vellum.workflows.types.core import JsonObject
@@ -27,9 +26,6 @@ class BaseNodeDisplay(Generic[NodeType]):
 
     # Used to store the mapping between node types and their display classes
     _node_display_registry: Dict[Type[NodeType], Type["BaseNodeDisplay"]] = {}
-
-    def __init__(self, node: Type[NodeType]):
-        self._node = node
 
     def serialize(self, display_context: "WorkflowDisplayContext", **kwargs: Any) -> JsonObject:
         raise NotImplementedError(f"Serialization for nodes of type {self._node.__name__} is not supported.")
@@ -71,6 +67,23 @@ class BaseNodeDisplay(Generic[NodeType]):
     def get_from_node_display_registry(cls, node_class: Type[NodeType]) -> Type["BaseNodeDisplay"]:
         return cls._node_display_registry[node_class]
 
+    @classmethod
+    def infer_node_class(cls) -> Type[NodeType]:
+        original_base = get_original_base(cls)
+        node_class = get_args(original_base)[0]
+        if isinstance(node_class, TypeVar):
+            bounded_class = node_class.__bound__
+            if inspect.isclass(bounded_class) and issubclass(bounded_class, BaseNode):
+                return cast(Type[NodeType], bounded_class)
+
+            if isinstance(bounded_class, ForwardRef) and bounded_class.__forward_arg__ == BaseNode.__name__:
+                return cast(Type[NodeType], BaseNode)
+
+        if issubclass(node_class, BaseNode):
+            return node_class
+
+        raise ValueError(f"Node {cls.__name__} must be a subclass of {BaseNode.__name__}")
+
     @cached_property
     def node_id(self) -> UUID:
         """Can be overridden as a class attribute to specify a custom node id."""
@@ -80,6 +93,10 @@ class BaseNodeDisplay(Generic[NodeType]):
     def label(self) -> str:
         """Can be overridden as a class attribute to specify a custom label."""
         return pascal_to_title_case(self._node.__name__)
+
+    @property
+    def _node(self) -> Type[NodeType]:
+        return self.infer_node_class()
 
     @classmethod
     def _get_explicit_node_display_attr(
@@ -124,17 +141,13 @@ class BaseNodeDisplay(Generic[NodeType]):
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
 
-        original_base = get_original_base(cls)
-        node_class = get_args(original_base)[0]
-        if isinstance(node_class, TypeVar):
-            bounded_class = node_class.__bound__
-            if inspect.isclass(bounded_class) and issubclass(bounded_class, BaseNode):
-                cls._node_display_registry[bounded_class] = cls
-        elif issubclass(node_class, BaseNode):
-            if has_wrapped_node(node_class):
-                wrapped_node = get_wrapped_node(node_class)
-                if wrapped_node._is_wrapped_node:
-                    cls._node_display_registry[wrapped_node] = cls
-                    return
+        node_class = cls.infer_node_class()
+        # if "SimpleCode" in node_class.__module__:
+        #     breakpoint()
+        # if has_wrapped_node(node_class):
+        #     wrapped_node = get_wrapped_node(node_class)
+        #     if wrapped_node._is_wrapped_node:
+        #         cls._node_display_registry[wrapped_node] = cls
+        #         return
 
-            cls._node_display_registry[node_class] = cls
+        cls._node_display_registry[node_class] = cls

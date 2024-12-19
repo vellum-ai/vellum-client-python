@@ -37,6 +37,10 @@ class MyNodeA(BaseNode):
         output: str
 
 
+class MyNodeADisplay(BaseNodeVellumDisplay[MyNodeA]):
+    pass
+
+
 class MyNodeB(BaseNode):
     example = MyNodeA.Outputs.output
     fallback_example = MyNodeA.Outputs.output.coalesce(Inputs.example_workflow_input).coalesce("fallback")
@@ -99,7 +103,7 @@ def test_create_node_input_value_pointer_rules(
                 ),
             },
             node_displays={
-                MyNodeA: BaseNodeVellumDisplay(MyNodeA),
+                MyNodeA: MyNodeADisplay(),
             },
         ),
     )

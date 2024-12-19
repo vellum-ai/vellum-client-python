@@ -15,7 +15,7 @@ def node_with_implicit_properties():
 
     expected_id = UUID("ace7f746-4fe6-45c7-8207-fc8a4d0c7f6f")
 
-    return MyNode, MyNodeDisplay, expected_id
+    return MyNodeDisplay, expected_id
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def node_with_explicit_properties():
     class MyNodeDisplay(BaseNodeDisplay[MyNode]):
         node_id = explicit_id
 
-    return MyNode, MyNodeDisplay, explicit_id
+    return MyNodeDisplay, explicit_id
 
 
 @pytest.fixture(
@@ -42,6 +42,6 @@ def node_info(request):
 
 
 def test_get_id(node_info):
-    node, node_display, expected_id = node_info
+    node_display, expected_id = node_info
 
-    assert node_display(node).node_id == expected_id
+    assert node_display().node_id == expected_id

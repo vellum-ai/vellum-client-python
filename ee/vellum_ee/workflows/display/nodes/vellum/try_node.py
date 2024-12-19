@@ -1,11 +1,13 @@
 from uuid import UUID
 from typing import Any, ClassVar, Generic, Optional, TypeVar
 
+from vellum.workflows.nodes.bases.base import BaseNode
 from vellum.workflows.nodes.core.try_node.node import TryNode
 from vellum.workflows.nodes.utils import ADORNMENT_MODULE_NAME, get_wrapped_node
 from vellum.workflows.types.core import JsonObject
 from vellum_ee.workflows.display.nodes.base_node_vellum_display import BaseNodeVellumDisplay
 from vellum_ee.workflows.display.nodes.get_node_display_class import get_node_display_class
+from vellum_ee.workflows.display.nodes.utils import raise_if_descriptor
 from vellum_ee.workflows.display.types import WorkflowDisplayContext
 from vellum_ee.workflows.display.utils.uuids import uuid4_from_hash
 
@@ -20,15 +22,19 @@ class BaseTryNodeDisplay(BaseNodeVellumDisplay[_TryNodeType], Generic[_TryNodeTy
 
         try:
             inner_node = get_wrapped_node(node)
-        except TypeError:
-            raise NotImplementedError(
-                "Unable to serialize Try Nodes that wrap subworkflows containing more than one Node."
-            )
+        except AttributeError:
+            subworkflow = raise_if_descriptor(node.subworkflow)
+            if not isinstance(subworkflow.graph, type) or not issubclass(subworkflow.graph, BaseNode):
+                raise NotImplementedError(
+                    "Unable to serialize Try Nodes that wrap subworkflows containing more than one Node."
+                )
+
+            inner_node = subworkflow.graph
 
         # We need the node display class of the underlying node because
         # it contains the logic for serializing the node and potential display overrides
         node_display_class = get_node_display_class(BaseNodeVellumDisplay, inner_node)
-        node_display = node_display_class(inner_node)
+        node_display = node_display_class()
 
         serialized_node = node_display.serialize(
             display_context,

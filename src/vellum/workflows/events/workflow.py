@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, Generator, Generic, Iterable, Liter
 from pydantic import field_serializer
 
 from vellum.core.pydantic_utilities import UniversalBaseModel
-from vellum.workflows.errors import VellumError
+from vellum.workflows.errors import WorkflowError
 from vellum.workflows.outputs.base import BaseOutput
 from vellum.workflows.references import ExternalInputReference
 from vellum.workflows.types.generics import OutputsType, StateType, WorkflowInputsType
@@ -90,7 +90,7 @@ class WorkflowExecutionFulfilledEvent(_BaseWorkflowEvent, Generic[OutputsType]):
 
 
 class WorkflowExecutionRejectedBody(_BaseWorkflowExecutionBody):
-    error: VellumError
+    error: WorkflowError
 
 
 class WorkflowExecutionRejectedEvent(_BaseWorkflowEvent):
@@ -98,7 +98,7 @@ class WorkflowExecutionRejectedEvent(_BaseWorkflowEvent):
     body: WorkflowExecutionRejectedBody
 
     @property
-    def error(self) -> VellumError:
+    def error(self) -> WorkflowError:
         return self.body.error
 
 

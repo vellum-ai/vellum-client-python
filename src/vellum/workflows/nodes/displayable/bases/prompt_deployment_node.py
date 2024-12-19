@@ -14,7 +14,7 @@ from vellum import (
 from vellum.client import RequestOptions
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
 from vellum.workflows.context import get_parent_context
-from vellum.workflows.errors import VellumErrorCode
+from vellum.workflows.errors import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.displayable.bases.base_prompt_node import BasePromptNode
 from vellum.workflows.types.generics import StateType
@@ -101,7 +101,7 @@ class BasePromptDeploymentNode(BasePromptNode, Generic[StateType]):
             else:
                 raise NodeException(
                     message=f"Unrecognized input type for input '{input_name}': {input_value.__class__}",
-                    code=VellumErrorCode.INVALID_INPUTS,
+                    code=WorkflowErrorCode.INVALID_INPUTS,
                 )
 
         return compiled_inputs

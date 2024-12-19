@@ -2,7 +2,7 @@ import sys
 from types import ModuleType
 from typing import TYPE_CHECKING, Any, Callable, Dict, Generic, Iterator, Optional, Set, Tuple, Type, TypeVar
 
-from vellum.workflows.errors.types import VellumError, VellumErrorCode
+from vellum.workflows.errors.types import WorkflowError, WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.nodes.bases.base import BaseNodeMeta
@@ -64,11 +64,11 @@ class TryNode(BaseNode[StateType], Generic[StateType], metaclass=_TryNodeMeta):
     """
 
     __wrapped_node__: Optional[Type["BaseNode"]] = None
-    on_error_code: Optional[VellumErrorCode] = None
+    on_error_code: Optional[WorkflowErrorCode] = None
     subworkflow: Type["BaseWorkflow"]
 
     class Outputs(BaseNode.Outputs):
-        error: Optional[VellumError] = None
+        error: Optional[WorkflowError] = None
 
     def run(self) -> Iterator[BaseOutput]:
         subworkflow = self.subworkflow(
@@ -98,13 +98,13 @@ class TryNode(BaseNode[StateType], Generic[StateType], metaclass=_TryNodeMeta):
                 outputs = event.outputs
             elif event.name == "workflow.execution.paused":
                 exception = NodeException(
-                    code=VellumErrorCode.INVALID_OUTPUTS,
+                    code=WorkflowErrorCode.INVALID_OUTPUTS,
                     message="Subworkflow unexpectedly paused within Try Node",
                 )
             elif event.name == "workflow.execution.rejected":
                 if self.on_error_code and self.on_error_code != event.error.code:
                     exception = NodeException(
-                        code=VellumErrorCode.INVALID_OUTPUTS,
+                        code=WorkflowErrorCode.INVALID_OUTPUTS,
                         message=f"""Unexpected rejection: {event.error.code.value}.
 Message: {event.error.message}""",
                     )
@@ -116,7 +116,7 @@ Message: {event.error.message}""",
 
         if outputs is None:
             raise NodeException(
-                code=VellumErrorCode.INVALID_OUTPUTS,
+                code=WorkflowErrorCode.INVALID_OUTPUTS,
                 message="Expected to receive outputs from Try Node's subworkflow",
             )
 
@@ -130,7 +130,7 @@ Message: {event.error.message}""",
                 )
 
     @classmethod
-    def wrap(cls, on_error_code: Optional[VellumErrorCode] = None) -> Callable[..., Type["TryNode"]]:
+    def wrap(cls, on_error_code: Optional[WorkflowErrorCode] = None) -> Callable[..., Type["TryNode"]]:
         _on_error_code = on_error_code
 
         def decorator(inner_cls: Type[BaseNode]) -> Type["TryNode"]:

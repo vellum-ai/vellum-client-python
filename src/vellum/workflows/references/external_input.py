@@ -5,7 +5,7 @@ from pydantic_core import core_schema
 
 from vellum.workflows.constants import UNDEF
 from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 
 if TYPE_CHECKING:
@@ -40,7 +40,7 @@ class ExternalInputReference(BaseDescriptor[_InputType], Generic[_InputType]):
         if state.meta.parent:
             return self.resolve(state.meta.parent)
 
-        raise NodeException(f"Missing required Node Input: {self._name}", code=VellumErrorCode.INVALID_INPUTS)
+        raise NodeException(f"Missing required Node Input: {self._name}", code=WorkflowErrorCode.INVALID_INPUTS)
 
     @classmethod
     def __get_pydantic_core_schema__(

@@ -1,7 +1,7 @@
 from threading import Event as ThreadingEvent, Thread
 import time
 
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 
 from tests.workflows.basic_cancellable_workflow.workflow import BasicCancellableWorkflow
 
@@ -31,7 +31,7 @@ def test_workflow__cancel_run():
     # THEN we should get the expected rejection
     assert terminal_event.name == "workflow.execution.rejected"
     assert terminal_event.error.message == "Workflow run cancelled"
-    assert terminal_event.error.code == VellumErrorCode.WORKFLOW_CANCELLED
+    assert terminal_event.error.code == WorkflowErrorCode.WORKFLOW_CANCELLED
 
 
 def test_workflow__cancel_stream():
@@ -61,4 +61,4 @@ def test_workflow__cancel_stream():
     assert events[0].name == "workflow.execution.initiated"
     assert events[-1].name == "workflow.execution.rejected"
     assert events[-1].error.message == "Workflow run cancelled"
-    assert events[-1].error.code == VellumErrorCode.WORKFLOW_CANCELLED
+    assert events[-1].error.code == WorkflowErrorCode.WORKFLOW_CANCELLED

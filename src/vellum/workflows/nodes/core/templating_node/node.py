@@ -10,7 +10,7 @@ import pydash
 import pytz
 import yaml
 
-from vellum.workflows.errors import VellumErrorCode
+from vellum.workflows.errors import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.nodes.bases.base import BaseNodeMeta
@@ -130,4 +130,4 @@ class TemplatingNode(BaseNode[StateType], Generic[StateType, _OutputType], metac
                 jinja_globals=self.jinja_globals,
             )
         except JinjaTemplateError as e:
-            raise NodeException(message=str(e), code=VellumErrorCode.INVALID_TEMPLATE)
+            raise NodeException(message=str(e), code=WorkflowErrorCode.INVALID_TEMPLATE)

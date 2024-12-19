@@ -11,8 +11,8 @@ from vellum import (
     StringVellumValue,
     VellumError,
 )
-from vellum.workflows.errors import VellumError as SdkVellumError
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors import WorkflowError as SdkVellumError
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.inputs import BaseInputs
 from vellum.workflows.nodes import InlinePromptNode
 from vellum.workflows.nodes.core.try_node.node import TryNode
@@ -104,7 +104,7 @@ def test_inline_text_prompt_node__catch_provider_error(vellum_adhoc_prompt_clien
     class State(BaseState):
         pass
 
-    @TryNode.wrap(on_error_code=VellumErrorCode.PROVIDER_ERROR)
+    @TryNode.wrap(on_error_code=WorkflowErrorCode.PROVIDER_ERROR)
     class MyInlinePromptNode(InlinePromptNode):
         ml_model = "gpt-4o"
         prompt_inputs = {}
@@ -143,7 +143,7 @@ def test_inline_text_prompt_node__catch_provider_error(vellum_adhoc_prompt_clien
             name="error",
             value=SdkVellumError(
                 message="OpenAI failed",
-                code=VellumErrorCode.PROVIDER_ERROR,
+                code=WorkflowErrorCode.PROVIDER_ERROR,
             ),
         )
         in outputs

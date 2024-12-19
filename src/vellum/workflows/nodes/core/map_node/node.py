@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Callable, Dict, Generic, List, Optional, Tuple
 
 from vellum.workflows.context import execution_context, get_parent_context
 from vellum.workflows.descriptors.base import BaseDescriptor
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.events.types import ParentContext
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.inputs.base import BaseInputs
@@ -88,7 +88,7 @@ class MapNode(BaseNode, Generic[StateType, MapNodeItemType]):
                         break
                 elif terminal_event.name == "workflow.execution.paused":
                     raise NodeException(
-                        code=VellumErrorCode.INVALID_OUTPUTS,
+                        code=WorkflowErrorCode.INVALID_OUTPUTS,
                         message=f"Subworkflow unexpectedly paused on iteration {index}",
                     )
                 elif terminal_event.name == "workflow.execution.rejected":

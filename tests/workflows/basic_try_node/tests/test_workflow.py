@@ -3,7 +3,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from vellum.workflows.constants import UNDEF
-from vellum.workflows.errors.types import VellumError, VellumErrorCode
+from vellum.workflows.errors.types import WorkflowError, WorkflowErrorCode
 
 from tests.workflows.basic_try_node.workflow import SimpleTryExample
 
@@ -45,7 +45,7 @@ def test_run_workflow__catch_error(mock_random_int):
     assert terminal_event.name == "workflow.execution.fulfilled", terminal_event
 
     # AND the output should match the expected value
-    assert terminal_event.outputs.error == VellumError(
-        message="This is a flaky node", code=VellumErrorCode.INTERNAL_ERROR
+    assert terminal_event.outputs.error == WorkflowError(
+        message="This is a flaky node", code=WorkflowErrorCode.INTERNAL_ERROR
     )
     assert terminal_event.outputs.final_value is UNDEF

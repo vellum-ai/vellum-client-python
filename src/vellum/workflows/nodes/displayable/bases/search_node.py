@@ -12,7 +12,7 @@ from vellum import (
     SearchWeightsRequest,
 )
 from vellum.core import ApiError, RequestOptions
-from vellum.workflows.errors import VellumErrorCode
+from vellum.workflows.errors import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs import BaseOutputs
@@ -83,12 +83,12 @@ class BaseSearchNode(BaseNode[StateType], Generic[StateType]):
         except NotFoundError:
             raise NodeException(
                 message=f"Document Index '{self.document_index}' not found",
-                code=VellumErrorCode.INVALID_INPUTS,
+                code=WorkflowErrorCode.INVALID_INPUTS,
             )
         except ApiError:
             raise NodeException(
                 message=f"An error occurred while searching against Document Index '{self.document_index}'",  # noqa: E501
-                code=VellumErrorCode.INTERNAL_ERROR,
+                code=WorkflowErrorCode.INTERNAL_ERROR,
             )
 
     def run(self) -> Outputs:

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Generic, Iterator, Optional, Set, Type, TypeVar
 
 from vellum.workflows.context import execution_context, get_parent_context
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases.base_subworkflow_node import BaseSubworkflowNode
 from vellum.workflows.outputs.base import BaseOutput, BaseOutputs
@@ -49,22 +49,12 @@ class InlineSubworkflowNode(BaseSubworkflowNode[StateType], Generic[StateType, W
             elif event.name == "workflow.execution.fulfilled":
                 outputs = event.outputs
             elif event.name == "workflow.execution.rejected":
-                error = event.error
-                if error.code in VellumErrorCode._value2member_map_:
-                    raise NodeException(
-                        message=error.message,
-                        code=VellumErrorCode(error.code),
-                    )
-                else:
-                    raise NodeException(
-                        message=error.message,
-                        code=VellumErrorCode.INTERNAL_ERROR,
-                    )
+                raise NodeException.of(event.error)
 
         if outputs is None:
             raise NodeException(
                 message="Expected to receive outputs from Workflow Deployment",
-                code=VellumErrorCode.INVALID_OUTPUTS,
+                code=WorkflowErrorCode.INVALID_OUTPUTS,
             )
 
         # For any outputs somehow in our final fulfilled outputs array,

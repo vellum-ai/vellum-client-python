@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from vellum.workflows.errors import VellumErrorCode
+from vellum.workflows.errors import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.displayable.bases import BaseInlinePromptNode as BaseInlinePromptNode
 from vellum.workflows.outputs import BaseOutput
@@ -34,7 +34,7 @@ class InlinePromptNode(BaseInlinePromptNode[StateType]):
         if not outputs:
             raise NodeException(
                 message="Expected to receive outputs from Prompt",
-                code=VellumErrorCode.INTERNAL_ERROR,
+                code=WorkflowErrorCode.INTERNAL_ERROR,
             )
 
         string_output = next((output for output in outputs if output.type == "STRING"), None)
@@ -43,7 +43,7 @@ class InlinePromptNode(BaseInlinePromptNode[StateType]):
             is_plural = len(output_types) > 1
             raise NodeException(
                 message=f"Expected to receive a non-null string output from Prompt. Only found outputs of type{'s' if is_plural else ''}: {', '.join(output_types)}",  # noqa: E501
-                code=VellumErrorCode.INTERNAL_ERROR,
+                code=WorkflowErrorCode.INTERNAL_ERROR,
             )
 
         yield BaseOutput(name="text", value=string_output.value)

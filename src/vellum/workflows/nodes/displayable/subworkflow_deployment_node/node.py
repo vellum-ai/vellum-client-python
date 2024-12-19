@@ -14,7 +14,8 @@ from vellum import (
 from vellum.core import RequestOptions
 from vellum.workflows.constants import LATEST_RELEASE_TAG, OMIT
 from vellum.workflows.context import get_parent_context
-from vellum.workflows.errors import VellumErrorCode
+from vellum.workflows.errors import WorkflowErrorCode
+from vellum.workflows.errors.types import workflow_event_error_to_workflow_error
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases.base_subworkflow_node.node import BaseSubworkflowNode
 from vellum.workflows.outputs.base import BaseOutput
@@ -84,7 +85,7 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
             else:
                 raise NodeException(
                     message=f"Unrecognized input type for input '{input_name}'",
-                    code=VellumErrorCode.INVALID_INPUTS,
+                    code=WorkflowErrorCode.INVALID_INPUTS,
                 )
 
         return compiled_inputs
@@ -136,23 +137,15 @@ class SubworkflowDeploymentNode(BaseSubworkflowNode[StateType], Generic[StateTyp
                 if not error:
                     raise NodeException(
                         message="Expected to receive an error from REJECTED event",
-                        code=VellumErrorCode.INTERNAL_ERROR,
+                        code=WorkflowErrorCode.INTERNAL_ERROR,
                     )
-                elif error.code in VellumErrorCode._value2member_map_:
-                    raise NodeException(
-                        message=error.message,
-                        code=VellumErrorCode(error.code),
-                    )
-                else:
-                    raise NodeException(
-                        message=error.message,
-                        code=VellumErrorCode.INTERNAL_ERROR,
-                    )
+                workflow_error = workflow_event_error_to_workflow_error(error)
+                raise NodeException.of(workflow_error)
 
         if outputs is None:
             raise NodeException(
                 message="Expected to receive outputs from Workflow Deployment",
-                code=VellumErrorCode.INTERNAL_ERROR,
+                code=WorkflowErrorCode.INTERNAL_ERROR,
             )
 
         # For any outputs somehow in our final fulfilled outputs array,

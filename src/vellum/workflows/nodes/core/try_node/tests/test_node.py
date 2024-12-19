@@ -1,7 +1,7 @@
 import pytest
 
 from vellum.client import Vellum
-from vellum.workflows.errors.types import VellumError, VellumErrorCode
+from vellum.workflows.errors.types import WorkflowError, WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.bases import BaseNode
@@ -14,13 +14,13 @@ from vellum.workflows.state.context import WorkflowContext
 
 def test_try_node__on_error_code__successfully_caught():
     # GIVEN a try node that is configured to catch PROVIDER_ERROR
-    @TryNode.wrap(on_error_code=VellumErrorCode.PROVIDER_ERROR)
+    @TryNode.wrap(on_error_code=WorkflowErrorCode.PROVIDER_ERROR)
     class TestNode(BaseNode):
         class Outputs(BaseOutputs):
             value: int
 
         def run(self) -> Outputs:
-            raise NodeException(message="This will be caught", code=VellumErrorCode.PROVIDER_ERROR)
+            raise NodeException(message="This will be caught", code=WorkflowErrorCode.PROVIDER_ERROR)
 
     # WHEN the node is run and throws a PROVIDER_ERROR
     node = TestNode(state=BaseState())
@@ -30,19 +30,21 @@ def test_try_node__on_error_code__successfully_caught():
     assert len(outputs) == 2
     assert set(outputs) == {
         BaseOutput(name="value"),
-        BaseOutput(name="error", value=VellumError(message="This will be caught", code=VellumErrorCode.PROVIDER_ERROR)),
+        BaseOutput(
+            name="error", value=WorkflowError(message="This will be caught", code=WorkflowErrorCode.PROVIDER_ERROR)
+        ),
     }
 
 
 def test_try_node__retry_on_error_code__missed():
     # GIVEN a try node that is configured to catch PROVIDER_ERROR
-    @TryNode.wrap(on_error_code=VellumErrorCode.PROVIDER_ERROR)
+    @TryNode.wrap(on_error_code=WorkflowErrorCode.PROVIDER_ERROR)
     class TestNode(BaseNode):
         class Outputs(BaseOutputs):
             value: int
 
         def run(self) -> Outputs:
-            raise NodeException(message="This will be missed", code=VellumErrorCode.INTERNAL_ERROR)
+            raise NodeException(message="This will be missed", code=WorkflowErrorCode.INTERNAL_ERROR)
 
     # WHEN the node is run and throws a different exception
     node = TestNode(state=BaseState())
@@ -51,7 +53,7 @@ def test_try_node__retry_on_error_code__missed():
 
     # THEN the exception is not caught
     assert exc_info.value.message == "Unexpected rejection: INTERNAL_ERROR.\nMessage: This will be missed"
-    assert exc_info.value.code == VellumErrorCode.INVALID_OUTPUTS
+    assert exc_info.value.code == WorkflowErrorCode.INVALID_OUTPUTS
 
 
 def test_try_node__use_parent_inputs_and_state():

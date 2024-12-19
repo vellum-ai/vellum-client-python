@@ -1,7 +1,7 @@
 import time
 
 from vellum.workflows import BaseWorkflow
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.bases import BaseNode
@@ -51,7 +51,7 @@ class FinalNode(BaseNode[State]):
     def run(self) -> Outputs:
         if self.state.aggregated:
             raise NodeException(
-                code=VellumErrorCode.INVALID_STATE,
+                code=WorkflowErrorCode.INVALID_STATE,
                 message="Final Node should have only executed once.",
             )
 

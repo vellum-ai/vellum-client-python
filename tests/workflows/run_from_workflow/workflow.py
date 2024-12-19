@@ -1,7 +1,7 @@
 import random
 from uuid import uuid4
 
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs import BaseOutputs
@@ -25,7 +25,7 @@ class NextNode(BaseNode):
     def run(self) -> Outputs:
         delta = random.randint(0, 100)
         if delta > 95:
-            raise NodeException("The next value is too high", code=VellumErrorCode.PROVIDER_ERROR)
+            raise NodeException("The next value is too high", code=WorkflowErrorCode.PROVIDER_ERROR)
 
         return self.Outputs(final_value=self.next_value + delta)
 

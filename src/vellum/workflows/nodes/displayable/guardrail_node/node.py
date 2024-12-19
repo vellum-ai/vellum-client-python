@@ -4,7 +4,7 @@ from typing import Any, ClassVar, Dict, Generic, List, Optional, Union, cast
 from vellum import ChatHistoryInput, ChatMessage, JsonInput, MetricDefinitionInput, NumberInput, StringInput
 from vellum.core import RequestOptions
 from vellum.workflows.constants import LATEST_RELEASE_TAG
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs.base import BaseOutputs
@@ -46,7 +46,7 @@ class GuardrailNode(BaseNode[StateType], Generic[StateType]):
         if not isinstance(score, float):
             raise NodeException(
                 message="Metric execution must have one output named 'score' with type 'float'",
-                code=VellumErrorCode.INVALID_OUTPUTS,
+                code=WorkflowErrorCode.INVALID_OUTPUTS,
             )
 
         metric_outputs.pop("score")
@@ -90,7 +90,7 @@ class GuardrailNode(BaseNode[StateType], Generic[StateType]):
             else:
                 raise NodeException(
                     message=f"Unrecognized input type for input '{input_name}'",
-                    code=VellumErrorCode.INVALID_INPUTS,
+                    code=WorkflowErrorCode.INVALID_INPUTS,
                 )
 
         return compiled_inputs

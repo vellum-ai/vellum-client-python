@@ -3,7 +3,7 @@ from typing import ClassVar, Generator, Generic, Iterator, List, Optional, Union
 
 from vellum import AdHocExecutePromptEvent, ExecutePromptEvent, PromptOutput
 from vellum.core import RequestOptions
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode, vellum_error_to_workflow_error
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases import BaseNode
 from vellum.workflows.outputs.base import BaseOutput, BaseOutputs
@@ -29,7 +29,7 @@ class BasePromptNode(BaseNode, Generic[StateType]):
         if outputs is None:
             raise NodeException(
                 message="Expected to receive outputs from Prompt",
-                code=VellumErrorCode.INTERNAL_ERROR,
+                code=WorkflowErrorCode.INTERNAL_ERROR,
             )
 
     def _process_prompt_event_stream(self) -> Generator[BaseOutput, None, Optional[List[PromptOutput]]]:
@@ -45,15 +45,7 @@ class BasePromptNode(BaseNode, Generic[StateType]):
                 outputs = event.outputs
                 yield BaseOutput(name="results", value=event.outputs)
             elif event.state == "REJECTED":
-                if event.error.code in VellumErrorCode._value2member_map_:
-                    raise NodeException(
-                        message=event.error.message,
-                        code=VellumErrorCode(event.error.code),
-                    )
-                else:
-                    raise NodeException(
-                        message=event.error.message,
-                        code=VellumErrorCode.INTERNAL_ERROR,
-                    )
+                workflow_error = vellum_error_to_workflow_error(event.error)
+                raise NodeException.of(workflow_error)
 
         return outputs

@@ -1,4 +1,4 @@
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 
 from tests.workflows.missing_workflow_inputs.workflow import Inputs, MissingInputsWorkflow
 
@@ -14,5 +14,5 @@ def test_run_workflow__happy_path():
     assert terminal_event.name == "workflow.execution.rejected", terminal_event
 
     # AND the outputs should be defaulted correctly
-    assert terminal_event.error.code == VellumErrorCode.INVALID_INPUTS
+    assert terminal_event.error.code == WorkflowErrorCode.INVALID_INPUTS
     assert terminal_event.error.message == "Missing required Workflow input: initial_value"

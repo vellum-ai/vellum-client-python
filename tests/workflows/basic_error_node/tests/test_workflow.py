@@ -1,4 +1,4 @@
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 
 from tests.workflows.basic_error_node.workflow import BasicErrorNodeWorkflow, Inputs
 
@@ -19,4 +19,4 @@ def test_workflow__error_node_rejects():
 
     # AND the error message will be the one defined in the error node
     assert terminal_event.error.message == "Input threshold was too low"
-    assert terminal_event.error.code == VellumErrorCode.USER_DEFINED_ERROR
+    assert terminal_event.error.code == WorkflowErrorCode.USER_DEFINED_ERROR

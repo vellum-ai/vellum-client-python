@@ -1,6 +1,6 @@
 import random
 
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.nodes.bases.base import BaseNode
 from vellum.workflows.nodes.core.try_node.node import TryNode
@@ -21,7 +21,7 @@ class ThresholdNode(BaseNode):
         threshold = random.randint(0, 100)
         if threshold > 50:
             raise NodeException(
-                code=VellumErrorCode.USER_DEFINED_ERROR,
+                code=WorkflowErrorCode.USER_DEFINED_ERROR,
                 message="Threshold exceeded",
             )
 

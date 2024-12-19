@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Callable, Dict, Generic, Optional, Type
 
-from vellum.workflows.errors.types import VellumErrorCode
+from vellum.workflows.errors.types import WorkflowErrorCode
 from vellum.workflows.exceptions import NodeException
 from vellum.workflows.inputs.base import BaseInputs
 from vellum.workflows.nodes.bases import BaseNode
@@ -31,7 +31,7 @@ class RetryNode(BaseNode[StateType], Generic[StateType], metaclass=_RetryNodeMet
     """
 
     max_attempts: int
-    retry_on_error_code: Optional[VellumErrorCode] = None
+    retry_on_error_code: Optional[WorkflowErrorCode] = None
     subworkflow: Type["BaseWorkflow[SubworkflowInputs, BaseState]"]
 
     class SubworkflowInputs(BaseInputs):
@@ -58,13 +58,13 @@ class RetryNode(BaseNode[StateType], Generic[StateType], metaclass=_RetryNodeMet
                 return node_outputs
             elif terminal_event.name == "workflow.execution.paused":
                 last_exception = NodeException(
-                    code=VellumErrorCode.INVALID_OUTPUTS,
+                    code=WorkflowErrorCode.INVALID_OUTPUTS,
                     message=f"Subworkflow unexpectedly paused on attempt {attempt_number}",
                 )
                 break
             elif self.retry_on_error_code and self.retry_on_error_code != terminal_event.error.code:
                 last_exception = NodeException(
-                    code=VellumErrorCode.INVALID_OUTPUTS,
+                    code=WorkflowErrorCode.INVALID_OUTPUTS,
                     message=f"""Unexpected rejection on attempt {attempt_number}: {terminal_event.error.code.value}.
 Message: {terminal_event.error.message}""",
                 )
@@ -76,7 +76,7 @@ Message: {terminal_event.error.message}""",
 
     @classmethod
     def wrap(
-        cls, max_attempts: int, retry_on_error_code: Optional[VellumErrorCode] = None
+        cls, max_attempts: int, retry_on_error_code: Optional[WorkflowErrorCode] = None
     ) -> Callable[..., Type["RetryNode"]]:
         _max_attempts = max_attempts
         _retry_on_error_code = retry_on_error_code

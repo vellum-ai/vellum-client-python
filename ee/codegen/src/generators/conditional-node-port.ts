@@ -80,11 +80,7 @@ export class ConditionalNodePort extends AstNode {
       return python.TypeInstantiation.none();
     }
 
-    if (
-      conditionData &&
-      conditionData.fieldNodeInputId &&
-      conditionData.valueNodeInputId
-    ) {
+    if (conditionData && conditionData.fieldNodeInputId) {
       return this.buildDescriptor(conditionData);
     }
 
@@ -130,12 +126,15 @@ export class ConditionalNodePort extends AstNode {
     const ruleId = conditionData.id;
 
     const lhsKey = this.inputFieldKeysByRuleId.get(ruleId);
-    const rhsKey = this.valueInputKeysByRuleId.get(ruleId);
-    if (isNil(lhsKey) || isNil(rhsKey)) {
+    let rhsKey;
+    if (isNil(lhsKey)) {
       throw new Error(`Could not find input field key given rule id ${ruleId}`);
     }
+    if (conditionData.valueNodeInputId) {
+      rhsKey = this.valueInputKeysByRuleId.get(ruleId);
+    }
     const lhs = this.nodeInputsByKey.get(lhsKey);
-    const rhs = this.nodeInputsByKey.get(rhsKey);
+    const rhs = !isNil(rhsKey) ? this.nodeInputsByKey.get(rhsKey) : undefined;
     const expression = conditionData.operator
       ? this.convertOperatorToMethod(conditionData.operator)
       : undefined;
@@ -163,8 +162,8 @@ export class ConditionalNodePort extends AstNode {
       doesNotContain: "does_not_contain",
       doesNotBeginWith: "does_not_begin_with",
       doesNotEndWith: "does_not_end_with",
-      null: "is_null",
-      notNull: "is_not_null",
+      null: "is_null()",
+      notNull: "is_not_null()",
       in: "in",
       notIn: "not_in",
       between: "between",

@@ -1,0 +1,7 @@
+{
+  "name": "vellum-automation",
+  "version": "0.0.1",
+  "scripts": {
+    "create-release": "echo 'TODO: Implement src/create-release.ts'"
+  }
+}
